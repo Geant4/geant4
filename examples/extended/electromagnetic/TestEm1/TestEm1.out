@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -298,7 +298,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=243.59s Real=332.3s Sys=1.07s
+  User=13.41s Real=18.92s Sys=0.58s
 
  ======================== run summary ======================
 
@@ -306,29 +306,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.751 MeV
+ total energy deposit: 99.792 MeV
 
- nb tracks/event   neutral:     27.991   charged:     148.21
- nb  steps/event   neutral:     141.08   charged:     473.11
+ nb tracks/event   neutral:     27.749   charged:      147.2
+ nb  steps/event   neutral:        140   charged:     470.24
 
  nb of process calls per event: 
-          eBrem       eIoni        phot         msc       comptTransportation        conv     annihil
-          25.36      302.05      25.558      144.23      113.09       0.989      1.4555      1.4555
+          eBrem       eIoni       compt        phot         msc        conv     annihilTransportation
+         25.228      300.25      112.25      25.379      143.34        1.41        1.41      0.9675
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 10.916 cm    rms = 3.7893 cm 
- proj Range = 9.4781 cm    rms = 3.527 cm 
- proj/true  = 0.86825
- transverse dispersion at end = 1.6503 cm 
-      mass true Range from simulation = 29.474 g/cm2 
+ true Range = 11.136 cm    rms = 3.8075 cm 
+ proj Range = 9.6876 cm    rms = 3.5531 cm 
+ proj/true  = 0.86994
+ transverse dispersion at end = 1.6484 cm 
+      mass true Range from simulation = 30.067 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 94606324, 1695920523
+ Current couple of seeds = 1933278320, 292162522
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -358,7 +358,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 94606324, 1695920523
+ Current couple of seeds = 1933278320, 292162522
 ----------------------------------------
 Start Run processing.
 
@@ -366,7 +366,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=436.22s Real=553.9s Sys=1.41s
+  User=24.74s Real=30.49s Sys=0.6s
 
  ======================== run summary ======================
 
@@ -374,29 +374,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.786 MeV
+ total energy deposit: 99.813 MeV
 
- nb tracks/event   neutral:     36.579   charged:     290.75
- nb  steps/event   neutral:     146.08   charged:      905.1
+ nb tracks/event   neutral:     36.679   charged:     291.47
+ nb  steps/event   neutral:     146.65   charged:     905.42
 
  nb of process calls per event: 
           eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-         584.15      34.754      284.81      34.291       109.5      1.3795      1.3795      0.9155
+         583.88      34.748      285.38       34.35      109.97       1.412       1.412      0.9225
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.189 cm    rms = 3.8844 cm 
- proj Range = 9.772 cm    rms = 3.6506 cm 
- proj/true  = 0.87333
- transverse dispersion at end = 1.7114 cm 
-      mass true Range from simulation = 30.211 g/cm2 
+ true Range = 11.151 cm    rms = 3.8821 cm 
+ proj Range = 9.7241 cm    rms = 3.6334 cm 
+ proj/true  = 0.87201
+ transverse dispersion at end = 1.707 cm 
+      mass true Range from simulation = 30.109 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1449229223, 780955839
+ Current couple of seeds = 268076810, 1628262656
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

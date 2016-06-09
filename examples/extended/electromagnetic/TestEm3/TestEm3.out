@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -244,20 +244,20 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   1 kByte
+    Total memory consumed for geometry optimisation:   3 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            3k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.00    Layer
+      92.05          2k         1       50         50         0.00    Calorimeter
+       7.95          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -272,28 +272,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=184.64s Real=205.47s Sys=0.04s
+  User=9.44s Real=9.8s Sys=0.03s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 788.34 MeV +- 14.84 MeV     1.883 +- 0.1883 %      54.3 cm  +-  1.1 cm 
-   liquidArgon: 202.61 MeV +- 14.65 MeV     7.231 +- 0.7231 %      99.6 cm  +- 7.58 cm 
+          Lead: 788.16 MeV +- 16.12 MeV     2.046 +- 0.2046 %      54.2 cm  +- 1.18 cm 
+   liquidArgon:  202.2 MeV +- 15.77 MeV     7.798 +- 0.7798 %      99.4 cm  +- 7.77 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 788.341 MeV
-liquidArgon:	 202.608 MeV
+      Lead:	 788.164 MeV
+liquidArgon:	 202.201 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1237127441, 1064633457
+ Current couple of seeds = 909114688, 1248511548
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

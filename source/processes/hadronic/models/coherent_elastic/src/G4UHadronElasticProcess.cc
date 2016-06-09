@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.35 2007/11/15 15:53:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UHadronElasticProcess.cc,v 1.35.2.1 2008/04/23 14:14:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -168,7 +168,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     x = 0.0;
     if(ni == 0) {
       G4int N = G4int(elm->GetN()+0.5) - iz;
-      x = qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
+      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
       xsecH[0] = x;
 #ifdef G4VERBOSE
       if(verboseLevel>1) 
@@ -177,7 +177,6 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	       << " mom(GeV)= " << momentum/GeV 
 	       << "  " << qCManager << G4endl; 
 #endif
-
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       for(G4int j=0; j<ni; j++) {
@@ -187,12 +186,14 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	} else {
 	  N = 2;
 	}
+#ifdef G4VERBOSE
 	if(verboseLevel>1) 
 	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
 		 << " N= "  << N << " pdg= " << pPDG 
 		 << " mom(GeV)= " << momentum/GeV 
 		 << "  " << qCManager << G4endl; 
-	G4double y = ab[j]*qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
+#endif
+	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
 	x += y;
 	xsecH[j] = x;
       }

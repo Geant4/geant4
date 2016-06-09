@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 Apr 2008 -  G.Cosmo (hadr-cohe-V09-00-08)
+--------------------------------------------
+  Tag for release 9.1.p02.
+
+10 Apr 2008 -  V.Ivanchenko (hadr-cohe-V09-01-02)
+------------------------------------------------
+  G4HadronElastic - added extra protection against precision lost
+                    when projectile almostly lost kinetic energy;
+                    set lowestEnergyLimit=1.e-6*eV (was 0.0)
+
+29 Jan 2008 -  V.Ivanchenko (hadr-cohe-V09-01-01)
+------------------------------------------------
+  G4UHadronElasticProcess - call to G4QElasticCrossSection with option 
+                            "false", so parameters for sampling of
+                            scattering are precalculated
+  G4HadronElastic - added extra protection - if sampled t out of the 
+                    physics range then no scattering
+
 16 Jan 2008 -  V.Ivanchenko (hadr-cohe-V09-01-00)
 ------------------------------------------------
   G4DiffuseElastic       - remove dependence on other elastic models

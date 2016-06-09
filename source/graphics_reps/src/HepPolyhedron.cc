@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.26.2.1 2008/01/30 10:45:58 allison Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// $Id: HepPolyhedron.cc,v 1.26.2.1.2.1 2008/04/23 07:58:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 //
@@ -65,6 +65,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 #include <CLHEP/Geometry/Vector3D.h>
 
+#include <cstdlib>  // Required on some compilers for std::abs(int) ...
 #include <cmath>
 
 using namespace HepGeom;
@@ -1499,10 +1500,7 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronParaboloid                     Date:    28.06.07 *
- *       ::HepPolyhedronParaboloid                                     *
- * Author: Lukas Lindroos (CERN), July 2007          Revised:          *
- * Author: Tatiana Nikitin                           Revised:          *
- * Author: John Allison (bug fix and improvement)    Revised: 29.01.08 *
+ * Author: L.Lindroos, T.Nikitina (CERN), July 2007  Revised: 28.06.07 *
  *                                                                     *
  * Function: Constructor for paraboloid                                *
  *                                                                     *
@@ -1597,6 +1595,94 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
 }
 
 HepPolyhedronParaboloid::~HepPolyhedronParaboloid() {}
+
+HepPolyhedronHype::HepPolyhedronHype(double r1,
+                                     double r2,
+                                     double sqrtan1,
+                                     double sqrtan2,
+                                     double halfZ) 
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedronHype                           Date:    14.04.08 *
+ * Author: Tatiana Nikitina (CERN)                   Revised: 14.04.08 *
+ *                                                                     *
+ * Function: Constructor for Hype                                      *
+ *                                                                     *
+ * Input: r1       - inside radius at z=0                              *
+ *        r2       - outside radiuses at z=0                           *
+ *        sqrtan1  - sqr of tan of Inner Stereo Angle                  *
+ *        sqrtan2  - sqr of tan of Outer Stereo Angle                  *
+ *        halfZ    - half length in Z                                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static double wholeCircle=twopi;
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  int k = 0;
+  if (r2 < 0. || r1 < 0. )        k = 1;
+  if (r1 > r2 )                   k = 1;
+  if (r1 == r2)                   k = 1;
+
+  if (halfZ <= 0.) k += 2;
+ 
+  if (sqrtan1<0.||sqrtan2<0.) k += 4;  
+ 
+  if (k != 0) {
+    std::cerr << "HepPolyhedronHype: error in input parameters";
+    if ((k & 1) != 0) std::cerr << " (radiuses)";
+    if ((k & 2) != 0) std::cerr << " (half-length)";
+    if ((k & 4) != 0) std::cerr << " (angles)";
+    std::cerr << std::endl;
+    std::cerr << " r1=" << r1 << " r2=" << r2;
+    std::cerr << " halfZ=" << halfZ << " sqrTan1=" << sqrtan1
+              << " sqrTan2=" << sqrtan2
+              << std::endl;
+    return;
+  }
+  
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  int n = GetNumberOfRotationSteps();
+  double dz = 2.*halfZ / n;
+  double k1 = r1*r1;
+  double k2 = r2*r2;
+
+  double *zz = new double[n + n], *rr = new double[n + n];
+
+  zz[0] = halfZ;
+  rr[0] = std::sqrt(sqrtan2*halfZ*halfZ+k2);
+
+  for(int i = 1; i < n - 1; i++)
+  {
+    zz[i] = zz[i-1] - dz;
+    rr[i] =std::sqrt(sqrtan2*zz[i]*zz[i]+k2) ;
+    
+  }
+
+  zz[n-1] = -halfZ;
+  rr[n-1] = rr[0];
+
+
+  zz[n] = halfZ;
+  rr[n] =  std::sqrt(sqrtan1*halfZ*halfZ+k1);
+   for(int i = n+1; i < n +n; i++)
+  {
+    zz[i] = zz[i-1] - dz;
+    rr[i] =std::sqrt(sqrtan1*zz[i]*zz[i]+k1) ;
+    
+  }
+  zz[n+n] = -halfZ;
+  rr[n+n] = rr[n];
+
+  //   R O T A T E    P O L Y L I N E S
+
+  RotateAroundZ(0, 0., wholeCircle, n, n, zz, rr, -1, -1); 
+  SetReferences();
+}
+
+HepPolyhedronHype::~HepPolyhedronHype() {}
 
 HepPolyhedronCons::HepPolyhedronCons(double Rmn1,
                                      double Rmx1,

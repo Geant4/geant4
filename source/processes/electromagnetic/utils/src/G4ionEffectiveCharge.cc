@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.17 2007/09/27 17:08:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ionEffectiveCharge.cc,v 1.17.2.1 2008/04/22 15:28:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -143,7 +143,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
       // Slower than Fermi velocity
     } else {
-      y = 0.6923 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
+      y = 0.692308 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
     }
 
     G4double y3 = std::pow(y, 0.3) ;
@@ -169,7 +169,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
     G4double lambda = 10.0 * vF / (zi13 * (6.0 + q));
-    if(q < 0.2) lambda *= (1.0 - 0.666666*q - 0.444444*q*q);
+    if(q < 0.2) lambda *= (1.0 - 0.666666*q - q*q/9.0);
     else        lambda *= std::pow(1.0-q, 0.666666);
 
     G4double lambda2 = lambda*lambda;

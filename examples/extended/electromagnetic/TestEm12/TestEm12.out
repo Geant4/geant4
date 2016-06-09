@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,6 +51,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -321,7 +323,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1245.25s Real=1675.18s Sys=7.42s
+  User=65.4s Real=92.27s Sys=2.75s
 
  ======================== run summary ======================
 
@@ -329,18 +331,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.939 MeV +- 214.508 keV
+ Total Energy deposited        = 3.934 MeV +- 240.666 keV
 
- Track length of primary track = 2.016 cm  +- 2.774 mm 
+ Track length of primary track = 2.016 cm  +- 2.808 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.314 cm  +- 4.196 mm 
+ Projected range               = 1.305 cm  +- 4.176 mm 
 
- Nb of steps of primary track  = 238.44 +- 30.73	 Step size= 84.539 um  +- 4.514 um 
+ Nb of steps of primary track  = 238.40 +- 31.17	 Step size= 84.562 um  +- 4.576 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1657344995, 1592221949
+ Current couple of seeds = 1695104246, 964521664
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

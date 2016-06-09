@@ -1,4 +1,4 @@
-$Id: History,v 1.173 2007/11/16 22:37:42 asaim Exp $
+$Id: History,v 1.173.2.2 2008/04/17 09:12:23 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+April 17th, 2008, Hisaya Kurashige (run-V09-00-08)
+- Add G4Transportation to shortlived particles in G4VUserPhysicsList
+  in order to fix a bug for shortlived particle decay
 
 November 16th, 2007, Makoto Asai (run-V09-00-06)
 - Re-order the commands in G4RunMessenger so that obsolete commands appear last.

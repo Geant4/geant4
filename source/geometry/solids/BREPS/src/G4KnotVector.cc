@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.cc,v 1.10 2007/07/16 08:06:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4KnotVector.cc,v 1.10.2.1 2008/04/23 08:59:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -87,18 +87,22 @@ G4int G4KnotVector::GetKnotIndex(G4double k_value, G4int order) const
   G4double knt;
 
   knt = knots[order - 1];
-  if ( k_value < knt ) 
+  if ( k_value < knt )
+  {
     if (ApxEq( k_value, knt)) 
       k_value = knt;
     else
       return -1;
+  }
   
   knt = knots[k_size - order + 1];
-  if ( k_value > knt )  
+  if ( k_value > knt )
+  {
     if (ApxEq( k_value, knt)) 
       k_value = knt;
     else
-      return -1; 
+      return -1;
+  }
 
   if ( k_value == knots[k_size - order + 1] )
     knot_index = k_size - order - 1;

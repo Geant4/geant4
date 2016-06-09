@@ -100,7 +100,7 @@ G4TripathiLightCrossSection::~G4TripathiLightCrossSection ()
 G4bool G4TripathiLightCrossSection::IsApplicable
   (const G4DynamicParticle* theProjectile, const G4Element* theTarget)
 {
-  return IsZAApplicable(theProjectile, theTarget->GetZ(), theTarget->GetA());
+  return IsZAApplicable(theProjectile, theTarget->GetZ(), theTarget->GetN());
 }
 
 

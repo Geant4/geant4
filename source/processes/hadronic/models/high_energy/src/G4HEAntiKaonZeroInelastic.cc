@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiKaonZeroInelastic.cc,v 1.14 2006/06/29 20:29:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HEAntiKaonZeroInelastic.cc,v 1.14.2.1 2008/04/23 16:31:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 
@@ -380,79 +380,72 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero( G4bool &inElastic,
 //                    calculate first the sum of all constants, check for numerical problems.   
        G4double test, dum, anpn = 0.0;
 
-       for( nt=1; nt<=numSec; nt++ ) 
-         {
-           test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-           dum = pi*nt/(2.0*n*n);
-           if( std::fabs(dum) < 1.0 ) 
-             if( test >= 1.0e-10 )anpn += dum*test;
-           else 
-             anpn += dum*test;
+       for (nt=1; nt<=numSec; nt++) {
+         test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+         dum = pi*nt/(2.0*n*n);
+         if (std::fabs(dum) < 1.0) { 
+           if( test >= 1.0e-10 )anpn += dum*test;
+         } else { 
+           anpn += dum*test;
          }
+       }
    
        G4double ran = G4UniformRand();
        G4double excs = 0.0;
-       if( targetCode == protonCode ) 
-         {
-           counter = -1;
-           for( np=0; np<numSec/3; np++ ) 
-              {
-                for( nm=std::max(0,np-2); nm<=np; nm++ ) 
-                   {
-                     for( nz=0; nz<numSec/3; nz++ ) 
-                        {
-                          if( ++counter < numMul ) 
-                            {
-                              nt = np+nm+nz;
-                              if( (nt>0) && (nt<=numSec) ) 
-                                {
-                                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                                  if( std::fabs(dum) < 1.0 ) 
-                                        if( test >= 1.0e-10 )excs += dum*test;
-                                   else 
-                                        excs += dum*test;
-                                   if (ran < excs) goto outOfLoop;      //----------------------->
-                                }   
-                            }    
-                        }     
-                   }                                                                                  
-              }
-       
-                                              // 3 previous loops continued to the end
-           inElastic = false;                 // quasi-elastic scattering   
-           return;
-         }
-       else   
-         {                                         // target must be a neutron
-           counter = -1;
-           for( np=0; np<numSec/3; np++ ) 
-              {
-                for( nm=std::max(0,np-1); nm<=(np+1); nm++ ) 
-                   {
-                     for( nz=0; nz<numSec/3; nz++ ) 
-                        {
-                          if( ++counter < numMul ) 
-                            {
-                              nt = np+nm+nz;
-                              if( (nt>=1) && (nt<=numSec) ) 
-                                {
-                                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                                  if( std::fabs(dum) < 1.0 ) 
-                                      if( test >= 1.0e-10 )excs += dum*test;
-                                  else 
-                                      excs += dum*test;
-                                  if (ran < excs) goto outOfLoop;       // -------------------------->
-                                }
-                            }
-                        }
-                   }
-              }
+       if (targetCode == protonCode) {
+         counter = -1;
+         for (np=0; np<numSec/3; np++) {
+           for (nm=std::max(0,np-2); nm<=np; nm++) {
+             for (nz=0; nz<numSec/3; nz++) {
+               if (++counter < numMul) {
+                 nt = np+nm+nz;
+                 if( (nt>0) && (nt<=numSec) ) {
+                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+
+                   if (std::fabs(dum) < 1.0) { 
+                     if( test >= 1.0e-10 )excs += dum*test;
+                   } else { 
+                     excs += dum*test;
+		   }
+
+                   if (ran < excs) goto outOfLoop;      //----------------------->
+		 }
+	       }
+             }
+           }
+	 }
+                                            // 3 previous loops continued to the end
+         inElastic = false;                 // quasi-elastic scattering   
+         return;
+
+       } else {         // target must be a neutron
+         counter = -1;
+         for (np=0; np<numSec/3; np++) {
+           for (nm=std::max(0,np-1); nm<=(np+1); nm++) {
+             for (nz=0; nz<numSec/3; nz++) {
+               if (++counter < numMul) {
+                 nt = np+nm+nz;
+                 if( (nt>=1) && (nt<=numSec) ) {
+                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+
+                   if (std::fabs(dum) < 1.0) { 
+                     if( test >= 1.0e-10 )excs += dum*test;
+                   } else { 
+                     excs += dum*test;
+		   }
+
+                   if (ran < excs) goto outOfLoop;       // -------------------------->
+		 }
+	       }
+             }
+	   }
+	 }
                                                   // 3 previous loops continued to the end
-           inElastic = false;                     // quasi-elastic scattering.
-           return;
-         }
+         inElastic = false;                     // quasi-elastic scattering.
+         return;
+       }
      } 
    outOfLoop:           //  <------------------------------------------------------------------------   
     

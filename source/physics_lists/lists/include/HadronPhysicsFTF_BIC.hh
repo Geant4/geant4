@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTF_BIC.hh,v 1.1 2007/11/16 16:52:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HadronPhysicsFTF_BIC.hh,v 1.1.2.1 2008/04/25 15:47:17 gunter Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -83,7 +83,6 @@ class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4FTFBinaryPiKBuilder * theFTFBinaryPiK;
     
     G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
     G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
     G4BinaryProtonBuilder * theBinaryPro;
     

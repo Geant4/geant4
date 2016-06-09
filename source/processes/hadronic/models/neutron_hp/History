@@ -1,3 +1,4 @@
+$Id: History,v 1.23.2.2 2008/04/29 07:05:37 gcosmo Exp $
 -------------------------------------------------------------------
 
           ==================================================
@@ -13,6 +14,55 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
       ---------------------------------------------------------------
+
+29 April 2008 Gabriele Cosmo (hadr-hpn-V09-00-07)
+-------------------------------------------------
+- Tag for release 9.1.p02.
+
+22 April 2008 Tatsumi Koi (hadr-hpn-V09-01-04)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPorLElasticData.cc
+	G4NeutronHPorLEInelasticData.cc
+	G4NeutronHPorLCaptureData.cc
+	G4NeutronHPorLFissionData.cc
+	G4NeutronHPJENDLHEData.cc
+
+17 April 2008 Tatsumi Koi (hadr-hpn-V09-01-03)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+	G4NeutronHPFissionData.cc
+        G4NeutronHPThermalScatteringData.cc
+
+9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-02)
+---------------------------------------------
+- Bug fixes for G4FPE_DEBUG by T. Koi
+	G4NeutronHPContAngularPar.cc 
+
+9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-01)
+---------------------------------------------
+- Bug fixes for G4FPE_DEBUG by T. Koi
+	G4NeutronHPContAngularPar.cc
+	G4NeutronHPVector.hh
+
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-01-00)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+  (This fix has a real effect to the code.) 
+	G4NeutronHPContAngularPar.cc
+- Also tagged "hadr-hpn-V09-00-05".
+
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-04)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+	G4NeutronHPElastic.cc
+	G4NeutronHPorLElastic.cc
+	G4NeutronHPorLCapture.cc
+	G4NeutronHPorLFission.cc
+
 31 Oct 2007 Tatsumi Koi (hadr-hpn-V09-00-03)
 ---------------------------------------------
 - Bug fix which pointed out by A. Howard 

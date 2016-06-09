@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -298,32 +298,32 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=84.69s Real=84.74s Sys=0s
+  User=4.19s Real=4.21s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1315
-Average number of gamma      697.1
-Average number of e+         48.38
-Average number of steps      3966
-Edep 1x1 =                   0.8299 +- 0.00282  res=  3.398 %
-Edep 3x3 =                   0.9584 +- 0.001213  res=  1.265 %
-Edep 5x5 =                   0.9797 +- 0.0007927  res=  0.8091 %
+Average number of e-         1320
+Average number of gamma      701.3
+Average number of e+         48.12
+Average number of steps      3980
+Edep 1x1 =                   0.8336 +- 0.002518  res=  3.021 %
+Edep 3x3 =                   0.9601 +- 0.001163  res=  1.212 %
+Edep 5x5 =                   0.9807 +- 0.0007853  res=  0.8007 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8291 +- 0.002911  res=  3.511 %
-Edep 3x3 =                   0.9576 +- 0.001329  res=  1.388 %
-Edep 5x5 =                   0.9783 +- 0.001096  res=  1.12 %
+Edep 1x1 =                   0.8327 +- 0.002681  res=  3.219 %
+Edep 3x3 =                   0.9596 +- 0.001241  res=  1.293 %
+Edep 5x5 =                   0.9807 +- 0.0007853  res=  0.8007 %
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8299  delEdep1x1= 0.002762 nrms= 0.9287
-Erms1x1: 0.0282  delErms1x1= -0.001543 nrms= -0.5188
-Edep3x3: 0.9584  delEdep3x3= 0.001382 nrms= 1.075
-Erms3x3: 0.01213  delErms3x3= -0.000732 nrms= -0.5692
-Edep5x5: 0.9797  delEdep5x5= 0.0004336 nrms= 0.4905
-Erms5x5: 0.007927  delErms5x5= -0.0009134 nrms= -1.033
+Edep1x1: 0.8336  delEdep1x1= 0.006515 nrms= 2.191
+Erms1x1: 0.02518  delErms1x1= -0.00456 nrms= -1.533
+Edep3x3: 0.9601  delEdep3x3= 0.003087 nrms= 2.401
+Erms3x3: 0.01163  delErms3x3= -0.001226 nrms= -0.9531
+Edep5x5: 0.9807  delEdep5x5= 0.001428 nrms= 1.615
+Erms5x5: 0.007853  delErms5x5= -0.0009872 nrms= -1.117
 <<<<<END>>>>>   IS ACCEPTED
 
 #

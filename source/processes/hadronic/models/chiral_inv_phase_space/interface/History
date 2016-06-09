@@ -1,0 +1,46 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/chiral_inv_phase_space/interface 
+	
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+07-May-2008 Gabriele Cosmo             (hadr-chips-inter-V09-00-13)
+-------------------------------------------------------------------
+- Tag for release 9.1.p02.
+
+06-May-2008 Dennis Wright              (hadr-chips-inter-V09-01-05)
+-------------------------------------------------------------------
+- replace max-- with --max at lines 1191, 1195, 1197 of G4Collison.cc
+  This fixes gcc-4.3 compiler warning of exceeded array bounds.
+
+20-Mar-2008 Dennis Wright              (hadr-chips-inter-V09-01-04)
+-------------------------------------------------------------------
+- Add parentheses around && within || to fix gcc-4.3 warnings.
+  Files affected:
+    G4QCollision.cc
+    G4QDiffractionRatio.cc
+    G4QElasticCrossSection.cc
+    G4QIonIonCrossSection.cc
+    G4QLowEnergy.cc
+    G4QuasiFreeRatios.cc
+ 
+17-Mar-2008 Vladimir Ivanchenko          (hadr-chips-inter-V09-01-03)
+- Check on tolerance is replaced by check on exact equality for 
+  G4QuasiFreeRatios,  G4QProtonNuclearCrossSection, 
+  G4QNeutronNuclearCrossSection,G4QMuonNuclearCrossSection, 
+  G4QPhotonNuclearCrossSection, G4QElectronNuclearCrossSection,
+  G4QDiffractionRatio, G4QElasticCrossSection. This intend to provide
+  reproducibility  
+
+7-Feb-2008 Gunter Folger		(hadr-chips-inter-V09-01-02)
+- Modify src/G4QElasticCrossSection.cc to fix problem with quasi-elastic. 
+  When run together with elastic, the parameters to sample T were not updated,
+  this fix is to always update these.  

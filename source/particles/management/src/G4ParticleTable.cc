@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.29 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleTable.cc,v 1.29.2.1 2008/04/25 12:21:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // class G4ParticleTable
 //
@@ -55,7 +55,6 @@
 #include "G4ParticleMessenger.hh"
 #include "G4IonTable.hh"
 #include "G4ShortLivedTable.hh"
-
 
 ////////////////////
 G4ParticleTable::G4ParticleTable()
@@ -99,11 +98,12 @@ G4ParticleTable::~G4ParticleTable()
   }
 
   if(fDictionary){
+    if (fIterator!=0 )delete fIterator;
+    fIterator =0;
+
     fDictionary->clear();
     delete fDictionary;
     fDictionary =0;
-    if (fIterator!=0 )delete fIterator;
-    fIterator =0;
   }
 
   if (fParticleMessenger!=0) delete fParticleMessenger;  
@@ -155,10 +155,28 @@ void G4ParticleTable::DeleteMessenger()
     //UI messenger
     delete fParticleMessenger;
     fParticleMessenger= 0;
-    // remove all items from G4ParticleTable
-    // temporaly comment out 
-    // RemoveAllParticles();
   }
+
+}
+
+////////////////////
+void G4ParticleTable::DeleteAllParticles()
+{
+
+#ifdef G4VERBOSE
+  if (verboseLevel>1){
+    G4cout << "G4ParticleTable::DeleteAllParticles() " << G4endl;
+  }
+#endif
+
+  // delete all particles 
+  G4PTblDicIterator *piter = fIterator; 
+  piter -> reset();
+  while( (*piter)() ){
+    delete (piter->value());
+  }
+
+  RemoveAllParticles();
 }
 
 ////////////////////
@@ -170,42 +188,26 @@ void G4ParticleTable::RemoveAllParticles()
     G4cout << "G4ParticleTable::RemoveAllParticles() " << G4endl;
   }
 #endif
-  // delete all particles 
-  G4PTblDicIterator *piter = fIterator; 
-  piter -> reset();
-  while( (*piter)() ){
-    delete (piter->value());
-  }
 
-  //delete Ion Table and contents
+  //remove all contnts in Ion Table
   if (fIonTable!=0) {
-    delete fIonTable;
-    fIonTable = 0;
+    fIonTable->clear();
   }
 
-  // delete Short Lived table and contents
+  // remomve all contents in hort Lived table 
   if (fShortLivedTable!=0) {
-    delete fShortLivedTable;
-    fShortLivedTable = 0;
+    fShortLivedTable->clear();
   }
 
-  // delete dictionary for encoding
-  if (fEncodingDictionary)
-    {
+  // clear dictionary for encoding
+  if (fEncodingDictionary) {
       fEncodingDictionary->clear();
-      delete fEncodingDictionary;
-      fEncodingDictionary = 0;
-    }
+  }
 
-  // delete dictionary
-  if (fDictionary)
-    {
-      if (fIterator!=0 )delete fIterator;
-      fIterator =0;
-      fDictionary->clear();
-      delete fDictionary;
-      fDictionary = 0;
-    }
+  // clear dictionary
+  if (fDictionary) {
+    fDictionary->clear();
+  }
 }
 
 ////////////////////
@@ -238,11 +240,13 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
       G4PTblDictionary *pdic =  fDictionary;
       G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
 
-      (*pdic)[GetKey(particle)] = particle;
+      // insert into Dictionary
+      pdic->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
+
       // insert into EncodingDictionary
       G4int code = particle->GetPDGEncoding();
       if (code !=0 ) {
-       (*pedic)[code] = particle;
+        pedic->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
       }       
 
       // insert it in IonTable if "nucleus"
@@ -285,6 +289,7 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   if (particle->IsShortLived() ){
     fShortLivedTable->Remove(particle);
   }
+
   return particle;
 }
 

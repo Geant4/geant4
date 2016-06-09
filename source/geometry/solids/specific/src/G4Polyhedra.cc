@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.36 2007/07/12 15:52:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Polyhedra.cc,v 1.36.8.1 2008/04/23 08:10:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -782,9 +782,12 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   }
   else
   {
-    for (j=0; j< numPlanes-1; j++)
+    for (j=0; j<numPlanes-1; j++)
     {
-      if(chose>=Achose1 && chose < Achose2){ Flag = j; }
+      if( ((chose >= Achose1) && (chose < Achose2)) || (j == numPlanes-2) )
+      { 
+        Flag = j; break; 
+      }
       Achose1 += numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
       Achose2 = Achose1 + numSide*(aVector1[j+1]+aVector2[j+1])
                         + 2.*aVector3[j+1];

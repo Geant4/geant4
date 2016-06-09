@@ -14,6 +14,30 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5 May 2008 Gabriele Cosmo (hadr-casc-V09-00-04)
+-----------------------------------------------
+- Tag for release 9.1.p02.
+
+30 Apr 2008 Dennis Wright (hadr-casc-V09-01-02)
+-----------------------------------------------
+- fix cross section bug in G4CascadSpecialFunctions that returned
+  low or zero total cross sections for pi-p, pi+n, np, and pi0 
+  interactions
+
+22 Apr 2008 Dennis Wright (hadr-casc-V09-01-01)
+-----------------------------------------------
+- changed pp, nn total cross section parameterization in 
+  G4CascadSpecialFunctions to more closely reflect the PDG values (old one 
+  was off by as much as a factor of 3.
+
+3 Apr 2008 Dennis Wright (hadr-casc-V09-01-coula)
+-------------------------------------------------
+- removed Coulomb barrier from G4IntraNucleiCascader.cc (causes unphysical spike)
+
+3 Apr 2008 Dennis Wright (hadr-casc-V09-01-coul)
+------------------------------------------------
+- Added Coulomb barrier in G4EquilibriumEvaporator.cc, G4IntraNucleiCascader.cc
+
 17 Nov 2007 Dennis Wright (hadr-casc-V09-00-02)
 -----------------------------------------------
 - Fix angular distribution for nucleon-nucleon elastic scattering

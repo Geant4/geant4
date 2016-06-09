@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.15 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VProcess.cc,v 1.15.2.1 2008/04/25 11:47:07 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -84,6 +84,10 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
 {
   if (currentInteractionLength>0.0) {
     theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
+    if(theNumberOfInteractionLengthLeft<0.) {
+      theNumberOfInteractionLengthLeft=perMillion;
+    }          
+    
   } else {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {

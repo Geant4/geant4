@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BREPSolidBox.hh,v 1.10 2008/01/22 16:03:13 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidBox

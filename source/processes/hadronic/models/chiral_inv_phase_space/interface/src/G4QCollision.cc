@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.24 2007/11/01 16:09:38 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QCollision.cc,v 1.24.2.2 2008/05/07 13:47:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //      ---------------- G4QCollision class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -600,10 +600,15 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4double absMom = 0.;                       // Prototype of absorbed by nucleus Moment
   G4QHadronVector* leadhs=new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVectorum
   G4LorentzVector lead4M(0.,0.,0.,0.);        // Prototype of LeadingQ 4-momentum
-		if(aProjPDG==11 || aProjPDG==13 || aProjPDG==15) // leptons with photonuclear
-		{ // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + NC (?)
+
+  //  
+  // Leptons with photonuclear
+  // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + NC (?)
+  //
+  if (aProjPDG == 11 || aProjPDG == 13 || aProjPDG == 15) {
+
 #ifdef debug
-		  G4cout<<"G4QCollision::PostStDoIt:startSt="<<aParticleChange.GetTrackStatus()<<G4endl;
+    G4cout<<"G4QCollision::PostStDoIt:startSt="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
     G4double kinEnergy= projHadron->GetKineticEnergy();
     G4ParticleMomentum dir = projHadron->GetMomentumDirection();
@@ -792,9 +797,12 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 		  G4cout<<"G4QCollision::PostStDoIt: St="<<aParticleChange.GetTrackStatus()<<", g4m="
           <<proj4M<<", lE="<<finE<<", lP="<<finP*findir<<", d="<<findir.mag2()<<G4endl;
 #endif
-  }
-		else if(aProjPDG==12||aProjPDG==14)    //neutrinoNuclear interactions
-		{
+
+  //
+  // neutrinoNuclear interactions (nu_e, nu_mu only)
+  //
+  } else if (aProjPDG == 12 || aProjPDG == 14) {
+
     G4double kinEnergy= projHadron->GetKineticEnergy()/MeV; // Total energy of the neutrino
     G4double dKinE=kinEnergy+kinEnergy;  // doubled energy for s calculation
 #ifdef debug
@@ -981,8 +989,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeEnergy(0.);
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
     // There is no way back from here
-    if((secnu||!nuanu||N)&&totCS*G4UniformRand()<qelCS||s<mlD2)// Quasi-Elastic interaction
-    {
+
+    if ( ((secnu || !nuanu || N) && totCS*G4UniformRand() < qelCS) || s < mlD2 ) 
+    {   // Quasi-Elastic interaction
       G4double Q2=0.;                           // Simulate transferred momentum, in MeV^2
       if(secnu) Q2=CSmanager2->GetQEL_ExchangeQ2();
       else      Q2=CSmanager->GetQEL_ExchangeQ2();
@@ -1012,8 +1021,11 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     else                                        // ***** Non Quasi Elastic interaction
     {
      
-      if(secnu&&projPDG==2212||!secnu&&projPDG==2112) targPDG+=1;    // Recover target PDG,
-      else if(secnu&&projPDG==2112||!secnu&&projPDG==2212) targPDG+=1000; // if not quasiEl
+      if ( (secnu && projPDG == 2212) || (!secnu && projPDG == 2112) ) {
+        targPDG+=1;    // Recover target PDG,
+      } else if ( (secnu && projPDG == 2112) || (!secnu && projPDG == 2212) ) { 
+        targPDG+=1000; // if not quasiEl
+      }
       G4double Q2=0;                            // Simulate transferred momentum, in MeV^2
       if(secnu) Q2=CSmanager->GetNQE_ExchangeQ2();
       else      Q2=CSmanager2->GetNQE_ExchangeQ2();
@@ -1148,10 +1160,13 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         return G4VDiscreteProcess::PostStepDoIt(track, step);
       }
     }
-  }
-		else if(aProjPDG==2212 && Z>0 && N>0) // quasi-elastic for pA(Z,N)
-		//else if(2>3)
-		{
+
+  //
+  // quasi-elastic for p+A(Z,N)
+  //
+  } else if (aProjPDG == 2212 && Z > 0 && N > 0) {
+    //else if(2>3)
+
     G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
     std::pair<G4double,G4double> fief=qfMan->GetRatios(momentum, aProjPDG, Z, N);
     G4double qepart=fief.first*fief.second;
@@ -1163,17 +1178,23 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       // First decay a nucleus in a nucleon and a residual (A-1) nucleus
       G4double dmom=91.; // Fermi momentum (proto default for a deuteron)
       if(Z>1||N>1) dmom=286.2*std::pow(-std::log(G4UniformRand()),third);// p_max=250 MeV/c
+
       // Calculate cluster probabilities (n,p,d,t,he3,he4 now only, can use UpdateClusters)
       const G4int lCl=3; // The last clProb[lCl]==1. by definition, MUST be increasing
-      G4double clProb[lCl]={.6,.7,.8}; // N/P,D,t/He3,Al, integrated prob for .6,.1,.1,.2
+      G4double clProb[lCl]={0.6,0.7,0.8}; // N/P,D,t/He3,Alpha, integrated prob for .6,.1,.1,.2
       G4double base=1.;  // Base for randomization (can be reduced by totZ & totN)
       G4int max=lCl;   // Number of boundaries (can be reduced by totZ & totN)
+
       // Take into account that at least one nucleon must be left !
-      G4int A=Z+N;       // Baryon number of the nucleus
-      if(Z<2||N<2||A<5) base=clProb[max--]; // Alpha cluster is impossible
-      if(Z>1&&N<2||Z<2&&N>1) base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
-      if(Z<2&&N<2||A<4) base=clProb[max--]; // Both He3 and t clusters are impossible
-      if(A<3)           base=clProb[max--]; // Deuteron cluster is impossible
+      // Change max-- to --max - DHW 05/08
+      G4int A = Z + N;       // Baryon number of the nucleus
+      if (Z<2 || N<2 || A<5) base = clProb[--max]; // Alpha cluster is impossible
+      if ( (Z > 1 && N < 2) || (Z < 2 && N > 1) ) 
+        base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
+
+      if ( (Z < 2 && N < 2) || A < 4) base=clProb[--max]; // Both He3 and t clusters are impossible
+
+      if(A<3)           base=clProb[--max]; // Deuteron cluster is impossible
       G4int cln=0;                          // Cluster#0 (Default for the selected nucleon)
       if(max)                               // Not only nucleons are possible
       //if(2>3)
@@ -1199,7 +1220,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         G4int nln=0;
         if(cln==2) nln=1;                         // @@ only for cp1: t/He3 choice from A=4
         // mass(A)=tM. Calculate masses of A-1 (rM) and mN (mNeut or mProt bounded mass)
-        if((!cln||cln==2)&&G4UniformRand()*(A-cln)>(N-nln) || (cln==3||cln==1)&&Z>N)
+        if ( ((!cln || cln == 2) && G4UniformRand()*(A-cln) > (N-nln)) || 
+             ((cln == 3 || cln == 1) && Z > N) )
         {
           nPDG=90001000;                          // Update quasi-free nucleon PDGCode to P
           nZ=1;                                   // Change charge of the quasiFree nucleon
@@ -1408,12 +1430,14 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       else G4cout<<"G4QCol::PSD: OUT, M2="<<s4M.m2()<<"<"<<minM*minM<<", N="<<nPDG<<G4endl;
 #endif
     }
-  }
+  }  // end lepto-nuclear, neutrino-nuclear, proton quasi-elastic
+
   EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
   if(absMom) EnMomConservation+=lead4M;         // Add E/M of leading System
 #ifdef debug
-		G4cout<<"G4QCollision::PostStDoIt:before St="<<aParticleChange.GetTrackStatus()<<G4endl;
+  G4cout<<"G4QCollision::PostStDoIt:before St="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
+
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin
   //G4bool elF=false; // Flag of the ellastic scattering is "false" by default
   //G4double eWei=1.;
@@ -1423,7 +1447,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--  -+
   //if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)      |
-		{ //                                                                                  |
+  { //                                                                                  |
     G4QHadronVector projHV;                                 //                          |
     projHV.push_back(pH);                                   // DESTROYED over 2 lines-+ |
     G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->----+ | |
@@ -1433,12 +1457,12 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<"G4QCol::PStDoIt:Proj="<<projPDG<<proj4M<<",Targ="<<targPDG<<G4endl; // |   .
 #endif
     try                                                           //                |   .
-	   {                                                             //                |   .
-	     delete output;                                              //                |   .
+    {                                                             //                |   .
+      delete output;                                              //                |   .
       output = pan->Fragment();// DESTROYED in the end of the LOOP work space       |   .
     }                                                             //                |   .
     catch (G4QException& error)//                                                   |   .
-	   {                                                             //                |   .
+    {                                                             //                |   .
 	     //#ifdef pdebug
       G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl;// |   .
 	     //#endif
@@ -1446,8 +1470,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }                                                             //                |   .
     delete pan;                              // Delete the Nuclear Environment <-<--+   .
   } //                                                                                  .
-  //else               // Use G4QuasmonString                                             .
-		//{ //                                                                                  ^
+  //else             // Use G4QuasmonString                                             .
+  //{ //                                                                                  ^
   //  G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+  |
   //  delete pH;                                                    // --------<-------+--+
 #ifdef debug
@@ -1456,15 +1480,15 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   //  //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
   //  try                                                           //                 |
-	 //  {                                                             //                 |
-		//		  delete output;                                            //                   |
+  //  {                                                             //                 |
+  //		  delete output;                                  //                   |
   //    output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
   //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
   //    //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
   //    //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
-		//		  //{//                                                                          |
+  //	//{//                                                                          |
   //    //  elF=true;                   // Just put a flag for the ellastic Scattering |
-	 //    //  delete output;              // Delete a prototype of dummy G4QHadronVector |
+  //    //  delete output;              // Delete a prototype of dummy G4QHadronVector |
   //    //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
   //    //}//                                                                          |
   //    //eWei=pan->GetWeight();        // Just an example for the weight of the event |
@@ -1474,8 +1498,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
   //  }                                                             //                 |
   //  catch (G4QException& error)//                                                    |
-	 //  {                                                             //                 |
-	 //    //#ifdef pdebug
+  //  {                                                             //                 |
+  //    //#ifdef pdebug
   //    G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
 	 //    //#endif
   //    G4Exception("G4QCollision::PostStDoIt:","27",FatalException,"QString Excep");//|
@@ -1498,6 +1522,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     delete leadhs;
   }
+
+
   // ------------- From here the secondaries are filled -------------------------
   G4int tNH = output->size();       // A#of hadrons in the output
   aParticleChange.SetNumberOfSecondaries(tNH); 

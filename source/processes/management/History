@@ -1,4 +1,4 @@
-$Id: History,v 1.51.2.1 2007/12/12 10:09:04 gcosmo Exp $
+$Id: History,v 1.51.2.1.2.1 2008/04/25 11:47:06 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Apr. 25, 2008   H.Kurashige (procman-V09-00-06)
+- fixed a bug of invoking ResetNumberOfInteractionLengthLeft 
+  at the zero length step  
+- allow zero mean free path for PostStepDoIt
+
 
 - Dec. 12, 2007   G.Cosmo (procman-V09-00-05a)
 - Moved inline definitions of virtual methods in G4WrapperProcess to

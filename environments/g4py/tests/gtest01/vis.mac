@@ -1,9 +1,6 @@
 # vis.mac
 
 /vis/open OGLIX
-#/vis/open OGLIXm
-#/vis/open RayTracerX
-#/vis/open OGLSX
 
 /vis/scene/create
 /vis/scene/add/volume

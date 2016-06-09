@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2007/11/25 19:47:02 kmura Exp $
+$Id: History,v 1.33.2.1 2008/04/23 09:26:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,24 +18,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-envs-V09-00-04  26 Nov. Koichi Murakami
+envs-V09-00-05  23 Apr. 2008 Gabriele Cosmo
+- Tag for release 9.1.p02.
+
+envs-V09-01-00  13 Mar. 2008 Koichi Murakami
+ [g4py]
+ - fix compilation problems
+ - direct usage of G4Version.hh instead of pyG4Version.hh
+
+envs-V09-00-04  26 Nov. 2007 Koichi Murakami
  [g4py]
  - add G4 GDML module support
  - update PL stuffs for 9.1
 
-envs-V09-00-03  16 Nov. Koichi Murakami
+envs-V09-00-03  16 Nov. 2007 Koichi Murakami
  - sorry, forget commiting this history file.
 
-envs-V09-00-02  13 Nov. Koichi Murakami
+envs-V09-00-02  13 Nov. 2007 Koichi Murakami
  [g4py]
   - modified for 9.1 release
   - add GDML support / GDML file I/O examples
 
-envs-V09-00-01  07 Aug. Koichi Murakami
+envs-V09-00-01  07 Aug. 2007 Koichi Murakami
  [g4py]
   - add geometry stuffs(boolean solids) and testing stuffs
 
-envs-V09-00-00  14 July Koichi Murakami
+envs-V09-00-00  14 July 2007 Koichi Murakami
  [g4py]
   - bug fix
   - update/add geometry stuffs

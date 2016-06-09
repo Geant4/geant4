@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIQt.hh,v 1.9 2007/11/30 13:32:47 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.hh,v 1.1 2007/03/30 15:25:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QuasiElasticChannel.hh,v 1.1.2.1 2008/04/24 10:54:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 
 // Author : Gunter Folger March 2007
@@ -44,6 +44,8 @@
 #include "G4KineticTrackVector.hh"
 
 #include "G4QuasiFreeRatios.hh"
+
+#include "G4Fancy3DNucleus.hh"
 
 class G4QuasiElasticChannel
 {
@@ -65,6 +67,7 @@ class G4QuasiElasticChannel
 
    private:
    	G4QuasiFreeRatios * theQuasiElastic;
+	G4Fancy3DNucleus  the3DNucleus;
 };
 
 #endif

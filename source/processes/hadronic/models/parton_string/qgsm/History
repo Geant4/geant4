@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007/04/24 10:29:34 gunter Exp $
+$Id: History,v 1.4.2.1 2008/04/23 15:25:01 gcosmo Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,10 +15,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 Apr 2008 Gabriele Cosmo (hadr-qgsm-V09-00-00)
+------------------------------------------------
+- Tag for release 9.1.p02.
+
+31 Mar 2008 Dennis Wright (hadr-qgsm-V09-01-00)
+-----------------------------------------------
+- Fix gcc-4.3 compiler warnings at lines 293, 395 of G4QGSMSplittableHadron.cc
 
 24 Apr 2007 Gunter Folger  (hadr-qgsm-V08-02-02)
--  merge in change done by ftf dev; ie. in G4QGSParticipants, theDiffExcitaton
-   is constructed with default arguments.
+------------------------------------------------
+- Merge in change done by ftf dev; ie. in G4QGSParticipants, theDiffExcitaton
+  is constructed with default arguments.
 
 25 Jan 2007 Gunter Folger  (hadr-qgsm-V08-02-01)
 ------------------------------------------------
@@ -26,10 +34,10 @@ code and to keep track of all tags.
 
 24 Jan 2007 Gunter Folger  (hadr-qgsm-V08-02-00)
 ------------------------------------------------
--  Correct E-p non-conservation in QGS. In 4QGSMSplitableHadron.cc the smaller
-   of the lightcone momenta Q+/Q- was ignored.
--  G4QGSMSplitableHadron correct divide by 0 in SampleX()
--  Add debugging output to several classes
+- Correct E-p non-conservation in QGS. In 4QGSMSplitableHadron.cc the smaller
+  of the lightcone momenta Q+/Q- was ignored.
+- G4QGSMSplitableHadron correct divide by 0 in SampleX()
+- Add debugging output to several classes
 
 30 Nov 2005 Gabriele Cosmo (hadr-qgsm-V07-01-00)
 -----------------------------------------------

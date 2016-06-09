@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -76,6 +76,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -303,7 +305,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.6s Real=5.7s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -311,11 +313,11 @@ Run Summary
 
  truePathLength :	2.7521 cm  +- 3.269 nm 
  geomPathLength :	2.0696 cm  +- 11.392 nm 
- lateralDisplac :	1.1482 cm  +- 9.6993 nm 
- Psi            :	506.49 mrad +- 0.00036939 mrad  (29.02 deg +- 2.1164e-05 deg)
+ lateralDisplac :	1.1482 cm  +- 4.6902 nm 
+ Psi            :	506.49 mrad +- 0.00019571 mrad  (29.02 deg +- 1.1213e-05 deg)
 
- Theta_plane    :	1811.3 mrad  (103.78 deg)
- phi correlation:	0.26313 +- 0.056751  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	1806.6 mrad  (103.51 deg)
+ phi correlation:	0.2624 +- 0.059273  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -327,7 +329,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1495830004, 1445517985
+ Current couple of seeds = 397063712, 552340631
 ----------------------------------------
 #
 /gun/energy 100 keV
@@ -361,7 +363,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1495830004, 1445517985
+ Current couple of seeds = 397063712, 552340631
 ----------------------------------------
 Start Run processing.
 
@@ -369,7 +371,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.4s Real=5.4s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -380,8 +382,8 @@ Run Summary
  lateralDisplac :	923.68 nm  +- 256.83 fm 
  Psi            :	148.35 mrad +- 8.7703e-05 mrad  (8.4998 deg +- 5.025e-06 deg)
 
- Theta_plane    :	231.09 mrad  (13.241 deg)
- phi correlation:	0.073719 +- 0.1302  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	258.19 mrad  (14.793 deg)
+ phi correlation:	0.077745 +- 0.12942  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -393,7 +395,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1231243716, 1284103083
+ Current couple of seeds = 707823211, 530749218
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

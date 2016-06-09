@@ -1,4 +1,4 @@
-$Id: History,v 1.363 2008/01/16 16:42:28 vnivanch Exp $
+$Id: History,v 1.363.2.1 2008/04/25 00:22:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 April 08: V.Ivant (emstand-V09-00-23)
+G4UrbanMscModel90, G4UrbanMscModel - fixed assymetry of lateral displacement
+G4ionIonisation - use linLossLimit 0.15 as it was in 9.1
+G4IonFluctuations - fixed discontinuity of width of the energy loss for small
+                    velocities (very long alpha events) 
 
 16 January 08: V.Ivant (emstand-V09-01-01)
 G4PAIModel, G4PAIPhotonModel - added an extra protection garanteed

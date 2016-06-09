@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UItcsh.cc,v 1.16 2008/01/15 08:13:34 kmura Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 
 #ifndef WIN32

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4GDMLParser.cc,v 1.1 2007/11/25 19:39:47 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4GDMLParser.cc,v 1.1.2.1 2008/04/23 09:26:58 gcosmo Exp $
+// $Name: geant4-09-01-patch-02 $
 // ====================================================================
 //   pyG4GDMLParser.cc
 //
@@ -52,7 +52,8 @@ using namespace pyG4GDMLParser;
 // ====================================================================
 void export_G4GDMLParser()
 {
-  class_<G4GDMLParser>("G4GDMLParser", "GDML parser")
+  class_<G4GDMLParser, boost::noncopyable>
+    ("G4GDMLParser", "GDML parser")
     // ---
     .def("Read",             &G4GDMLParser::Read)
     .def("GetWorldVolume",   &G4GDMLParser::GetWorldVolume,

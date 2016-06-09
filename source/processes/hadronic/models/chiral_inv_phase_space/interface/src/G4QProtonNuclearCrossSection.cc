@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // G4 Physics class: G4QProtonNuclearCrossSection for gamma+A cross sections
@@ -106,7 +106,8 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
+	//        if(std::fabs(lastP/pMom-1.)<tolerance)
+        if(lastP==pMom)                  // VI do not use tolerance
         {
 #ifdef pdebug
           G4cout<<"G4QPrCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
@@ -188,7 +189,8 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  //  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  else if(lastP==pMom)                // VI do not use tolerance
   {
 #ifdef pdebug
     G4cout<<"G4QPrCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;

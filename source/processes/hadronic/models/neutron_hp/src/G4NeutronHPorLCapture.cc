@@ -29,6 +29,8 @@
 //          If NeutronHP data do not available for an element, then Low Energy 
 //          Parameterization models handle the interactions of the element.
 //
+// 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
+//
 
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
@@ -55,7 +57,7 @@ G4NeutronHPorLCapture::G4NeutronHPorLCapture()
       theCapture[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       //G4cout << (*(G4Element::GetElementTable()))[i] -> GetName()  << G4endl;
       //while(!theCapture[i].Register(theFS));
-      try { while(!theCapture[i].Register(theFS)); }
+      try { while(!theCapture[i].Register(theFS)) ; }
       catch ( G4HadronicException )
       {
           unavailable_elements.insert ( (*(G4Element::GetElementTable()))[i]->GetName() ); 

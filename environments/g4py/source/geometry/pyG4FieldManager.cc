@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4FieldManager.cc,v 1.4 2006/06/29 15:32:02 gunter Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4FieldManager.cc,v 1.4.2.1 2008/04/23 09:26:58 gcosmo Exp $
+// $Name: geant4-09-01-patch-02 $
 // ====================================================================
 //   pyG4FieldManager.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4FieldManager.hh"
 #include "G4Field.hh"
 #include "G4ChordFinder.hh"

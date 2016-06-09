@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.126.2.1 2008/01/30 10:45:58 allison Exp $
+cvs log $Id: History,v 1.126.2.1.2.1 2008/04/23 07:58:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30th January 2008  John Allison  (greps-V09-01-02)
-- Bug fix tag (HepPolyhedronParaboloid)
+14th April 2008  Tatiana Nikitina  (greps-V09-00-03)
+- Added G4Hype representation to HepPolyhedron and G4Polyhedron.
+- Coworks with development tag "geom-specific-V09-01-08",
+  available in development tag "greps-V09-01-04".
 
-29th January 2008  John Allison  (greps-V09-01-01)
+13th March 2008  Gabriele Cosmo
+- Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on gcc-4.3.0.
+- Available in development tag "greps-V09-01-03".
+
+30th January 2008  John Allison
+- Bug fix tag (HepPolyhedronParaboloid).
+- Available in development tag "greps-V09-01-02".
+
+29th January 2008  John Allison
 - HepPolyhedronParaboloid: bug fix and improvement.
+- Available in development tag "greps-V09-01-01".
 
 21th August 2007  Tatiana Nikitina  (greps-V09-00-02)
 - Fixed bug in scaling parameter for G4EllipticalCone representation in

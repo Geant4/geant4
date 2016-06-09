@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.6 2008/02/01 22:51:43 ivana Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// $Id: G4ExtrudedSolid.hh,v 1.6.2.1 2008/04/23 08:10:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -138,6 +138,8 @@ class G4ExtrudedSolid : public G4TessellatedSolid
     G4TwoVector ProjectPoint(const G4ThreeVector& point) const;
 
     G4bool IsSameLine(G4TwoVector p,
+                      G4TwoVector l1, G4TwoVector l2) const;
+    G4bool IsSameLineSegment(G4TwoVector p,
                       G4TwoVector l1, G4TwoVector l2) const;
     G4bool IsSameSide(G4TwoVector p1, G4TwoVector p2, 
                       G4TwoVector l1, G4TwoVector l2) const;

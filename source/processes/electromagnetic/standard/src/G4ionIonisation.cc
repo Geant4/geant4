@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.45 2008/01/14 11:59:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// $Id: G4ionIonisation.cc,v 1.45.2.2 2008/04/25 00:34:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -85,7 +85,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     stopDataActive(true),
     nuclearStopping(true)
 {
-  //  SetLinearLossLimit(0.0.05);
+  SetLinearLossLimit(0.15);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
   SetVerboseLevel(1);

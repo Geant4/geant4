@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.cc,v 1.11 2006/06/29 18:42:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ProjectedSurface.cc,v 1.11.4.1 2008/04/23 08:59:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -644,7 +644,7 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
   for( register G4int a=0; a<size;a++)
   {
     if ( lower != 0)
-      for ( i = 0,  o_ptr = oslo_m; i < lower; i++, o_ptr = o_ptr->GetNextNode());
+      for ( i = 0,  o_ptr = oslo_m; i < lower; i++, o_ptr = o_ptr->GetNextNode()){;}
     else
       o_ptr = oslo_m;
     

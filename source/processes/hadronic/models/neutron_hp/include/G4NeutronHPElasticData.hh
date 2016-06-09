@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticData.hh,v 1.9 2006/06/29 20:47:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPElasticData.hh,v 1.9.2.1 2008/04/29 07:05:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
+//
+// 080417 Add IsZAApplicable method (return false) by T. Koi
 //
 #ifndef G4NeutronHPElasticData_h
 #define G4NeutronHPElasticData_h 1
@@ -53,6 +55,10 @@ class G4NeutronHPElasticData : public G4VCrossSectionDataSet
    ~G4NeutronHPElasticData();
    
    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+
+   public:
+      G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+      { return false;}
 
    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 

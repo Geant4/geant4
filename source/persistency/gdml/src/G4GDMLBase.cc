@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GDMLBase.cc,v 1.3.2.1 2008/01/16 09:43:30 ztorzsok Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // class G4GDMLBase

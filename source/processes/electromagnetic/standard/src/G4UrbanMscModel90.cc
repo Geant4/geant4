@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.1 2007/12/07 17:35:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UrbanMscModel90.cc,v 1.1.2.2 2008/04/25 00:34:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +56,7 @@
 #include "G4UrbanMscModel90.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
@@ -67,11 +68,11 @@
 
 using namespace std;
 
-G4UrbanMscModel90::G4UrbanMscModel90(G4double m_facrange, G4double m_dtrl, 
-				 G4double m_lambdalimit, 
-				 G4double m_facgeom,G4double m_skin, 
-				 G4bool m_samplez, G4MscStepLimitType m_stepAlg, 
-				 const G4String& nam)
+G4UrbanMscModel90::G4UrbanMscModel90(G4double m_facrange, G4double m_dtrl,
+				     G4double m_lambdalimit,
+				     G4double m_facgeom,G4double m_skin,
+				     G4bool m_samplez, G4MscStepLimitType m_stepAlg,
+				     const G4String& nam)
   : G4VEmModel(nam),
     dtrl(m_dtrl),
     lambdalimit(m_lambdalimit),
@@ -99,14 +100,13 @@ G4UrbanMscModel90::G4UrbanMscModel90(G4double m_facrange, G4double m_dtrl,
   geombig       = 1.e50*mm;
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
-  presafety     = 0.*mm;
   facsafety     = 0.25;
+  presafety     = 0.*mm;
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,9 +117,11 @@ G4UrbanMscModel90::~G4UrbanMscModel90()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
-				 const G4DataVector&)
+				   const G4DataVector&)
 {
+  skindepth     = skin*stepmin;
   if(isInitialized) return;
+
   // set values of some data members
   SetParticle(p);
 
@@ -131,6 +133,8 @@ void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
+
+  isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -790,11 +794,13 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
         // sample direction of lateral displacement
         // compute it from the lateral correlation
         G4double Phi = 0.;
-        if(std::abs(r*sth) < latcorr)
+        if(std::abs(r*sth) < latcorr) {
           Phi  = twopi*G4UniformRand();
-        else
-          Phi = phi-std::acos(latcorr/(r*sth));
-        if(Phi < 0.) Phi += twopi;
+        } else {
+          G4double psi = std::acos(latcorr/(r*sth));
+          if(G4UniformRand() < 0.5) Phi = phi+psi;
+          else                      Phi = phi-psi;
+	}
 
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
@@ -886,14 +892,14 @@ G4double G4UrbanMscModel90::SampleCosineTheta(G4double trueStepLength,
   }
   else
   {
-      if(trueStepLength >= currentRange*dtrl)
-        if(par1*trueStepLength < 1.)
-          tau = -par2*log(1.-par1*trueStepLength) ;
-        // for the case if ioni/brems are inactivated
-        // see the corresponding condition in ComputeGeomPathLength 
-        else if(1.-KineticEnergy/currentKinEnergy > taulim)
-          tau = taubig ;
-
+    if(trueStepLength >= currentRange*dtrl) {
+      if(par1*trueStepLength < 1.)
+	tau = -par2*log(1.-par1*trueStepLength) ;
+      // for the case if ioni/brems are inactivated
+      // see the corresponding condition in ComputeGeomPathLength 
+      else if(1.-KineticEnergy/currentKinEnergy > taulim)
+	tau = taubig ;
+    }
     currentTau = tau ;
     lambdaeff = trueStepLength/currentTau;
     currentRadLength = couple->GetMaterial()->GetRadlen();

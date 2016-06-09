@@ -28,6 +28,7 @@
 //          Implemented by T. Koi (SLAC/SCCS)
 //          If NeutronHP data do not available for an element, then Low Energy 
 //          Parameterization models handle the interactions of the element.
+// 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
 //
 
 // neutron_hp -- source file
@@ -60,7 +61,7 @@ G4NeutronHPorLFission::G4NeutronHPorLFission()
       if ( (*(G4Element::GetElementTable()))[i]-> GetZ() > 89 )
       {
          theFission[i].Init((*(G4Element::GetElementTable()))[i], dirName);
-         try { while(!theFission[i].Register(&theFS)); }
+         try { while(!theFission[i].Register(&theFS)) ; }
          catch ( G4HadronicException )
          {
              unavailable_elements.insert ( (*(G4Element::GetElementTable()))[i]->GetName() ); 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceList.cc,v 1.7 2006/06/29 18:42:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4SurfaceList.cc,v 1.7.4.1 2008/04/23 08:59:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -137,6 +137,7 @@ void G4SurfaceList::RemovePointer()
   // Remove the current pointer from the List
   // Do not delete the object itself
   if(number_of_elements)
+  {
     if(first != index)
     {
       temp = first;
@@ -156,7 +157,8 @@ void G4SurfaceList::RemovePointer()
       first = first->GetNextNode();
       index = first;
     }
-  
+  }
+
   number_of_elements--;
 }
 

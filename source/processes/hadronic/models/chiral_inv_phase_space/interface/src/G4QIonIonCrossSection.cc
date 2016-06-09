@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 19-Aug-07
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // G4 Physics class: G4QIonIonCrossSection for gamma+A cross sections
@@ -423,7 +423,7 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
   G4double elCS=0.;
   if(pA<1.1 || tA<1.1) // Ion-nucleon/nucleon-ion interaction use NA(in,el)
 		{
-    if     (pZ==1 && !pN || tZ==1 && !tN) // proton-nuclear
+    if ( (pZ == 1 && !pN) || (tZ == 1 && !tN) ) // proton-nuclear
     {
       elCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
       inCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);

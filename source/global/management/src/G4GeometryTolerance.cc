@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.cc,v 1.2 2007/06/18 13:26:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GeometryTolerance.cc,v 1.2.4.1 2008/04/23 09:22:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // class G4GeometryTolerance
 //
@@ -107,7 +107,7 @@ void G4GeometryTolerance::SetSurfaceTolerance(G4double worldExtent)
 {
   if (!fInitialised)
   {
-    fCarTolerance = worldExtent*1E-11*mm;
+    fCarTolerance = worldExtent*1E-11;
     fInitialised = true;
   }
   else

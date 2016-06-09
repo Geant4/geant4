@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2004/09/01 09:56:08 japost Exp $
+$Id: README,v 1.5.2.1 2008/05/05 09:23:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,7 +33,7 @@ $Id: README,v 1.5 2004/09/01 09:56:08 japost Exp $
         The volume "World" contains the "absorber". 
         In this test the parameters of the "World" can be changed , too.
 
- 	In addition a transverse uniform magnetic field can be applied.
+ 	In addition a transverse uniform electric field can be applied.
  	
  	The default geometry is constructed in DetectorConstruction class,
  	but all the parameters can be changed via

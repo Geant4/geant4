@@ -112,7 +112,8 @@ void F04OpticalPhysics::ConstructProcess()
     }
 
     if(theCerenkovProcess->IsApplicable(*particle)){
-      pManager->AddContinuousProcess(theCerenkovProcess);
+      pManager->AddProcess(theCerenkovProcess);
+      pManager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
     if(theScintProcess->IsApplicable(*particle)){
       pManager->AddProcess(theScintProcess);

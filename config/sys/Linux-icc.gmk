@@ -1,9 +1,9 @@
 #
-# ------ GNU/LINUX ------         Intel icc 9.1
+# ------ GNU/LINUX ------         Intel icc 10.1
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -mp -no-gcc -w1
+  CXXFLAGS  := -ansi -fp-model precise -no-gcc -w1
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
     FCFLAGS   := -O2
@@ -26,9 +26,9 @@ ifeq ($(G4SYSTEM),Linux-icc)
     CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
-  CC := gcc
-  FC := g77
-  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  CC := icc
+  FC := ifort
+  FCFLAGS += -noautomatic -assume nobscc -assume no2underscores
   FCLIBS := -lg2c -lnsl
   AR := ar r
   ECHO    := /bin/echo -e

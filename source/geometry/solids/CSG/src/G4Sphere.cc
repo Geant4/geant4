@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.57 2007/05/18 07:38:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Sphere.cc,v 1.57.2.1 2008/04/23 09:05:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // class G4Sphere
 //
@@ -2974,7 +2974,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   costheta = std::cos(theta);
   sintheta = std::sqrt(1.-sqr(costheta));
 
-  if( (fSPhi==0) && (fDPhi==2.*pi) || (fDPhi==2.*pi) ) {aFiv = 0;}
+  if( ((fSPhi==0) && (fDPhi==2.*pi)) || (fDPhi==2.*pi) ) {aFiv = 0;}
   if(fSTheta == 0)  {aThr=0;}
   if(fDTheta + fSTheta == pi) {aFou = 0;}
   if(fSTheta == 0.5*pi) {aThr = pi*(fRmax*fRmax-fRmin*fRmin);}

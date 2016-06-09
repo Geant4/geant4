@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4JTPolynomialSolver.cc,v 1.6 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4JTPolynomialSolver.cc,v 1.6.2.1 2008/04/23 09:22:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -136,9 +136,9 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degr,
     //
     sc = lo/min;
 
-    if ( sc <= 1.0 && max >= 10.0 
-      || sc > 1.0 && infin/sc >= max 
-      || infin/sc >= max && max >= 10 )
+    if ( ((sc <= 1.0) && (max >= 10.0)) 
+      || ((sc > 1.0) && (infin/sc >= max)) 
+      || ((infin/sc >= max) && (max >= 10)) )
     {
       if (!( sc != 0.0 ))
         { sc = smalno ; }
@@ -381,7 +381,7 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int *nz)
     //
     vtry = 0;
     stry = 0;
-    if (spass && (!vpass) || tss < tvv)
+    if ((spass && (!vpass)) || (tss < tvv))
     {
       RealPolynomialIteration(&xs,nz,&iflag);
       if (*nz > 0)  { return; }

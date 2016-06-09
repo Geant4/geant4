@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.cc,v 1.9 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4DataInterpolation.cc,v 1.9.2.1 2008/04/23 09:22:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 #include "G4DataInterpolation.hh"
 
@@ -382,7 +382,7 @@ G4DataInterpolation::LocateArgument(G4double pX) const
    while((kHigh - kLow) > 1)
    {
       k = (kHigh + kLow) >> 1 ; // compute midpoint 'bisection'
-      if(pX >= fArgument[k] == ascend)
+      if( (pX >= fArgument[k]) == ascend)
       {
          kLow = k ;
       }

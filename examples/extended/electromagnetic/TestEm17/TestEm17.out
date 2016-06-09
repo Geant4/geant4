@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -48,6 +48,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -142,18 +144,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=146.73s Real=438.54s Sys=6.51s
+  User=8.7s Real=32.93s Sys=2.4s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 468278	muPairProd : 63553	muBrems : 665
+ Number of process calls --->	muIoni : 469509	muPairProd : 63194	muBrems : 732
 
- Simulation: total CrossSection = 0.5325 /cm	 MeanFreePath = 1.8779 cm 	 massicCrossSection = 0.067661 cm2/g
+ Simulation: total CrossSection = 0.53343 /cm	 MeanFreePath = 1.8746 cm 	 massicCrossSection = 0.067781 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1877659782, 1214151217
+ Current couple of seeds = 2031201429, 1872579439
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

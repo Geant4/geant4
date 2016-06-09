@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RunAction.cc,v 1.21 2008/01/14 12:11:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

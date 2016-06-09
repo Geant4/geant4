@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.7 2007/11/25 19:37:44 kmura Exp $
+#$Id: configure,v 1.7.2.1 2008/04/23 09:26:58 gcosmo Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -32,9 +32,6 @@ Installation directories:
 Fine tuning of the library path:
   --with-g4-incdir=DIR      Geant4 header dir [\$G4INCLUDE]
   --with-g4-libdir=DIR      Geant4 library dir [\$G4LIB/\$G4SYSTEM]
-  --with-g4-version=NUM     Geant4 version (700/701/710/711)
-                            Not required after ver.8.0
-
   --with-clhep-incdir=DIR   CLHEP header dir [\$CLHEP_INCLUDE_DIR]
   --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_LIB_DIR]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|\$CLHEP_LIB]
@@ -60,14 +57,13 @@ Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, \$G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, \$G4VIS_USE_RAYTRACERX]
-  g4gdml       GDML support (G4 module) [disable]
   gdml         GDML support (external, experimental) [disable]
                also specifying inc/lib directories
 
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOSX with gcc (Tiger and XCode 2.3)
+  macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
 EOF
 }
@@ -85,7 +81,6 @@ current_dir=`pwd`
 g4_incdir=${G4INCLUDE:-/zzz}
 g4_libdir=${G4LIB:+$G4LIB/$G4SYSTEM}
 g4_libdir=${g4_libdir:-/zzz}
-g4_version=${G4VERSION_NUMBER:-auto}
 
 clhep_incdir=${CLHEP_INCLUDE_DIR:-/zzz}
 clhep_libdir=${CLHEP_LIB_DIR:-/zzz}
@@ -157,7 +152,6 @@ do
                                clhep_libdir=$optarg/lib          ;;
     --with-g4-incdir=*)        g4_incdir=$optarg                 ;;
     --with-g4-libdir=*)        g4_libdir=$optarg                 ;;
-    --with-g4-version=*)       g4_version=$optarg                ;;
     --with-clhep-incdir=*)     clhep_incdir=$optarg              ;;
     --with-clhep-libdir=*)     clhep_libdir=$optarg              ;;
     --with-clhep-lib=*)        clhep_lib=$optarg                 ;;
@@ -177,8 +171,6 @@ do
     --disable-openglxm )       enable_openglxm=0                 ;;
     --enable-raytracerx )      enable_raytracerx=1               ;;
     --disable-raytracerx )     enable_raytracerx=0               ;;
-    --enable-g4gdml )          enable_g4gdml=1                   ;;
-    --disable-g4gdml )         enable_g4gdml=0                   ;;
     --enable-gdml )            enable_gdml=1                     ;;
     --disable-gdml )           enable_gdml=0                     ;;
     # ---------------------------------------------------------------
@@ -234,25 +226,6 @@ if [ ! -d "$g4_libdir" ]; then
   exit -1
 fi
 echo "$g4_libdir"
-
-echo -n "Checking for G4 version ... "
-case $g4_version in
-  auto|700|701|710|711)
-    echo "$g4_version"
-    ;;
-  *)
-    echo "no"
-    echo "### $g4_version (g4-version) is invalid (700/701/710/711)."
-    exit -1
-    ;;
-esac
-
-if [ "$g4_version" = "auto" ]; then
-  if [ ! -f "$g4_incdir"/G4Version.hh ]; then
-    echo "### G4Version.hh does not exist. Try --with-g4-version option."
-    exit -1
-  fi
-fi
 
 # ---
 echo -n "Checking for CLHEP include dir ... "
@@ -369,17 +342,13 @@ fi
 
 # ---
 echo -n "Checking for G4GDML support ..."
-if [ $enable_g4gdml == 0 ]; then
-  echo "no"
+if [ -f "$g4_incdir"/G4GDMLParser.hh ]; then
+  echo "yes"
+  enable_g4gdml=1
 else
-  if [ -f "$g4_incdir"/G4GDMLParser.hh ]; then
-    echo "yes"
-  else
-    echo "no"
-    echo "### G4 GDML component is not found."
-    exit -1
-  fi  
-fi
+  echo "no"
+  enable_g4gdml=0
+fi  
 
 # ---
 echo -n "Checking for GDML support ..."
@@ -465,11 +434,6 @@ Q_G4_INCDIR           := $g4_incdir
 Q_G4_LIBDIR           := $g4_libdir
 EOF
 
-if [ $g4_version != auto ]; then
-cat >> $make_config <<EOF
-Q_G4_VERSION          := $g4_version
-EOF
-fi
 
 cat >> $make_config <<EOF
 

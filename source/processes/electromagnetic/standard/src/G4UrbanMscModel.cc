@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.77 2007/11/30 13:53:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UrbanMscModel.cc,v 1.77.2.2 2008/04/25 00:34:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -165,6 +165,7 @@
 #include "G4UrbanMscModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
@@ -176,10 +177,10 @@
 
 using namespace std;
 
-G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl, 
-				 G4double m_lambdalimit, 
-				 G4double m_facgeom,G4double m_skin, 
-				 G4bool m_samplez, G4MscStepLimitType m_stepAlg, 
+G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
+				 G4double m_lambdalimit,
+				 G4double m_facgeom,G4double m_skin,
+				 G4bool m_samplez, G4MscStepLimitType m_stepAlg,
 				 const G4String& nam)
   : G4VEmModel(nam),
     dtrl(m_dtrl),
@@ -211,8 +212,8 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   geombig       = 1.e50*mm;
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
-  presafety     = 0.*mm;
   facsafety     = 0.25;
+  presafety     = 0.*mm;
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
@@ -231,7 +232,9 @@ G4UrbanMscModel::~G4UrbanMscModel()
 void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 				 const G4DataVector&)
 {
+  skindepth = skin*stepmin;
   if(isInitialized) return;
+
   // set values of some data members
   SetParticle(p);
 
@@ -243,6 +246,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
+
+  isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -898,11 +903,13 @@ void G4UrbanMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
         // sample direction of lateral displacement
         // compute it from the lateral correlation
         G4double Phi = 0.;
-        if(std::abs(r*sth) < latcorr)
+        if(std::abs(r*sth) < latcorr) {
           Phi  = twopi*G4UniformRand();
-        else
-          Phi = phi-std::acos(latcorr/(r*sth));
-        if(Phi < 0.) Phi += twopi;
+        } else {
+          G4double psi = std::acos(latcorr/(r*sth));
+          if(G4UniformRand() < 0.5) Phi = phi+psi;
+          else                      Phi = phi-psi;
+	}
 
         dirx = std::cos(Phi);
         diry = std::sin(Phi);

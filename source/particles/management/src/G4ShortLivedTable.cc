@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.14 2006/06/29 19:26:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ShortLivedTable.cc,v 1.14.2.1 2008/04/25 12:21:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -88,6 +88,7 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
     for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
       if ( particle == *idx) {
         fShortLivedList->erase(idx);
+        break;
       }
     }
   } else {

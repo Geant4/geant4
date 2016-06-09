@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,6 +24,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -159,7 +161,7 @@ The materials defined are:
    --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  63.97 %  ElmAbundance  50.00 %
 
- Material: Scintillator     density:  1.032 g/cm3   RadL:  42.544 cm   Imean:  63.913 eV 
+ Material: Scintillator     density:  0.000 mg/cm3  RadL:  86.056 pc   Imean:  63.913 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
    --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
    --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  91.47 %  ElmAbundance  47.37 %
@@ -172,9 +174,6 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
 G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Pb
 G4NistMaterialBuilder::FindOrBuildMaterial G4_W
-Angle: 30deg 
-Angle: 10deg 
-Angle: 170deg 
 F04ExtraPhysics:: Add Extra Physics Processes
 Thank you for using G4BinaryCascade. 
 ### Adding Neutron tracking cut for neutron

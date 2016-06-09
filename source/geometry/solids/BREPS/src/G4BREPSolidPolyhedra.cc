@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4BREPSolidPolyhedra.cc,v 1.35 2008/01/22 16:04:58 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

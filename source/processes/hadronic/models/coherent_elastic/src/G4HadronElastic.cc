@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.56 2007/12/11 11:39:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// $Id: G4HadronElastic.cc,v 1.56.2.1 2008/04/23 14:14:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -87,7 +87,7 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
   lowEnergyLimitHE = 1.0*GeV; 
-  lowestEnergyLimit= 0.0*keV;  
+  lowestEnergyLimit= 1.e-6*eV;  
   plabLowLimit     = 20.0*MeV;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
@@ -133,12 +133,12 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double zTarget = targetNucleus.GetZ();
 
   G4double plab = aParticle->GetTotalMomentum();
-  if (verboseLevel >1) 
+  if (verboseLevel >1) {
     G4cout << "G4HadronElastic::DoIt: Incident particle plab=" 
 	   << plab/GeV << " GeV/c " 
 	   << " ekin(MeV) = " << ekin/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
-
+  }
   // Scattered particle referred to axis of incident particle
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   G4double m1 = theParticle->GetPDGMass();
@@ -195,10 +195,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   // Sample t
   //
   if(gtype == fQElastic) {
-    if (verboseLevel >1) 
+    if (verboseLevel >1) {
       G4cout << "G4HadronElastic: Z= " << Z << " N= " 
 	     << N << " pdg= " <<  projPDG
 	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl; 
+    }
     if(Z == 1 && N == 2) N = 1;
     else if(Z == 2 && N == 1) N = 2;
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
@@ -245,15 +246,10 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double cost = 1. - 2.0*t/tmax;
   G4double sint;
 
-  if( cost >= 1.0 ) 
+  if( cost >= 1.0 || cost < -1 ) 
   {
     cost = 1.0;
     sint = 0.0;
-  }
-  else if( cost <= -1.0) 
-  {
-    cost = -1.0;
-    sint =  0.0;
   }
   else  
   {
@@ -269,32 +265,36 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   nlv1.boost(bst); 
 
   G4double eFinal = nlv1.e() - m1;
-  if (verboseLevel > 1) 
+  if (verboseLevel > 1) {
     G4cout << "Scattered: "
 	   << nlv1<<" m= " << m1 << " ekin(MeV)= " << eFinal 
 	   << " Proj: 4-mom " << lv1 
 	   <<G4endl;
-  if(eFinal < 0.0) {
-    G4cout << "G4HadronElastic WARNING ekin= " << eFinal
-	   << " after scattering of " 
-	   << aParticle->GetDefinition()->GetParticleName()
-	   << " p(GeV/c)= " << plab
-	   << " on " << theDef->GetParticleName()
-	   << G4endl;
-    eFinal = 0.0;
-    nlv1.setE(m1);
   }
+  if(eFinal <= lowestEnergyLimit) {
+    if(eFinal < 0.0) {
+      G4cout << "G4HadronElastic WARNING ekin= " << eFinal
+	     << " after scattering of " 
+	     << aParticle->GetDefinition()->GetParticleName()
+	     << " p(GeV/c)= " << plab
+	     << " on " << theDef->GetParticleName()
+	     << G4endl;
+    }
+    theParticleChange.SetEnergyChange(0.0);
+    nlv1 = G4LorentzVector(0.0,0.0,0.0,m1);
 
-  theParticleChange.SetMomentumChange(nlv1.vect().unit());
-  theParticleChange.SetEnergyChange(eFinal);
-  
+  } else {
+    theParticleChange.SetMomentumChange(nlv1.vect().unit());
+    theParticleChange.SetEnergyChange(eFinal);
+  }  
+
   G4LorentzVector nlv0 = lv - nlv1;
   G4double erec =  nlv0.e() - m2;
-  if (verboseLevel > 1) 
+  if (verboseLevel > 1) {
     G4cout << "Recoil: "
 	   << nlv0<<" m= " << m2 << " ekin(MeV)= " << erec 
 	   <<G4endl;
-
+  }
   if(erec > lowEnergyRecoilLimit) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);

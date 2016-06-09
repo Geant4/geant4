@@ -101,9 +101,9 @@ void F04ElementField::construct()
   G4ThreeVector globalPosition;
   local[3] = 0.0;
   for (int i=0; i<2; ++i) {
-      local[0] = (i==0 ? -1.0 : 1.0) * getWidth();
+      local[0] = (i==0 ? -1.0 : 1.0) * getWidth()/2.;
       for (int j=0; j<2; ++j) {
-          local[1] = (j==0 ? -1.0 : 1.0) * getHeight();
+          local[1] = (j==0 ? -1.0 : 1.0) * getHeight()/2.;
           for (int k=0; k<2; ++k) {
               local[2] = (k==0 ? -1.0 : 1.0) * getLength()/2.;
               G4ThreeVector localPosition(local[0],local[1],local[2]);

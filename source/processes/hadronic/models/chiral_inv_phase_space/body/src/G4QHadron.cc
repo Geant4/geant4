@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.52 2008/01/09 09:37:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// $Id: G4QHadron.cc,v 1.52.2.1 2008/04/23 14:47:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -1238,7 +1238,9 @@ void G4QHadron::SplitUp()
       if (std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson        
       ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
       HPWtest = ColorX;
-      while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin); 
+      while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin) {
+        ;  // Possible dead loop?  Don't know why this loop is here - DHW
+      } 
       Color.back()->SetX(SumX = ColorX);// this is the valenz quark.
 
       std::list<G4QParton*>::iterator icolor = Color.begin();
@@ -1582,7 +1584,9 @@ G4bool G4QHadron::SplitBaryon(G4int PDGcode, G4int* quark, G4int* diQuark)
 G4ThreeVector G4QHadron::GaussianPt(G4double widthSquare, G4double maxPtSquare)
 {
   G4double R=0.;
-  while((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare);
+  while ((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare) {
+    ;
+  }
   R = std::sqrt(R);
   G4double phi = twopi*G4UniformRand();
   return G4ThreeVector(R*std::cos(phi), R*std::sin(phi), 0.);    

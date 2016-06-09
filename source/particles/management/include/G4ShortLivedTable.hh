@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.hh,v 1.12 2006/06/29 19:24:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ShortLivedTable.hh,v 1.12.2.1 2008/04/25 12:21:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -34,6 +34,7 @@
 //	History: first implementation, 
 //      based on object model of June 27, 98 H.Kurashige
 // ------------------------------------------------------------
+//      added clear()                   20 Mar.,08 H.Kurashige
 //      added Remove()                  06 Nov.,98 H.Kurashige
 
 #ifndef G4ShortLivedTable_h
@@ -74,12 +75,27 @@ class G4ShortLivedTable
    // dump information of particles specified by name 
 
    G4int                 Entries() const;
-   G4bool                Contains(const G4ParticleDefinition *particle) const;
-   void                  Insert(G4ParticleDefinition* particle);
-   void                  Remove(G4ParticleDefinition* particle);
-   G4ParticleDefinition* GetParticle(G4int index) const;
+   // return number of particles in the list
 
- protected:
+   G4bool                Contains(const G4ParticleDefinition *particle) const;
+   // return true if the list contains the specified particle 
+
+   void                  Insert(G4ParticleDefinition* particle);
+   // add the particle in the list
+
+   void                  Remove(G4ParticleDefinition* particle);
+   // remove the particle (not delete) from the list 
+
+   G4ParticleDefinition* GetParticle(G4int index) const;
+   // return the i-th particle in the list
+
+   G4int                 size() const;
+   // return number of particles in the list
+  
+   void                  clear();
+   // remove all particles (not delete) from the list
+
+ protected://Without Description
    G4int                GetVerboseLevel() const;
 
  private:
@@ -101,6 +117,15 @@ inline G4int G4ShortLivedTable::Entries() const
   return fShortLivedList->size();
 }
 
+inline G4int G4ShortLivedTable::size() const
+{
+  return fShortLivedList->size();
+}
+
+inline void G4ShortLivedTable::clear()
+{
+  fShortLivedList->clear();
+}
 
 inline 
  G4ParticleDefinition*  G4ShortLivedTable::GetParticle(G4int index) const

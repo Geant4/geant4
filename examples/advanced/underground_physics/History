@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2007/11/06 09:38:16 ahoward Exp $
+$Id: History,v 1.15.2.1 2008/04/23 08:15:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.15 2007/11/06 09:38:16 ahoward Exp $
 
                       Category History file
                       ---------------------
+
+23.04.2008 - G. Cosmo (DMX-V09-00-03)
+             Tag for release 9.1.p02.
+
+04.04.2008 - A. Howard (DMX-V09-01-00)
+	     Fixed mis-sized arrays - ring_phys_gas[] and ring_phys_liq[].
+	     Both one were less than the utilized size (!).  This has always
+             been wrong.
+
 06.11.2007 - A. Howard (DMX-V09-00-02)
 	     Corrected micrometer unit in macros from mum to um (old bug since
              release 8.2)

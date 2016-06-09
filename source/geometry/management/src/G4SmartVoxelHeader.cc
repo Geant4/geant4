@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.28 2006/06/29 18:33:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4SmartVoxelHeader.cc,v 1.28.4.1 2008/04/23 09:15:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -900,7 +900,6 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       }
     }
 #endif
-
   }
 
   // Extents of all daughters known

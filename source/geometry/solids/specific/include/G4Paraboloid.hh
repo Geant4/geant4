@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Paraboloid.hh,v 1.4 2008/01/22 17:42:09 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // --------------------------------------------------------------------

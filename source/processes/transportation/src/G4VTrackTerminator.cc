@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VTrackTerminator.cc,v 1.7 2007/06/01 07:53:27 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

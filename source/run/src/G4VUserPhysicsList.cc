@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.62 2007/09/23 17:33:00 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VUserPhysicsList.cc,v 1.62.2.1 2008/04/17 09:10:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -267,6 +267,19 @@ void G4VUserPhysicsList::AddTransportation()
       }
     } else {
       // shortlived particle case
+      // Add transportation process for all particles other than  "shortlived"
+      if ( pmanager == 0) {
+        // Error !! no process manager
+        G4String particleName = particle->GetParticleName();
+        G4Exception("G4VUserPhysicsList::AddTransportation","No process manager",
+                    RunMustBeAborted, particleName );
+      } else {
+        // add transportation with ordering = ( -1, "first", "first" )
+        pmanager ->AddProcess(theTransportationProcess);
+        pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);
+        pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxPostStep);
+      }
+
     }
   }
 }

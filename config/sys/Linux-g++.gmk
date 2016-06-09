@@ -37,7 +37,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
   CC := gcc
-  FC := g77
+  FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
   ECHO    := /bin/echo -e
@@ -55,12 +55,14 @@ ifeq ($(G4SYSTEM),Linux-g++)
     XMLIBS    := -lXm -lXpm
   endif
   ifndef QTHOME
-    QTHOME  := /usr/local/Qt
+    QTHOME     := /usr/local/Qt
   endif
   ifndef QTFLAGS
-    QTFLAGS   := -I$(QTHOME)/include/Qt
-    QTFLAGS   += -I$(QTHOME)/include
-    MOC       := $(QTHOME)/bin/moc
+    QTFLAGS    := -I$(QTHOME)/include/Qt
+    QTFLAGS    += -I$(QTHOME)/include
+  endif
+  ifndef QTMOC
+    QTMOC      := $(QTHOME)/bin/moc
   endif
   ifndef QTLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt-mt

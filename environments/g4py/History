@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2007/11/25 19:37:33 kmura Exp $
+$Id: History,v 1.32.2.1 2008/04/23 09:26:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,14 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13 March 2008 K.Murakami (1.6.0)
+ - use G4Version.hh directly, instead pyG4Version.hh
+ - configure script updated
+
+28 February 2008 K.Murakami
+ - fix pyPhysicsList.cc compilation error
+ - fix pyG4GDMLParser.cc compilation error
+ - G4GDML is automatically detected by configure script
 
 26 November 2007 K.Murakami
  - add G4 GDML module support

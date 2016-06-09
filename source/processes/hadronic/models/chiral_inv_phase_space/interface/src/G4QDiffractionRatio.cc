@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.7 2007/12/10 16:31:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QDiffractionRatio.cc,v 1.7.2.1 2008/04/23 14:57:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // G4 Physics class: G4QDiffractionRatio for N+A elastic cross sections
@@ -104,7 +104,8 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
   G4double s=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom));
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  if(nDB && lastA==A && s==lastS) return lastR;   // VI do not use toler
   if(s>ms)
   {
     lastR=CalcDiff2Prod_Ratio(s,A);     // @@ Probably user ought to be notified about bigS
@@ -1051,8 +1052,8 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         }
       }                                    // --> End of decay                          |
 				}                                      // -> End of Iso-nuclear treatment           |
-    else if(nL>0 && nB>1 || nL<0 && nB<-1) // Hypernucleus is found                     |
-    {
+    else if( (nL > 0 && nB > 1) || (nL < 0 && nB < -1) ) 
+    {     // Hypernucleus is found                                                      |
       G4bool anti=false;                   // Default=Nucleus (true=antinucleus         |
       if(nB<0)                             // Anti-nucleus                              |
       {
@@ -1306,11 +1307,11 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
 G4double G4QDiffractionRatio::GetTargSingDiffXS(G4double pIU, G4int pPDG, G4int Z, G4int N)
 {
   G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
-  if(mom<1. || pPDG!=2212 && pPDG!=2112)
+  if ( mom < 1. || (pPDG != 2212 && pPDG != 2112) )
     G4cerr<<"G4QDiffractionRatio::GetTargSingDiffXS isn't applicable p="<<mom<<" GeV, PDG="
          <<pPDG<<G4endl;
   G4double A=Z+N;                        // A of the target
 		//return 4.5*std::pow(A,.364)*millibarn; // Result
-		return 3.7*std::pow(A,.364)*millibarn; // Result after mpi0 correction
+  return 3.7*std::pow(A,.364)*millibarn; // Result after mpi0 correction
 
 } // End of ProjFragment

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.1 2007/03/30 15:25:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QuasiElasticChannel.cc,v 1.1.2.2 2008/04/24 13:44:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 
 // Author : Gunter Folger March 2007
@@ -38,7 +38,12 @@
 
 #include "G4QuasiElasticChannel.hh"
 
+#include "G4Fancy3DNucleus.hh"
+
+
 #include "G4HadTmpUtil.hh"		//lrint
+
+//#define debug_scatter
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
 {
@@ -70,22 +75,27 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	
 	
 	G4int A=G4lrint(theNucleus.GetN());
-	G4int Z=G4lrint(theNucleus.GetZ());
-	G4double an=G4UniformRand()*A;
-	G4ParticleDefinition * pDef;
-	if ( an < Z )
-	{
-	   pDef=G4Proton::Proton();
-	} else 
-	{
-	   pDef=G4Neutron::Neutron(); 
-	}          
+//	G4int Z=G4lrint(theNucleus.GetZ());
+//   build Nucleus and choose random nucleon to scatter with
+	the3DNucleus.Init(theNucleus.GetN(),theNucleus.GetZ());
+	const std::vector<G4Nucleon *> nucleons=the3DNucleus.GetNucleons();
+	
+        G4int index;
+        do {
+	   index=G4lrint((A-1)*G4UniformRand());
+	   
+	} while (index < 0 || index >= static_cast<G4int>(nucleons.size()));
+	    
+//	G4double an=G4UniformRand()*A;
+	G4ParticleDefinition * pDef= nucleons[index]->GetDefinition();
 	
 #ifdef debug_scatter
-	G4cout << " neutron - proton? A, Z, an, pdg" <<" "<< A <<" "<<Z 
-			<< " "<<an <<" " << pDef->GetParticleName()<< G4endl;
+	G4cout << " neutron - proton? A, Z, an, pdg" <<" "
+	       << A <<" "<<G4lrint(theNucleus.GetZ())
+	       << " "<<an <<" " << pDef->GetParticleName()<< G4endl;
 #endif
-	G4LorentzVector pNucleon(G4ThreeVector(0,0,0),pDef->GetPDGMass());
+//	G4LorentzVector pNucleon(G4ThreeVector(0,0,0),pDef->GetPDGMass());
+	G4LorentzVector pNucleon=nucleons[index]->Get4Momentum();
 	
 	std::pair<G4LorentzVector,G4LorentzVector> result;
 	
@@ -98,6 +108,18 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	   G4cout << "Warning - G4QuasiElasticChannel::Scatter no scattering" << G4endl;
 	   return 0;       //no scatter
 	}
+
+#ifdef debug_scatter
+        G4LorentzVector EpConservation=pNucleon+thePrimary.Get4Momentum() 
+	                                - result.first - result.second;
+	if (   (EpConservation.vect().mag2() > 0.01*MeV*MeV )
+	    || 	(std::abs(EpConservation.e()) > 0.1 * MeV ) ) 
+	{
+	    G4cout << "Warning - G4QuasiElasticChannel::Scatter E-p non conservation : "
+	            << EpConservation << G4endl;
+	}    
+#endif
+
 	G4KineticTrackVector * ktv;
 	ktv=new G4KineticTrackVector();
 	G4KineticTrack * sPrim=new G4KineticTrack(thePrimary.GetDefinition(),
@@ -108,8 +130,8 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	ktv->push_back(sNuc);
 	
 #ifdef debug_scatter
-	G4cout << " scattered Nucleon : " << result.first << G4endl;
-	G4cout << " scattered Project : " << result.second << G4endl;
+	G4cout << " scattered Nucleon : " << result.first << " mass " <<result.first.mag() << G4endl;
+	G4cout << " scattered Project : " << result.second << " mass " <<result.second.mag() << G4endl;
 #endif
 	return ktv;			       
 }

@@ -91,16 +91,16 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
   theExcitationEnergy = theMomentum.mag() - 
                         G4ParticleTable::GetParticleTable()->GetIonTable()
 			->GetIonMass( G4lrint(theZ), G4lrint(theA) );
-  if( theExcitationEnergy < 0.0 )
-    if( theExcitationEnergy > -10.0 * eV || 0==G4lrint(theA))
+  if (theExcitationEnergy < 0.0) {
+    if (theExcitationEnergy > -10.0 * eV || 0 == G4lrint(theA)) {
       theExcitationEnergy = 0.0;
-    else 
-    {
+    } else {
       G4cout << "A, Z, momentum, theExcitationEnergy"<<
            A<<" "<<Z<<" "<<aMomentum<<" "<<theExcitationEnergy<<G4endl;
       G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
       throw G4HadronicException(__FILE__, __LINE__, text);
     }
+  }
 }
 
 
@@ -200,28 +200,26 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 
 G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) const
 {
-	static G4int errCount(0);
-	G4double theMaxGroundStateMass = theZ*G4Proton::Proton()->GetPDGMass()+
+  static G4int errCount(0);
+  G4double theMaxGroundStateMass = theZ*G4Proton::Proton()->GetPDGMass()+
 	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
-	G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
-	if( U < 0.0 )
-		if( U > -10.0 * eV || 0==G4lrint(theA))
-			U = 0.0;
-		else 
-		{
-			if ( errCount < 10 ) 
-			{
-			    G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
-			       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl
-			       << ", mass= " << GetGroundStateMass() << " maxMass= "<<theMaxGroundStateMass<<G4endl; ;
-			    errCount++;
-			    if (errCount == 10 ) G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
-			    			<< " further warnings on negative excitation will be supressed" << G4endl;
-			}  
-     
-			U=0.0;
-		}
-	return U;
+  G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
+  if( U < 0.0 ) {
+     if( U > -10.0 * eV || 0==G4lrint(theA)){
+	U = 0.0;
+     } else {
+	if ( errCount < 10 ) {
+	    G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
+	       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl
+	       << ", mass= " << GetGroundStateMass() << " maxMass= "<<theMaxGroundStateMass<<G4endl; ;
+	    errCount++;
+	    if (errCount == 10 ) G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
+				<< " further warnings on negative excitation will be supressed" << G4endl;
+	}
+	U=0.0;
+     }
+  }
+  return U;
 }
 
 G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const

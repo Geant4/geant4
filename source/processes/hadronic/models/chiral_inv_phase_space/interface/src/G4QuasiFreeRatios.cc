@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.16 2007/08/09 13:04:37 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QuasiFreeRatios.cc,v 1.16.2.1 2008/04/23 14:57:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // G4 Physics class: G4QuasiFreeRatios for N+A elastic cross sections
@@ -132,7 +132,8 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     return 0.;
   }
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  if(nDB && lastA==A && s==lastS) return lastR;  // VI do not use tolerance
   G4bool found=false;
   G4int i=-1;
 		if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
@@ -569,7 +570,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   static const G4double ma=std::exp(lpa);// The max p of logTabEl(~ 22. TeV)
   static const G4double dl=(lpa-lpi)/nlp;// Step of the logarithmic Table
   static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
-  static const G4double toler=.001;      // Relative tolarence defining "the same momentum"
+  //  static const G4double toler=.001;      // Relative tolarence defining "the same momentum"
   static G4double lastP=0.;              // The last momentum for which XS was calculated
   static G4int    lastH=0;               // The last projPDG for which XS was calculated
   static G4bool   lastF=true;            // The last nucleon for which XS was calculated
@@ -586,9 +587,10 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
   G4int nDB=vI.size();                   // A number of hadrons already initialized in AMDB
 #ifdef pdebug
-		G4cout<<"G4QuasiFreeR::FetchElTot:p="<<p<<",PDG="<<PDG<<",F="<<F<<",nDB="<<nDB<<G4endl;
+  G4cout<<"G4QuasiFreeR::FetchElTot:p="<<p<<",PDG="<<PDG<<",F="<<F<<",nDB="<<nDB<<G4endl;
 #endif
-  if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
+  if(nDB && lastH==PDG && lastF==F && p>0. && p==lastP) return lastR; // VI do not use toler
+  //  if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
   lastH=PDG;
   lastF=F;
   G4int ind=-1;                          // Prototipe of the index of the PDG/F combination
@@ -601,21 +603,29 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
     kf=true;
     if(G4UniformRand()>.5) kfl=false;
   }
-  if     (PDG==2212&&F || PDG==2112&&!F) ind=0; // pp/nn
-  else if(PDG==2112&&F || PDG==2212&&!F) ind=1; // np/pn
-  else if(PDG==-211&&F || PDG== 211&&!F) ind=2; // pimp/pipn
-  else if(PDG== 211&&F || PDG==-211&&!F) ind=3; // pipp/pimn
-  else if(PDG==-321 || PDG==-311 || (kf &&!kfl)) ind=4; // KmN/K0N
-		else if(PDG== 321 || PDG== 311 || (kf && kfl)) ind=5; // KpN/aK0N
-  else if(PDG> 3000 && PDG< 3335) ind=6;        // @@ for all hyperons - take Lambda
-  else if(PDG<-2000 && PDG>-3335) ind=7;        // @@ for all anti-baryons - anti-p/anti-n
-  else
-  {
+  if ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) {
+    ind=0; // pp/nn
+  } else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) {
+    ind=1; // np/pn
+  } else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) {
+    ind=2; // pimp/pipn
+  } else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) {
+    ind=3; // pipp/pimn
+  } else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) {
+    ind=4; // KmN/K0N
+  } else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) {
+    ind=5; // KpN/aK0N
+  } else if ( PDG > 3000 && PDG < 3335) {
+    ind=6;        // @@ for all hyperons - take Lambda
+  } else if ( PDG < -2000 && PDG > -3335 ) {
+    ind=7;        // @@ for all anti-baryons - anti-p/anti-n
+  } else {
     G4cout<<"*Error*G4QuasiFreeRatios::FetchElTot: PDG="<<PDG
           <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
     G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");
   }
-  if(nDB && lastI==ind && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
+  if(nDB && lastI==ind && p>0. && p==lastP) return lastR;  // VI do not use toler
+  //  if(nDB && lastI==ind && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
   if(p<=mi || p>=ma) return CalcElTot(p,ind);   // @@ Slow calculation ! (Warning?)
   G4bool found=false;
   G4int i=-1;
@@ -867,7 +877,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
   G4double maxt=CSmanager->GetHMaxT();            // max possible -t
 #ifdef ppdebug
-  G4cout<<"G4QFR::Scat:PDG="<<pPDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<G4endl;
+  G4cout<<"G4QFR::Scat:PDG="<<PDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<", Z="<<Z<<",N="<<N<<G4endl;
 #endif
 #ifdef nandebug
   if(mint>-.0000001);

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.23 2008/01/11 19:55:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// $Id: G4EmCorrections.cc,v 1.23.2.1 2008/04/22 15:28:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -529,6 +529,7 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
   // Finite size corrections are parameterized according to
   // J.D.Jackson Phys. Rev. D59 (1998) 017301 
 {
+  if(p) return 0.0;
   SetupKinematics(p, mat, e);
   G4double term = 0.0;
   G4double numlim = 0.2;

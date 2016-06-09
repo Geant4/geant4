@@ -175,7 +175,7 @@ if [ $enable_glib == 1 ]; then
 fi
 
 if [ $enable_slib == 1 ]; then
-  echo -n "Checking for glib dir ..."
+  echo -n "Checking for slib dir ..."
   if [ ! -d $g4dir/$slibdir ]; then
     echo "no"
     echo "### $slibdir is invalid."

@@ -1,4 +1,4 @@
-$Id: History,v 1.308 2008/01/11 19:55:29 vnivanch Exp $
+$Id: History,v 1.308.2.1 2008/04/22 15:28:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 April 08: V.Ivant (emutils-V09-00-14)
+- G4EmCorrections - set finite size correction to zero (provides          
+                    flat distribution of vertex detector response
+                    for high energy hadrons)
+- G4ionEffectiveCharge - minor change of numerical constants to provide
+                         a continuous change of charge versus energy 
+
 11 January 08: V.Ivant (emutils-V09-01-00)
 - G4EmCorrections - improve CPU by usage expansions and precalculated
                     values of Z^0.23
@@ -25,16 +32,16 @@ committal in the CVS repository !
 
 09 November 07: V.Ivant (emutils-V09-00-13)
 - G4VMultipleScattering - set at initialisation that scattering may be 
-                          off lectrons (needed for single scattering)
+                          off electrons (needed for single scattering)
 - G4EmModelmanager - add pointers to G4Gamma and G4Positron at 
                      initialisation
 
 07 November 07: V.Ivant (emutils-V09-00-12)
 - G4VEnergyLossProcess - simplify logic to switch on/off fluctuations
-- G4EmProcessOptions - add forgoten initialisation of G4LossTableManager
+- G4EmProcessOptions - add forgotten initialisation of G4LossTableManager
                        parameters together with parameters of concrete 
                        processes (fixed initialisation when options
-                       defined before proceeses are instantiated)
+                       defined before processes are instantiated)
 
 29 October 07: V.Ivant (emutils-V09-00-11)
 - G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering
@@ -67,7 +74,7 @@ committal in the CVS repository !
 25 September 07: V.Ivant (emutils-V09-00-05)
 - G4VEnergyLossProcess and G4VEmProcess - fixed handling zero cross 
   section in PostStepGetPhysicalInteractionLength method to avoid problem
-  happans in FanoCavity example when cross section inside cavity is zero
+  happens in FanoCavity example when cross section inside cavity is zero
 - G4VEmModel - compare cross section with DBL_MIN instead of zero
 
 16 August 07: V.Ivant (emutils-V09-00-04)
@@ -116,7 +123,7 @@ committal in the CVS repository !
 - G4VEmModel - change interface of SampleSecondary method, it become 
   void, extra parameter std::vector<G4DynamicParticle*>*, this vector
   is now a member of base class G4VEnergyLossProcess, G4VEmProcess,
-  no new and delete of the vector in the run time. About 5% speadup
+  no new and delete of the vector in the run time. About 5% speedup
   of EM shower simulation
 - G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering modified 
   to follow this new interface

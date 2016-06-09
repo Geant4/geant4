@@ -1,4 +1,4 @@
-$Id: 00README,v 1.9 2007/11/25 19:37:24 kmura Exp $
+$Id: 00README,v 1.9.2.1 2008/04/23 09:26:58 gcosmo Exp $
 ==========================================================================
 Geant4Py
 
@@ -17,7 +17,7 @@ Python
   - only 2.x is tested.
 
 Geant4
-  - 7.0 or later
+  - 8.0 or later
   - should be built in "global" and "shared" libraries.
   - All header files should be collected into $(G4INSTALL)/include
     by "make includes"
@@ -50,8 +50,6 @@ There is a configuraton script for building the package.
 
 # ./configure --help 
 
-shows help message;
-
 `configure' configures Geant4Py to adapt to many kinds of systems.
 
 Usage:  ./configure SYSTEM [OPTION]... [VAR=VALUE]...
@@ -69,9 +67,6 @@ Installation directories:
 Fine tuning of the library path:
   --with-g4-incdir=DIR      Geant4 header dir [$G4INCLUDE]
   --with-g4-libdir=DIR      Geant4 library dir [$G4LIB/$G4SYSTEM]
-  --with-g4-version=NUM     Geant4 version (700/701/710/711)
-                            Not required after ver.8.0
-
   --with-clhep-incdir=DIR   CLHEP header dir [$CLHEP_INCLUDE_DIR]
   --with-clhep-libdir=DIR   CLHEP library dir [$CLHEP_LIB_DIR]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|$CLHEP_LIB]
@@ -94,18 +89,16 @@ Fine tuning of the library path:
   --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
 
 Enable/disable options: prefix with either --enable- or --disable-
-  openglx      OpenGL support     [auto]
+  openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, $G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, $G4VIS_USE_RAYTRACERX]
-  g4gdml       GDML support (G4 module) [disable]
   gdml         GDML support (external, experimental) [disable]
                also specifying inc/lib directories
 
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOS X with gcc 
-
+  macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
 You can specify all parameters adopting your environment.
 
@@ -168,9 +161,108 @@ g++ :           4.2.1
 Python:         2.5.1
 CLHEP:          1.9.3.2 / 2.0.3.2
 BOOST-Python:   1.33.1
-ROOT:           5.16/00
+ROOT:           5.18/00
 
 Have A Fun!!
 
 Koichi Murakami <Koichi.Murakami@kek.jp>
+
+
+==========================================================================
+<<<How to install Geant4Py in Mac OSX>>>
+                                 H. Yoshida and K. Murakami
+				 16 November 2006 for Geant4-8.2 release
+==========================================================================
+
+Geant4Py package can be installed in  Linux or Mac OS X systems. Documentation
+on   the    installation   and   the   latest   version    is   available   at
+www-geant4.kek.jp/projects/Geant4Py.
+
+This text  is a supplementary document  dedicated to Mac OS  X.  The following
+installation procedure was tested on a MacBook; Mac OS X 10.4.8 (8L2127), and 
+Darwin-8.8.1.
+       
+
+0) General remarks
+
+ You have to install ALL packages from the system DVD, including supplementary
+ packages and Xcode packages. Then, OpenGL must work.
+
+ a. Compilation of Geant4 libraries; 
+      *.dylib must be created and all header files must be assembled. So
+         %make global; make includes
+ b. Linker; 
+      If ld (linker) complains "Undefined symbols", try
+         %setenv MACOSX_DEPLOYMENT_TARGET 10.4
+ c. Path of the Dynamic Libraries ;
+      If you have used Configure script to make the Geant4 libraries, the paths
+      to the dylibs are set automatically. The environment variables can be
+      checked in $G4INSTALL/.config/bin/Darwin-g++/env.csh.
+ d. X window;
+      For visialization with OpenGL, you have to start Xserver and
+         %setenv DISPLAY localhost:0.0                                                                               
+1) Installation of Python 2.4.3
+
+The  latest  Mac  products  (as   of  October  2006)  include  Python  2.3  by
+default. This  is not  bad for  the basic installation  of Geant4Py,  but some
+examples  here   require  Python  2.4  which  provides   advanced  OS  related
+functionalities.  So, we recommend you to install Python 2.4.3. (Python 2.5 is
+already  published  but  we  don't  tested it  with  respect  to  boost_python
+wrappers.)
+
+Visit  the Python language  Web site;  http://www.python.org/download/mac/ and
+follow   the  instructions.    Universal-MacPython-2.4.3-*.dmg   is  available
+there. Or the site http://pythonmac.org/packages/ provides also *.dmg package,
+too.
+
+2) Installation of Boost-Python 
+
+ Visit  the  site  http://boost.org/  and download  boost-1_33_1,  the  latest
+version. Then,  run the configure script and  then make libboost_python.dylib.
+Please make install it to  the default prefix directory, i.e., /usr/local, for
+simplcity.
+
+3) Compilation of Geant4Py
+
+If you have installed Python-2.4  and Boost-1_33_1 as above, you can configure
+Geant4Py as below;
+
+./configure macosx --with-python-incdir=/usr/local/include/python2.4\
+                   --with-python-libdir=/usr/local/lib/python2.4\
+                   --with-boost-incdir=/usr/local/include/boost-1_33_1\
+                   --with-boost-libdir=/usr/local/lib\
+                   --with-boost-python-lib=boost_python-1_33_1
+
+And  then,   %make;  make  install.   The  libraries  will  be   installed  in
+$G4INSTALL/environments/g4py/lib whose path must be added to PYTHONPATH.
+
+If you want to enjoy examples/education, wxPython package is necessary.
+
+4) Installation of wxPython
+
+Download  the latest  version  of wxPython  from http://www.wxpython.org/  and
+create the library. The next instructions are taken from the above Web page.
+
+%cd $WXDIR
+%mkdir bld
+%cd bld
+%../configure --prefix=/opt/wx/2.7 \
+             --with-mac\
+             --with-opengl \
+             --enable-debug \
+             --enable-geometry \
+             --enable-graphics_ctx \
+             --enable-sound --with-sdl \
+             --enable-mediactrl \
+             --enable-display \
+             --disable-debugreport 
+
+And then make; make install.
+You have to setenv/export PYTHONPATH, adding /opt/wx/2.7
+
+5) Run
+
+ g4py/examples/education/lesson1/Lesson1Wx.py and lesson2/Lesson2Wx.py are
+ exaples, using wxPython GUI toolkits. Run them,
+    %python Lesson1Wx.py
 

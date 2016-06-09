@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.26 2007/05/11 13:30:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VSolid.hh,v 1.26.2.1 2008/04/23 09:15:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // class G4VSolid
@@ -293,11 +293,17 @@ class G4VSolid
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
 
-protected:
+  protected:  // without description
+
+    G4VSolid(const G4VSolid& rhs);
+    G4VSolid& operator=(const G4VSolid& rhs); 
+      // Protected copy constructor and assignment operator.
+
+  protected:
 
     G4double kCarTolerance;      // Cached geometrical tolerance
 
-private:
+  private:
 
     void ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 				   G4ThreeVectorList& outputPolygon,

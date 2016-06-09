@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.5 2007/11/25 19:40:13 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyPhysicsLists.cc,v 1.5.2.1 2008/04/23 09:26:58 gcosmo Exp $
+// $Name: geant4-09-01-patch-02 $
 // ====================================================================
 //   pyPhysicsLists.cc
 //
 //                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 
 #if G4VERSION_NUMBER >= 820
 
@@ -87,7 +87,6 @@
 #include "FTF_BIC.hh"
 #include "QGSC_BERT.hh"
 #include "QGS_BIC.hh"
-#include "QGSP_BIC2.hh"
 #endif
 
 using namespace boost::python;
@@ -260,9 +259,6 @@ void export_PhysicsLists()
     ;
   class_<QGS_BIC, QGS_BIC*, bases<G4VUserPhysicsList> >
     ("QGS_BIC", "QGS_BIC physics list")
-    ;
-  class_<QGSP_BIC2, QGSP_BIC2*, bases<G4VUserPhysicsList> >
-    ("QGSP_BIC2", "QGSP_BIC2 physics list")
     ;
 #endif
 

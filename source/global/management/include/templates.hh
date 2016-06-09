@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.10 2006/06/29 19:03:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: templates.hh,v 1.10.8.1 2008/04/23 09:22:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // -*- C++ -*-
@@ -52,6 +52,7 @@
 #define templates_h 1
 
 #include <limits>
+#include <climits>
 
 //
 // If HIGH_PRECISION is defined to TRUE (ie. != 0) then the type "Float"

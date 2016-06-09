@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.7 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4String.hh,v 1.7.2.1 2008/04/23 09:22:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -46,6 +46,8 @@
 
 #include <stdio.h>
 #include <string>
+#include <cstring>
+
 #include "G4Types.hh"
 #include <iostream>
 

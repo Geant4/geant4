@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.6 2007/11/25 19:38:17 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: GNUmakefile,v 1.6.2.1 2008/04/23 09:26:58 gcosmo Exp $
+# $Name: geant4-09-01-patch-02 $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
@@ -9,7 +9,7 @@ SUBDIR1 := global interface intercoms run event tracking track
 SUBDIR1 += geometry materials particles processes digits_hits
 SUBDIR2 := visualization graphics_reps physics_lists
 SUBDIR3 := python
-SUBDIR4 := boost version
+SUBDIR4 := boost
 
 ifeq ($(Q_ENABLE_G4GDML), 1)
   SUBDIR2 += g4gdml

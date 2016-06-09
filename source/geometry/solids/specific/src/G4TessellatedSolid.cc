@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.14 2007/12/11 15:28:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4TessellatedSolid.cc,v 1.14.2.1 2008/04/23 08:10:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -150,6 +150,21 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
 {
   if (&s == this) { return; }
 
+  dirTolerance = 1.0E-14;
+  
+  geometryType = "G4TessellatedSolid";
+  facets.clear();
+  solidClosed  = false;
+  
+  xMinExtent =  kInfinity;
+  xMaxExtent = -kInfinity;
+  yMinExtent =  kInfinity;
+  yMaxExtent = -kInfinity;
+  zMinExtent =  kInfinity;
+  zMaxExtent = -kInfinity;
+
+  SetRandomVectorSet();
+
   CopyObjects (s);
 }
 
@@ -184,12 +199,13 @@ void G4TessellatedSolid::DeleteObjects ()
 void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
 {
   size_t n = s.GetNumberOfFacets();
-  for (size_t i=0; i<n; n++)
+  for (size_t i=0; i<n; i++)
   {
     G4VFacet *facetClone = (s.GetFacet(i))->GetClone();
     AddFacet(facetClone);
   }
-  solidClosed = s.GetSolidClosed();
+  
+  if ( s.GetSolidClosed() )  { SetSolidClosed(true); }
 
 //  cubicVolume = s.GetCubicVolume();  
 }
@@ -492,8 +508,8 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
         crossingI =  ((*f)->Intersect(p,v,false,distI,distFromSurfaceI,normalI));
         if (crossingO || crossingI)
         {
-          nearParallel = crossingO && std::abs(normalO.dot(v))<dirTolerance ||
-                         crossingI && std::abs(normalI.dot(v))<dirTolerance;
+          nearParallel = (crossingO && std::abs(normalO.dot(v))<dirTolerance) ||
+                         (crossingI && std::abs(normalI.dot(v))<dirTolerance);
           if (!nearParallel)
           {
             if (crossingO && distO > 0.0 && distO < distOut) distOut = distO;
@@ -731,8 +747,10 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
           (*f)->Distance(p,kCarTolerance) <= 0.5*kCarTolerance)
       {
         // We are on a surface. Return zero.
-        *validNorm = extremeFacets.count(*f);
-        *n         = SurfaceNormal(p);
+        if (calcNorm) {
+          *validNorm = extremeFacets.count(*f);
+          *n         = SurfaceNormal(p);
+        }  
         return 0.0;
       }
       if (dist >= 0.0 && dist < minDist)

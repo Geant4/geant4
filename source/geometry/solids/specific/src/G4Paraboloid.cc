@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.5 2007/12/10 16:30:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Paraboloid.cc,v 1.5.2.1 2008/04/23 08:10:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // class G4Paraboloid
 //
@@ -462,10 +462,9 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
            vRho2 = v.perp2(), intersection,
            B = (k1 * p.z() + k2 - rho2) * vRho2;
 
-  if ( rho2 > paraRho2
-    && sqr(rho2-paraRho2-0.25*tol2) > tol2*paraRho2
-    || p.z() < - dz+kCarTolerance
-    || p.z() > dz-kCarTolerance) // Make sure it's safely outside.
+  if ( ( (rho2 > paraRho2) && (sqr(rho2-paraRho2-0.25*tol2) > tol2*paraRho2) )
+    || (p.z() < - dz+kCarTolerance)
+    || (p.z() > dz-kCarTolerance) ) // Make sure it's safely outside.
   {
     // Is there a problem with squaring rho twice?
 
@@ -674,7 +673,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
       }
       return intersection;
     }
-    else if(A <= 0 && B >= sqr(A) * (sqr(vRho2) - 1) || A >= 0)
+    else if( ((A <= 0) && (B >= sqr(A) * (sqr(vRho2) - 1))) || (A >= 0))
     {
       intersection = (A + std::sqrt(B + sqr(A))) / vRho2;
       if(calcNorm)
@@ -706,7 +705,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
     if(std::fabs(p.z()) > dz - tolh)
     {
       // We're in the lower or upper edge
-      if(v.z() > 0 && p.z() > 0 || v.z() < 0 && p.z() < 0)
+      if( ((v.z() > 0) && (p.z() > 0)) || ((v.z() < 0) && (p.z() < 0)) )
       // If we're headig out of the object that is treated here
       {
         if(calcNorm)

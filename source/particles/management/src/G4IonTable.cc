@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.48 2007/11/14 02:23:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IonTable.cc,v 1.48.2.1 2008/04/25 12:21:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -703,6 +703,7 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
     for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
       if ( particle == *idx) {
         fIonList->erase(idx);
+        break;
       }
     }
   } else {

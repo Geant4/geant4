@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PropagatorInField.cc,v 1.42 2008/01/24 08:54:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a

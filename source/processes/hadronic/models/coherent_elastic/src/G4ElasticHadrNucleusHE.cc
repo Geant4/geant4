@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ElasticHadrNucleusHE.cc,v 1.79 2008/01/14 10:39:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 //  The generator of high energy hadron-nucleus elastic scattering

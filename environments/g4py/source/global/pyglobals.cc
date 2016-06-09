@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyglobals.cc,v 1.5 2007/07/12 09:38:01 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyglobals.cc,v 1.5.2.1 2008/04/23 09:26:58 gcosmo Exp $
+// $Name: geant4-09-01-patch-02 $
 // ====================================================================
 //   pyglobals.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4strstreambuf.hh"
 #include "G4UImanager.hh"
 #include "G4PyCoutDestination.hh"

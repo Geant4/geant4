@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -250,30 +250,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=266.54s Real=2219.02s Sys=67.58s
+  User=18.6s Real=260.66s Sys=23.45s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.332 keV +- 16.77 eV 
+ Total energy deposit in absorber per event = 6.331 keV +- 16.59 eV 
 
- -----> Mean dE/dx = 3.166 MeV/cm	(1.359 MeV*cm2/g)
+ -----> Mean dE/dx = 3.165 MeV/cm	(1.359 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 2.936 MeV/cm	(1.26 MeV*cm2/g)
-   full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
+   full dEdx       = 4.697 MeV/cm	(2.016 MeV*cm2/g)
 
- Leakage :  primary = 5 GeV +- 989.4 eV    secondaries = 2.883 keV +- 988.9 eV 
+ Leakage :  primary = 5 GeV +- 414.7 eV    secondaries = 1.972 keV +- 413.7 eV 
  Energy balance :  edep + eleak = 5 GeV
 
- Total track length (charged) in absorber per event = 20.27 um  +- 8.088 nm 
- Total track length (neutral) in absorber per event = 5.301 Ang +- 2.67 Ang
+ Total track length (charged) in absorber per event = 20.28 um  +- 8.08 nm 
+ Total track length (neutral) in absorber per event = 6.125 Ang +- 4.382 Ang
 
- Number of steps (charged) in absorber per event = 10.15 +- 8.994e-06
- Number of steps (neutral) in absorber per event = 4e-05 +- 8.994e-06
+ Number of steps (charged) in absorber per event = 10.15 +- 8.989e-06
+ Number of steps (neutral) in absorber per event = 2e-05 +- 8.989e-06
 
- Number of secondaries per event : Gammas = 4e-05;   electrons = 0.01747;   positrons = 0
+ Number of secondaries per event : Gammas = 2e-05;   electrons = 0.01764;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -282,13 +282,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02414 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02411 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.011 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1050074337, 380686861
+ Current couple of seeds = 921430354, 552442089
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

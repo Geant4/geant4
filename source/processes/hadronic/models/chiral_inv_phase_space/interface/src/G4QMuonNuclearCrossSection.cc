@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.11 2006/12/04 10:44:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.11.10.1 2008/04/23 14:57:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 //
 // G4 Physics class: G4QMuonNuclearCrossSection for gamma+A cross sections
@@ -133,7 +133,8 @@ G4double G4QMuonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
+	//        if(std::fabs(lastP/pMom-1.)<tolerance)
+        if(lastP==pMom)                  // VI do not use tolerance
         {
 #ifdef pdebug
           G4cout<<"G4QMNCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
@@ -222,7 +223,8 @@ G4double G4QMuonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  //  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  else if(lastP==pMom)                 // VI do not use tolerance
   {
 #ifdef pdebug
     G4cout<<"G4QMNCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;

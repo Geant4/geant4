@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.58 2007/11/14 10:04:21 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.58.2.1 2008/04/29 15:37:16 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -254,6 +254,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                   "Number of geometries limiting the step not set."); 
     }
   }
+#ifdef G4DEBUG_PATHFINDER      
   else
   {
      if( proposedStepLength < fTrueMinStep )  // For 2nd+ geometry 
@@ -306,16 +307,16 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
         // client accessing information for the current track, step 
         // We will simply retrieve the results of the synchronous
         // stepping for this Navigator Id below.
-#ifdef G4DEBUG_PATHFINDER      
+        //
         if( fVerboseLevel > 1 )
         { 
            G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
                   << " stepNo= " << stepNo << " last= " << fLastStepNo 
                   << " new= " << fNewTrack << " Step already done" << G4endl; 
         }
-#endif
      } 
   }
+#endif
 
   fNewTrack= false; 
 

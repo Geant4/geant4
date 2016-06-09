@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-00-03    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -127,7 +127,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 1.02 s
+total time for build X-ray TR energy loss tables = 0.16 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -202,7 +202,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 1.02 s
+total time for build X-ray TR energy loss tables = 0.16 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -314,26 +314,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=42.62s Real=43.65s Sys=1.01s
+  User=1.59s Real=1.59s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=43.8791 +- 0.504856  mm  
+    mean charged track length   in absorber=43.942 +- 0.565197  mm  
 
-            mean energy deposit in absorber=0.0518824 +- 0.000873635  MeV 
+            mean energy deposit in absorber=0.0525422 +- 0.000881868  MeV 
 
- mean number of steps in absorber (charged) =8.695 +- 0.236808      
- mean number of steps in absorber (neutral) =2.832 +- 0.0524574      
+ mean number of steps in absorber (charged) =9.129 +- 0.269225      
+ mean number of steps in absorber (neutral) =2.837 +- 0.0537069      
 
-   mean number of charged secondaries = 3.608 +- 0.0792864
+   mean number of charged secondaries = 3.658 +- 0.0775696
 
-   mean number of neutral secondaries = 0.044 +- 0.00648568
+   mean number of neutral secondaries = 0.036 +- 0.00622125
 
-   mean number of e-s =3.608  and e+s =0
+   mean number of e-s =3.658  and e+s =0
 
-(number) transmission coeff=0.498  reflection coeff=0.024
+(number) transmission coeff=0.513  reflection coeff=0.022
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=46
+#entries=1000    #underflows=0    #overflows=57
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -343,70 +343,70 @@ Run Summary
     5   7.69231           0           0
     6   9.23077           0           0
     7   10.7692           0           0
-    8   12.3077           1       0.001
-    9   13.8462           1       0.001
-   10   15.3846          10        0.01
-   11   16.9231          18       0.018
-   12   18.4615          15       0.015
-   13        20          13       0.013
-   14   21.5385          23       0.023
-   15   23.0769          24       0.024
-   16   24.6154          29       0.029
-   17   26.1538          18       0.018
-   18   27.6923          23       0.023
-   19   29.2308          27       0.027
-   20   30.7692          34       0.034
-   21   32.3077          18       0.018
-   22   33.8462          35       0.035
-   23   35.3846          26       0.026
-   24   36.9231          38       0.038
-   25   38.4615          27       0.027
-   26        40          26       0.026
-   27   41.5385          24       0.024
-   28   43.0769          26       0.026
-   29   44.6154          30        0.03
-   30   46.1538          31       0.031
-   31   47.6923          23       0.023
+    8   12.3077           0           0
+    9   13.8462           5       0.005
+   10   15.3846           9       0.009
+   11   16.9231           8       0.008
+   12   18.4615          13       0.013
+   13        20          17       0.017
+   14   21.5385          17       0.017
+   15   23.0769          21       0.021
+   16   24.6154          31       0.031
+   17   26.1538          22       0.022
+   18   27.6923          24       0.024
+   19   29.2308          24       0.024
+   20   30.7692          31       0.031
+   21   32.3077          26       0.026
+   22   33.8462          26       0.026
+   23   35.3846          37       0.037
+   24   36.9231          37       0.037
+   25   38.4615          35       0.035
+   26        40          32       0.032
+   27   41.5385          26       0.026
+   28   43.0769          29       0.029
+   29   44.6154          29       0.029
+   30   46.1538          32       0.032
+   31   47.6923          31       0.031
    32   49.2308          23       0.023
-   33   50.7692          26       0.026
-   34   52.3077          32       0.032
-   35   53.8462          25       0.025
-   36   55.3846          26       0.026
-   37   56.9231          26       0.026
-   38   58.4615          15       0.015
-   39        60          23       0.023
-   40   61.5385          16       0.016
-   41   63.0769          14       0.014
-   42   64.6154          14       0.014
-   43   66.1538          14       0.014
+   33   50.7692          25       0.025
+   34   52.3077          17       0.017
+   35   53.8462          17       0.017
+   36   55.3846          11       0.011
+   37   56.9231          22       0.022
+   38   58.4615          19       0.019
+   39        60          14       0.014
+   40   61.5385          22       0.022
+   41   63.0769          18       0.018
+   42   64.6154          16       0.016
+   43   66.1538          13       0.013
    44   67.6923          13       0.013
    45   69.2308          20        0.02
-   46   70.7692          16       0.016
-   47   72.3077           7       0.007
-   48   73.8462           9       0.009
-   49   75.3846           9       0.009
-   50   76.9231           4       0.004
-   51   78.4615          10        0.01
-   52        80          11       0.011
-   53   81.5385           6       0.006
-   54   83.0769           6       0.006
+   46   70.7692          17       0.017
+   47   72.3077          13       0.013
+   48   73.8462           7       0.007
+   49   75.3846          12       0.012
+   50   76.9231           9       0.009
+   51   78.4615           8       0.008
+   52        80           5       0.005
+   53   81.5385           2       0.002
+   54   83.0769          10        0.01
    55   84.6154          10        0.01
-   56   86.1538           7       0.007
+   56   86.1538           2       0.002
    57   87.6923           4       0.004
-   58   89.2308           5       0.005
-   59   90.7692           6       0.006
-   60   92.3077           3       0.003
-   61   93.8462           2       0.002
-   62   95.3846           3       0.003
-   63   96.9231           4       0.004
+   58   89.2308           2       0.002
+   59   90.7692           8       0.008
+   60   92.3077           5       0.005
+   61   93.8462           5       0.005
+   62   95.3846           4       0.004
+   63   96.9231           3       0.003
    64   98.4615           5       0.005
 
- Emp =       0.0369231   width=      0.0476923  MeV 
+ Emp =       0.0353846   width=      0.0461538  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1475465879, 1720338131
+ Current couple of seeds = 1468174231, 450679924
 ----------------------------------------
 
 ========= Table of registered couples ==============================

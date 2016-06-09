@@ -23,19 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisManager.cc,v 1.6 2006/12/01 02:17:54 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4VisManager.cc,v 1.6.2.1 2008/04/23 09:26:58 gcosmo Exp $
+// $Name: geant4-09-01-patch-02 $
 // ====================================================================
 //   pyG4VisManager.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
 #include "G4VisManager.hh"
-#if G4VERSION_NUMBER >= 800
 #include "G4TrajectoryModelFactories.hh"
-#endif
 
 using namespace boost::python;
 
@@ -49,12 +46,10 @@ public:
 
   virtual void RegisterGraphicsSystems() { }
 
-#if G4VERSION_NUMBER >= 800
   virtual void RegisterModelFactories() {
     RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
     RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
   }
-#endif
 
 };
 

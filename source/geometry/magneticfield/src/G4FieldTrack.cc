@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FieldTrack.cc,v 1.14 2007/10/03 15:34:42 japost Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 // -------------------------------------------------------------------
 

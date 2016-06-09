@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.cc,v 1.8 2007/05/11 13:50:20 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FastSimulationMessenger.cc,v 1.8.2.1 2008/04/23 08:50:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-02 $
 //
 
 #include "G4FastSimulationMessenger.hh"
@@ -109,12 +109,14 @@ void G4FastSimulationMessenger::SetNewValue(G4UIcommand * command,G4String newVa
   if (command == fShowSetupCmd)
     fGlobalFastSimulationManager->ShowSetup();
   if( command == fListEnvelopesCmd)
+  {
     if(newValue == "all") 
       fGlobalFastSimulationManager->ListEnvelopes();
     else 
       fGlobalFastSimulationManager->
 	ListEnvelopes(G4ParticleTable::GetParticleTable()->
 		      FindParticle(newValue));
+  }
   if( command == fListModelsCmd)
     fGlobalFastSimulationManager->ListEnvelopes(newValue, MODELS); 
   if( command == fListIsApplicableCmd)
