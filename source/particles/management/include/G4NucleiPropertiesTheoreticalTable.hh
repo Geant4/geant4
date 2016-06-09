@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.5 2001/10/15 09:58:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.6 2003/12/12 06:48:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,8 +33,10 @@
 //   Encapsulates Data from W.D. Myers, W.J. Swiatecki, P. Moller
 //   and J.R. Nix, 1. Jan. 1995.
 //   Atomic Mass Excess.
-
 // ----------------------------------------------------------------
+// Remove "theInstance"  by H.Kurashige (12 Dec. 03)
+//
+
 #ifndef G4NucleiPropertiesTheoreticalTable_h
 #define G4NucleiPropertiesTheoreticalTable_h 1
 
@@ -45,9 +47,7 @@ class G4NucleiPropertiesTheoreticalTable
 private:
   
   // Default constructor 
-  G4NucleiPropertiesTheoreticalTable(G4double dummy);
-
-  static G4NucleiPropertiesTheoreticalTable theInstance;
+  G4NucleiPropertiesTheoreticalTable(){};
 
 public:
 
@@ -77,31 +77,25 @@ public:
 
 private:
 
-	// Operation: GetIndex
-	static G4int GetIndex(G4int Z, G4int A);
+  // Operation: GetIndex
+  static G4int GetIndex(G4int Z, G4int A);
   
-	static G4double ElectronicBindingEnergy(G4int Z);
+  static G4double ElectronicBindingEnergy(G4int Z);
  
 
-
-
-	// Mass Excess
-	static G4double AtomicMassExcess[nEntries];
+  // Mass Excess
+  static G4double AtomicMassExcess[nEntries];
   
+  // Table of Z (number of protons) and A (number of nucleons)
+  //        indexArray[0][ ] --> Z
+  //        indexArray[1][ ] --> A
+  static G4int indexArray[2][nEntries];
   
-
-    
-	// Table of Z (number of protons) and A (number of nucleons)
-	//        indexArray[0][ ] --> Z
-	//        indexArray[1][ ] --> A
-	static G4int indexArray[2][nEntries];
-
-	// Reduced Table of Z for shorter index search.
-	//         The index in this table coincide with Z-1
-	//         For each Z value shortTable[Z-1] has the index of the 1st occurrence in
-	//         the indexArray[][]
-	static G4int shortTable[shortTableSize];
-
+  // Reduced Table of Z for shorter index search.
+  //         The index in this table coincide with Z-1
+  //         For each Z value shortTable[Z-1] has the index of
+  // the 1st occurrence in the indexArray[][]
+  static G4int shortTable[shortTableSize];
 
 };
   

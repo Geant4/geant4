@@ -1,4 +1,4 @@
-$Id: History,v 1.191 2003/11/18 17:49:41 pia Exp $
+$Id: History,v 1.193 2004/01/27 14:12:22 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.01.2004   MGP, tag emlowen-V06-00-01
+             Optimization of Bremsstrahlung angular generators,
+             provided by LIP group
+
+26.01.2004   MGP, tag emlowen-V06-00-00
+             Fixed memory leaks in G4PenepoleInterpolator and
+             G4PenelopeIonisation
 
 18.11.2003   MGP, tag emlowen-V05-02-10
              Performance optimization in Bremsstrahlung angular distribution

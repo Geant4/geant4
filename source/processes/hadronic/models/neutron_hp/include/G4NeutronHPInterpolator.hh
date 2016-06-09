@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.15 2003/11/03 17:54:36 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NeutronHPInterpolator.hh,v 1.15.2.1 2004/02/08 09:37:30 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #ifndef G4NeutronHPInterpolator_h
 #define G4NeutronHPInterpolator_h 1
@@ -83,7 +83,7 @@ Interpolate(G4InterpolationScheme aScheme,
 {
   G4double result(0);
   G4int theScheme = aScheme;
-  theScheme = theScheme%CSTART;
+  theScheme = theScheme%CSTART_HP;
   switch(theScheme)
   {
     case 1:

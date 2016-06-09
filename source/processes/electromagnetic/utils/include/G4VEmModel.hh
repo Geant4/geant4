@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.14 2003/10/13 17:57:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VEmModel.hh,v 1.15 2004/01/27 11:21:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -114,7 +114,7 @@ public:
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle) = 0;
 
-  G4String GetName() const {return name;};
+  const G4String& GetName() const {return name;};
 
   // Methods for msc simulation
   virtual G4double GeomPathLength(G4PhysicsTable*,

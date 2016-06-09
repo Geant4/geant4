@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-06-00 $
-                                (12-December-2003)
+ Geant4 version $Name: geant4-06-00-patch-01 $
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -235,15 +235,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=79.47s Real=83.14s Sys=3.67s
+  User=79.94s Real=83.69s Sys=3.74s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events                     100
-Average number of e-                 1294
-Average number of gamma              684.8
-Average number of e+                 47.98
-Average number of steps              3812
+Average number of e-                 1295
+Average number of gamma              678.8
+Average number of e+                 47.7
+Average number of steps              3811
 ========================================================
 
 #

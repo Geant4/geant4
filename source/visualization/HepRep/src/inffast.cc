@@ -1,9 +1,9 @@
 /* inffast.c -- process literals and length/distance pairs fast
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
  */
 
-#include "zutil.h"
+#include "HepRep-zutil.h"
 #include "inftrees.h"
 #include "infblock.h"
 #include "infcodes.h"

@@ -39,10 +39,10 @@ class G4ProtonAntiProtonReaction : public G4HadronicInteraction
 };
 
 inline
-G4VParticleChange * G4ProtonAntiProtonReaction::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+G4HadFinalState * G4ProtonAntiProtonReaction::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
 {
-  if(aTrack.GetDynamicParticle()->GetDefinition() != G4AntiProton::AntiProton())
+  if(aTrack.GetDefinition() != G4AntiProton::AntiProton())
   {
     throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonReaction with particle other than p-bar!!!");
   }

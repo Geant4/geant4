@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.11 2003/11/26 14:51:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4UserSpecialCuts.cc,v 1.12 2004/01/23 02:47:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // --------------------------------------------------------------
 // History
@@ -30,6 +30,7 @@
 // 15-04-98 first implementation, mma
 // 07-04-03 migrade to cut per region (V.Ivanchenko)
 // 18-09-03 substitute manager for the loss tables (V.Ivanchenko)
+// 23-01-04 add protection for charged geantino in range cut (H.Kurashige)
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
@@ -95,10 +96,11 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
      if (temp < 0.) return 0.;
      if (ProposedStep > temp) ProposedStep = temp;
                  
-     // min remaining range (only for charged particle)
-     //
+     // min remaining range 
+     // (only for charged particle except for chargedGeantino)
      G4ParticleDefinition* Particle = aTrack.GetDefinition();
-     if (Particle->GetPDGCharge() != 0.)
+     if ( (Particle->GetPDGCharge() != 0.) 
+	  && (Particle->GetParticleType() != "geantino"))
      {
        G4double              Ekine    = aTrack.GetKineticEnergy();
        const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
@@ -136,3 +138,15 @@ G4UserSpecialCuts::PostStepDoIt( const G4Track& aTrack,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+
+
+
+
+
+
+
+
+
+

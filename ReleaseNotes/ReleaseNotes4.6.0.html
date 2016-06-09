@@ -201,14 +201,14 @@ We believe none give rise to incorrect behaviour.
     its mother physical volume during the navigation, it is now required to
     adopt <I>touchables</I> through the pre/post-step point.<BR>
     Examples on how to do this are provided in the
-    <A TARGET="ext" HREF="http://cern.ch/geant4/support/faq.html#a-geom-3">FAQ page</A></LI>
+    <A TARGET="ext" HREF="http://geant4.web.cern.ch/geant4/support/faq.html#a-geom-3">FAQ page</A></LI>
 <LI>Inherited user-defined physical volumes will have to adapt to the
     new interface by removing the method <TT>Setup()</TT>, now no longer
     required.</LI>
 <LI>A revision of methods in <TT>G4Navigator</TT> has taken place, some
     obsolete methods not used and available in the public interface have been
     removed, others originally meant for internal use have been moved
-    to <TT>protected</TT> (see <A HREF=#geo-notes">notes</A> for details).<BR>
+    to <TT>protected</TT> (see <A HREF="#geo-notes">notes</A> for details).<BR>
     <TT>LocateGlobalPointAndSetup(p,v,history)</TT> has been renamed to
     <TT>ResetHistoryAndLocate(p,v,history)</TT>.</LI>
 <LI>A revision of the inclusion of header files has been done in all
@@ -219,7 +219,7 @@ We believe none give rise to incorrect behaviour.
 <LI>Internal modules in the geometry have been reorganised. External
     frameworks taking into account the internal structure of the Geant4
     modules will have to be adapted to the new configuration (see
-    <A HREF=#geo-notes">notes</A> for the details).</LI>
+    <A HREF="#geo-notes">notes</A> for the details).</LI>
 </UL>
 
 <P> </P>

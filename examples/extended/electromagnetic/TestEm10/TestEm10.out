@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-06-00 $
-                                (12-December-2003)
+ Geant4 version $Name: geant4-06-00-patch-01 $
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -225,7 +225,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 21.04
 49	fGamma = 9.283e+04	sumE = 21.05
 
-total time for build X-ray TR energy loss tables = 210.42 s
+total time for build X-ray TR energy loss tables = 208.24 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -343,7 +343,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=214.99s Real=215.24s Sys=0.25s
+  User=214.89s Real=215.17s Sys=0.26s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=68.4534 +- 2.63717  mm  

@@ -6,7 +6,7 @@
 #include "zipios++/meta-iostreams.h"
 #include <vector>
 
-#include <zlib.h>
+#include <HepRep-zlib.h>
 
 #include "zipios++/filterinputstreambuf.h"
 

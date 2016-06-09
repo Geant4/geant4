@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.22 2003/12/04 10:44:07 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Trap.cc,v 1.24 2004/01/26 09:03:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // class G4Trap
 //
@@ -1510,6 +1510,21 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         *n=G4ThreeVector(0,0,1);
         break;
       default:
+        G4cout.precision(16);
+        G4cout << G4endl;
+        DumpInfo();
+        G4cout << "Position:"  << G4endl << G4endl;
+        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+        G4cout << "Direction:" << G4endl << G4endl;
+        G4cout << "v.x() = "   << v.x() << G4endl;
+        G4cout << "v.y() = "   << v.y() << G4endl;
+        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+        G4cout << "Proposed distance :" << G4endl << G4endl;
+        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4Exception("G4Trap::DistanceToOut(p,v,..)","Notification",JustWarning,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }

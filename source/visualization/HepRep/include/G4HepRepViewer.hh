@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4HepRepViewer.hh,v 1.16 2003/12/11 21:55:55 duns Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 /**

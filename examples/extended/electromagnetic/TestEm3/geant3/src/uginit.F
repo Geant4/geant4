@@ -36,7 +36,15 @@
       IF (filnam.EQ.' ') filnam = 'run01.dat'
       OPEN (unit=5,file=filnam,status='unknown',form='formatted')
 *
-      CALL GFFGO 
+*     fileName for histograms, must be 1st data card !
+      fileName = 'testem3.paw'
+      READ(5,98)key,spaces,fileName
+98    FORMAT(A4,A2,A25)
+
+      CALL GFFGO
+*       
+      write(6,99) fileName
+99    FORMAT(/,15x,'histogram file --> Name: ',A25)
 *
       CALL GZINIT
       CALL GPART

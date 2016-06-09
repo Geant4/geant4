@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.8 2003/12/09 15:36:41 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PenelopeIonisation.cc,v 1.9 2004/01/20 08:33:31 pandola Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 // --------------------------------------------------------------
 //
@@ -33,11 +33,16 @@
 //
 // Modifications:
 // 
-// 25.03.03 L.Pandola First implementation 
-// 03.06.03 L.Pandola Added continuous part
-// 30.06.03 L.Pandola Added positrons  
-// 01.07.03 L.Pandola Changed cross section files for e- and e+    
-//                    Interface with PenelopeCrossSectionHandler
+// 25.03.03 L.Pandola           First implementation 
+// 03.06.03 L.Pandola           Added continuous part
+// 30.06.03 L.Pandola           Added positrons  
+// 01.07.03 L.Pandola           Changed cross section files for e- and e+    
+//                              Interface with PenelopeCrossSectionHandler
+// 18.01.04 M.Mendenhall (Vanderbilt University) [bug report 568]
+//                              Changed returns in CalculateDiscreteForElectrons() 
+//                              to eliminate leaks
+// 20.01.04 L.Pandola           Changed returns in CalculateDiscreteForPositrons()
+//                              to eliminate the same bug 
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
@@ -357,8 +362,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   
   std::vector<G4DynamicParticle*>* photonVector=0;
   G4DynamicParticle* aPhoton;
-  //  G4AtomicDeexciation deexcitationManager;
-
+ 
   if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
     {
       photonVector = deexcitationManager.GenerateParticles(Z,shellId);
@@ -488,13 +492,14 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
   G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
 
   G4double rl,rl1;
+
+  if (cutoff > ene) return; //delta rays are not generated
+
   G4DataVector* qm = new G4DataVector();
   G4DataVector* cumulHardCS = new G4DataVector();
   G4DataVector* typeOfInteraction = new G4DataVector();
   G4DataVector* nbOfLevel = new G4DataVector();
  
-  if (cutoff > ene) return; //delta rays are not generated
-
   //Hard close collisions with outer shells
   G4double wmaxc = 0.5*ene;
   G4double closeCS0 = 0.0;
@@ -600,6 +605,10 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
     energySecondary=0.0;
     cosThetaSecondary=0.0;
     iOsc=-1;
+    delete qm;
+    delete cumulHardCS;
+    delete typeOfInteraction;
+    delete nbOfLevel;
     return;
   }
 
@@ -1032,12 +1041,14 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
 
   G4double rl,rl1;
+
+  if (cutoff > ene) return; //delta rays are not generated
+
   G4DataVector* qm = new G4DataVector();
   G4DataVector* cumulHardCS = new G4DataVector();
   G4DataVector* typeOfInteraction = new G4DataVector();
   G4DataVector* nbOfLevel = new G4DataVector();
  
-  if (cutoff > ene) return; //delta rays are not generated
 
   //Hard close collisions with outer shells
   G4double wmaxc = ene;
@@ -1148,6 +1159,10 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
     energySecondary=0.0;
     cosThetaSecondary=0.0;
     iOsc=-1;
+    delete qm;
+    delete cumulHardCS;
+    delete typeOfInteraction;
+    delete nbOfLevel;
     return;
   }
 

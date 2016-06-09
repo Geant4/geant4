@@ -76,11 +76,11 @@ G4Nucleus& aTargetNucleus, G4HadFinalState * aChange)
   G4int targetZ = G4int(aTargetNucleus.GetZ()+0.5);
   G4int targetA = G4int(aTargetNucleus.GetN()+0.5);
   G4int targetPDGCode = 90000000 + 1000*targetZ + (targetA-targetZ);
-  // NOT NECESSARY ______________
+  // debug +
   G4double targetMass = G4ParticleTable::GetParticleTable()->GetIonTable()
                                                            ->GetIonMass(targetZ, targetA);
   G4LorentzVector targ4Mom(0.,0.,0.,targetMass);  
-  // END OF NOT NECESSARY^^^^^^^^
+  // debug -
 
   G4int nop = 164; // nuclear clusters up to A=21
   G4double fractionOfSingleQuasiFreeNucleons = 0.4;

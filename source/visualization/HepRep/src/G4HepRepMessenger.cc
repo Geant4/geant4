@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4HepRepMessenger.cc,v 1.4 2003/12/11 21:55:55 duns Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #include "G4HepRepMessenger.hh"
 

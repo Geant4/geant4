@@ -62,8 +62,8 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
 						 G4ForceCondition*condition);
 
   // zero mean lifetime
-     G4double GetMeanLifeTime(const G4Track& aTrack,
-			      G4ForceCondition* condition) {return 0.0;}
+     G4double GetMeanLifeTime(const G4Track& ,
+			      G4ForceCondition* ) {return 0.0;}
 
      G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
@@ -74,8 +74,15 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
 
 inline
 G4VParticleChange * G4ProtonAntiProtonAtRestChips::
-AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
+AtRestDoIt(const G4Track& aTrack, const G4Step&)
 {
+  static G4ParticleChange theTotalResult; 
+
+  theTotalResult.Clear();
+  theTotalResult.SetLocalEnergyDeposit(0.);
+  theTotalResult.Initialize(aTrack);
+  theTotalResult.SetStatusChange(fAlive);
+
   // Create target
   G4Element * theTarget = theSelector.GetElement(aTrack.GetMaterial());
   G4Nucleus aTargetNucleus(theTarget->GetN() ,theTarget->GetZ());
@@ -92,7 +99,46 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
   }
   
   // Call chips
-  return theModel.ApplyYourself(aTrack, aTargetNucleus);
+  G4HadFinalState * aR = theModel.ApplyYourself(aTrack, aTargetNucleus);
+  
+  if(aR->GetStatusChange()==stopAndKill)
+  {
+    theTotalResult.SetStatusChange(fStopAndKill);
+    theTotalResult.SetEnergyChange( 0.0 );
+  }
+  if(aR->GetStatusChange()==suspend)
+  {
+    theTotalResult.SetStatusChange(fSuspend);
+  }
+  if(aR->GetStatusChange()!=stopAndKill )
+  {
+    G4double newWeight = aR->GetWeightChange()*aTrack.GetWeight();
+    theTotalResult.SetWeightChange(newWeight); 
+    if(aR->GetEnergyChange()>-.5) theTotalResult.SetEnergyChange(aR->GetEnergyChange());
+    theTotalResult.SetMomentumDirectionChange(aR->GetMomentumChange().unit());
+  }
+
+  theTotalResult.SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
+  theTotalResult.SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
+
+  G4ThreeVector it(0., 0., 1.);
+  G4double what = 2.*pi*G4UniformRand();
+  for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
+  {
+    G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
+    theM.rotate(what, it);
+    aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
+    G4double time = aR->GetSecondary(i)->GetTime();
+    if(time<0) time = aTrack.GetGlobalTime();
+    G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
+				 aTrack.GetGlobalTime(),
+				 aTrack.GetPosition());
+    G4double newWeight = aTrack.GetWeight()*aR->GetSecondary(i)->GetWeight();
+    track->SetWeight(newWeight);
+    theTotalResult.AddSecondary(track);
+  }
+  return &theTotalResult;
+
 }
 
 G4double G4ProtonAntiProtonAtRestChips::

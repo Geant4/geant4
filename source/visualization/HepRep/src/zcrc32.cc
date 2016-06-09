@@ -9,12 +9,12 @@
 
 /* crc32.c -- compute the CRC-32 of a data stream
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
  */
 
-/* @(#) $Id: zcrc32.cc,v 1.1 2003/07/11 06:01:45 duns Exp $ */
+/* @(#) $Id: zcrc32.cc,v 1.2 2004/02/03 19:34:44 duns Exp $ */
 
-#include "zlib.h"
+#include "HepRep-zlib.h"
 
 #define local static
 

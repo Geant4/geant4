@@ -27,6 +27,7 @@
 // History:
 // -----------
 // 17 Feb 2003   LP        Created
+// 17 Dec 2003   LP        Removed memory leak
 //
 // -------------------------------------------------------------------
 
@@ -128,6 +129,16 @@ G4PenelopeInterpolator::G4PenelopeInterpolator(G4double* pX,G4double* pY,G4int n
     y->push_back(pY[i]);
   }
   return;
+}
+
+G4PenelopeInterpolator::~G4PenelopeInterpolator()
+{
+  delete a;
+  delete b;
+  delete c;
+  delete d;
+  delete x;
+  delete y;
 }
 
 G4double G4PenelopeInterpolator::CubicSplineInterpolation(G4double xx)

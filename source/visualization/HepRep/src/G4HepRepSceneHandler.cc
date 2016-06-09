@@ -20,6 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4HepRepSceneHandler.cc,v 1.70 2004/02/05 18:41:49 duns Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
+//
 
 /**
  * @author Mark Donszelmann, Joseph Perl
@@ -430,20 +433,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     setMarker(instance, line);
 
     // Default MarkName is set to Circle for this Type.
-    switch (line.GetMarkerType()) {
-        case line.dots:
-            setAttribute(instance, "Fill", true);
-            setColor(instance, GetColor(line), G4String("FillColor"));
-            break;
-        case line.circles:
-            break;
-        case line.squares:
-            setAttribute(instance, "MarkName", G4String("Box"));
-            break;
-        case line.line:
-        default:
-            setAttribute(instance, "MarkName", G4String("Plus"));
-            break;
+    int mtype = line.GetMarkerType();
+    
+    // Cannot be case statement since line.xxx is not a constant
+    if (mtype == line.dots) {
+        setAttribute(instance, "Fill", true);
+        setColor(instance, GetColor(line), G4String("FillColor"));
+    } else if (mtype == line.circles) {
+    } else if (line.squares) {
+        setAttribute(instance, "MarkName", G4String("Box"));
+    } else {
+        // line.line + default
+        setAttribute(instance, "MarkName", G4String("Plus"));
     }
 
     for (size_t i=0; i < line.size(); i++) {

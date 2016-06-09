@@ -21,51 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.5 2003/05/19 17:10:25 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.6 2003/12/12 06:48:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 // ------------------------------------------------------------
+// Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 
 #include "G4NucleiPropertiesTheoreticalTable.hh"
-
-
-
-G4int G4NucleiPropertiesTheoreticalTable::shortTable[G4NucleiPropertiesTheoreticalTable::shortTableSize];
-
-G4NucleiPropertiesTheoreticalTable G4NucleiPropertiesTheoreticalTable::theInstance(2.5);
-// Default constructor
-G4NucleiPropertiesTheoreticalTable::G4NucleiPropertiesTheoreticalTable(G4double )
-{
-	G4int j = 0;
-	
-	for (G4int i = 0; i < G4NucleiPropertiesTheoreticalTable::nEntries; i++) {
-		if (indexArray[0][i] > j+7) {
-			shortTable[j++] = i;
-		}
-	}
-	shortTable[G4NucleiPropertiesTheoreticalTable::shortTableSize-1] = 
-										G4NucleiPropertiesTheoreticalTable::nEntries;
-}
 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A) 
 {
 
-	if(A>339) G4Exception(
-	"G4NucleiPropertiesTheoreticalTable::GetIndex : Nucleon number larger than 339!\n"); 
-	if(A<16) G4Exception(
-	"G4NucleiPropertiesTheoreticalTable::GetIndex : Nucleon number smaller than 16!\n"); 
-	if(Z>136) G4Exception(
-	"G4NucleiPropertiesTheoreticalTable::GetIndex : Proton number larger than 136!\n"); 
-	if(Z<8) G4Exception(
-	"G4NucleiPropertiesTheoreticalTable::GetIndex : Proton number smaller than 8!\n");	
-	if(Z>A) G4Exception(
-	"G4NucleiPropertiesTheoreticalTable::GetIndex : Nucleon number smaller than Z!\n"); 
-  
+  if(A>339) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted,"Nucleon number larger than 339!");
+  } else if(A<16) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted," Nucleon number smaller than 16!"); 
+  } else if(Z>136) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted, "Proton number larger than 136!");
+  } else if(Z<8) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted, "Proton number smaller than 8!");
+  } else if(Z>A) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted, "Nucleon number smaller than Z!"); 
+  }
   
   G4int i = shortTable[Z-8];
   while ( i < shortTable[Z-8+1] ) {
@@ -133,4 +125,11 @@ G4bool G4NucleiPropertiesTheoreticalTable::IsInTable(G4int Z, G4int A)
 {
   return (Z <= A && A >= 16 && A <= 339 && Z <= 136 && Z >= 8 && GetIndex(Z, A) >= 0);
 }
+
+
+
+
+
+
+
 

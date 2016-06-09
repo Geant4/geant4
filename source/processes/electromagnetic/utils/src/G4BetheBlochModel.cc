@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.9 2003/11/12 10:24:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4BetheBlochModel.cc,v 1.10 2004/01/26 08:59:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -82,7 +82,7 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     spin = particle->GetPDGSpin();
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
-    lowKinEnergy *= mass/proton_mass_c2;
+//    lowKinEnergy *= mass/proton_mass_c2;
     ratio = electron_mass_c2/mass;
     if(particle->GetParticleName() == "GenericIon") isIon = true;
   }
@@ -232,7 +232,7 @@ G4double G4BetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
     cross *= twopi_mc2_rcl2*chargeSquare*
              (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
+  //  G4cout << "BB: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
   //       << " cross= " << cross << G4endl;
   return cross;
 }

@@ -557,17 +557,17 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
           theTotalResult->SetEnergyChange( 0.0 );
 	}
       }
-      else if(aR->GetStatusChange()==suspend)
-      {
-        theTotalResult->SetStatusChange(fSuspend);
-	if(xBiasOn)
-	{
-          G4Exception("G4HadronicProcess", "007", FatalException,
-	              "Cannot cross-section bias a process that suspends tracks.");
-	}
-      }
       else if(aR->GetStatusChange()!=stopAndKill )
       {
+        if(aR->GetStatusChange()==suspend)
+        {
+	  if(xBiasOn)
+	  {
+            G4Exception("G4HadronicProcess", "007", FatalException,
+	                "Cannot cross-section bias a process that suspends tracks.");
+	  }
+          theTotalResult->SetStatusChange(fSuspend);
+        }
 	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
 	{
  	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );

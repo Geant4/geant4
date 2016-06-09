@@ -1,15 +1,15 @@
 /* gzio.c -- IO on .gz files
  * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
  *
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.cc,v 1.4 2003/07/12 15:19:56 duns Exp $ */
+/* @(#) $Id: gzio.cc,v 1.5 2004/02/03 19:34:44 duns Exp $ */
 
 #include <stdio.h>
 
-#include "zutil.h"
+#include "HepRep-zutil.h"
 
 struct internal_state {int dummy;}; /* for buggy compilers */
 

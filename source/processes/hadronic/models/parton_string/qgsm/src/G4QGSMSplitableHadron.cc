@@ -61,6 +61,7 @@ void G4QGSMSplitableHadron::InitParameters()
 		    // to be revised.
   widthOfPtSquare = 0.01*GeV*GeV;
   Direction = FALSE;
+  minTransverseMass = 1*keV;
 } 
 
 G4QGSMSplitableHadron::G4QGSMSplitableHadron() 
@@ -136,7 +137,7 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   G4double pt2 = HadronMom.perp2();
   G4double transverseMass2 = HadronMom.plus()*HadronMom.minus();
   G4double maxAvailMomentum2 = sqr(sqrt(transverseMass2) - sqrt(pt2));
-  G4ThreeVector pt(0.,0.,0.);
+  G4ThreeVector pt(minTransverseMass, minTransverseMass, 0);
   if(maxAvailMomentum2/widthOfPtSquare>0.01) pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
 
   G4LorentzVector LeftMom(pt, 0.);

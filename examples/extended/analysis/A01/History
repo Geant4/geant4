@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2003/12/01 19:12:36 perl Exp $
+$Id: History,v 1.22 2004/02/09 22:21:58 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,11 @@ $Id: History,v 1.21 2003/12/01 19:12:36 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+9th February 2004 Makoto Asai (exampleA01-V06-00-00)
+- Fix EM part of the physics list to use the new 
+ processes introduced at 6.0.
+- Reference output is updated accordingly.
 
  1st December 2003 Joseph Perl
 - Removed endOfEventAction.mac since new vis policy provides such a flush

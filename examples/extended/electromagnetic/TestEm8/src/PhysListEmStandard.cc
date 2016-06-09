@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.2 2003/11/24 17:52:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: PhysListEmStandard.cc,v 1.3 2004/01/27 11:19:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -93,7 +93,7 @@ void PhysListEmStandard::ConstructProcess()
 
       G4eIonisation* eion = new G4eIonisation();
 
-      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      G4PAIModel*     pai = new G4PAIModel(particle);
       eion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(eion,        -1, 2,2);
@@ -113,7 +113,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
       G4MuIonisation* muion = new G4MuIonisation();
-      G4PAIModel*     pai   = new G4PAIModel(particle,"PAIModel");
+      G4PAIModel*     pai   = new G4PAIModel(particle);
       muion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(muion,      -1, 2,-2);
@@ -135,7 +135,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
       G4hIonisation* hion =     new G4hIonisation();
-      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      G4PAIModel*     pai = new G4PAIModel(particle);
       hion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(hion,       -1,2,2);

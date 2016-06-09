@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunActionMessenger.hh,v 1.1 2003/09/22 14:06:43 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: RunActionMessenger.hh,v 1.3 2004/01/21 17:29:26 maire Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 
@@ -37,6 +37,7 @@
 
 class RunAction;
 class G4UIcommand;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,9 +50,9 @@ class RunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RunAction* Run;
-    G4UIcommand*  HistoCmd;        
- 
+    RunAction*          Run;
+    G4UIcmdWithAString* fileCmd;
+    G4UIcommand*        HistoCmd;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

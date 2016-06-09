@@ -49,6 +49,7 @@
 //                           moved E2_perp, E2_parl and E2_total out of 'if'
 //              2003-11-27 - Modified line 168-9 to reflect changes made to
 //                           G4OpticalSurface class ( by Fan Lei)
+//              2004-02-02 - Set theStatus = Undefined at start of DoIt
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -107,6 +108,8 @@ G4OpBoundaryProcess::~G4OpBoundaryProcess(){}
 G4VParticleChange*
 G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
+        theStatus = Undefined;
+
         aParticleChange.Initialize(aTrack);
 
         G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
@@ -154,19 +157,19 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4SurfaceType type = dielectric_dielectric;
 
-        Rindex = 0;
-        OpticalSurface = 0;
+        Rindex = NULL;
+        OpticalSurface = NULL;
 
         G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface
 				    (pPreStepPoint ->GetPhysicalVolume(),
 				     pPostStepPoint->GetPhysicalVolume());
 
-        if (Surface == 0) Surface = G4LogicalSkinSurface::GetSurface
+        if (Surface == NULL) Surface = G4LogicalSkinSurface::GetSurface
 				       (pPreStepPoint->GetPhysicalVolume()->
 						GetLogicalVolume());
 
-	//	if (Surface != 0) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
-	if (Surface != 0) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
+	//	if (Surface) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
+	if (Surface) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
 
 	if (OpticalSurface) {
 
@@ -181,8 +184,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
               if (theFinish == polishedbackpainted ||
                   theFinish == groundbackpainted ) {
-                  Rindex = 
-                  aMaterialPropertiesTable->GetProperty("RINDEX");
+                  Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 	          if (Rindex) {
                      Rindex2 = Rindex->GetProperty(thePhotonMomentum);
                   }
@@ -280,8 +282,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
 	                                TransformAxis(theLocalNormal);
-
-	theStatus = Undefined;
 
 	if (type == dielectric_metal) {
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.13 2003/11/13 10:10:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4UniversalFluctuation.cc,v 1.15 2004/02/06 11:59:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 07-11-03 Fix problem of rounding of double in G4UniversalFluctuations
+// 06-02-04 Add control on big sigma > 2*meanLoss (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,9 +123,14 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length 
                               * electronDensity * chargeSquare ;
     siga = sqrt(siga);
-    do {
-     loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (loss < 0. || loss > 2.*meanLoss);
+    G4double twomeanLoss = meanLoss + meanLoss;
+    if(twomeanLoss < siga) {
+      loss = twomeanLoss*G4UniformRand(); 
+    } else {
+      do {
+       loss = G4RandGauss::shoot(meanLoss,siga);
+      } while (loss < 0. || loss > twomeanLoss);
+    }
     //    G4cout << "de= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl; 
 
     return loss;
@@ -292,21 +298,5 @@ G4double G4UniversalFluctuation::Dispersion(
 
   return siga;
 }
-
-
-/*
-    // High velocity or negatively charged particle
-    zeff         = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-    if( beta2 > 3.0*theBohrBeta2*zeff || charge < 0.0) {
-      siga = sqrt( siga * chargeSquare ) ;
-
-    // Low velocity - additional ion charge fluctuations according to
-    // Q.Yang et al., NIM B61(1991)149-155.
-    } else {
-      G4double chu = theIonChuFluctuationModel->TheValue(particle, material);
-      G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
-      siga = sqrt( siga * (chargeSquare * chu + yang)) ;
-    }
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2003/12/01 15:14:05 gcosmo Exp $
+$Id: History,v 1.47 2004/02/03 13:45:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03.02.04 V.Ivant - materials-V06-00-01
+         Fix problem of destructor of G4SandiaTable
+     
+22.01.04 mma - materials-V06-00-00
+         G4Material.cc: proper STL handdling of theElementVector (Hisaya)
 
 01.12.03 P.Gumplinger - materials-V05-02-00
          Added base class G4SurfaceProperty.

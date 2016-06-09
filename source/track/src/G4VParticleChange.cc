@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.15 2003/06/19 14:45:12 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VParticleChange.cc,v 1.16 2003/12/12 13:12:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -325,12 +325,12 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
 }
 
 
-const G4double G4VParticleChange::GetAccuracyForWarning() const
+G4double G4VParticleChange::GetAccuracyForWarning() const
 {
   return accuracyForWarning;
 }
 
-const G4double G4VParticleChange::GetAccuracyForException() const
+G4double G4VParticleChange::GetAccuracyForException() const
 {
   return accuracyForException;
 }

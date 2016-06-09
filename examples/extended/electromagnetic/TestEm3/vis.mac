@@ -15,7 +15,7 @@
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
-###/vis/open DAWNFILE
+####/vis/open DAWNFILE
 /vis/open OGLIX
 #
 # Draw scene
@@ -27,4 +27,4 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/testem/event/drawTracks
+/testem/event/drawTracks all

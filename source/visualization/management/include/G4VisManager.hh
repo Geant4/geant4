@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.31 2003/11/27 09:55:45 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VisManager.hh,v 1.32 2004/02/09 10:01:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 
@@ -93,6 +93,7 @@
 class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
+class G4VisStateDependent;
 
 class G4VisManager: public G4VVisManager {
 

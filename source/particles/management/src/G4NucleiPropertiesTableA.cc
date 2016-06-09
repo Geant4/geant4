@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableA.cc,v 1.7 2001/10/15 09:58:34 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NucleiPropertiesTableA.cc,v 1.8 2003/12/12 06:48:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -32,69 +32,47 @@
 //      File name:     G4NucleiPropertiesTable.cc 
 //
 //      Authors:       Vicente Lara (Vicente.Lara@cern.ch)
-//                     Christian V"olcker (Christian.Volcker@cern.ch),
+//                     Christian V'olcker (Christian.Volcker@cern.ch),
 //
 //      Creation date: November 1997
 //
 //      Modifications: 
 // -------------------------------------------------------------------
 // Migrate into particles category by H.Kurashige (17 Nov. 98)
-
+// Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 
 #include "G4NucleiPropertiesTable.hh"
 
-
 // Class G4NucleiPropertiesTable 
-
-
-G4int G4NucleiPropertiesTable::shortTable[G4NucleiPropertiesTable::MaxA+1];
-// make sure there is exactly one instance of this class!
-G4NucleiPropertiesTable G4NucleiPropertiesTable::theInstance(2.5);
-
-// Default constructor
-
-//G4NucleiPropertiesTable::G4NucleiPropertiesTable() : G4NucleiPropertiesTable::nEntries(2971) 
-G4NucleiPropertiesTable::G4NucleiPropertiesTable(G4double dummy)
-{
-  
-  G4double even_more_dummy = 0;
-  even_more_dummy = dummy;
-  G4int j = 0;
-  
-  for (G4int i = 0; i < G4NucleiPropertiesTable::nEntries; i++) {
-      if (indexArray[1][i] > j) {
-				shortTable[j++] = i;
-      }
-  }
-  shortTable[G4NucleiPropertiesTable::MaxA] = G4NucleiPropertiesTable::nEntries;
-}
-
-
 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 
 G4int G4NucleiPropertiesTable::GetIndex(G4int Z, G4int A) 
 {
-
-  if(A>G4NucleiPropertiesTable::MaxA) G4Exception(
- "G4NucleiPropertiesTable::GetIndex : Nucleon number larger than 273!\n"); 
-  if(A<1) G4Exception(
- "G4NucleiPropertiesTable::GetIndex : Nucleon number negativ!\n"); 
-  if(Z>A) G4Exception(
- "G4NucleiPropertiesTable::GetIndex : Nucleon number smaller than Z!\n"); 
-  
+  if(A>G4NucleiPropertiesTable::MaxA) {
+    G4Exception("G4NucleiPropertiesTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted,"Nucleon number larger than 273!");
+  } else if(A<1) {
+    G4Exception("G4NucleiPropertiesTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted," Nucleon number is negative!"); 
+  } else if(Z>A) {
+    G4Exception("G4NucleiPropertiesTable::GetIndex",
+		"Illegal arguemnt",
+		EventMustBeAborted, "Nucleon number smaller than Z!"); 
+  }
+   
   G4int i = shortTable[A-1];
   while ( i < shortTable[A] ) {
-    if (indexArray[0][i] != Z ) i++;
-    else return i;
+    if (indexArray[0][i] != Z ) {
+      i++;
+    } else {
+      return i;
+    }
   }
-  
   return -1;
 }
-
-
-
-
 
 
 G4int G4NucleiPropertiesTable::MinZ(G4int A)

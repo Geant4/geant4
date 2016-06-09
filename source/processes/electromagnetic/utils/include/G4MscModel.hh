@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.6 2003/11/26 10:01:13 urban Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MscModel.hh,v 1.7 2004/01/21 18:05:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #define G4MscModel_h 1
 
 #include "G4VEmModel.hh"
+
 class G4MscModel : public G4VEmModel
 {
 

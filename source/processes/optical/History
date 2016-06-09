@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd February 2004 Peter Gumplinger (op-V06-00-00)
+                Set theStatus = Undefined at start of DoIt
+                Replace usage of 0 with NULL.
+ 
 1st December 2003 Peter Gumplinger (op-V05-02-02)
                 G4OpBoundaryProcess.cc: modified to adopt G4SurfaceProperty.
                 Requires tag "materials-V05-02-00".

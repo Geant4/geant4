@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.6 2003/03/28 09:52:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PolyhedraSide.cc,v 1.7 2004/01/06 18:07:02 davidw Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -495,8 +495,8 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
     // Do we remain within r/z bounds?
     //
     
-    if (normSign*qa.cross(qc).dot(v) < 0) return false;
-    if (normSign*qb.cross(qd).dot(v) > 0) return false;
+    if (r[0] > 1/kInfinity && normSign*qa.cross(qc).dot(v) < 0) return false;
+    if (r[1] > 1/kInfinity && normSign*qb.cross(qd).dot(v) > 0) return false;
     
     //
     // We allow the face to be slightly behind the trajectory

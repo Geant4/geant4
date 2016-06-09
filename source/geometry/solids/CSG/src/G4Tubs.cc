@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.40 2003/11/03 18:17:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Tubs.cc,v 1.42 2004/01/26 09:03:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // class G4Tubs
@@ -649,7 +649,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     default:
     {
       DumpInfo();
-      G4Exception("G4Tubs::SurfaceNormal()", "LogicError", FatalException,
+      G4Exception("G4Tubs::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
     }    
@@ -1435,7 +1435,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl ;
         G4cout << "Proposed distance :" << G4endl << G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4Exception("G4Tubs::DistanceToOut()", "LogicError", FatalException,
+        G4Exception("G4Tubs::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break ;
     }
@@ -1464,8 +1464,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-    G4Exception("G4Tubs::DistanceToOut(p)",
-                "Notification", JustWarning, "Point p is outside !?");
+    G4Exception("G4Tubs::DistanceToOut(p)", "Notification", JustWarning, 
+                 "Point p is outside !?");
   }
 #endif
 

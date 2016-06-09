@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2003/11/26 16:09:26 vnivanch Exp $
+$Id: History,v 1.135 2004/02/06 17:31:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 Feb 04: V.Ivant (utils-a-V06-00-00)
+- The tag on top of utils-V06-00-00 for the patch include:
+- Fix problem of destruction of PAI model
+- Fix a bug responsibile for mess in cross section of delta-electron
+  production by muons
+
+27 Jan 04: V.Ivant (utils-V06-00-03)
+- Fix problem of destruction of PAI model
+
+26 Jan 04: V.Ivant (utils-V06-00-02)
+- Fix a bug responsibile for mess in cross section of delta-electron
+  production by muons
+
+22 Jan 04: V.Ivant (utils-V06-00-01)
+- Migrade to G4ParticleChangeForLoss
+
+14 Jan 04: V.Ivant (utils-V06-00-00)
+- Activate precise range calculation
+- Add Set methods to G4LossTablemanager to define: binning, maxEnergy for muon
+  tables, maxEnergy for precise range.
 
 26 Nov 03: V.Ivant (utils-V05-02-17)
 - Close precise range feature for the time being

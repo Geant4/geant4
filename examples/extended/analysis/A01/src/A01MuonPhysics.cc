@@ -20,10 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.cc,v 1.5 2003/10/11 03:00:00 tkoi Exp $
+// $Id: A01MuonPhysics.cc,v 1.6 2004/01/06 02:53:22 tkoi Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 
+// 05-Jan-2004 Add Brem. and PairProd. of AlongStepDoit for mu+- by T. Koi
 
 #include "A01MuonPhysics.hh"
 
@@ -92,6 +93,9 @@ void A01MuonPhysics::ConstructProcess()
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(thempMultipleScattering, idxAlongStep,1);
    pManager->SetProcessOrdering(thempIonisation,        idxAlongStep,2);
+   pManager->SetProcessOrdering(thempBremsstrahlung,     idxAlongStep,3);
+   pManager->SetProcessOrdering(thempPairProduction,     idxAlongStep,4);
+
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(thempMultipleScattering, idxPostStep,1);
    pManager->SetProcessOrdering(thempIonisation,        idxPostStep,2);
@@ -99,6 +103,7 @@ void A01MuonPhysics::ConstructProcess()
    pManager->SetProcessOrdering(thempPairProduction,     idxPostStep,4);
 
    //Muon-
+   pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
    G4VProcess* themmMultipleScattering = new G4MultipleScattering();
    G4VProcess* themmBremsstrahlung     = new G4MuBremsstrahlung();
    G4VProcess* themmPairProduction     = new G4MuPairProduction();
@@ -113,6 +118,8 @@ void A01MuonPhysics::ConstructProcess()
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(themmMultipleScattering, idxAlongStep,1);
    pManager->SetProcessOrdering(themmIonisation,        idxAlongStep,2);
+   pManager->SetProcessOrdering(themmBremsstrahlung,     idxAlongStep,3);
+   pManager->SetProcessOrdering(themmPairProduction,     idxAlongStep,4);
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(themmMultipleScattering, idxPostStep,1);
    pManager->SetProcessOrdering(themmIonisation,        idxPostStep,2);

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.48 2003/12/12 15:02:51 stesting Exp $
+# $Id: Configure,v 1.49 2004/02/09 14:58:45 stesting Exp $
 #
-# Generated on Fri Dec 12 15:49:38 CET 2003 [metaconfig 3.0 PL70]
+# Generated on Mon Feb  9 15:57:09 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3101,6 +3101,8 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
+		g4lib_build_shared=n
+		g4lib_build_static=y
 		break
 		;;
 	y*|Y*) 
@@ -3134,7 +3136,8 @@ You selected to build 'shared' (.so) libraries.
 Do you want to build 'static' (.a) libraries too?
 EOM`
 
-dflt=$g4lib_build_static
+#dflt=$g4lib_build_static
+dflt=n
 rp=$g4message
 . ./myread
 gans=$ans
@@ -3142,6 +3145,7 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
+		g4lib_build_static=n
 		break
 		;;
 	y*|Y*) 

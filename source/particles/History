@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2003/10/30 09:25:29 kurasige Exp $
+$Id: History,v 1.101 2003/12/12 06:55:19 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Oct 30, 2003  iH.Kurashige (particles-V05-02-06)
+- Dec. 12, 2003  H.Kurashige (particles-V06-00-00)
+- Fixed initialization problems in G4NuclearPropertiesTable
+ -- Add initialization of indexArray 
+ -- Remove the static member of theInstance
+
+- Oct 30, 2003  H.Kurashige (particles-V05-02-06)
 - Fixed compiler warning in G4HtmlReporter.cc 
 
 - Oct 21, 2003  M.Asai (particles-V05-02-05)

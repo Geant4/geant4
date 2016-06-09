@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.11 2003/11/12 10:24:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4BraggModel.cc,v 1.12 2004/01/26 08:59:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,7 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     massRate     = mass/proton_mass_c2;
-    highKinEnergy *= massRate;
+//    highKinEnergy *= massRate;
     ratio = electron_mass_c2/mass;
     if(particle->GetParticleName() == "GenericIon") isIon = true;
   }
@@ -185,11 +185,15 @@ G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
     G4double beta2  = 1. - 1./(gam*gam);
     cross = (1.0 - x*(1.0 - beta2*log(x)))/cutEnergy;
 
+    // +term for spin=1/2 particle
+    if( 0.5 == spin ) {
+      cross +=  0.5 * (tmax - cutEnergy) / (energy*energy);
+    }
     cross *= twopi_mc2_rcl2*chargeSquare*
              (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
-  //         << " cross= " << cross << G4endl;
+ //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
+ //        << " cross= " << cross << G4endl;
   return cross;
 }
 

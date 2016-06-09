@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2003/12/04 11:41:08 gcosmo Exp $
+$Id: History,v 1.62 2004/01/26 09:03:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 26, 2004  V.Grichine                 geom-csg-V06-00-00
+- Converted strong exceptions in warning notifications for rare anomalous
+  conditions in DistanceToOut(p,v,..).
+- G4Cons.cc: bug fix in DistanceToIn(p,v) to resolve situations of calls
+  to DistanceToOut() for points outside.
 
 Dec 4, 2003   V.Grichine                 geom-csg-V05-02-06
 - G4Trap.cc: fixed initialisation of planes in default constructor.

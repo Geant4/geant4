@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.9 2003/10/06 10:09:20 maire Exp $
+# $Id: run02.mac,v 1.10 2004/01/21 17:29:22 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -24,6 +24,7 @@
 /gun/particle e-
 /gun/energy 1 GeV
 #
+/testem/run/setFileName run02.paw
 /testem/run/setHisto 0 100 900. 1000. MeV
 /testem/run/setHisto 1 100   0.   50. MeV
 #

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.27 2003/11/03 18:17:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Sphere.cc,v 1.29 2004/01/26 09:03:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // class G4Sphere
 //
@@ -524,7 +524,6 @@ if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ;
       }
     }
   }
-  //  if (in == kInside) DBG();
   return in;
 }
 
@@ -668,7 +667,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Sphere::SurfaceNormal()", "LogicError", FatalException,
+      G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break;    
   } // end case
@@ -2453,8 +2452,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Sphere::DistanceToOut(p,v,...)",
-                    "LogicError", FatalException,
+        G4Exception("G4Sphere::DistanceToOut(p,v,..)",
+                    "Notification", JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -2476,10 +2475,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-    G4Exception("G4Sphere::DistanceToOut(p,v,...)",
+    G4Exception("G4Sphere::DistanceToOut(p,v,..)",
                 "Notification", JustWarning,
                 "Logic error: snxt = kInfinity  ???");
-    DBG();
   }
 
   return snxt;

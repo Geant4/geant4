@@ -39,8 +39,8 @@ class G4PionMinusNuclearReaction : public G4HadronicInteraction
 };
 
 inline
-G4VParticleChange * G4PionMinusNuclearReaction::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+G4HadFinalState * G4PionMinusNuclearReaction::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
 {
 //  if(aTrack.GetDynamicParticle()->GetDefinition() != G4PionMinus::PionMinusDefinition())
 //  {

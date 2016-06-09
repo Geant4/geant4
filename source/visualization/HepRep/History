@@ -1,4 +1,4 @@
-.$Id: History,v 1.55 2003/12/05 23:53:19 perl Exp $
+.$Id: History,v 1.61 2004/02/05 18:59:26 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,26 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+5 February 2004 Mark Donszelmann (vis-HepRep-V06-00-04)
+- Fixed compilation problems for the Linux-icc (7.0) compiler.
+
+3 February 2004 Mark Donszelmann (vis-HepRep-V06-00-03)
+- Further fix to GEANT-40, renamed zutil.h, zlib.h and zconf.h
+  into HepRep-zutil.h, ... to avoid conflicts with those files
+  on Unix systems if /usr/include or /usr/local/include is
+  on the include search path.
+
+28 January 2004 Mark Donszelmann (vis-HepRep-V06-00-01)
+- Attempted to fix GEANT-40. For some unclear reason the symbols zcalloc and zcfree
+  of the zlib library were being called as C++ mangled names. 
+  To get rid of the situation of a mix of C++ and C names, we took
+  out the 'extern "C"' declarations from our zlib.h and zutil.h.
+  All names are C++ mangled now.
+
+11 December 2003 Mark Donszelmann
+- Removed the HepRep2 driver from FreeHEP, so the HepRep2 sources now live
+  in this directory. Modified the copyfreehep scripts, and the READMEs.
+  Re-added the cvs expand keywords to show revision and tagname.
 
 05 December 2003 Joseph Perl (vis-HepRep-V05-02-09)
 - Fix bug with CalHits by moving faces to separate HepRepType

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.17 2003/11/03 18:17:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Trd.cc,v 1.19 2004/01/26 09:03:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // Implementation for G4Trd class
@@ -1120,8 +1120,7 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Trd::DistanceToOut()",
-                    "LogicError", FatalException,
+        G4Exception("G4Trd::DistanceToOut(p,v,..)","Notification",JustWarning, 
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -1151,8 +1150,8 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4Exception("G4Trd::DistanceToOut(p)",
-                 "Notification", JustWarning, "Point p is outside !?" );
+     G4Exception("G4Trd::DistanceToOut(p)", "Notification", JustWarning, 
+                 "Point p is outside !?" );
   }
 #endif
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.1 2003/11/12 16:18:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VEnergyLossProcess.hh,v 1.3 2004/01/14 18:01:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 14-01-04 Activate precise range calculation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -196,6 +197,9 @@ public:
   void SetRangeTable(G4PhysicsTable* p);
   G4PhysicsTable* RangeTable() const {return theRangeTable;};
 
+  void SetRangeTableForLoss(G4PhysicsTable* p);
+  G4PhysicsTable* RangeTableForLoss() const {return theRangeTableForLoss;};
+
   void SetInverseRangeTable(G4PhysicsTable* p);
   G4PhysicsTable* InverseRangeTable() const {return theInverseRangeTable;};
 
@@ -308,6 +312,8 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
+  G4double GetRangeForLoss(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
+
   // hide  assignment operator
 
   G4VEnergyLossProcess(G4VEnergyLossProcess &);
@@ -326,6 +332,7 @@ private:
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
   G4PhysicsTable*  theRangeTable;
+  G4PhysicsTable*  theRangeTableForLoss;
   G4PhysicsTable*  theSecondaryRangeTable;
   G4PhysicsTable*  theInverseRangeTable;
   G4PhysicsTable*  theLambdaTable;
@@ -354,7 +361,6 @@ private:
   G4double maxKinEnergy;
   G4double maxKinEnergyForRange;
   G4double lowKinEnergy;
-  G4double highKinEnergyForRange;
 
   G4double massRatio;
   G4double reduceFactor;
@@ -415,12 +421,24 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
   G4bool b;
   G4double x;
   G4double e = kineticEnergy*massRatio;
-  if (e < highKinEnergyForRange) {
+  if (e < maxKinEnergyForRange) {
     x = ((*theRangeTable)[currentMaterialIndex])->GetValue(e, b);
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
-      (e - highKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
+      (e - maxKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
   }
+  return x*reduceFactor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
+                                            const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  G4bool b;
+  G4double e = kineticEnergy*massRatio;
+  G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->GetValue(e, b);
   return x*reduceFactor;
 }
 
@@ -480,9 +498,10 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
   G4double x = DBL_MAX;
 
   if (theRangeTable) {
-    G4bool b;
-    fRange = ((*theRangeTable)[currentMaterialIndex])->
-            GetValue(preStepScaledEnergy, b)*reduceFactor;
+    //G4bool b;
+    //    fRange = ((*theRangeTableForLoss)[currentMaterialIndex])->
+    //        GetValue(preStepScaledEnergy, b)*reduceFactor;
+    fRange = GetRange(preStepKinEnergy, currentCouple);
 
     x = fRange;
     G4double y = x*dRoverRange;
@@ -551,26 +570,11 @@ inline void G4VEnergyLossProcess::SetDEDXBinningForPreciseRange(G4int nbins)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline G4int G4VEnergyLossProcess::DEDXBinning() const
-{
-  return nDEDXBins;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossProcess::SetLambdaBinning(G4int nbins)
 {
   nLambdaBins = nbins;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline G4int G4VEnergyLossProcess::LambdaBinning() const
-{
-  return nLambdaBins;
-}
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

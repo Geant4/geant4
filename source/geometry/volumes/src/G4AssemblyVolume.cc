@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.2 2003/11/02 16:06:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AssemblyVolume.cc,v 1.3 2004/01/19 14:07:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -166,7 +166,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
 
   unsigned int        numberOfDaughters;
   
-  if( copyNumBase != 0 ) {
+  if( copyNumBase == 0 ) {
     numberOfDaughters = pMotherLV->GetNoDaughters();
   } else {
     numberOfDaughters = copyNumBase;
@@ -247,7 +247,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
 
   unsigned int        numberOfDaughters;
   
-  if( copyNumBase != 0 ) {
+  if( copyNumBase == 0 ) {
     numberOfDaughters = pMotherLV->GetNoDaughters();
   } else {
     numberOfDaughters = copyNumBase;

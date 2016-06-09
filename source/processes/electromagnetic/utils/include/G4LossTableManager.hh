@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.19 2003/11/12 16:18:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4LossTableManager.hh,v 1.20 2004/01/14 18:01:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 05-10-03 Add G4VEmProcesses registration (V.Ivanchenko)
 // 17-10-03 Add SetParameters method (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 14-01-04 Activate precise range calculation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -119,7 +120,7 @@ public:
   void Register(G4VMultipleScattering* p);
 
   void DeRegister(G4VMultipleScattering* p);
-  
+
   void Register(G4VEmProcess* p);
 
   void DeRegister(G4VEmProcess* p);
@@ -144,10 +145,20 @@ public:
 
   void SetMaxEnergy(G4double val);
 
+  void SetMaxEnergyForPreciseRange(G4double val);
+
+  void SetMaxEnergyForMuons(G4double val);
+  
+  void SetDEDXBinning(G4int val);
+  
+  void SetDEDXBinningForPreciseRange(G4int val);
+
+  void SetLambdaBinning(G4int val);
+
   void SetStepLimits(G4double v1, G4double v2);
 
   void SetBuildPreciseRange(G4bool val);
- 
+
   void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
@@ -202,6 +213,7 @@ private:
   G4bool buildPreciseRange;
   G4bool minEnergyActive;
   G4bool maxEnergyActive;
+  G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
 
   G4double minSubRange;
@@ -209,10 +221,11 @@ private:
   G4double maxFinalStep;
   G4double minKinEnergy;
   G4double maxKinEnergy;
+  G4double maxKinEnergyForMuons;
 
-  G4VEnergyLossProcess*         eIonisation;
-  G4LossTableBuilder*       tableBuilder;
-  G4EnergyLossMessenger*    theMessenger;
+  G4VEnergyLossProcess*       eIonisation;
+  G4LossTableBuilder*         tableBuilder;
+  G4EnergyLossMessenger*      theMessenger;
   const G4ParticleDefinition* firstParticle;
   G4int verbose;
 
