@@ -40,7 +40,7 @@ public:
 
   G4CollisionNNToDeltaDelta1700();
 
-  virtual ~G4CollisionNNToDeltaDelta1700() {}
+  virtual ~G4CollisionNNToDeltaDelta1700();
 
 
   virtual G4String GetName() const { return "NN -> Delta Delta(1700) Collision"; }
@@ -51,6 +51,10 @@ public:
     return *aList;
   } 
   
+private:
+  G4CollisionNNToDeltaDelta1700(const G4CollisionNNToDeltaDelta1700 &);
+  G4CollisionNNToDeltaDelta1700 & operator= (const G4CollisionNNToDeltaDelta1700 &);
+
 
 protected:
   

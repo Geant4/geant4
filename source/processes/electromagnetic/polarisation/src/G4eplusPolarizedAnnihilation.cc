@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.8 2008-10-30 22:34:23 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +55,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eplusPolarizedAnnihilation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Gamma.hh"
 #include "G4PhysicsVector.hh"

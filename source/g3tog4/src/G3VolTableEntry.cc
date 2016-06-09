@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.cc,v 1.12 2006-06-29 18:13:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // modified by I.Hrivnacova, 13.10.99
 
@@ -194,13 +193,13 @@ void G3VolTableEntry::SetNmed(G4int nmed) {
   fNmed = nmed;
 }
 
-void G3VolTableEntry::SetNRpar(G4int npar, G4double* Rpar) {
+void G3VolTableEntry::SetNRpar(G4int npar, G4double* rpar) {
   if (npar != fNpar) {
     fNpar = npar;
     delete [] fRpar;
     fRpar = new G4double[fNpar];
   }      
-  for (G4int i=0; i<fNpar; i++) fRpar[i] = Rpar[i];
+  for (G4int i=0; i<fNpar; i++) fRpar[i] = rpar[i];
 }  
 
 void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {

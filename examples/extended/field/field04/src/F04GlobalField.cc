@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04GlobalField.cc
+/// \brief Implementation of the F04GlobalField class
 //
 //
-
 #include <time.h>
 
 #include "Randomize.hh"
@@ -37,40 +38,45 @@
 #include "G4SimpleHeum.hh"
 #include "G4ClassicalRK4.hh"
 #include "G4CashKarpRKF45.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F04GlobalField.hh"
 
-F04GlobalField* F04GlobalField::object = 0;
+F04GlobalField* F04GlobalField::fObject = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04GlobalField::F04GlobalField() : G4ElectroMagneticField(),
-                             minStep(0.01*mm), deltaChord(3.0*mm),
-                             deltaOneStep(0.01*mm), deltaIntersection(0.1*mm),
-                             epsMin(2.5e-7*mm), epsMax(0.05*mm),
-                             fEquation(0), fFieldManager(0), 
+                             fMinStep(0.01*mm), fDeltaChord(3.0*mm),
+                             fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
+                             fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
+                             fEquation(0), fFieldManager(0),
                              fFieldPropagator(0), fStepper(0), fChordFinder(0)
 //F04GlobalField::F04GlobalField() : G4MagneticField(),
-//                             minStep(0.01*mm), deltaChord(3.0*mm),
-//                             deltaOneStep(0.01*mm), deltaIntersection(0.1*mm),
-//                             epsMin(2.5e-7*mm), epsMax(0.05*mm),
-//                             fEquation(0), fFieldManager(0),
-//                             fFieldPropagator(0), fStepper(0), fChordFinder(0)
+//                           fMinStep(0.01*mm), fDeltaChord(3.0*mm),
+//                           fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
+//                           fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
+//                           fEquation(0), fFieldManager(0),
+//                           fFieldPropagator(0), fStepper(0), fChordFinder(0)
 {
   fFieldMessenger = new F04FieldMessenger(this);
 
-  fields = new FieldList();
+  fFields = new FieldList();
 
   fStepperType = 4 ;       // ClassicalRK4 is default stepper
 
   //  set object
 
-  object = this;
+  fObject = this;
 
-  updateField();
+  UpdateField();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04GlobalField::~F04GlobalField()
 {
-  clear();
+  Clear();
 
   delete fFieldMessenger;
 
@@ -81,14 +87,16 @@ F04GlobalField::~F04GlobalField()
   if (fChordFinder)     delete fChordFinder;
 }
 
-void F04GlobalField::updateField()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04GlobalField::UpdateField()
 {
-  first = true;
+  fFirst = true;
 
-  nfp = 0;
-  fp = 0;
+  fNfp = 0;
+  fFp = 0;
 
-  clear();
+  Clear();
 
   //  Construct equ. of motion of particles through B fields
 //  fEquation = new G4Mag_EqRhs(this);
@@ -100,12 +108,12 @@ void F04GlobalField::updateField()
   fEquation = new G4EqEMFieldWithSpin(this);
 
   //  Get transportation, field, and propagator managers
-  G4TransportationManager* fTransportManager =
+  G4TransportationManager* transportManager =
          G4TransportationManager::GetTransportationManager();
 
   fFieldManager = GetGlobalFieldManager();
 
-  fFieldPropagator = fTransportManager->GetPropagatorInField();
+  fFieldPropagator = transportManager->GetPropagatorInField();
 
   //  Need to SetFieldChangesEnergy to account for a time varying electric
   //  field (r.f. fields)
@@ -119,36 +127,40 @@ void F04GlobalField::updateField()
 
   //  Create a cord finder providing the (global field, min step length,
   //  a pointer to the stepper)
-  fChordFinder = new G4ChordFinder((G4MagneticField*)this,minStep,fStepper);
+  fChordFinder = new G4ChordFinder((G4MagneticField*)this,fMinStep,fStepper);
 
   // Set accuracy parameters
-  fChordFinder->SetDeltaChord( deltaChord );
+  fChordFinder->SetDeltaChord( fDeltaChord );
 
-  fFieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+  fFieldManager->SetAccuraciesWithDeltaOneStep(fDeltaOneStep);
 
-  fFieldManager->SetDeltaIntersection(deltaIntersection);
+  fFieldManager->SetDeltaIntersection(fDeltaIntersection);
 
-  fFieldPropagator->SetMinimumEpsilonStep(epsMin);
-  fFieldPropagator->SetMaximumEpsilonStep(epsMax);
+  fFieldPropagator->SetMinimumEpsilonStep(fEpsMin);
+  fFieldPropagator->SetMaximumEpsilonStep(fEpsMax);
 
   G4cout << "Accuracy Parameters:" <<
-            " MinStep=" << minStep <<
-            " DeltaChord=" << deltaChord <<
-            " DeltaOneStep=" << deltaOneStep << G4endl;
+            " MinStep=" << fMinStep <<
+            " DeltaChord=" << fDeltaChord <<
+            " DeltaOneStep=" << fDeltaOneStep << G4endl;
   G4cout << "                    " <<
-            " DeltaIntersection=" << deltaIntersection <<
-            " EpsMin=" << epsMin <<
-            " EpsMax=" << epsMax <<  G4endl;
+            " DeltaIntersection=" << fDeltaIntersection <<
+            " EpsMin=" << fEpsMin <<
+            " EpsMax=" << fEpsMax <<  G4endl;
 
   fFieldManager->SetChordFinder(fChordFinder);
 
 }
 
-F04GlobalField* F04GlobalField::getObject()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04GlobalField* F04GlobalField::GetObject()
 {
-  if (!object) new F04GlobalField();
-  return object;
+  if (!fObject) new F04GlobalField();
+  return fObject;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04GlobalField::SetStepper()
 {
@@ -190,16 +202,20 @@ void F04GlobalField::SetStepper()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4FieldManager* F04GlobalField::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
                                 ->GetFieldManager();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04GlobalField::GetFieldValue(const G4double* point, G4double* field) const
 {
   // NOTE: this routine dominates the CPU time for tracking.
-  // Using the simple array fp[] instead of fields[] 
+  // Using the simple array fFp[] instead of fields[] 
   // directly sped it up
 
   field[0] = field[1] = field[2] = field[3] = field[4] = field[5] = 0.0;
@@ -207,40 +223,44 @@ void F04GlobalField::GetFieldValue(const G4double* point, G4double* field) const
   // protect against Geant4 bug that calls us with point[] NaN.
   if(point[0] != point[0]) return;
 
-  // (can't use nfp or fp, as they may change)
-  if (first) ((F04GlobalField*)this)->setupArray();   // (cast away const)
+  // (can't use fNfp or fFp, as they may change)
+  if (fFirst) ((F04GlobalField*)this)->SetupArray();   // (cast away const)
 
-  for (int i=0; i<nfp; ++i) {
-      const F04ElementField* p = fp[i];
-      if (p->isInBoundingBox(point)) {
-         p->addFieldValue(point,field);
+  for (int i=0; i<fNfp; ++i) {
+      const F04ElementField* p = fFp[i];
+      if (p->IsInBoundingBox(point)) {
+         p->AddFieldValue(point,field);
       }
   }
 
 }
 
-void F04GlobalField::clear()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04GlobalField::Clear()
 {
-  if (fields) {
-     if (fields->size()>0) {
+  if (fFields) {
+     if (fFields->size()>0) {
         FieldList::iterator i;
-        for (i=fields->begin(); i!=fields->end(); ++i) delete *i;
-        fields->clear();
+        for (i=fFields->begin(); i!=fFields->end(); ++i) delete *i;
+        fFields->clear();
      }
   }
 
-  if (fp) delete[] fp;
+  if (fFp) delete[] fFp;
 
-  first = true;
+  fFirst = true;
 
-  nfp = 0;
-  fp = NULL;
+  fNfp = 0;
+  fFp = NULL;
 }
 
-void F04GlobalField::setupArray()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04GlobalField::SetupArray()
 {
-  first = false;
-  nfp = fields->size();
-  fp = new const F04ElementField* [nfp+1]; // add 1 so it's never 0
-  for (int i=0; i<nfp; ++i) fp[i] = (*fields)[i];
+  fFirst = false;
+  fNfp = fFields->size();
+  fFp = new const F04ElementField* [fNfp+1]; // add 1 so it's never 0
+  for (int i=0; i<fNfp; ++i) fFp[i] = (*fFields)[i];
 }

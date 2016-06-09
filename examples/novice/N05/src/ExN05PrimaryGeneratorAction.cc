@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PrimaryGeneratorAction.cc,v 1.5 2006-06-29 17:53:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "ExN05PrimaryGeneratorAction.hh"
@@ -35,6 +34,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN05PrimaryGeneratorAction::ExN05PrimaryGeneratorAction()
 {

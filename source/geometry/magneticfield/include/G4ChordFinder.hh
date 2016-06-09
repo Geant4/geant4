@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.21 2008-10-29 14:17:42 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4ChordFinder
@@ -55,7 +54,7 @@ class G4ChordFinder
       G4ChordFinder( G4MagInt_Driver* pIntegrationDriver );
 
       G4ChordFinder( G4MagneticField* itsMagField,
-                     G4double         stepMinimum = 1.0e-2 * mm, 
+                     G4double         stepMinimum = 1.0e-2, // * mm 
                      G4MagIntegratorStepper* pItsStepper = 0 );  
         // A constructor that creates defaults for all "children" classes.
       

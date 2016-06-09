@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.24 2009-11-15 22:10:03 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -41,6 +40,7 @@
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel96.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -64,6 +64,8 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,20 +102,29 @@ void PhysListEmStandard::ConstructProcess()
      
     } else if (particleName == "e-") {
     
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);            
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc -> AddEmModel(0, new G4UrbanMscModel96());    
+      ph->RegisterProcess(msc, particle);
+      //            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
+      //
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);      
-	    
+            
     } else if (particleName == "e+") {
-
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);                  
+    
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc -> AddEmModel(0, new G4UrbanMscModel96());    
+      ph->RegisterProcess(msc, particle);
+      //     
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
+      //
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      //
+      ph->RegisterProcess(new G4eplusAnnihilation(), particle);    
                   
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {

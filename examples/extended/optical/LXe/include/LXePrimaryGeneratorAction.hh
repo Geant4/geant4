@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file optical/LXe/include/LXePrimaryGeneratorAction.hh
+/// \brief Definition of the LXePrimaryGeneratorAction class
+//
+//
 #ifndef LXePrimaryGeneratorAction_h
 #define LXePrimaryGeneratorAction_h 1
 
@@ -34,17 +37,18 @@ class G4Event;
 
 class LXePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  LXePrimaryGeneratorAction();
-  ~LXePrimaryGeneratorAction();
-  
-public:
-  void GeneratePrimaries(G4Event* anEvent);
-  
-private:
-    G4ParticleGun* particleGun;
+  public:
+
+    LXePrimaryGeneratorAction();
+    virtual ~LXePrimaryGeneratorAction();
+ 
+  public:
+
+    virtual void GeneratePrimaries(G4Event* anEvent);
+
+  private:
+
+    G4ParticleGun* fParticleGun;
 };
 
 #endif
-
-

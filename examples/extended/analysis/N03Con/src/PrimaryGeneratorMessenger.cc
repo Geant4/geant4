@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/src/PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -41,27 +43,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
-                                          PrimaryGeneratorAction* Gun)
-:Action(Gun)
+                                          PrimaryGeneratorAction* gun)
+:fAction(gun)
 {
-  gunDir = new G4UIdirectory("/N03/gun/");
-  gunDir->SetGuidance("PrimaryGenerator control");
+  fGunDir = new G4UIdirectory("/N03/gun/");
+  fGunDir->SetGuidance("PrimaryGenerator control");
    
-  RndmCmd = new G4UIcmdWithAString("/N03/gun/rndm",this);
-  RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on(default), off");
-  RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("on");
-  RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fRndmCmd = new G4UIcmdWithAString("/N03/gun/rndm",this);
+  fRndmCmd->SetGuidance("Shoot randomly the incident particle.");
+  fRndmCmd->SetGuidance("  Choice : on(default), off");
+  fRndmCmd->SetParameterName("choice",true);
+  fRndmCmd->SetDefaultValue("on");
+  fRndmCmd->SetCandidates("on off");
+  fRndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-  delete RndmCmd;
-  delete gunDir;
+  delete fRndmCmd;
+  delete fGunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,8 +71,8 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(
                                         G4UIcommand* command, G4String newValue)
 { 
-  if( command == RndmCmd )
-   { Action->SetRndmFlag(newValue);}
+  if( command == fRndmCmd )
+   { fAction->SetRndmFlag(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

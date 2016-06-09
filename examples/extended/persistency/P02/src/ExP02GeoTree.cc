@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExP02GeoTree.cc,v 1.2 2007-12-10 16:29:20 gunter Exp $
+/// \file persistency/P02/src/ExP02GeoTree.cc
+/// \brief Implementation of the ExP02GeoTree class
+//
+// $Id$
 // Include files
 
 // local
@@ -35,27 +38,29 @@
 // 2005-05-26 : Witold POKORSKI
 //-----------------------------------------------------------------------------
 
-//=============================================================================
-// Standard constructor, initializes variables
-//=============================================================================
-ExP02GeoTree::ExP02GeoTree(  ): topV(0)
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExP02GeoTree::ExP02GeoTree(  ): fTopV(0)
 {
-  eltab = G4Element::GetElementTable();
-  mattab = G4Material::GetMaterialTable();
+  fEltab = G4Element::GetElementTable();
+  fMattab = G4Material::GetMaterialTable();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExP02GeoTree::ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, const G4MaterialTable* mt): 
-  topV(vol), eltab(et), mattab(mt)
+  fTopV(vol), fEltab(et), fMattab(mt)
 {}
 
-//=============================================================================
-// Destructor
-//=============================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExP02GeoTree::~ExP02GeoTree() {} 
 
-//=============================================================================
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* ExP02GeoTree::TopVol()
 {
-  return topV;
+  return fTopV;
 }

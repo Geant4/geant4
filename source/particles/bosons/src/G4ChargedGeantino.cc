@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.cc,v 1.15 2006-06-29 19:14:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +37,7 @@
 // ----------------------------------------------------------------
 
 #include "G4ChargedGeantino.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 

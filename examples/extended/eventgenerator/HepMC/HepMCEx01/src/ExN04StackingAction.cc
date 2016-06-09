@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04StackingAction.cc
+/// \brief Implementation of the ExN04StackingAction class
+//
 
 #include "ExN04StackingAction.hh"
 #include "G4SDManager.hh"
@@ -34,6 +37,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "ExN04StackingActionMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04StackingAction::ExN04StackingAction()

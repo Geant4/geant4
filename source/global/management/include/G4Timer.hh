@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.hh,v 1.14 2006-06-29 19:03:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -117,6 +116,7 @@ class G4Timer
     inline void Start();
     inline void Stop();
     inline G4bool IsValid() const;
+    inline const char* GetClockTime() const;
     G4double GetRealElapsed() const;
     G4double GetSystemElapsed() const;
     G4double GetUserElapsed() const;

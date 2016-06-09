@@ -32,7 +32,14 @@
 
 G4CollisionNNToNDelta1620::G4CollisionNNToNDelta1620()
 { 
-  MakeNNToNDelta<Dm_1620PC, D0_1620PC, Dp_1620PC, Dpp_1620PC, G4ConcreteNNToNDeltaStar>::Make(this);
+	components=0;
+	MakeNNToNDelta<Dm_1620PC, D0_1620PC, Dp_1620PC, Dpp_1620PC, G4ConcreteNNToNDeltaStar>::Make(this);
+}
+
+G4CollisionNNToNDelta1620::~G4CollisionNNToNDelta1620()
+{
+	if (components) delete components;
+	components=0;
 }
 
 

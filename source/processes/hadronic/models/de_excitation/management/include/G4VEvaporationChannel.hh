@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh,v 1.7 2010-10-29 17:35:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -51,8 +50,6 @@ public:
   G4VEvaporationChannel(const G4String & aName = "Anonymous");
   virtual ~G4VEvaporationChannel();
 
-  virtual void Initialize(const G4Fragment & fragment) = 0;
-
   // return emitted fragment, initial fragment is modified
   // and not deleted
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
@@ -65,7 +62,7 @@ public:
   // in the list of emitted fragments
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus) = 0;
 
-  virtual G4double GetEmissionProbability(void) const = 0;
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus) = 0;
 
   inline G4String GetName() const {return Name;}
   inline void SetName(const G4String & aName) { Name = aName;}

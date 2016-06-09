@@ -34,6 +34,7 @@
 // 100729 Add safty for 0 lenght cross sections by T. Koi
 
 #include "G4NeutronHPFissionData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
@@ -105,7 +106,11 @@ void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   size_t numberOfElements = G4Element::GetNumberOfElements();
   //theCrossSections = new G4PhysicsTable( numberOfElements );
    // TKDB
-   if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   //if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   if ( theCrossSections == NULL ) 
+      theCrossSections = new G4PhysicsTable( numberOfElements );
+   else
+      theCrossSections->clearAndDestroy();
 
   // make a PhysicsVector for each element
 

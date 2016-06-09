@@ -23,17 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoCluster.cc,v 1.5 2008-06-09 18:13:35 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
-#include "G4RPGTwoCluster.hh"
-#include "Randomize.hh"
-#include "G4Poisson.hh"
 #include <iostream>
-#include "G4HadReentrentException.hh"
 #include <signal.h>
 
+#include "G4RPGTwoCluster.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4Poisson.hh"
+#include "G4HadReentrentException.hh"
 
 G4RPGTwoCluster::G4RPGTwoCluster()
   : G4RPGReaction() {}
@@ -58,14 +59,13 @@ ReactionStage(const G4HadProjectile* originalIncident,
   // A simple two cluster model is used to generate x- and pt- values for 
   // incident, target, and all secondary particles. 
   // This should be sufficient for low energy interactions.
-  //
 
   G4int i;
-  G4ParticleDefinition *aProton = G4Proton::Proton();
-  G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
-  G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
-  G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-  G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
+  G4ParticleDefinition* aProton = G4Proton::Proton();
+  G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
+  G4ParticleDefinition* aPiPlus = G4PionPlus::PionPlus();
+  G4ParticleDefinition* aPiMinus = G4PionMinus::PionMinus();
+  G4ParticleDefinition* aPiZero = G4PionZero::PionZero();
   G4bool veryForward = false;
 
   const G4double protonMass = aProton->GetPDGMass()/MeV;
@@ -74,22 +74,20 @@ ReactionStage(const G4HadProjectile* originalIncident,
   const G4double mOriginal = modifiedOriginal.GetMass()/GeV;
   const G4double pOriginal = modifiedOriginal.GetMomentum().mag()/GeV;
   G4double targetMass = targetParticle.GetDefinition()->GetPDGMass()/GeV;
-  G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
-                                      targetMass*targetMass +
-                                      2.0*targetMass*etOriginal );  // GeV
+  G4double centerofmassEnergy = std::sqrt(mOriginal*mOriginal +
+                                          targetMass*targetMass +
+                                          2.0*targetMass*etOriginal);  // GeV
   G4double currentMass = currentParticle.GetMass()/GeV;
   targetMass = targetParticle.GetMass()/GeV;
 
-  if( currentMass == 0.0 && targetMass == 0.0 )
-  {
+  if (currentMass == 0.0 && targetMass == 0.0) {
     G4double ek = currentParticle.GetKineticEnergy();
-    G4ThreeVector m = currentParticle.GetMomentum();
+    G4ThreeVector mom = currentParticle.GetMomentum();
     currentParticle = *vec[0];
     targetParticle = *vec[1];
-    for( i=0; i<(vecLen-2); ++i )*vec[i] = *vec[i+2];
-    if(vecLen<2) 
-    {
-      for(G4int i=0; i<vecLen; i++) delete vec[i];
+    for (i = 0; i < (vecLen-2); ++i) *vec[i] = *vec[i+2];
+    if (vecLen < 2) {
+      for (G4int j = 0; j < vecLen; j++) delete vec[j];
       vecLen = 0;
       throw G4HadReentrentException(__FILE__, __LINE__,
       "G4RPGTwoCluster::ReactionStage : Negative number of particles");
@@ -101,17 +99,16 @@ ReactionStage(const G4HadProjectile* originalIncident,
     targetMass = targetParticle.GetMass()/GeV;
     incidentHasChanged = true;
     targetHasChanged = true;
-    currentParticle.SetKineticEnergy( ek );
-    currentParticle.SetMomentum( m );
+    currentParticle.SetKineticEnergy(ek);
+    currentParticle.SetMomentum(mom);
     veryForward = true;
   }
 
   const G4double atomicWeight = targetNucleus.GetA_asInt();
   const G4double atomicNumber = targetNucleus.GetZ_asInt();
-  //
+
   // particles have been distributed in forward and backward hemispheres
   // in center of mass system of the hadron nucleon interaction
-  //
 
   // Incident particle always in forward hemisphere
 
@@ -121,35 +118,26 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4double cMass = forwardMass;
     
   // Target particle always in backward hemisphere
-
   G4int backwardCount = 1;       // number of particles in backward hemisphere
   targetParticle.SetSide( -1 );
   G4double backwardMass = targetParticle.GetMass()/GeV;
   G4double bMass = backwardMass;
 
   //  G4int backwardNucleonCount = 1;  // number of nucleons in backward hemisphere
-    
-  for( i=0; i<vecLen; ++i )
-  {
-    if( vec[i]->GetSide() < 0 )vec[i]->SetSide( -1 );   // to take care of 
+  for (i = 0; i < vecLen; ++i) {
+    if (vec[i]->GetSide() < 0) vec[i]->SetSide(-1);   // to take care of 
     // case where vec has been preprocessed by GenerateXandPt
     // and some of them have been set to -2 or -3
-    if( vec[i]->GetSide() == -1 )
-    {
+    if (vec[i]->GetSide() == -1) {
       ++backwardCount;
       backwardMass += vec[i]->GetMass()/GeV;
-    }
-    else
-    {
+    } else {
       ++forwardCount;
       forwardMass += vec[i]->GetMass()/GeV;
     }
   }
 
-  //
   // Add nucleons and some pions from intra-nuclear cascade
-  //
-
   G4double term1 = std::log(centerofmassEnergy*centerofmassEnergy);
   if(term1 < 0) term1 = 0.0001; // making sure xtarg<0;
   const G4double afc = 0.312 + 0.2 * std::log(term1);

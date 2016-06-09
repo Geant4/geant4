@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.8 2010-10-14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -43,6 +42,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "G4SynchrotronRadiation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmProcessSubType.hh"
 
@@ -63,8 +64,8 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   fFieldPropagator = transportMgr->GetPropagatorInField();
 
   fLambdaConst = std::sqrt(3.0)*electron_mass_c2/
-                           (2.5*fine_structure_const*eplus*c_light) ;
-  fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2  ;
+                           (2.5*fine_structure_const*eplus*c_light);
+  fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2 ;
 
   SetProcessSubType(fSynchrotronRadiation);
   verboseLevel=1;
@@ -96,7 +97,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
 
   const G4DynamicParticle* aDynamicParticle = trackData.GetDynamicParticle();
 
-  *condition = NotForced ;
+  *condition = NotForced;
 
   G4double gamma = aDynamicParticle->GetTotalEnergy()/
                    aDynamicParticle->GetMass();
@@ -126,7 +127,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
     }
     if ( fieldExertsForce )
     {
-      pField = fieldMgr->GetDetectorField() ;
+      pField = fieldMgr->GetDetectorField();
       G4ThreeVector  globPosition = trackData.GetPosition();
 
       G4double  globPosVec[4], FieldValueVec[6];
@@ -145,8 +146,8 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
 
 
       G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
-      G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum) ;
-      G4double perpB             = unitMcrossB.mag() ;
+      G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum);
+      G4double perpB             = unitMcrossB.mag();
 
       if( perpB > 0.0 ) MeanFreePath = fLambdaConst/perpB;
       else              MeanFreePath = DBL_MAX;
@@ -206,7 +207,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
 
   G4ThreeVector  FieldValue;
-  const G4Field*   pField = 0 ;
+  const G4Field*   pField = 0;
 
   G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false;
@@ -223,22 +224,22 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   }
   if ( fieldExertsForce )
   {
-    pField = fieldMgr->GetDetectorField() ;
-    G4ThreeVector  globPosition = trackData.GetPosition() ;
-    G4double  globPosVec[4], FieldValueVec[6] ;
-    globPosVec[0] = globPosition.x() ;
-    globPosVec[1] = globPosition.y() ;
-    globPosVec[2] = globPosition.z() ;
+    pField = fieldMgr->GetDetectorField();
+    G4ThreeVector  globPosition = trackData.GetPosition();
+    G4double  globPosVec[4], FieldValueVec[6];
+    globPosVec[0] = globPosition.x();
+    globPosVec[1] = globPosition.y();
+    globPosVec[2] = globPosition.z();
     globPosVec[3] = trackData.GetGlobalTime();
 
-    pField->GetFieldValue( globPosVec, FieldValueVec ) ;
+    pField->GetFieldValue( globPosVec, FieldValueVec );
     FieldValue = G4ThreeVector( FieldValueVec[0],
                                    FieldValueVec[1],
                                    FieldValueVec[2]   );
 
     G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
     G4ThreeVector unitMcrossB = FieldValue.cross(unitMomentum);
-    G4double perpB = unitMcrossB.mag() ;
+    G4double perpB = unitMcrossB.mag();
     if(perpB > 0.0)
     {
       // M-C of synchrotron photon energy
@@ -255,15 +256,33 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       G4ParticleMomentum
       particleDirection = aDynamicParticle->GetMomentumDirection();
 
-      // M-C of its direction
+      // M-C of its direction, simplified dipole boosted approach
 
-      G4double Teta = G4UniformRand()/gamma ;    // Very roughly
+      // G4double Teta, fteta;  // = G4UniformRand()/gamma;    // Very roughly
 
-      G4double Phi  = twopi * G4UniformRand() ;
+      G4double cosTheta, sinTheta, fcos, beta;
 
-      G4double dirx = std::sin(Teta)*std::cos(Phi) ,
-               diry = std::sin(Teta)*std::sin(Phi) ,
-               dirz = std::cos(Teta) ;
+  do
+  { 
+    cosTheta = 1. - 2.*G4UniformRand();
+    fcos     = (1 + cosTheta*cosTheta)*0.5;
+  }
+  while( fcos < G4UniformRand() );
+
+  beta = std::sqrt(1. - 1./(gamma*gamma));
+
+  cosTheta = (cosTheta + beta)/(1. + beta*cosTheta);
+
+  if( cosTheta >  1. ) cosTheta =  1.;
+  if( cosTheta < -1. ) cosTheta = -1.;
+
+  sinTheta = std::sqrt(1. - cosTheta*cosTheta );
+
+      G4double Phi  = twopi * G4UniformRand();
+
+      G4double dirx = sinTheta*std::cos(Phi) ,
+               diry = sinTheta*std::sin(Phi) ,
+               dirz = cosTheta;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);
@@ -295,7 +314,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
       // Update the incident particle
 
-      G4double newKinEnergy = kineticEnergy - energyOfSR ;
+      G4double newKinEnergy = kineticEnergy - energyOfSR;
       aParticleChange.ProposeLocalEnergyDeposit (0.);
 
       if (newKinEnergy > 0.)

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.4 2006-06-29 16:47:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,31 +40,31 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
-:physList(physL)
+:fPhysList(physL)
 {
-  physDir = new G4UIdirectory("/testem/phys/");
-  physDir->SetGuidance("physics list commands");
+  fPhysDir = new G4UIdirectory("/testem/phys/");
+  fPhysDir->SetGuidance("physics list commands");
   
-  SRTypeCmd = new G4UIcmdWithABool("/testem/phys/analyticSR",this);
-  SRTypeCmd->SetGuidance("choose analytic synchrotron radiation");
-  SRTypeCmd->SetParameterName("SRType",true);
-  SRTypeCmd->SetDefaultValue(true);  
+  fSRTypeCmd = new G4UIcmdWithABool("/testem/phys/analyticSR",this);
+  fSRTypeCmd->SetGuidance("choose analytic synchrotron radiation");
+  fSRTypeCmd->SetParameterName("SRType",true);
+  fSRTypeCmd->SetDefaultValue(true);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete SRTypeCmd;
-  delete physDir;
+  delete fSRTypeCmd;
+  delete fPhysDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == SRTypeCmd)
-    { physList->SetAnalyticSR(SRTypeCmd->GetNewBoolValue(newValue));} 
+  if (command == fSRTypeCmd)
+    { fPhysList->SetAnalyticSR(fSRTypeCmd->GetNewBoolValue(newValue));} 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

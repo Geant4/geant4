@@ -30,6 +30,8 @@
 //
 
 #include "G4NeutronInelasticCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4NistManager.hh"
@@ -99,8 +101,8 @@ G4NeutronInelasticCrossSection::GetCrossSection(G4double anEnergy,
   G4double corr     = 1. + p3*(1.-1./first); 
 
   G4double secondexp= -p6*(elog-p7);
-  G4double second   = 1.+std::exp(secondexp);
-  G4double corr2    = 1./second;
+  G4double secondv   = 1.+std::exp(secondexp);
+  G4double corr2    = 1./secondv;
 
   G4double xsec = corr*corr2*part1*part2*10.*millibarn;
   if(xsec < 0.0) { xsec = 0.0; }

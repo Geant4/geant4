@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: IonDPMJETPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
+/// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
+/// \brief Definition of the IonDPMJETPhysics class
+//
+// $Id$
+// GRAS tag $Name: gras-02-05-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,6 +58,7 @@
 
 class G4BinaryLightIonReaction;
 class G4DPMJET2_5Model;
+class G4DPMJET2_5CrossSection;
 class G4VCrossSectionDataSet;
 
 class IonDPMJETPhysics : public G4VHadronPhysics
@@ -71,15 +76,16 @@ public:
 private:
 
   void AddProcess(const G4String& name, G4ParticleDefinition* part,
-		  G4bool isIon);
+                  G4bool isIon);
 
   G4VCrossSectionDataSet* fTripathi;
   G4VCrossSectionDataSet* fTripathiLight;
   G4VCrossSectionDataSet* fShen;
   G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  theIonBC;
-  G4DPMJET2_5Model*          theDPM;
-  G4bool useDPMJETXS;
+  G4BinaryLightIonReaction*  fIonBC;
+  G4DPMJET2_5Model*          fDPM;
+  G4DPMJET2_5CrossSection*   fDpmXS;
+  G4bool                  fUseDPMJETXS;
 };
 
 #endif

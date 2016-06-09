@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmSteppingAction.cc
+/// \brief Implementation of the exrdmSteppingAction class
+//
 #include "G4ios.hh"
 
 #include "exrdmSteppingAction.hh"
@@ -30,6 +33,7 @@
 #include "G4Track.hh"
 #include "globals.hh"
 #include "G4SteppingManager.hh"
+#include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,49 +63,38 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
 #endif
 
 #ifdef COLLECT
-  if (StepNo == 1) {
-    if ( (fTrack->GetDefinition()->GetParticleType() == "nucleus") && 
-	 !( fTrack->GetDefinition()->GetPDGStable()) && 
-	 fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Target" ) {
- //     G4String particleName = fTrack->GetDefinition()->GetParticleName();
-      G4double particleName = G4double(fTrack->GetDefinition()->GetPDGEncoding());
-      G4double time = fStep->GetPreStepPoint()->GetGlobalTime() ;
-	// - fStep->GetPreStepPoint()->GetLocalTime(); // do we have to take out the local time?
-      G4double weight =  fStep->GetPreStepPoint()->GetWeight() ;
-      // get the analysis manager
-      exrdmAnalysisManager* analysis = exrdmAnalysisManager::getInstance();
-      //      G4cout << particleName << " " << weight << " " << time/s << G4endl;
-      analysis->AddIsotope(particleName, weight, time);
+  G4double time = fStep->GetPreStepPoint()->GetGlobalTime();
+  G4double weight =  fStep->GetPreStepPoint()->GetWeight();
+  G4double edep = fStep->GetTotalEnergyDeposit();
+  exrdmAnalysisManager* analysis = exrdmAnalysisManager::GetInstance();
+  if (StepNo == 1) { //beginning of step
+        G4double pid=G4double(fTrack->GetDefinition()->GetPDGEncoding());
+        G4double energy = fStep->GetPreStepPoint()->GetKineticEnergy();
+        G4ParticleDefinition* thePartDef = fTrack->GetDefinition();
+        G4String partType= fTrack->GetDefinition()->GetParticleType();
+        if (( partType == "nucleus") &&  !(thePartDef->GetPDGStable()) &&
+       fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Target" ) {
+      analysis->AddIsotope(pid, weight, time);
     }
     if (fTrack->GetTrackID() != 1 ){
+      //Radioactive decay products
       if (fTrack->GetCreatorProcess()->GetProcessName() == "RadioactiveDecay") {
-	// emitted particles
-	if (fTrack->GetDefinition()->GetParticleType() != "nucleus") {
-	//  G4String particleName = fTrack->GetDefinition()->GetParticleName();
-	  G4double particleName = G4double (fTrack->GetDefinition()->GetPDGEncoding());
-	  G4double time = fStep->GetPreStepPoint()->GetGlobalTime() ; 
-	  //- fStep->GetPreStepPoint()->GetLocalTime();
-	  G4double weight = fStep->GetPreStepPoint()->GetWeight() ;   
-	  G4double energy = fStep->GetPreStepPoint()->GetKineticEnergy();
-	  //
-	  exrdmAnalysisManager::getInstance()->AddParticle(particleName, energy, weight, time);
-	}
+        //all products
+            G4int Z=thePartDef->GetAtomicNumber();
+            G4int A=thePartDef->GetAtomicMass();
+            analysis->AddDecayProduct(pid, Z,  A, energy, time, weight);
+        // emitted particles except nuclei
+            if ( partType!= "nucleus") {
+                    analysis->AddParticle(pid, energy, weight, time);
+            }
       }
     }
   }
   // energy deposition
-  if (fTrack->GetTrackID() != 1 ) {
-    //    if (fTrack->GetCreatorProcess()->GetProcessName() == "RadioactiveDecay") {	
-      if (fStep->GetTotalEnergyDeposit() ) {
-	G4double time = fStep->GetPreStepPoint()->GetGlobalTime() ;
-	// - fStep->GetPreStepPoint()->GetLocalTime(); 
-	//    G4double time = fStep->GetPreStepPoint()->GetLocalTime(); // time since the track was created
-	G4double edep = fStep->GetTotalEnergyDeposit();
-	G4double weight = fStep->GetPreStepPoint()->GetWeight() ; 
-	if (fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Detector") edep = -edep;
-	exrdmAnalysisManager::getInstance()->AddEnergy(edep,weight,time);
-      }
-      //    }
+  if (fTrack->GetTrackID() != 1  && edep) {
+   if (fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Detector")
+     edep = -edep;
+   analysis->AddEnergy(edep,weight,time);
   }
 #endif 
 }

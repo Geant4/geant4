@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmMaterialMessenger.hh
+/// \brief Definition of the exrdmMaterialMessenger class
+//
 #ifndef exrdmMaterialMessenger_h
 #define exrdmMaterialMessenger_h 1
 ////////////////////////////////////////////////////////////////////////////////
@@ -44,19 +47,19 @@ class exrdmMaterialMessenger: public G4UImessenger
 {
 public:
   exrdmMaterialMessenger(exrdmMaterial* );
-  ~exrdmMaterialMessenger();
+  virtual ~exrdmMaterialMessenger();
 
-  void SetNewValue (G4UIcommand*, G4String);
+  virtual void SetNewValue (G4UIcommand*, G4String);
 
 private:
 
-  exrdmMaterial                *materialsManager;
+  exrdmMaterial                *fMaterialsManager;
 
-  G4UIdirectory             *MaterialDir;
-  G4UIcmdWithoutParameter   *ListCmd;
-  G4UIcmdWithAnInteger      *DeleteIntCmd;
-  G4UIcmdWithAString        *DeleteNameCmd;
-  G4UIcommand               *AddCmd;
+  G4UIdirectory             *fMaterialDir;
+  G4UIcmdWithoutParameter   *fListCmd;
+  G4UIcmdWithAnInteger      *fDeleteIntCmd;
+  G4UIcmdWithAString        *fDeleteNameCmd;
+  G4UIcommand               *fAddCmd;
 };
 ////////////////////////////////////////////////////////////////////////////////
 #endif

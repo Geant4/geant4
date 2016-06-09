@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.hh,v 1.12 2010-05-20 07:55:47 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  27th March 1996
@@ -79,8 +78,9 @@ public: // With description
   const G4String& GetNickname      () const;
   const G4String& GetDescription   () const;
   Functionality   GetFunctionality () const;
+  virtual G4bool IsUISessionCompatible () const;
   void SetName          (const G4String&);
-  void SetNickName      (const G4String&);
+  void SetNickname      (const G4String&);
   void SetDescription   (const G4String&);
   void SetFunctionality (Functionality);
 

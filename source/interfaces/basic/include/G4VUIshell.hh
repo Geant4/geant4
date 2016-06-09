@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.hh,v 1.8 2009-05-13 09:01:36 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VUIshell_h
@@ -37,7 +36,7 @@
 //   Description: 
 //   This class is the abstract base class for various UI shells.
 //
-//   GetCommadLine() (virtual) returns a command string input from
+//   GetCommadLineString() (virtual) returns a command string input from
 //    a commad line.
 //
 //   Two pre-inplemented shell commands(still virtual) are also included, 
@@ -95,7 +94,7 @@ public:
   //  "candidate" is specified with full path.
 
   // get command string from a command line
-  virtual G4String GetCommandLine(const char* msg=0)= 0;
+  virtual G4String GetCommandLineString(const char* msg=0)= 0;
 
   virtual void ResetTerminal();
 };

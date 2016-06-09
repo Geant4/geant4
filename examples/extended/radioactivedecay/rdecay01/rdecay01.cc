@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/rdecay01.cc
+/// \brief Main program of the radioactivedecay/rdecay01 example
 //
-// $Id: rdecay01.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -41,7 +43,6 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -71,11 +72,10 @@ int main(int argc,char** argv) {
       
   // set user action classes
   // 
-  HistoManager*           histo = new HistoManager();  
   PrimaryGeneratorAction* prim  = new PrimaryGeneratorAction();
-  RunAction*              run   = new RunAction(histo,prim);  
+  RunAction*              run   = new RunAction(prim);  
   EventAction*            event = new EventAction();  
-  TrackingAction*         track = new TrackingAction(histo,run,event);
+  TrackingAction*         track = new TrackingAction(run,event);
         
   runManager->SetUserAction(run);
   runManager->SetUserAction(prim);
@@ -86,7 +86,12 @@ int main(int argc,char** argv) {
   runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
+
+#ifdef G4VIS_USE
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+#endif
 
   if (argc!=1)   // batch mode  
     { 
@@ -97,26 +102,22 @@ int main(int argc,char** argv) {
     
   else           // define visualization and UI terminal for interactive mode 
     { 
+#ifdef G4UI_USE
+     G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
 #ifdef G4VIS_USE
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
      UI->ApplyCommand("/control/execute vis.mac");          
 #endif
-
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
+     ui->SessionStart();
+     delete ui;
 #endif
-     
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
     }
+
+#ifdef G4VIS_USE
+  delete visManager;
+#endif     
 
   // job termination
   //
-  delete histo;  
   delete runManager;
 
   return 0;

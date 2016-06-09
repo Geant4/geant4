@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.icc,v 1.5 2006-06-29 21:07:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  History:
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige

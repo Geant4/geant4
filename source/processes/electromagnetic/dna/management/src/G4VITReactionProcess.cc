@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITReactionProcess.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -34,7 +35,7 @@
 
 #include "G4VITReactionProcess.hh"
 
-G4VITReactionProcess::G4VITReactionProcess() : fReactionTable(0), fChanges(0)
+G4VITReactionProcess::G4VITReactionProcess() : fpReactionTable(0), fpChanges(0)
 {
     //ctor
 }
@@ -47,23 +48,23 @@ G4VITReactionProcess::~G4VITReactionProcess()
 G4VITReactionProcess::G4VITReactionProcess(const G4VITReactionProcess& /*other*/)
 {
     //copy ctor
-    fChanges = 0;
-    fReactionTable = 0;
+    fpChanges = 0;
+    fpReactionTable = 0;
 }
 
 G4VITReactionProcess& G4VITReactionProcess::operator=(const G4VITReactionProcess& rhs)
 {
     //assignment operator
     if (this == &rhs) return *this; // handle self assignment
-    fApplicableType1 = rhs.fApplicableType1;
-    fApplicableType2 = rhs.fApplicableType2;
+//    fApplicableType1 = rhs.fApplicableType1;
+//    fApplicableType2 = rhs.fApplicableType2;
 
     fName       = rhs.fName;
     return *this;
 }
 
-void G4VITReactionProcess::GetApplicableTypes(G4ITType& type1, G4ITType& type2) const
-{
-    type1 = fApplicableType1;
-    type2 = fApplicableType2;
-}
+//void G4VITReactionProcess::GetApplicableTypes(G4ITType& type1, G4ITType& type2) const
+//{
+//    type1 = fApplicableType1;
+//    type2 = fApplicableType2;
+//}

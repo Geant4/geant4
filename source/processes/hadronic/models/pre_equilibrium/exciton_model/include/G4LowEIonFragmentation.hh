@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.7 2010-10-28 17:34:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.7 2010-10-28 17:34:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ClassName:   G4LowEIonFragmentation
 //

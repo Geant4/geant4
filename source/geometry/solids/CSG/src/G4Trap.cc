@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.49 2010-10-19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4Trap
 //
@@ -733,7 +732,7 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
                           const G4ThreeVector& p4,
                                 TrapSidePlane& plane )
 {
-  G4double a, b, c, s;
+  G4double a, b, c, sd;
   G4ThreeVector v12, v13, v14, Vcross;
 
   G4bool good;
@@ -752,8 +751,8 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     // a,b,c correspond to the x/y/z components of the
     // normal vector to the plane
      
-    //  a  = (p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
-    //  a += (p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // ?   
+    // a  = (p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
+    // a += (p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // ?   
     // b  = (p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
     // b += (p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?      
     // c  = (p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
@@ -772,13 +771,13 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     c = +(p4.x() - p2.x())*(p3.y() - p1.y())
         - (p3.x() - p1.x())*(p4.y() - p2.y());
 
-    s = std::sqrt( a*a + b*b + c*c ); // so now vector plane.(a,b,c) is unit 
+    sd = std::sqrt( a*a + b*b + c*c ); // so now vector plane.(a,b,c) is unit 
 
-    if( s > 0 )
+    if( sd > 0 )
     {
-      plane.a = a/s;
-      plane.b = b/s;
-      plane.c = c/s;
+      plane.a = a/sd;
+      plane.b = b/sd;
+      plane.c = c/sd;
     }
     else
     {

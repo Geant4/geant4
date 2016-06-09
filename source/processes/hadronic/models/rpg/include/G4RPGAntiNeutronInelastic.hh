@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGAntiNeutronInelastic.hh,v 1.1 2007-07-18 20:51:36 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: D. H. Wright
 // Date:   18 June 2007
@@ -37,7 +36,7 @@
 #ifndef G4RPGAntiNeutronInelastic_h
 #define G4RPGAntiNeutronInelastic_h 1
  
-
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
  class G4RPGAntiNeutronInelastic : public G4RPGInelastic
@@ -47,7 +46,7 @@
     G4RPGAntiNeutronInelastic() : G4RPGInelastic("G4RPGAntiNeutronInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGAntiNeutronInelastic()

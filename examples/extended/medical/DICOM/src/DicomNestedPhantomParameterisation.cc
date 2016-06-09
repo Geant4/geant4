@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomNestedPhantomParameterisation.cc,v 1.6 2009-11-10 18:48:46 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
+/// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
-// --------------------------------------------------------------------
+// $Id$
+//
+
 #include "DicomNestedPhantomParameterisation.hh"
 
 #include "G4VPhysicalVolume.hh"
@@ -36,21 +38,29 @@
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomNestedPhantomParameterisation::
 DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
                                          std::vector<G4Material*>& mat):
   G4VNestedParameterisation(), fdX(voxelSize.x()),
   fdY(voxelSize.y()), fdZ(voxelSize.z()), fMaterials(mat)
 {
+  fnX = 0;
+  fnY = 0;
+  fnZ = 0;
+  fMaterialIndices = 0;
+
   // Position of voxels. 
   // x and y positions are already defined in DetectorConstruction by using
   // replicated volume. Here only we need to define is z positions of voxels.
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation()
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomNestedPhantomParameterisation::
 SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz )
 {
@@ -59,9 +69,7 @@ SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz )
   fnZ = nz;
 }
 
-//
-// Material assignment to geometry.
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomNestedPhantomParameterisation::
 ComputeMaterial(G4VPhysicalVolume*, const G4int copyNoZ, 
                                     const G4VTouchable* parentTouch)
@@ -84,14 +92,14 @@ ComputeMaterial(G4VPhysicalVolume*, const G4int copyNoZ,
   return fMaterials[ matIndex ];
 }
 
-//------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 unsigned int DicomNestedPhantomParameterisation::
 GetMaterialIndex( unsigned int copyNo ) const
 {
   return *(fMaterialIndices+copyNo);
 }
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Number of Materials
 // Material scanner is required for preparing physics tables and so on before 
 // starting simulation, so that G4 has to know number of materials.
@@ -101,6 +109,7 @@ G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const
   return fMaterials.size();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // GetMaterial
 //  This is needed for material scanner and realizing geometry.
@@ -120,6 +129,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
   physVol->SetTranslation(position);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Dimensions are always same in this RE02 example.
 //

@@ -22,26 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: HistoManager.hh,v 1.1 2010/10/06 14:39:41 sincerti Exp $
-// GEANT4 tag $Name:  $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
 #include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class ITuple;
-}
-
-const G4int MaxNtupl = 1;
+#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,22 +38,19 @@ class HistoManager
     HistoManager();
    ~HistoManager();
 
+    void SetFileName   (const G4String& name) { fileName[0] = name;};
     void book();
-    void save();   
-    void FillNtuple(G4int id, G4int column, G4double value);
-    void AddRowNtuple(G4int id);
-
+    void save();
+    void FillNtuple(G4int id, G4int col, G4double e, G4double weight = 1.0);
+    void FillNtupleIColumn(G4int icol, G4int ival);
+    void FillNtupleFColumn(G4int icol, G4float ival);
+    void FillNtupleDColumn(G4int icol, G4double ival);
+    void AddNtupleRow();
+    
   private:
 
-    G4String                 fileName[2];
-    G4String                 fileType;
-    G4String                 fileOption;    
-    AIDA::IAnalysisFactory*  af;
-    AIDA::ITree*             tree;
-    AIDA::ITuple*      	     ntupl0;    
- 
-    G4bool                   factoryOn;
-    
+    G4String         fileName[2];
+    G4bool           factoryOn;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

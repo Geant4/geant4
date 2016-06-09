@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronEvaporationProbability.cc,v 1.16 2010-11-17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -36,6 +35,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4NeutronEvaporationProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
     G4EvaporationProbability(1,0,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
@@ -102,17 +102,17 @@ G4double G4NeutronEvaporationProbability::GetOpt12(G4double K)
   // JMQ  xsec is set constat above limit of validity
   if (K > 50*MeV) { Kc = 50*MeV; }
 
-  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
+  G4double landa, landa0, landa1, mu, mum0, mu1,nu, nu0, nu1, nu2,xs;
 
   landa0 = 18.57;
   landa1 = -22.93;
-  mu0 = 381.7;
+  mum0 = 381.7;
   mu1 = 24.31;
   nu0 = 0.172;
   nu1 = -15.39;
   nu2 = 804.8;
   landa = landa0/ResidualAthrd + landa1;
-  mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
+  mu = mum0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
   nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
   xs=landa*Kc + mu + nu/Kc;
   if (xs <= 0.0 ){
@@ -128,7 +128,7 @@ G4double G4NeutronEvaporationProbability::GetOpt12(G4double K)
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
 G4double G4NeutronEvaporationProbability::GetOpt34(G4double K)
 {
-  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
+  G4double landa, landa0, landa1, mu, mum0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0;
   G4double flow,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
@@ -136,7 +136,7 @@ G4double G4NeutronEvaporationProbability::GetOpt34(G4double K)
   //safety initialization
   landa0=0;
   landa1=0;
-  mu0=0.;
+  mum0=0.;
   mu1=0.;
   nu0=0.;
   nu1=0.;
@@ -149,7 +149,7 @@ G4double G4NeutronEvaporationProbability::GetOpt34(G4double K)
   p0 = -312.;
   landa0 = 12.10;
   landa1=  -11.27;
-  mu0 = 234.1;
+  mum0 = 234.1;
   mu1 = 38.26;
   nu0 = 1.55;
   nu1 = -106.1;
@@ -158,7 +158,7 @@ G4double G4NeutronEvaporationProbability::GetOpt34(G4double K)
   if (ResidualA < 40)  { signor =0.7 + ResidualA*0.0075; }
   if (ResidualA > 210) { signor = 1. + (ResidualA-210)/250.; }
   landa = landa0/ResidualAthrd + landa1;
-  mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
+  mu = mum0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
   nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2;
 
   // JMQ very low energy behaviour corrected (problem  for A (apprx.)>60)

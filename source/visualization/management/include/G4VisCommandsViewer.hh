@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.23 2006-09-13 13:17:29 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -129,6 +128,19 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandViewerCopyViewFrom: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerCopyViewFrom ();
+  virtual ~G4VisCommandViewerCopyViewFrom ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerCopyViewFrom (const G4VisCommandViewerCopyViewFrom&);
+  G4VisCommandViewerCopyViewFrom& operator =
+  (const G4VisCommandViewerCopyViewFrom&);
+  G4UIcmdWithAString* fpCommand;
+};
+
 class G4VisCommandViewerCreate: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerCreate ();
@@ -230,6 +242,18 @@ public:
 private:
   G4VisCommandViewerRebuild (const G4VisCommandViewerRebuild&);
   G4VisCommandViewerRebuild& operator = (const G4VisCommandViewerRebuild&);
+  G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerSave: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerSave ();
+  virtual ~G4VisCommandViewerSave ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerSave (const G4VisCommandViewerSave&);
+  G4VisCommandViewerSave& operator = (const G4VisCommandViewerSave&);
   G4UIcmdWithAString* fpCommand;
 };
 

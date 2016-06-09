@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02RunAction.cc
+/// \brief Implementation of the F02RunAction class
 //
-// $Id: F02RunAction.cc,v 1.8 2006-06-29 17:18:20 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 #include "F02RunAction.hh"
@@ -36,45 +36,45 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include <iomanip>
-
 #include "Randomize.hh"
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02RunAction::F02RunAction()
-  : saveRndm(0)
+ : G4UserRunAction(),
+   fMessenger(0),
+   fSaveRndm(0)
 {
-  runMessenger = new F02RunMessenger(this);
+  fMessenger = new F02RunMessenger(this);
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02RunAction::~F02RunAction()
 {
-  delete runMessenger;
+  delete fMessenger;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F02RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
+  if (fSaveRndm > 0)
   { 
-      CLHEP::HepRandom::showEngineStatus();
-      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
+    CLHEP::HepRandom::showEngineStatus();
+    CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
   }  
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* uiManager = G4UImanager::GetUIpointer();
    
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
 
-  if(pVVisManager)    UI->ApplyCommand("/vis/scene/notifyHandlers");
+  if (visManager) uiManager->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F02RunAction::EndOfRunAction(const G4Run*)
 {
@@ -85,13 +85,11 @@ void F02RunAction::EndOfRunAction(const G4Run*)
 
   // save Rndm status
 
-  if (saveRndm == 1)
+  if (fSaveRndm == 1)
   { 
     CLHEP::HepRandom::showEngineStatus();
     CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
   }     
 }
 
-//
-//
-////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

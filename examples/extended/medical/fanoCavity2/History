@@ -14,7 +14,45 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-11-12 I. Hrivnacova (fano2-V09-05-08)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+
+13-10-12 A. Dotti (fano2-V09-05-07)
+- Removing double include of system of units
+
+13-10-12 A. Dotti (fano2-V09-05-06)
+- Adding explicit use of system of units
      
+04-09-12 I. Hrivnacova (fano2-V09-05-05)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added .README  
+     
+21-04-12 mma (fano2-V09-05-04)
+- all classes : apply G4 coding conventions
+     
+23-02-12 mma (fano2-V09-05-03)
+- HistoManager : GetFileType()
+     
+14-02-12 mma (fano2-V09-05-02)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+
+09-02-12 V.Ivant (fano2-V09-05-01)
+- PhysListEmStandard_WVI - more safe initialisation method         
+     
+17-01-12 mma (fano2-V09-05-00)        
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)  
+- HistoMessenger.hh and .cc : suppress fileType command
+- HistoManager and HistoMessenger : coding conventions
+- Update Readme and all macros accordingly
+         
 08-11-11 mma (fano2-V09-04-03)
 - modify SteppingVerbose for OutOfWorld
           

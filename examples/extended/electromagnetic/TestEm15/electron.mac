@@ -18,17 +18,16 @@
 /gun/particle e-
 /gun/energy 5 MeV
 #
-/testem/histo/setFileName electron
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 1  100  0     1000 um	#true step length
-/testem/histo/setHisto 2  100  0     1000 um	#geom step length
-/testem/histo/setHisto 3  100  0     1.1 none	#ratio geom/true
-/testem/histo/setHisto 4  100  0     500 um	#lateral radius
-/testem/histo/setHisto 5  100  0    +25 deg	#psi_space angle
-/testem/histo/setHisto 6  100 -50   +50 deg	#theta_plane angle
-/testem/histo/setHisto 7   90 -180  +180 deg	#phi-position angle
-/testem/histo/setHisto 8   90 -180  +180 deg	#phi-direction angle
-/testem/histo/setHisto 9  100  -1    +1 none	#phi correlation
+/analysis/setFileName electron
+/analysis/h1/set 1  100  0     1000 um	#true step length
+/analysis/h1/set 2  100  0     1000 um	#geom step length
+/analysis/h1/set 3  100  0     1.1 none	#ratio geom/true
+/analysis/h1/set 4  100  0     500 um	#lateral radius
+/analysis/h1/set 5  100  0    +25 deg	#psi_space angle
+/analysis/h1/set 6  100 -50   +50 deg	#theta_plane angle
+/analysis/h1/set 7   90 -180  +180 deg	#phi-position angle
+/analysis/h1/set 8   90 -180  +180 deg	#phi-direction angle
+/analysis/h1/set 9  100  -1    +1 none	#phi correlation
 #
 ###/tracking/verbose 2
 ###/run/beamOn 1

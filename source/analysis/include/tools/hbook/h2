@@ -12,8 +12,8 @@ namespace hbook {
 class h2 : public base_histo {
 public:
   h2(int aID,const std::string& aTitle,
-             int aXnumber,rarg aXmin,rarg aXmax,
-             int aYnumber,rarg aYmin,rarg aYmax)
+     int aXnumber,rarg aXmin,rarg aXmax,
+     int aYnumber,rarg aYmin,rarg aYmax)
   :base_histo(aID)
   ,m_axis_x(m_path,aID,2,true,true)
   ,m_axis_y(m_path,aID,2,false,true)
@@ -43,6 +43,14 @@ private:
     return *this;
   }
 public:
+  bool configure(int aXnumber,rarg aXmin,rarg aXmax,
+                 int aYnumber,rarg aYmin,rarg aYmax){
+    cd_beg();
+    CHBOOK2(m_id,title(),aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax);
+    cd_end();
+    return true;
+  }
+public:
   void fill(rarg aX,rarg aY,rarg aWeight = 1) { 
     cd_beg();
     CHFILL(m_id,aX,aY,aWeight);
@@ -56,22 +64,8 @@ public:
   }
   void fill_end() const {cd_end();}
 
-  std::string title() const {
-    std::string title;
-    int ncx,ncy;
-    rarg xmin,xmax,ymin,ymax;
-    cd_beg();
-    CHGIVE(m_id,title,ncx,xmin,xmax,ncy,ymin,ymax);
-    cd_end();
-    return title;
-  }
   int dimension() const {return 2;}
-  bool reset() {
-    cd_beg();
-    CHRESET(m_id," ");
-    cd_end();
-    return true;
-  }
+
   rret mean_x() const {
     cd_beg();
     rret v = CHSTATI(m_id,1,"PROX",0);
@@ -105,12 +99,6 @@ public:
   }
   int coord_to_index_y(rarg aCoordY) const { 
     return m_axis_y.coord_to_index(aCoordY);
-  }
-  int all_entries() const { 
-    cd_beg();
-    int v = CHNOENT(m_id);
-    cd_end();
-    return v;
   }
   rret min_bin_height() const {
     cd_beg();
@@ -203,13 +191,6 @@ public:
     }
     cd_end();
     return w;
-  }
-  bool scale(rarg aScale) {
-    //FIXME : Do we want the E option ?
-    cd_beg();
-    CHOPERA(m_id,"+E",m_id,m_id,aScale,0);
-    cd_end();
-    return true;
   }
 protected:
   hbook::axis m_axis_x;

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.4 2007-10-29 17:09:53 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(RunAction* RuAct, HistoManager* histo)
-:runAction(RuAct), histoManager(histo)
+:fRunAction(RuAct), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +54,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track*)
 { 
  //initialize edep cavity per track
  //
- EdepCavity = 0.; 
+ fEdepCavity = 0.; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,9 +63,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track*)
 {
   //sum energy in cavity
   //
-  if (EdepCavity > 0.) {
-    runAction->AddEdepCavity(EdepCavity);
-    histoManager->FillHisto(11,EdepCavity);
+  if (fEdepCavity > 0.) {
+    fRunAction->AddEdepCavity(fEdepCavity);
+    fHistoManager->FillHisto(11,fEdepCavity);
   }  
  }
 

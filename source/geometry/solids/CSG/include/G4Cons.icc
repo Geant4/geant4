@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc,v 1.11 2009-06-09 16:08:23 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -108,24 +107,24 @@ inline void G4Cons::CheckSPhiAngle(G4double sPhi)
 
   if ( sPhi < 0 )
   {
-    fSPhi = twopi - std::fmod(std::fabs(sPhi),twopi);
+    fSPhi = CLHEP::twopi - std::fmod(std::fabs(sPhi),CLHEP::twopi);
   }
   else
   {
-    fSPhi = std::fmod(sPhi,twopi) ;
+    fSPhi = std::fmod(sPhi,CLHEP::twopi) ;
   }
-  if ( fSPhi+fDPhi > twopi )
+  if ( fSPhi+fDPhi > CLHEP::twopi )
   {
-    fSPhi -= twopi ;
+    fSPhi -= CLHEP::twopi ;
   }
 }
 
 inline void G4Cons::CheckDPhiAngle(G4double dPhi)
 {
   fPhiFullCone = true;
-  if ( dPhi >= twopi-kAngTolerance*0.5 )
+  if ( dPhi >= CLHEP::twopi-kAngTolerance*0.5 )
   {
-    fDPhi=twopi;
+    fDPhi=CLHEP::twopi;
     fSPhi=0;
   }
   else
@@ -150,7 +149,7 @@ inline void G4Cons::CheckDPhiAngle(G4double dPhi)
 inline void G4Cons::CheckPhiAngles(G4double sPhi, G4double dPhi)
 {
   CheckDPhiAngle(dPhi);
-  if ( (fDPhi<twopi) && (sPhi) ) { CheckSPhiAngle(sPhi); }
+  if ( (fDPhi<CLHEP::twopi) && (sPhi) ) { CheckSPhiAngle(sPhi); }
   InitializeTrigonometry();
 }
 

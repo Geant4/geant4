@@ -15,6 +15,48 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+19-10-12 mma (testem3-V09-05-11)
+- HistoManager: vmax=100
+     
+19-10-12 mma (testem3-V09-05-10)
+- PhysListEmStandard: use G4UrbanMsc96
+ 
+12-10-12 V.Ivant (testem3-V09-05-09)
+- Do not save random seed per even
+
+12-10-12 V.Ivant (testem3-V09-05-08)
+- Added statistics on number of charged and neutral steps
+
+12-10-12 V.Ivant (testem3-V09-05-07)
+- Migration to the updated analysis tool and inplicit units
+     
+10-10-12 mma (testem3-V09-05-06)
+- PhysicsList: add Em option4
+     
+05-10-12 mma (testem3-V09-05-05)
+- HistoManager.cc : suppress a tabulation in array id[]
+     
+03-10-12 mma (testem3-V09-05-04)
+- apply coding conventions in DetectorConstruction and PhysicsList
+     
+02-10-12 mma (testem3-V09-05-03)
+- HistoManager functionalies transfered to G4Analysis
+- suppress HistoMessenger
+     
+29-08-12 mma (testem3-V09-05-02)
+- add .README
+     
+05-04-12 mma (testem3-V09-05-01)
+- all classes : apply G4 coding conventions
+     
+27-02-12 mma (testem3-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+- remove unused macros
+- add PhysListEmStandardWVI;    SetPolarAngle = pi
+     
 08-11-11 mma (testem3-V09-04-08)
 - modify SteppingVerbose for OutOfWorld
      

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.96 2010-11-05 16:00:11 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  19th July 1996
@@ -84,6 +83,7 @@
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttDef.hh"
+#include "G4PhysicalConstants.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -97,10 +97,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 					  // G4VisManager.cc).
   fReadyForTransients    (true),  // Only false while processing scene.
   fProcessingSolid       (false),
-  fSecondPassRequested   (false),
-  fSecondPass            (false),
+  fProcessing2D          (false),
   fpModel                (0),
-  fpObjectTransformation (0),
   fNestingDepth          (0),
   fpVisAttribs           (0)
 {
@@ -128,14 +126,13 @@ G4VSceneHandler::~G4VSceneHandler () {
 }
 
 void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
-                                  const G4VisAttributes& visAttribs) {
-  fpObjectTransformation = &objectTransformation;
+				   const G4VisAttributes& visAttribs) {
+  fObjectTransformation = objectTransformation;
   fpVisAttribs = &visAttribs;
   fProcessingSolid = true;
 }
 
 void G4VSceneHandler::PostAddSolid () {
-  fpObjectTransformation = 0;
   fpVisAttribs = 0;
   fProcessingSolid = false;
   if (fReadyForTransients) {
@@ -146,21 +143,22 @@ void G4VSceneHandler::PostAddSolid () {
 
 void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
+  //static G4int count = 0;
+  //G4cout << "G4VSceneHandler::BeginPrimitives: " << count++ << G4endl;
   fNestingDepth++;
   if (fNestingDepth > 1)
     G4Exception
       ("G4VSceneHandler::BeginPrimitives",
-       "visman0003", FatalException,
+       "visman0101", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
-  fpObjectTransformation = &objectTransformation;
+  fObjectTransformation = objectTransformation;
 }
 
 void G4VSceneHandler::EndPrimitives () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives",
-		"visman0004", FatalException, "Nesting error.");
+		"visman0102", FatalException, "Nesting error.");
   fNestingDepth--;
-  fpObjectTransformation = 0;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
@@ -173,21 +171,22 @@ void G4VSceneHandler::BeginPrimitives2D
   if (fNestingDepth > 1)
     G4Exception
       ("G4VSceneHandler::BeginPrimitives2D",
-       "visman0005", FatalException,
+       "visman0103", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
-  fpObjectTransformation = &objectTransformation;
+  fObjectTransformation = objectTransformation;
+  fProcessing2D = true;
 }
 
 void G4VSceneHandler::EndPrimitives2D () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives2D",
-		"visman0006", FatalException, "Nesting error.");
+		"visman0104", FatalException, "Nesting error.");
   fNestingDepth--;
-  fpObjectTransformation = 0;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
   }
+  fProcessing2D = false;
 }
 
 void G4VSceneHandler::BeginModeling () {
@@ -198,16 +197,9 @@ void G4VSceneHandler::EndModeling ()
   fpModel = 0;
 }
 
-void G4VSceneHandler::ClearStore () {
-  // if (fpViewer) fpViewer -> NeedKernelVisit (true);
-  // ?? Viewer is supposed to be smart enough to know when to visit
-  // kernel, but a problem in OpenGL Stored seems to require a forced
-  // kernel visit triggered by the above code.  John Allison Aug 2001
-  // Feb 2005 - commented out.  Let's fix OpenGL if necessary.
-}
+void G4VSceneHandler::ClearStore () {}
 
-void G4VSceneHandler::ClearTransientStore () {
-}
+void G4VSceneHandler::ClearTransientStore () {}
 
 void G4VSceneHandler::AddSolid (const G4Box& box) {
   RequestPrimitives (box);
@@ -269,7 +261,7 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (!trajectoriesModel) G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
-     "visman0007", FatalException, "Not a G4TrajectoriesModel.");
+     "visman0105", FatalException, "Not a G4TrajectoriesModel.");
   else {
     if (trajectoriesModel->IsDrawingModeSet()) {
       traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
@@ -295,8 +287,8 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
     size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t i = 0; i < nMeshes; ++i) {
-      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
       if (mesh && mesh->IsActive()) {
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
 	for(MeshScoreMap::const_iterator i = scoreMap.begin();
@@ -486,13 +478,22 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  BeginPrimitives (*fpObjectTransformation);
+  BeginPrimitives (fObjectTransformation);
   G4NURBS* pNURBS = 0;
   G4Polyhedron* pPolyhedron = 0;
   switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
   case G4ViewParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
+      static G4bool warned = false;
+      if (!warned) {
+        warned = true;
+        G4cout <<
+  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  "!!!!! NURBS are deprecated and will be removed in the next major release."
+  "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        << G4endl;
+      }
       pNURBS -> SetVisAttributes (fpVisAttribs);
       AddPrimitive (*pNURBS);
       delete pNURBS;
@@ -533,7 +534,10 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   EndPrimitives ();
 }
 
-void G4VSceneHandler::ProcessScene (G4VViewer&) {
+void G4VSceneHandler::ProcessScene () {
+
+  // Assumes graphics database store has already been cleared if
+  // relevant for the particular scene handler.
 
   if (!fpScene) return;
 
@@ -545,11 +549,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   fReadyForTransients = false;
 
-  // Clear stored scene, if any, i.e., display lists, scene graphs.
-  ClearStore ();
-
-  // Reset fMarkForClearingTransientStore.  No need to clear transient
-  // store since it has just been cleared above.  (Leaving
+  // Reset fMarkForClearingTransientStore. (Leaving
   // fMarkForClearingTransientStore true causes problems with
   // recomputing transients below.)  Restore it again at end...
   G4bool tmpMarkForClearingTransientStore = fMarkForClearingTransientStore;
@@ -557,7 +557,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
-  const std::vector<G4VModel*>& runDurationModelList =
+  const std::vector<G4Scene::Model>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.size ()) {
@@ -571,37 +571,22 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     G4ModelingParameters* pMP = CreateModelingParameters ();
 
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
-      G4VModel* pModel = runDurationModelList[i];
-      // Note: this is not the place to take action on
-      // pModel->GetTransformation().  The model must take care of
-      // this in pModel->DescribeYourselfTo(*this).  See, for example,
-      // G4PhysicalVolumeModel and /vis/scene/add/logo.
-      pModel -> SetModelingParameters (pMP);
-      SetModel (pModel);  // Store for use by derived class.
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters (0);
-    }
-
-    // Repeat if required...
-    if (fSecondPassRequested) {
-      fSecondPass = true;
-      for (size_t i = 0; i < runDurationModelList.size (); i++) {
-	G4VModel* pModel = runDurationModelList[i];
+      if (runDurationModelList[i].fActive) {
+	G4VModel* pModel = runDurationModelList[i].fpModel;
+	// Note: this is not the place to take action on
+	// pModel->GetTransformation().  The model must take care of
+	// this in pModel->DescribeYourselfTo(*this).  See, for example,
+	// G4PhysicalVolumeModel and /vis/scene/add/logo.
 	pModel -> SetModelingParameters (pMP);
 	SetModel (pModel);  // Store for use by derived class.
 	pModel -> DescribeYourselfTo (*this);
 	pModel -> SetModelingParameters (0);
       }
-      fSecondPass = false;
-      fSecondPassRequested = false;
     }
 
     delete pMP;
     EndModeling ();
-
   }
-
-  fpViewer->FinishView();  // Flush streams and/or swap buffers.
 
   fReadyForTransients = true;
 
@@ -672,18 +657,20 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
 void G4VSceneHandler::DrawEvent(const G4Event* event)
 {
-  const std::vector<G4VModel*>& EOEModelList =
+  const std::vector<G4Scene::Model>& EOEModelList =
     fpScene -> GetEndOfEventModelList ();
   size_t nModels = EOEModelList.size();
   if (nModels) {
     G4ModelingParameters* pMP = CreateModelingParameters();
     pMP->SetEvent(event);
     for (size_t i = 0; i < nModels; i++) {
-      G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters(pMP);
-      SetModel (pModel);
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters(0);
+      if (EOEModelList[i].fActive) {
+	G4VModel* pModel = EOEModelList[i].fpModel;
+	pModel -> SetModelingParameters(pMP);
+	SetModel (pModel);
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters(0);
+      }
     }
     delete pMP;
     SetModel (0);
@@ -692,18 +679,20 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
 
 void G4VSceneHandler::DrawEndOfRunModels()
 {
-  const std::vector<G4VModel*>& EORModelList =
+  const std::vector<G4Scene::Model>& EORModelList =
     fpScene -> GetEndOfRunModelList ();
   size_t nModels = EORModelList.size();
   if (nModels) {
     G4ModelingParameters* pMP = CreateModelingParameters();
     pMP->SetEvent(0);
     for (size_t i = 0; i < nModels; i++) {
-      G4VModel* pModel = EORModelList [i];
-      pModel -> SetModelingParameters(pMP);
-      SetModel (pModel);
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters(0);
+      if (EORModelList[i].fActive) {
+	G4VModel* pModel = EORModelList[i].fpModel;
+	pModel -> SetModelingParameters(pMP);
+	SetModel (pModel);
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters(0);
+      }
     }
     delete pMP;
     SetModel (0);
@@ -761,6 +750,8 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
   pModelingParams->SetSectionSolid(CreateSectionSolid());
   pModelingParams->SetCutawaySolid(CreateCutawaySolid());
   // The polyhedron objects are deleted in the modeling parameters destructor.
+  
+  pModelingParams->SetVisAttributesModifiers(vp.GetVisAttributesModifiers());
 
   return pModelingParams;
 }
@@ -774,11 +765,11 @@ G4VSolid* G4VSceneHandler::CreateSectionSolid()
     G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
     G4VSolid* sectionBox =
       new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane.
-    const G4Plane3D& s = vp.GetSectionPlane ();
-    G4double a = s.a();
-    G4double b = s.b();
-    G4double c = s.c();
-    G4double d = s.d();
+    const G4Plane3D& sp = vp.GetSectionPlane ();
+    G4double a = sp.a();
+    G4double b = sp.b();
+    G4double c = sp.c();
+    G4double d = sp.d();
     G4Transform3D transform = G4TranslateZ3D(-d);
     const G4Normal3D normal(a,b,c);
     if (normal != G4Normal3D(0,0,1)) {
@@ -813,26 +804,31 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVModel) {
     // Load G4Atts from G4PhysicalVolumeModel...
-    const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
-    if (defs) {
-      holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
+    const std::map<G4String,G4AttDef>* pvDefs = pPVModel->GetAttDefs();
+    if (pvDefs) {
+      holder->AddAtts(pPVModel->CreateCurrentAttValues(), pvDefs);
     }
   }
 
   G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (trajModel) {
+    // Load G4Atts from trajectory model...
+    const std::map<G4String,G4AttDef>* trajModelDefs = trajModel->GetAttDefs();
+    if (trajModelDefs) {
+      holder->AddAtts(trajModel->CreateCurrentAttValues(), trajModelDefs);
+    }
     // Load G4Atts from trajectory...
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
-    if (defs) {
-      holder->AddAtts(traj->CreateAttValues(), defs);
+    const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();
+    if (trajDefs) {
+      holder->AddAtts(traj->CreateAttValues(), trajDefs);
     }
     G4int nPoints = traj->GetPointEntries();
     for (G4int i = 0; i < nPoints; ++i) {
       G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
-      if (defs) {
-	holder->AddAtts(trajPoint->CreateAttValues(), defs);
+      const std::map<G4String,G4AttDef>* pointDefs = trajPoint->GetAttDefs();
+      if (pointDefs) {
+	holder->AddAtts(trajPoint->CreateAttValues(), pointDefs);
       }
     }
   }
@@ -841,9 +837,9 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
   if (hitsModel) {
     // Load G4Atts from hit...
     const G4VHit* hit = hitsModel->GetCurrentHit();
-    const std::map<G4String,G4AttDef>* defs = hit->GetAttDefs();
-    if (defs) {
-      holder->AddAtts(hit->CreateAttValues(), defs);
+    const std::map<G4String,G4AttDef>* hitsDefs = hit->GetAttDefs();
+    if (hitsDefs) {
+      holder->AddAtts(hit->CreateAttValues(), hitsDefs);
     }
   }
 }
@@ -938,9 +934,8 @@ G4double G4VSceneHandler::GetMarkerSize
     // Draw in screen coordinates.
     markerSizeType = screen;
   }
-  if (size <= 1.) size = 1.;
   size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  if (size <= 1.) size = 1.;
+  if (markerSizeType == screen && size < 1.) size = 1.;
   return size;
 }
 
@@ -965,16 +960,16 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
   return lineSegmentsPerCircle;
 }
 
-std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s) {
+std::ostream& operator << (std::ostream& os, const G4VSceneHandler& sh) {
 
-  os << "Scene handler " << s.fName << " has "
-     << s.fViewerList.size () << " viewer(s):";
-  for (size_t i = 0; i < s.fViewerList.size (); i++) {
-    os << "\n  " << *(s.fViewerList [i]);
+  os << "Scene handler " << sh.fName << " has "
+     << sh.fViewerList.size () << " viewer(s):";
+  for (size_t i = 0; i < sh.fViewerList.size (); i++) {
+    os << "\n  " << *(sh.fViewerList [i]);
   }
 
-  if (s.fpScene) {
-    os << "\n  " << *s.fpScene;
+  if (sh.fpScene) {
+    os << "\n  " << *sh.fpScene;
   }
   else {
     os << "\n  This scene handler currently has no scene.";

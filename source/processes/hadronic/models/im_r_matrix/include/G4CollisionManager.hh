@@ -53,6 +53,10 @@ public:
   void Print();
 
 private:
+  G4CollisionManager(const G4CollisionManager &);
+  G4CollisionManager & operator= (const G4CollisionManager &);
+
+private:
   G4ListOfCollisions * theCollisionList;   //was sorted (by time) vector...
 };
 

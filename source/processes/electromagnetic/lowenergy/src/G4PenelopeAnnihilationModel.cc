@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeAnnihilationModel.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -37,6 +36,8 @@
 //                  - do not use G4ElementSelector
 
 #include "G4PenelopeAnnihilationModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
@@ -48,7 +49,7 @@
 
 G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 0.0;
   fIntrinsicHighEnergyLimit = 100.0*GeV;

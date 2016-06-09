@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# Find EXTERN_PACKAGE (required package)
+#
+find_package(EXTERN_PACKAGE QUIET)
+if(NOT EXTERN_PACKAGE_TO_UPPER_FOUND)
+  message(STATUS "G4 Examples: EXTERN_PACKAGE package not found. --> EXAMPLE_NAME example disabled")  
+  return()
+endif()
+

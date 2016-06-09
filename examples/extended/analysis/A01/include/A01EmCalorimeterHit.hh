@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeterHit.hh,v 1.5 2006-06-29 16:31:02 gunter Exp $
+/// \file analysis/A01/include/A01EmCalorimeterHit.hh
+/// \brief Definition of the A01EmCalorimeterHit class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01EmCalorimeterHit_h
@@ -43,7 +46,6 @@ class G4AttValue;
 class A01EmCalorimeterHit : public G4VHit
 {
   public:
-
       A01EmCalorimeterHit();
       A01EmCalorimeterHit(G4int z);
       virtual ~A01EmCalorimeterHit();
@@ -60,24 +62,24 @@ class A01EmCalorimeterHit : public G4VHit
       virtual void Print();
 
   private:
-      G4int cellID;
-      G4double edep;
-      G4ThreeVector pos;
-      G4RotationMatrix rot;
-      const G4LogicalVolume* pLogV;
+      G4int fCellID;
+      G4double fEdep;
+      G4ThreeVector fPos;
+      G4RotationMatrix fRot;
+      const G4LogicalVolume* fPLogV;
 
   public:
-      inline void SetCellID(G4int z) { cellID = z; }
-      inline G4int GetCellID() const { return cellID; }
-      inline void SetEdep(G4double de) { edep = de; }
-      inline void AddEdep(G4double de) { edep += de; }
-      inline G4double GetEdep() const { return edep; }
-      inline void SetPos(G4ThreeVector xyz) { pos = xyz; }
-      inline G4ThreeVector GetPos() const { return pos; }
-      inline void SetRot(G4RotationMatrix rmat) { rot = rmat; }
-      inline G4RotationMatrix GetRot() const { return rot; }
-      inline void SetLogV(G4LogicalVolume* val) { pLogV = val; }
-      inline const G4LogicalVolume* GetLogV() const { return pLogV; }
+      inline void SetCellID(G4int z) { fCellID = z; }
+      inline G4int GetCellID() const { return fCellID; }
+      inline void SetEdep(G4double de) { fEdep = de; }
+      inline void AddEdep(G4double de) { fEdep += de; }
+      inline G4double GetEdep() const { return fEdep; }
+      inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+      inline G4ThreeVector GetPos() const { return fPos; }
+      inline void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
+      inline G4RotationMatrix GetRot() const { return fRot; }
+      inline void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
+      inline const G4LogicalVolume* GetLogV() const { return fPLogV; }
 };
 
 typedef G4THitsCollection<A01EmCalorimeterHit> A01EmCalorimeterHitsCollection;

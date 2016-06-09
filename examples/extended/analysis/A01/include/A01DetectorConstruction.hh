@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.hh,v 1.6 2009-11-21 00:22:55 perl Exp $
+/// \file analysis/A01/include/A01DetectorConstruction.hh
+/// \brief Definition of the A01DetectorConstruction class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -48,45 +51,39 @@ class A01DetectorConstruction : public G4VUserDetectorConstruction
     A01DetectorConstruction();
     virtual ~A01DetectorConstruction();
 
-  public:
     virtual G4VPhysicalVolume* Construct();
     void SetArmAngle(G4double val);
-    inline G4double GetArmAngle() { return armAngle; }
+    inline G4double GetArmAngle() { return fArmAngle; }
 
-  private:
     void ConstructMaterials();
     void DestroyMaterials();
     void DumpGeometricalTree(G4VPhysicalVolume* aVolume,G4int depth=0);
 
   private:
-    A01DetectorConstMessenger* messenger;
-    A01MagneticField* magneticField;
-    G4FieldManager* fieldMgr;
+    A01DetectorConstMessenger* fMessenger;
+    A01MagneticField* fMagneticField;
+    G4FieldManager* fFieldMgr;
 
-    G4Material* air;
-    G4Material* argonGas;
-    G4Material* scintillator;
-    G4Material* CsI;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    G4Material* lead;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    G4Material* fAir;
+    G4Material* fArgonGas;
+    G4Material* fScintillator;
+    G4Material* fCsI;
+    G4Material* fLead;
 
-    G4VisAttributes* worldVisAtt;
-    G4VisAttributes* magneticVisAtt;
-    G4VisAttributes* armVisAtt;
-    G4VisAttributes* hodoscopeVisAtt;
-    G4VisAttributes* chamberVisAtt;
-    G4VisAttributes* wirePlaneVisAtt;
-    G4VisAttributes* EMcalorimeterVisAtt;
-    G4VisAttributes* cellVisAtt;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    G4VisAttributes* HadCalorimeterVisAtt;
-    G4VisAttributes* HadCalorimeterCellVisAtt;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    G4VisAttributes* fWorldVisAtt;
+    G4VisAttributes* fMagneticVisAtt;
+    G4VisAttributes* fArmVisAtt;
+    G4VisAttributes* fHodoscopeVisAtt;
+    G4VisAttributes* fChamberVisAtt;
+    G4VisAttributes* fWirePlaneVisAtt;
+    G4VisAttributes* fEMcalorimeterVisAtt;
+    G4VisAttributes* fCellVisAtt;
+    G4VisAttributes* fHadCalorimeterVisAtt;
+    G4VisAttributes* fHadCalorimeterCellVisAtt;
 
-    G4double armAngle;
-    G4RotationMatrix* armRotation;
-    G4VPhysicalVolume* secondArmPhys;
+    G4double fArmAngle;
+    G4RotationMatrix* fArmRotation;
+    G4VPhysicalVolume* fSecondArmPhys;
 };
 
 #endif

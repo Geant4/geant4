@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPIsotropic.hh,v 1.10 2006-06-29 20:48:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPIsotropic_h
 #define G4NeutronHPIsotropic_h 1

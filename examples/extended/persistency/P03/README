@@ -42,10 +42,6 @@ g4geom_assembly.txt :
      	
 2.- HOW TO START ?
  
-    - compile and link to generate an executable
-       % cd P03
-       % make
- 		
     - execute textGeom in 'batch' mode from macro file 
        % textGeom run.mac
  		

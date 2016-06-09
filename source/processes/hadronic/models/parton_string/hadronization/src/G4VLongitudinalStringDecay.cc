@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.23 2010-12-07 10:42:40 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -33,9 +32,11 @@
 //      History: first implementation, Maxim Komogorov, 1-Jul-1998
 //               redesign  Gunter Folger, August/September 2001
 // -----------------------------------------------------------------------------
+#include "G4VLongitudinalStringDecay.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4VLongitudinalStringDecay.hh"
 #include "G4FragmentingString.hh"
 
 #include "G4ParticleDefinition.hh"

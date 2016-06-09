@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.23 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //------------------ G4GammaConversion physics process------------------------
@@ -85,6 +84,9 @@ public:  // with description
 
   // true for Gamma only.
   virtual G4bool IsApplicable(const G4ParticleDefinition&);
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+				    const G4Material*);
 
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();

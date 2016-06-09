@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh 48195 2011-02-02 15:33:39Z jjacquem $
+/// \file analysis/AnaEx02/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
+// $Id: HistoManager.hh 59868 2012-06-20 13:59:51Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,8 +60,8 @@ class HistoManager
     void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
     void Normalize(G4int id, G4double fac);    
 
-    void FillNtuple(G4double EnergyAbs, G4double EnergyGap,
-                    G4double TrackLAbs, G4double TrackLGap);
+    void FillNtuple(G4double energyAbs, G4double energyGap,
+                    G4double trackLAbs, G4double trackLGap);
     
     void PrintStatistic();
         

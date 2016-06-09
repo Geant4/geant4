@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // Implementation of the HETC88 code into Geant4.
 // Evaporation and De-excitation parts
 // T. Lampen, Helsinki Institute of Physics, May-2000
+//
+// 20120608  M. Kelsey -- Change vars 's','m','m2' to avoid name collisions
 
 #include "G4BEChargedChannel.hh"
-
+#include "G4SystemOfUnits.hh"
 
 G4BEChargedChannel::G4BEChargedChannel()
 {
@@ -65,9 +66,9 @@ void G4BEChargedChannel::calculateProbability()
   // max(s_i), where i goes over all channels.
 
   G4double levelParam = getLevelDensityParameter();
-  G4double s        = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
+  G4double slevel = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
   G4double constant = A / 2 * ( 2 * spin + 1 ) * ( 1 + coulombFactor() );
-  G4double eye1     = ( std::pow( s, 2. ) - 3 * s + 3 ) / ( 4 * std::pow( levelParam, 2. ) ) * std::exp( s );
+  G4double eye1     = ( slevel*slevel - 3 * slevel + 3 ) / ( 4 * levelParam*levelParam ) * std::exp( slevel );
 
   emissionProbability = constant * std::pow( G4double(residualA), 0.6666666 ) * eye1;
 
@@ -92,37 +93,12 @@ void G4BEChargedChannel::calculateProbability()
 
 G4double G4BEChargedChannel::sampleKineticEnergy()
 {
-//    G4double randExp1;
-//    G4double randExp2;
-//    G4double s;
-//    G4double levelParam;
-//    G4double kineticEnergyAv;
-//    G4double kineticEnergy;
-  
-//    randExp1 = RandExponential::shoot( 1 );
-//    randExp2 = RandExponential::shoot( 1 );
-//    levelParam = getLevelDensityParameter();
-//    s = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-//    kineticEnergyAv = 2 * ( std::pow( s, 3. ) - 6.0 * std::pow( s, 2. ) + 15.0 * s - 15.0 )  / 
-//        ( ( 2.0 * std::pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
-  
-//    kineticEnergy = 0.5 * ( randExp1 + randExp2 ) * kineticEnergyAv + getThresh() - getQ();
-
-//    if ( verboseLevel >= 10 )
-//      G4cout << "  G4BEChargedChannel : sampleKineticEnergy() " << G4endl
-//  	   << "         kinetic e = " << kineticEnergy << G4endl
-//  	   << "           average = " << kineticEnergyAv << G4endl
-//  	   << "                 s = " << s << G4endl
-//  	   << "        levelParam = " << levelParam << G4endl
-//  	   << "          randExp1 = " << randExp1 << G4endl
-//  	   << "          randExp2 = " << randExp2 << G4endl;
-
   G4double levelParam;
   levelParam = getLevelDensityParameter();
   
   const G4double xMax  = excitationEnergy - getThresh() - correction; // maximum number
   const G4double xProb = ( - 1 + std::sqrt ( 1 + 4 * levelParam * xMax ) ) / ( 2 * levelParam ); // most probable value
-  const G4double m = xProb * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
+  const G4double maxProb = xProb * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
 
   // Sample x according to density function P(x) with rejection method
   G4double r1;
@@ -131,7 +107,7 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
   do
     {
       r1 = G4UniformRand() * xMax;
-      r2 = G4UniformRand() * m;
+      r2 = G4UniformRand() * maxProb;
       koe++;
     }
   while (  r1 * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );

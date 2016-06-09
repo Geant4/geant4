@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaNuclearReaction.hh,v 1.15 2009-02-23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // GEANT4 physics class: G4GammaNuclearReaction - header file for CHIPS

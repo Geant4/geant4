@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04SimpleSolenoid.hh
+/// \brief Definition of the F04SimpleSolenoid class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04SimpleSolenoid_h
 #define F04SimpleSolenoid_h 1
 
@@ -39,7 +36,7 @@
 #include "F04ElementField.hh"
 #include "F04GlobalField.hh"
 
-//  F04SimpleSolenoid implements a solenoid magnet with a constant 
+//  F04SimpleSolenoid implements a solenoid magnet with a constant
 //  cylindrical magnetic field in z-direction
 
 class F04SimpleSolenoid : public F04ElementField
@@ -52,39 +49,39 @@ class F04SimpleSolenoid : public F04ElementField
     ///  Destructor.
     virtual ~F04SimpleSolenoid() {}
 
-    ///  getLength() returns the length of the solenoid
-    virtual G4double getLength() { return fieldLength; }
+    ///  GetLength() returns the length of the solenoid
+    virtual G4double GetLength() { return fFieldLength; }
 
-    ///  getWidth() returns the solenoid diameter
-    virtual G4double getWidth() { return fieldRadius*2.0; }
+    ///  GetWidth() returns the solenoid diameter
+    virtual G4double GetWidth() { return fFieldRadius*2.0; }
 
-    ///  getHeight() returns the solenoid diameter
-    virtual G4double getHeight() { return fieldRadius*2.0; }
+    ///  GetHeight() returns the solenoid diameter
+    virtual G4double GetHeight() { return fFieldRadius*2.0; }
 
-    /// setFringeZ(G4double) sets the solenoid fringe field z-length
-    void setFringeZ(G4double z) { fringeZ = z; }
+    /// SetFringeZ(G4double) sets the solenoid fringe field z-length
+    void SetFringeZ(G4double z) { fFringeZ = z; }
 
-    /// getFringeZ() returns the solenoid fringe field z-length
-    G4double getFringeZ() { return fringeZ; }
+    /// GetFringeZ() returns the solenoid fringe field z-length
+    G4double GetFringeZ() { return fFringeZ; }
 
-    ///  isOutside() returns true when outside the solenoid
-    G4bool isOutside(G4ThreeVector& local) const; 
+    ///  IsOutside() returns true when outside the solenoid
+    G4bool IsOutside(G4ThreeVector& local) const;
 
-    /// isWithin() returns true when inside the solenoid
-    G4bool isWithin(G4ThreeVector& local) const;
+    /// IsWithin() returns true when inside the solenoid
+    G4bool IsWithin(G4ThreeVector& local) const;
 
-    ///  addFieldValue() adds the field for this solenoid into field[].
+    ///  AddFieldValue() adds the field for this solenoid into field[].
     ///  point[] is in global coordinates.
-    void addFieldValue(const G4double point[4], G4double field[6]) const;
+    virtual void AddFieldValue(const G4double point[4], G4double field[6]) const;
 
   private:
 
-    G4double Bfield;
+    G4double fBfield;
 
-    G4double fringeZ;
+    G4double fFringeZ;
 
-    G4double fieldRadius;
-    G4double fieldLength;
+    G4double fFieldLength;
+    G4double fFieldRadius;
 
 };
 

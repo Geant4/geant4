@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.9 2011-01-05 19:02:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/src/PhysListEmStandardSS.cc
+/// \brief Implementation of the PhysListEmStandardSS class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -53,6 +55,8 @@
 #include "G4ionIonisation.hh"
 
 #include "G4EmProcessOptions.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -85,29 +89,29 @@ void PhysListEmStandardSS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
-	    
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
+            
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
       pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
              
     } else if (particleName == "alpha" || particleName == "He3") {
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
       G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
+      //cs->AddEmModel(0, new G4IonCoulombScatteringModel());
       cs->SetBuildTableFlag(false);
       pmanager->AddDiscreteProcess(cs);
 
@@ -119,8 +123,8 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
@@ -136,20 +140,20 @@ void PhysListEmStandardSS::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
-  emOptions.SetSplineFlag(true);	//default
+  emOptions.SetMinEnergy(100*eV);        //default    
+  emOptions.SetMaxEnergy(100*TeV);        //default  
+  emOptions.SetDEDXBinning(12*20);        //default=12*7  
+  emOptions.SetLambdaBinning(12*20);        //default=12*7
+  emOptions.SetSplineFlag(true);        //default
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
-  emOptions.SetLinearLossLimit(1.e-2);		//default
+  emOptions.SetStepFunction(0.2, 100*um);        //default=(0.2, 1*mm)      
+  emOptions.SetLinearLossLimit(1.e-2);                //default
    
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default  
+  emOptions.SetSubCutoff(false);        //default  
 
   // scattering
   emOptions.SetPolarAngleLimit(0.0);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/include/G4Monopole.hh
+/// \brief Definition of the G4Monopole class
+//
 #ifndef G4Monopole_h
 #define G4Monopole_h 1
 
@@ -45,6 +48,8 @@
 
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+
+#include "CLHEP/Units/SystemOfUnits.h"
 
 // ######################################################################
 // ###                       Monopole                                 ###
@@ -71,9 +76,9 @@ private:
 
 public: 
   
-  static G4Monopole* MonopoleDefinition(G4double mass_ = 100.*GeV, 
-                                        G4double magCharge_ = 1.0, 
-                                        G4double elCharge_  = 0.0);
+  static G4Monopole* MonopoleDefinition(G4double mass = 100.*CLHEP::GeV, 
+                                        G4double magCharge = 1.0, 
+                                        G4double elCharge  = 0.0);
 
   static G4Monopole* Monopole();
 

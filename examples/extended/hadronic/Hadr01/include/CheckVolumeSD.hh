@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CheckVolumeSD.hh,v 1.3 2006-06-29 17:23:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/include/CheckVolumeSD.hh
+/// \brief Definition of the CheckVolumeSD class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.01.2003 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -67,7 +69,7 @@ public: // Without description
 
 private:
 
-  HistoManager*  theHisto;
+  HistoManager*  fHisto;
 
 };
 

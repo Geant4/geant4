@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01CalorimeterHit.cc
+/// \brief Implementation of the RE01CalorimeterHit class
 //
-// $Id: RE01CalorimeterHit.cc,v 1.5 2006-11-14 07:07:38 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// $Id$
+//
 
 #include "RE01CalorimeterHit.hh"
 #include "G4ios.hh"
@@ -40,98 +41,75 @@
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SystemOfUnits.hh"    
 
 G4Allocator<RE01CalorimeterHit> RE01CalorimeterHitAllocator;
 
-RE01CalorimeterHit::RE01CalorimeterHit()
-{pLogV=0;}
-
-RE01CalorimeterHit::RE01CalorimeterHit(G4LogicalVolume* logVol,G4int z,G4int phi)
-: ZCellID(z), PhiCellID(phi), pLogV(logVol)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE01CalorimeterHit::RE01CalorimeterHit(G4LogicalVolume* logVol,
+                                       G4int z, G4int phi)
+  :G4VHit(), fZCellID(z), fPhiCellID(phi), fEdep(0.0), 
+   fPos(0),fRot(0.,0.,0.),fPLogV(logVol),fEdepByATrack(0.0),fTrackInfo()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01CalorimeterHit::~RE01CalorimeterHit()
 {;}
 
-RE01CalorimeterHit::RE01CalorimeterHit(const RE01CalorimeterHit &right)
-  : G4VHit()
-{
-  ZCellID = right.ZCellID;
-  PhiCellID = right.PhiCellID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
-  edepByATrack = right.edepByATrack;
-  trackInfo = right.trackInfo;
-}
-
-const RE01CalorimeterHit& RE01CalorimeterHit::operator=(const RE01CalorimeterHit &right)
-{
-  ZCellID = right.ZCellID;
-  PhiCellID = right.PhiCellID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
-  edepByATrack = right.edepByATrack;
-  trackInfo = right.trackInfo;
-  return *this;
-}
-
-G4int RE01CalorimeterHit::operator==(const RE01CalorimeterHit &right) const
-{
-  return ((ZCellID==right.ZCellID)&&(PhiCellID==right.PhiCellID));
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01CalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Transform3D trans(rot,pos);
+    G4Transform3D trans(fRot,fPos);
     G4VisAttributes attribs;
-    const G4VisAttributes* pVA = pLogV->GetVisAttributes();
+    const G4VisAttributes* pVA = fPLogV->GetVisAttributes();
     if(pVA) attribs = *pVA;
     G4Colour colour(1.,0.,0.);
     attribs.SetColour(colour);
     attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*pLogV,attribs,trans);
+    pVVisManager->Draw(*fPLogV,attribs,trans);
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const std::map<G4String,G4AttDef>* RE01CalorimeterHit::GetAttDefs() const
 {
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("RE01CalorimeterHit",isNew);
   if (isNew) {
-    G4String HitType("HitType");
-    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Physics","","G4String");
+    G4String hitType("HitType");
+    (*store)[hitType] = G4AttDef(hitType,"Hit Type","Physics","","G4String");
 
-    G4String ZCellID("ZCellID");
-    (*store)[ZCellID] = G4AttDef(ZCellID,"Z Cell ID","Physics","","G4int");
+    G4String zCellID("ZCellID");
+    (*store)[zCellID] = G4AttDef(zCellID,"Z Cell ID","Physics","","G4int");
 
-    G4String PhiCellID("PhiCellID");
-    (*store)[PhiCellID] = G4AttDef(PhiCellID,"Phi Cell ID","Physics","","G4int");
+    G4String phiCellID("PhiCellID");
+    (*store)[phiCellID] = G4AttDef(phiCellID,"Phi Cell ID","Physics","","G4int");
 
-    G4String Energy("Energy");
-    (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
+    G4String energy("Energy");
+    (*store)[energy] = G4AttDef(energy,"Energy Deposited","Physics","G4BestUnit",
+                                "G4double");
 
-    G4String ETrack("ETrack");
-    (*store)[ETrack] = G4AttDef(ETrack,"Energy Deposited By Track","Physics","G4BestUnit","G4double");
+    G4String eTrack("ETrack");
+    (*store)[eTrack] = G4AttDef(eTrack,"Energy Deposited By Track","Physics",
+                                "G4BestUnit","G4double");
 
-    G4String Pos("Pos");
-    (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+    G4String pos("Pos");
+    (*store)[pos] = G4AttDef(pos, "Position",
+                      "Physics","G4BestUnit","G4ThreeVector");
 
-    G4String LVol("LVol");
-    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Physics","","G4String");
+    G4String lvol("LVol");
+    (*store)[lvol] = G4AttDef(lvol,"Logical Volume","Physics","","G4String");
   }
+
   return store;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 std::vector<G4AttValue>* RE01CalorimeterHit::CreateAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
@@ -139,23 +117,23 @@ std::vector<G4AttValue>* RE01CalorimeterHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","RE01CalorimeterHit",""));
 
   values->push_back
-    (G4AttValue("ZCellID",G4UIcommand::ConvertToString(ZCellID),""));
+    (G4AttValue("ZCellID",G4UIcommand::ConvertToString(fZCellID),""));
 
   values->push_back
-    (G4AttValue("PhiCellID",G4UIcommand::ConvertToString(PhiCellID),""));
+    (G4AttValue("PhiCellID",G4UIcommand::ConvertToString(fPhiCellID),""));
 
   values->push_back
-    (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
+    (G4AttValue("Energy",G4BestUnit(fEdep,"Energy"),""));
 
   values->push_back
-    (G4AttValue("ETrack",G4BestUnit(edepByATrack,"Energy"),""));
+    (G4AttValue("ETrack",G4BestUnit(fEdepByATrack,"Energy"),""));
 
   values->push_back
-    (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
+    (G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
 
-  if (pLogV)
+  if (fPLogV)
     values->push_back
-      (G4AttValue("LVol",pLogV->GetName(),""));
+      (G4AttValue("LVol",fPLogV->GetName(),""));
   else
     values->push_back
       (G4AttValue("LVol"," ",""));
@@ -163,9 +141,11 @@ std::vector<G4AttValue>* RE01CalorimeterHit::CreateAttValues() const
   return values;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01CalorimeterHit::Print()
 {
-  G4cout << "Cell[" << ZCellID << "," << PhiCellID << "]    " << edep/GeV << " [GeV]" << G4endl;
+  G4cout << "Cell[" << fZCellID << "," << fPhiCellID << "]    " 
+         << fEdep/GeV << " [GeV]" << G4endl;
 }
 
 

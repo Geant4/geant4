@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file radioactivedecay/rdecay01/include/EventMessenger.hh
+/// \brief Definition of the EventMessenger class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,14 +49,14 @@ class EventMessenger: public G4UImessenger
     EventMessenger(EventAction*);
    ~EventMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction* eventAction;
+    EventAction*          fEventAction;
     
-    G4UIdirectory*        Dir;       
-    G4UIdirectory*        eventDir;   
-    G4UIcmdWithAnInteger* PrintCmd;    
+    G4UIdirectory*        fDir;       
+    G4UIdirectory*        fEventDir;   
+    G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronShellPlusPairingCorrections.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #ifndef G4CameronShellPlusPairingCorrections_h
 #define G4CameronShellPlusPairingCorrections_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 
@@ -54,7 +55,7 @@ public:
   
   G4double GetShellPlusPairingZ(const G4int Z) const 
   {
-    if (Z <= TableSize && Z > 1) return SPZTable[Z-1]*MeV;
+    if (Z <= TableSize && Z > 1) return SPZTable[Z-1]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CameronShellPlusPairingCorrections: out of table for Z = " << Z << G4endl;
@@ -65,7 +66,7 @@ public:
   
   G4double GetShellPlusPairingN(const G4int N) const 
   {
-    if (N <= TableSize && N > 0) return SPNTable[N-1]*MeV;
+    if (N <= TableSize && N > 0) return SPNTable[N-1]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CameronShellPlusPairingCorrections: out of table for N = " << N << G4endl;

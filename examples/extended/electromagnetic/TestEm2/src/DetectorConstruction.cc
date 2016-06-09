@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm2/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // 
-// $Id: DetectorConstruction.cc,v 1.14 2009-09-16 18:07:30 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,25 +52,26 @@
 #include "G4RunManager.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:nLtot(40),nRtot(50),dLradl(0.5),dRradl(0.1),
- dLlength(0.),dRlength(0.),
- myMaterial(0),magField(0),
- EcalLength(0.),EcalRadius(0.),
- solidEcal(0),logicEcal(0),physiEcal(0)
+:fNLtot(40),fNRtot(50),fDLradl(0.5),fDRradl(0.1),
+ fDLlength(0.),fDRlength(0.),
+ fMaterial(0),fMagField(0),
+ fEcalLength(0.),fEcalRadius(0.),
+ fSolidEcal(0),fLogicEcal(0),fPhysiEcal(0)
 {
   DefineMaterials();
   SetMaterial("G4_PbWO4");
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -127,10 +130,10 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
-  G4double Radl = myMaterial->GetRadlen();
+  G4double Radl = fMaterial->GetRadlen();
 
-  dLlength = dLradl*Radl; dRlength = dRradl*Radl;
-  EcalLength = nLtot*dLlength;  EcalRadius = nRtot*dRlength;
+  fDLlength = fDLradl*Radl; fDRlength = fDRradl*Radl;
+  fEcalLength = fNLtot*fDLlength;  fEcalRadius = fNRtot*fDRlength;
 
   // Cleanup old geometry
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -141,19 +144,19 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //
   // Ecal
   //
-  solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
-  logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
-  physiEcal = new G4PVPlacement(0,G4ThreeVector(),
-                                logicEcal,"Ecal",0,false,0);
+  fSolidEcal = new G4Tubs("Ecal",0.,fEcalRadius,0.5*fEcalLength,0.,360*deg);
+  fLogicEcal = new G4LogicalVolume( fSolidEcal,fMaterial,"Ecal",0,0,0);
+  fPhysiEcal = new G4PVPlacement(0,G4ThreeVector(),
+                                fLogicEcal,"Ecal",0,false,0);
 
-  G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length")
-         << " of " << myMaterial->GetName() << G4endl;
-  G4cout << myMaterial << G4endl;     
+  G4cout << "Absorber is " << G4BestUnit(fEcalLength,"Length")
+         << " of " << fMaterial->GetName() << G4endl;
+  G4cout << fMaterial << G4endl;     
 
   //
   //always return the physical World
   //
-  return physiEcal;
+  return fPhysiEcal;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,8 +168,8 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
   if (pttoMaterial) {
-    myMaterial = pttoMaterial;
-    if(logicEcal) logicEcal->SetMaterial(myMaterial);
+    fMaterial = pttoMaterial;
+    if(fLogicEcal) fLogicEcal->SetMaterial(fMaterial);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -175,26 +178,26 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 
 void DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
-  nLtot = (G4int)Value(0);
-  if (nLtot > MaxBin) {
+  fNLtot = (G4int)Value(0);
+  if (fNLtot > MaxBin) {
     G4cout << "\n ---> warning from SetLBining: "
-           << nLtot << " truncated to " << MaxBin << G4endl;
-    nLtot = MaxBin;
+           << fNLtot << " truncated to " << MaxBin << G4endl;
+    fNLtot = MaxBin;
   }  
-  dLradl = Value(1);
+  fDLradl = Value(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
-  nRtot = (G4int)Value(0);
-  if (nRtot > MaxBin) {
+  fNRtot = (G4int)Value(0);
+  if (fNRtot > MaxBin) {
     G4cout << "\n ---> warning from SetRBining: "
-           << nRtot << " truncated to " << MaxBin << G4endl;
-    nRtot = MaxBin;
+           << fNRtot << " truncated to " << MaxBin << G4endl;
+    fNRtot = MaxBin;
   }    
-  dRradl = Value(1);
+  fDRradl = Value(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,15 +208,15 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(magField) delete magField;		//delete the existing magn field
+  if(fMagField) delete fMagField;                //delete the existing magn field
 
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
+  if(fieldValue!=0.)                        // create a new one if non nul
+  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+    fieldMgr->SetDetectorField(fMagField);
+    fieldMgr->CreateChordFinder(fMagField);
   } else {
-    magField = 0;
-    fieldMgr->SetDetectorField(magField);
+    fMagField = 0;
+    fieldMgr->SetDetectorField(fMagField);
   }
 }
 

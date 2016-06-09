@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.16 2010-12-23 06:00:42 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -40,6 +39,7 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 // energy range
 G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;
@@ -343,14 +343,14 @@ void G4VRangeToEnergyConverter::BuildRangeVector(const G4Material* aMaterial,
   G4double Value;
   for ( i=0; i<size_t(TotBin); i++) {
     G4double t = rangeVector->GetLowEdgeEnergy(i);
-    G4double s = t/lossV[i];
-    if (i==0) s0 += 0.5*s;
-    else s0 += s;
+    G4double q = t/lossV[i];
+    if (i==0) s0 += 0.5*q;
+    else s0 += q;
     
     if (i==0) {
-       Value = (s0 + 0.5*s)*dltau ;
+       Value = (s0 + 0.5*q)*dltau ;
     } else {
-      Value = (s0 - 0.5*s)*dltau ;
+      Value = (s0 - 0.5*q)*dltau ;
     }
     rangeVector->PutValue(i,Value);
   }
@@ -362,7 +362,11 @@ void G4VRangeToEnergyConverter::BuildRangeVector(const G4Material* aMaterial,
 G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
 				    G4RangeVector* rangeVector,
 				    G4double       theCutInLength, 
+#ifdef G4VERBOSE
 				    size_t         materialIndex
+#else
+                                    size_t
+#endif
 				                              ) const
 {
   const G4double epsilon=0.01;

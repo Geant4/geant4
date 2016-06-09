@@ -6,7 +6,7 @@
 
 #include "base_cloud"
 
-#include <tools/mnmx>
+#include "../mnmx"
 
 #include "h2d"
 
@@ -14,6 +14,11 @@ namespace tools {
 namespace histo {
 
 class c2d : public base_cloud {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c2d");
+    return s_v;
+  }
 public:
   bool set_title(const std::string&);
   unsigned int dimension() const {return 2;}
@@ -50,6 +55,12 @@ public:
   }
   bool set_conversion_parameters(unsigned int,double,double,  
                                  unsigned int,double,double);
+
+  bool set_histogram(h2d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
+  }
 public:
   c2d();
   c2d(const std::string&,int=-1);
@@ -200,9 +211,9 @@ bool c2d::convert(
 ,unsigned int aBinsY,double aLowerEdgeY,double aUpperEdgeY 
 ) { 
   if(m_histo) return true; // Done.
-  m_histo = new histo::h2d(this->title(),
-                              aBinsX,aLowerEdgeX,aUpperEdgeX,
-                              aBinsY,aLowerEdgeY,aUpperEdgeY);
+  m_histo = new histo::h2d(base_cloud::title(),
+                           aBinsX,aLowerEdgeX,aUpperEdgeX,
+                           aBinsY,aLowerEdgeY,aUpperEdgeY);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -295,8 +306,8 @@ bool c2d::fill(double aX,double aY,double aW){
 inline
 bool c2d::convert(const std::vector<double>& aEdgesX,const std::vector<double>& aEdgesY) { 
   if(m_histo) return true;
-  m_histo = new histo::h2d(this->title(),
-                                aEdgesX,aEdgesY);
+  m_histo = new histo::h2d(base_cloud::title(),
+                           aEdgesX,aEdgesY);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();

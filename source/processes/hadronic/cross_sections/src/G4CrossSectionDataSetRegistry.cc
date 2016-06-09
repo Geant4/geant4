@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.7 2010-03-25 15:28:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -39,8 +38,36 @@
 // Modifications:
 //
 
+#include "G4ios.hh"
+
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionFactory.hh"
+
+// Neeed for running with 'static' libraries to pull the references of the 
+// declared factories
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonMinusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonMinusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonPlusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonPlusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonZeroInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonZeroElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsHyperonInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsHyperonElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsProtonInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsProtonElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsNeutronInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsNeutronElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionPlusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionPlusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
+G4_REFERENCE_XS_FACTORY(G4NucleonNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
+G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
+
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 
@@ -102,4 +129,37 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
   }
 }
 
+void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* factory)
+{
+  factories[name] = factory;
+}
 
+G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name, G4bool warning)
+{
+  size_t n = xSections.size(); 
+ 
+  for (size_t i=0; i<n; ++i) 
+    {
+      if(xSections[i]) 
+	{
+	  G4VCrossSectionDataSet* p = xSections[i];
+	  if (p->GetName() == name) return p;
+	}
+    }
+  // check if factory exists...
+  //
+  if (factories.find(name)!=factories.end())
+    {
+      return factories[name]->Instantiate();
+    }
+  else
+    {
+        if(warning)
+        {
+         G4ExceptionDescription ED;
+         ED << "Factory for ["<< name << "] cross section data set not found." << G4endl;
+         G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
+        }
+      return 0;
+    }
+}

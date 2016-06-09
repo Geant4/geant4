@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.18 2009-02-20 14:48:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +58,8 @@
 
 #ifndef G4MuBetheBlochModel_h
 #define G4MuBetheBlochModel_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VEmModel.hh"
 
@@ -148,7 +149,7 @@ inline void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = particle->GetPDGMass();
     massSquare = mass*mass;
-    ratio = electron_mass_c2/mass;
+    ratio = CLHEP::electron_mass_c2/mass;
   }
 }
 

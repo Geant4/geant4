@@ -23,21 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02DetectorConstruction.cc
+/// \brief Implementation of the RE02DetectorConstruction class
 //
-// $Id: RE02DetectorConstruction.cc,v 1.5 2010-12-07 15:17:13 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
  
 #include "RE02DetectorConstruction.hh"
 
-#include "G4MultiFunctionalDetector.hh"
-
-#include "RE02PSEnergyDeposit.hh"
-#include "RE02PSNofStep.hh"
-#include "RE02PSCellFlux.hh"
-#include "RE02PSPassageCellFlux.hh"
-#include "RE02PSFlatSurfaceFlux.hh"
-#include "RE02PSFlatSurfaceCurrent.hh"
+#include "G4PSEnergyDeposit3D.hh"
+#include "G4PSNofStep3D.hh"
+#include "G4PSCellFlux3D.hh"
+#include "G4PSPassageCellFlux3D.hh"
+#include "G4PSFlatSurfaceFlux3D.hh"
+#include "G4PSFlatSurfaceCurrent3D.hh"
 
 #include "G4SDParticleWithEnergyFilter.hh"
 #include "G4SDParticleFilter.hh"
@@ -56,6 +56,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
+#include "G4SystemOfUnits.hh"    
 #include "G4ios.hh"
 
 //=======================================================================
@@ -68,14 +69,16 @@
 //   [Geometry] 
 //     The world volume is defined as 200 cm x 200 cm x 200 cm box with Air.
 //   Water phantom is defined as  200 mm x 200 mm x 400 mm box with Water.
-//   The water phantom is divided into 100 segments in x,y plane using replication,
+//   The water phantom is divided into 100 segments in x,y plane using
+//   replication,
 //   and then divided into 200 segments perpendicular to z axis using nested 
 //   parameterised volume.  
 //    These values are defined at constructor,
-//    e.g. the size of water phantom (fphantomSize), and number of segmentation
+//    e.g. the size of water phantom (fPhantomSize), and number of segmentation
 //   of water phantom (fNx, fNy, fNz).
 //
-//   By default, lead plates are inserted into the position of even order segments.
+//   By default, lead plates are inserted into the position of even order 
+//   segments.
 //   NIST database is used for materials.
 //
 //
@@ -99,21 +102,22 @@
 //
 //=======================================================================
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02DetectorConstruction::RE02DetectorConstruction()
 {
   // Default size of water phantom,and segmentation.
-    fphantomSize.setX(200.*mm);
-    fphantomSize.setY(200.*mm);
-    fphantomSize.setZ(400.*mm);
+    fPhantomSize.setX(200.*mm);
+    fPhantomSize.setY(200.*mm);
+    fPhantomSize.setZ(400.*mm);
     fNx = fNy = fNz = 100;
+    fInsertLead = TRUE;
 }
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02DetectorConstruction::~RE02DetectorConstruction()
 {;}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  G4VPhysicalVolume* RE02DetectorConstruction::Construct()
 {
   //=====================
@@ -124,15 +128,14 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //  Material Information imported from NIST database.
   //
   G4NistManager* NISTman = G4NistManager::Instance();
-  G4Material* Air  = NISTman->FindOrBuildMaterial("G4_AIR");
-  G4Material* H2O  = NISTman->FindOrBuildMaterial("G4_WATER");
-  G4Material* LEAD = NISTman->FindOrBuildMaterial("G4_Pb");
+  G4Material* air  = NISTman->FindOrBuildMaterial("G4_AIR");
+  G4Material* water  = NISTman->FindOrBuildMaterial("G4_WATER");
+  G4Material* lead = NISTman->FindOrBuildMaterial("G4_Pb");
 
   //
   // Print all the materials defined.
   G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
 
   //============================================================================
   //      Definitions of Solids, Logical Volumes, Physical Volumes 
@@ -147,19 +150,19 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4Box * solidWorld
     = new G4Box("world", worldSize.x()/2., worldSize.y()/2., worldSize.z()/2.);
   G4LogicalVolume * logicWorld
-    = new G4LogicalVolume(solidWorld, Air, "World", 0, 0, 0);
+    = new G4LogicalVolume(solidWorld, air, "World", 0, 0, 0);
 
   // 
   //  Must place the World Physical volume unrotated at (0,0,0).
   G4VPhysicalVolume * physiWorld
     = new G4PVPlacement(0,               // no rotation
-			G4ThreeVector(), // at (0,0,0)
-			logicWorld,      // its logical volume
-			"World",         // its name
-			0,               // its mother  volume
-			false,           // no boolean operations
-			0);              // copy number
-				 
+                        G4ThreeVector(), // at (0,0,0)
+                        logicWorld,      // its logical volume
+                        "World",         // its name
+                        0,               // its mother  volume
+                        false,           // no boolean operations
+                        0);              // copy number
+                                 
   //---------------
   // Water Phantom
   //---------------
@@ -169,35 +172,36 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //................................
 
   //--  Default size of water phantom is defined at constructor.
-  G4ThreeVector phantomSize = fphantomSize; 
+  G4ThreeVector phantomSize = fPhantomSize; 
   
   G4Box * solidPhantom
     = new G4Box("phantom",
-		phantomSize.x()/2., phantomSize.y()/2., phantomSize.z()/2.);
+                phantomSize.x()/2., phantomSize.y()/2., phantomSize.z()/2.);
   G4LogicalVolume * logicPhantom
-    = new G4LogicalVolume(solidPhantom, H2O, "Phantom", 0, 0, 0);  
+    = new G4LogicalVolume(solidPhantom, water, "Phantom", 0, 0, 0);  
 
-  G4RotationMatrix* rot=new G4RotationMatrix();
+  G4RotationMatrix* rot = new G4RotationMatrix();
   //rot->rotateY(30.*deg);
   G4ThreeVector positionPhantom;
   //G4VPhysicalVolume * physiPhantom =
   new G4PVPlacement(rot,             // no rotation
-		    positionPhantom, // at (x,y,z)
-		    logicPhantom,    // its logical volume
-		    "Phantom",       // its name
-		    logicWorld,      // its mother  volume
-		    false,           // no boolean operations
-		    0);              // copy number 
+                    positionPhantom, // at (x,y,z)
+                    logicPhantom,    // its logical volume
+                    "Phantom",       // its name
+                    logicWorld,      // its mother  volume
+                    false,           // no boolean operations
+                    0);              // copy number 
 
   //..............................................
   // Phantom segmentation using Parameterisation
   //..............................................
   //
   G4cout << "<-- RE02DetectorConstruction::Construct-------" <<G4endl;
-  G4cout << "  Water Phantom Size " << fphantomSize/mm       << G4endl;
-  G4cout << "  Segmentation  ("<< fNx<<","<<fNy<<","<<fNz<<")"<<G4endl;
-  G4cout << "  Lead plate at even copy # (0-False,1-True): " << IsLeadSegment() <<G4endl;
-  G4cout << "<---------------------------------------------"<<G4endl;
+  G4cout << "  Water Phantom Size " << fPhantomSize/mm       << G4endl;
+  G4cout << "  Segmentation  ("<< fNx<<","<<fNy<<","<<fNz<<")"<< G4endl;
+  G4cout << "  Lead plate at even copy # (0-False,1-True): " << IsLeadSegment()
+         << G4endl;
+  G4cout << "<---------------------------------------------"<< G4endl;
   // Number of segmentation.
   // - Default number of segmentation is defined at constructor.
   G4int nxCells = fNx;
@@ -217,7 +221,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4VSolid* solYRep =
     new G4Box(yRepName,phantomSize.x()/2.,sensSize.y()/2.,phantomSize.z()/2.);
   G4LogicalVolume* logYRep =
-    new G4LogicalVolume(solYRep,H2O,yRepName);
+    new G4LogicalVolume(solYRep,water,yRepName);
   //G4PVReplica* yReplica =
   new G4PVReplica(yRepName,logYRep,logicPhantom,kYAxis,fNy,sensSize.y());
   // X Slice
@@ -225,11 +229,10 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4VSolid* solXRep =
     new G4Box(xRepName,sensSize.x()/2.,sensSize.y()/2.,phantomSize.z()/2.);
   G4LogicalVolume* logXRep =
-    new G4LogicalVolume(solXRep,H2O,xRepName);
+    new G4LogicalVolume(solXRep,water,xRepName);
   //G4PVReplica* xReplica =
   new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNx,sensSize.x());
-  //
-  //
+
   //
   //..................................
   // Voxel solid and logical volumes
@@ -238,24 +241,24 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4String zVoxName("phantomSens");
   G4VSolid* solVoxel = 
     new G4Box(zVoxName,sensSize.x()/2.,sensSize.y()/2.,sensSize.z()/2.);
-  G4LogicalVolume* logicPhantomSens = new G4LogicalVolume(solVoxel,H2O,zVoxName);
+  G4LogicalVolume* logicPhantomSens = new G4LogicalVolume(solVoxel,water,zVoxName);
   //
   //
-  std::vector<G4Material*> phantomMat(2,H2O);
-  if ( IsLeadSegment() ) phantomMat[1]=LEAD;
+  std::vector<G4Material*> phantomMat(2,water);
+  if ( IsLeadSegment() ) phantomMat[1]=lead;
   //
   // Parameterisation for transformation of voxels.
   //  (voxel size is fixed in this example. 
-  //    e.g. nested parameterisation handles material and transfomation of voxels.)
+  //  e.g. nested parameterisation handles material and transfomation of voxels.)
   RE02NestedPhantomParameterisation* paramPhantom
     = new RE02NestedPhantomParameterisation(sensSize/2.,nzCells,phantomMat);
   //G4VPhysicalVolume * physiPhantomSens =
     new G4PVParameterised("PhantomSens",     // their name
-			  logicPhantomSens,  // their logical volume
-			  logXRep,           // Mother logical volume
-			  kUndefined,        // Are placed along this axis 
-			  nzCells,            // Number of cells
-			  paramPhantom);     // Parameterisation.
+                          logicPhantomSens,  // their logical volume
+                          logXRep,           // Mother logical volume
+                          kUndefined,        // Are placed along this axis 
+                          nzCells,           // Number of cells
+                          paramPhantom);     // Parameterisation.
   //   Optimization flag is avaiable for,
   //    kUndefined, kXAxis, kYAxis, kZAxis.
   //
@@ -265,7 +268,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //================================================
   //
   //  Sensitive Detector Manager.
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  G4SDManager* pSDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
   G4String phantomSDname = "PhantomSD";
@@ -275,9 +278,10 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //------------------------
   //
   // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(phantomSDname);
-  SDman->AddNewDetector( MFDet );                 // Register SD to SDManager.
-  logicPhantomSens->SetSensitiveDetector(MFDet);  // Assign SD to the logical volume.
+  G4MultiFunctionalDetector* mFDet
+    = new G4MultiFunctionalDetector(phantomSDname);
+  pSDman->AddNewDetector( mFDet );                // Register SD to SDManager.
+  logicPhantomSens->SetSensitiveDetector(mFDet);  // Assign SD to the logical volume.
 
   //---------------------------------------
   // SDFilter : Sensitive Detector Filters
@@ -312,23 +316,26 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //-- Primitive Scorer for Energy Deposit.
   //      Total, by protons, by electrons.
   G4String psName;
-  G4PSEnergyDeposit*  scorer0 = new RE02PSEnergyDeposit(psName="totalEDep",fNx,fNy,fNz);
-  G4PSEnergyDeposit*  scorer1 = new RE02PSEnergyDeposit(psName="protonEDep",fNx,fNy,fNz);
+  G4PSEnergyDeposit3D * scorer0 = new G4PSEnergyDeposit3D(psName="totalEDep",
+                                                          fNx,fNy,fNz);
+  G4PSEnergyDeposit3D * scorer1 = new G4PSEnergyDeposit3D(psName="protonEDep",
+                                                          fNx,fNy,fNz);
   scorer1->SetFilter(protonFilter);
 
   //
   //-- Number of Steps for protons
-  G4PSNofStep*   scorer2 = new RE02PSNofStep(psName="protonNStep",fNx,fNy,fNz);
+  G4PSNofStep3D * scorer2 =
+    new G4PSNofStep3D(psName="protonNStep",fNx,fNy,fNz);
   scorer2->SetFilter(protonFilter);
 
   //
   //-- CellFlux for charged particles
-  G4PSPassageCellFlux* scorer3 = new RE02PSPassageCellFlux(psName="chargedPassCellFlux",
-							   fNx,fNy,fNz);
-  G4PSCellFlux*        scorer4 = new RE02PSCellFlux(psName="chargedCellFlux",
-						    fNx,fNy,fNz);
-  G4PSFlatSurfaceFlux* scorer5 = new RE02PSFlatSurfaceFlux(psName="chargedSurfFlux",
-							   fFlux_InOut,fNx,fNy,fNz);
+  G4PSPassageCellFlux3D * scorer3 =
+    new G4PSPassageCellFlux3D(psName="chargedPassCellFlux", fNx,fNy,fNz);
+  G4PSCellFlux3D *        scorer4 =
+    new G4PSCellFlux3D(psName="chargedCellFlux", fNx,fNy,fNz);
+  G4PSFlatSurfaceFlux3D * scorer5 =
+    new G4PSFlatSurfaceFlux3D(psName="chargedSurfFlux", fFlux_InOut,fNx,fNy,fNz);
   scorer3->SetFilter(chargedFilter);
   scorer4->SetFilter(chargedFilter);
   scorer5->SetFilter(chargedFilter);
@@ -337,13 +344,12 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //------------------------------------------------------------
   //  Register primitive scorers to MultiFunctionalDetector
   //------------------------------------------------------------
-  MFDet->RegisterPrimitive(scorer0);
-  MFDet->RegisterPrimitive(scorer1);
-  MFDet->RegisterPrimitive(scorer2);
-  MFDet->RegisterPrimitive(scorer3);
-  MFDet->RegisterPrimitive(scorer4);
-  MFDet->RegisterPrimitive(scorer5);
-
+  mFDet->RegisterPrimitive(scorer0);
+  mFDet->RegisterPrimitive(scorer1);
+  mFDet->RegisterPrimitive(scorer2);
+  mFDet->RegisterPrimitive(scorer3);
+  mFDet->RegisterPrimitive(scorer4);
+  mFDet->RegisterPrimitive(scorer5);
 
   //========================
   // More additional Primitive Scoreres
@@ -365,14 +371,14 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
       G4double kmax = std::pow(10.,(G4double)(i+1))*keV;
       //-- Particle with kinetic energy filter.
       G4SDParticleWithEnergyFilter* pkinEFilter =
-	new G4SDParticleWithEnergyFilter(fltName="gammaE filter",kmin,kmax);
+        new G4SDParticleWithEnergyFilter(fltName="gammaE filter",kmin,kmax);
       pkinEFilter->add("gamma");  // Accept only gamma.
       pkinEFilter->show();        // Show accepting condition to stdout.
       //-- Surface Current Scorer which scores  number of tracks in unit area.
-      G4PSFlatSurfaceCurrent* scorer =
-	  new RE02PSFlatSurfaceCurrent(psgName,fCurrent_InOut,fNx,fNy,fNz);
+      G4PSFlatSurfaceCurrent3D * scorer =
+          new G4PSFlatSurfaceCurrent3D(psgName,fCurrent_InOut,fNx,fNy,fNz);
       scorer->SetFilter(pkinEFilter);    // Assign filter.
-      MFDet->RegisterPrimitive(scorer);  // Register it to MultiFunctionalDetector.
+      mFDet->RegisterPrimitive(scorer);  // Register it to MultiFunctionalDetector.
   }
   //
 
@@ -380,19 +386,19 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
  //   Visualization attributes 
   //===============================
 
-  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  logicWorld  ->SetVisAttributes(BoxVisAtt);  
+  G4VisAttributes* boxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  logicWorld  ->SetVisAttributes(boxVisAtt);  
   //logicWorld->SetVisAttributes(G4VisAttributes::Invisible);  
 
   // Mother volume of WaterPhantom
-  G4VisAttributes* PhantomVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  logicPhantom->SetVisAttributes(PhantomVisAtt);
+  G4VisAttributes* phantomVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  logicPhantom->SetVisAttributes(phantomVisAtt);
   
   // Replica
-  G4VisAttributes* YRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  logYRep->SetVisAttributes(YRepVisAtt);
-  G4VisAttributes* XRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  logXRep->SetVisAttributes(XRepVisAtt);
+  G4VisAttributes* yRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  logYRep->SetVisAttributes(yRepVisAtt);
+  G4VisAttributes* xRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  logXRep->SetVisAttributes(xRepVisAtt);
   
   // Skip the visualization for those voxels.
   logicPhantomSens->SetVisAttributes(G4VisAttributes::Invisible);

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.cc,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -52,14 +51,54 @@
 //
 
 #include "G4DipBustGenerator.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 G4DipBustGenerator::G4DipBustGenerator(const G4String&)
-  : G4VBremAngularDistribution("AngularGenUrban")
+  : G4VEmAngularDistribution("DipBustGen")
 {}    
 
 G4DipBustGenerator::~G4DipBustGenerator() 
 {}
+
+G4ThreeVector& 
+G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
+				    G4double, G4int, const G4Material*)
+{
+  G4double c, cosTheta, delta, cofA, signc = 1., a, power = 1./3.;
+
+  G4double eTkin = dp->GetKineticEnergy();
+
+  c = 4. - 8.*G4UniformRand();
+  a = c;
+ 
+  if( c < 0. )
+  {
+    signc = -1.;
+    a     = -c;
+  }
+  delta  = std::sqrt(a*a+4.);
+  delta += a;
+  delta *= 0.5; 
+
+  cofA = -signc*std::pow(delta, power);
+
+  cosTheta = cofA - 1./cofA;
+
+  G4double tau = eTkin/electron_mass_c2;
+  G4double beta = std::sqrt(tau*(tau + 2.))/(tau + 1.);
+
+  cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
+
+  G4double sinTheta = std::sqrt((1 - cosTheta)*(1 + cosTheta));
+  G4double phi  = twopi*G4UniformRand(); 
+
+  fLocalDirection.set(sinTheta*std::cos(phi), sinTheta*std::sin(phi),cosTheta);
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+
+  return fLocalDirection;
+
+}
 
 G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
 				    const G4double, // final_energy
@@ -101,9 +140,7 @@ G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
 void G4DipBustGenerator::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
-  G4cout << "Bremsstrahlung Angular Generator is Modified Tsai" << G4endl;
-  G4cout << "Distribution suggested by L.Urban (Geant3 manual (1993) Phys211)" 
-	 << G4endl;
-  G4cout << "Derived from Tsai distribution (Rev Mod Phys 49,421(1977)) \n" 
+  G4cout << "Angular Generator based on classical formula from" << G4endl;
+  G4cout << "J.D. Jackson, Classical Electrodynamics, Wiley, New York 1975" 
 	 << G4endl;
 } 

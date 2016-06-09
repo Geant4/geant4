@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeTrajectory.cc
+/// \brief Implementation of the LXeTrajectory class
+//
+//
 #include "LXeTrajectory.hh"
 #include "G4TrajectoryPoint.hh"
 #include "G4Trajectory.hh"
@@ -38,34 +42,36 @@
 
 G4Allocator<LXeTrajectory> LXeTrajectoryAllocator;
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeTrajectory::LXeTrajectory()
-  :G4Trajectory(),wls(false),drawit(false),forceNoDraw(false),forceDraw(false)
+  :G4Trajectory(),fWls(false),fDrawit(false),fForceNoDraw(false),fForceDraw(false)
 {
-  particleDefinition=0;
+  fParticleDefinition=0;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeTrajectory::LXeTrajectory(const G4Track* aTrack)
-  :G4Trajectory(aTrack),wls(false),drawit(false)
+  :G4Trajectory(aTrack),fWls(false),fDrawit(false)
 {
-  particleDefinition=aTrack->GetDefinition();
+  fParticleDefinition=aTrack->GetDefinition();
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeTrajectory::LXeTrajectory(LXeTrajectory &right)
-  :G4Trajectory(right),wls(right.wls),drawit(right.drawit)
+  :G4Trajectory(right),fWls(right.fWls),fDrawit(right.fDrawit)
 {
-  particleDefinition=right.particleDefinition;
+  fParticleDefinition=right.fParticleDefinition;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeTrajectory::~LXeTrajectory()
-{
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+LXeTrajectory::~LXeTrajectory() {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeTrajectory::DrawTrajectory() const
 {
   // Invoke the default implementation in G4VTrajectory...
@@ -73,12 +79,13 @@ void LXeTrajectory::DrawTrajectory() const
   // ... or override with your own code here.
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
   //Taken from G4VTrajectory and modified to select colours based on particle
   //type and to selectively eliminate drawing of certain trajectories.
 
-  if(!forceDraw && (!drawit || forceNoDraw))
+  if(!fForceDraw && (!fDrawit || fForceNoDraw))
     return;
  
   // If i_mode>=0, draws a trajectory as a polyline and, if i_mode!=0,
@@ -86,31 +93,31 @@ void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
   // for auxiliary points, if any - whose screen size in pixels is
   // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily
   // visible markers.
-  
+ 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) return;
  
   const G4double markerSize = std::abs(i_mode)/1000;
   G4bool lineRequired (i_mode >= 0);
   G4bool markersRequired (markerSize > 0.);
-  
+ 
   G4Polyline trajectoryLine;
   G4Polymarker stepPoints;
   G4Polymarker auxiliaryPoints;
-  
+ 
   for (G4int i = 0; i < GetPointEntries() ; i++) {
     G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
     const std::vector<G4ThreeVector>* auxiliaries
       = aTrajectoryPoint->GetAuxiliaryPoints();
     if (auxiliaries) {
       for (size_t iAux = 0; iAux < auxiliaries->size(); ++iAux) {
-	const G4ThreeVector pos((*auxiliaries)[iAux]);
-	if (lineRequired) {
-	  trajectoryLine.push_back(pos);
-	}
-	if (markersRequired) {
-	  auxiliaryPoints.push_back(pos);
-	}
+        const G4ThreeVector pos((*auxiliaries)[iAux]);
+        if (lineRequired) {
+          trajectoryLine.push_back(pos);
+        }
+        if (markersRequired) {
+          auxiliaryPoints.push_back(pos);
+        }
       }
     }
     const G4ThreeVector pos(aTrajectoryPoint->GetPosition());
@@ -121,20 +128,20 @@ void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
       stepPoints.push_back(pos);
     }
   }
-  
+ 
   if (lineRequired) {
     G4Colour colour;
-    
-    if(particleDefinition==G4OpticalPhoton::OpticalPhotonDefinition()){ 
-      if(wls) //WLS photons are red
-	colour = G4Colour(1.,0.,0.);
+ 
+    if(fParticleDefinition==G4OpticalPhoton::OpticalPhotonDefinition()){
+      if(fWls) //WLS photons are red
+        colour = G4Colour(1.,0.,0.);
       else{ //Scintillation and Cerenkov photons are green
-	colour = G4Colour(0.,1.,0.);
+        colour = G4Colour(0.,1.,0.);
       }
     }
     else //All other particles are blue
       colour = G4Colour(0.,0.,1.);
-    
+ 
     G4VisAttributes trajectoryLineAttribs(colour);
     trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
     pVVisManager->Draw(trajectoryLine);
@@ -146,17 +153,12 @@ void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
     G4VisAttributes auxiliaryPointsAttribs(G4Colour(0.,1.,1.));  // Magenta
     auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
     pVVisManager->Draw(auxiliaryPoints);
-    
+
     stepPoints.SetMarkerType(G4Polymarker::circles);
     stepPoints.SetScreenSize(markerSize);
     stepPoints.SetFillStyle(G4VMarker::filled);
-    G4VisAttributes stepPointsAttribs(G4Colour(1.,1.,0.));  // Yellow.
+    G4VisAttributes stepPointsAttribs(G4Colour(1.,1.,0.));  // Yellow
     stepPoints.SetVisAttributes(&stepPointsAttribs);
     pVVisManager->Draw(stepPoints);
   }
 }
-
-
-
-
-

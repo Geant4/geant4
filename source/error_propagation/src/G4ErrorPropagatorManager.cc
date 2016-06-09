@@ -23,14 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagatorManager.cc,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
 //
 
+#include "G4ErrorPropagatorManager.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4Mag_EqRhs.hh"
@@ -39,8 +41,6 @@
 #include "G4ClassicalRK4.hh"
 #include "G4ExactHelixStepper.hh"
 #include "G4HelixExplicitEuler.hh"
-
-#include "G4ErrorPropagatorManager.hh"
 
 #include "G4EventManager.hh"
 #include "G4ErrorRunManagerHelper.hh"
@@ -58,6 +58,8 @@
 #include "G4ChordFinder.hh"
 #include "G4EquationOfMotion.hh"
 #include "G4FieldManager.hh"
+#include "G4PropagatorInField.hh"
+#include "G4RunManager.hh"
 #include "G4VParticleChange.hh"
 
 G4ErrorPropagatorManager*
@@ -106,6 +108,11 @@ G4ErrorPropagatorManager::G4ErrorPropagatorManager()
 //-----------------------------------------------------------------------
 G4ErrorPropagatorManager::~G4ErrorPropagatorManager()
 {
+  delete theEquationOfMotion;
+  delete theG4ErrorPropagationNavigator;
+  delete thePropagator;
+  delete theG4ErrorRunManagerHelper;
+  delete theG4ErrorPropagatorManager;
 }
 
 
@@ -147,6 +154,10 @@ void G4ErrorPropagatorManager::StartNavigator()
     theG4ErrorPropagationNavigator->SetVerboseLevel( verb );   
     
     transportationManager->SetNavigatorForTracking(theG4ErrorPropagationNavigator);
+    transportationManager->GetPropagatorInField()->GetIntersectionLocator()
+                         ->SetNavigatorFor(theG4ErrorPropagationNavigator);
+    G4EventManager::GetEventManager()->GetTrackingManager()->GetSteppingManager()
+                         ->SetNavigator(theG4ErrorPropagationNavigator);
     //  G4ThreeVector center(0,0,0);
     //  theG4ErrorPropagationNavigator->LocateGlobalPointAndSetup(center,0,false);
     

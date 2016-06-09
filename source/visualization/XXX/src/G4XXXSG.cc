@@ -24,15 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSG.cc,v 1.2 2006-06-29 21:27:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  10th March 2005
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines or sections marked like this require specialisation for your driver.
-
-#ifdef G4VIS_BUILD_XXXSG_DRIVER
 
 #include "G4XXXSG.hh"
 #include "G4XXXSGSceneHandler.hh"
@@ -73,5 +70,3 @@ G4VViewer* G4XXXSG::CreateViewer(G4VSceneHandler& scene,
   }
   return pView;
 }
-
-#endif

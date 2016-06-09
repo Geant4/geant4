@@ -23,18 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomRun.hh
+/// \brief Definition of the DicomRun class
 //
-// $Id: DicomRun.hh,v 1.1 2008-11-27 21:55:27 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//---------------------------------------------------------------------
-// (Purpose) 
-//    Example implementation for multi-functional-detector and 
-//   primitive scorer.
-//    This DicomRun class has collections which accumulate
-//   a event information into a run information.
-//
-//---------------------------------------------------------------------
+// $Id$
 
 #ifndef DicomRun_h
 #define DicomRun_h 1
@@ -44,7 +36,16 @@
 
 #include "G4THitsMap.hh"
 #include <vector>
-//
+
+//---------------------------------------------------------------------
+/// DicomRun class
+///
+/// Example implementation for multi-functional-detector and 
+/// primitive scorer.
+/// This DicomRun class has collections which accumulate
+/// a event information into a run information.
+//---------------------------------------------------------------------
+
 class DicomRun : public G4Run {
 
 public:
@@ -61,19 +62,19 @@ public:
   // Access methods for scoring information.
   // - Number of HitsMap for this RUN. 
   //   This is equal to number of collections.
-  G4int GetNumberOfHitsMap() const {return theRunMap.size();}
+  G4int GetNumberOfHitsMap() const {return fRunMap.size();}
   // - Get HitsMap of this RUN.
   //   by sequential number, by multifucntional name and collection name,
   //   and by collection name with full path.
-  G4THitsMap<G4double>* GetHitsMap(G4int i){return theRunMap[i];}
+  G4THitsMap<G4double>* GetHitsMap(G4int i){return fRunMap[i];}
   G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
-				  const G4String& colName);
+                                  const G4String& colName);
   G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
 
 private:
-  std::vector<G4String> theCollName;
-  std::vector<G4int> theCollID;
-  std::vector<G4THitsMap<G4double>*> theRunMap;
+  std::vector<G4String> fCollName;
+  std::vector<G4int> fCollID;
+  std::vector<G4THitsMap<G4double>*> fRunMap;
 };
 
 //

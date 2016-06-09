@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundTransitions.cc,v 1.1 2010-08-20 07:42:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // V.Ivanchenko 20.08.2010
 //
  
 #include "G4VPreCompoundTransitions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4VPreCompoundTransitions::G4VPreCompoundTransitions()
   :useNGB(false),useCEMtr(false),  

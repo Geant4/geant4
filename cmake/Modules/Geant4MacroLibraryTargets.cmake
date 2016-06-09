@@ -9,6 +9,11 @@
 # static and shared targets depending on the value of BUILD_SHARED_LIBS and
 # BUILD_STATIC_LIBS. Install targets are also created.
 
+if(__GEANT4MACROLIBRARYTARGETS_ISLOADED)
+  return()
+endif()
+set(__GEANT4MACROLIBRARYTARGETS_ISLOADED TRUE)
+
 include(CMakeMacroParseArguments)
 
 #----------------------------------------------------------------------------

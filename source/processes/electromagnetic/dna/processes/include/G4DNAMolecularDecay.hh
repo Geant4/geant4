@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMolecularDecay.hh 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -128,25 +129,3 @@ inline G4VParticleChange* G4DNAMolecularDecay::AtRestDoIt(
 
 
 #endif /* G4MOLECULARDECAYPROCESS_HH */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

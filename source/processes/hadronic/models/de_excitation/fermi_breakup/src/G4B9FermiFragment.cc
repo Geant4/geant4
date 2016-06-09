@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4B9FermiFragment.cc,v 1.7 2006-06-29 20:12:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.25 2009-10-29 16:57:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ionEffectiveCharge.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.10 2010-11-19 19:50:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -37,19 +36,22 @@
 // 16.05.07 V.Ivanchenko: rename EM builders
 // 20.04.11 V.Ivanchenko: remove extra headers of elastic builders
 //                        added FTFP/Binary ion physics 
+// 16.10.12 A.Ribon: renamed the used physics classes
 //
 //----------------------------------------------------------------------------
 //
 
 #include "QBBC.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -57,8 +59,7 @@
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4ChargeExchangePhysics.hh"
-#include "G4IonBinaryCascadePhysics.hh"
-#include "G4IonFTFPBinaryCascadePhysics.hh"
+#include "G4IonPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 QBBC::QBBC( G4int ver, const G4String&)
@@ -82,9 +83,9 @@ QBBC::QBBC( G4int ver, const G4String&)
    // Hadron Physics
   RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
 
-  RegisterPhysics( new G4QStoppingPhysics(ver) );
+  RegisterPhysics( new G4StoppingPhysics(ver) );
 
-  RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver) );
+  RegisterPhysics( new G4IonPhysics(ver) );
 
   RegisterPhysics( new G4HadronInelasticQBBC(ver));
 

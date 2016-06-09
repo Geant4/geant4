@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFluxForCylinder3D.cc,v 1.4 2010/07/22 07:23:45 taso Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSPassageCellFluxForCylinder3D
 #include "G4PSPassageCellFluxForCylinder3D.hh"
+#include "G4PhysicalConstants.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)

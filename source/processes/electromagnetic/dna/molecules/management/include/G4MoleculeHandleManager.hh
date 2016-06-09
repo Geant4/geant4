@@ -65,7 +65,7 @@ private:
         G4bool operator()(const G4Molecule* mol1, const G4Molecule* mol2) const;
     };
 
-    typedef std::map<const G4Molecule* const, G4MoleculeHandle, G4MoleculeHandleManager::CompMoleculePointer> MoleculeHandleMap;
+    typedef std::map<const G4Molecule*, G4MoleculeHandle, G4MoleculeHandleManager::CompMoleculePointer> MoleculeHandleMap;
     MoleculeHandleMap fMoleculeHandle;
 };
 

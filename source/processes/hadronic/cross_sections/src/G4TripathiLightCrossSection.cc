@@ -65,6 +65,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4TripathiLightCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4WilsonRadius.hh"
 #include "G4NucleiProperties.hh"

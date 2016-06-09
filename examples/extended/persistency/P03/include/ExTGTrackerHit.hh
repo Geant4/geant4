@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P03/include/ExTGTrackerHit.hh
+/// \brief Definition of the ExTGTrackerHit class
 //
-// $Id: ExTGTrackerHit.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ---------------------------------------------------------------------------
+// $Id$
 
 #ifndef ExTGTrackerHit_h
 #define ExTGTrackerHit_h 1
@@ -36,6 +35,8 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+
+/// Example of hit
 
 class ExTGTrackerHit : public G4VHit
 {
@@ -53,22 +54,22 @@ class ExTGTrackerHit : public G4VHit
     void Draw();
     void Print();
 
-    void SetTrackID  (G4int track)      { trackID = track; };
-    void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
-    void SetEdep     (G4double de)      { edep = de; };
-    void SetPos      (G4ThreeVector xyz){ pos = xyz; };
+    void SetTrackID  (G4int track)      { fTrackID = track; };
+    void SetChamberNb(G4int chamb)      { fChamberNb = chamb; };  
+    void SetEdep     (G4double de)      { fEdep = de; };
+    void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
       
-    G4int GetTrackID()    { return trackID; };
-    G4int GetChamberNb()  { return chamberNb; };
-    G4double GetEdep()    { return edep; };      
-    G4ThreeVector GetPos(){ return pos; };
+    G4int GetTrackID()    { return fTrackID; };
+    G4int GetChamberNb()  { return fChamberNb; };
+    G4double GetEdep()    { return fEdep; };      
+    G4ThreeVector GetPos(){ return fPos; };
       
   private:
   
-      G4int         trackID;
-      G4int         chamberNb;
-      G4double      edep;
-      G4ThreeVector pos;
+      G4int         fTrackID;
+      G4int         fChamberNb;
+      G4double      fEdep;
+      G4ThreeVector fPos;
 };
 
 // ---------------------------------------------------------------------------

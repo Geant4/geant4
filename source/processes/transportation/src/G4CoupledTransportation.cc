@@ -24,9 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.28 2011-01-05 00:59:03 asaim Exp $
+// $Id$
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
-// GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================
@@ -46,6 +45,9 @@
 // =======================================================================
 
 #include "G4CoupledTransportation.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4TransportationProcessType.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
@@ -59,20 +61,20 @@ class G4VSensitiveDetector;
 //
 // Constructor
 
-G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
+G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
   : G4VProcess( G4String("CoupledTransportation"), fTransportation ),
     fParticleIsLooping( false ),
-    fPreviousSftOrigin (0.,0.,0.),
-    fPreviousMassSafety    ( 0.0 ),
-    fPreviousFullSafety    ( 0.0 ),
+    fPreviousSftOrigin( 0.,0.,0. ),
+    fPreviousMassSafety( 0.0 ),
+    fPreviousFullSafety( 0.0 ),
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
     fUnimportant_Energy( 1 * MeV ), 
-    fNoLooperTrials(0),
+    fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fUseMagneticMoment(false),  
-    fVerboseLevel(verboseLevel)     //  ( verboseLevel ? verboseLevel : 2 )  // or 4
+    fUseMagneticMoment( false ),  
+    fVerboseLevel( verbosity )
 {
   // set Process Sub Type
   SetProcessSubType(static_cast<int>(COUPLED_TRANSPORTATION));

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2009-09-18 17:34:54 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -352,9 +351,9 @@ void RunAction::CreateFilePixels()
   G4int n1pxl   = detector->GetN1Pixels();
   G4int n2pxl   = detector->GetN2Pixels();
   G4int n1shift = detector->GetN1Shift();    
-  G4int nbEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
+  G4int noEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
                      ->GetNumberOfEventToBeProcessed();
-  File << nbEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
+  File << noEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
          << G4endl;
 }
 

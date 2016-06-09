@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.13 2006-06-29 19:14:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // ------------------------------------------------------------

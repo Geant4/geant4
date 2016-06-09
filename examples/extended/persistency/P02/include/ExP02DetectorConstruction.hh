@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P02/include/ExP02DetectorConstruction.hh
+/// \brief Definition of the ExP02DetectorConstruction class
+//
 #ifndef ExP02DetectorConstruction_H
 #define ExP02DetectorConstruction_H 1
 
@@ -31,6 +34,8 @@ class G4VPhysicalVolume;
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Element.hh"
+
+/// Detector construction
 
 class ExP02DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -45,17 +50,17 @@ class ExP02DetectorConstruction : public G4VUserDetectorConstruction
     
     // Logical volumes
     //
-    G4LogicalVolume* experimentalHall_log;
-    G4LogicalVolume* tracker_log;
-    G4LogicalVolume* calorimeterBlock_log;
-    G4LogicalVolume* calorimeterLayer_log;
+    G4LogicalVolume* fExperimentalHall_log;
+    G4LogicalVolume* fTracker_log;
+    G4LogicalVolume* fCalorimeterBlock_log;
+    G4LogicalVolume* fCalorimeterLayer_log;
 
     // Physical volumes
     //
-    G4VPhysicalVolume* experimentalHall_phys;
-    G4VPhysicalVolume* calorimeterLayer_phys;
-    G4VPhysicalVolume* calorimeterBlock_phys;
-    G4VPhysicalVolume* tracker_phys;
+    G4VPhysicalVolume* fExperimentalHall_phys;
+    G4VPhysicalVolume* fCalorimeterLayer_phys;
+    G4VPhysicalVolume* fCalorimeterBlock_phys;
+    G4VPhysicalVolume* fTracker_phys;
 };
 
 #endif

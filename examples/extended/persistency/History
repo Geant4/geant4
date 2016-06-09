@@ -5,7 +5,7 @@ $Id: History,v 1.12 2008-08-27 10:39:40 gcosmo Exp $
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-               Persistency Exapmles History file
+               Persistency Examples History file
                ---------------------------------
 
 This file should be used by the G4 example coordinator to briefly
@@ -15,6 +15,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 17th, 2012 I. Hrivnacova (exPersistency-V09-05-08)
+- Fixed .README files for artefacts from Markdown support
+- Removed/updated obsolete instructions (how to compile & link)
+
+November 15th, 2012 I. Hrivnacova (exPersistency-V09-05-07)
+- Fixes in files descriptions (for Doxygen)
+
+October 22th, 2012 I. Hrivnacova (exPersistency-V09-05-06)
+- Fixed handling GDML option in CMake build:
+  The "gdml" component is added to find_package call in G0*/CMakeLists.txt
+  examples (Ben Morgan); check on existence of Geant4_gdml_FOUND only in the
+  persistency/CMakeLists.txt
+
+October 18th, 2012 I. Hrivnacova (exPersistency-V09-05-05)
+- Adding a test for GEANT4_USE_GDML option in CMake files
+
+October 1st, 2012 I. Hrivnacova (exPersistency-V09-05-04)
+- The same version as in previous tag
+
+September 28th, 2012 I. Hrivnacova (exPersistency-V09-05-03)
+- Adding back visualization drivers in GDML CMake build and keeping
+  off only UI drivers.
+
+September 27th, 2012 I. Hrivnacova (exPersistency-V09-05-02)
+- Temporarily removed visualization from GDML CMake build
+  (causing a name clash when compiling examples on Windows)
+
+September 25th, 2012 I. Hrivnacova (exPersistency-V09-05-01)
+- Fixed P01 for renaming of the dictionary;
+  Fixed GNUmake build in P01, P02
+
+Sep 24th, 2012  Ivana Hrivnacova (exPersistency-V09-05-00)
+- Updated CMakeLists.txt files:
+  adding visualization, copying macros, install target and comment lines 
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters  
 
 Aug 27th, 2008  Gabriele Cosmo (persistencyEx-V09-01-00)
 - Added examples set for GDML plugin module.

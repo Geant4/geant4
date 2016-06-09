@@ -58,6 +58,8 @@ public:
 	G4VPhysicalVolume* Build();
 private:
 	G4VPhysicalVolume *ROPhyVol;
+        G4VPhysicalVolume *ROPhantomYDivisionPhys;
+
 	G4ThreeVector centre, halfSize;
 	G4int NumberOfVoxelsAlongX, NumberOfVoxelsAlongY, NumberOfVoxelsAlongZ;
 };

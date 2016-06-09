@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP.hh,v 1.5 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -37,6 +36,7 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 30.03.2007 G.Folger: Add quasielastic option, turned off by default
 // 25.04.2007 G.Folger: Use quasielastic by default
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -47,7 +47,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4LEPPiKBuilder.hh"
@@ -89,7 +89,7 @@ class HadronPhysicsQGSP : public G4VPhysicsConstructor
     G4LEPProtonBuilder * theLEPPro;
     G4QGSPProtonBuilder * theQGSPPro;    
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscBuilder * theMisc;
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;

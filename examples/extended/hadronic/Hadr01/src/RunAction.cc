@@ -23,12 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id: RunAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // -------------------------------------------------------------
-//
-//
-// -------------------------------------------------------------
-//      GEANT4
-//
+//  
+//    GEANT4 class file
+//    RunAction
 //
 // -------------------------------------------------------------
 
@@ -39,8 +43,6 @@
 #include "HistoManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4NistManager.hh"
-#include "G4Element.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -77,14 +79,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
+
   G4cout << "RunAction: End of run actions are started" << G4endl;
+  (HistoManager::GetPointer())->EndOfRun();
 
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 #endif
 
-  HistoManager::GetPointer()->EndOfRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

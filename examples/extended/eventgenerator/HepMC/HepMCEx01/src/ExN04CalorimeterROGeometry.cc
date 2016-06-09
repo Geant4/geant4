@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterROGeometry.cc
+/// \brief Implementation of the ExN04CalorimeterROGeometry class
+//
 #include "ExN04CalorimeterROGeometry.hh"
 #include "ExN04DummySD.hh"
 
@@ -35,7 +38,7 @@
 #include "G4Tubs.hh"
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
- 
+#include "G4SystemOfUnits.hh"
 
 ExN04CalorimeterROGeometry::ExN04CalorimeterROGeometry()
   : G4VReadOutGeometry()
@@ -64,20 +67,20 @@ G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
   //Builds the ReadOut World:
   G4Box *ROWorldBox = new G4Box("ROWorldBox", expHall_x, expHall_y, expHall_z);
   G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorldBox, dummyMat,
-						    "ROWorldLogical", 0, 0, 0);
+                                                    "ROWorldLogical", 0, 0, 0);
   G4PVPlacement *ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(),
-						 "ROWorldPhysical",
-						 ROWorldLog,
-						 0,false,0);
+                                                 "ROWorldPhysical",
+                                                 ROWorldLog,
+                                                 0,false,0);
   // Calorimeter volume:
   G4VSolid * caloROtub
     = new G4Tubs("caloROtub",caloTubs_rmin,caloTubs_rmax,
-		 caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
+                 caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
   G4LogicalVolume * caloROlog
     = new G4LogicalVolume(caloROtub,dummyMat,"caloROlogical",0,0,0);
   G4VPhysicalVolume * caloROphys
     = new G4PVPlacement(0,G4ThreeVector(),"calROphysical",caloROlog,
-			ROWorldPhys,false,0);
+                        ROWorldPhys,false,0);
 
   // -------------------------------
   // Calorimeter readout division:
@@ -85,21 +88,21 @@ G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
   // Phi division first: 48 sectors
   G4VSolid * caloROphiDivisionTub
     = new G4Tubs("caloROphiDivision", caloCell_rmin, caloCell_rmax,
-		 caloCell_dz, caloCell_sphi, caloCell_dphi);
+                 caloCell_dz, caloCell_sphi, caloCell_dphi);
   G4LogicalVolume * caloROphiDivisionLog
     = new G4LogicalVolume(caloROphiDivisionTub, dummyMat, "caloROphiDivisionLogical",0,0,0);
   G4VPhysicalVolume * caloROphiDivisionPhys
     = new G4PVReplica("caloROphiDivisionPhysical", caloROphiDivisionLog, caloROphys,
-		      kPhi, segmentsinPhi, caloCell_dphi);
+                      kPhi, segmentsinPhi, caloCell_dphi);
   // then z division: 20 slices:
   G4VSolid * caloROcellTub
     = new G4Tubs("caloROcellTub", caloRing_rmin, caloRing_rmax,
-		 caloRing_dz, caloRing_sphi, caloRing_dphi);
+                 caloRing_dz, caloRing_sphi, caloRing_dphi);
   G4LogicalVolume * caloROcellLog
     = new G4LogicalVolume(caloROcellTub, dummyMat, "caloROcellLogical",0,0,0);
 //  G4VPhysicalVolume * caloROcellPhys =
       new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
-		      kZAxis, segmentsinZ,2.*caloRing_dz);
+                      kZAxis, segmentsinZ,2.*caloRing_dz);
   
 
   //Flags the cells as sensitive .The pointer here serves

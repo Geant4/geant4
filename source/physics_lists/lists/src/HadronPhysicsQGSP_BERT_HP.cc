@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_HP.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -37,14 +36,17 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 20.06.2006 G.Folger: Bertini applies to Kaons, i.e. use SetMinEnergy instead of SetMinPionEnergy
 // 25.04.2007 G.Folger: Add code for quasielastic
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "HadronPhysicsQGSP_BERT_HP.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
@@ -52,13 +54,47 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BERT_HP);
+
 HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_BERT_HP")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP_BERT_HP")
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theHPNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)      //A.R. 26-Jul-2012 Coverity fix
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theLEPPro(0)      //A.R. 26-Jul-2012 Coverity fix
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theMisc(0)
+    , QuasiElastic(true)
 {}
 
 HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name)
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theHPNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)      //A.R. 26-Jul-2012 Coverity fix
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theLEPPro(0)      //A.R. 26-Jul-2012 Coverity fix
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theMisc(0)
+    , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSP_BERT_HP::CreateModels()
@@ -94,12 +130,12 @@ void HadronPhysicsQGSP_BERT_HP::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(9.9*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BERT_HP::~HadronPhysicsQGSP_BERT_HP() 
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBertiniNeutron;
@@ -133,6 +169,6 @@ void HadronPhysicsQGSP_BERT_HP::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

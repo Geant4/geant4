@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNAIonisation.hh
         G4DNAMolecularDecayDisplacer.hh
         G4DNAMolecularDecay.hh
+        G4DNASecondOrderReaction.hh
         G4DNAVibExcitation.hh
     SOURCES
         G4DNAAttachment.cc
@@ -74,6 +75,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNAIonisation.cc
         G4DNAMolecularDecay.cc
         G4DNAMolecularDecayDisplacer.cc
+        G4DNASecondOrderReaction.cc
         G4DNAVibExcitation.cc
     GRANULAR_DEPENDENCIES
         G4baryons

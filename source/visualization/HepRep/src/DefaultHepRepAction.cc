@@ -13,8 +13,8 @@ using namespace HEPREP;
  */
 namespace cheprep {
 
-DefaultHepRepAction::DefaultHepRepAction(string name, string expression)
-    : name(name), expression(expression) {
+DefaultHepRepAction::DefaultHepRepAction(string aName, string anExpression)
+    : name(aName), expression(anExpression) {
 }
 
 DefaultHepRepAction::~DefaultHepRepAction() {

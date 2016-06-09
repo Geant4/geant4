@@ -26,10 +26,12 @@
 #ifndef G4CrossSectionBuffer_h
 #define G4CrossSectionBuffer_h
 
-#include "G4ParticleDefinition.hh"
-#include "globals.hh"
 #include <utility>
 #include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
 class G4CrossSectionBuffer
 {
@@ -52,10 +54,10 @@ class G4CrossSectionBuffer
       return result;
     }
     
-    void push_back(G4double s, G4double x)
+    void push_back(G4double S, G4double x)
     {
       std::pair<G4double, G4double> aNew;
-      aNew.first = s;
+      aNew.first = S;
       aNew.second = x;
       theData.push_back(aNew);
     }
@@ -99,7 +101,7 @@ class G4CrossSectionBuffer
       // G4cerr << "!!!!!! "<<sqrts<<" "<<x1<<" "<<x2<<" "<<y1<<" "<<y2<<" "<<i<<G4endl;
       G4double result = y1 + (sqrts-x1) * (y2-y1)/(x2-x1);
       if(result<0) result = 0;
-      if(y1<0.01*millibarn) result = 0;
+      if(y1<0.01*CLHEP::millibarn) result = 0;
       return result;
     }
     
@@ -107,7 +109,7 @@ class G4CrossSectionBuffer
     {
       for(size_t i=0;i<theData.size(); i++)
       {
-        G4cerr << "sqrts = "<<theData[i].first<<", X = "<<theData[i].second/millibarn<<G4endl;
+        G4cerr << "sqrts = "<<theData[i].first<<", X = "<<theData[i].second/CLHEP::millibarn<<G4endl;
       }
     }
   

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.32 2009-08-11 17:24:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +55,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LossTableBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
@@ -63,6 +63,9 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Material.hh"
+#include "G4VEmModel.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -162,6 +165,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
     // initialisation of a new vector
     if(npoints < 2) { npoints = 2; }
+
+    delete (*rangeTable)[i];
     G4PhysicsLogVector* v;
     if(0 == bin0) { v = new G4PhysicsLogVector(*pv); }
     else { v = new G4PhysicsLogVector(elow, ehigh, npoints-1); }
@@ -223,6 +228,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
     G4double rlow  = (*pv)[0];
     G4double rhigh = (*pv)[npoints-1];
       
+    delete (*invRangeTable)[i];
     G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(npoints,rlow,rhigh);
     v->SetSpline(splineFlag);
 
@@ -246,10 +252,11 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
   size_t nFlags = theFlag->size();
 
   if(nCouples == nFlags && isInitialized) { return; }
+
   isInitialized = true;
 
-  //G4cout << "%%%%%% Ncouples= " << nCouples << "  FlagSize= " << nFlags 
-  //	 << "  IsInitialise= " << isInitialized << G4endl; 
+  //G4cout << "%%%%%% G4LossTableBuilder::InitialiseBaseMaterials Ncouples= " 
+  //	 << nCouples << "  FlagSize= " << nFlags << G4endl; 
 
   // variable density check
   const G4ProductionCutsTable* theCoupleTable=
@@ -312,10 +319,12 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
   /*
   for(size_t i=0; i<nCouples; ++i) {
     G4cout << "CoupleIdx= " << i << "  Flag= " <<  (*theFlag)[i] 
-	   << " tableFlag= " << table->GetFlag(i) << "  "
+	   << "  TableFlag= " << table->GetFlag(i) << "  "
 	   << theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()->GetName()
 	   << G4endl;
   }
+  G4cout << "%%%%%% G4LossTableBuilder::InitialiseBaseMaterials end" 
+	 << G4endl; 
   */
 }
 
@@ -323,13 +332,14 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
 
 void G4LossTableBuilder::InitialiseCouples()
 {
-  //G4cout << "%%%%%% InitialiseCouples= " << G4endl; 
   isInitialized = true;
 
   // variable density initialisation for the cas without tables 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t nCouples = theCoupleTable->GetTableSize();
+  //G4cout << "%%%%%% G4LossTableBuilder::InitialiseCouples() nCouples= " 
+  //	 << nCouples << G4endl; 
 
   theDensityFactor->resize(nCouples, 1.0);
   theDensityIdx->resize(nCouples, -1);
@@ -373,6 +383,100 @@ void G4LossTableBuilder::InitialiseCouples()
       }
     }
   }
+  /*  
+  for(size_t i=0; i<nCouples; ++i) {
+    G4cout << "CoupleIdx= " << i << "  Flag= " <<  (*theFlag)[i] << "  "
+	   << theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()->GetName()
+	   << "  DensityFactor= " << (*theDensityFactor)[i]
+	   << G4endl;
+  }
+  G4cout << "%%%%%% G4LossTableBuilder::InitialiseCouples() end" << G4endl; 
+  */
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4PhysicsTable* 
+G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable, 
+				       G4VEmModel* model, 
+				       const G4ParticleDefinition* part,
+				       G4double emin, G4double emax,
+				       G4bool spline)
+{
+  // check input
+  G4PhysicsTable* table = G4PhysicsTableHelper::PreparePhysicsTable(aTable);
+  if(!table) { return table; }
+  if(emin >= emax) { 
+    table->clearAndDestroy();
+    delete table;
+    table = 0;
+    return table; 
+  }
+  InitialiseBaseMaterials(table);
+
+  G4int nbins = G4int(std::log10(emax/emin) + 0.5)
+    *G4LossTableManager::Instance()->GetNumberOfBinsPerDecade();
+  if(nbins < 3) { nbins = 3; }
+
+  // Access to materials
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  G4PhysicsLogVector* aVector = 0;
+  G4PhysicsLogVector* bVector = 0;
+
+  for(size_t i=0; i<numOfCouples; ++i) {
+
+    //G4cout<< "i= " << i << " Flag=  " << GetFlag(i) << G4endl;
+
+    if (GetFlag(i)) {
+
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = 
+	theCoupleTable->GetMaterialCutsCouple(i);
+      delete (*table)[i];
+
+      // if start from zero then change the scale
+
+      const G4Material* mat = couple->GetMaterial();
+
+      G4double tmin = std::max(emin,model->MinPrimaryEnergy(mat,part));
+      if(0.0 >= tmin) { tmin = eV; }
+      G4int n = nbins + 1;
+
+      if(tmin >= emax) {
+	aVector = 0;
+      } else if(tmin > emin) {
+	G4int bin = nbins*G4int(std::log10(emax/tmin) + 0.5);
+	if(bin < 3) { bin = 3; }
+	n = bin + 1;
+	aVector = new G4PhysicsLogVector(tmin, emax, bin);
+
+      } else if(!bVector) {
+	aVector = new G4PhysicsLogVector(emin, emax, nbins);
+        bVector = aVector;
+
+      } else {
+        aVector = new G4PhysicsLogVector(*bVector);
+      }
+
+      if(aVector) {
+	aVector->SetSpline(spline);
+        for(G4int j=0; j<n; ++j) {
+          aVector->PutValue(j, model->Value(couple, part, aVector->Energy(j)));
+	}
+	if(spline) { aVector->FillSecondDerivatives(); }
+      }
+      G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
+    }
+  }
+  /*
+  G4cout << "G4LossTableBuilder::BuildTableForModel done for "
+	 << part->GetParticleName() << " and "<< model->GetName()
+	 << "  " << table << G4endl;
+  */
+  return table; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

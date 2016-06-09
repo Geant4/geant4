@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.47 2010-06-10 08:37:27 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -38,14 +37,16 @@
 #ifndef G4QNucleus_h
 #define G4QNucleus_h 1
 
+#include <utility>
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4RandomDirection.hh"
 #include "G4QCandidateVector.hh"
 #include "G4QHadronVector.hh"
 #include "G4LorentzRotation.hh"
 #include "G4QChipolino.hh"
-#include <utility>
-#include <vector>
-#include "globals.hh"
-#include "G4RandomDirection.hh"
 
 class G4QNucleus : public G4QHadron
 {
@@ -172,7 +173,7 @@ public:
 
   // Static functions
   static void SetParameters(G4double fN=.1,G4double fD=.05, G4double cP=4., G4double mR=1.,
-                            G4double nD=.8*fermi);
+                            G4double nD=.8*CLHEP::fermi);
 
   // Specific General Functions
   G4int RandomizeBinom(G4double p,G4int N);         // Randomize according to Binomial Law

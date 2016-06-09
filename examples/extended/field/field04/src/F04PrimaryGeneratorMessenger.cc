@@ -23,59 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the F04PrimaryGeneratorMessenger class
 //
 //
-
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F04PrimaryGeneratorAction.hh"
 #include "F04PrimaryGeneratorMessenger.hh"
 
-F04PrimaryGeneratorMessenger::F04PrimaryGeneratorMessenger(F04PrimaryGeneratorAction* Gun)
-  : Action(Gun)
-{ 
-  RndmCmd = new G4UIcmdWithAString("/gun/random",this);
-  RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on, off(default)");
-  RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("off");
-  RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04PrimaryGeneratorMessenger::
+                  F04PrimaryGeneratorMessenger(F04PrimaryGeneratorAction* gun)
+  : fAction(gun)
+{
+  fRndmCmd = new G4UIcmdWithAString("/gun/random",this);
+  fRndmCmd->SetGuidance("Shoot randomly the incident particle.");
+  fRndmCmd->SetGuidance("  Choice : on, off(default)");
+  fRndmCmd->SetParameterName("choice",true);
+  fRndmCmd->SetDefaultValue("off");
+  fRndmCmd->SetCandidates("on off");
+  fRndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
  
-  setxvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/xvertex",this);
-  setxvertexCmd->SetGuidance(" Set x coord. of the primary vertex.");
-  setxvertexCmd->SetParameterName("xv",true);
-  setxvertexCmd->SetDefaultValue(0.0*mm) ; 
-  
-  setyvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/yvertex",this);
-  setyvertexCmd->SetGuidance(" Set y coord. of the primary vertex.");
-  setyvertexCmd->SetParameterName("yv",true);
-  setyvertexCmd->SetDefaultValue(0.0*mm) ; 
-  
-  setzvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/zvertex",this);
-  setzvertexCmd->SetGuidance(" Set z coord. of the primary vertex.");
-  setzvertexCmd->SetParameterName("zv",true);
-  setzvertexCmd->SetDefaultValue(0.0*mm) ; 
-  
+  fSetXvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/xvertex",this);
+  fSetXvertexCmd->SetGuidance(" Set x coord. of the primary vertex.");
+  fSetXvertexCmd->SetParameterName("xv",true);
+  fSetXvertexCmd->SetDefaultValue(0.0*mm);
+ 
+  fSetYvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/yvertex",this);
+  fSetYvertexCmd->SetGuidance(" Set y coord. of the primary vertex.");
+  fSetYvertexCmd->SetParameterName("yv",true);
+  fSetYvertexCmd->SetDefaultValue(0.0*mm);
+ 
+  fSetZvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/zvertex",this);
+  fSetZvertexCmd->SetGuidance(" Set z coord. of the primary vertex.");
+  fSetZvertexCmd->SetParameterName("zv",true);
+  fSetZvertexCmd->SetDefaultValue(0.0*mm);
+
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04PrimaryGeneratorMessenger::~F04PrimaryGeneratorMessenger()
 {
-  delete RndmCmd;
-  delete setxvertexCmd;
-  delete setyvertexCmd;
-  delete setzvertexCmd;
+  delete fRndmCmd;
+  delete fSetXvertexCmd;
+  delete fSetYvertexCmd;
+  delete fSetZvertexCmd;
 }
 
-void F04PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if( command == RndmCmd )
-   { Action->SetRndmFlag(newValue);}
-  if( command == setxvertexCmd)
-   { Action->Setxvertex(setxvertexCmd->GetNewDoubleValue(newValue));}
-  if( command == setyvertexCmd)
-   { Action->Setyvertex(setyvertexCmd->GetNewDoubleValue(newValue));}
-  if( command == setzvertexCmd)
-   { Action->Setzvertex(setzvertexCmd->GetNewDoubleValue(newValue));}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04PrimaryGeneratorMessenger::
+                          SetNewValue(G4UIcommand * command,G4String newValue)
+{
+  if( command == fRndmCmd )
+   { fAction->SetRndmFlag(newValue);}
+  if( command == fSetXvertexCmd)
+   { fAction->SetXvertex(fSetXvertexCmd->GetNewDoubleValue(newValue));}
+  if( command == fSetYvertexCmd)
+   { fAction->SetYvertex(fSetYvertexCmd->GetNewDoubleValue(newValue));}
+  if( command == fSetZvertexCmd)
+   { fAction->SetZvertex(fSetZvertexCmd->GetNewDoubleValue(newValue));}
 }

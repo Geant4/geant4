@@ -53,7 +53,6 @@ public:
   virtual ~G4ProtonField();
 
 private:
-
   G4ProtonField(const  G4ProtonField &right);
   const G4ProtonField & operator=(const G4ProtonField & right);
   int operator==(const G4ProtonField & right) const;

@@ -13,15 +13,80 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-21)
-- G4AntiNuclElastic - bug is fixed, Plab/baryon was inserted
+
+21 September 2012 - G.Cosmo (hadr-cohe-V09-05-11)
+-------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+18 September 2012 - M.Kelsey (hadr-cohe-V09-05-10)
+--------------------------------------------------
+- G4ChargeExchangeProcess.cc:  Follow migration of G4HadronicProcess
+  inheritance and ctor signature.
+- Requires co-working base tag hadr-man-V09-05-16
+
+17 August 2012 - W.Pokorski (hadr-cohe-V09-05-09)
+--------------------------------------------
+- removed obsolete CHIPS includes from CMake file
+
+17 June 2012 - W.Pokorski (hadr-cohe-V09-05-08)
+--------------------------------------------
+- using factory mechanism for Chips cross sections
+
+12 June 2012 - A.Ribon (hadr-cohe-V09-05-07)
+--------------------------------------------
+- fixed warnings of shadowed variables.
+
+26 March 2012 - W.Pokorski (hadr-cohe-V09-05-06)
 ------------------------------------------------------
-24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-20)
-- G4AntiNuclElastic - bug at very low energy is fixed
+- added G4ChipsElasticModel class to use the extracted Chips XS classes from 
+  hardonic/cross_sections
+
+6 May 2012, Gunter Folger  ( ..trunk.. )
+- revert changes by Mikhail ( rev. r58260, r58258 )
+
+28 April 2012 - M.Kosov (hadr-cohe-V09-05-05)
+- hadronic/models/chiral_inv_phase_space moved to hadronic/chips
+
+20 April 2012 - A.Ribon (hadr-cohe-V09-05-04)
 ------------------------------------------------------
-31 October 2011 - A.Galoyan (hadr-cohe-V09-04-19)
--  G4AntiNuclElastic - antiProton-Proton elastic scattering is improved 
+- G4ElasticHadrNucleusHE - fixed compilation error on Windows.
+
+20 April 2012 - A.Ribon (hadr-cohe-V09-05-03)
+------------------------------------------------------
+- G4ElasticHadrNucleusHE - minor fix of a compilation warning.
+
+19 April 2012 - A.Ribon (hadr-cohe-V09-05-02)
+------------------------------------------------------
+- G4ElasticHadrNucleusHE - fixed reproducibility violation due to
+    cashing of cross sections based on the target element, whereas
+    they depend also on the isotope. Rather than using the first
+    isotope encountered for an element, the natural average is used. 
+
+26 March 2012 - V.Ivanchenko (hadr-cohe-V09-05-01)
+------------------------------------------------------
+- G4HadronElastic - fixed units in cout
+
+1 March 2012 - V.Ivanchenko (hadr-cohe-V09-05-00)
+------------------------------------------------------
+- G4AntiNuclElastic - fixed Coverity warning
+
+30 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-22)
 --------------------------------------------------------------
+- G4AntiNuclElastic - bug is fixed, check of |cosTheta|<1 introduced.
+
+24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-21)
+--------------------------------------------------------------
+- G4AntiNuclElastic - bug is fixed, Plab/baryon was inserted
+
+24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-20)
+--------------------------------------------------------------
+- G4AntiNuclElastic - bug at very low energy is fixed
+
+31 October 2011 - A.Galoyan (hadr-cohe-V09-04-19)
+--------------------------------------------------------------
+-  G4AntiNuclElastic - antiProton-Proton elastic scattering is improved 
+
 21 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-18)
 ------------------------------------------------------
 - G4CHIPSElasticXS - used G4HadronicException; added cross sections for neutral

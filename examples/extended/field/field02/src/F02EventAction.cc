@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02EventAction.cc
+/// \brief Implementation of the F02EventAction class
 //
-// $Id: F02EventAction.cc,v 1.7 2010-06-06 04:55:59 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "F02EventAction.hh"
-
 #include "F02RunAction.hh"
-
 #include "F02CalorHit.hh"
 #include "F02EventActionMessenger.hh"
 
@@ -44,25 +42,27 @@
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
 #include "G4SDManager.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
+#include "G4ios.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-F02EventAction::F02EventAction(F02RunAction* F02RA)
- : calorimeterCollID(-1), eventMessenger(0),
-   runaction(F02RA), verboselevel(0),
-   drawFlag("all"), printModulo(10000)
+F02EventAction::F02EventAction(F02RunAction* action)
+ : fCalorimeterCollID(-1), 
+   fEventMessenger(0),
+   fRunAction(action), 
+   fVerboseLevel(0),
+   fPrintModulo(10000)
 {
-  eventMessenger = new F02EventActionMessenger(this);
+  fEventMessenger = new F02EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02EventAction::~F02EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,16 +70,16 @@ F02EventAction::~F02EventAction()
 void F02EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
      
-  if(verboselevel>1)
+  if (fVerboseLevel>1)
     G4cout << "<<< Event  " << evtNb << " started." << G4endl;
     
-  if (calorimeterCollID==-1)
+  if (fCalorimeterCollID==-1)
     {
-     G4SDManager * SDman = G4SDManager::GetSDMpointer();
-     calorimeterCollID = SDman->GetCollectionID("CalCollection");
+     G4SDManager * sdManager = G4SDManager::GetSDMpointer();
+     fCalorimeterCollID = sdManager->GetCollectionID("CalCollection");
     } 
 }
 
@@ -87,35 +87,20 @@ void F02EventAction::BeginOfEventAction(const G4Event* evt)
 
 void F02EventAction::EndOfEventAction(const G4Event* evt)
 {  
-  if(verboselevel>0)
+  if (fVerboseLevel>0)
     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 
   // save rndm status
-  if (runaction->GetRndmFreq() == 2)
+  if (fRunAction->GetRndmFreq() == 2)
     { 
      CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");   
      G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
+     if (evtNb%fPrintModulo == 0)
        { 
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
         CLHEP::HepRandom::showEngineStatus();
        }
     }     
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4int F02EventAction::GetEventno()
-{
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
-  return evno ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F02EventAction::setEventVerbose(G4int level)
-{
-  verboselevel = level ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

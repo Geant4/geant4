@@ -20,6 +20,41 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+8th August 2012  John Allison  (vis-HepRep-V09-05-05 and 06)
+- G4HepRepSceneHandler.cc: Intercepted 2D primitives.
+
+5th July 2012  Gabriele Cosmo  (vis-HepRep-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+10th June 2012  John Allison  (vis-HepRep-V09-05-03)
+- Fixed shadowing in the following files:
+  o include/cheprep/AbstractXMLWriter.h
+  o src/IndentPrintWriter.cc
+  o src/XMLWriter.cc
+  o src/DefaultHepRepAttDef.cc
+  o src/DefaultHepRepTreeID.cc
+  o src/ZipOutputStreamBuffer.cc
+  o src/DeflateOutputStreamBuffer.cc
+  o src/DefaultHepRepInstanceTree.cc
+  o src/DefaultHepRepAttValue.cc
+  o src/GZIPOutputStreamBuffer.cc
+  o src/DefaultHepRepPoint.cc
+  o src/BHepRepWriter.cc
+  o src/DefaultHepRepAction.cc
+  o src/G4HepRepSceneHandler.cc
+
+8th June 2012  John Allison  (vis-HepRep-V09-05-02)
+- G4HepRepFileSceneHandler.cc: Shadow clean.
+
+23rd May 2012  John Allison  (vis-HepRep-V09-05-01)
+- Health Check 2012: Migrated (see management/History):
+  o G4HepRepFileSceneHandler::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
+28th February 2012  John Allison  (vis-HepRep-V09-05-00)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
 28th October 2011  Joseph Perl  (vis-HepRep-V09-04-03)
 - Add /vis/heprep/scale and /vis/heprep/center
 

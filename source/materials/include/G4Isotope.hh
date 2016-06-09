@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.21 2008-11-14 15:14:24 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -87,15 +86,23 @@ class G4Isotope
     // Retrieval methods
     //
     const G4String& GetName()  const {return fName;}
+
+    // Atomic number 
     G4int    GetZ()     const {return fZ;}
+
+    // Number of nucleous
     G4int    GetN()     const {return fN;}
+
+    // Atomic mass of mole in Geant4 units with electron shell 
     G4double GetA()     const {return fA;}
+
+    // Isomer level      
     G4int    Getm()     const {return fm;}
         
     G4int GetCountUse() const {return fCountUse;}
     
     static  
-    G4Isotope* GetIsotope(G4String name, G4bool warning=false);
+    G4Isotope* GetIsotope(const G4String& name, G4bool warning=false);
     
     static const
     G4IsotopeTable* GetIsotopeTable();
@@ -138,7 +145,7 @@ class G4Isotope
     G4String fName;              // name of the Isotope
     G4int    fZ;                 // atomic number
     G4int    fN;                 // number of nucleons
-    G4double fA;                 // mass of a mole
+    G4double fA;                 // atomic mass of a mole
     G4int    fm;                 // isomer level
         
     G4int    fCountUse;          // nb of elements which use this isotope

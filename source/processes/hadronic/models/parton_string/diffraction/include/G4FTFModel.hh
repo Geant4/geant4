@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.12 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Class Description
@@ -64,20 +64,20 @@ class G4FTFModel : public G4VPartonStringModel
 {
 
   public:
-      G4FTFModel();
-      G4FTFModel(G4double , G4double , G4double );
-      G4FTFModel(G4DiffractiveExcitation * anExcitation);
-      G4FTFModel(const G4FTFModel &right);
+      G4FTFModel(const G4String& modelName = "FTF");
+      //G4FTFModel(G4double , G4double , G4double );
+      //G4FTFModel(G4DiffractiveExcitation * anExcitation);
       ~G4FTFModel();
+  private:
+      G4FTFModel(const G4FTFModel &right);
       const G4FTFModel & operator=(const G4FTFModel &right);
-
       int operator==(const G4FTFModel &right) const;
       int operator!=(const G4FTFModel &right) const;
-
+  public:
       void Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile);
       G4ExcitedStringVector * GetStrings();
       G4V3DNucleus * GetWoundedNucleus() const;
-
+      virtual void ModelDescription(std::ostream&) const;
 
   protected:
   

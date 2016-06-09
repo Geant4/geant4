@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2010-09-08 09:12:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -51,41 +53,41 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:pPhysicsList(pPhys)
+:fPhysicsList(pPhys)
 {   
-  eCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setMaxE",this);  
-  eCmd->SetGuidance("Set max energy deposit");
-  eCmd->SetParameterName("Emax",false);
-  eCmd->SetUnitCategory("Energy");
-  eCmd->SetRange("Emax>0.0");
-  eCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fECmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setMaxE",this);  
+  fECmd->SetGuidance("Set max energy deposit");
+  fECmd->SetParameterName("Emax",false);
+  fECmd->SetUnitCategory("Energy");
+  fECmd->SetRange("Emax>0.0");
+  fECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ebCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsE",this);  
-  ebCmd->SetGuidance("Set number of bins in energy.");
-  ebCmd->SetParameterName("Ebins",false);
-  ebCmd->SetRange("Ebins>0");
-  ebCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fEBCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsE",this);  
+  fEBCmd->SetGuidance("Set number of bins in energy.");
+  fEBCmd->SetParameterName("Ebins",false);
+  fEBCmd->SetRange("Ebins>0");
+  fEBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  cbCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsCl",this);  
-  cbCmd->SetGuidance("Set max number of clusters.");
-  cbCmd->SetParameterName("Cbins",false);
-  cbCmd->SetRange("Cbins>0");
-  cbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fCBCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsCl",this);  
+  fCBCmd->SetGuidance("Set max number of clusters.");
+  fCBCmd->SetParameterName("Cbins",false);
+  fCBCmd->SetRange("Cbins>0");
+  fCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
-  pListCmd->SetGuidance("Add modula physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);  
+  fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
+  fListCmd->SetGuidance("Add modula physics list.");
+  fListCmd->SetParameterName("PList",false);
+  fListCmd->AvailableForStates(G4State_PreInit);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete eCmd;
-  delete ebCmd;
-  delete cbCmd;
-  delete pListCmd;
+  delete fECmd;
+  delete fEBCmd;
+  delete fCBCmd;
+  delete fListCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,17 +96,17 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
   HistoManager* man = HistoManager::GetPointer();
-  if( command == eCmd )
-   { man->SetMaxEnergy(eCmd->GetNewDoubleValue(newValue));}
+  if( command == fECmd )
+   { man->SetMaxEnergy(fECmd->GetNewDoubleValue(newValue)); }
      
-  if( command == ebCmd )
-   { man->SetNumberBins(ebCmd->GetNewIntValue(newValue));}
+  if( command == fEBCmd )
+   { man->SetNumberBins(fEBCmd->GetNewIntValue(newValue)); }
      
-  if( command == cbCmd )
-   { man->SetNumberBinsCluster(cbCmd->GetNewIntValue(newValue));}
+  if( command == fCBCmd )
+   { man->SetNumberBinsCluster(fCBCmd->GetNewIntValue(newValue)); }
 
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
+  if( command == fListCmd )
+   { fPhysicsList->AddPhysicsList(newValue); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

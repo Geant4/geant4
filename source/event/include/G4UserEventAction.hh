@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.hh,v 1.6 2006-06-29 18:09:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //
@@ -52,8 +51,8 @@ class G4Event;
 class G4UserEventAction 
 {
   public:
-      G4UserEventAction() {;}
-      virtual ~G4UserEventAction() {;}
+      G4UserEventAction();
+      virtual ~G4UserEventAction();
       inline void SetEventManager(G4EventManager* value)
       { fpEventManager = value; }
   public: // with description

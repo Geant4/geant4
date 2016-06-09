@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 17, 2012 - I.Hrivnacova - fieldex03-V09-05-00
+-----------------------------
+- Applied coding guidelines, code clean-up
+
 August 16th, 2010 H.Kurashige - fieldex03-V09-03-04
 -----------------------------
 - Removed inclusion of G4ParticleWithCuts header.

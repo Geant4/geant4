@@ -23,43 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2007-12-10 16:28:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "DetectorConstruction.hh"
+#include "G4Step.hh"
 #include "RunAction.hh"
-#include "G4SteppingManager.hh"
-#include "G4VProcess.hh"
-#include "G4ParticleTypes.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,RunAction* RuAct):detector(det), runAction(RuAct)
+SteppingAction::SteppingAction(RunAction* RuAct):fRunAction(RuAct)
 {}
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 SteppingAction::~SteppingAction()
 {}
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if (edep <= 0.) return;
+  if (edep <= 0.) { return; }
  
   //Bragg curve
-  G4StepPoint* prePoint  = aStep->GetPreStepPoint();
-  G4StepPoint* postPoint = aStep->GetPostStepPoint();
-   
-  G4double x = (prePoint->GetPosition().x() + postPoint->GetPosition().x()) * 0.5;
-  x += runAction->GetOffsetX();
-  runAction->FillHisto(0, x/mm , edep);
+  G4double x = aStep->GetPreStepPoint()->GetPosition().x();
+  G4double dx = aStep->GetPostStepPoint()->GetPosition().x() - x;
+  x += dx*G4UniformRand() - fRunAction->GetOffsetX();
+  fRunAction->FillHisto(0, x, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

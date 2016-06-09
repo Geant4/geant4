@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.22 2011-01-07 09:47:23 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -33,6 +32,7 @@
 
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredViewer.hh"
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
@@ -170,6 +170,17 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameter->SetDefaultValue("ns");
   fpCommandEndTime->SetParameter(parameter);
 
+  fpCommandEventsDrawInterval =
+    new G4UIcmdWithAnInteger("/vis/ogl/set/eventsDrawInterval", this);
+  fpCommandEventsDrawInterval->SetGuidance
+    ("Set number of events allowed in drawing pipeline - speeds drawing");
+  fpCommandEventsDrawInterval->SetGuidance
+    ("By default, the screen is updated at the end of every event."
+     "\nAllowing OpenGL to buffer several events can make a big improvement"
+     "\nin drawing speed.");
+  fpCommandEventsDrawInterval->SetParameterName("interval", omitable = true);
+  fpCommandEventsDrawInterval->SetDefaultValue(1);
+
   fpCommandFade = new G4UIcmdWithADouble("/vis/ogl/set/fade", this);
   fpCommandFade->SetGuidance
     ("0: no fade; 1: maximum fade with time within range.");
@@ -251,6 +262,7 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpCommandPrintFilename;
   delete fpCommandPrintEPS;
   delete fpCommandFade;
+  delete fpCommandEventsDrawInterval;
   delete fpCommandEndTime;
   delete fpCommandDisplayListLimit;
   delete fpCommandDisplayLightFront;
@@ -458,6 +470,14 @@ void G4OpenGLViewerMessenger::SetNewValue
            << G4endl;
     return;
   }
+
+  if (command == fpCommandEventsDrawInterval)
+    {
+      G4int eventsDrawInterval =
+	fpCommandEventsDrawInterval->GetNewIntValue(newValue);
+      pOGLSceneHandler->SetEventsDrawInterval(eventsDrawInterval);
+      return;
+    }
 
   G4OpenGLStoredSceneHandler* pOGLSSceneHandler =
     dynamic_cast<G4OpenGLStoredSceneHandler*>(pViewer->GetSceneHandler());

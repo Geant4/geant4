@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysicsTableHelper.cc,v 1.8 2010-12-23 06:00:42 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------

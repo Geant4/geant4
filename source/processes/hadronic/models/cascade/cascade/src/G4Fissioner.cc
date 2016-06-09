@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fissioner.cc,v 1.38 2010-12-15 07:41:07 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100318  M. Kelsey -- Bug fix setting mass with G4LV
@@ -42,6 +41,7 @@
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110801  M. Kelsey -- Replace constant-size std::vector's w/C arrays
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20120517  A. Ribon  -- Removed static in local vectors for reproducibility
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -105,8 +105,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   
   TEM += DTEM;
   
-  static G4double AL1[2] = { -0.15, -0.15 };
-  static G4double BET1[2] = { 0.05, 0.05 };
+  G4double AL1[2] = { -0.15, -0.15 };
+  G4double BET1[2] = { 0.05, 0.05 };
 
   G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
   

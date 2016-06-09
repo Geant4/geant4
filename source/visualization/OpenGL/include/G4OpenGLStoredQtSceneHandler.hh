@@ -45,12 +45,17 @@ public:
   virtual ~G4OpenGLStoredQtSceneHandler ();
 
   // Two virtual functions for extra processing in a sub-class, for
-  // example, to make a display tree.
-  void ExtraPOProcessing(size_t currentPOListIndex);
-  void ExtraTOProcessing(size_t currentTOListIndex);
+  // example, to make a display tree.  They are to return true if the
+  // visible object uses gl commands for drawing.  This is
+  // predominantly true; a notable exception is Qt text.  In that
+  // case, a display list does not need to be created; all relevant
+  // information is assumed to be stored in the PO/TOList.
+  G4bool ExtraPOProcessing(const G4Visible&, size_t currentPOListIndex);
+  G4bool ExtraTOProcessing(const G4Visible&, size_t currentTOListIndex);
 
   void ClearStore ();
   void ClearTransientStore ();
+  void SetScene(G4Scene*);
 };
 
 #endif

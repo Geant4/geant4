@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc,v 1.5 2009-11-12 12:57:15 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 Class file
 //
@@ -42,6 +41,7 @@
 // Provides some basic polarization transformation routines.
 //
 #include "G4PolarizationHelper.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4StokesVector.hh"
 
 

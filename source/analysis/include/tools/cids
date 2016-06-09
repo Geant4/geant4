@@ -1,0 +1,58 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_cids
+#define tools_cids
+
+#include "cid"
+
+#include <string>
+#include "typedefs" //byte
+
+namespace tools {
+
+inline cid _cid(byte)           {return 1;}
+inline cid _cid(char)           {return 2;}
+inline cid _cid(unsigned short) {return 3;}
+inline cid _cid(short)          {return 4;}
+inline cid _cid(unsigned int)   {return 5;}
+inline cid _cid(int)            {return 6;}
+inline cid _cid(float)          {return 7;}
+inline cid _cid(double)         {return 8;}
+inline cid _cid(bool)           {return 9;}
+
+// not compiler types :
+inline cid _cid(uint64)             {return 10;}
+inline cid _cid(int64)              {return 11;}
+inline cid _cid(const std::string&) {return 12;}
+inline cid _cid(fits_bit)           {return 13;}
+inline cid _cid(csv_time)           {return 14;}
+
+//NOTE : avoid time_t which is defined in general as a long
+//       and is then ambiguous relative to int/int64.
+
+//NOTE : if adding some, it must not exceed 20. Else, you have to change
+//       the below for std::vector.
+
+}
+
+#include <vector>
+
+namespace tools {
+
+// For rntuple and rroot::ntuple::column_element.
+// The read::icolumn<T> needs a _cid(T) with T :
+//   std::vector< [basic_type, std::vector<basic_type>] >
+
+template <class T>
+inline cid _cid(const std::vector<T>&) {return 20+_cid(T());}
+
+// Then : cid for std::vector< std::vector<T> > is going to be :
+//   20+_cid(std::vector<T>) = 2*20+_cid(T)
+
+//WARNING : rroot/cids start at 100.
+//WARNING : rroot/geo_cids start at 1000.
+
+}
+
+#endif

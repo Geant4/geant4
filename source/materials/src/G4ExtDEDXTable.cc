@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExtDEDXTable.cc,v 1.6 2010-12-24 12:23:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -407,34 +406,42 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
 
 // #########################################################################
 
-G4bool G4ExtDEDXTable::RetrievePhysicsTable(
-              const G4String& fileName  // File name
-				             ) { 
-
+G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName) 
+{ 
   std::ifstream ifilestream;
-  ifilestream.open( fileName, std::ios::in );
+  ifilestream.open( fileName, std::ios::in|std::ios::binary );
   if( ! ifilestream ) {
 #ifdef G4VERBOSE
-    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	   << " Cannot open file "<< fileName 
 	   << G4endl;
 #endif
     return false;
   }   
 
-  std::string::size_type nmbVectors;
+  //std::string::size_type nmbVectors;
+  G4int nmbVectors;
   ifilestream >> nmbVectors;
+  if( ifilestream.fail() ) { 
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
+	   << " File content of " << fileName << " ill-formated." 
+	   << G4endl;     
+    ifilestream.close(); 
+    return false; 
+  }
 
-  if(nmbVectors == std::string::npos) {
+  //  if(nmbVectors == std::string::npos) {
+  /*
+  if(nmbVectors <= 0) {
 #ifdef G4VERBOSE
-    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	   << " The file is corrupted " << G4endl;
 #endif
     return false;
   }  
-
-  size_t nm = size_t(nmbVectors);
-  for(size_t i = 0; i<nm; ++i) {
+  */
+  //size_t nm = size_t(nmbVectors);
+  for(G4int i = 0; i<nmbVectors; ++i) {
 
     G4String line = "";
     while( line.empty() ) {

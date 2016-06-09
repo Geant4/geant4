@@ -34,7 +34,6 @@
 # <<END-copyright>>
 */
 #include <string.h>
-#include <math.h>
 
 #include <tpia_target.h>
 #include <tpia_misc.h>

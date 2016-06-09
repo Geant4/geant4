@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGS_BIC.hh,v 1.2 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -44,7 +43,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4BinaryPiKBuilder.hh"
@@ -89,7 +88,7 @@ class HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
     G4QGSBinaryProtonBuilder * theQGSBinaryPro; 
     G4BinaryProtonBuilder * theBinaryPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscBuilder * theMisc;
     
     G4bool QuasiElastic;
 };

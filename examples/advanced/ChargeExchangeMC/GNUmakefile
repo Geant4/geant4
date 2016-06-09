@@ -6,7 +6,7 @@ CPPFLAGS += -DCEXMC_PROG_NAME=\"$(name)\"
 
 # if CEXMC_USE_PERSISTENCY is 'yes' then run and events data can be read and
 # written; requires boost::serialize headers and library
-CEXMC_USE_PERSISTENCY := yes
+CEXMC_USE_PERSISTENCY := no
 # if CEXMC_USE_CUSTOM_FILTER is 'yes' then Custom filter can be used for
 # existing events data; requires boost::spirit 2.x headers. Notice: if
 # CEXMC_USE_PERSISTENCY is not 'yes' then Custom Filter will not be used anyway

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SamplingPostStepAction.cc,v 1.3 2008-04-21 09:10:29 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -79,10 +78,10 @@ void G4SamplingPostStepAction::DoIt(const G4Track& aTrack,
     os << "Sampler returned nw = "
        << nw
        << "\n";
-    G4String m = os.str();
+    G4String msg = os.str();
     
     G4Exception("G4SamplingPostStepAction::DoIt()",
-                "InvalidCondition", FatalException, m);
+                "InvalidCondition", FatalException, msg);
   }
 }
 

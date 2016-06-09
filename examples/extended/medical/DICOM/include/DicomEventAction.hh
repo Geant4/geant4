@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomEventAction.hh
+/// \brief Definition of the DicomEventAction class
+//
 // The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//      *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca
 //      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
@@ -55,10 +58,10 @@ public:
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event* anEvent);
 
-  void SetDrawFlag (G4String val) { drawFlag = val; }
+  void SetDrawFlag (G4String val) { fDrawFlag = val; }
     
 private:
-  G4String drawFlag;
+  G4String fDrawFlag;
 };
 #endif
 

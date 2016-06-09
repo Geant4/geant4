@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.34 2010-08-10 15:47:42 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -54,9 +53,11 @@
 #ifndef G4ParticleDefinition_h
 #define G4ParticleDefinition_h 1
 
+#include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
 
 class G4ProcessManager;
 class G4DecayTable;

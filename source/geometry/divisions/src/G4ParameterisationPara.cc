@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.13 2010-11-10 09:16:03 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4ParameterisationPara Implementation file
 //
@@ -38,6 +37,7 @@
 
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"

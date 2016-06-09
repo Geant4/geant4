@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_DEEXCITATION_HH
 #define G4CASCADE_DEEXCITATION_HH
-// $Id: G4CascadeDeexcitation.hh,v 1.4 2010-12-15 07:39:36 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.

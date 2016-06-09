@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc,v 1.8 2010-12-27 17:45:12 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Author: Sebastien Incerti
@@ -43,6 +42,8 @@
 // 30 May 2011   V Ivanchenko Migration to model design for deexcitation
 
 #include "G4LivermoreComptonModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"
@@ -61,7 +62,8 @@ using namespace std;
 
 G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),scatterFunctionData(0),
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   scatterFunctionData(0),
    crossSectionHandler(0),fAtomDeexcitation(0)
 {
   lowEnergyLimit = 250 * eV; 
@@ -213,9 +215,9 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
   G4int Z = (G4int)elm->GetZ();
 
-  G4double epsilon0 = 1. / (1. + 2. * e0m);
-  G4double epsilon0Sq = epsilon0 * epsilon0;
-  G4double alpha1 = -std::log(epsilon0);
+  G4double epsilon0Local = 1. / (1. + 2. * e0m);
+  G4double epsilon0Sq = epsilon0Local * epsilon0Local;
+  G4double alpha1 = -std::log(epsilon0Local);
   G4double alpha2 = 0.5 * (1. - epsilon0Sq);
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
@@ -231,7 +233,7 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
 	{
-	  // std::pow(epsilon0,G4UniformRand())
+	  // std::pow(epsilon0Local,G4UniformRand())
 	  epsilon = std::exp(-alpha1 * G4UniformRand());  
 	  epsilonSq = epsilon * epsilon;
 	}
@@ -303,8 +305,12 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 	  photonE = -1.;
 	}
     } while ( iteration <= maxDopplerIterations && 
-	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
-  
+
+// JB : corrected the following condition
+//	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
+
+	     (photonE > eMax ) );
+    
   // End of recalculation of photon energy with Doppler broadening
   // Revert to original if maximum number of iterations threshold has been reached
 

@@ -39,6 +39,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4THitsMap.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

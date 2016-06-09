@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.2 2010-06-02 09:08:25 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QElectronNuclearCrossSection for gamma+A cross sections
@@ -45,6 +44,7 @@
 //#define sdebug
 
 #include "G4QElectronNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4bool    G4QElectronNuclearCrossSection::onlyCS=true;// Flag to calculate only CS
@@ -2613,16 +2613,16 @@ G4int G4QElectronNuclearCrossSection::GetFunctions(G4double  a, G4double* x,
       G4int     k1=k-1;
       G4double  xi=A[k1];
       G4double   b=(a-xi)/(A[k]-xi);
-      for(G4int m=0; m<nE; m++)
+      for(G4int j=0; j<nE; j++)
       {
-        G4double xi=P0[k1][m];
-        x[m]=xi+(P0[k][m]-xi)*b;
-        G4double yi=P1[k1][m];
-        y[m]=yi+(P1[k][m]-yi)*b;
-        G4double zi=P2[k1][m];
-        z[m]=zi+(P2[k][m]-zi)*b;
+        xi=P0[k1][j];
+        x[j]=xi+(P0[k][j]-xi)*b;
+        G4double yi=P1[k1][j];
+        y[j]=yi+(P1[k][j]-yi)*b;
+        G4double zi=P2[k1][j];
+        z[j]=zi+(P2[k][j]-zi)*b;
 #ifdef pdebug
-        G4cout<<"G4QElNucCroSect::GetFunctions:inter A="<<a<<",i="<<m<<",J1="<<x[k]<<",J2="
+        G4cout<<"G4QElNucCroSect::GetFunctions:inter A="<<a<<",i="<<j<<",J1="<<x[k]<<",J2="
               <<y[k]<<",J3="<<z[k]<<G4endl;
 #endif
       }

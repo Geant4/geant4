@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: field04.cc,v 1.12 2010-10-25 00:49:58 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file field/field04/field04.cc
+/// \brief Main program of the field/field04 example
 //
 //
 // --------------------------------------------------------------
+//
 //      GEANT 4 - Example F04
 //
 // --------------------------------------------------------------
@@ -70,7 +70,7 @@
 // argv[0] is always the name of the program
 // argv[1] points to the first argument, and so on
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   G4String physName = "QGSP_BERT_EMV";
 
@@ -93,12 +93,10 @@ int main(int argc,char** argv)
          G4cout << "Physics List used is " <<  physName << G4endl;
          break;
        case ':':       /* -p without operand */
-         fprintf(stderr, 
-                         "Option -%c requires an operand\n", optopt);
+         fprintf(stderr,"Option -%c requires an operand\n", optopt);
          break;
        case '?':
-         fprintf(stderr,
-                         "Unrecognised option: -%c\n", optopt);
+         fprintf(stderr,"Unrecognised option: -%c\n", optopt);
      }
   }
 #endif
@@ -106,7 +104,7 @@ int main(int argc,char** argv)
   // My Verbose output class
 
   G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);
-  
+
   // Construct the default run manager
 
   G4RunManager * runManager = new G4RunManager;
@@ -117,7 +115,7 @@ int main(int argc,char** argv)
 
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new F04PhysicsList(physName));
-  
+
 #ifdef G4VIS_USE
 
   // visualization manager
@@ -127,7 +125,7 @@ int main(int argc,char** argv)
 
 #endif
 
-  // Set mandatory user action class 
+  // Set mandatory user action class
 
   runManager->SetUserAction( new F04PrimaryGeneratorAction(detector) );
 
@@ -140,9 +138,11 @@ int main(int argc,char** argv)
   runManager->SetUserAction( new F04SteppingAction() );
   runManager->SetUserAction( new F04StackingAction() );
 
-  // Get the pointer to the User Interface manager 
+  // runManager->Initialize();
 
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+  // Get the pointer to the User Interface manager
+
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
 #ifndef WIN32
   G4int optmax = argc;
@@ -159,7 +159,7 @@ int main(int argc,char** argv)
   }
 #else  // Simple UI for Windows runs, no possibility of additional arguments
   if (argc!=1)
-  { 
+  {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UImanager->ApplyCommand(command+fileName);
@@ -170,7 +170,7 @@ int main(int argc,char** argv)
 #ifdef G4UI_USE
      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-     UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
      ui->SessionStart();
      delete ui;

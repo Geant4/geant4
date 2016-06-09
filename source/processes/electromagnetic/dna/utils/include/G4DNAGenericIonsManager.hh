@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.hh,v 1.4 2009-06-10 13:32:58 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
  #define  G4DNAGENERICIONSMANAGER_HH 1

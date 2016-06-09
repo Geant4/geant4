@@ -21,17 +21,18 @@
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate conv
+/process/inactivate Rayl
 #
 /testem/det/setField 1 tesla
 #
 /gun/particle e-
 /gun/energy 9.9994890009 GeV
+#
 # set up histos.  A reasonable choice for the upper limits is about 5*Ecr and 10*MeanFreePath
-/testem/histo/setHisto 1 100 0   400 keV	#SynRad Energy
-/testem/histo/setHisto 2 100 0   400 keV	#SynRad Power
-/testem/histo/setHisto 3 100 0   1.6 m		#Path Length
-/testem/histo/setFileName testem16
-/testem/histo/setFileType hbook
+/analysis/setFileName run01
+/analysis/h1/set 1 100 0   400 keV	#SynRad Energy
+/analysis/h1/set 2 100 0   400 keV	#SynRad Power
+/analysis/h1/set 3 100 0   1.6 m	#Path Length
 #
 # next would be 30 degree angle  sin 30deg = 0.5  cos 30 deg = 0.866025403
 #/gun/direction 0.5 0 0.866025403

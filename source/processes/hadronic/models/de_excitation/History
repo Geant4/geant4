@@ -13,20 +13,100 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21 September 2012 Gabriele Cosmo (hadr-deex-V09-05-11)
+------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+11 August 2012 Vladimir Ivanchenko (hadr-deex-V09-05-10)
+----------------------------------------------------------
+- G4DiscreteGammaTransition - minor cleanup
+
+09 August 2012 Vladimir Ivanchenko (hadr-deex-V09-05-09)
+----------------------------------------------------------
+- G4DiscreteGammaTransition - fixed algorithm of selection of
+    discrete transition (bug #1338) - restore transition
+    to the ground state in gamma+C12 reaction 
+
+06 July 2012 Vladimir Ivanchenko (hadr-deex-V09-05-08)
+----------------------------------------------------------
+- Fixed remaining shadowing and Coverity warnings in
+  G4WilsonAblationModel, G4NeutronRadCapture, G4StatMFMacroTemperature
+
+12 June 2012 Vladimir Ivanchenko (hadr-deex-V09-05-07)
+----------------------------------------------------------
+11 June 2012 Vladimir Ivanchenko (hadr-deex-V09-05-06)
+----------------------------------------------------------
+- Fixed shadowing and Coverity warnings
+
+25 May 2012 Vladimir Ivanchenko (hadr-deex-V09-05-05)
+----------------------------------------------------------
+- G4PhotonEvaporation - added check of environment variable
+    G4AddTimeLimitToPhotonEvaporation, if it is define a time
+    limit 1.e10-16, comparison of this limit with nuclear level life time 
+    allows to identify to sample narrow gamma lines or use relativistic
+    kinematics which will result in Doppler broading of nuclear lines,
+    this option has a side effect - momentum non-conservation
+- G4VGammaDeexcitation - use this threshold, cleanup comments
+- G4DiscreteGammaTransition - cleanup comments
+
+07 March 2012 Vladimir Ivanchenko (hadr-deex-V09-05-04)
+----------------------------------------------------------
+- fixed source.cmake
+
+07 March 2012 Vladimir Ivanchenko (hadr-deex-V09-05-03)
+----------------------------------------------------------
+- G4PhotonEvaporation, G4CompetitiveFission, G4EvaporationChannel,
+  G4UnstableFragmentBreakUp, G4GEMChannel, G4VEvaporationChannel,
+  G4Evaporation 
+    removed Initialise method and use GetEmissionProbability method
+    directly - minor performance improvement
+- G4PromptPhotonEvaporation, G4LevelManager, G4NucLevel, 
+    G4LevelReader - new classes
+- G4NuclearLevelStore - add method GetLevelManager for the new 
+    G4PromptPhotonEvaporation model
+
+
+27 January 2012 Vladimir Ivanchenko (hadr-deex-V09-05-02)
+----------------------------------------------------------
+- G4Evaporation - cleanup logic of initialisation and setup options;
+    always define photon evaporation channel as first; removed
+    obsolete constructor
+- G4EvaporationFactory, G4EvaporationGEMFactory, 
+	G4EvaporationDefaultGEMFactory - simplified constructors
+- G4ExcitationHandler - do not delete G4VEvaporation if it is set
+     via Set method (to avoid double deletion by QMD)
+
+23 January 2012 Vladimir Ivanchenko (hadr-deex-V09-05-01)
+----------------------------------------------------------
+- G4VEvaporationFactory, G4VEvaporation, G4Evaporation, G4EvaporationGEMFactory,
+  G4EvaporationFactory, G4EvaporationDefaultGEMFactory - added pointer of 
+  the G4VPhotonEvaporation to the constructor and delete it at destruction
+- G4ExcitationHandler - propagate G4VPhotonEvaporation pointer to G4Evaporation
+  and do not delete is at destruction; this allowing to use the same gamma 
+  evaporation object inside G4Evaporation class and G4ExcitationHandler;
+  added access methods to de-excitation components  
+
+06 January 2012 Vladimir Ivanchenko (hadr-deex-V09-05-00)
+----------------------------------------------------------
+- G4VEvaporationFactory, G4Evaporation, G4EvaporationGEMFactory,
+  G4EvaporationFactory, G4EvaporationDefaultGEMFactory - added proper 
+  destruction of decay channels after run 
+
 03 November 2011 Laurent Desorgher (hadr-deex-V09-04-21)
 ----------------------------------------------------------
-- Extend the use of G4PhotoEvaporation to Z>100. Note that for Z>100 at the moment the binding 
-  energy of the vacant e- shell left after internal  conversion is set as 0. and the atomic relaxation 
-  will not be simulated later on. 
- 
-     
+- Extend the use of G4PhotoEvaporation to Z>100. Note that for Z>100 at the 
+  moment the binding energy of the vacant e- shell left after internal conversion 
+  is set as 0 and the atomic relaxation will not be simulated later on. 
+      
 17 October 2011 Laurent Desorgher (hadr-deex-V09-04-20)
 ----------------------------------------------------------
-- G4NuclearLevelStore (photo-evaporation) 
-					  - add AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename)
-					  	The given data file will be used for the treatment of the photo evaporation 
-					  	of the given isotope instead of using the file provided in the photo evaporation 
-					  	database.
+- G4NuclearLevelStore (photo-evaporation):
+  add AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename)
+  The given data file will be used for the treatment of the photo evaporation 
+  of the given isotope instead of using the file provided in the photo evaporation 
+  database.
 
 30 September 2011 Vladimir Ivanchenko (hadr-deex-V09-04-19)
 ----------------------------------------------------------

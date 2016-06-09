@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.15 2008-11-27 16:43:00 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Geant4 Hadron Charge Exchange Process -- source file
@@ -38,10 +37,11 @@
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy for CHIPS
 // 23-Jan-07 V.Ivanchenko add cross section interfaces with Z and A
 //                        and do not use CHIPS for cross sections
-//
+// 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 
 #include "G4ChargeExchangeProcess.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4Element.hh"
@@ -52,9 +52,8 @@
 #include "G4PhysicsLinearVector.hh"
 
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
-  : G4HadronicProcess(procName), first(true)
+  : G4HadronicProcess(procName,fChargeExchange), first(true)
 {
-  SetProcessSubType(fChargeExchange);
   thEnergy = 20.*MeV;
   pPDG = 0;
   verboseLevel= 1;

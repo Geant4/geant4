@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_RECOIL_MAKER_HH
 #define G4CASCADE_RECOIL_MAKER_HH
-// $Id: G4CascadeRecoilMaker.hh,v 1.7 2010-12-15 07:39:44 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.
@@ -45,14 +44,16 @@
 // 20110214  M. Kelsey -- Replace "model" with G4InuclParticle::Model enum
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
+#include <cmath>
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
 #include "G4LorentzVector.hh"
-#include <cmath>
-#include <vector>
 
 class G4CascadParticle;
 class G4CascadeCheckBalance;
@@ -62,7 +63,7 @@ class G4InuclParticle;
 
 class G4CascadeRecoilMaker : public G4VCascadeCollider {
 public:
-  explicit G4CascadeRecoilMaker(G4double tolerance=0.001*MeV);
+  explicit G4CascadeRecoilMaker(G4double tolerance=0.001*CLHEP::MeV);
   virtual ~G4CascadeRecoilMaker();
 
   // Standard Collider interface (non-const output "buffer")

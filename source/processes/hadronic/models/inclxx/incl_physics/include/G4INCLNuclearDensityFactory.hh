@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,18 +40,52 @@
 #define G4INCLNuclearDensityFactory_hh 1
 
 #include "G4INCLNuclearDensity.hh"
+#include "G4INCLParticleSampler.hh"
 #include "G4INCLParticleTable.hh"
+#include <map>
 
 namespace G4INCL {
 
   class NuclearDensityFactory {
   public:
-    static NuclearDensity* createDensity(G4int A, G4int Z);
-    static IFunction1D* createDensityFunction(G4int A, G4int Z);
+    static NuclearDensity *createDensity(const G4int A, const G4int Z);
 
-    //  protected:
-    NuclearDensityFactory();
-    ~NuclearDensityFactory();
+    static InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z);
+
+    static InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z);
+
+    static InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z);
+
+    static ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
+
+    static void clearCache() {
+      for(std::map<G4int,NuclearDensity*>::const_iterator i = nuclearDensityCache.begin(); i!=nuclearDensityCache.end(); ++i)
+        delete i->second;
+      nuclearDensityCache.clear();
+
+      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rpCorrelationTableCache.begin(); i!=rpCorrelationTableCache.end(); ++i)
+        delete i->second;
+      rpCorrelationTableCache.clear();
+
+      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rCDFTableCache.begin(); i!=rCDFTableCache.end(); ++i)
+        delete i->second;
+      rCDFTableCache.clear();
+
+      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = pCDFTableCache.begin(); i!=pCDFTableCache.end(); ++i)
+        delete i->second;
+      pCDFTableCache.clear();
+    }
+
+  protected:
+    // We will not construct any instances of this class
+    NuclearDensityFactory() {}
+    ~NuclearDensityFactory() {}
+
+    static std::map<G4int,NuclearDensity*> nuclearDensityCache;
+
+    static std::map<G4int,InverseInterpolationTable*> rpCorrelationTableCache;
+    static std::map<G4int,InverseInterpolationTable*> rCDFTableCache;
+    static std::map<G4int,InverseInterpolationTable*> pCDFTableCache;
 
   };
 }

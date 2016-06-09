@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,19 +46,41 @@ namespace G4INCL {
 
   TransmissionChannel::~TransmissionChannel() {}
 
+  G4double TransmissionChannel::particleLeaves() {
+
+    // \todo{this is the place to add refraction}
+
+    // The particle energy outside the nucleus. Subtract the nuclear
+    // potential from the kinetic energy when leaving the nucleus
+    G4double kineticEnergyOutside = theParticle->getEnergy()
+      - theParticle->getPotentialEnergy()
+      - theParticle->getMass();
+
+    // Correction for real masses
+    const G4int AParent = theNucleus->getA();
+    const G4int ZParent = theNucleus->getZ();
+    const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(AParent,ZParent);
+    kineticEnergyOutside += theQValueCorrection;
+    theParticle->setTableMass();
+
+    // Scaling factor for the particle momentum
+    theParticle->setEnergy(kineticEnergyOutside + theParticle->getMass());
+    theParticle->adjustMomentumFromEnergy();
+    theParticle->setPotentialEnergy(0.);
+
+    return theQValueCorrection;
+  }
+
   FinalState* TransmissionChannel::getFinalState() {
     FinalState *fs = new FinalState;
     G4double initialEnergy = 0.0;
-    if(theParticle->isCluster()) {
-      Cluster *clusterOut = dynamic_cast<Cluster*>(theParticle);
-      ParticleList const *components = clusterOut->getParticles();
-      for(ParticleIter in = components->begin(); in != components->end(); ++in)
-        initialEnergy += (*in)->getEnergy() - (*in)->getPotentialEnergy();
-    } else {
-      initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
-    }
-    fs->setTotalEnergyBeforeInteraction(initialEnergy);
-    theNucleus->particleLeaves(theParticle);
+    initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
+
+    // Correction for real masses
+    initialEnergy += theParticle->getTableMass() - theParticle->getMass();
+
+    const G4double theQValueCorrection = particleLeaves();
+    fs->setTotalEnergyBeforeInteraction(initialEnergy + theQValueCorrection);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
     return fs;
   }

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmDetectorMessenger.hh
+/// \brief Definition of the exrdmDetectorMessenger class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef exrdmDetectorMessenger_h
@@ -42,21 +45,21 @@ class exrdmDetectorMessenger: public G4UImessenger
 {
   public:
     exrdmDetectorMessenger(exrdmDetectorConstruction*);
-   ~exrdmDetectorMessenger();
+    virtual         ~exrdmDetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    exrdmDetectorConstruction* myDetector;
+    exrdmDetectorConstruction* fMyDetector;
     
-    G4UIdirectory*             exrdmDir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        TargMatCmd;
-    G4UIcmdWithAString*        DetectMatCmd;
-    G4UIcmdWithADoubleAndUnit* TargRadiusCmd;
-    G4UIcmdWithADoubleAndUnit* DetectThicknessCmd;
-    G4UIcmdWithADoubleAndUnit* TargLengthCmd;
-    G4UIcmdWithADoubleAndUnit* DetectLengthCmd;
+    G4UIdirectory*             fExrdmDir;
+    G4UIdirectory*             fDetDir;
+    G4UIcmdWithAString*        fTargMatCmd;
+    G4UIcmdWithAString*        fDetectMatCmd;
+    G4UIcmdWithADoubleAndUnit* fTargRadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fDetectThicknessCmd;
+    G4UIcmdWithADoubleAndUnit* fTargLengthCmd;
+    G4UIcmdWithADoubleAndUnit* fDetectLengthCmd;
     
 };
 

@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // Author: Sebastien Incerti
-//         30 October 2008
-//         on base of G4LowEnergyGammaConversion developed by A.Forti and M.G.Pia
-//
+//         22 January 2012
+//         on base of G4LivermoreGammaConversionModel
 
 #ifndef G4LivermoreGammaConversionModel_h
 #define G4LivermoreGammaConversionModel_h 1
@@ -38,10 +34,8 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4ForceCondition.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4Gamma.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4ProductionCutsTable.hh"
 
 class G4LivermoreGammaConversionModel : public G4VEmModel
 {
@@ -69,30 +63,26 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
-
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
 private:
 
-  const G4double smallEnergy;
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit;
+  void ReadData(size_t Z, const char* path = 0);
 
-  G4int verboseLevel;
-  G4bool isInitialised;
-  
   G4double ScreenFunction1(G4double screenVariable);
   G4double ScreenFunction2(G4double screenVariable);
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VEMDataSet* meanFreePathTable;
 
   G4LivermoreGammaConversionModel & operator=(const  G4LivermoreGammaConversionModel &right);
   G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&);
 
+  G4double smallEnergy;
+  G4bool isInitialised;
+  G4int maxZ;
+
+  G4double lowEnergyLimit;  
+  G4int verboseLevel;
+  
+  G4ParticleChangeForGamma* fParticleChange;
+
+  std::vector<G4LPhysicsFreeVector*> data;
 
 };
 

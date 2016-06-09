@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.9 2009-11-27 14:54:58 hbu Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,44 +40,44 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
-:physList(physL)
+:fPhysList(physL)
 {
-  physDir = new G4UIdirectory("/testem/phys/");
-  physDir->SetGuidance("physics list commands");
+  fPhysDir = new G4UIdirectory("/testem/phys/");
+  fPhysDir->SetGuidance("physics list commands");
  
-  GammaToMuPairFacCmd=new G4UIcmdWithADouble
+  fGammaToMuPairFacCmd=new G4UIcmdWithADouble
                                       ("/testem/phys/SetGammaToMuPairFac",this);
-  GammaToMuPairFacCmd->SetGuidance(
+  fGammaToMuPairFacCmd->SetGuidance(
          "Set factor to artificially increase the GammaToMuPair cross section");
-  GammaToMuPairFacCmd->SetParameterName("GammaToMuPairFac",false);
-  GammaToMuPairFacCmd->SetRange("GammaToMuPairFac>0.0");
-  GammaToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fGammaToMuPairFacCmd->SetParameterName("GammaToMuPairFac",false);
+  fGammaToMuPairFacCmd->SetRange("GammaToMuPairFac>0.0");
+  fGammaToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  AnnihiToMuPairFacCmd=new G4UIcmdWithADouble
+  fAnnihiToMuPairFacCmd=new G4UIcmdWithADouble
                                      ("/testem/phys/SetAnnihiToMuPairFac",this);
-  AnnihiToMuPairFacCmd->SetGuidance(
+  fAnnihiToMuPairFacCmd->SetGuidance(
         "Set factor to artificially increase the AnnihiToMuPair cross section");
-  AnnihiToMuPairFacCmd->SetParameterName("AnnihiToMuPairFac",false);
-  AnnihiToMuPairFacCmd->SetRange("AnnihiToMuPairFac>0.0");
-  AnnihiToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAnnihiToMuPairFacCmd->SetParameterName("AnnihiToMuPairFac",false);
+  fAnnihiToMuPairFacCmd->SetRange("AnnihiToMuPairFac>0.0");
+  fAnnihiToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  AnnihiToHadronFacCmd=new G4UIcmdWithADouble
+  fAnnihiToHadronFacCmd=new G4UIcmdWithADouble
                                       ("/testem/phys/SetAnnihiToHadronFac",this);
-  AnnihiToHadronFacCmd->SetGuidance(
+  fAnnihiToHadronFacCmd->SetGuidance(
        "Set factor to artificially increase the AnnihiToHadrons cross section");
-  AnnihiToHadronFacCmd->SetParameterName("AnnihiToHadFac",false);
-  AnnihiToHadronFacCmd->SetRange("AnnihiToHadFac>0.0");
-  AnnihiToHadronFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fAnnihiToHadronFacCmd->SetParameterName("AnnihiToHadFac",false);
+  fAnnihiToHadronFacCmd->SetRange("AnnihiToHadFac>0.0");
+  fAnnihiToHadronFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete GammaToMuPairFacCmd;
-  delete AnnihiToMuPairFacCmd;
-  delete AnnihiToHadronFacCmd;  
-  delete physDir;  
+  delete fGammaToMuPairFacCmd;
+  delete fAnnihiToMuPairFacCmd;
+  delete fAnnihiToHadronFacCmd;  
+  delete fPhysDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,17 +85,17 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-  if(command == GammaToMuPairFacCmd)
-   { physList->SetGammaToMuPairFac(
-                           GammaToMuPairFacCmd->GetNewDoubleValue(newValue));}   
+  if(command == fGammaToMuPairFacCmd)
+   { fPhysList->SetGammaToMuPairFac(
+                           fGammaToMuPairFacCmd->GetNewDoubleValue(newValue));}   
 
-  if( command == AnnihiToMuPairFacCmd)
-   { physList->SetAnnihiToMuPairFac(
-                          AnnihiToMuPairFacCmd->GetNewDoubleValue(newValue));}
-			  
-  if( command == AnnihiToHadronFacCmd)
-   { physList->SetAnnihiToHadronFac(
-                          AnnihiToHadronFacCmd->GetNewDoubleValue(newValue));}			     
+  if( command == fAnnihiToMuPairFacCmd)
+   { fPhysList->SetAnnihiToMuPairFac(
+                          fAnnihiToMuPairFacCmd->GetNewDoubleValue(newValue));}
+                          
+  if( command == fAnnihiToHadronFacCmd)
+   { fPhysList->SetAnnihiToHadronFac(
+                          fAnnihiToHadronFacCmd->GetNewDoubleValue(newValue));}                             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

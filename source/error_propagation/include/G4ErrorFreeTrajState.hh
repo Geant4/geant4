@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorFreeTrajState.hh,v 1.4 2007-05-31 20:27:06 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class Description:
 //
@@ -68,7 +67,7 @@ class G4ErrorFreeTrajState : public G4ErrorTrajState
  public:  // with description
 
   G4ErrorFreeTrajState() : theFirstStep(true) {}
-  G4ErrorFreeTrajState( const G4String& partType,
+  G4ErrorFreeTrajState( const G4String& partName,
                         const G4Point3D& pos,
                         const G4Vector3D& mom,
                         const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );

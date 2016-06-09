@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2009-01-22 18:34:06 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +42,8 @@
 #include "G4EmCalculator.hh"
 #include "G4Electron.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <iomanip>
 
@@ -47,7 +51,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin, 
                      HistoManager* histo)
-:detector(det),kinematic(kin),ProcCounter(0),histoManager(histo)
+:fDetector(det),fKinematic(kin),fProcCounter(0),fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,46 +71,46 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //geometry
   //
-  wallThickness = detector->GetWallThickness();
-  wallRadius    = detector->GetWallRadius();
-  mateWall      = detector->GetWallMaterial();
-  densityWall   = mateWall->GetDensity();
+  fWallThickness = fDetector->GetWallThickness();
+  fWallRadius    = fDetector->GetWallRadius();
+  fMateWall      = fDetector->GetWallMaterial();
+  fDensityWall   = fMateWall->GetDensity();
 
-  cavityThickness = detector->GetCavityThickness();
-  cavityRadius    = detector->GetCavityRadius();
-  surfaceCavity   = pi*cavityRadius*cavityRadius;
-  volumeCavity    = surfaceCavity*cavityThickness;   		     
-  mateCavity      = detector->GetCavityMaterial();
-  densityCavity   = mateCavity->GetDensity();
-  massCavity      = volumeCavity*densityCavity;
+  fCavityThickness = fDetector->GetCavityThickness();
+  fCavityRadius    = fDetector->GetCavityRadius();
+  fSurfaceCavity   = pi*fCavityRadius*fCavityRadius;
+  fVolumeCavity    = fSurfaceCavity*fCavityThickness;                        
+  fMateCavity      = fDetector->GetCavityMaterial();
+  fDensityCavity   = fMateCavity->GetDensity();
+  fMassCavity      = fVolumeCavity*fDensityCavity;
     
   //process counter
   //
-  ProcCounter = new ProcessesCount;
+  fProcCounter = new ProcessesCount;
   
   //kinetic energy of charged secondary a creation
   //
-  Esecondary = Esecondary2 = 0.;
-  nbSec = 0;
+  fEsecondary = fEsecondary2 = 0.;
+  fNbSec = 0;
   
   //charged particles and energy flow in cavity
   //
-  PartFlowCavity[0] = PartFlowCavity[1] = 0;
-  EnerFlowCavity[0] = EnerFlowCavity[1] = 0.;
+  fPartFlowCavity[0] = fPartFlowCavity[1] = 0;
+  fEnerFlowCavity[0] = fEnerFlowCavity[1] = 0.;
        
   //total energy deposit and charged track segment in cavity
   //
-  EdepCavity = EdepCavity2 = trkSegmCavity = 0.;
-  nbEventCavity = 0; 
+  fEdepCavity = fEdepCavity2 = fTrkSegmCavity = 0.;
+  fNbEventCavity = 0; 
    
   //stepLenth of charged particles
   //
-  stepWall = stepWall2 = stepCavity = stepCavity2 =0.;
-  nbStepWall = nbStepCavity = 0;
+  fStepWall = fStepWall2 = fStepCavity = fStepCavity2 =0.;
+  fNbStepWall = fNbStepCavity = 0;
     
   //histograms
   //
-  histoManager->book();
+  fHistoManager->book();
     
 }
 
@@ -115,12 +119,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::CountProcesses(G4String procName)
 {
    //does the process  already encounted ?
-   size_t nbProc = ProcCounter->size();
+   size_t nbProc = fProcCounter->size();
    size_t i = 0;
-   while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+   while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
+   if (i == nbProc) fProcCounter->push_back( new OneProcessCount(procName));
 
-   (*ProcCounter)[i]->Count();
+   (*fProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,40 +136,40 @@ void RunAction::SurveyConvergence(G4int NbofEvents)
   //mean kinetic energy of secondary electrons
   //
   G4double meanEsecond = 0.;
-  if (nbSec > 0) meanEsecond = Esecondary/nbSec;
+  if (fNbSec > 0) meanEsecond = fEsecondary/fNbSec;
   G4double rateEmean = 0.;
   // compute variation rate (%), iteration to iteration
-  if (oldEmean > 0.) rateEmean = 100*(meanEsecond/oldEmean - 1.);
-  oldEmean = meanEsecond;
-  	        
+  if (fOldEmean > 0.) rateEmean = 100*(meanEsecond/fOldEmean - 1.);
+  fOldEmean = meanEsecond;
+                  
   //beam energy fluence
   //
-  G4double rBeam = wallRadius*(kinematic->GetBeamRadius());
+  G4double rBeam = fWallRadius*(fKinematic->GetBeamRadius());
   G4double surfaceBeam = pi*rBeam*rBeam;
-  G4double beamEnergy = kinematic->GetParticleGun()->GetParticleEnergy();  
+  G4double beamEnergy = fKinematic->GetParticleGun()->GetParticleEnergy();  
          
   //total dose in cavity
-  //		   
-  G4double doseCavity = EdepCavity/massCavity;
+  //                   
+  G4double doseCavity = fEdepCavity/fMassCavity;
   G4double doseOverBeam = doseCavity*surfaceBeam/(NbofEvents*beamEnergy);
   G4double rateDose = 0.;
   // compute variation rate (%), iteration to iteration  
-  if (oldDose > 0.) rateDose = 100*(doseOverBeam/oldDose - 1.);
-  oldDose = doseOverBeam;  
+  if (fOldDose > 0.) rateDose = 100*(doseOverBeam/fOldDose - 1.);
+  fOldDose = doseOverBeam;  
 
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int prec = G4cout.precision(3);
     
   G4cout << "\n ---> NbofEvents= " << NbofEvents 
-         << "   NbOfelectr= " << nbSec
-	 << "   Tkin= " << G4BestUnit(meanEsecond,"Energy")
-	 << " (" << rateEmean << " %)"
-	 << "   NbOfelec in cav= " << PartFlowCavity[0]
-	 << "   Dose/EnFluence= " << G4BestUnit(doseOverBeam,"Surface/Mass")
-	 << " (" << rateDose << " %)"
-	 << G4endl;
-	 	 
+         << "   NbOfelectr= " << fNbSec
+         << "   Tkin= " << G4BestUnit(meanEsecond,"Energy")
+         << " (" << rateEmean << " %)"
+         << "   NbOfelec in cav= " << fPartFlowCavity[0]
+         << "   Dose/EnFluence= " << G4BestUnit(doseOverBeam,"Surface/Mass")
+         << " (" << rateDose << " %)"
+         << G4endl;
+                  
   // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);  
@@ -183,10 +187,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //run conditions
   //     
-  G4ParticleDefinition* particle = kinematic->GetParticleGun()
+  G4ParticleDefinition* particle = fKinematic->GetParticleGun()
                                           ->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();    		         
-  G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
+  G4String partName = particle->GetParticleName();                             
+  G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
   
   G4cout << "\n ======================== run summary ======================\n";
   
@@ -194,24 +198,24 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run consists of " << NbofEvents << " "<< partName << " of "
          << G4BestUnit(energy,"Energy") << " through 2*" 
-	 << G4BestUnit(wallThickness,"Length") << " of "
-	 << mateWall->GetName() << " (density: " 
-	 << G4BestUnit(densityWall,"Volumic Mass") << ")" << G4endl;
-	 
+         << G4BestUnit(fWallThickness,"Length") << " of "
+         << fMateWall->GetName() << " (density: " 
+         << G4BestUnit(fDensityWall,"Volumic Mass") << ")" << G4endl;
+         
   G4cout << "\n the cavity is "
-	 << G4BestUnit(cavityThickness,"Length") << " of "
-	 << mateCavity->GetName() << " (density: " 
-	 << G4BestUnit(densityCavity,"Volumic Mass") << "); Mass = " 
-	 << G4BestUnit(massCavity,"Mass") << G4endl;
-	 	 
+         << G4BestUnit(fCavityThickness,"Length") << " of "
+         << fMateCavity->GetName() << " (density: " 
+         << G4BestUnit(fDensityCavity,"Volumic Mass") << "); Mass = " 
+         << G4BestUnit(fMassCavity,"Mass") << G4endl;
+                  
   G4cout << "\n ============================================================\n";
 
   //frequency of processes
   //
   G4cout << "\n Process calls frequency --->";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     G4int    count    = (*ProcCounter)[i]->GetCounter(); 
+  for (size_t i=0; i< fProcCounter->size();i++) {
+     G4String procName = (*fProcCounter)[i]->GetName();
+     G4int    count    = (*fProcCounter)[i]->GetCounter(); 
      G4cout << "  " << procName << "= " << count;
   }
   G4cout << G4endl;
@@ -221,29 +225,29 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4EmCalculator emCalculator;  
   G4cout << "\n Gamma crossSections in wall material :";
   G4double sumc = 0.0;  
-  for (size_t i=0; i< ProcCounter->size();i++) {
-    G4String procName = (*ProcCounter)[i]->GetName();
+  for (size_t i=0; i< fProcCounter->size();i++) {
+    G4String procName = (*fProcCounter)[i]->GetName();
     G4double massSigma = 
     emCalculator.ComputeCrossSectionPerVolume(energy,particle,
-                                              procName,mateWall)/densityWall;
+                                              procName,fMateWall)/fDensityWall;
     if (massSigma > 0.) {
       sumc += massSigma;
       G4cout << "  " << procName << "= "
              << G4BestUnit(massSigma, "Surface/Mass");
-    }	     
-  }  	   
+    }             
+  }             
   G4cout << "   --> total= " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
   
   //mean kinetic energy of secondary electrons
   //
-  if (nbSec == 0) return;
-  G4double meanEsecond = Esecondary/nbSec, meanEsecond2 = Esecondary2/nbSec;
+  if (fNbSec == 0) return;
+  G4double meanEsecond = fEsecondary/fNbSec, meanEsecond2 = fEsecondary2/fNbSec;
   G4double varianceEsec = meanEsecond2 - meanEsecond*meanEsecond;
   G4double dToverT = 0.;
-  if (varianceEsec>0.) dToverT = std::sqrt(varianceEsec/nbSec)/meanEsecond;
+  if (varianceEsec>0.) dToverT = std::sqrt(varianceEsec/fNbSec)/meanEsecond;
   G4double csdaRange =
-      emCalculator.GetCSDARange(meanEsecond,G4Electron::Electron(),mateWall);
+      emCalculator.GetCSDARange(meanEsecond,G4Electron::Electron(),fMateWall);
 
   G4cout.precision(4);       
   G4cout 
@@ -260,15 +264,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << " Mass_energy_transfer coef: "  
          << G4BestUnit(massTransfCoef, "Surface/Mass")
          << G4endl;
-	 
+         
   //stopping power from EmCalculator
   //
   G4double dedxWall = 
-      emCalculator.GetDEDX(meanEsecond,G4Electron::Electron(),mateWall);
-  dedxWall /= densityWall;
+      emCalculator.GetDEDX(meanEsecond,G4Electron::Electron(),fMateWall);
+  dedxWall /= fDensityWall;
   G4double dedxCavity = 
-      emCalculator.GetDEDX(meanEsecond,G4Electron::Electron(),mateCavity);
-  dedxCavity /= densityCavity;
+      emCalculator.GetDEDX(meanEsecond,G4Electron::Electron(),fMateCavity);
+  dedxCavity /= fDensityCavity;
   
   G4cout 
     << "\n StoppingPower in wall   = " 
@@ -276,46 +280,46 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "\n               in cavity = " 
     << G4BestUnit(dedxCavity,"Energy*Surface/Mass")
     << G4endl;  
-  	
+          
   //charged particle flow in cavity
   //
   G4cout 
     << "\n Charged particle flow in cavity :"
-    << "\n      Enter --> nbParticles = " << PartFlowCavity[0]
-    << "\t Energy = " << G4BestUnit (EnerFlowCavity[0], "Energy")
-    << "\n      Exit  --> nbParticles = " << PartFlowCavity[1]
-    << "\t Energy = " << G4BestUnit (EnerFlowCavity[1], "Energy")
+    << "\n      Enter --> nbParticles = " << fPartFlowCavity[0]
+    << "\t Energy = " << G4BestUnit (fEnerFlowCavity[0], "Energy")
+    << "\n      Exit  --> nbParticles = " << fPartFlowCavity[1]
+    << "\t Energy = " << G4BestUnit (fEnerFlowCavity[1], "Energy")
     << G4endl;
              
-  if (PartFlowCavity[0] == 0) return;
-  	        
+  if (fPartFlowCavity[0] == 0) return;
+                  
   //beam energy fluence
   //
-  G4double rBeam = wallRadius*(kinematic->GetBeamRadius());
+  G4double rBeam = fWallRadius*(fKinematic->GetBeamRadius());
   G4double surfaceBeam = pi*rBeam*rBeam;
   
   //error on Edep in cavity
   //
-  if (nbEventCavity == 0) return;
-  G4double meanEdep  = EdepCavity/nbEventCavity;
-  G4double meanEdep2 = EdepCavity2/nbEventCavity;
+  if (fNbEventCavity == 0) return;
+  G4double meanEdep  = fEdepCavity/fNbEventCavity;
+  G4double meanEdep2 = fEdepCavity2/fNbEventCavity;
   G4double varianceEdep = meanEdep2 - meanEdep*meanEdep;
   G4double dEoverE = 0.;
-  if(varianceEdep>0.) dEoverE = std::sqrt(varianceEdep/nbEventCavity)/meanEdep;
+  if(varianceEdep>0.) dEoverE = std::sqrt(varianceEdep/fNbEventCavity)/meanEdep;
            
   //total dose in cavity
-  //		   
-  G4double doseCavity = EdepCavity/massCavity;
+  //                   
+  G4double doseCavity = fEdepCavity/fMassCavity;
   G4double doseOverBeam = doseCavity*surfaceBeam/(NbofEvents*energy);
   
   //track length in cavity
-  G4double meantrack = trkSegmCavity/PartFlowCavity[0];
-  		  
+  G4double meantrack = fTrkSegmCavity/fPartFlowCavity[0];
+                    
   G4cout.precision(4);       
   G4cout 
-    << "\n Total edep in cavity = "      << G4BestUnit(EdepCavity,"Energy")
+    << "\n Total edep in cavity = "      << G4BestUnit(fEdepCavity,"Energy")
     << " +- " << 100*dEoverE << " %"    
-    << "\t Total charged trackLength = " << G4BestUnit(trkSegmCavity,"Length")
+    << "\t Total charged trackLength = " << G4BestUnit(fTrkSegmCavity,"Length")
     << "   (mean value = " << G4BestUnit(meantrack,"Length") << ")"       
     << "\n Total dose in cavity = " << doseCavity/(MeV/mg) << " MeV/mg"
     << "\n Dose/EnergyFluence   = " << G4BestUnit(doseOverBeam,"Surface/Mass")
@@ -330,27 +334,27 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout 
     << "\n (Dose/EnergyFluence)/Mass_energy_transfer = " << ratio 
     << " +- " << error << G4endl; 
-     	 
+              
   //compute mean step size of charged particles
   //
-  stepWall /= nbStepWall; stepWall2 /= nbStepWall;
-  G4double rms = stepWall2 - stepWall*stepWall;        
+  fStepWall /= fNbStepWall; fStepWall2 /= fNbStepWall;
+  G4double rms = fStepWall2 - fStepWall*fStepWall;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
   G4cout.precision(4);       
   G4cout 
     << "\n StepSize of ch. tracks in wall   = " 
-    << G4BestUnit(stepWall,"Length") << " +- " << G4BestUnit( rms,"Length")
-    << "\t (nbSteps/track = " << double(nbStepWall)/nbSec << ")";
+    << G4BestUnit(fStepWall,"Length") << " +- " << G4BestUnit( rms,"Length")
+    << "\t (nbSteps/track = " << double(fNbStepWall)/fNbSec << ")";
     
-  stepCavity /= nbStepCavity; stepCavity2 /= nbStepCavity;
-  rms = stepCavity2 - stepCavity*stepCavity;        
+  fStepCavity /= fNbStepCavity; fStepCavity2 /= fNbStepCavity;
+  rms = fStepCavity2 - fStepCavity*fStepCavity;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
   G4cout 
    << "\n StepSize of ch. tracks in cavity = " 
-   << G4BestUnit(stepCavity,"Length") << " +- " << G4BestUnit( rms,"Length")
-   << "\t (nbSteps/track = " << double(nbStepCavity)/PartFlowCavity[0] << ")";
+   << G4BestUnit(fStepCavity,"Length") << " +- " << G4BestUnit( rms,"Length")
+   << "\t (nbSteps/track = " << double(fNbStepCavity)/fPartFlowCavity[0] << ")";
         
   G4cout << G4endl;
   
@@ -358,16 +362,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
   
-  // delete and remove all contents in ProcCounter 
-  while (ProcCounter->size()>0){
-    OneProcessCount* aProcCount=ProcCounter->back();
-    ProcCounter->pop_back();
+  // delete and remove all contents in fProcCounter 
+  while (fProcCounter->size()>0){
+    OneProcessCount* aProcCount=fProcCounter->back();
+    fProcCounter->pop_back();
     delete aProcCount;
   }
-  delete ProcCounter;
+  delete fProcCounter;
   
   // save histograms
-  histoManager->save();
+  fHistoManager->save();
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

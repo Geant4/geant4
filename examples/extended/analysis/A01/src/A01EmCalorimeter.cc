@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeter.cc,v 1.6 2006-06-29 16:32:33 gunter Exp $
+/// \file analysis/A01/src/A01EmCalorimeter.cc
+/// \brief Implementation of the A01EmCalorimeter class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01EmCalorimeter.hh"
@@ -40,24 +43,24 @@ A01EmCalorimeter::A01EmCalorimeter(G4String name)
 {
   G4String HCname;
   collectionName.insert(HCname="EMcalorimeterColl");
-  HCID = -1;
+  fHCID = -1;
 }
 
 A01EmCalorimeter::~A01EmCalorimeter(){;}
 
 void A01EmCalorimeter::Initialize(G4HCofThisEvent*HCE)
 {
-  hitsCollection = new A01EmCalorimeterHitsCollection
+  fHitsCollection = new A01EmCalorimeterHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(hitsCollection); }
-  HCE->AddHitsCollection(HCID,hitsCollection);
+  if(fHCID<0)
+  { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
+  HCE->AddHitsCollection(fHCID,fHitsCollection);
 
   // fill calorimeter hits with zero energy deposition
   for(int i=0;i<80;i++)
   {
     A01EmCalorimeterHit* aHit = new A01EmCalorimeterHit(i);
-    hitsCollection->insert( aHit );
+    fHitsCollection->insert( aHit );
   }
 }
 
@@ -72,7 +75,7 @@ G4bool A01EmCalorimeter::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/
   G4VPhysicalVolume* thePhysical = theTouchable->GetVolume();
   G4int copyNo = thePhysical->GetCopyNo();
 
-  A01EmCalorimeterHit* aHit = (*hitsCollection)[copyNo];
+  A01EmCalorimeterHit* aHit = (*fHitsCollection)[copyNo];
   // check if it is first touch
   if(!(aHit->GetLogV()))
   {

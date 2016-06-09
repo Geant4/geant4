@@ -34,11 +34,10 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-#include "B4DetectorMessenger.hh"
-
 class G4Box;
 class G4VPhysicalVolume;
 class G4UniformMagField;
+class G4GenericMessenger;
 
 /// Detector construction class to define materials and geometry.
 /// The calorimeter is a box made of a given number of layers. A layer consists
@@ -53,7 +52,9 @@ class G4UniformMagField;
 ///
 /// In addition a transverse uniform magnetic field is defined in
 /// SetMagField() method which can be activated
-/// via a command defined in the B4DetectorMessenger class. 
+/// via a command defined using G4GenericMessenger class: 
+/// - /B4/det/setMagField value unit
+
 
 class B4DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -81,7 +82,7 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
   
     // data members
     //
-    B4DetectorMessenger  fMessenger; // messenger 
+    G4GenericMessenger*  fMessenger; // messenger 
     G4UniformMagField*   fMagField;  // magnetic field
     
     G4VPhysicalVolume* fAbsorberPV; // the absorber physical volume

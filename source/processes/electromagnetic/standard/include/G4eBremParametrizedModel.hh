@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremParametrizedModel.hh,v 1.14 2010/10/26 10:35:22 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4eBremParametrizedModel : public G4VEmModel
 public:
 
   G4eBremParametrizedModel(const G4ParticleDefinition* p = 0, 
-			    const G4String& nam = "eBremLPM");
+			   const G4String& nam = "eBremParam");
 
   virtual ~G4eBremParametrizedModel();
 

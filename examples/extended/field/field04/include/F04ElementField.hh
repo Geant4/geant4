@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04ElementField.hh
+/// \brief Definition of the F04ElementField class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04ElementField_h
 #define F04ElementField_h 1
 
@@ -48,7 +45,7 @@
 
 //  An element that represents an element with an EM field will
 //  derive a class from this one and implement the computation for the
-//  element. The construct() function will add the derived object into
+//  element. The Construct() function will add the derived object into
 //  GlobalField.
 
 class F04ElementField 
@@ -64,95 +61,95 @@ class F04ElementField
     F04ElementField(const G4ThreeVector, G4LogicalVolume*);
 
     /// the actual implementation constructs the F04ElementField
-    void construct();
+    void Construct();
 
     ///  Destructor.
-    virtual ~F04ElementField() { if (aNavigator) delete aNavigator; }
+    virtual ~F04ElementField() { if (fNavigator) delete fNavigator; }
 
-    /// setMaxStep(G4double) sets the max. step size
-    void setMaxStep(G4double s)
+    /// SetMaxStep(G4double) sets the max. step size
+    void SetMaxStep(G4double stp)
     {
-      maxStep = s;
-      userLimits->SetMaxAllowedStep(maxStep);
-      lvolume->SetUserLimits(userLimits);
+      fMaxStep = stp;
+      fUserLimits->SetMaxAllowedStep(fMaxStep);
+      fVolume->SetUserLimits(fUserLimits);
     }
 
-    /// getMaxStep() returns the max. step size
-    G4double getMaxStep() { return maxStep; }
+    /// GetMaxStep() returns the max. step size
+    G4double GetMaxStep() { return fMaxStep; }
 
-    /// setColor(G4String) sets the color
-    void setColor(G4String c)
-    { 
-      color = c;
-      lvolume->SetVisAttributes(getVisAttribute(color));
+    /// SetColor(G4String) sets the color
+    void SetColor(G4String c)
+    {
+      fColor = c;
+      fVolume->SetVisAttributes(GetVisAttribute(fColor));
     }
 
-    /// getColor() returns the color
-    G4String getColor() { return color; }
+    /// GetColor() returns the color
+    G4String GetColor() { return fColor; }
 
-    ///  getVisAttribute() returns the appropriate G4VisAttributes.
-    static G4VisAttributes* getVisAttribute(G4String color);
+    ///  GetVisAttribute() returns the appropriate G4VisAttributes.
+    static G4VisAttributes* GetVisAttribute(G4String color);
 
-    ///  setGlobalPoint() ensures that the point is within the global
+    ///  SetGlobalPoint() ensures that the point is within the global
     ///  bounding box of this ElementField's global coordinates.
     ///  Normally called 8 times for the corners of the local bounding
     ///  box, after a local->global coordinate transform.
     ///  If never called, the global bounding box is infinite.
     ///  BEWARE: if called only once, the bounding box is just a point.
-    void setGlobalPoint(const G4double point[4])
+    void SetGlobalPoint(const G4double point[4])
     {
-      if(minX == -DBL_MAX || minX > point[0]) minX = point[0];
-      if(minY == -DBL_MAX || minY > point[1]) minY = point[1];
-      if(minZ == -DBL_MAX || minZ > point[2]) minZ = point[2];
-      if(maxX ==  DBL_MAX || maxX < point[0]) maxX = point[0];
-      if(maxY ==  DBL_MAX || maxY < point[1]) maxY = point[1];
-      if(maxZ ==  DBL_MAX || maxZ < point[2]) maxZ = point[2];
+      if(fMinX == -DBL_MAX || fMinX > point[0]) fMinX = point[0];
+      if(fMinY == -DBL_MAX || fMinY > point[1]) fMinY = point[1];
+      if(fMinZ == -DBL_MAX || fMinZ > point[2]) fMinZ = point[2];
+      if(fMaxX ==  DBL_MAX || fMaxX < point[0]) fMaxX = point[0];
+      if(fMaxY ==  DBL_MAX || fMaxY < point[1]) fMaxY = point[1];
+      if(fMaxZ ==  DBL_MAX || fMaxZ < point[2]) fMaxZ = point[2];
     }
 
-    ///  isInBoundingBox() returns true if the point is within the
+    ///  IsInBoundingBox() returns true if the point is within the
     ///  global bounding box - global coordinates.
-    bool isInBoundingBox(const G4double point[4]) const
+    bool IsInBoundingBox(const G4double point[4]) const
     {
-      if(point[2] < minZ || point[2] > maxZ) return false;
-      if(point[0] < minX || point[0] > maxX) return false;
-      if(point[1] < minY || point[1] > maxY) return false;
+      if(point[2] < fMinZ || point[2] > fMaxZ) return false;
+      if(point[0] < fMinX || point[0] > fMaxX) return false;
+      if(point[1] < fMinY || point[1] > fMaxY) return false;
       return true;
     }
 
-    ///  addFieldValue() will add the field value for this element to field[].
+    ///  AddFieldValue() will add the field value for this element to field[].
     ///  Implementations must be sure to verify that point[] is within
     ///  the field region, and do nothing if not.
     ///  point[] is in global coordinates and geant4 units; x,y,z,t.
     ///  field[] is in geant4 units; Bx,By,Bz,Ex,Ey,Ez.
     ///  For efficiency, the caller may (but need not) call
-    ///  isInBoundingBox(point), and only call this function if that
+    ///  IsInBoundingBox(point), and only call this function if that
     ///  returns true.
-    virtual void 
-        addFieldValue(const G4double point[4], G4double field[6]) const = 0;
+    virtual void
+        AddFieldValue(const G4double point[4], G4double field[6]) const = 0;
 
-    virtual G4double getLength() = 0;
-    virtual G4double getWidth()  = 0;
-    virtual G4double getHeight() = 0;
+    virtual G4double GetLength() = 0;
+    virtual G4double GetWidth()  = 0;
+    virtual G4double GetHeight() = 0;
 
   protected:
 
-    G4LogicalVolume* lvolume;
+    G4LogicalVolume* fVolume;
 
-    G4AffineTransform global2local;
+    G4AffineTransform fGlobal2local;
 
 //    F04ElementField(const F04ElementField&);
 
   private:
 
-    static G4Navigator* aNavigator;
+    static G4Navigator* fNavigator;
 
-    G4String color;
+    G4String fColor;
 
-    G4ThreeVector center;
-    G4double minX, minY, minZ, maxX, maxY,maxZ;
+    G4ThreeVector fCenter;
+    G4double fMinX, fMinY, fMinZ, fMaxX, fMaxY, fMaxZ;
 
-    G4double maxStep;
-    G4UserLimits* userLimits;
+    G4double fMaxStep;
+    G4UserLimits* fUserLimits;
 
 };
 

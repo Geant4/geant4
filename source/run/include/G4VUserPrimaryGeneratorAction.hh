@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPrimaryGeneratorAction.hh,v 1.5 2006-06-29 21:13:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VUserPrimaryGeneratorAction_h

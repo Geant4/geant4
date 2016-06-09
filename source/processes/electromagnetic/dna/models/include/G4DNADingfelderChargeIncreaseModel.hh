@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNADingfelderChargeIncreaseModel_h
@@ -68,8 +67,9 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  // Water density table
+  const std::vector<G4double>* fpMolWaterDensity;
 
-  G4Material* nistwater;
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 

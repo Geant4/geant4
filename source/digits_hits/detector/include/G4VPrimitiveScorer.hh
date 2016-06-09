@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.hh,v 1.7 2010-11-10 16:38:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VPrimitiveScorer_h

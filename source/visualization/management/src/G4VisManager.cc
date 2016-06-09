@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.131 2010-12-14 15:53:28 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -33,21 +32,19 @@
 
 #include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
-#include "G4VisCommandsDefault.hh"
 #include "G4VisCommandsGeometry.hh"
 #include "G4VisCommandsGeometrySet.hh"
+#include "G4VisCommandsSet.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
+#include "G4VisCommandsTouchableSet.hh"
 #include "G4VisCommandsViewer.hh"
+#include "G4VisCommandsViewerDefault.hh"
 #include "G4VisCommandsViewerSet.hh"
 #include "G4UImanager.hh"
 #include "G4VisStateDependent.hh"
 #include "G4UIdirectory.hh"
-#include "G4VisFeaturesOfFukuiRenderer.hh"
-#include "G4VisFeaturesOfDAWNFILE.hh"
-#include "G4VisFeaturesOfOpenGL.hh"
-#include "G4VisFeaturesOfOpenInventor.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4VViewer.hh"
@@ -75,6 +72,9 @@
 #include "G4EventManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
+#include <map>
+#include <set>
+#include <vector>
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -84,7 +84,6 @@ G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),
   fInitialised     (false),
-  fpUserVisAction  (0),
   fpGraphicsSystem (0),
   fpScene          (0),
   fpSceneHandler   (0),
@@ -96,7 +95,9 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fEventKeepingSuspended    (false),
   fKeptLastEvent            (false),
   fpRequestedEvent (0),
-  fAbortReviewKeptEvents    (false)
+  fAbortReviewKeptEvents    (false),
+  fIsDrawGroup              (false),
+  fDrawGroupNestingDepth    (0)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -173,7 +174,10 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   directory -> SetGuidance ("Visualization commands.");
   fDirectoryList.push_back (directory);
 
-  // Instantiate top level basic commands
+  // Instantiate *basic* top level commands so that they can be used
+  // immediately after instantiation of the vis manager.  Other top
+  // level and lower level commands are instantiated later in
+  // RegisterMessengers.
   G4VVisCommand::SetVisManager (this);  // Sets shared pointer
   RegisterMessenger(new G4VisCommandVerbose);
   RegisterMessenger(new G4VisCommandInitialize);
@@ -320,11 +324,181 @@ void G4VisManager::Initialise () {
   }
 
   if (fVerbosity >= startup) {
+    PrintAvailableUserVisActions (fVerbosity);
+    G4cout << G4endl;
+  }
+
+  if (fVerbosity >= startup) {
     PrintAvailableColours (fVerbosity);
     G4cout << G4endl;
   }
 
   fInitialised = true;
+}
+
+void G4VisManager::RegisterMessengers () {
+  
+  // Instantiate individual messengers/commands (often - but not
+  // always - one command per messenger).
+  
+  G4UIcommand* directory;
+  
+  // *Basic* top level commands were instantiated in the constructor
+  // so that they can be used immediately after instantiation of the
+  // vis manager.  Other top level and lower level commands are
+  // instantiated here.
+  
+  // Other top level commands...
+  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandList);
+  RegisterMessenger(new G4VisCommandReviewKeptEvents);
+  
+  // Compound commands...
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandSpecify);
+  
+  directory = new G4UIdirectory ("/vis/geometry/");
+  directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometryList);
+  RegisterMessenger(new G4VisCommandGeometryRestore);
+  
+  directory = new G4UIdirectory ("/vis/geometry/set/");
+  directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometrySetColour);
+  RegisterMessenger(new G4VisCommandGeometrySetDaughtersInvisible);
+  RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
+  RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
+  RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
+  RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
+  RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
+  RegisterMessenger(new G4VisCommandGeometrySetVisibility);
+  
+  directory = new G4UIdirectory ("/vis/set/");
+  directory -> SetGuidance
+    ("Set quantities for use in future commands where appropriate.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSetColour);
+  RegisterMessenger(new G4VisCommandSetLineWidth);
+  RegisterMessenger(new G4VisCommandSetTextColour);
+  RegisterMessenger(new G4VisCommandSetTextLayout);
+  RegisterMessenger(new G4VisCommandSetTouchable);
+  
+  directory = new G4UIdirectory ("/vis/scene/");
+  directory -> SetGuidance ("Operations on Geant4 scenes.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneActivateModel);
+  RegisterMessenger(new G4VisCommandSceneCreate);
+  RegisterMessenger(new G4VisCommandSceneEndOfEventAction);
+  RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
+  RegisterMessenger(new G4VisCommandSceneList);
+  RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
+  RegisterMessenger(new G4VisCommandSceneSelect);
+  
+  directory = new G4UIdirectory ("/vis/scene/add/");
+  directory -> SetGuidance ("Add model to current scene.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneAddArrow);
+  RegisterMessenger(new G4VisCommandSceneAddArrow2D);
+  RegisterMessenger(new G4VisCommandSceneAddAxes);
+  RegisterMessenger(new G4VisCommandSceneAddDate);
+  RegisterMessenger(new G4VisCommandSceneAddDigis);
+  RegisterMessenger(new G4VisCommandSceneAddEventID);
+  RegisterMessenger(new G4VisCommandSceneAddFrame);
+  RegisterMessenger(new G4VisCommandSceneAddGhosts);
+  RegisterMessenger(new G4VisCommandSceneAddHits);
+  RegisterMessenger(new G4VisCommandSceneAddLine);
+  RegisterMessenger(new G4VisCommandSceneAddLine2D);
+  RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
+  RegisterMessenger(new G4VisCommandSceneAddLogo);
+  RegisterMessenger(new G4VisCommandSceneAddLogo2D);
+  RegisterMessenger(new G4VisCommandSceneAddPSHits);
+  RegisterMessenger(new G4VisCommandSceneAddScale);
+  RegisterMessenger(new G4VisCommandSceneAddText);
+  RegisterMessenger(new G4VisCommandSceneAddText2D);
+  RegisterMessenger(new G4VisCommandSceneAddTrajectories);
+  RegisterMessenger(new G4VisCommandSceneAddUserAction);
+  RegisterMessenger(new G4VisCommandSceneAddVolume);
+  
+  directory = new G4UIdirectory ("/vis/sceneHandler/");
+  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneHandlerAttach);
+  RegisterMessenger(new G4VisCommandSceneHandlerCreate);
+  RegisterMessenger(new G4VisCommandSceneHandlerList);
+  RegisterMessenger(new G4VisCommandSceneHandlerSelect);
+  
+  directory = new G4UIdirectory ("/vis/touchable/");
+  directory -> SetGuidance ("Operations on touchables.");
+  directory = new G4UIdirectory ("/vis/touchable/set/");
+  directory -> SetGuidance ("Set vis attributes of current touchable.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandsTouchableSet);
+
+  directory = new G4UIdirectory ("/vis/viewer/");
+  directory -> SetGuidance ("Operations on Geant4 viewers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandViewerAddCutawayPlane);
+  RegisterMessenger(new G4VisCommandViewerChangeCutawayPlane);
+  RegisterMessenger(new G4VisCommandViewerClear);
+  RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
+  RegisterMessenger(new G4VisCommandViewerClearTransients);
+  RegisterMessenger(new G4VisCommandViewerClone);
+  RegisterMessenger(new G4VisCommandViewerCopyViewFrom);
+  RegisterMessenger(new G4VisCommandViewerCreate);
+  RegisterMessenger(new G4VisCommandViewerDolly);
+  RegisterMessenger(new G4VisCommandViewerFlush);
+  RegisterMessenger(new G4VisCommandViewerList);
+  RegisterMessenger(new G4VisCommandViewerPan);
+  RegisterMessenger(new G4VisCommandViewerRebuild);
+  RegisterMessenger(new G4VisCommandViewerRefresh);
+  RegisterMessenger(new G4VisCommandViewerReset);
+  RegisterMessenger(new G4VisCommandViewerSave);
+  RegisterMessenger(new G4VisCommandViewerScale);
+  RegisterMessenger(new G4VisCommandViewerSelect);
+  RegisterMessenger(new G4VisCommandViewerUpdate);
+  RegisterMessenger(new G4VisCommandViewerZoom);
+  
+  directory = new G4UIdirectory ("/vis/viewer/default/");
+  directory -> SetGuidance("Set default values for future viewers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandViewerDefaultHiddenEdge);
+  RegisterMessenger(new G4VisCommandViewerDefaultStyle);
+  
+  directory = new G4UIdirectory ("/vis/viewer/set/");
+  directory -> SetGuidance ("Set view parameters of current viewer.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandsViewerSet);
+  
+  // List manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
+  RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
+  
+  // Trajectory filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+  
+  // Hit filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VHit> >
+                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
+                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+  
+  // Digi filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
 }
 
 void G4VisManager::Enable() {
@@ -471,184 +645,233 @@ void G4VisManager::SelectTrajectoryModel(const G4String& model)
    fpTrajDrawModelMgr->SetCurrent(model);
 }
 
-void G4VisManager::Draw (const G4Circle& circle,
-			 const G4Transform3D& objectTransform) {
+void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
+{
+  fDrawGroupNestingDepth++;
+  if (fDrawGroupNestingDepth > 1) {
+    G4Exception
+      ("G4VSceneHandler::BeginDraw",
+       "visman0008", JustWarning,
+       "Nesting detected. It is illegal to nest Begin/EndDraw."
+       "\n Ignored");
+    return;
+  }
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (circle);
+    fIsDrawGroup = true;
+  }
+}
+
+void G4VisManager::EndDraw ()
+{
+  fDrawGroupNestingDepth--;
+  if (fDrawGroupNestingDepth != 0) {
+    if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
+    return;
+  }
+  if (IsValidView ()) {
     fpSceneHandler -> EndPrimitives ();
   }
+  fIsDrawGroup = false;
+}
+
+void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
+{
+  fDrawGroupNestingDepth++;
+  if (fDrawGroupNestingDepth > 1) {
+    G4Exception
+      ("G4VSceneHandler::BeginDraw2D",
+       "visman0009", JustWarning,
+       "Nesting detected. It is illegal to nest Begin/EndDraw2D."
+       "\n Ignored");
+    return;
+  }
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D (objectTransform);
+    fIsDrawGroup = true;
+  }
+}
+
+void G4VisManager::EndDraw2D ()
+{
+  fDrawGroupNestingDepth--;
+  if (fDrawGroupNestingDepth != 0) {
+    if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
+    return;
+  }
+  if (IsValidView ()) {
+    fpSceneHandler -> EndPrimitives2D ();
+  }
+  fIsDrawGroup = false;
+}
+
+template <class T> void G4VisManager::DrawT
+(const T& graphics_primitive, const G4Transform3D& objectTransform) {
+  if (fIsDrawGroup) {
+    if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
+      G4Exception
+	("G4VSceneHandler::DrawT",
+	 "visman0010", FatalException,
+	 "Different transform detected in Begin/EndDraw group.");
+    }
+    fpSceneHandler -> AddPrimitive (graphics_primitive);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> BeginPrimitives (objectTransform);
+      fpSceneHandler -> AddPrimitive (graphics_primitive);
+      fpSceneHandler -> EndPrimitives ();
+    }
+  }
+}
+
+template <class T> void G4VisManager::DrawT2D
+(const T& graphics_primitive, const G4Transform3D& objectTransform) {
+  if (fIsDrawGroup) {
+    if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
+      G4Exception
+	("G4VSceneHandler::DrawT",
+	 "visman0011", FatalException,
+	 "Different transform detected in Begin/EndDraw2D group.");
+    }
+    fpSceneHandler -> AddPrimitive (graphics_primitive);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> BeginPrimitives2D (objectTransform);
+      fpSceneHandler -> AddPrimitive (graphics_primitive);
+      fpSceneHandler -> EndPrimitives2D ();
+    }
+  }
+}
+
+void G4VisManager::Draw (const G4Circle& circle,
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (circle, objectTransform);
 }
 
 void G4VisManager::Draw (const G4NURBS& nurbs,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (nurbs);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (nurbs, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Polyhedron& polyhedron,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (polyhedron);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (polyhedron, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Polyline& line,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (line);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (line, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Polymarker& polymarker,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (polymarker);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (polymarker, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Scale& scale,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (scale);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (scale, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Square& square,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (square);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (square, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Text& text,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (text);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (text, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Circle& circle,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(circle);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (circle, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4NURBS& nurbs,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(nurbs);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (nurbs, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polyhedron& polyhedron,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(polyhedron);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (polyhedron, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polyline& line,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(line);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (line, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polymarker& polymarker,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(polymarker);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (polymarker, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Square& square,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(square);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (square, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Text& text,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(text);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (text, objectTransform);
 }
 
 void G4VisManager::Draw (const G4VHit& hit) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (hit);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> AddCompound (hit);
+    }
   }
 }
 
 void G4VisManager::Draw (const G4VDigi& digi) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (digi);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> AddCompound (digi);
+    }
   }
 }
 
 void G4VisManager::Draw (const G4VTrajectory& traj,
 			 G4int i_mode) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
     dummyTrajectoriesModel.SetDrawingMode(i_mode);
     fpSceneHandler -> AddCompound (traj);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+      dummyTrajectoriesModel.SetDrawingMode(i_mode);
+      fpSceneHandler -> AddCompound (traj);
+    }
   }
 }
 
@@ -663,11 +886,17 @@ void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
 void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddSolid ();
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> PreAddSolid (objectTransform, attribs);
+      solid.DescribeYourselfTo (*fpSceneHandler);
+      fpSceneHandler -> PostAddSolid ();
+    }
   }
 }
 
@@ -802,22 +1031,21 @@ void G4VisManager::GeometryHasChanged () {
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
-    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
-
+    std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
     if (modelList.size ()) {
       G4bool modelInvalid;
       do {  // Remove, if required, one at a time.
 	modelInvalid = false;
-	std::vector<G4VModel*>::iterator iterModel;
+	std::vector<G4Scene::Model>::iterator iterModel;
 	for (iterModel = modelList.begin();
 	     iterModel != modelList.end();
 	     ++iterModel) {
-	  modelInvalid = !((*iterModel) -> Validate (fVerbosity >= warnings));
+	  modelInvalid = !(iterModel->fpModel->Validate(fVerbosity>=warnings));
 	  if (modelInvalid) {
 	    // Model invalid - remove and break.
 	    if (fVerbosity >= warnings) {
 	      G4cout << "WARNING: Model \""
-		     << (*iterModel) -> GetGlobalDescription ()
+		     << iterModel->fpModel->GetGlobalDescription ()
 		     <<
 		"\" is no longer valid - being removed\n  from scene \""
 		     << pScene -> GetName () << "\""
@@ -867,7 +1095,7 @@ void G4VisManager::NotifyHandlers () {
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
-    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
+    std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
     
     if (modelList.size ()) {
       pScene->CalculateExtent();
@@ -964,16 +1192,48 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
   }
 }
 
-void G4VisManager::SetUserAction
-(G4VUserVisAction* pVisAction,
+void G4VisManager::RegisterRunDurationUserVisAction
+(const G4String& name,
+ G4VUserVisAction* pVisAction,
  const G4VisExtent& extent) {
-  fpUserVisAction = pVisAction;
-  fUserVisActionExtent = extent;
+  fRunDurationUserVisActions.push_back(UserVisAction(name,pVisAction));
+  if (extent.GetExtentRadius() > 0.) {
+    fUserVisActionExtents[pVisAction] = extent;
+  } else {
+    if (fVerbosity >= warnings) {
+      G4cout << 
+	"WARNING: No extent set for user vis action \"" << name << "\"."
+	     << G4endl;
+    }
+  }
+}
+
+void G4VisManager::RegisterEndOfEventUserVisAction
+(const G4String& name,
+ G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  fEndOfEventUserVisActions.push_back(UserVisAction(name,pVisAction));
+  if (extent.GetExtentRadius() > 0.) {
+    fUserVisActionExtents[pVisAction] = extent;
+  } else {
+    if (fVerbosity >= warnings) {
+      G4cout << 
+	"WARNING: No extent set for user vis action \"" << name << "\"."
+	     << G4endl;
+    }
+  }
+}
+
+void G4VisManager::RegisterEndOfRunUserVisAction
+(const G4String& name,
+ G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  fEndOfRunUserVisActions.push_back(UserVisAction(name,pVisAction));
+  fUserVisActionExtents[pVisAction] = extent;
   if (extent.GetExtentRadius() <= 0.) {
     if (fVerbosity >= warnings) {
       G4cout << 
-	"WARNING: No extent set for user vis action.  (You may"
-	"\n  set it later when adding with /vis/scene/add/userAction.)"
+	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
   }
@@ -1107,148 +1367,36 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   }
 }
 
-void G4VisManager::RegisterMessengers () {
-
-  // Instantiate individual messengers/commands (often - but not
-  // always - one command per messenger).
-
-  G4UIcommand* directory;
-
-  // Top level commands...
-  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
-  RegisterMessenger(new G4VisCommandEnable);
-  RegisterMessenger(new G4VisCommandList);
-  RegisterMessenger(new G4VisCommandReviewKeptEvents);
-
-  // Compound commands...
-  RegisterMessenger(new G4VisCommandDrawTree);
-  RegisterMessenger(new G4VisCommandDrawView);
-  RegisterMessenger(new G4VisCommandDrawVolume);
-  RegisterMessenger(new G4VisCommandOpen);
-  RegisterMessenger(new G4VisCommandSpecify);
-
-  directory = new G4UIdirectory ("/vis/default/");
-  directory -> SetGuidance("Set default values for future operations.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandDefaultHiddenEdge);
-  RegisterMessenger(new G4VisCommandDefaultStyle);
-
-  directory = new G4UIdirectory ("/vis/geometry/");
-  directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandGeometryList);
-  RegisterMessenger(new G4VisCommandGeometryRestore);
-
-  directory = new G4UIdirectory ("/vis/geometry/set/");
-  directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandGeometrySetColour);
-  RegisterMessenger(new G4VisCommandGeometrySetDaughtersInvisible);
-  RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
-  RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
-  RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
-  RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
-  RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
-  RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
-  RegisterMessenger(new G4VisCommandGeometrySetVisibility);
-
-  directory = new G4UIdirectory ("/vis/scene/");
-  directory -> SetGuidance ("Operations on Geant4 scenes.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSceneCreate);
-  RegisterMessenger(new G4VisCommandSceneEndOfEventAction);
-  RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
-  RegisterMessenger(new G4VisCommandSceneList);
-  RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
-  RegisterMessenger(new G4VisCommandSceneSelect);
-
-  directory = new G4UIdirectory ("/vis/scene/add/");
-  directory -> SetGuidance ("Add model to current scene.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSceneAddAxes);
-  RegisterMessenger(new G4VisCommandSceneAddEventID);
-  RegisterMessenger(new G4VisCommandSceneAddGhosts);
-  RegisterMessenger(new G4VisCommandSceneAddHits);
-  RegisterMessenger(new G4VisCommandSceneAddDigis);
-  RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
-  RegisterMessenger(new G4VisCommandSceneAddLogo);
-  RegisterMessenger(new G4VisCommandSceneAddPSHits);
-  RegisterMessenger(new G4VisCommandSceneAddScale);
-  RegisterMessenger(new G4VisCommandSceneAddText);
-  RegisterMessenger(new G4VisCommandSceneAddTrajectories);
-  RegisterMessenger(new G4VisCommandSceneAddUserAction);
-  RegisterMessenger(new G4VisCommandSceneAddVolume);
-
-  directory = new G4UIdirectory ("/vis/sceneHandler/");
-  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSceneHandlerAttach);
-  RegisterMessenger(new G4VisCommandSceneHandlerCreate);
-  RegisterMessenger(new G4VisCommandSceneHandlerList);
-  RegisterMessenger(new G4VisCommandSceneHandlerSelect);
-
-  directory = new G4UIdirectory ("/vis/viewer/");
-  directory -> SetGuidance ("Operations on Geant4 viewers.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandViewerAddCutawayPlane);
-  RegisterMessenger(new G4VisCommandViewerChangeCutawayPlane);
-  RegisterMessenger(new G4VisCommandViewerClear);
-  RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
-  RegisterMessenger(new G4VisCommandViewerClearTransients);
-  RegisterMessenger(new G4VisCommandViewerClone);
-  RegisterMessenger(new G4VisCommandViewerCreate);
-  RegisterMessenger(new G4VisCommandViewerDolly);
-  RegisterMessenger(new G4VisCommandViewerFlush);
-  RegisterMessenger(new G4VisCommandViewerList);
-  RegisterMessenger(new G4VisCommandViewerPan);
-  RegisterMessenger(new G4VisCommandViewerRebuild);
-  RegisterMessenger(new G4VisCommandViewerRefresh);
-  RegisterMessenger(new G4VisCommandViewerReset);
-  RegisterMessenger(new G4VisCommandViewerScale);
-  RegisterMessenger(new G4VisCommandViewerSelect);
-  RegisterMessenger(new G4VisCommandViewerUpdate);
-  RegisterMessenger(new G4VisCommandViewerZoom);
-
-  directory = new G4UIdirectory ("/vis/viewer/set/");
-  directory -> SetGuidance ("Set view parameters of current viewer.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandsViewerSet);
-
-  // List manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
-		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
-  RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
-		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));  
-
-  // Trajectory filter manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
-                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
-  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
-                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
-
-  // Hit filter manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VHit> >
-                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
-  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
-                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
-
-  // Digi filter manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VDigi> >
-                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
-  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VDigi> >
-                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
+namespace {
+  struct NicknameComparison {
+    bool operator() (const G4String& lhs, const G4String& rhs) const
+    {return lhs.length()<rhs.length();}
+  };
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {
   G4int nSystems = fAvailableGraphicsSystems.size ();
   G4cout << "Current available graphics systems are:";
   if (nSystems) {
-    for (int i = 0; i < nSystems; i++) {
-      const G4VGraphicsSystem* pSystem = fAvailableGraphicsSystems [i];
-      G4cout << "\n  " << pSystem -> GetName ();
-      if (pSystem -> GetNickname () != "") {
-	G4cout << " (" << pSystem -> GetNickname () << ")";
+    // Make a map of graphics systems names (there may be repeated systems)
+    // and for each name a set of nicknames.  The nicknames are ordered
+    // by length - see struct NicknameComparison above.
+    std::map<G4String,std::set<G4String,NicknameComparison> > systemMap;
+    for (G4int i = 0; i < nSystems; i++) {
+      const G4VGraphicsSystem* pSystem = fAvailableGraphicsSystems[i];
+      systemMap[pSystem->GetName()].insert(pSystem->GetNickname());
+    }
+    // Print the map.
+    std::map<G4String,std::set<G4String,NicknameComparison> >::const_iterator i;
+    for (i = systemMap.begin(); i != systemMap.end(); ++i) {
+      G4cout << "\n  " << i->first << " (";
+      const std::set<G4String,NicknameComparison>& nicknames = i->second;
+      std::set<G4String,NicknameComparison>::const_iterator j;
+      for (j = nicknames.begin(); j != nicknames.end(); ++j) {
+        if (j != nicknames.begin()) G4cout << ", ";
+        G4cout << *j;
       }
+      G4cout << ')';
     }
   }
   else {
@@ -1308,6 +1456,42 @@ void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
 	G4cout << "  " << (*i)->GetName() << G4endl;
 	if (verbosity >= parameters) (*i)->PrintAll(G4cout);
       }
+    }
+  }
+}
+
+void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
+{
+  G4cout <<
+    "You have successfully registered the following user vis actions."
+	 << G4endl;
+  G4cout << "Run Duration User Vis Actions:";
+  if (fRunDurationUserVisActions.empty()) G4cout << " none" << G4endl;
+  else {
+    G4cout << G4endl;
+    for (size_t i = 0; i < fRunDurationUserVisActions.size(); i++) {
+      const G4String& name = fRunDurationUserVisActions[i].fName;
+      G4cout << "  " << name << G4endl;
+    }
+  }
+
+  G4cout << "End of Event User Vis Actions:";
+  if (fEndOfEventUserVisActions.empty()) G4cout << " none" << G4endl;
+  else {
+    G4cout << G4endl;
+    for (size_t i = 0; i < fEndOfEventUserVisActions.size(); i++) {
+      const G4String& name = fEndOfEventUserVisActions[i].fName;
+      G4cout << "  " << name << G4endl;
+    }
+  }
+
+  G4cout << "End of Run User Vis Actions:";
+  if (fEndOfRunUserVisActions.empty()) G4cout << " none" << G4endl;
+  else {
+    G4cout << G4endl;
+    for (size_t i = 0; i < fEndOfRunUserVisActions.size(); i++) {
+      const G4String& name = fEndOfRunUserVisActions[i].fName;
+      G4cout << "  " << name << G4endl;
     }
   }
 }
@@ -1383,7 +1567,17 @@ void G4VisManager::EndOfEvent ()
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
+  // We are about to draw the event (trajectories, etc.), but first we
+  // have to clear the previous event(s) if necessary.  If this event
+  // needs to be drawn afresh, e.g., the first event or any event when
+  // "accumulate" is not requested, the old event has to be cleared.
+  // We have postponed this so that, for normal viewers like OGL, the
+  // previous event(s) stay on screen until this new event comes
+  // along.  For a file-writing viewer the geometry has to be drawn.
+  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
   ClearTransientStoreIfMarked();
+
+  // Now draw the event...
   fpSceneHandler->DrawEvent(currentEvent);
 
   G4int nEventsToBeProcessed = 0;
@@ -1401,8 +1595,10 @@ void G4VisManager::EndOfEvent ()
 
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
+      // ShowView guarantees the view comes to the screen.  No action
+      // is taken for normal viewers like OGL, but file-writing
+      // viewers have to close the file.
       fpViewer->ShowView();
-      fpViewer->DrawView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
       // Keep, but only if user has not kept any...
@@ -1447,7 +1643,14 @@ void G4VisManager::EndOfRun ()
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
+	// ShowView guarantees the view comes to the screen.  No
+	// action is taken for normal viewers like OGL, but
+	// file-writing viewers have to close the file.
 	fpViewer->ShowView();
+        // An extra refresh for auto-refresh viewers
+        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+          fpViewer->RefreshView();
+        }
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
     }
@@ -1557,33 +1760,33 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
 std::vector<G4String> G4VisManager::VerbosityGuidanceStrings;
 
 G4String G4VisManager::VerbosityString(Verbosity verbosity) {
-  G4String s;
+  G4String rs;
   switch (verbosity) {
-  case         quiet: s = "quiet (0)"; break;
-  case       startup: s = "startup (1)"; break;
-  case        errors: s = "errors (2)"; break;
-  case      warnings: s = "warnings (3)"; break;
-  case confirmations: s = "confirmations (4)"; break;
-  case    parameters: s = "parameters (5)"; break;
-  case           all: s = "all (6)"; break;
+  case         quiet: rs = "quiet (0)"; break;
+  case       startup: rs = "startup (1)"; break;
+  case        errors: rs = "errors (2)"; break;
+  case      warnings: rs = "warnings (3)"; break;
+  case confirmations: rs = "confirmations (4)"; break;
+  case    parameters: rs = "parameters (5)"; break;
+  case           all: rs = "all (6)"; break;
   }
-  return s;
+  return rs;
 }
 
 G4VisManager::Verbosity
 G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
-  G4String s(verbosityString); s.toLower();
+  G4String ss(verbosityString); ss.toLower();
   Verbosity verbosity;
-  if      (s(0) == 'q') verbosity = quiet;
-  else if (s(0) == 's') verbosity = startup;
-  else if (s(0) == 'e') verbosity = errors;
-  else if (s(0) == 'w') verbosity = warnings;
-  else if (s(0) == 'c') verbosity = confirmations;
-  else if (s(0) == 'p') verbosity = parameters;
-  else if (s(0) == 'a') verbosity = all;
+  if      (ss(0) == 'q') verbosity = quiet;
+  else if (ss(0) == 's') verbosity = startup;
+  else if (ss(0) == 'e') verbosity = errors;
+  else if (ss(0) == 'w') verbosity = warnings;
+  else if (ss(0) == 'c') verbosity = confirmations;
+  else if (ss(0) == 'p') verbosity = parameters;
+  else if (ss(0) == 'a') verbosity = all;
   else {
     G4int intVerbosity;
-    std::istringstream is(s);
+    std::istringstream is(ss);
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc,v 1.8 2009-08-17 14:52:19 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -37,6 +36,8 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4IsotopeProperty.hh"
 #include "G4DecayTable.hh"
 

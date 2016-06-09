@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.10 2010-11-03 08:28:42 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ---------------------------------------------------------------------
 // Modifications
 // 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
 //  24-Mar-2011  T.Aso  Add StepChecker for debugging.
 //  24-Mar-2011  T.Aso  Size and segmentation for replicated cylinder.
+//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options 
+//                      in flatCurrent and flatFulx commands.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -334,13 +335,23 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 		new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
-	      ps->SetUnit(token[4]);
+	      if ( StoB(token[3]) ){
+		ps->SetUnit(token[4]);
+	      }else{
+		ps->SetUnit("");
+	      }
 	      mesh->SetPrimitiveScorer(ps);
 	  }
       } else if(command== qFlatSurfFluxCmd){
 	  if( CheckMeshPS(mesh, token[0] )) {
 	      G4PSFlatSurfaceFlux3D* ps = new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1]));
-	      ps->SetUnit(token[2]);
+	      ps->Weighted(StoB(token[2]));
+	      ps->DivideByArea(StoB(token[3]));
+	      if ( StoB(token[3]) ){
+		ps->SetUnit(token[4]);
+	      }else{
+		ps->SetUnit("");
+	      }
 	      mesh->SetPrimitiveScorer(ps);
 	  }
 //    } else if(command== qSphereSurfCurrCmd){
@@ -349,13 +360,23 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 //		new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
 //	      ps->Weighted(StoB(token[2]));
 //	      ps->DivideByArea(StoB(token[3]));
-//	      ps->SetUnit(token[4]);
+//	      if ( StoB(token[3]) ){
+//		ps->SetUnit(token[4]);
+//	      }else{
+//		ps->SetUnit("");
+//	      }
 //	      mesh->SetPrimitiveScorer(ps);
 //	  }
 //   } else if(command== qSphereSurfFluxCmd){
 //	  if( CheckMeshPS(mesh,token[0])) {
 //            G4PSSphereSurfaceFlux3D* ps = new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1]));
-//            ps->SetUnit(token[2]);	   
+//	      ps->Weighted(StoB(token[2]));
+//	      ps->DivideByArea(StoB(token[3]));
+//	      if ( StoB(token[3]) ){
+//		ps->SetUnit(token[4]);
+//	      }else{
+//		ps->SetUnit("");
+//	      }
 //	      mesh->SetPrimitiveScorer(ps);
 //	  }
 //   } else if(command== qCylSurfCurrCmd){
@@ -364,13 +385,24 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 //		new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
 //	      ps->Weighted(StoB(token[2]));
 //	      ps->DivideByArea(StoB(token[3]));
+//	      if ( StoB(token[3]) ){
+//		ps->SetUnit(token[4]);
+//	      }else{
+//		ps->SetUnit("");
+//	      }
 //	      ps->SetUnit(token[4]);
 //	      mesh->SetPrimitiveScorer(ps);
 //	  }
 //   } else if(command== qCylSurfFluxCmd){
 //	  if( CheckMeshPS(mesh, token[0] ) {
 //            G4PSCylinerSurfaceFlux3D* ps =new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1]));
-//            ps->SetUnit(token[2]);
+//	      ps->Weighted(StoB(token[2]));
+//	      ps->DivideByArea(StoB(token[3]));
+//	      if ( StoB(token[3]) ){
+//		ps->SetUnit(token[4]);
+//	      }else{
+//		ps->SetUnit("");
+//	      }
 //	      mesh->SetPrimitiveScorer(ps);
 //	  }
       } else if(command== qNofCollisionCmd){

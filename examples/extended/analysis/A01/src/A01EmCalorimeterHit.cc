@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeterHit.cc,v 1.12 2006-11-14 07:11:19 perl Exp $
+/// \file analysis/A01/src/A01EmCalorimeterHit.cc
+/// \brief Implementation of the A01EmCalorimeterHit class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -37,22 +40,23 @@
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 G4Allocator<A01EmCalorimeterHit> A01EmCalorimeterHitAllocator;
 
 A01EmCalorimeterHit::A01EmCalorimeterHit()
 {
-  cellID = -1;
-  edep = 0.;
-  pLogV = 0;
+  fCellID = -1;
+  fEdep = 0.;
+  fPLogV = 0;
 }
 
 A01EmCalorimeterHit::A01EmCalorimeterHit(G4int z)
 {
-  cellID = z;
-  edep = 0.;
-  pLogV = 0;
+  fCellID = z;
+  fEdep = 0.;
+  fPLogV = 0;
 }
 
 A01EmCalorimeterHit::~A01EmCalorimeterHit()
@@ -60,45 +64,45 @@ A01EmCalorimeterHit::~A01EmCalorimeterHit()
 
 A01EmCalorimeterHit::A01EmCalorimeterHit(const A01EmCalorimeterHit &right)
     : G4VHit() {
-  cellID = right.cellID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
+  fCellID = right.fCellID;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fRot = right.fRot;
+  fPLogV = right.fPLogV;
 }
 
 const A01EmCalorimeterHit& A01EmCalorimeterHit::operator=(const A01EmCalorimeterHit &right)
 {
-  cellID = right.cellID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
+  fCellID = right.fCellID;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fRot = right.fRot;
+  fPLogV = right.fPLogV;
   return *this;
 }
 
 int A01EmCalorimeterHit::operator==(const A01EmCalorimeterHit &right) const
 {
-  return (cellID==right.cellID);
+  return (fCellID==right.fCellID);
 }
 
 void A01EmCalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager&&(edep>0.))
+  if(pVVisManager&&(fEdep>0.))
   {
     // Draw a calorimeter cell with a color corresponding to its energy deposit
-    G4Transform3D trans(rot.inverse(),pos);
+    G4Transform3D trans(fRot.inverse(),fPos);
     G4VisAttributes attribs;
-    const G4VisAttributes* pVA = pLogV->GetVisAttributes();
+    const G4VisAttributes* pVA = fPLogV->GetVisAttributes();
     if(pVA) attribs = *pVA;
-    G4double rcol = edep/(0.7*GeV);
+    G4double rcol = fEdep/(0.7*GeV);
     if(rcol>1.) rcol = 1.;
     if(rcol<0.4) rcol = 0.4;
     G4Colour colour(rcol,0.,0.);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*pLogV,attribs,trans);
+    pVVisManager->Draw(*fPLogV,attribs,trans);
   }
 }
 
@@ -119,7 +123,7 @@ const std::map<G4String,G4AttDef>* A01EmCalorimeterHit::GetAttDefs() const
 
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+                      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String LVol("LVol");
     (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Physics","","G4String");
@@ -134,17 +138,17 @@ std::vector<G4AttValue>* A01EmCalorimeterHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","EmCalorimeterHit",""));
 
   values->push_back
-    (G4AttValue("ID",G4UIcommand::ConvertToString(cellID),""));
+    (G4AttValue("ID",G4UIcommand::ConvertToString(fCellID),""));
 
   values->push_back
-    (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
+    (G4AttValue("Energy",G4BestUnit(fEdep,"Energy"),""));
 
   values->push_back
-    (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
+    (G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
 
-  if (pLogV)
+  if (fPLogV)
     values->push_back
-      (G4AttValue("LVol",pLogV->GetName(),""));
+      (G4AttValue("LVol",fPLogV->GetName(),""));
   else
     values->push_back
       (G4AttValue("LVol"," ",""));
@@ -154,7 +158,7 @@ std::vector<G4AttValue>* A01EmCalorimeterHit::CreateAttValues() const
 
 void A01EmCalorimeterHit::Print()
 {
-  G4cout << "  Cell[" << cellID << "] " << edep/MeV << " (MeV)" << G4endl;
+  G4cout << "  Cell[" << fCellID << "] " << fEdep/MeV << " (MeV)" << G4endl;
 }
 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.19 2010-10-29 23:18:35 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -57,10 +56,12 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include "G4ios.hh"
-#include "G4OpProcessSubType.hh"
-
 #include "G4OpRayleigh.hh"
+
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4OpProcessSubType.hh"
 
 /////////////////////////
 // Class Implementation

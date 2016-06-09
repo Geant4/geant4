@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -75,6 +74,7 @@ G4NeutronElasticXS::G4NeutronElasticXS()
 
 G4NeutronElasticXS::~G4NeutronElasticXS()
 {
+  delete fNucleon;
   for(G4int i=0; i<=maxZ; ++i) {
     delete data[i];
   }

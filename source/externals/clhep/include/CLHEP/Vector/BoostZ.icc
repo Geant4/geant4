@@ -25,11 +25,11 @@ inline HepBoostZ & HepBoostZ::operator = (const HepBoostZ & b) {
   return *this;
 }
 
-inline HepBoostZ::HepBoostZ(double beta) { set(beta); }
+inline HepBoostZ::HepBoostZ(double bbeta) { set(bbeta); }
 
 // - Protected method:
-inline HepBoostZ::HepBoostZ( double beta, double gamma ) : 
-					beta_(beta), gamma_(gamma) {}
+inline HepBoostZ::HepBoostZ( double bbeta, double ggamma ) : 
+					beta_(bbeta), gamma_(ggamma) {}
 
 // ----------  Accessors:
 

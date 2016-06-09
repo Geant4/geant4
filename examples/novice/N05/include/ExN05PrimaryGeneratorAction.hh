@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PrimaryGeneratorAction.hh,v 1.5 2006-06-29 17:52:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef ExN05PrimaryGeneratorAction_h

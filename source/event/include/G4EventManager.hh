@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.23 2010-06-12 04:07:45 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 
@@ -129,12 +128,7 @@ class G4EventManager
       // an event is not processing.
 
   public: // with description
-      inline void AbortCurrentEvent()
-      { 
-        abortRequested = true;
-        trackContainer->clear();
-        if(tracking) trackManager->EventAborted();
-      }
+      void AbortCurrentEvent();
       //  This method aborts the processing of the current event. All stacked
       // tracks are deleted. The contents of G4Event object is not completed,
       // but trajectories, hits, and/or digits which are created before the

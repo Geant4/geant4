@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.hh,v 1.14 2006-06-29 19:09:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4UIWin32_h
 #define G4UIWin32_h 
@@ -81,17 +80,17 @@ public: // With description
   // Ex : AddButton("my_menu","Run","/run/beamOn 1"); 
 public:
   ~G4UIWin32 ();
-  void Prompt (G4String);
+  void Prompt (const G4String&);
   void SessionTerminate ();
-  void PauseSessionStart (G4String);
-  G4int ReceiveG4cout(G4String);
-  G4int ReceiveG4cerr(G4String);
+  void PauseSessionStart (const G4String&);
+  G4int ReceiveG4cout(const G4String&);
+  G4int ReceiveG4cerr(const G4String&);
   G4String GetCommand (int);
   void TextAppendString(char*);
 private:
-  void SecondaryLoop (G4String);
+  void SecondaryLoop (const G4String&);
   G4bool GetHelpChoice(G4int&);
-  void ExitHelp();
+  void ExitHelp() const;
 private:
   G4VInteractorManager* interactorManager;
   HWND mainWindow;

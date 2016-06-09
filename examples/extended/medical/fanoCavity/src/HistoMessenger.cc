@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.2 2007-11-13 11:31:54 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/HistoMessenger.cc
+/// \brief Implementation of the HistoMessenger class
 //
+//
+// $Id$
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "HistoMessenger.hh"
 
@@ -43,94 +46,74 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(HistoManager* manager)
-:histoManager (manager)
+:fHistoManager (manager)
 {
-  histoDir = new G4UIdirectory("/testem/histo/");
-  histoDir->SetGuidance("histograms control");
+  fHistoDir = new G4UIdirectory("/testem/histo/");
+  fHistoDir->SetGuidance("histograms control");
 
-  factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");
-
-  typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
-  typeCmd->SetGuidance("set histograms file type: hbook, root, XML");
-  typeCmd->SetCandidates("hbook root XML");
-
-  histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
-  histoCmd->SetGuidance("Set bining of the histo number ih :");
-  histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
+  fFileNameCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
+  fFileNameCmd->SetGuidance("set name for the histograms file");
+  
+  fHistoCmd = new G4UIcommand("/testem/histo/setHisto",this);
+  fHistoCmd->SetGuidance("Set bining of the histo number ih :");
+  fHistoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
   ih->SetGuidance("histo number : from 1 to MaxHisto");
   ih->SetParameterRange("ih>0");
-  histoCmd->SetParameter(ih);
+  fHistoCmd->SetParameter(ih);
   //
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
   nbBins->SetGuidance("number of bins");
   nbBins->SetParameterRange("nbBins>0");
-  histoCmd->SetParameter(nbBins);
+  fHistoCmd->SetParameter(nbBins);
   //
   G4UIparameter* valMin = new G4UIparameter("valMin",'d',false);
   valMin->SetGuidance("valMin, expressed in unit");
-  histoCmd->SetParameter(valMin);  
+  fHistoCmd->SetParameter(valMin);  
   //    
   G4UIparameter* valMax = new G4UIparameter("valMax",'d',false);
   valMax->SetGuidance("valMax, expressed in unit");
-  histoCmd->SetParameter(valMax);
+  fHistoCmd->SetParameter(valMax);
   //    
   G4UIparameter* unit = new G4UIparameter("unit",'s',true);
   unit->SetGuidance("if omitted, vmin and vmax are assumed dimensionless");
   unit->SetDefaultValue("none");
-  histoCmd->SetParameter(unit);
+  fHistoCmd->SetParameter(unit);
   
-  prhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/printHisto",this);
-  prhistoCmd->SetGuidance("print histo #id on ascii file");
-  prhistoCmd->SetParameterName("id",false);
-  prhistoCmd->SetRange("id>0");
-      
-  rmhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/removeHisto",this);
-  rmhistoCmd->SetGuidance("desactivate histo  #id");
-  rmhistoCmd->SetParameterName("id",false);
-  rmhistoCmd->SetRange("id>0");
+  fPrtHistoCmd = new G4UIcmdWithAnInteger("/testem/histo/printHisto",this);
+  fPrtHistoCmd->SetGuidance("print histo #id on ascii file");
+  fPrtHistoCmd->SetParameterName("id",false);
+  fPrtHistoCmd->SetRange("id>0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::~HistoMessenger()
 {
-  delete rmhistoCmd;
-  delete prhistoCmd;    
-  delete histoCmd;
-  delete typeCmd;  
-  delete factoryCmd;
-  delete histoDir;
+  delete fPrtHistoCmd;  
+  delete fHistoCmd;
+  delete fFileNameCmd;
+  delete fHistoDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if (command == factoryCmd)
-    histoManager->SetFileName(newValues);
+  if (command == fFileNameCmd)
+    fHistoManager->SetFileName(newValues);
 
-  if (command == typeCmd)
-    histoManager->SetFileType(newValues);
-
-  if (command == histoCmd)
-   { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
+  if (command == fHistoCmd)
+   { G4int ih,nbBins; G4double vmin,vmax; G4String unit;
      const char* t = newValues;
      std::istringstream is(t);
-     is >> ih >> nbBins >> vmin >> vmax >> unts;
-     G4String unit = unts;
-     G4double vUnit = 1. ;
-     if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
-     histoManager->SetHisto (ih,nbBins,vmin*vUnit,vmax*vUnit,unit);
+     is >> ih >> nbBins >> vmin >> vmax >> unit;
+     fHistoManager->SetHisto (ih,nbBins,vmin,vmax,unit);     
    }
    
-  if (command == prhistoCmd)
-    histoManager->PrintHisto(prhistoCmd->GetNewIntValue(newValues));
-            
-  if (command == rmhistoCmd)
-    histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));         
+  if (command == fPrtHistoCmd)
+    fHistoManager->PrintHisto(fPrtHistoCmd->GetNewIntValue(newValues));   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

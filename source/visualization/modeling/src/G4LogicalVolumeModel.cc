@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.14 2006-11-01 10:28:42 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  26th July 1999.
@@ -59,7 +58,7 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
   G4PhysicalVolumeModel
 (new G4PVPlacement (0,                   // No rotation.
 		    G4ThreeVector(),     // Null traslation.
-		    "PhysVol representaion of LogVol " + pLV -> GetName (),
+		    "PhysVol representation of LogVol " + pLV -> GetName (),
 		    pLV,
 		    0,                   // No mother.
 		    false,               // Not "MANY".
@@ -73,6 +72,7 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
   fVoxels (voxels),
   fReadout (readout)
 {
+  fType = "G4LogicalVolumeModel";
   fGlobalTag = fpLV -> GetName ();
   fGlobalDescription = "G4LogicalVolumeModel " + fGlobalTag;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: bindingEnergy.cc,v 1.11 2010-12-15 07:41:25 gunter Exp $
+// $Id$
 //
 // 20100622 M. Kelsey -- Replace all functionally with call-through to
 //		G4NucleiProperties.  Check for valid A/Z and return zero

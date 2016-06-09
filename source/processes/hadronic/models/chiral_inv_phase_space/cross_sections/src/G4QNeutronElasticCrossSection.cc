@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronElasticCrossSection.cc,v 1.5 2010-09-03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QNeutronElasticCrossSection for nA elastic cross sections
@@ -44,6 +43,7 @@
 //#define sdebug
 
 #include "G4QNeutronElasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static parameters
 const G4int G4QNeutronElasticCrossSection::nPoints=128;//#ofPt in the AMDB tabs(>anyPar)(D)
@@ -2356,8 +2356,8 @@ G4double G4QNeutronElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN
     G4double mt=mProt;                                 // Target mass in GeV
     if(tgN||tgZ>1) mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
-    return dmt*dmt*pP2/s;
+    G4double s_value=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
+    return dmt*dmt*pP2/s_value;
   }
   else
   {

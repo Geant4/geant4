@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc,v 1.3 2010-10-26 10:06:12 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +46,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4alphaIonisation.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Alpha.hh"
 #include "G4BraggIonModel.hh"
@@ -97,8 +99,8 @@ G4double G4alphaIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 					     G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
-  return mass*(g - 1.0);
+  G4double gam = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
+  return mass*(gam - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

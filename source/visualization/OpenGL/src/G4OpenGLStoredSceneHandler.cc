@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.46 2010-11-10 17:11:20 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -44,6 +43,7 @@
 #include "G4OpenGLStoredSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Polyline.hh"
@@ -55,30 +55,106 @@
 #include "G4AttHolder.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4AttHolder.hh"
 
-G4OpenGLStoredSceneHandler::PO::PO
-(G4int id,
- const G4Transform3D& tr):
-  fDisplayListId(id),
-  fTransform(tr),
-  fPickName(0)
+#include <typeinfo>
+
+G4OpenGLStoredSceneHandler::PO::PO():
+  fDisplayListId(0),
+  fPickName(0),
+  fpG4TextPlus(0),
+  fMarkerOrPolyline(false)
 {}
 
-G4OpenGLStoredSceneHandler::TO::TO
-(G4int id,
- const G4Transform3D& tr):
+G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
+  fDisplayListId(po.fDisplayListId),
+  fTransform(po.fTransform),
+  fPickName(po.fPickName),
+  fColour(po.fColour),
+  fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0),
+  fMarkerOrPolyline(po.fMarkerOrPolyline)
+{}
+
+G4OpenGLStoredSceneHandler::PO::PO(G4int id, const G4Transform3D& tr):
+  fDisplayListId(id),
+  fTransform(tr),
+  fPickName(0),
+  fpG4TextPlus(0),
+  fMarkerOrPolyline(false)
+{}
+
+G4OpenGLStoredSceneHandler::PO::~PO()
+{
+  delete fpG4TextPlus;
+}
+
+G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
+  (const G4OpenGLStoredSceneHandler::PO& rhs)
+{
+  if (&rhs == this) return *this;
+  fDisplayListId = rhs.fDisplayListId;
+  fTransform = rhs.fTransform;
+  fPickName = rhs.fPickName;
+  fColour = rhs.fColour;
+  fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
+  fMarkerOrPolyline = rhs.fMarkerOrPolyline;
+  return *this;
+}
+
+G4OpenGLStoredSceneHandler::TO::TO():
+  fDisplayListId(0),
+  fPickName(0),
+  fStartTime(-DBL_MAX),
+  fEndTime(DBL_MAX),
+  fpG4TextPlus(0),
+  fMarkerOrPolyline(false)
+{}
+
+G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
+  fDisplayListId(to.fDisplayListId),
+  fTransform(to.fTransform),
+  fPickName(to.fPickName),
+  fStartTime(to.fStartTime),
+  fEndTime(to.fEndTime),
+  fColour(to.fColour),
+  fpG4TextPlus(to.fpG4TextPlus? new G4TextPlus(*to.fpG4TextPlus): 0),
+  fMarkerOrPolyline(to.fMarkerOrPolyline)
+{}
+
+G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fDisplayListId(id),
   fTransform(tr),
   fPickName(0),
   fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX)
+  fEndTime(DBL_MAX),
+  fpG4TextPlus(0),
+  fMarkerOrPolyline(false)
 {}
+
+G4OpenGLStoredSceneHandler::TO::~TO()
+{
+  delete fpG4TextPlus;
+}
+
+G4OpenGLStoredSceneHandler::TO& G4OpenGLStoredSceneHandler::TO::operator=
+  (const G4OpenGLStoredSceneHandler::TO& rhs)
+{
+  if (&rhs == this) return *this;
+  fDisplayListId = rhs.fDisplayListId;
+  fTransform = rhs.fTransform;
+  fPickName = rhs.fPickName;
+  fStartTime = rhs.fStartTime;
+  fEndTime = rhs.fEndTime;
+  fColour = rhs.fColour;
+  fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
+  fMarkerOrPolyline = rhs.fMarkerOrPolyline;
+  return *this;
+}
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
 (G4VGraphicsSystem& system,
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
-fAddPrimitivePreambleNestingDepth (0),
 fTopPODL (0)
 {}
 
@@ -116,69 +192,234 @@ void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
-void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
-  // Track nesting depth to avoid recursive calls, for example, from a
-  // G4Polymarker that invokes a G4Circle...
-  fAddPrimitivePreambleNestingDepth++;
-  if (fAddPrimitivePreambleNestingDepth > 1) return;
+  const G4Colour& c = GetColour (visible);
+  G4double opacity = c.GetAlpha ();
+
+  G4bool transparency_enabled = true;
+  G4bool isMarkerNotHidden = true;
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) {
+    transparency_enabled = pViewer->transparency_enabled;
+    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
+  }
+  
+  G4bool isMarker = false;
+  try {
+    (void) dynamic_cast<const G4VMarker&>(visible);
+    isMarker = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isPolyline = false;
+  try {
+    (void) dynamic_cast<const G4Polyline&>(visible);
+    isPolyline = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isTransparent = opacity < 1.;
+  G4bool isMarkerOrPolyline = isMarker || isPolyline;
+  G4bool treatAsTransparent = transparency_enabled && isTransparent;
+  G4bool treatAsNotHidden = isMarkerNotHidden && isMarkerOrPolyline;
+  
+  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
+  else {
+    if (isMarkerOrPolyline && isMarkerNotHidden)
+      glDisable (GL_DEPTH_TEST);
+    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+  }
+
+  if (fThreePassCapable) {
+    
+    // Ensure transparent objects are drawn opaque ones and before
+    // non-hidden markers.  The problem of blending/transparency/alpha
+    // is quite a tricky one - see History of opengl-V07-01-01/2/3.
+    if (!(fSecondPassForTransparency || fThirdPassForNonHiddenMarkers)) {
+      // First pass...
+      if (treatAsTransparent) {  // Request pass for transparent objects...
+        fSecondPassForTransparencyRequested = true;
+      }
+      if (treatAsNotHidden) {    // Request pass for non-hidden markers...
+        fThirdPassForNonHiddenMarkersRequested = true;
+      }
+      // On first pass, transparent objects and non-hidden markers are not drawn...
+      if (treatAsTransparent || treatAsNotHidden) {
+        return false;  // No further processing.
+      }
+    }
+    
+    // On second pass, only transparent objects are drawn...
+    if (fSecondPassForTransparency) {
+      if (!treatAsTransparent) {
+        return false;  // No further processing.
+      }
+    }
+    
+    // On third pass, only non-hidden markers are drawn...
+    if (fThirdPassForNonHiddenMarkers) {
+      if (!treatAsNotHidden) {
+        return false;  // No further processing.
+        
+      }
+    }
+  }  // fThreePassCapable
+  
+  // Loads G4Atts for picking...
+  G4bool isPicking = false;
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    isPicking = true;
+    glLoadName(++fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(visible, holder);
+    fPickMap[fPickName] = holder;
+  }
+  
+  // Can we re-use a display list?
+  const G4VSolid* pSolid = 0;
+  G4PhysicalVolumeModel* pPVModel =
+  dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (fpViewer->GetViewParameters().GetVisAttributesModifiers().size())
+    // Touchables have been modified - don't risk re-using display list.
+    goto end_of_display_list_reuse_test;
+  if (pPVModel) {
+    // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
+    // G4PhysicalVolumeModel).
+    G4LogicalVolumeModel* pLVModel =
+    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+    if (pLVModel)
+      // Logical volume model - don't re-use.
+      goto end_of_display_list_reuse_test;
+    // If part of the geometry hierarchy, i.e., from a
+    // G4PhysicalVolumeModel, check if a display list already exists for
+    // this solid, re-use it if possible.  We could be smarter, and
+    // recognise repeated branches of the geometry hierarchy, for
+    // example.  But this algorithm should be secure, I think...
+    pSolid = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetSolid();
+    EAxis axis = kRho;
+    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+    if (pCurrentPV -> IsReplicated ()) {
+      G4int nReplicas;
+      G4double width;
+      G4double offset;
+      G4bool consuming;
+      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    }
+    // Provided it is not parametrised (because if so, the
+    // solid's parameters might have been changed)...
+    if (!(pCurrentPV -> IsParameterised ()) &&
+        // Provided it is not replicated radially (because if so, the
+        // solid's parameters will have been changed)...
+        !(pCurrentPV -> IsReplicated () && axis == kRho) &&
+        // ...and if the solid has already been rendered...
+        (fSolidMap.find (pSolid) != fSolidMap.end ())) {
+      fDisplayListId = fSolidMap [pSolid];
+      PO po(fDisplayListId,fObjectTransformation);
+      if (isPicking) po.fPickName = fPickName;
+      po.fColour = c;
+      po.fMarkerOrPolyline = isMarkerOrPolyline;
+      fPOList.push_back(po);
+      // No need to test if gl commands are used (result of
+      // ExtraPOProcessing) because we have already decided they will
+      // not, at least not here.  Also, pass a dummy G4Visible since
+      // not relevant for G4PhysicalVolumeModel.
+      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
+      return false;  // No further processing.
+    }
+  }
+end_of_display_list_reuse_test:
 
   // Because of our need to control colour of transients (display by
   // time fading), display lists may only cover a single primitive.
   // So display list setup is here.
-
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    fPickMap[++fPickName] = 0;
-  }
-
-  const G4Colour& c = GetColour (visible);
-
+  
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
     if (glGetError() == GL_OUT_OF_MEMORY ||
 	fDisplayListId > fDisplayListLimit) {
       G4cout <<
-  "********************* WARNING! ********************"
-  "\n*  Display list limit reached in OpenGL."
-  "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
-  "\n*  Current limit: " << fDisplayListLimit <<
-  ".  Change with \"/vis/ogl/set/displayListLimit\"."
-  "\n***************************************************"
-	     << G4endl;
+      "********************* WARNING! ********************"
+      "\n*  Display list limit reached in OpenGL."
+      "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
+      "\n*  Current limit: " << fDisplayListLimit <<
+      ".  Change with \"/vis/ogl/set/displayListLimit\"."
+      "\n***************************************************"
+      << G4endl;
       fMemoryForDisplayLists = false;
     }
   }
+  
+  if (pSolid) fSolidMap [pSolid] = fDisplayListId;
+
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      TO to(fDisplayListId, *fpObjectTransformation);
-      to.fPickName = fPickName;
+      TO to(fDisplayListId, fObjectTransformation);
+      if (isPicking) to.fPickName = fPickName;
       to.fColour = c;
       const G4VisAttributes* pVA =
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
-      ExtraTOProcessing(fTOList.size());  // Pass TO list index of next item.
+      to.fMarkerOrPolyline = isMarkerOrPolyline;
       fTOList.push_back(to);
+      // For transient objects, colour, transformation, are kept in
+      // the TO, so should *not* be in the display list.  As mentioned
+      // above, in some cases (display-by-time fading) we need to have
+      // independent control of colour.  But for now transform and set
+      // colour for immediate display.
       glPushMatrix();
-      G4OpenGLTransform3D oglt (*fpObjectTransformation);
+      G4OpenGLTransform3D oglt (fObjectTransformation);
       glMultMatrixd (oglt.GetGLMatrix ());
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      if (transparency_enabled) {
+        glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+      } else {
+        glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+      }
+      (void) ExtraTOProcessing(visible, fTOList.size() - 1);
+      // Ignore return value of the above.  If this visible does not use
+      // gl commands, a display list is created that is empty and not
+      // used.
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
-    }
-    else {
-      PO po(fDisplayListId, *fpObjectTransformation);
-      po.fPickName = fPickName;
-      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
+    } else {
+      PO po(fDisplayListId, fObjectTransformation);
+      if (isPicking) po.fPickName = fPickName;
+      po.fColour = c;
+      po.fMarkerOrPolyline = isMarkerOrPolyline;
       fPOList.push_back(po);
+      // For permanent objects, colour is kept in the PO, so should
+      // *not* be in the display list.  This is so that sub-classes
+      // may implement colour modifications according to their own
+      // criteria, e.g., scen tree slider in Qt.  But for now set
+      // colour for immediate display.
+      if (transparency_enabled) {
+        glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+      } else {
+        glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+      }
+      G4bool usesGLCommands = ExtraPOProcessing(visible, fPOList.size() - 1);
+      // Transients are displayed as they come (GL_COMPILE_AND_EXECUTE
+      // above) but persistents are compiled into display lists
+      // (GL_COMPILE only) and then drawn from the display lists with
+      // their fObjectTransformation as stored in fPOList.  Thus,
+      // there is no need to do glMultMatrixd here.  If
+      // ExtraPOProcessing says the visible object does not use gl
+      // commands, simply return and abandon further processing.  It
+      // is assumed that all relevant information is kept in the
+      // POList.
+      if (!usesGLCommands) return false;
       glNewList (fDisplayListId, GL_COMPILE);
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     }
-  } else {
+  } else {  // Out of memory (or being used when display lists not required).
     glDrawBuffer (GL_FRONT);
     glPushMatrix();
-    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    if (transparency_enabled) {
+      glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+    } else {
+      glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+    }
   }
 
   if (fProcessing2D) {
@@ -191,10 +432,13 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
+    glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
   }
+
+  return true;
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
@@ -210,37 +454,40 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   //  if ((glGetError() == GL_TABLE_TOO_LARGE) || (glGetError() == GL_OUT_OF_MEMORY)) {  // Could close?
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
     G4cout <<
-      "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
-      "  display List for fTopPODL - try OpenGL Immediated mode."
+      "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
+      "  to allocate display List for fTopPODL - try OpenGL Immediated mode."
            << G4endl;
   }
   if (fMemoryForDisplayLists) {
     glEndList();
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
       G4cout <<
-        "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
-        "  display List for fTopPODL - try OpenGL Immediated mode."
+        "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
+	"  to allocate display List for fTopPODL - try OpenGL Immediated mode."
              << G4endl;
     }
   }
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
   }
-  fAddPrimitivePreambleNestingDepth--;
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
 {
-  AddPrimitivePreamble(polyline);
-  G4OpenGLSceneHandler::AddPrimitive(polyline);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(polyline);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polyline);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
-  AddPrimitivePreamble(polymarker);
-  G4OpenGLSceneHandler::AddPrimitive(polymarker);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(polymarker);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polymarker);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Text& text)
@@ -248,23 +495,29 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Text& text)
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Text&), so it still
   // gets into the display list
-  AddPrimitivePreamble(text);
-  G4OpenGLSceneHandler::AddPrimitive(text);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(text);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(text);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Circle& circle)
 {
-  AddPrimitivePreamble(circle);
-  G4OpenGLSceneHandler::AddPrimitive(circle);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(circle);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(circle);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
 {
-  AddPrimitivePreamble(square);
-  G4OpenGLSceneHandler::AddPrimitive(square);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(square);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(square);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Scale& scale)
@@ -278,9 +531,11 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&), so it still
   // gets into the display list
-  AddPrimitivePreamble(polyhedron);
-  G4OpenGLSceneHandler::AddPrimitive(polyhedron);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(polyhedron);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polyhedron);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
@@ -288,14 +543,15 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4NURBS&), so it still
   // gets into the display list
-  AddPrimitivePreamble(nurbs);
-  G4OpenGLSceneHandler::AddPrimitive(nurbs);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(nurbs);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(nurbs);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
-  ClearStore();  // ...and all that goes with it.
   /* Debug...
   fDisplayListId = glGenLists (1);
   G4cout << "OGL::fDisplayListId (start): " << fDisplayListId << G4endl;
@@ -311,7 +567,8 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       "  display List for fTopPODL - try OpenGL Immediated mode."
 	   << G4endl;
   } else {
-    glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
+
+    glNewList (fTopPODL, GL_COMPILE); {
       for (size_t i = 0; i < fPOList.size (); i++) {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (fPOList[i].fTransform);
@@ -323,6 +580,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       }
     }
     glEndList ();
+
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
       G4cout <<
         "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
@@ -332,11 +590,6 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   }
 
   G4VSceneHandler::EndModeling ();
-
-  /* Debug...
-  fDisplayListId = glGenLists (1);
-  G4cout << "OGL::fDisplayListId (end): " << fDisplayListId << G4endl;
-  */
 }
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
@@ -364,11 +617,9 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   fMemoryForDisplayLists = true;
 }
 
-void G4OpenGLStoredSceneHandler::ClearTransientStore () {
-
+void G4OpenGLStoredSceneHandler::ClearTransientStore ()
+{
   //G4cout << "G4OpenGLStoredSceneHandler::ClearTransientStore" << G4endl;
-
-  G4VSceneHandler::ClearTransientStore ();
 
   // Delete OpenGL transient display lists and Transient Objects themselves.
   for (size_t i = 0; i < fTOList.size (); i++)
@@ -377,104 +628,12 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
 
   fMemoryForDisplayLists = true;
 
-  // Make sure screen corresponds to graphical database...
+  // Redraw the scene ready for the next event.
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
-}
-
-void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
-{
-  if (fReadyForTransients) {
-    // Always draw transient solids, e.g., hits represented as solids.
-    // (As we have no control over the order of drawing of transient
-    // objects, we cannot do anything about transparent ones, as
-    // below, so always draw them.)
-    G4VSceneHandler::RequestPrimitives (solid);
-    return;
-  }
-
-  // For non-transient (run-duration) objects, ensure transparent
-  // objects are drawn last.  The problem of
-  // blending/transparency/alpha is quite a tricky one - see History
-  // of opengl-V07-01-01/2/3.
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
-  const G4Colour& c = pVA -> GetColour ();
-  G4double opacity = c.GetAlpha ();
-
-  if (!fSecondPass) {
-    G4bool transparency_enabled = true;
-    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-    if (transparency_enabled && opacity < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
-      return;
-    }
-  }
-
-  // On second pass, opaque objects are not drwan...
-  if (fSecondPass && opacity >= 1.) return;
-
-  G4PhysicalVolumeModel* pPVModel =
-    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
- 
-  if (pPVModel) {
-    // If part of the geometry hierarchy, i.e., from a
-    // G4PhysicalVolumeModel, check if a display list already exists for
-    // this solid, re-use it if possible.  We could be smarter, and
-    // recognise repeated branches of the geometry hierarchy, for
-    // example.  But this algorithm should be secure, I think...
-    const G4VSolid* pSolid = &solid;
-    EAxis axis = kRho;
-    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    if (pCurrentPV -> IsReplicated ()) {
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    }
-    // Provided it is not parametrised (because if so, the
-    // solid's parameters might have been changed)...
-    if (!(pCurrentPV -> IsParameterised ()) &&
-	// Provided it is not replicated radially (because if so, the
-	// solid's parameters will have been changed)...
-	!(pCurrentPV -> IsReplicated () && axis == kRho) &&
-	// ...and if the solid has already been rendered...
-	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
-      fDisplayListId = fSolidMap [pSolid];
-      PO po(fDisplayListId,*fpObjectTransformation);
-      if (fpViewer->GetViewParameters().IsPicking()) {
-	G4AttHolder* holder = new G4AttHolder;
-	// Load G4Atts from G4VisAttributes, if any...
-	const G4VisAttributes* va = pPVModel->GetCurrentLV()->GetVisAttributes();
-	if (va) {
-	  const std::map<G4String,G4AttDef>* vaDefs = va->GetAttDefs();
-	  if (vaDefs) holder->AddAtts(va->CreateAttValues(), vaDefs);
-	}
-	// Load G4Atts from G4PhysicalVolumeModel...
-	const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
-	if (defs) holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
-	fPickMap[++fPickName] = holder;
-	po.fPickName = fPickName;
-      }
-      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
-      fPOList.push_back(po);
-    }
-    else {
-      G4VSceneHandler::RequestPrimitives (solid);
-      fSolidMap [pSolid] = fDisplayListId;
-    }
-    return;
-  }
-
-  // Otherwise invoke base class method...
-  G4VSceneHandler::RequestPrimitives (solid);
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;

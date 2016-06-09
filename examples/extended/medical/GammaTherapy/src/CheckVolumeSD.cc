@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/CheckVolumeSD.cc
+/// \brief Implementation of the CheckVolumeSD class
+//
 // -------------------------------------------------------------
 //
 //      ---------- CheckVolumeSD -------------
@@ -44,13 +47,12 @@
 #include "globals.hh"
 #include "Histo.hh"
 #include "G4Gamma.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
- :G4VSensitiveDetector(name),
-  theHisto(Histo::GetPointer()),
-  evno(0)
+ :G4VSensitiveDetector(name), fHisto(Histo::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -61,11 +63,7 @@ CheckVolumeSD::~CheckVolumeSD()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void CheckVolumeSD::Initialize(G4HCofThisEvent*)
-{
-  evno++;
-  if(0 < theHisto->GetVerbose())
-    G4cout << "CheckVolumeSD: Begin Of Event # " << evno << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,11 +76,11 @@ G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4double x = p.x();
     G4double y = p.y();
     G4double r = std::sqrt(x*x + y*y);
-    theHisto->AddGamma(e,r);
+    fHisto->AddPhantomGamma(e,r);
   }
-  if(1 < theHisto->GetVerbose()) {
+  if(1 < fHisto->GetVerbose()) {
       G4cout << "CheckVolumeSD: energy = " << e/MeV
-                  << G4endl;
+             << G4endl;
   }
   return true;
 }

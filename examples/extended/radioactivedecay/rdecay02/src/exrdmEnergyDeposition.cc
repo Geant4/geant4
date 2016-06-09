@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmEnergyDeposition.cc
+/// \brief Implementation of the exrdmEnergyDeposition class
+//
 #include "exrdmEnergyDeposition.hh"
 
 
@@ -30,26 +33,28 @@
 // Default constructor
 //
 exrdmEnergyDeposition::exrdmEnergyDeposition()
+: fEnergy(0.), fTime(0.),fWeight(1.)
 {;}
 //
 // Specific constructor
 //
 exrdmEnergyDeposition::exrdmEnergyDeposition( G4double energy,
-				    G4double time,
+                                    G4double time,
                                     G4double weight )
-  : Energy(energy),
-    Time(time),
-    Weight(weight)
+  : fEnergy(energy),
+    fTime(time),
+    fWeight(weight)
 {;}
 
 
 //
 // Copy constructor
 //
-exrdmEnergyDeposition::exrdmEnergyDeposition( const exrdmEnergyDeposition &right )
-  : Energy(right.Energy),
-    Time(right.Time),
-    Weight(right.Weight)
+exrdmEnergyDeposition::exrdmEnergyDeposition(
+                                                   const exrdmEnergyDeposition &right )
+  : fEnergy(right.fEnergy),
+    fTime(right.fTime),
+    fWeight(right.fWeight)
 {;}
 
 //
@@ -60,21 +65,24 @@ exrdmEnergyDeposition::~exrdmEnergyDeposition() {;}
 //
 // Equivalence operator
 //
-G4bool exrdmEnergyDeposition::operator==( const exrdmEnergyDeposition &right ) const
+G4bool exrdmEnergyDeposition::operator==
+                                          ( const exrdmEnergyDeposition &right ) const
 {
-  return Time == right.Time;
+  return fTime == right.fTime;
 }
 
 //
 // Order operators
 //
-G4bool exrdmEnergyDeposition::operator<( const exrdmEnergyDeposition &right ) const
+G4bool exrdmEnergyDeposition::operator<
+                                  ( const exrdmEnergyDeposition &right ) const
 {
-  return Time < right.Time;
+  return fTime < right.fTime;
 }
 
-G4bool exrdmEnergyDeposition::operator<=( const exrdmEnergyDeposition &right ) const
+G4bool exrdmEnergyDeposition::operator<=
+                                  ( const exrdmEnergyDeposition &right ) const
 {
-  return Time <= right.Time;
+  return fTime <= right.fTime;
 }
 

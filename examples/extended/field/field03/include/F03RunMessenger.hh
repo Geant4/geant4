@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file field/field03/include/F03RunMessenger.hh
+/// \brief Definition of the F03RunMessenger class
 //
-// $Id: F03RunMessenger.hh,v 1.4 2006-06-29 17:19:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -36,9 +35,9 @@
 #ifndef F03RunMessenger_h
 #define F03RunMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 #include "G4ios.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -54,17 +53,16 @@ class F03RunMessenger : public G4UImessenger
   public:
 
    F03RunMessenger(F03RunAction* );
-  ~F03RunMessenger();
+   ~F03RunMessenger();
 
-   void SetNewValue(G4UIcommand* ,G4String );
+   virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-   F03RunAction*              runAction;
-   
-   G4UIdirectory*             RndmDir;
-   G4UIcmdWithAnInteger*      RndmSaveCmd;    
-   G4UIcmdWithAString*        RndmReadCmd;    
+   F03RunAction*              fRunAction;
+   G4UIdirectory*             fRndmDir;
+   G4UIcmdWithAnInteger*      fRndmSaveCmd;    
+   G4UIcmdWithAString*        fRndmReadCmd;    
  
 };
 

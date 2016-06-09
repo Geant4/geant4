@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.icc,v 1.13 2006-06-29 18:59:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation of G4Integrator methods. 
 //
@@ -322,7 +321,7 @@ template <class T, class F>
 G4double G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b,
                                       G4int nLegendre )
 {
-   G4double newton, newton1, temp1, temp2, temp3, temp ;
+   G4double nwt, nwt1, temp1, temp2, temp3, temp ;
    G4double xDiff, xMean, dx, integral ;
 
    const G4double tolerance = 1.6e-10 ;
@@ -340,7 +339,7 @@ G4double G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b,
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      nwt = std::cos(CLHEP::pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
 
       do     // loop of Newton's method  
       {                           
@@ -350,16 +349,16 @@ G4double G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b,
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-            temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
+            temp1 = ((2.0*j - 1.0)*nwt*temp2 - (j - 1.0)*temp3)/j ;
          }
-         temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
-         newton1 = newton ;
-         newton  = newton1 - temp1/temp ;       // Newton's method
+         temp = k*(nwt*temp1 - temp2)/(nwt*nwt - 1.0) ;
+         nwt1 = nwt ;
+         nwt  = nwt1 - temp1/temp ;       // Newton's method
       }
-      while(std::fabs(newton - newton1) > tolerance) ;
+      while(std::fabs(nwt - nwt1) > tolerance) ;
          
-      fAbscissa[fNumber-i] =  newton ;
-      fWeight[fNumber-i] = 2.0/((1.0 - newton*newton)*temp*temp) ;
+      fAbscissa[fNumber-i] =  nwt ;
+      fWeight[fNumber-i] = 2.0/((1.0 - nwt*nwt)*temp*temp) ;
    }
 
    //
@@ -399,7 +398,7 @@ template <class T, class F>
 G4double G4Integrator<T,F>::Legendre( G4double (*f)(G4double),
                           G4double a, G4double b, G4int nLegendre) 
 {
-   G4double newton, newton1, temp1, temp2, temp3, temp ;
+   G4double nwt, nwt1, temp1, temp2, temp3, temp ;
    G4double xDiff, xMean, dx, integral ;
 
    const G4double tolerance = 1.6e-10 ;
@@ -417,7 +416,7 @@ G4double G4Integrator<T,F>::Legendre( G4double (*f)(G4double),
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      nwt = std::cos(CLHEP::pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
 
       do     // loop of Newton's method  
       {                           
@@ -427,16 +426,16 @@ G4double G4Integrator<T,F>::Legendre( G4double (*f)(G4double),
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-            temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
+            temp1 = ((2.0*j - 1.0)*nwt*temp2 - (j - 1.0)*temp3)/j ;
          }
-         temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
-         newton1 = newton ;
-         newton  = newton1 - temp1/temp ;       // Newton's method
+         temp = k*(nwt*temp1 - temp2)/(nwt*nwt - 1.0) ;
+         nwt1 = nwt ;
+         nwt  = nwt1 - temp1/temp ;       // Newton's method
       }
-      while(std::fabs(newton - newton1) > tolerance) ;
+      while(std::fabs(nwt - nwt1) > tolerance) ;
          
-      fAbscissa[fNumber-i] =  newton ;
-      fWeight[fNumber-i] = 2.0/((1.0 - newton*newton)*temp*temp) ;
+      fAbscissa[fNumber-i] =  nwt ;
+      fWeight[fNumber-i] = 2.0/((1.0 - nwt*nwt)*temp*temp) ;
    }
 
    //
@@ -751,7 +750,7 @@ G4double G4Integrator<T,F>::Chebyshev( T& typeT, F f, G4double a,
    G4double xDiff, xMean, dx, integral = 0.0 ;
    
    G4int fNumber = nChebyshev  ;   // Try to reduce fNumber twice ??
-   G4double cof = pi/fNumber ;
+   G4double cof = CLHEP::pi/fNumber ;
    G4double* fAbscissa = new G4double[fNumber] ;
    G4double* fWeight   = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
@@ -799,7 +798,7 @@ G4double G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
    G4double xDiff, xMean, dx, integral = 0.0 ;
    
    G4int fNumber = nChebyshev  ;   // Try to reduce fNumber twice ??
-   G4double cof = pi/fNumber ;
+   G4double cof = CLHEP::pi/fNumber ;
    G4double* fAbscissa = new G4double[fNumber] ;
    G4double* fWeight   = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
@@ -844,7 +843,7 @@ G4double G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha,
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
    G4int i, j, k ;
-   G4double newton=0., newton1, temp1, temp2, temp3, temp, cofi ;
+   G4double nwt=0., nwt1, temp1, temp2, temp3, temp, cofi ;
    G4double integral = 0.0 ;
 
    G4int fNumber = nLaguerre ;
@@ -855,19 +854,19 @@ G4double G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha,
    {
       if(i == 1)
       {
-         newton = (1.0 + alpha)*(3.0 + 0.92*alpha)
+         nwt = (1.0 + alpha)*(3.0 + 0.92*alpha)
                 / (1.0 + 2.4*fNumber + 1.8*alpha) ;
       }
       else if(i == 2)
       {
-         newton += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
+         nwt += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
       }
       else
       {
          cofi = i - 2 ;
-         newton += ((1.0+2.55*cofi)/(1.9*cofi)
-                 + 1.26*cofi*alpha/(1.0+3.5*cofi))
-                 * (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
+         nwt += ((1.0+2.55*cofi)/(1.9*cofi)
+              + 1.26*cofi*alpha/(1.0+3.5*cofi))
+              * (nwt - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
       }
       for(k=1;k<=maxNumber;k++)
       {
@@ -878,13 +877,13 @@ G4double G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha,
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-         temp1 = ((2*j - 1 + alpha - newton)*temp2 - (j - 1 + alpha)*temp3)/j ;
+         temp1 = ((2*j - 1 + alpha - nwt)*temp2 - (j - 1 + alpha)*temp3)/j ;
          }
-         temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/newton ;
-         newton1 = newton ;
-         newton  = newton1 - temp1/temp ;
+         temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/nwt ;
+         nwt1 = nwt ;
+         nwt  = nwt1 - temp1/temp ;
 
-         if(std::fabs(newton - newton1) <= tolerance) 
+         if(std::fabs(nwt - nwt1) <= tolerance) 
          {
             break ;
          }
@@ -895,7 +894,7 @@ G4double G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha,
                      FatalException, "Too many (>12) iterations.");
       }
          
-      fAbscissa[i-1] =  newton ;
+      fAbscissa[i-1] =  nwt ;
       fWeight[i-1] = -std::exp(GammaLogarithm(alpha + fNumber) - 
                 GammaLogarithm((G4double)fNumber))/(temp*fNumber*temp2) ;
    }
@@ -936,7 +935,7 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
    G4int i, j, k ;
-   G4double newton=0., newton1, temp1, temp2, temp3, temp, cofi ;
+   G4double nwt=0., nwt1, temp1, temp2, temp3, temp, cofi ;
    G4double integral = 0.0 ;
 
    G4int fNumber = nLaguerre ;
@@ -947,19 +946,19 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
    {
       if(i == 1)
       {
-         newton = (1.0 + alpha)*(3.0 + 0.92*alpha)
-                / (1.0 + 2.4*fNumber + 1.8*alpha) ;
+         nwt = (1.0 + alpha)*(3.0 + 0.92*alpha)
+             / (1.0 + 2.4*fNumber + 1.8*alpha) ;
       }
       else if(i == 2)
       {
-         newton += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
+         nwt += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
       }
       else
       {
          cofi = i - 2 ;
-         newton += ((1.0+2.55*cofi)/(1.9*cofi)
-                    + 1.26*cofi*alpha/(1.0+3.5*cofi))
-                 * (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
+         nwt += ((1.0+2.55*cofi)/(1.9*cofi)
+              + 1.26*cofi*alpha/(1.0+3.5*cofi))
+              * (nwt - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
       }
       for(k=1;k<=maxNumber;k++)
       {
@@ -970,13 +969,13 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-         temp1 = ((2*j - 1 + alpha - newton)*temp2 - (j - 1 + alpha)*temp3)/j ;
+         temp1 = ((2*j - 1 + alpha - nwt)*temp2 - (j - 1 + alpha)*temp3)/j ;
          }
-         temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/newton ;
-         newton1 = newton ;
-         newton  = newton1 - temp1/temp ;
+         temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/nwt ;
+         nwt1 = nwt ;
+         nwt  = nwt1 - temp1/temp ;
 
-         if(std::fabs(newton - newton1) <= tolerance) 
+         if(std::fabs(nwt - nwt1) <= tolerance) 
          {
             break ;
          }
@@ -987,7 +986,7 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
                      FatalException, "Too many (>12) iterations.");
       }
          
-      fAbscissa[i-1] =  newton ;
+      fAbscissa[i-1] =  nwt ;
       fWeight[i-1] = -std::exp(GammaLogarithm(alpha + fNumber) - 
                 GammaLogarithm((G4double)fNumber))/(temp*fNumber*temp2) ;
    }
@@ -1052,9 +1051,9 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite )
    
    G4int i, j, k ;
    G4double integral = 0.0 ;
-   G4double newton=0., newton1, temp1, temp2, temp3, temp ;
+   G4double nwt=0., nwt1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(CLHEP::pi,-0.25) ; // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -1064,24 +1063,24 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite )
    {
       if(i == 1)
       {
-         newton = std::sqrt((G4double)(2*nHermite + 1)) - 
-                  1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
+         nwt = std::sqrt((G4double)(2*nHermite + 1)) - 
+               1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
       }
       else if(i == 2)
       {
-         newton -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton ;
+         nwt -= 1.14001*std::pow((G4double)nHermite,0.425999)/nwt ;
       }
       else if(i == 3)
       {
-         newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
+         nwt = 1.86002*nwt - 0.86002*fAbscissa[0] ;
       }
       else if(i == 4)
       {
-         newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
+         nwt = 1.91001*nwt - 0.91001*fAbscissa[1] ;
       }
       else 
       {
-         newton = 2.0*newton - fAbscissa[i - 3] ;
+         nwt = 2.0*nwt - fAbscissa[i - 3] ;
       }
       for(k=1;k<=maxNumber;k++)
       {
@@ -1092,14 +1091,14 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite )
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-            temp1 = newton*std::sqrt(2.0/j)*temp2 - 
+            temp1 = nwt*std::sqrt(2.0/j)*temp2 - 
                     std::sqrt(((G4double)(j - 1))/j)*temp3 ;
          }
          temp = std::sqrt((G4double)2*nHermite)*temp2 ;
-         newton1 = newton ;
-         newton = newton1 - temp1/temp ;
+         nwt1 = nwt ;
+         nwt = nwt1 - temp1/temp ;
 
-         if(std::fabs(newton - newton1) <= tolerance) 
+         if(std::fabs(nwt - nwt1) <= tolerance) 
          {
             break ;
          }
@@ -1109,7 +1108,7 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite )
          G4Exception("G4Integrator<T,F>::Hermite(T,F, ...)", "Error",
                      FatalException, "Too many (>12) iterations.");
       }
-      fAbscissa[i-1] =  newton ;
+      fAbscissa[i-1] =  nwt ;
       fWeight[i-1] = 2.0/(temp*temp) ;
    }
 
@@ -1150,9 +1149,9 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    
    G4int i, j, k ;
    G4double integral = 0.0 ;
-   G4double newton=0., newton1, temp1, temp2, temp3, temp ;
+   G4double nwt=0., nwt1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(CLHEP::pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -1162,24 +1161,24 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    {
       if(i == 1)
       {
-         newton = std::sqrt((G4double)(2*nHermite + 1)) - 
-                  1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
+         nwt = std::sqrt((G4double)(2*nHermite + 1)) - 
+               1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
       }
       else if(i == 2)
       {
-         newton -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton ;
+         nwt -= 1.14001*std::pow((G4double)nHermite,0.425999)/nwt ;
       }
       else if(i == 3)
       {
-         newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
+         nwt = 1.86002*nwt - 0.86002*fAbscissa[0] ;
       }
       else if(i == 4)
       {
-         newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
+         nwt = 1.91001*nwt - 0.91001*fAbscissa[1] ;
       }
       else 
       {
-         newton = 2.0*newton - fAbscissa[i - 3] ;
+         nwt = 2.0*nwt - fAbscissa[i - 3] ;
       }
       for(k=1;k<=maxNumber;k++)
       {
@@ -1190,14 +1189,14 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-            temp1 = newton*std::sqrt(2.0/j)*temp2 - 
+            temp1 = nwt*std::sqrt(2.0/j)*temp2 - 
                     std::sqrt(((G4double)(j - 1))/j)*temp3 ;
          }
          temp = std::sqrt((G4double)2*nHermite)*temp2 ;
-         newton1 = newton ;
-         newton = newton1 - temp1/temp ;
+         nwt1 = nwt ;
+         nwt = nwt1 - temp1/temp ;
 
-         if(std::fabs(newton - newton1) <= tolerance) 
+         if(std::fabs(nwt - nwt1) <= tolerance) 
          {
             break ;
          }
@@ -1207,7 +1206,7 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
          G4Exception("G4Integrator<T,F>::Hermite(...)", "Error",
                      FatalException, "Too many (>12) iterations.");
       }
-      fAbscissa[i-1] =  newton ;
+      fAbscissa[i-1] =  nwt ;
       fWeight[i-1] = 2.0/(temp*temp) ;
    }
 
@@ -1242,7 +1241,7 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
   const G4double maxNumber = 12 ;
   G4int i, k, j ;
   G4double alphaBeta, alphaReduced, betaReduced, root1=0., root2=0., root3=0. ;
-  G4double a, b, c, newton1, newton2, newton3, newton, temp, root=0., rootTemp ;
+  G4double a, b, c, nwt1, nwt2, nwt3, nwt, temp, root=0., rootTemp ;
 
   G4int     fNumber   = nJacobi ;
   G4double* fAbscissa = new G4double[fNumber] ;
@@ -1297,23 +1296,23 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
      for (k=1;k<=maxNumber;k++)
      {
         temp = 2.0 + alphaBeta ;
-        newton1 = (alpha-beta+temp*root)/2.0 ;
-        newton2 = 1.0 ;
+        nwt1 = (alpha-beta+temp*root)/2.0 ;
+        nwt2 = 1.0 ;
         for (j=2;j<=nJacobi;j++)
         {
-           newton3 = newton2 ;
-           newton2 = newton1 ;
+           nwt3 = nwt2 ;
+           nwt2 = nwt1 ;
            temp = 2*j+alphaBeta ;
            a = 2*j*(j+alphaBeta)*(temp-2.0) ;
             b = (temp-1.0)*(alpha*alpha-beta*beta+temp*(temp-2.0)*root) ;
            c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
-           newton1 = (b*newton2-c*newton3)/a ;
+           nwt1 = (b*nwt2-c*nwt3)/a ;
         }
-        newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
-              2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2)/
+        nwt = (nJacobi*(alpha - beta - temp*root)*nwt1 +
+              2.0*(nJacobi + alpha)*(nJacobi + beta)*nwt2)/
              (temp*(1.0 - root*root)) ;
         rootTemp = root ;
-        root = rootTemp - newton1/newton ;
+        root = rootTemp - nwt1/nwt ;
         if (std::fabs(root-rootTemp) <= tolerance)
         {
            break ;
@@ -1329,7 +1328,7 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
                         GammaLogarithm((G4double)(beta+nJacobi)) - 
                         GammaLogarithm((G4double)(nJacobi+1.0)) -
                         GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
-                        *temp*std::pow(2.0,alphaBeta)/(newton*newton2)             ;
+                        *temp*std::pow(2.0,alphaBeta)/(nwt*nwt2)             ;
    }
 
    //
@@ -1370,7 +1369,7 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
   const G4double maxNumber = 12 ;
   G4int i, k, j ;
   G4double alphaBeta, alphaReduced, betaReduced, root1=0., root2=0., root3=0. ;
-  G4double a, b, c, newton1, newton2, newton3, newton, temp, root=0., rootTemp ;
+  G4double a, b, c, nwt1, nwt2, nwt3, nwt, temp, root=0., rootTemp ;
 
   G4int     fNumber   = nJacobi ;
   G4double* fAbscissa = new G4double[fNumber] ;
@@ -1425,23 +1424,23 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
      for (k=1;k<=maxNumber;k++)
      {
         temp = 2.0 + alphaBeta ;
-        newton1 = (alpha-beta+temp*root)/2.0 ;
-        newton2 = 1.0 ;
+        nwt1 = (alpha-beta+temp*root)/2.0 ;
+        nwt2 = 1.0 ;
         for (j=2;j<=nJacobi;j++)
         {
-           newton3 = newton2 ;
-           newton2 = newton1 ;
+           nwt3 = nwt2 ;
+           nwt2 = nwt1 ;
            temp = 2*j+alphaBeta ;
            a = 2*j*(j+alphaBeta)*(temp-2.0) ;
            b = (temp-1.0)*(alpha*alpha-beta*beta+temp*(temp-2.0)*root) ;
            c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
-           newton1 = (b*newton2-c*newton3)/a ;
+           nwt1 = (b*nwt2-c*nwt3)/a ;
         }
-        newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
-             2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2) /
+        nwt = (nJacobi*(alpha - beta - temp*root)*nwt1 +
+             2.0*(nJacobi + alpha)*(nJacobi + beta)*nwt2) /
              (temp*(1.0 - root*root)) ;
         rootTemp = root ;
-        root = rootTemp - newton1/newton ;
+        root = rootTemp - nwt1/nwt ;
         if (std::fabs(root-rootTemp) <= tolerance)
         {
            break ;
@@ -1458,7 +1457,7 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
                  GammaLogarithm((G4double)(beta+nJacobi)) - 
                  GammaLogarithm((G4double)(nJacobi+1.0)) -
                  GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
-        *temp*std::pow(2.0,alphaBeta)/(newton*newton2);
+        *temp*std::pow(2.0,alphaBeta)/(nwt*nwt2);
    }
 
    //

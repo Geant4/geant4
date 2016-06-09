@@ -23,23 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh,v 1.8 2010-11-17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// Hadronic Process: Nuclear De-excitations
+// Hadronic Process: Nuclear De-excitations interface
+//
 // by V. Lara (Oct 1998) written from G4Evaporation.hh (May 1998)
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
-// JMQ (06 September 2008) Also external choices have been added for 
-// superimposed Coulomb barrier (if useSICBis set true, by default is false) 
-
+// Modifications:
+// 03 September 2008 by J. M. Quesada for external choice of inverse 
+//    cross section option
+// 06 September 2008 (JMQ) Also external choices have been added for 
+//    superimposed Coulomb barrier (if useSICBis set true, by default is false) 
+// 23 January 2012 by V.Ivanchenko added pointer of G4VPhotonEvaporation to 
+//    the constructor
+// 
 
 #ifndef G4VEvaporation_h
 #define G4VEvaporation_h 1
 
 #include "globals.hh"
 #include "G4Fragment.hh"
+
+class G4VEvaporationChannel;
 
 class G4VEvaporation 
 {
@@ -49,7 +54,6 @@ public:
 
 private:  
   G4VEvaporation(const G4VEvaporation &right);
-
   const G4VEvaporation & operator=(const G4VEvaporation &right);
   G4bool operator==(const G4VEvaporation &right) const;
   G4bool operator!=(const G4VEvaporation &right) const;
@@ -60,16 +64,27 @@ public:
 
   virtual void Initialise();
 
+  virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
+
+  inline G4VEvaporationChannel* GetPhotonEvaporation();
+
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
   // for superimposed Coulomb Barrier for inverse cross sections 	
   inline void UseSICB(G4bool use) { useSICB = use; }	
 
 protected:
+
+  G4VEvaporationChannel* thePhotonEvaporation;
+
   G4int OPTxs;
   G4bool useSICB;
 
 };
 
+inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
+{
+  return thePhotonEvaporation;
+}
 
 #endif

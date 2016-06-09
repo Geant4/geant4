@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc,v 1.6 2009-02-04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // OpenGLImmediateQt graphics system factory.
@@ -42,10 +41,10 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateQt::G4OpenGLImmediateQt ():
-  G4VGraphicsSystem ("OpenGLImmediateQt",
-		     "OGLIQt",
-		     G4VisFeaturesOfOpenGLIQt (),
-		     G4VGraphicsSystem::threeD)
+  G4OpenGLQt ("OpenGLImmediateQt",
+              "OGLIQt",
+              G4VisFeaturesOfOpenGLIQt (),
+              G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
 }
@@ -61,8 +60,8 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQt::CreateViewer \n");
 #endif
-  G4VViewer* pView =
-    new G4OpenGLImmediateQtViewer
+  G4VViewer* pView = 0;
+  pView = new G4OpenGLImmediateQtViewer
     ((G4OpenGLImmediateSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
@@ -81,7 +80,7 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQt::CreateViewer END \n");
 #endif
-   return pView;
+  return pView;
 }
 
 #endif

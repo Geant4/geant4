@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.cc,v 1.12 2009-02-24 10:58:04 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -42,13 +41,13 @@ G4VMarker::G4VMarker ():
   // fInfo: default initialisation.
 }
 
-G4VMarker::G4VMarker (const G4VMarker& m):
-  G4Visible   (m),
-  fPosition   (m.fPosition),
-  fWorldSize  (m.fWorldSize),
-  fScreenSize (m.fScreenSize),
-  fFillStyle  (m.fFillStyle),
-  fInfo       (m.fInfo)
+G4VMarker::G4VMarker (const G4VMarker& mk):
+  G4Visible   (mk),
+  fPosition   (mk.fPosition),
+  fWorldSize  (mk.fWorldSize),
+  fScreenSize (mk.fScreenSize),
+  fFillStyle  (mk.fFillStyle),
+  fInfo       (mk.fInfo)
 {}
 
 G4VMarker::G4VMarker (const G4Point3D& pos):
@@ -63,25 +62,25 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
 
 G4VMarker::~G4VMarker () {}
 
-G4VMarker& G4VMarker::operator = (const G4VMarker& m) {
-  if (&m == this) return *this;
-  G4Visible::operator = (m);
-  fPosition   = m.fPosition;
-  fWorldSize  = m.fWorldSize;
-  fScreenSize = m.fScreenSize;
-  fFillStyle  = m.fFillStyle;
-  fInfo       = m.fInfo;
+G4VMarker& G4VMarker::operator = (const G4VMarker& mk) {
+  if (&mk == this) return *this;
+  G4Visible::operator = (mk);
+  fPosition   = mk.fPosition;
+  fWorldSize  = mk.fWorldSize;
+  fScreenSize = mk.fScreenSize;
+  fFillStyle  = mk.fFillStyle;
+  fInfo       = mk.fInfo;
   return *this;
 }
 
-G4bool G4VMarker::operator != (const G4VMarker& m) const {
+G4bool G4VMarker::operator != (const G4VMarker& mk) const {
   if (
-      (G4Visible::operator != (m))   ||
-      (fWorldSize  != m.fWorldSize)   ||
-      (fScreenSize != m.fScreenSize)  ||
-      (fFillStyle  != m.fFillStyle)   ||
-      !(fPosition  == m.fPosition)    ||
-      (fInfo       != m.fInfo)
+      (G4Visible::operator != (mk))   ||
+      (fWorldSize  != mk.fWorldSize)   ||
+      (fScreenSize != mk.fScreenSize)  ||
+      (fFillStyle  != mk.fFillStyle)   ||
+      !(fPosition  == mk.fPosition)    ||
+      (fInfo       != mk.fInfo)
       )
     return true;
   return false;

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.22 2010-06-23 13:29:23 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
@@ -37,6 +36,8 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
+
+#include <qapplication.h>
 
 G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 (G4OpenGLImmediateSceneHandler& sceneHandler,
@@ -51,6 +52,8 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   fHasToRepaint = false;
   fIsRepainting = false;
 
+  resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 
@@ -63,7 +66,7 @@ void G4OpenGLImmediateQtViewer::Initialise() {
   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
   fReadyToPaint = false;
-  CreateMainWindow (this,QString(fName));
+  CreateMainWindow (this,QString(GetName()));
   CreateFontLists ();
 
   fReadyToPaint = true;
@@ -83,6 +86,11 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
     fHasToRepaint =true;
   }
 
+  // Set the component visible
+  setVisible(true) ;
+  
+  // and update it immediatly before wait for SessionStart() (batch mode)
+  QCoreApplication::sendPostedEvents () ;
 }
 
 
@@ -101,9 +109,9 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
   // back buffer for this OpenGLImmediate view.
   //  glDrawBuffer (GL_FRONT);
 
-  G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
+  G4ViewParameters::DrawingStyle dstyle = GetViewParameters().GetDrawingStyle();
 
-  if(style!=G4ViewParameters::hlr &&
+  if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 
     HaloingFirstPass ();
@@ -146,6 +154,8 @@ void G4OpenGLImmediateQtViewer::resizeGL(
 
 void G4OpenGLImmediateQtViewer::paintGL()
 {
+  updateToolbarAndMouseContextMenu();
+
   if (fIsRepainting) {
     //    return ;
   }

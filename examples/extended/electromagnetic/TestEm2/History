@@ -15,6 +15,30 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+19-10-12 mma (testem2-V09-05-05)
+- PhysListEmStandard: use G4UrbanMsc96 
+
+12-10-12 V.Ivant (testem2-V09-05-04)
+- Added statistics on number of charged and neutral steps
+- Migration to the updated analysis tool and implicit units
+     
+10-10-12 mma (testem2-V09-05-03)
+- add Em physics option4
+- coding conventions: virtual 
+    
+27-08-12 mma (testem2-V09-05-02)
+- add .README
+     
+07-04-12 mma (testem2-V09-05-01)
+- all classes : apply G4 coding conventions
+     
+02-03-12 mma (testem2-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+- remove unused macros
+     
 08-11-11 mma (testem2-V09-04-07)
 - modify SteppingVerbose for OutOfWorld
           

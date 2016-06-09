@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCrossSectionXS.hh,v 1.1 2010-06-03 14:01:59 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -47,7 +46,7 @@ class G4NeutronCrossSectionXS : public G4VPhysicsConstructor {
 
 public:
 
-  G4NeutronCrossSectionXS(G4int ver);
+  G4NeutronCrossSectionXS(G4int ver = 0);
   virtual ~G4NeutronCrossSectionXS();
 
   virtual void ConstructParticle();

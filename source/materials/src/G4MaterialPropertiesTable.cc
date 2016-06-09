@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.21 2009-04-21 15:35:45 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -49,6 +48,7 @@
 
 #include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
+#include "G4PhysicalConstants.hh"
 
 /////////////////
 // Constructors

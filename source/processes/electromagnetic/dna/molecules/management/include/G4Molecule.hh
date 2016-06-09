@@ -85,6 +85,9 @@ public: // With Description
 
     //  new/delete operators are overloded to use G4Allocator
     inline void *operator new(size_t);
+#ifdef __IBMCPP__
+    inline void *operator new(size_t sz, void* p) { return p; }
+#endif
     inline void operator delete(void *aVUserTrackInformation);
 
     G4Molecule(const G4Molecule&);
@@ -208,7 +211,7 @@ public:
     /** Returns the object ElectronOccupancy describing the electronic
      * configuration of the molecule.
      */
-    G4ElectronOccupancy GetElectronOccupancy() const;
+    const G4ElectronOccupancy* GetElectronOccupancy() const;
 
     /** Returns the charge of molecule.
      */

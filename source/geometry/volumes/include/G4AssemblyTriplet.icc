@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyTriplet.icc,v 1.2 2006-06-29 18:56:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4AssemblyTriplet - inline implementation
@@ -61,13 +60,13 @@ G4AssemblyTriplet::G4AssemblyTriplet( G4AssemblyVolume* pAssembly,
 }
 
 inline
-G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& second )
+G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& scopy )
 {
-  fVolume       = second.GetVolume();
-  fRotation     = second.GetRotation();
-  fTranslation  = second.GetTranslation();
-  fAssembly     = second.GetAssembly();
-  fIsReflection = second.IsReflection();
+  fVolume       = scopy.GetVolume();
+  fRotation     = scopy.GetRotation();
+  fTranslation  = scopy.GetTranslation();
+  fAssembly     = scopy.GetAssembly();
+  fIsReflection = scopy.IsReflection();
 }
 
 inline
@@ -145,15 +144,15 @@ G4bool G4AssemblyTriplet::IsReflection() const
 
 inline
 G4AssemblyTriplet&
-G4AssemblyTriplet::operator=( const G4AssemblyTriplet& second )
+G4AssemblyTriplet::operator=( const G4AssemblyTriplet& scopy )
 {
-  if( this != &second )
+  if( this != &scopy )
   {
-    fVolume       = second.GetVolume();
-    fRotation     = second.GetRotation();
-    fTranslation  = second.GetTranslation();
-    fAssembly     = second.GetAssembly();
-    fIsReflection = second.IsReflection();
+    fVolume       = scopy.GetVolume();
+    fRotation     = scopy.GetRotation();
+    fTranslation  = scopy.GetTranslation();
+    fAssembly     = scopy.GetAssembly();
+    fIsReflection = scopy.IsReflection();
   }
   
   return *this;

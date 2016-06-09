@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc,v 1.6 2009-05-03 08:29:55 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -40,6 +39,8 @@
 //                  - use G4ElementSelector
 
 #include "G4LivermorePolarizedComptonModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -49,7 +50,8 @@ using namespace std;
 
 G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
@@ -218,9 +220,9 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
 
   G4double epsilon, epsilonSq, onecost, sinThetaSqr, greject ;
 
-  G4double epsilon0 = 1./(1. + 2*E0_m);
-  G4double epsilon0Sq = epsilon0*epsilon0;
-  G4double alpha1   = - std::log(epsilon0);
+  G4double epsilon0Local = 1./(1. + 2*E0_m);
+  G4double epsilon0Sq = epsilon0Local*epsilon0Local;
+  G4double alpha1   = - std::log(epsilon0Local);
   G4double alpha2 = 0.5*(1.- epsilon0Sq);
 
   G4double wlGamma = h_Planck*c_light/gammaEnergy0;

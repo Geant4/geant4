@@ -26,7 +26,7 @@
 //
 // $Id$
 // 
-/// \file testAnalysis.cc
+/// \file common/analysis/testAnalysis.cc
 /// \brief Test program for the analysis common classes
 
 #ifdef G4_USE_HBOOK
@@ -34,7 +34,7 @@
 #endif
 
 // test program which only instantiates classes defined in 
-// examples/common/analysis
+// examples/extended/common/analysis
 
 int main()
 {

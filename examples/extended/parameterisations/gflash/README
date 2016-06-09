@@ -64,6 +64,6 @@ To use GFLASH the user has to implement the following to use GFLASH:
 	The separate interface is used, because the GFLASH spots contains
 	(naturally) less information than the full simulation. 
 		
-	Note: Intead of particle gun the gps class is used here for
+	Note: Instead of particle gun the gps class is used here for
 	particle generation. 
   

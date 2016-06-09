@@ -33,18 +33,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4DPMJET2_5Model.hh
+/// \brief Definition of the G4DPMJET2_5Model class
+//
 #ifndef G4DPMJET2_5Model_h
 #define G4DPMJET2_5Model_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5Model.hh
 //
-// Version:		0.B
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.B
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

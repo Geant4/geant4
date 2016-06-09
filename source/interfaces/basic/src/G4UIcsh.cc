@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcsh.cc,v 1.8 2006-06-29 19:09:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4UIcsh.hh"
@@ -44,9 +43,9 @@ G4UIcsh::~G4UIcsh()
 }
 
 
-//////////////////////////////////
-G4String G4UIcsh::GetCommandLine(const char* msg)
-//////////////////////////////////
+///////////////////////////////////////////////////////
+G4String G4UIcsh::GetCommandLineString(const char* msg)
+///////////////////////////////////////////////////////
 {
   MakePrompt(msg);
   G4cout << promptString << std::flush;

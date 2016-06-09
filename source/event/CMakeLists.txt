@@ -13,6 +13,7 @@
 
 # Add allocation export symbol for the event category
 add_definitions(-DG4EVENT_ALLOC_EXPORT)
+add_definitions(-DG4_USESMARTSTACK)
 
 include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)

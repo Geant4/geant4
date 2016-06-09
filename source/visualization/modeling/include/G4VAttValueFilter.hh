@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAttValueFilter.hh,v 1.2 2006-12-13 15:50:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Abstract base class for G4AttValue filters
 //

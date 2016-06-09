@@ -30,9 +30,9 @@
  *  fast, flexible operations on piecewise-twice-differentiable functions
  *
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
- *  \author 2005 Vanderbilt University.
+ *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- *	\version c2_function.cc,v 1.169 2008/05/22 12:45:19 marcus Exp
+ *	\version c2_function.cc 488 2012-04-04 11:30:21Z marcus 
  */
 
 #include <iostream>
@@ -47,7 +47,7 @@
 #include <sstream>
 
 template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
-{ return "c2_function.cc,v 1.169 2008/05/22 12:45:19 marcus Exp"; }
+{ return "c2_function.cc 488 2012-04-04 11:30:21Z marcus "; }
 
 // find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
 // since the derivatives are known exactly, and smoothness is guaranteed.
@@ -267,15 +267,16 @@ template <typename float_type> float_type c2_function<float_type>::integrate_ste
 		float_type left, right;
 		
 		// pre-compute constants so all multiplies use a small dynamic range
+		// note the forced csting of the denominators to assure full precision for (e.g.) long double
 		// constants for 0 derivative integrator
-		static const float_type c0c1=5./12., c0c2=8./12., c0c3=-1./12.;
+		static const float_type c0c1=5./((float_type)12.), c0c2=8./((float_type)12.), c0c3=-1./((float_type)12.);
 		// constants for 1 derivative integrator
-		static const float_type c1c1=101./240., c1c2=128./240., c1c3=11./240.,
-			c1c4=13./240., c1c5=-40./240., c1c6=-3./240.;
+		static const float_type c1c1=101./((float_type)240.), c1c2=128./((float_type)240.), c1c3=11./((float_type)240.),
+			c1c4=13./((float_type)240.), c1c5=-40./((float_type)240.), c1c6=-3./((float_type)240.);
 		// constants for 2 derivative integrator
-		static const float_type c2c1=169./40320., c2c2=1024./ 40320., c2c3=-41./40320.,
-			c2c4=2727./40320., c2c5=-5040./40320., c2c6=423./40320.,
-			c2c7=17007./40320., c2c8=24576./40320., c2c9=-1263./40320.;
+		static const float_type c2c1=169./((float_type)40320.), c2c2=1024./ ((float_type)40320.), c2c3=-41./((float_type)40320.),
+			c2c4=2727./((float_type)40320.), c2c5=-5040./((float_type)40320.), c2c6=423./((float_type)40320.),
+			c2c7=17007./((float_type)40320.), c2c8=24576./((float_type)40320.), c2c9=-1263./((float_type)40320.);
 		
 		switch(derivs) {
 			case 2:
@@ -355,7 +356,7 @@ template <typename float_type> bool c2_function<float_type>::check_monotonicity(
 
 template <typename float_type> void c2_function<float_type>::set_sampling_grid(const std::vector<float_type> &grid) throw(c2_exception)
 { 
-	bool rev=check_monotonicity(grid, "set_sampling_grid: sampling grid not monotonic");
+	bool rev=this->check_monotonicity(grid, "set_sampling_grid: sampling grid not monotonic");
 	
 	if(!sampling_grid || no_overwrite_grid) sampling_grid=new std::vector<float_type>;
 	(*sampling_grid)=grid; no_overwrite_grid=0;  
@@ -364,28 +365,28 @@ template <typename float_type> void c2_function<float_type>::set_sampling_grid(c
 }
 
 template <typename float_type> void c2_function<float_type>::
-	get_sampling_grid(float_type xmin, float_type xmax, std::vector<float_type> &grid) const 
+	get_sampling_grid(float_type amin, float_type amax, std::vector<float_type> &grid) const 
 {
 	std::vector<float_type> *result=&grid;
 	result->clear();
 	
-	if( !(sampling_grid) || !(sampling_grid->size()) || (xmax <= sampling_grid->front()) || (xmin >= sampling_grid->back()) ) { 
-		// nothing is known about the function in this region, return xmin and xmax		
-		result->push_back(xmin);
-		result->push_back(xmax);
+	if( !(sampling_grid) || !(sampling_grid->size()) || (amax <= sampling_grid->front()) || (amin >= sampling_grid->back()) ) { 
+		// nothing is known about the function in this region, return amin and amax		
+		result->push_back(amin);
+		result->push_back(amax);
 	} else {	
 		std::vector<float_type> &sg=*sampling_grid; // just a shortcut
 		int np=sg.size();
 		int klo=0, khi=np-1, firstindex=0, lastindex=np-1;
 		
-		result->push_back(xmin);
+		result->push_back(amin);
 
-		if(xmin > sg.front() ) {
+		if(amin > sg.front() ) {
 			// hunt through table for position bracketing starting point
 			while(khi-klo > 1) {
-				int km=(khi+klo)/2;
-				if(sg[km] > xmin) khi=km;
-				else klo=km;
+				int kk=(khi+klo)/2;
+				if(sg[kk] > amin) khi=kk;
+				else klo=kk;
 			}
 			khi=klo+1;
 			// khi now points to first point definitively beyond our first point, or last point of array
@@ -393,12 +394,12 @@ template <typename float_type> void c2_function<float_type>::
 			khi=np-1; // restart upper end of search
 		}
 		
-		if(xmax < sg.back()) {
+		if(amax < sg.back()) {
 			// hunt through table for position bracketing starting point
 			while(khi-klo > 1) {
-				int km=(khi+klo)/2;
-				if(sg[km] > xmax) khi=km;
-				else klo=km;
+				int kk=(khi+klo)/2;
+				if(sg[kk] > amax) khi=kk;
+				else klo=kk;
 			}
 			khi=klo+1;
 			// khi now points to first point definitively beyond our last point, or last point of array
@@ -408,7 +409,7 @@ template <typename float_type> void c2_function<float_type>::
 		int initsize=result->size();
 		result->resize(initsize+(lastindex-firstindex+2));
 		std::copy(sg.begin()+firstindex, sg.begin()+lastindex+1, result->begin()+initsize);
-		result->back()=xmax;
+		result->back()=amax;
 
 		//  this is the unrefined sampling grid... now check for very close points on front & back and fix if needed.
 		preen_sampling_grid(result);
@@ -464,46 +465,46 @@ template <typename float_type> void c2_function<float_type>::
 	grid=result; // copy the expanded grid back to the input
 }
 
-template <typename float_type> float_type c2_function<float_type>::integral(float_type xmin, float_type xmax, std::vector<float_type> *partials,
+template <typename float_type> float_type c2_function<float_type>::integral(float_type amin, float_type amax, std::vector<float_type> *partials,
 	 float_type abs_tol, float_type rel_tol, int derivs, bool adapt, bool extrapolate) const throw(c2_exception)
 {
-	if(xmin==xmax) {
+	if(amin==amax) {
 		if(partials) partials->clear();
 		return 0.0;
 	}
 	std::vector<float_type> grid;
-	get_sampling_grid(xmin, xmax, grid);
+	get_sampling_grid(amin, amax, grid);
 	float_type intg=partial_integrals(grid, partials, abs_tol, rel_tol, derivs, adapt, extrapolate);
 	return intg;
 }
 
-template <typename float_type> c2_function<float_type> &c2_function<float_type>::normalized_function(float_type xmin, float_type xmax, float_type norm) 
+template <typename float_type> c2_function<float_type> &c2_function<float_type>::normalized_function(float_type amin, float_type amax, float_type norm) 
 	const throw(c2_exception)
 {
-	float_type intg=integral(xmin, xmax);
+	float_type intg=integral(amin, amax);
 	return *new c2_scaled_function_p<float_type>(*this, norm/intg);
 }
 
-template <typename float_type> c2_function<float_type> &c2_function<float_type>::square_normalized_function(float_type xmin, float_type xmax, float_type norm)
+template <typename float_type> c2_function<float_type> &c2_function<float_type>::square_normalized_function(float_type amin, float_type amax, float_type norm)
 	const throw(c2_exception)
 {
 	c2_ptr<float_type> mesquared((*new c2_quadratic_p<float_type>(0., 0., 0., 1.))(*this));
 	
 	std::vector<float_type> grid;
-	get_sampling_grid(xmin, xmax, grid);		
+	get_sampling_grid(amin, amax, grid);		
 	float_type intg=mesquared->partial_integrals(grid);
 	
 	return *new c2_scaled_function_p<float_type>(*this, std::sqrt(norm/intg));
 }
 
 template <typename float_type> c2_function<float_type> &c2_function<float_type>::square_normalized_function(
-		float_type xmin, float_type xmax, const c2_function<float_type> &weight, float_type norm) 
+		float_type amin, float_type amax, const c2_function<float_type> &weight, float_type norm) 
 	const throw(c2_exception)
 {
 	c2_ptr<float_type> weighted((*new c2_quadratic_p<float_type>(0., 0., 0., 1.))(*this) * weight);
 
 	std::vector<float_type> grid;
-	get_sampling_grid(xmin, xmax, grid);	
+	get_sampling_grid(amin, amax, grid);	
 	float_type intg=weighted->partial_integrals(grid);
 
 	return *new c2_scaled_function_p<float_type>(*this, std::sqrt(norm/intg));
@@ -562,11 +563,11 @@ template <typename float_type> float_type c2_function<float_type>::partial_integ
 // generate a sampling grid at points separated by dx=5, which is intentionally
 // incommensurate with pi and 2*pi so grid errors are somewhat randomized
 template <typename float_type> void c2_sin_p<float_type>::
-	get_sampling_grid(float_type xmin, float_type xmax,  std::vector<float_type> &grid) const
+	get_sampling_grid(float_type amin, float_type amax,  std::vector<float_type> &grid) const
 {
 	grid.clear();	
-	for(; xmin < xmax; xmin+=5.0) grid.push_back(xmin);
-	grid.push_back(xmax);
+	for(; amin < amax; amin+=5.0) grid.push_back(amin);
+	grid.push_back(amax);
 	this->preen_sampling_grid(&grid);
 }
 
@@ -614,7 +615,7 @@ template <typename float_type> interpolating_function_p<float_type> & interpolat
 	// Xraw is useful in some of the arithmetic operations between interpolating functions
 	Xraw=x;
 
-	set_domain(std::min(Xraw.front(), Xraw.back()),std::max(Xraw.front(), Xraw.back()));
+	this->set_domain(std::min(Xraw.front(), Xraw.back()),std::max(Xraw.front(), Xraw.back()));
 		
 	if(x.size() != f.size()) {
 		throw c2_exception("interpolating_function::init() -- x & y inputs are of different size");
@@ -626,13 +627,13 @@ template <typename float_type> interpolating_function_p<float_type> & interpolat
 		throw c2_exception("interpolating_function::init() -- input < 2 elements ");
 	}
 	
-	bool xraw_rev=check_monotonicity(Xraw, 
+	bool xraw_rev=this->check_monotonicity(Xraw, 
 			"interpolating_function::init() non-monotonic raw x input"); // which way does raw X point?  sampling grid MUST be increasing
 
 	if(!xraw_rev) { // we can use pointer to raw X values if they are in the right order
-		set_sampling_grid_pointer(Xraw); // our intial grid of x values is certainly a good guess for 'interesting' points
+		this->set_sampling_grid_pointer(Xraw); // our intial grid of x values is certainly a good guess for 'interesting' points
 	} else {
-		set_sampling_grid(Xraw); // make a copy of it, and assure it is in right order
+		this->set_sampling_grid(Xraw); // make a copy of it, and assure it is in right order
 	}
 	
 	if(fTransform.X.fTransformed) { // check if X scale is nonlinear, and if so, do transform
@@ -646,7 +647,7 @@ template <typename float_type> interpolating_function_p<float_type> & interpolat
 		for(size_t i=0; i<np; i++) F[i]=fTransform.Y.fIn(F[i]);
 	}
 		  
-	xInverted=check_monotonicity(X, 
+	xInverted=this->check_monotonicity(X, 
 		"interpolating_function::init() non-monotonic transformed x input"); 
 	
 	if(splined) spline(lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope);
@@ -657,7 +658,7 @@ template <typename float_type> interpolating_function_p<float_type> & interpolat
 	return *this;
 }
 
-/*
+
 //  The constructor
 template <typename float_type> interpolating_function_p<float_type> & interpolating_function_p<float_type>::load_pairs(
 								std::vector<std::pair<float_type, float_type> > &data, 
@@ -717,7 +718,7 @@ template <typename float_type> interpolating_function_p<float_type> &
 
 template <typename float_type> interpolating_function_p<float_type> & 
 	interpolating_function_p<float_type>::load_random_generator_bins(
-	const std::vector<float_type> &bins, const std::vector<float_type> &binheights)
+	const std::vector<float_type> &bins, const std::vector<float_type> &binheights, bool splined)
 	throw(c2_exception)
 {	
 	c2_ptr<float_type> keepme(*this);
@@ -755,12 +756,12 @@ template <typename float_type> interpolating_function_p<float_type> &
 	integral.back()=1.0; // force exactly correct value on boundary
 	this->load(integral, bin_edges, 
 		  false, 1.0/(scale*binheights.front()), 
-		  false, 1.0/(scale*binheights.back())
-		  ); // use integral as x axis in inverse function
+		  false, 1.0/(scale*binheights.back()),
+		  splined); // use integral as x axis in inverse function
 	keepme.release_for_return();
 	return *this;
 }
-*/
+
 
 //  The spline table generator
 template <typename float_type> void interpolating_function_p<float_type>::spline(
@@ -815,7 +816,7 @@ template <typename float_type> void interpolating_function_p<float_type>::spline
 
 template <typename float_type> interpolating_function_p<float_type> &interpolating_function_p<float_type>::sample_function(
 			const c2_function<float_type> &func,
-			float_type xmin, float_type xmax, float_type abs_tol, float_type rel_tol, 
+			float_type amin, float_type amax, float_type abs_tol, float_type rel_tol, 
 			bool lowerSlopeNatural, float_type lowerSlope, 
 			bool upperSlopeNatural, float_type upperSlope
  ) throw(c2_exception) 
@@ -827,18 +828,18 @@ template <typename float_type> interpolating_function_p<float_type> &interpolati
 	 // set up our params to look like the samplng function for now
 	 sampler_function=func;
 	 std::vector<float_type> grid;
-	 func.get_sampling_grid(xmin, xmax, grid);
+	 func.get_sampling_grid(amin, amax, grid);
 	 size_t gsize=grid.size();
 	 if(XX.fTransformed) for(size_t i=0; i<gsize; i++) grid[i]=XX.fIn(grid[i]);
-	 set_sampling_grid_pointer(grid);
+	 this->set_sampling_grid_pointer(grid);
 	 
-	// float_type xmin1=fXin(xmin), xmax1=fXin(xmax); // bounds in transformed space
+	// float_type amin1=fXin(amin), amax1=fXin(amax); // bounds in transformed space
 	 // get a list of points needed in transformed space, directly into our tables
 	 this->adaptively_sample(grid.front(), grid.back(), 8*abs_tol, 8*rel_tol, 0, &X, &F);
 	 // clear the sampler function now, since otherwise our value_with_derivatives is broken
 	 sampler_function.unset_function();
 	 
-	 xInverted=check_monotonicity(X, 
+	 xInverted=this->check_monotonicity(X, 
 		  "interpolating_function::init() non-monotonic transformed x input"); 
 	 
 	 size_t np=X.size();
@@ -848,28 +849,28 @@ template <typename float_type> interpolating_function_p<float_type> &interpolati
 	 else {
 		 Xraw.resize(np);
 		 for (size_t i=1; i<np-1; i++) Xraw[i]=XX.fOut(X[i]);
-		 Xraw.front()=xmin;
-		 Xraw.back()=xmax;
+		 Xraw.front()=amin;
+		 Xraw.back()=amax;
 	 }
 	 	 
-	 bool xraw_rev=check_monotonicity(Xraw, 
+	 bool xraw_rev=this->check_monotonicity(Xraw, 
 		  "interpolating_function::init() non-monotonic raw x input"); 
 		  // which way does raw X point?  sampling grid MUST be increasing
 	 
 	 if(!xraw_rev) { // we can use pointer to raw X values if they are in the right order
-		 set_sampling_grid_pointer(Xraw); 
+		 this->set_sampling_grid_pointer(Xraw); 
 		 // our intial grid of x values is certainly a good guess for 'interesting' points
 	 } else {
-		 set_sampling_grid(Xraw); // make a copy of it, and assure it is in right order
+		 this->set_sampling_grid(Xraw); // make a copy of it, and assure it is in right order
 	 }
 	 
 	 if(XX.fTransformed) { // check if X scale is nonlinear, and if so, do transform
-		 if(!lowerSlopeNatural) lowerSlope /= XX.fInPrime(xmin);
-		 if(!upperSlopeNatural) upperSlope /= XX.fInPrime(xmax);
+		 if(!lowerSlopeNatural) lowerSlope /= XX.fInPrime(amin);
+		 if(!upperSlopeNatural) upperSlope /= XX.fInPrime(amax);
 	 }	
 	 if(YY.fTransformed) {  // check if Y scale is nonlinear, and if so, do transform
-		 if(!lowerSlopeNatural) lowerSlope *= YY.fInPrime(func(xmin));
-		 if(!upperSlopeNatural) upperSlope *= YY.fInPrime(func(xmax));
+		 if(!lowerSlopeNatural) lowerSlope *= YY.fInPrime(func(amin));
+		 if(!upperSlopeNatural) upperSlope *= YY.fInPrime(func(amax));
 	 }
 	 // note that each of ends has 3 points with two equal gaps, since they were obtained by bisection
 	 // so the step sizes are easy to get
@@ -887,7 +888,7 @@ template <typename float_type> interpolating_function_p<float_type> &interpolati
 		 upperSlope=0.5*(F[np-3]+3*F[np-1]-4*F[np-2])/hupper;
 		 upperSlopeNatural=false; // it's not the usual meaning of natural any more 
 	 }
-	 this->set_domain(xmin, xmax);
+	 this->set_domain(amin, amax);
 	 
 	 spline(lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope);
 	 lastKLow=0;
@@ -936,9 +937,9 @@ template <typename float_type> float_type interpolating_function_p<float_type>::
 		} else { // not bracketed, not close, start over
 				 // search for new KLow
 			while(khi-klo > 1) {
-				int km=(khi+klo)/2;
-				if(X[km] > x) khi=km;
-				else klo=km;
+				int kk=(khi+klo)/2;
+				if(X[kk] > x) khi=kk;
+				else klo=kk;
 			}
 		}
 	} else {
@@ -951,9 +952,9 @@ template <typename float_type> float_type interpolating_function_p<float_type>::
 		} else { // not bracketed, not close, start over
 				 // search for new KLow
 			while(khi-klo > 1) {
-				int km=(khi+klo)/2;
-				if(X[km] < x) khi=km;
-				else klo=km;
+				int kk=(khi+klo)/2;
+				if(X[kk] < x) khi=kk;
+				else klo=kk;
 			}
 		}
 	}
@@ -1095,7 +1096,7 @@ template <typename float_type> c2_inverse_function_p<float_type>::c2_inverse_fun
 	if (ly > ry) {
 		float_type t=ly; ly=ry; ry=t; 
 	}
-	set_domain(ly, ry);
+	this->set_domain(ly, ry);
 }
 
 template <typename float_type> float_type c2_inverse_function_p<float_type>::value_with_derivatives(
@@ -1197,9 +1198,9 @@ template <typename float_type> float_type c2_piecewise_function_p<float_type>::v
 	} else {
 		int khi=np;
 		while(khi-klo > 1) {
-			int km=(khi+klo)/2;
-			if(functions[km]->xmin() > x) khi=km;
-			else klo=km;
+			int kk=(khi+klo)/2;
+			if(functions[kk]->xmin() > x) khi=kk;
+			else klo=kk;
 		}
 	}
 	lastKLow=klo;
@@ -1472,7 +1473,7 @@ template <typename float_type> void c2_function<float_type>::sample_step(c2_samp
 
 template <typename float_type>  c2_piecewise_function_p<float_type> *
 	c2_function<float_type>::adaptively_sample(
-		float_type xmin, float_type xmax,
+		float_type amin, float_type amax,
 		float_type abs_tol, float_type rel_tol,
 		int derivs, std::vector<float_type> *xvals, std::vector<float_type> *yvals) const throw(c2_exception)
 {
@@ -1499,7 +1500,7 @@ template <typename float_type>  c2_piecewise_function_p<float_type> *
 	// create xgrid as a automatic-variable copy of the sampling grid so the exception handler correctly 
 	// disposes of it.
 	std::vector<float_type> xgrid;
-	get_sampling_grid(xmin, xmax, xgrid);
+	get_sampling_grid(amin, amax, xgrid);
 	int np=xgrid.size();	 
 
 	f2.x=xgrid[0];
@@ -1532,20 +1533,4 @@ template <typename float_type>  c2_piecewise_function_p<float_type> *
 	if(rb.out) rb.out->set_sampling_grid(xgrid); // reflect old sampling grid, which still should be right
 	pieces.release_for_return(); // unmanage the piecewise_function so we can return it
 	return rb.out;
-}
-
-template <typename float_type, typename Final> 
- interpolating_function_p<float_type> & inverse_integrated_density_function(
-	const std::vector<float_type> &bincenters, const c2_function<float_type> &binheights)
-	throw(c2_exception)
-{	
-	return (new Final())->load_random_generator_function(bincenters, binheights);
-}
-
-template <typename float_type, typename Final> 
-	interpolating_function_p<float_type> & inverse_integrated_density_bins(
-	const std::vector<float_type> &bins, const std::vector<float_type> &binheights)
-	throw(c2_exception)
-{	
-	return (new Final())->load_random_generator_bins(bins, binheights);
 }

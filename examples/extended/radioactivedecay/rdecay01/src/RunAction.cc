@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/src/RunAction.cc
+/// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -37,18 +39,24 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(HistoManager* histo, PrimaryGeneratorAction* kin)
-:histoManager(histo), primary(kin)
-{ }
+RunAction::RunAction(PrimaryGeneratorAction* kin)
+:fPrimary(kin)
+{
+  fHistoManager = new HistoManager();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{ 
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,13 +64,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
 { 
   //initialize arrays
   //
-  decayCount = timeCount = 0;
-  for (G4int i=0; i<3; i++) EkinTot[i] = Pbalance[i] = EventTime[i] = 0. ;
-  PrimaryTime = 0.;
+  fDecayCount = fTimeCount = 0;
+  for (G4int i=0; i<3; i++) fEkinTot[i] = fPbalance[i] = fEventTime[i] = 0. ;
+  fPrimaryTime = 0.;
           
   //histograms
   //
-  histoManager->book();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }     
   
   //inform the runManager to save random number seed
   //
@@ -73,48 +84,48 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::ParticleCount(G4String name, G4double Ekin)
 {
-  particleCount[name]++;
-  Emean[name] += Ekin;
+  fParticleCount[name]++;
+  fEmean[name] += Ekin;
   //update min max
-  if (particleCount[name] == 1) Emin[name] = Emax[name] = Ekin;
-  if (Ekin < Emin[name]) Emin[name] = Ekin;
-  if (Ekin > Emax[name]) Emax[name] = Ekin;  
+  if (fParticleCount[name] == 1) fEmin[name] = fEmax[name] = Ekin;
+  if (Ekin < fEmin[name]) fEmin[name] = Ekin;
+  if (Ekin > fEmax[name]) fEmax[name] = Ekin;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::Balance(G4double Ekin, G4double Pbal)
 {
-  decayCount++;
-  EkinTot[0] += Ekin;
+  fDecayCount++;
+  fEkinTot[0] += Ekin;
   //update min max  
-  if (decayCount == 1) EkinTot[1] = EkinTot[2] = Ekin;
-  if (Ekin < EkinTot[1]) EkinTot[1] = Ekin;
-  if (Ekin > EkinTot[2]) EkinTot[2] = Ekin;
+  if (fDecayCount == 1) fEkinTot[1] = fEkinTot[2] = Ekin;
+  if (Ekin < fEkinTot[1]) fEkinTot[1] = Ekin;
+  if (Ekin > fEkinTot[2]) fEkinTot[2] = Ekin;
   
-  Pbalance[0] += Pbal;
+  fPbalance[0] += Pbal;
   //update min max   
-  if (decayCount == 1) Pbalance[1] = Pbalance[2] = Pbal;  
-  if (Pbal < Pbalance[1]) Pbalance[1] = Pbal;
-  if (Pbal > Pbalance[2]) Pbalance[2] = Pbal;    
+  if (fDecayCount == 1) fPbalance[1] = fPbalance[2] = Pbal;  
+  if (Pbal < fPbalance[1]) fPbalance[1] = Pbal;
+  if (Pbal > fPbalance[2]) fPbalance[2] = Pbal;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EventTiming(G4double time)
 {
-  timeCount++;  
-  EventTime[0] += time;
-  if (timeCount == 1) EventTime[1] = EventTime[2] = time;  
-  if (time < EventTime[1]) EventTime[1] = time;
-  if (time > EventTime[2]) EventTime[2] = time;	     
+  fTimeCount++;  
+  fEventTime[0] += time;
+  if (fTimeCount == 1) fEventTime[1] = fEventTime[2] = time;  
+  if (time < fEventTime[1]) fEventTime[1] = time;
+  if (time > fEventTime[2]) fEventTime[2] = time;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::PrimaryTiming(G4double ptime)
 {
-  PrimaryTime += ptime;
+  fPrimaryTime += ptime;
 }
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,12 +133,12 @@ void RunAction::PrimaryTiming(G4double ptime)
 void RunAction::EndOfRunAction(const G4Run* run)
 {
  G4int nbEvents = run->GetNumberOfEvent();
- if (nbEvents == 0) return;
+ if (nbEvents == 0) { return; }
  
- G4ParticleDefinition* particle = primary->GetParticleGun()
+ G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                          ->GetParticleDefinition();
  G4String partName = particle->GetParticleName();
- G4double eprimary = primary->GetParticleGun()->GetParticleEnergy();
+ G4double eprimary = fPrimary->GetParticleGun()->GetParticleEnergy();
  
  G4cout << "\n ======================== run summary ======================";  
  G4cout << "\n The run was " << nbEvents << " " << partName << " of "
@@ -143,75 +154,91 @@ void RunAction::EndOfRunAction(const G4Run* run)
  G4cout << " Nb of generated particles: \n" << G4endl;
      
  std::map<G4String,G4int>::iterator it;               
- for (it = particleCount.begin(); it != particleCount.end(); it++) { 
+ for (it = fParticleCount.begin(); it != fParticleCount.end(); it++) { 
     G4String name = it->first;
     G4int count   = it->second;
-    G4double eMean = Emean[name]/count;
-    G4double eMin = Emin[name], eMax = Emax[name];    
+    G4double eMean = fEmean[name]/count;
+    G4double eMin = fEmin[name], eMax = fEmax[name];    
          
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-	   << "\t( "  << G4BestUnit(eMin, "Energy")
-	   << " --> " << G4BestUnit(eMax, "Energy") 
-           << ")" << G4endl;	   
+           << "\t( "  << G4BestUnit(eMin, "Energy")
+           << " --> " << G4BestUnit(eMax, "Energy") 
+           << ")" << G4endl;           
  }
  
  //energy momentum balance
  //
- G4double Ebmean = EkinTot[0]/decayCount;
- G4double Pbmean = Pbalance[0]/decayCount;
+
+ if (fDecayCount > 0) {
+    G4double Ebmean = fEkinTot[0]/fDecayCount;
+    G4double Pbmean = fPbalance[0]/fDecayCount;
          
- G4cout << "\n   Ekin Total (Q): mean = "
-        << std::setw(wid) << G4BestUnit(Ebmean, "Energy")
-	<< "\t( "  << G4BestUnit(EkinTot[1], "Energy")
-	<< " --> " << G4BestUnit(EkinTot[2], "Energy")
-        << ")" << G4endl;    
-	   
- G4cout << "\n   Momentum balance (excluding gamma desexcitation): mean = " 
-        << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
-	<< "\t( "  << G4BestUnit(Pbalance[1], "Energy")
-	<< " --> " << G4BestUnit(Pbalance[2], "Energy")
-        << ")" << G4endl;
-	    
+    G4cout << "\n   Ekin Total (Q): mean = "
+           << std::setw(wid) << G4BestUnit(Ebmean, "Energy")
+           << "\t( "  << G4BestUnit(fEkinTot[1], "Energy")
+           << " --> " << G4BestUnit(fEkinTot[2], "Energy")
+           << ")" << G4endl;    
+           
+    G4cout << "\n   Momentum balance (excluding gamma desexcitation): mean = " 
+           << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
+           << "\t( "  << G4BestUnit(fPbalance[1], "Energy")
+           << " --> " << G4BestUnit(fPbalance[2], "Energy")
+           << ")" << G4endl;
+ }
+            
  //total time of life
  //
- G4double Tmean = EventTime[0]/timeCount;
- G4double halfLife = Tmean*std::log(2.);
+ if (fTimeCount > 0) {
+    G4double Tmean = fEventTime[0]/fTimeCount;
+    G4double halfLife = Tmean*std::log(2.);
    
- G4cout << "\n   Total time of life : mean = "
-            << std::setw(wid) << G4BestUnit(Tmean, "Time")
-	    << "  half-life = "
-	    << std::setw(wid) << G4BestUnit(halfLife, "Time")
-	    << "   ( "  << G4BestUnit(EventTime[1], "Time")
-	    << " --> "  << G4BestUnit(EventTime[2], "Time")
-            << ")" << G4endl;
-	    
+    G4cout << "\n   Total time of life : mean = "
+           << std::setw(wid) << G4BestUnit(Tmean, "Time")
+           << "  half-life = "
+           << std::setw(wid) << G4BestUnit(halfLife, "Time")
+           << "   ( "  << G4BestUnit(fEventTime[1], "Time")
+           << " --> "  << G4BestUnit(fEventTime[2], "Time")
+           << ")" << G4endl;
+ }
+            
  //activity of primary ion
  //
- G4double pTimeMean = PrimaryTime/nbEvents;
+ G4double pTimeMean = fPrimaryTime/nbEvents;
  G4double molMass = particle->GetAtomicMass()*g/mole;
- G4double nAtoms = Avogadro/molMass;
- G4double ActivPerAtom = 1./pTimeMean;
- G4double ActivPerMass = ActivPerAtom*nAtoms;
+ G4double nAtoms_perUnitOfMass = Avogadro/molMass;
+ G4double Activity_perUnitOfMass = 0.0;
+ if (pTimeMean > 0.0)
+   { Activity_perUnitOfMass = nAtoms_perUnitOfMass/pTimeMean; }
    
  G4cout << "\n   Activity of " << partName << " = "
-            << std::setw(wid) << ActivPerMass*g/becquerel
-	    << " Bq/g   ("    << ActivPerMass*g/curie
-	    << " Ci/g) \n" 
-	    << G4endl;
-    	    	   	         
- // remove all contents in particleCount
+            << std::setw(wid)  << Activity_perUnitOfMass*g/becquerel
+            << " Bq/g   ("     << Activity_perUnitOfMass*g/curie
+            << " Ci/g) \n" 
+            << G4endl;
+                                            
+ // remove all contents in fParticleCount
  // 
- particleCount.clear(); 
- Emean.clear();  Emin.clear(); Emax.clear();
+ fParticleCount.clear(); 
+ fEmean.clear();  fEmin.clear(); fEmax.clear();
 
  // restore default precision
  // 
  G4cout.precision(dfprec);
             
- //save histograms
- //      
- histoManager->save();
+ //normalize and save histograms
+ //
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
+ G4double factor = 100./nbEvents;
+ analysisManager->ScaleH1(1,factor);
+ analysisManager->ScaleH1(2,factor);
+ analysisManager->ScaleH1(3,factor);
+ analysisManager->ScaleH1(4,factor);
+ analysisManager->ScaleH1(5,factor);   
+ if ( analysisManager->IsActive() ) {
+  analysisManager->Write();
+  analysisManager->CloseFile();
+ } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

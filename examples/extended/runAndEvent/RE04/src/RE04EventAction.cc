@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/src/RE04EventAction.cc
+/// \brief Implementation of the RE04EventAction class
+//
+// $Id: $
+//
 #include "RE04EventAction.hh"
 
 #include "G4Event.hh"
@@ -35,15 +39,19 @@
 #include "G4ios.hh"
 #include "RE04Trajectory.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04EventAction::RE04EventAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04EventAction::~RE04EventAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04EventAction::BeginOfEventAction(const G4Event*)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Summary of Event " << evt->GetEventID() << G4endl;
@@ -56,7 +64,8 @@ void RE04EventAction::EndOfEventAction(const G4Event* evt)
   G4cout << G4endl;
   for(G4int i=0; i<n_trajectories; i++) 
   {
-    RE04Trajectory* trj = (RE04Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
+    RE04Trajectory* trj
+      = (RE04Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
     trj->ShowTrajectory();
   }
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrRotationMatrix.cc,v 1.7 2010-10-13 15:20:01 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrRotationMatrix
@@ -35,6 +34,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrRotationMatrix.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrRotationMatrixFactory.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"

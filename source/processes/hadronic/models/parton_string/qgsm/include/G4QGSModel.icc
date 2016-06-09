@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// #include "G4ios.hh"
 
 //****************************************************************************************************************
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel() 
     {
 	G4VPartonStringModel::SetThisPointer(this);
-	SetEnergyMomentumCheckLevels(2*perCent, 150*MeV);
+	SetEnergyMomentumCheckLevels(2*CLHEP::perCent, 150*CLHEP::MeV);
     }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)
@@ -38,6 +37,17 @@ G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)
 	G4VPartonStringModel::SetThisPointer(this);
 	std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
 	SetEnergyMomentumCheckLevels(levels.first, levels.second);
+    }
+
+template<class ParticipantType>
+G4QGSModel<ParticipantType>& G4QGSModel<ParticipantType>::operator=(const G4QGSModel &right)
+    {
+       if (this != &right )
+       {
+         G4VPartonStringModel::SetThisPointer(this);
+         std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
+         SetEnergyMomentumCheckLevels(levels.first, levels.second);
+      }
     }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::~G4QGSModel()
@@ -123,7 +133,16 @@ G4V3DNucleus* G4QGSModel<ParticipantType>::GetWoundedNucleus() const
 {
   return theParticipants.GetWoundedNucleus();
 }
- 
 
+template<class ParticipantType>
+void G4QGSModel<ParticipantType>::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "The Quark-Gluon String (QGS) model simulates the interaction\n"
+          << "of protons, neutrons, pions and kaons with nuclei in the\n"
+          << "approximate energy range 20 GeV to 50 TeV. The model handles\n"
+          << "the selection of collision partners, splitting of the nucleons\n"
+          << "into quarks and di-quarks, the formation and excitation of\n"
+          << "quark-gluon strings, string hadronization and diffractive dissociation.\n";
+}
 //********************************************************************************************************************* 
 

@@ -18,10 +18,9 @@
 #
 /run/initialize
 #
-/testem/histo/setFileName 10gev
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 1 100   0.   1000.  MeV
-/testem/histo/setHisto 2 100   9.   10.  GeV
+/analysis/setFileName 10gev
+/analysis/h1/set 1 100   0.   1000.  MeV
+/analysis/h1/set 2 100   9.   10.  GeV
 #
 /gun/particle e-
 /gun/particle pi+

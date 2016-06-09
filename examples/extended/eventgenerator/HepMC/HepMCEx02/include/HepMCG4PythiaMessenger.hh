@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/include/HepMCG4PythiaMessenger.hh
+/// \brief Definition of the HepMCG4PythiaMessenger class
+//
 // ====================================================================
 //
 //   HepMCG4GenericPythiaMessenger.hh
-//   $Id: HepMCG4PythiaMessenger.hh,v 1.4 2006-06-29 17:10:16 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef HEPMC_G4_PYTHIA_MESSENGER_H

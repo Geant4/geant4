@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03CalorimeterSD.hh
+/// \brief Definition of the F03CalorimeterSD class
 //
-// $Id: F03CalorimeterSD.hh,v 1.4 2006-06-29 17:18:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -35,9 +35,9 @@
 #ifndef F03CalorimeterSD_h
 #define F03CalorimeterSD_h 1
 
-#include "globals.hh"
-#include "G4VSensitiveDetector.hh"
 #include "F03CalorHit.hh"
+#include "G4VSensitiveDetector.hh"
+#include "globals.hh"
 
 class F03DetectorConstruction;
 class G4HCofThisEvent;
@@ -50,19 +50,19 @@ class F03CalorimeterSD : public G4VSensitiveDetector
   public:
   
       F03CalorimeterSD(G4String, F03DetectorConstruction* );
-     ~F03CalorimeterSD();
+      ~F03CalorimeterSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-      void clear();
-      void PrintAll();
+      virtual void Initialize(G4HCofThisEvent*);
+      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+      virtual void EndOfEvent(G4HCofThisEvent*);
+      virtual void clear();
+      virtual void PrintAll();
 
   private:
   
-      F03CalorHitsCollection*  CalCollection;      
-      F03DetectorConstruction* Detector;
-      G4int*                   HitID;
+      F03CalorHitsCollection*  fCalCollection;      
+      F03DetectorConstruction* fDetector;
+      G4int*                   fHitID;
 };
 
 #endif

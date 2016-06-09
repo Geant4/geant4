@@ -23,10 +23,9 @@
 /gun/particle proton
 /gun/energy 174.664 GeV		#momentum 175 GeV/c
 #
-/testem/histo/setFileName shen2
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 12  100  0.00   0.004 deg	#space angle  
-/testem/histo/setHisto 13  100 -0.004 +0.004 deg	#projected angle 
+/analysis/setFileName shen2
+/analysis/h1/set 12  100  0.00   0.004 deg	#space angle  
+/analysis/h1/set 13  100 -0.004 +0.004 deg	#projected angle 
 #
 /testem/stack/killSecondaries
 #

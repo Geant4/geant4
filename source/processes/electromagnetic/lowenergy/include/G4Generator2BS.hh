@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BS.hh,v 1.5 2010-10-14 14:00:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -58,11 +57,11 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VBremAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
 
 class G4Pow;
 
-class G4Generator2BS : public G4VBremAngularDistribution
+class G4Generator2BS : public G4VEmAngularDistribution
 {
 
 public:
@@ -71,9 +70,10 @@ public:
 
   virtual ~G4Generator2BS();
 
-  G4double PolarAngle(const G4double initial_energy,
-		      const G4double final_energy,
-		      const G4int Z);
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double out_energy,
+                                         G4int Z,
+                                         const G4Material* mat = 0);
 
   void PrintGeneratorInformation() const;
 
@@ -83,23 +83,26 @@ protected:
 
 private:
 
-  G4double z;
-  G4double rejection_argument1, rejection_argument2, rejection_argument3;
-  G4double EnergyRatio;
-
-  G4Pow* g4pow;
-
   // hide assignment operator 
   G4Generator2BS & operator=(const  G4Generator2BS &right);
   G4Generator2BS(const  G4Generator2BS&);
 
+  G4double fz;
+  G4double ratio;
+  G4double ratio1;
+  G4double ratio2;
+  G4double delta;
+
+  G4Pow* g4pow;
+  G4int  nwarn;
+
 };
 
-inline G4double G4Generator2BS::RejectionFunction(G4double value) const
+inline G4double G4Generator2BS::RejectionFunction(G4double y) const
 {
-  G4double argument = (1+value)*(1+value);
-  return (4+std::log(rejection_argument3+(z/argument)))*
-    ((4*EnergyRatio*value/argument)-rejection_argument1)+rejection_argument2;
+  G4double y2 = (1 + y)*(1 + y);
+  G4double x  = 4*y*ratio/y2;
+  return 4*x - ratio1 - (ratio2 - x)*std::log(delta + fz/y2); 
 }
 
 #endif

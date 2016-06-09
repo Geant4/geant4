@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc,v 1.7 2008-07-25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
+#include <numeric>
 
 #include "G4StatMFMicroCanonical.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
-#include <numeric>
 
 // constructor
 G4StatMFMicroCanonical::G4StatMFMicroCanonical(G4Fragment const & theFragment) 
@@ -117,9 +118,9 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   
   
   
-  for (G4int m = 2; m <= MaxMult; m++) {
+  for (G4int im = 2; im <= MaxMult; im++) {
     G4StatMFMicroManager * aMicroManager = 
-      new G4StatMFMicroManager(theFragment,m,__FreeInternalE0,SCompoundNucleus);
+      new G4StatMFMicroManager(theFragment,im,__FreeInternalE0,SCompoundNucleus);
     _ThePartitionManagerVector.push_back(aMicroManager);
   }
   

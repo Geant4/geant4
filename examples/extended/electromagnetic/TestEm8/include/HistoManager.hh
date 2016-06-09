@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2010-09-08 11:23:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -97,50 +99,52 @@ private:
   // MEMBERS
   static HistoManager* fManager;
 
-  G4int nHisto;
-  G4int verbose;
+  G4int fNHisto;
+  G4int fVerbose;
 
-  G4double maxEnergy;
-  G4double nStepGas;
-  G4double nCluster;
-  G4double nTotStepGas;
-  G4double nTotCluster;
-  G4double nEvt;
+  G4double fMaxEnergy;
+  G4double fStepGas;
+  G4double fCluster;
+  G4double fTotStepGas;
+  G4double fTotCluster;
+  G4double fEvt;
 
-  G4int nBinsE; 
-  G4int nBinsCluster;
+  G4int fBinsE; 
+  G4int fBinsCluster;
 
-  G4double totEdep;
-  G4double overflow;
-  G4DataVector Egas;
+  G4bool fHistoBooked;
 
-  Histo*    histo;
-  G4ElectronIonPair* elIonPair;
+  G4double fTotEdep;
+  G4double fOverflow;
+  G4DataVector fEgas;
+
+  Histo*   fHisto;
+  G4ElectronIonPair* fElIonPair;
 };
 
 inline void HistoManager::SetMaxEnergy(G4double value)
 {
-  maxEnergy = value;
+  fMaxEnergy = value;
 }
 
 inline void HistoManager::SetNumberBins(G4int value)
 {
-  nBinsE = value;
+  fBinsE = value;
 }
 
 inline void HistoManager::SetNumberBinsCluster(G4int value)
 {
-  nBinsCluster = value;
+  fBinsCluster = value;
 }
 
 inline void HistoManager::SetVerbose(G4int value)
 {
-  verbose = value;
+  fVerbose = value;
 }
 
 inline G4int HistoManager::GetVerbose() const
 {
-  return verbose;
+  return fVerbose;
 }
 
 #endif

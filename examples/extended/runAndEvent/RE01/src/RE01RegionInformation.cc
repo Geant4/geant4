@@ -23,27 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01RegionInformation.cc
+/// \brief Implementation of the RE01RegionInformation class
 //
-// $Id: RE01RegionInformation.cc,v 1.2 2006-06-29 17:44:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "RE01RegionInformation.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01RegionInformation::RE01RegionInformation()
-:isWorld(false),isTracker(false),isCalorimeter(false)
+  :G4VUserRegionInformation(),
+   fIsWorld(false),fIsTracker(false),fIsCalorimeter(false)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01RegionInformation::~RE01RegionInformation()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01RegionInformation::Print() const
 {
  G4cout << "I'm ";
- if(isWorld) { G4cout << "World."; }
- else if(isTracker) { G4cout << "Tracker."; }
- else if(isCalorimeter) { G4cout << "Calorimeter."; }
+ if(fIsWorld) { G4cout << "World."; }
+ else if(fIsTracker) { G4cout << "Tracker."; }
+ else if(fIsCalorimeter) { G4cout << "Calorimeter."; }
  else { G4cout << "unknown."; }
  G4cout << G4endl;
 }

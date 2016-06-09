@@ -1,0 +1,38 @@
+//$Id$
+
+///\file "hadronic/.README"
+///\brief Examples hadronic README page
+
+/*! \page Examples_hadronic Category "hadronic"
+
+ Examples in this directory demonstrate specific hadronic physics simulation 
+ with histogramming.
+
+\link ExampleHadr00 Hadr00 \endlink
+
+This example demonstrates a usage of G4PhysListFactory to build 
+Physics List and G4HadronicProcessStore to access cross sections.
+
+\link ExampleHadr01 Hadr01 \endlink
+
+This example application is based on the application IION developed for
+simulation of proton or ion beam interaction with a water target. Different 
+aspects of beam target interaction are demonstrating in the example including 
+longitudinal profile of energy deposition, spectra of secondary  particles,
+spectra of particles leaving the target. 
+
+\link ExampleHadr02 Hadr02 \endlink
+
+This example application is providing simulation of ion beam interaction with different 
+targets. Hadronic aspects of beam target interaction are demonstrated in the example 
+including longitudinal profile of energy deposition, spectra of secondary  particles,
+isotope production spectra. 
+
+\link ExampleHadr03 Hadr03 \endlink
+
+This example demonstrates how to compute total cross section from the direct evaluation of the 
+mean free path ( see below, item Physics), how to identify nuclear reactions, how to plot 
+energy spectrum of secondary particles.	
+
+*/
+

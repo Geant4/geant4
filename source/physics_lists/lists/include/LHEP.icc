@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LHEP.icc,v 1.6 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,10 +39,14 @@
 // 16.05.2007 V.Ivanchenko: rename EM builders
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Renamed used classed; deprecated for removal in G4 10
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -51,33 +54,37 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4EmQExtraPhysics.hh"
+#include "G4IonLHEPPhysics.hh"
 #include "G4HadronElasticPhysicsLHEP.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP.hh"
 
+#include "G4WarnPLStatus.hh"
+
+
 template<class T> TLHEP<T>::TLHEP(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+  // defaultCutValue = 1.0*CLHEP::mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: LHEP 4.3"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP 4.4"<<G4endl;
   G4cout <<G4endl;
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("LHEP", "FTFP_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+  this->RegisterPhysics( new G4EmQExtraPhysics(ver) );
 
   // General Physics - i.e. decay
   this->RegisterPhysics( new G4DecayPhysics(ver) );
@@ -89,7 +96,7 @@ template<class T> TLHEP<T>::TLHEP(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsLHEP(ver));
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  this->RegisterPhysics( new G4IonLHEPPhysics(ver));
 
 }
 

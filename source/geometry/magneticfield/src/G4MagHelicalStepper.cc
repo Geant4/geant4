@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.24 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 
 #include "G4MagHelicalStepper.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LineSection.hh"
 #include "G4Mag_EqRhs.hh"
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.18 2010-12-23 18:31:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +53,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4UrbanMscModel90.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 
@@ -67,8 +68,7 @@
 using namespace std;
 
 G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
-  : G4VMscModel(nam),
-    isInitialized(false)
+  : G4VMscModel(nam)
 {
   taubig        = 8.0;
   tausmall      = 1.e-20;
@@ -90,6 +90,7 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
+  firstStep     = true; 
   inside        = false;  
   insideskin    = false;
 
@@ -102,8 +103,9 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
 
   currentMaterialIndex = -1;
   fParticleChange = 0;
-  theLambdaTable = 0;
   couple = 0;
+  G4cout << "### G4UrbanMscModel90 is obsolete and will be removed for "
+	 << "the next Geant4 version" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,7 +119,6 @@ void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
 				   const G4DataVector&)
 {
   skindepth = skin*stepmin;
-  if(isInitialized) { return; }
 
   // set values of some data members
   SetParticle(p);
@@ -129,9 +130,8 @@ void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
 	   << G4endl;
   }
 
-  fParticleChange = GetParticleChangeForMSC();
 
-  isInitialized = true;
+  fParticleChange = GetParticleChangeForMSC(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -380,32 +380,36 @@ G4double G4UrbanMscModel90::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4UrbanMscModel90::StartTracking(G4Track* track)
+{
+  SetParticle(track->GetDynamicParticle()->GetDefinition());
+  firstStep = true; 
+  inside = false;
+  insideskin = false;
+  tlimit = geombig;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
                              const G4Track& track,
-			     G4PhysicsTable* theTable,
-			     G4double currentMinimalStep)
+			     G4double& currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-
-  if(stepStatus == fUndefined) {
-    inside = false;
-    insideskin = false;
-    tlimit = geombig;
-    SetParticle( dp->GetDefinition() );
-  }
-
-  theLambdaTable = theTable;
   couple = track.GetMaterialCutsCouple();
+  SetCurrentCouple(couple); 
   currentMaterialIndex = couple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange =  GetRange(particle,currentKinEnergy,couple);
-  lambda0 = GetLambda(currentKinEnergy);
+  lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) { return tPathLength; }
+  if(inside || tPathLength < tlimitminfix) { 
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  }
   
   if(tPathLength > currentRange) { tPathLength = currentRange; }
 
@@ -419,7 +423,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   if(currentRange < presafety)
     {
       inside = true;
-      return tPathLength;  
+      return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
     }
 
   // standard  version
@@ -427,22 +431,22 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+      geomlimit = ComputeGeomLimit(track, presafety, currentRange);
    
       // is far from boundary
       if(currentRange <= presafety)
 	{
 	  inside = true;
-	  return tPathLength;   
+	  return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 	}
 
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
 	{
 
-	  if(stepStatus == fUndefined) smallstep = 1.e10;
+	  if(firstStep) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
 	  // facrange scaling in lambda 
@@ -493,7 +497,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
 
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety))
-	return tPathLength;   
+	return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 
       G4double tnow = tlimit;
       // optimization ...
@@ -536,10 +540,10 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
       if(currentRange < presafety)
         {
           inside = true;
-          return tPathLength;  
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
 	{ 
 	  // facrange scaling in lambda 
 	  // not so strong step restriction above lambdalimit
@@ -576,13 +580,14 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
     }
   //  G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
-  return tPathLength ;
+  return ConvertTrueToGeom(tPathLength, currentMinimalStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4UrbanMscModel90::ComputeGeomPathLength(G4double)
 {
+  firstStep = false; 
   lambdaeff = lambda0;
   par1 = -1. ;  
   par2 = par3 = 0. ;  
@@ -620,7 +625,7 @@ G4double G4UrbanMscModel90::ComputeGeomPathLength(G4double)
       zmean = 1./(par1*par3) ;
   } else {
     G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
-    G4double lambda1 = GetLambda(T1);
+    G4double lambda1 = GetTransportMeanFreePath(particle,T1);
 
     par1 = (lambda0-lambda1)/(lambda0*tPathLength) ;
     par2 = 1./(par1*lambda0) ;
@@ -723,16 +728,23 @@ G4double G4UrbanMscModel90::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
-					 G4double safety)
+G4ThreeVector& 
+G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
+				    G4double safety)
 {
-  G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0) ) return;
+  fDisplacement.set(0.0,0.0,0.0);
+  G4double kineticEnergy = currentKinEnergy;
+  if (tPathLength > currentRange*dtrl) {
+    kineticEnergy = GetEnergy(particle,currentRange-tPathLength,couple);
+  } else {
+    kineticEnergy -= tPathLength*GetDEDX(particle,currentKinEnergy,couple);
+  }
+  if((kineticEnergy <= eV) || (tPathLength <= tlimitminfix) ||
+     (tPathLength/tausmall < lambda0) ) { return fDisplacement; }
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
-  if(std::abs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) { return fDisplacement; }
 
   const G4double checkEnergy = GeV;
   if(kineticEnergy > checkEnergy && cth < 0.0 
@@ -742,10 +754,11 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
        << " E(MeV)= " << kineticEnergy/MeV
        << " Step(mm)= " << tPathLength/mm
        << " in " << CurrentCouple()->GetMaterial()->GetName()
-       << " scattering angle is set to zero" << G4endl;
+       << " CosTheta= " << cth 
+       << " is too big - the angle is set to zero" << G4endl;
     G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
-                ed,"Please, send bug report in the case of this message");
-    return;
+                ed,"");
+    return fDisplacement;
   }
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -787,11 +800,11 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
 
-        G4ThreeVector latDirection(dirx,diry,0.0);
-        latDirection.rotateUz(oldDirection);
-	ComputeDisplacement(fParticleChange, latDirection, r, safety);
+        fDisplacement.set(r*dirx,r*diry,0.0);
+        fDisplacement.rotateUz(oldDirection);
       }
   }
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

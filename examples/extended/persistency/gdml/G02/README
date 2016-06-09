@@ -20,22 +20,16 @@ $Id: README,v 1.2 2008-11-13 16:44:29 gcosmo Exp $
   
  HOW TO BUILD THE EXAMPLE ?
  
- - You need to have built the persistency/gdml plugin module along with the
-   Geant4 libraries, by having set the G4LIB_BUILD_GDML variable in your
-   environment.
-   It is also required to specify the path where the XercesC XML parser
-   package is installed in your system, through the variable XERCESCROOT.
+ - You need to have built the persistency/gdml module by having
+   set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+   as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+   the path where the XercesC XML parser package is installed in your system.
  
- - Compile and link to generate the executable:
-               % gmake
+ - Compile and link to generate the executable (in your CMAKE build directory):
+               % make
  
  - Execute the application:
                % geotest [macro-file].mac
-   Note: if you are using dynamic libraries, you should add and
-         $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
-         equivalent on your system).
-
-
 
  You can run this application with the following macro file:
    

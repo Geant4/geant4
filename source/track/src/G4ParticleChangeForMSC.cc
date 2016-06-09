@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.15 2010-07-21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -39,6 +38,7 @@
 // --------------------------------------------------------------
 
 #include "G4ParticleChangeForMSC.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4DynamicParticle.hh"
@@ -106,12 +106,21 @@ G4Step* G4ParticleChangeForMSC::UpdateStepForAlongStep(G4Step* pStep)
   //  Update the G4Step specific attributes
   pStep->SetStepLength(theTrueStepLength);
   theStatusChange = pStep->GetTrack()->GetTrackStatus();
+
+  // Multiple scattering calculates the final state of the particle
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  // update  momentum direction
+  pPostStepPoint->SetMomentumDirection(theMomentumDirection);
+
+  // update position
+  pPostStepPoint->SetPosition( thePosition );
   return pStep;
 }
 
 G4Step* G4ParticleChangeForMSC::UpdateStepForPostStep(G4Step* pStep)
 {
-  // A physics process always calculates the final state of the particle
+  // Multiple scattering calculates the final state of the particle
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
   // update  momentum direction
@@ -169,21 +178,24 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
   // MomentumDirection should be unit vector
   accuracy = std::fabs(theMomentumDirection.mag2()-1.0);
   if (accuracy > accuracyForWarning) {
+    itsOK = false;
+    exitWithError = (accuracy > accuracyForException);
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForMSC::CheckIt  : ";
-    G4cout << "the Momentum Change is not unit vector !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy << G4endl;
+    G4cout << "the Momentum Change is not unit vector !!"
+	   << "  Difference:  " << accuracy << G4endl;
+    G4cout << aTrack.GetDefinition()->GetParticleName()
+	   << " E=" << aTrack.GetKineticEnergy()/MeV
+	   << " pos=" << aTrack.GetPosition().x()/m
+	   << ", " << aTrack.GetPosition().y()/m
+	   << ", " << aTrack.GetPosition().z()/m
+	   <<G4endl;
 #endif
-    itsOK = false;
-    if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
 #ifdef G4VERBOSE
-  if (!itsOK) {
-    G4cout << " G4ParticleChangeForMSC::CheckIt " <<G4endl;
-    DumpInfo();
-  }
+  if (!itsOK) DumpInfo();
 #endif
 
   // Exit with error

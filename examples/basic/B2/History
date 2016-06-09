@@ -15,27 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29/11/11 B.Morgan (exbasic-V09-04-05)
-- Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
-  to build directory so executable is runnable directly.
+18/09/12 I. Hrivnacova
+- Updated vis.mac (on suggestions by John Al.):
+  - Activating drawing hits in vis.mac macros
+  - Increased hit screen size (from 2 to 4)
+  - In TrackerSD: removing obsolete line with 
+  //newHit->Draw();
+- General changes (see basic/History)
 
-23/11/11 I. Hrivnacova (exbasic-V09-04-04)     
-- Fixed the example name in the top comment line in init.mac and
-  init_vis.mac  
-
-21/11/11 I. Hrivnacova (exbasic-V09-04-03)     
-- Improved vis.mac 
-
-18/11/11 I. Hrivnacova (exbasic-V09-04-02)
-- Fixes in macros and README files
-     
-15/11/11 I. Hrivnacova (exbasic-V09-04-01)
+15/11/11 I. Hrivnacova 
 - Migration to new G4Exception in B2aDetectorConstruction.cc
   and B2bChamberParameterisation.cc.
     
-14/11/11 I. Hrivnacova (exbasic-V09-04-00)
+14/11/11 I. Hrivnacova
 - The first tagged version of the new B2 example created from N02
-  example by P. Gumplinger.
+  example by P. Gumplinger (tagged in basic).
+  Started from novice/N03.
 
 05-07-11 gum 
 migrate to new novice example code guidelines

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdacPlus.cc,v 1.17 2010-10-01 02:41:43 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +37,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiLambdacPlus.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

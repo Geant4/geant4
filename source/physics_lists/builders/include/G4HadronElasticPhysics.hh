@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.9 2010-08-25 16:49:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -77,6 +76,10 @@ public:
   inline G4HadronicProcess* GetNeutronProcess();
 
 private:
+
+  // copy constructor and hide assignment operator
+  G4HadronElasticPhysics(G4HadronElasticPhysics &);
+  G4HadronElasticPhysics & operator=(const G4HadronElasticPhysics &right);
 
   G4int    verbose;
   G4bool   wasActivated;

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITBox.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -34,14 +35,14 @@
 
 #include "G4ITBox.hh"
 
-G4ITBox::G4ITBox() : fNbIT(0), fFirstIT(0), fLastIT(0), fPreviousBox(0), fNextBox(0)
+G4ITBox::G4ITBox() : fNbIT(0), fpFirstIT(0), fpLastIT(0), fpPreviousBox(0), fpNextBox(0)
 {;}
 
 G4ITBox::~G4ITBox()
 {
     if( fNbIT != 0 )
     {
-        G4IT * aIT = fFirstIT;
+        G4IT * aIT = fpFirstIT;
         G4IT * nextIT;
 
         while( aIT != 0 )
@@ -52,17 +53,17 @@ G4ITBox::~G4ITBox()
         }
     }
 
-    if(fPreviousBox)    fPreviousBox->SetNextBox(fNextBox) ;
-    if(fNextBox)        fNextBox->SetPreviousBox(fPreviousBox);
+    if(fpPreviousBox)    fpPreviousBox->SetNextBox(fpNextBox) ;
+    if(fpNextBox)        fpNextBox->SetPreviousBox(fpPreviousBox);
 }
 
 const G4ITBox & G4ITBox::operator=(const G4ITBox &right)
 {
     fNbIT = right.fNbIT;
-    fFirstIT = right.fFirstIT;
-    fLastIT = right.fLastIT;
-    fPreviousBox = 0;
-    fNextBox = 0;
+    fpFirstIT = right.fpFirstIT;
+    fpLastIT = right.fpLastIT;
+    fpPreviousBox = 0;
+    fpNextBox = 0;
     return *this;
 }
 
@@ -71,27 +72,27 @@ void G4ITBox::Push( G4IT * aIT )
     if( fNbIT == 0 )
     {
         aIT->SetPrevious( 0 );
-        fFirstIT = aIT;
+        fpFirstIT = aIT;
     }
     else
     {
-        fLastIT->SetNext( aIT );
-        aIT->SetPrevious( fLastIT );
+        fpLastIT->SetNext( aIT );
+        aIT->SetPrevious( fpLastIT );
     }
-    fLastIT = aIT;
+    fpLastIT = aIT;
     fNbIT++;
     aIT->SetITBox(this);
 }
 
 void G4ITBox::Extract( G4IT * aStackedIT )
 {
-    if( aStackedIT == fFirstIT )
+    if( aStackedIT == fpFirstIT )
     {
-        fFirstIT = aStackedIT->GetNext();
+        fpFirstIT = aStackedIT->GetNext();
     }
-    else  if( aStackedIT == fLastIT )
+    else  if( aStackedIT == fpLastIT )
     {
-        fLastIT = aStackedIT->GetPrevious();
+        fpLastIT = aStackedIT->GetPrevious();
 
     }
 
@@ -110,7 +111,7 @@ G4IT* G4ITBox::FindIT(const G4Track& track)
 {
     if( fNbIT == 0 ) return 0;
 
-    G4IT * temp = fLastIT;
+    G4IT * temp = fpLastIT;
     G4bool find = false;
 
     while(find == false && temp != 0)
@@ -130,7 +131,7 @@ const G4IT* G4ITBox::FindIT(const G4Track& track) const
 {
     if( fNbIT == 0 ) return 0;
 
-    const G4IT * temp = fLastIT;
+    const G4IT * temp = fpLastIT;
     G4bool find = false;
 
     while(find == false && temp != 0)
@@ -148,7 +149,7 @@ const G4IT* G4ITBox::FindIT(const G4Track& track) const
 
 void G4ITBox::TransferTo(G4ITBox * aStack)
 {
-    G4IT * ITToTransfer = fFirstIT;
+    G4IT * ITToTransfer = fpFirstIT;
     while(fNbIT)
     {
         Extract(ITToTransfer);

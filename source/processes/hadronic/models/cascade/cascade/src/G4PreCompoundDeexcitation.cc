@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundDeexcitation.cc,v 1.7 2010-12-15 07:41:19 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
@@ -38,6 +37,7 @@
 //		replace getDeexcitationFragments() with deExcite().
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110803  M. Kelsey -- Add post-deexcitation diagnostic messages
+// 20120120  V. Ivanchenko -- Pre-compound model and its handler should not be deleted here
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -60,8 +60,10 @@ G4PreCompoundDeexcitation::G4PreCompoundDeexcitation()
 
 G4PreCompoundDeexcitation::~G4PreCompoundDeexcitation() {
   // we need to delete here because G4PreComp does NOT delete it
-  delete theExcitationHandler;
-  delete theDeExcitation;
+  // all objects following G4HadronicInteraction interface are
+  // deleted 
+  //delete theExcitationHandler;
+  //delete theDeExcitation;
 }
 
 // Main processing

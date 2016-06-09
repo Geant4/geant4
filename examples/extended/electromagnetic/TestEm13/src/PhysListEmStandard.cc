@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm13/src/PhysListEmStandard.cc
+/// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc,v 1.4 2010-04-02 15:46:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -54,6 +56,8 @@
 #include "G4EmProcessOptions.hh"
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -91,7 +95,7 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4eIonisation,        -1,-1,1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,2);
-	    
+            
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eIonisation,        -1,-1,1);
@@ -109,8 +113,8 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4ionIonisation,     -1,-1,1);
 
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hIonisation,       -1,-1,1);
     }

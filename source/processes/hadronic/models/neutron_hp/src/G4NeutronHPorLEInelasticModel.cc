@@ -31,6 +31,7 @@
 //
 
 #include "G4NeutronHPorLEInelasticModel.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronHPorLEInelasticModel::G4NeutronHPorLEInelasticModel()
 {

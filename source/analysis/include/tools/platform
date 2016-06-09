@@ -24,5 +24,52 @@ inline bool is_little_endian() {
 
 }
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
 #endif
 
+namespace tools {
+namespace device {
+#if TARGET_OS_IPHONE
+inline bool is_iOS() {return true;}
+#else
+inline bool is_iOS() {return false;}
+#endif
+
+#if ANDROID_NDK
+inline bool is_Android() {return true;}
+#else
+inline bool is_Android() {return false;}
+#endif
+
+
+#if ANDROID_NDK || TARGET_OS_IPHONE
+inline bool small_screen()           {return true;}
+inline bool no_cursor()              {return true;}
+inline bool stop_app_button()        {return true;}
+#else
+inline bool small_screen()     {return false;}
+inline bool no_cursor()        {return false;}
+inline bool stop_app_button()  {return false;}
+#endif
+#if TARGET_OS_IPHONE
+inline bool slow_cpu()         {return true;}
+#else
+inline bool slow_cpu()         {return false;}
+#endif
+}}
+
+#endif
+
+
+/* We prefer to handle endianity dynamically, but with cpp macro
+   it would looks like (from luaconf.h) :
+#if defined(__i386__) || defined(__i386) || \
+    defined(__X86__)  || defined (__x86_64)
+#define TOOLS_IS_BE 0
+#define TOOLS_IS_LE 1
+#elif defined(__POWERPC__) || defined(__ppc__)
+#define TOOLS_IS_BE 1
+#define TOOLS_IS_LE 0
+#endif
+*/

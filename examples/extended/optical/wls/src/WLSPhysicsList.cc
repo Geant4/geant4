@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSPhysicsList.cc
+/// \brief Implementation of the WLSPhysicsList class
+//
 //
 //
 
@@ -56,6 +59,8 @@
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
 #include "G4RadioactiveDecayPhysics.hh"
+
+#include "G4SystemOfUnits.hh"
 
 WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
 {

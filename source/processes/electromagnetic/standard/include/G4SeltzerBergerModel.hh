@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.hh,v 1.14 2010-10-26 10:35:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -35,16 +34,18 @@
 //
 // Author:        Andreas Schaelicke & Vladimir Ivantchenko
 //
-// Creation date: 25.09.2011
+// Creation date: 04.10.2011
 //
 // Modifications:
 //
 //
 // Class Description:
 //
-// Implementation of the bremssrahlung model using
-// S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
-// Tables 35 (1986) 345
+// Implementation of the bremssrahlung energy spectrum using
+// 1. S.M. Seltzer and M.J. Berger Nucl. Instr. Meth. B12 (1985) 95
+// 2. S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
+//    Tables 35 (1986) 345
+// Cross section computation in the base class G4eBremsstrahlungRelModel
 
 // -------------------------------------------------------------------
 //
@@ -75,6 +76,8 @@ public:
 				 G4double cutEnergy,
 				 G4double maxEnergy);
 
+  inline void SetBicubicInterpolationFlag(G4bool);
+
 protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
@@ -87,9 +90,17 @@ private:
   G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
   G4SeltzerBergerModel(const  G4SeltzerBergerModel&);
 
-  std::vector<G4Physics2DVector*> dataSB;
-
+  static G4Physics2DVector* dataSB[101];
+  static G4double ylimit[101];
+  static G4double expnumlim;
+  G4int  nwarn;
+  G4bool useBicubicInterpolation;
 };
+
+inline void G4SeltzerBergerModel::SetBicubicInterpolationFlag(G4bool val)
+{
+  useBicubicInterpolation = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

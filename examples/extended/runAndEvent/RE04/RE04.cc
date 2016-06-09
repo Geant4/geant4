@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/RE04.cc
+/// \brief Main program of the runAndEvent/RE04 example
+//
+// $Id: $
+//
 #include "G4RunManager.hh"
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
@@ -67,9 +71,9 @@ int main(int argc,char** argv)
  // Set user action classes
  //
  runManager->SetUserAction(new RE04PrimaryGeneratorAction);
-// runManager->SetUserAction(new RE04EventAction);
-// runManager->SetUserAction(new RE04TrackingAction);
-// runManager->SetUserAction(new RE04SteppingAction);
+ // runManager->SetUserAction(new RE04EventAction);
+ // runManager->SetUserAction(new RE04TrackingAction);
+ // runManager->SetUserAction(new RE04SteppingAction);
   
 #ifdef G4VIS_USE
  // Visualization manager
@@ -84,14 +88,14 @@ int main(int argc,char** argv)
   
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+ G4UImanager* pUImanager = G4UImanager::GetUIpointer();  
 
  if (argc==1)   // Define UI session for interactive mode
  {
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");
+      pUImanager->ApplyCommand("/control/execute vis.mac");
 #endif
       ui->SessionStart();
       delete ui;
@@ -101,7 +105,7 @@ int main(int argc,char** argv)
  {
    G4String command = "/control/execute ";
    G4String fileName = argv[1];
-   UImanager->ApplyCommand(command+fileName);
+   pUImanager->ApplyCommand(command+fileName);
  }
 
 #ifdef G4VIS_USE

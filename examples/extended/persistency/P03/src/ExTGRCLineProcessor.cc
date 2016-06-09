@@ -23,27 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCLineProcessor.cc,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
+/// \file ExTGRCLineProcessor.cc
+/// \brief Implementation of the ExTGRCLineProcessor class
 
 #include "ExTGRCLineProcessor.hh"
 #include "ExTGRCRegionCutsMgr.hh"
 
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCLineProcessor::ExTGRCLineProcessor() : G4tgrLineProcessor()
 {
 }
 
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCLineProcessor::~ExTGRCLineProcessor()
 {
 }
 
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExTGRCLineProcessor::ProcessLine( const std::vector<G4String>& wl )
 {
 

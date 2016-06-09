@@ -8,6 +8,57 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+
+29.11.2012 G.Cosmo;        Tag: hadrontherapy-V09-05-13
+           - More fixes for variable shadowing related to use of ROOT.
+
+28.11.2012 G.Cosmo;        Tag: hadrontherapy-V09-05-12
+           - Fixed cases of variable shadowing.
+
+16.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-11
+           - In macro files included generic command for visualization vis/open OGL where needed.
+
+08.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-10
+           - hadrontherapy.cc: fixed problem for referencePhysList if condition.
+	   - README revised.
+	   
+29.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-09
+           - Added explicit inclusion of units and constants headers where missing.
+	   - Executable renamed to the same name of the directory to avoid possible
+	     problems with Mac/WIN (thanks to Ivana for the suggestion).
+
+26.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-08
+           - Fixed region volume problem.
+
+25.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-07
+           - Included GPS in batch.mac and minor changes.
+
+24.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-06
+           - Added explicit inclusion of units and constants headers in new file.
+
+24.10.2012 A.Ribon;       Tag: hadrontherapy-V09-05-05
+           - Migrated to the new stopping physics.
+
+23.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-04
+           - Remove IAEA detetctor and related files
+	   - Added Carbon beam line
+	   - Fixed system of units issues
+	   - Added GPS
+	   - Modified CMakeList.txt
+
+11.10.2012 G.Cosmo;       Tag: hadrontherapy-V09-05-03
+           - Explicit inclusion of units and constants headers.
+
+10.07.2012 A.Ribon;       Tag: hadrontherapy-V09-05-02
+	   - Replaced INCL with INCLXX.
+
+13.06.2012 G.Cosmo;       Tag: hadrontherapy-V09-05-01
+	   - Use std::string::size_type for string length instead of int
+             in HadrontherapyMatrix::ion. Fixes compilation warning on gcc-4.7.
+
+08.12.2011 G.Folger;      Tag: hadrontherapy-V09-05-00
+	   - Added CMakeLists.txt file 
+
 25.11.2011 G.Folger;      Tag: hadrontherapy-V09-04-08
 	   - remove #include for not needed unistd.h in 
 	      HadrontherapyMatrix.cc

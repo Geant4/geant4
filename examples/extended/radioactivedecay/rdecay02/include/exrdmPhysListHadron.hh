@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmPhysListHadron.hh
+/// \brief Definition of the exrdmPhysListHadron class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef exrdmPhysListHadron_h
@@ -51,22 +54,22 @@ class exrdmPhysListHadron : public G4VPhysicsConstructor
 
   public:
   // Construct particle and physics
-    void ConstructParticle() {};
+    virtual void ConstructParticle() {};
   //
-    void ConstructProcess(); 
+    virtual void ConstructProcess();
 
   private:
 
-  G4HadronElasticProcess  theElasticProcess;
-  G4ProtonInelasticProcess theProtonInelastic;
-  G4NeutronInelasticProcess  theNeutronInelastic;
-  G4HadronElasticProcess* theNeutronElasticProcess;
-  G4HadronFissionProcess* theFissionProcess;
-  G4HadronCaptureProcess* theCaptureProcess;
-  G4DeuteronInelasticProcess* theDeuteronInelasticProcess;
-  G4TritonInelasticProcess* theTritonInelasticProcess;
-  G4AlphaInelasticProcess* theAlphaInelasticProcess;
-  G4IonInelasticProcess* theIonInelasticProcess;
+  G4HadronElasticProcess  fTheElasticProcess;
+  G4ProtonInelasticProcess fTheProtonInelastic;
+  G4NeutronInelasticProcess  fTheNeutronInelastic;
+  G4HadronElasticProcess* fTheNeutronElasticProcess;
+  G4HadronFissionProcess* fTheFissionProcess;
+  G4HadronCaptureProcess* fTheCaptureProcess;
+  G4DeuteronInelasticProcess* fTheDeuteronInelasticProcess;
+  G4TritonInelasticProcess* fTheTritonInelasticProcess;
+  G4AlphaInelasticProcess* fTheAlphaInelasticProcess;
+  G4IonInelasticProcess* fTheIonInelasticProcess;
 };
 
 #endif

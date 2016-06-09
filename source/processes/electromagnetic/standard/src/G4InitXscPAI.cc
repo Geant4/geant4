@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InitXscPAI.cc,v 1.9 2006-06-29 19:53:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4InitXscPAI.cc -- class implementation file
@@ -44,6 +43,8 @@
 #include "G4InitXscPAI.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "G4Integrator.hh"
@@ -184,7 +185,7 @@ void G4InitXscPAI::Normalisation()
   //  G4cout<<"G4InitXscPAI::fNormalizationCof/cof = "<<fNormalizationCof
   //    <<";  at delta ="<<delta<<G4endl ;
 
-  for (G4int i = 0; i < fIntervalNumber; i++) // renormalisation on QM sum rule
+  for (i = 0; i < fIntervalNumber; i++) // renormalisation on QM sum rule
   {
     for(j = 1; j < 5 ; j++)
     {
@@ -222,10 +223,6 @@ void G4InitXscPAI::Normalisation()
         <<";  at delta ="<<delta<<"  and i = "<<i<<G4endl ;
  */ 
 }
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////
 //

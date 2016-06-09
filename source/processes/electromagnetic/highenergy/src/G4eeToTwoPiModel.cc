@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.7 2009-02-20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +48,8 @@
 
 #include "G4eeToTwoPiModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4DynamicParticle.hh"

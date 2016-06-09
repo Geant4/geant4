@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.17 2010-05-30 10:18:32 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
@@ -220,6 +219,12 @@ public:
 			G4int		ival3  ,
 			G4int		ival4  ,
 			const char*	char_string );
+
+  void	SendStrDouble3Str(	const char*	char_string1 ,
+				G4double	dval1  ,
+				G4double	dval2  ,
+				G4double	dval3  ,
+				const char*	char_string2 );
 
   void	SendStrDouble6Str(	const char*	char_string1 ,
 				G4double	dval1  ,

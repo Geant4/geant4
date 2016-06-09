@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/src/EventAction.cc
+/// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc,v 1.9 2010-06-07 05:40:45 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -35,6 +37,7 @@
 #include "EventAction.hh"
 
 #include "EventActionMessenger.hh"
+#include "HistoManager.hh"
 
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
@@ -42,16 +45,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:drawFlag("none"),printModulo(10000),eventMessenger(0)
+:fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,21 +64,24 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
  
  //printing survey
- if (evtNb%printModulo == 0) {
+ if (evtNb%fPrintModulo == 0) {
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 }
  
  //additional initializations            
- TotalEnergyDeposit = 0.;
+ fTotalEnergyDeposit = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  if (drawFlag != "none") G4cout << " Energy deposit: "
-                                 << G4BestUnit(TotalEnergyDeposit,"Energy")
-                                 << G4endl;
+
+  G4AnalysisManager::Instance()->FillH1(4,fTotalEnergyDeposit);
+  
+  ////if (fDrawFlag != "none") G4cout << " Energy deposit: "
+  ////                               << G4BestUnit(fTotalEnergyDeposit,"Energy")
+  ////                               << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -46,49 +46,44 @@
 //
 // -------------------------------------------------------------------
 //
-//    
 
 #include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
-//    
-
-G4PhotoElectricAngularGeneratorSauterGavrila::G4PhotoElectricAngularGeneratorSauterGavrila(const G4String& name):
-  G4VPhotoElectricAngularDistribution(name)
-{;}
-
-//    
+G4PhotoElectricAngularGeneratorSauterGavrila::G4PhotoElectricAngularGeneratorSauterGavrila():
+  G4VEmAngularDistribution("AngularGenSauterGavrilaLowE")
+{}
 
 G4PhotoElectricAngularGeneratorSauterGavrila::~G4PhotoElectricAngularGeneratorSauterGavrila() 
-{;}
+{}
 
-//
-
-G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDirection(const G4ThreeVector& direction, 
-										      const G4double eKineticEnergy, 
-										      const G4ThreeVector&, const G4int) const
+G4ThreeVector& 
+G4PhotoElectricAngularGeneratorSauterGavrila::SampleDirection(
+                         const G4DynamicParticle* dp,
+                         G4double, G4int, const G4Material*)
 {
 
   // Compute Theta distribution of the emitted electron, with respect to the
   // incident Gamma.
-  // The Sauter-Gavrila distribution for the K-shell is used. (adapted from G4PhotoElectricEffect)
+  // The Sauter-Gavrila distribution for the K-shell is used. 
 
   G4double costeta = 1.;
   G4double Phi     = twopi * G4UniformRand();
   G4double cosphi = std::cos(Phi);
   G4double sinphi = std::sin(Phi);
   G4double sinteta = 0;
-  G4double gamma   = 1. + eKineticEnergy/electron_mass_c2;
+  G4double gamma   = 1. + dp->GetKineticEnergy()/electron_mass_c2;
 
   if (gamma > 5.) {
-    G4ThreeVector outdirection (sinteta*cosphi, sinteta*sinphi, costeta);
-    return outdirection; 
+    fLocalDirection = dp->GetMomentumDirection(); 
+    return fLocalDirection; 
     // Bugzilla 1120
     // SI on 05/09/2010 as suggested by JG 04/09/10 
   }
 
-  G4double beta  = std::sqrt(gamma*gamma-1.)/gamma;
-  G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
+  G4double beta  = std::sqrt((gamma - 1)*(gamma + 1))/gamma;
+  G4double b     = 0.5*gamma*(gamma - 1)*(gamma - 2);
     
   G4double rndm,term,greject,grejsup;
   if (gamma < 2.) grejsup = gamma*gamma*(1.+b-beta*b);
@@ -100,14 +95,11 @@ G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDire
        greject = (1.-costeta*costeta)*(1.+b*term)/(term*term);
   } while(greject < G4UniformRand()*grejsup);
        
-
-  sinteta = std::sqrt(1.-costeta*costeta);
-  G4ThreeVector photoelectrondirection (sinteta*cosphi, sinteta*sinphi, costeta);
-  photoelectrondirection.rotateUz(direction);
-  return photoelectrondirection;
+  sinteta = std::sqrt((1 - costeta)*(1 + costeta));
+  fLocalDirection.set(sinteta*cosphi, sinteta*sinphi, costeta);
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+  return fLocalDirection;
 }
-
-//
 
 void G4PhotoElectricAngularGeneratorSauterGavrila::PrintGeneratorInformation() const
 {

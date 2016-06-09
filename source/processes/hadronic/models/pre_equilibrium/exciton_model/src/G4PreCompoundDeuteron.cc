@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundDeuteron.cc,v 1.9 2010-11-02 17:33:28 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +41,7 @@
 //
 
 #include "G4PreCompoundDeuteron.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Deuteron.hh"
 
 G4PreCompoundDeuteron::G4PreCompoundDeuteron()
@@ -136,7 +136,7 @@ G4double G4PreCompoundDeuteron::GetOpt12(G4double K)
   G4double    p2 = -2804.;
   G4double    landa0 = -0.0323;
   G4double    landa1 = -5.48;
-  G4double    mu0 = 336.1;
+  G4double    mm0 = 336.1;
   G4double    mu1 = 0.48;
   G4double    nu0 = 524.3;
   G4double    nu1 = -371.8;
@@ -147,7 +147,7 @@ G4double G4PreCompoundDeuteron::GetOpt12(G4double K)
   p = p0 + p1/Ec + p2/(Ec*Ec);
   landa = landa0*ResidualA + landa1;
   G4double resmu1 = g4pow->powZ(ResidualA,mu1); 
-  mu = mu0*resmu1;
+  mu = mm0*resmu1;
   nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
@@ -178,7 +178,7 @@ G4double G4PreCompoundDeuteron::GetOpt34(G4double K)
   G4double     p2 = -1651.;
   G4double     landa0 = 0.00619;
   G4double     landa1 = -7.54;
-  G4double     mu0 = 583.5;
+  G4double     mm0 = 583.5;
   G4double     mu1 = 0.337;
   G4double     nu0 = 421.8;
   G4double     nu1 = -474.5;
@@ -193,7 +193,7 @@ G4double G4PreCompoundDeuteron::GetOpt34(G4double K)
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
   a = g4pow->powZ(ResidualA,mu1);
-  mu = mu0 * a;
+  mu = mm0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);  
   xnulam = nu / landa;
   if (xnulam > spill) { xnulam=0.; }

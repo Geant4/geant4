@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/include/G4MonopoleFieldMessenger.hh
+/// \brief Definition of the G4MonopoleFieldMessenger class
+//
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,19 +49,19 @@ class G4UIcmdWithADoubleAndUnit;
 
 class G4MonopoleFieldMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    G4MonopoleFieldMessenger(G4MonopoleFieldSetup* );
-   ~G4MonopoleFieldMessenger();
+  G4MonopoleFieldMessenger(G4MonopoleFieldSetup* );
+  ~G4MonopoleFieldMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    G4MonopoleFieldSetup*  Field;
+  G4MonopoleFieldSetup*  fField;
     
-    G4UIdirectory*             fieldDir;
-    G4UIcmdWithADoubleAndUnit* SetFieldCmd;
+  G4UIdirectory*             fFieldDir;
+  G4UIcmdWithADoubleAndUnit* fSetFieldCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

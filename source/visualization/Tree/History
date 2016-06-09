@@ -24,6 +24,20 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+8th June 2012  John Allison (vistree-V09-05-02)
+- Shadow clean.
+
+10th April 2012  John Allison (vistree-V09-05-01)
+- Migrated to G4Scene::Model.
+
+12th January 2012  John Allison  (vistree-V09-05-00)
+- G4VTreeSceneHandler.hh:
+  o Removed empty implementations of Begin/EndPrimitives, so now
+    picks up the default (and correct non-empty default
+    implementations in G4VSceneHandler).  The problem is that
+    objectTransformation must be set to something.  This was causing a
+    G4Exception in G4VisManager::DrawT.
+
 25th September 2011  John Allison  (vistree-V09-04-01)
 - Tagged.
 

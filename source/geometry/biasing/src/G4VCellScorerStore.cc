@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCellScorerStore.cc,v 1.4 2006-06-29 18:17:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,9 +34,24 @@
 // ----------------------------------------------------------------------
 
 #include "G4VCellScorerStore.hh"
+#include "G4ios.hh"
 
 G4VCellScorerStore::G4VCellScorerStore()
-{}
+{
+  static G4bool warn=true;
+  if (warn)
+  {
+    G4cout
+         << "--------------------------------------------------------" << G4endl
+         << "WARNING: Class  <G4VCellScorerStore>  is  now obsolete |" << G4endl
+         << "         and will be removed starting from next Geant4 |" << G4endl
+         << "         major release.  Please, consider switching to |" << G4endl
+         << "         general purpose scoring functionality.        |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+    warn = false;
+  }
+}
 
 G4VCellScorerStore::~G4VCellScorerStore()
 {}

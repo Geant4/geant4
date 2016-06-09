@@ -51,9 +51,8 @@ G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
 G4CsvAnalysisManager::G4CsvAnalysisManager()
  : G4VAnalysisManager("Csv"),
    fFile(0),
-   fNtupleName(),
-   fNtupleTitle(),
    fNtuple(0),
+   fNtupleBooking(0),
    fNtupleIColumnMap(),
    fNtupleFColumnMap(),
    fNtupleDColumnMap()
@@ -74,6 +73,7 @@ G4CsvAnalysisManager::G4CsvAnalysisManager()
 G4CsvAnalysisManager::~G4CsvAnalysisManager()
 {  
   delete fNtuple;
+  delete fNtupleBooking;
   delete fFile;
 
   fgInstance = 0;
@@ -135,6 +135,40 @@ G4CsvAnalysisManager::GetNtupleDColumn(G4int id) const
   return it->second;
 }  
  
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::Reset()
+{
+  delete fNtuple;
+  fNtuple = 0;
+  
+  return true;
+}  
+ 
+//_____________________________________________________________________________
+void  G4CsvAnalysisManager::ExceptionForHistograms(
+                                        const G4String& functionName) const
+{
+  G4String inFunction = "G4CsvAnalysisManager::";
+  inFunction += functionName;
+  G4ExceptionDescription description;
+  description << "      " 
+              << "Histograms are not supported." ;
+  G4Exception(inFunction, "Analysis_W005", JustWarning, description);
+}  
+
+//
+// protected methods
+//
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::WriteOnAscii(std::ofstream& /*output*/)
+{
+// Write selected objects on ASCII file
+// To be added: ntuple
+
+  return true;
+}  
+
 // 
 // public methods
 //
@@ -142,14 +176,23 @@ G4CsvAnalysisManager::GetNtupleDColumn(G4int id) const
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::OpenFile(const G4String& fileName)
 {
+  // Keep file name
+  fFileName =  fileName;
+
   // Add file extension .csv if no extension is given
   G4String name(fileName);
-  if ( name.find(".") == std::string::npos ) name.append(".csv");
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }  
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("open", "analysis file", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("open", "analysis file", name);
 #endif
+  
+  // delete a previous file if it exists
+  if ( fFile ) delete fFile; 
   
   fFile = new std::ofstream(name);
   if ( fFile->fail() ) {
@@ -160,6 +203,43 @@ G4bool G4CsvAnalysisManager::OpenFile(const G4String& fileName)
     return false;
   }
 
+  // Create ntuple if it was already booked
+  if ( fNtupleBooking && ( ! fNtuple ) ) {
+#ifdef G4VERBOSE
+    if ( fpVerboseL4 ) 
+      fpVerboseL4->Message("create from booking", "ntuple", name);
+#endif
+    fNtuple = new tools::wcsv::ntuple(*fFile, G4cerr, *fNtupleBooking);
+    if ( fNtupleBooking->m_columns.size() ) {
+      // store ntuple columns in local maps
+      const std::vector<tools::ntuple_booking::col_t>& columns 
+        = fNtupleBooking->m_columns;
+      std::vector<tools::ntuple_booking::col_t>::const_iterator it;
+      G4int index = 0;
+      for ( it = columns.begin(); it!=columns.end(); ++it) {
+        if ( (*it).second == tools::_cid(int(0) ) ) {
+          G4cout << "adding int " << fNtuple->find_column<int>((*it).first) << G4endl;
+          fNtupleIColumnMap[index++] = fNtuple->find_column<int>((*it).first);
+        }
+        else if( (*it).second == tools::_cid(float(0) ) ) {
+          fNtupleFColumnMap[index++] = fNtuple->find_column<float>((*it).first);
+        } 
+        else if((*it).second== tools::_cid(double(0))) {
+          fNtupleDColumnMap[index++] = fNtuple->find_column<double>((*it).first);
+        }
+        else {
+          G4ExceptionDescription description;
+          description << "      " 
+                      << "Unsupported column type " << (*it).first;
+          G4Exception("G4CsvAnalysisManager::OpenFile()",
+                      "Analysis_W004", JustWarning, description);
+        }
+      }
+    }
+  }   
+
+  fLockFileName = true;
+  
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("open", "analysis file", name);
@@ -171,23 +251,44 @@ G4bool G4CsvAnalysisManager::OpenFile(const G4String& fileName)
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::Write() 
 {
-  // nothing to be done here
-  return true;
+  // nothing to be done for Csv file
+  G4bool result = true;
+  
+  // Write ASCII if activated
+  if ( IsAscii() ) {
+    result = WriteAscii();
+  }   
+
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::CloseFile()
 {
+  G4bool result = true;
+
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("close", "file", "");
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("close", "file", GetFullFileName());
 #endif
 
+  // reset data
+  result = Reset();
+  if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "Resetting data failed";
+      G4Exception("G4CsvAnalysisManager::CloseFile()",
+                "Analysis_W002", JustWarning, description);
+      result = false;       
+  } 
+
+  // close file
   fFile->close(); 
+  fLockFileName = false;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", "");
+    fpVerboseL1->Message("close", "file", GetFullFileName());
 #endif
 
   return true; 
@@ -197,13 +298,11 @@ G4bool G4CsvAnalysisManager::CloseFile()
 G4int G4CsvAnalysisManager::CreateH1(const G4String& /*name*/, 
                                const G4String& /*title*/, 
                                G4int /*nbins*/, 
-                               G4double /*xmin*/, G4double /*xmax*/)
+                               G4double /*xmin*/, G4double /*xmax*/,
+                               const G4String& /*unitName*/, 
+                               const G4String& /*fcnName*/)
 {
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4CsvAnalysisManager::CreateH1()",
-            "Analysis_W005", JustWarning, description);
+  ExceptionForHistograms("CreateH1");
   return 0;
 }                                         
 
@@ -213,21 +312,61 @@ G4int G4CsvAnalysisManager::CreateH2(const G4String& /*name*/,
                                G4int /*nxbins*/, 
                                G4double /*xmin*/, G4double /*xmax*/,
                                G4int /*nybins*/, 
-                               G4double /*ymin*/, G4double /*ymax*/)
+                               G4double /*ymin*/, G4double /*ymax*/,
+                               const G4String& /*xunitName*/, 
+                               const G4String& /*yunitName*/, 
+                               const G4String& /*xfcnName*/,
+                               const G4String& /*yfcnName*/)
 {
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4CsvAnalysisManager::CreateH2()",
-            "Analysis_W005", JustWarning, description);
+  ExceptionForHistograms("CreateH2");
   return 0;
 }                                         
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1(G4int /*id*/,
+                                G4int /*nbins*/, 
+                                G4double /*xmin*/, G4double /*xmax*/,
+                                const G4String& /*unitName*/, 
+                                const G4String& /*fcnName*/)
+{                                
+  ExceptionForHistograms("SetH1");
+  return false;
+}
+  
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2(G4int /*id*/,
+                                G4int /*nxbins*/, 
+                                G4double /*xmin*/, G4double /*xmax*/, 
+                                G4int /*nybins*/, 
+                                G4double /*ymin*/, G4double /*ymax*/,
+                                const G4String& /*xunitName*/, 
+                                const G4String& /*yunitName*/, 
+                                const G4String& /*xfcnName*/,
+                                const G4String& /*yfcnName*/)
+{                                
+  ExceptionForHistograms("SetH2");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::ScaleH1(G4int /*id*/, G4double /*factor*/)
+{
+  ExceptionForHistograms("ScaleH1");
+  return false;
+}
+                                  
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::ScaleH2(G4int /*id*/, G4double /*factor*/)
+{
+  ExceptionForHistograms("ScaleH2");
+  return false;
+}
 
 //_____________________________________________________________________________
 void G4CsvAnalysisManager::CreateNtuple(const G4String& name, 
                                         const G4String& title)
 {
-  if ( fNtuple ) {
+  if ( fNtupleBooking ) {
     G4ExceptionDescription description;
     description << "      " 
                 << "Ntuple already exists. "
@@ -238,17 +377,25 @@ void G4CsvAnalysisManager::CreateNtuple(const G4String& name,
   }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple", name);
 #endif
 
-  fNtuple = new tools::wcsv::ntuple(*fFile);
-  fNtupleName = name;
-  fNtupleTitle = title;
+  // Create ntuple booking
+  fNtupleBooking = new tools::ntuple_booking();
+  fNtupleBooking->m_name = name;
+  fNtupleBooking->m_title = title;
+           // ntuple booking object is deleted in destructor
+
+  // Create ntuple if the file is open
+  if ( fFile ) {
+    fNtuple = new tools::wcsv::ntuple(*fFile);
+           // ntuple object is deleted when closing a file
+  }  
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple", name);
+  if ( fpVerboseL2 ) 
+    fpVerboseL2->Message("create", "ntuple", name);
 #endif
 }                                         
 
@@ -256,60 +403,114 @@ void G4CsvAnalysisManager::CreateNtuple(const G4String& name,
 G4int G4CsvAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple I column", name);
+#endif
+
+  if ( ! fNtupleBooking ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple has to be created first. ";
+    G4Exception("G4CsvAnalysisManager::CreateNtupleIColumn()",
+                "Analysis_W005", JustWarning, description);
+    return -1;       
+  }
+
+  // Save column info in booking
+  G4int index = fNtupleBooking->m_columns.size();
+  fNtupleBooking->add_column<int>(name);  
+ 
+  // Create column if ntuple already exists
+  if ( fNtuple ) {
+    tools::wcsv::ntuple::column<int>* column 
+      = fNtuple->create_column<int>(name);  
+    fNtupleIColumnMap[index] = column;
+  }  
+
+  fLockFirstNtupleColumnId = true;
+
+#ifdef G4VERBOSE
   if ( fpVerboseL2 ) 
     fpVerboseL2->Message("create", "ntuple I column", name);
 #endif
 
-  G4int index = fNtuple->columns().size();
-  tools::wcsv::ntuple::column<int>* column = fNtuple->create_column<int>(name);  
-  fNtupleIColumnMap[index] = column;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple I column", name);
-#endif
-
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 G4int G4CsvAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple F column", name);
+#endif
+
+  if ( ! fNtupleBooking )  {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple has to be created first. ";
+    G4Exception("G4CsvAnalysisManager::CreateNtupleFColumn()",
+                "Analysis_W005", JustWarning, description);
+    return -1;       
+  }
+
+  // Save column info in booking
+  G4int index = fNtupleBooking->m_columns.size();
+  fNtupleBooking->add_column<float>(name);  
+ 
+  // Create column if ntuple already exists
+  if ( fNtuple ) {
+    tools::wcsv::ntuple::column<float>* column 
+      = fNtuple->create_column<float>(name);  
+    fNtupleFColumnMap[index] = column;
+  }  
+
+  fLockFirstNtupleColumnId = true;
+
+#ifdef G4VERBOSE
   if ( fpVerboseL2 ) 
     fpVerboseL2->Message("create", "ntuple F column", name);
 #endif
 
-  G4int index = fNtuple->columns().size();
-  tools::wcsv::ntuple::column<float>* column = fNtuple->create_column<float>(name);  
-  fNtupleFColumnMap[index] = column;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple F column", name);
-#endif
-
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 G4int G4CsvAnalysisManager::CreateNtupleDColumn(const G4String& name)   
 {
 #ifdef G4VERBOSE
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple D column", name);
+#endif
+
+  if ( ! fNtupleBooking ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple has to be created first. ";
+    G4Exception("G4CsvAnalysisManager::CreateNtupleDColumn()",
+                "Analysis_W005", JustWarning, description);
+    return -1;       
+  }
+
+  // Save column info in booking
+  G4int index = fNtupleBooking->m_columns.size();
+  fNtupleBooking->add_column<double>(name);  
+ 
+  // Create column if ntuple already exists
+  if ( fNtuple ) {
+    tools::wcsv::ntuple::column<double>* column 
+      = fNtuple->create_column<double>(name);  
+    fNtupleDColumnMap[index] = column;
+  }
+    
+  fLockFirstNtupleColumnId = true;
+
+#ifdef G4VERBOSE
   if ( fpVerboseL2 ) 
     fpVerboseL2->Message("create", "ntuple D column", name);
 #endif
 
-  G4int index = fNtuple->columns().size();
-  tools::wcsv::ntuple::column<double>* column = fNtuple->create_column<double>(name);  
-  fNtupleDColumnMap[index] = column;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple D column", name);
-#endif
-
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
@@ -347,14 +548,6 @@ G4bool G4CsvAnalysisManager::FillH2(G4int /*id*/,
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple I column", description);
-  }  
-#endif
-
   tools::wcsv::ntuple::column<int>* column = GetNtupleIColumn(id);
   if ( ! column ) {
     G4ExceptionDescription description;
@@ -366,10 +559,10 @@ G4bool G4CsvAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple I column", description);
+    fpVerboseL4->Message("fill", "ntuple I column", description);
   }  
 #endif
   return true;       
@@ -377,14 +570,6 @@ G4bool G4CsvAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple F column", description);
-  }  
-#endif
-
   tools::wcsv::ntuple::column<float>* column = GetNtupleFColumn(id);
   if ( ! column ) {
     G4ExceptionDescription description;
@@ -396,10 +581,10 @@ G4bool G4CsvAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple F column", description);
+    fpVerboseL4->Message("fill", "ntuple F column", description);
   }  
 #endif
   return true;       
@@ -408,14 +593,6 @@ G4bool G4CsvAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple D column", description);
-  }  
-#endif
-
    tools::wcsv::ntuple::column<double>* column = GetNtupleDColumn(id);
   if ( ! column ) {
     G4ExceptionDescription description;
@@ -427,10 +604,10 @@ G4bool G4CsvAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple D column", description);
+    fpVerboseL4->Message("fill", "ntuple D column", description);
   }  
 #endif
   return true;       
@@ -440,8 +617,8 @@ G4bool G4CsvAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool G4CsvAnalysisManager::AddNtupleRow()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 )
-    fpVerboseL2->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 )
+    fpVerboseL4->Message("add", "ntuple row", "");
 #endif
 
   if ( ! fNtuple ) {
@@ -454,9 +631,207 @@ G4bool G4CsvAnalysisManager::AddNtupleRow()
   
   fNtuple->add_row();
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 )
-    fpVerboseL1->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 )
+    fpVerboseL4->Message("add", "ntuple row", "");
 #endif
 
   return true;
 }
+
+//_____________________________________________________________________________
+tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple() const
+{
+  return fNtuple;
+}  
+
+
+//_____________________________________________________________________________
+G4int G4CsvAnalysisManager::GetH1Nbins(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Nbins");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH1Xmin(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Xmin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH1Xmax(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Xmax");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH1Width(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Xwidth");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4int G4CsvAnalysisManager::GetH2Nxbins(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2NXbins");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Xmin(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Xmin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Xmax(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Xmin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2XWidth(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2XWidth");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4int G4CsvAnalysisManager::GetH2Nybins(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2NYbins");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Ymin(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Ymin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Ymax(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Ymax");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2YWidth(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2YWidth");
+  return 0;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1Title(G4int /*id*/, 
+                                        const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH1Title");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1XAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH1XAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1YAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH1YAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2Title(G4int /*id*/, 
+                                        const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2Title");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2XAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2XAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2YAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2YAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2ZAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2ZAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH1XAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1XAxisTitle");
+  return "";
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH1Title(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Title");
+  return "";
+}
+  
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH1YAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1YAxisTitle");
+  return "";
+}
+
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2Title(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Title");
+  return "";
+}
+  
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2XAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2XAxisTitle");
+  return "";
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2YAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2YAxisTitle");
+  return "";
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2ZAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2ZAxisTitle");
+  return "";
+}
+  

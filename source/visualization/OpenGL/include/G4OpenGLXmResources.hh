@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmResources.hh,v 1.6 2009-02-04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Default resources file for GEANT4 OpenGL Motif windows.

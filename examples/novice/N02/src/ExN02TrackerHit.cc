@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.cc,v 1.10 2006-06-29 17:48:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +98,7 @@ void ExN02TrackerHit::Print()
 {
   G4cout << "  trackID: " << trackID << "  chamberNb: " << chamberNb
          << "  energy deposit: " << G4BestUnit(edep,"Energy")
-	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
+         << "  position: " << G4BestUnit(pos,"Length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

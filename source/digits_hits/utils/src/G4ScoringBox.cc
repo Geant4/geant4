@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.61 2010-07-27 01:44:54 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4ScoringBox.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"

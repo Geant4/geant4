@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.18 2010-09-22 14:57:59 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4BooleanSolid
@@ -111,12 +110,19 @@ class G4BooleanSolid : public G4VSolid
 
   protected:
   
-    G4VSolid* fPtrSolidA;
-    G4VSolid* fPtrSolidB;
-
     G4Polyhedron* StackPolyhedron(HepPolyhedronProcessor&,
                                   const G4VSolid*) const;
       // Stack polyhedra for processing. Return top polyhedron.
+
+    inline G4double GetAreaRatio() const;
+      // Ratio of surface areas of SolidA to total A+B
+
+  protected:
+  
+    G4VSolid* fPtrSolidA;
+    G4VSolid* fPtrSolidB;
+
+    mutable G4double fAreaRatio; // Calculation deferred to GetPointOnSurface()
 
   private:
 

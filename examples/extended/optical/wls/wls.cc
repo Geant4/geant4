@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/wls.cc
+/// \brief Main program of the optical/wls example
+//
 //
 //
 //

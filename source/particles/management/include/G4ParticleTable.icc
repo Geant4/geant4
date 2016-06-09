@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.icc,v 1.11 2007-09-14 07:04:09 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -126,9 +125,9 @@ inline
 }
 
 inline
- void G4ParticleTable::SetReadiness()
+ void G4ParticleTable::SetReadiness(G4bool val)
 {
-  readyToUse = true;
+  readyToUse = val;
 }
 
 inline

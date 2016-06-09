@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmAnalysisManager.cc
+/// \brief Implementation of the exrdmAnalysisManager class
+//
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -33,6 +36,8 @@
 #include "exrdmHisto.hh"
 #include "G4ProcessTable.hh"
 #include "G4RadioactiveDecay.hh"
+#include "G4TwoVector.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <fstream>
 
@@ -42,14 +47,14 @@ exrdmAnalysisManager* exrdmAnalysisManager::fManager = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-exrdmAnalysisManager* exrdmAnalysisManager::getInstance()
+exrdmAnalysisManager* exrdmAnalysisManager::GetInstance()
 {
   if(!fManager) {
     fManager = new exrdmAnalysisManager();
   }
   return fManager;
 }
-void exrdmAnalysisManager::dispose()
+void exrdmAnalysisManager::Dispose()
 {
   delete fManager;
   fManager = 0;
@@ -58,15 +63,13 @@ void exrdmAnalysisManager::dispose()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmAnalysisManager::exrdmAnalysisManager()
+: fVerbose(0), fNEvt1(-1), fNEvt2(-2),
+  fHistEMax (15.0*MeV), fHistEMin (0.),fHistNBin(100),
+  fTargetThresE(10*keV), fDetectorThresE(10*keV),fPulseWidth(1.*microsecond)
 {
-  verbose = 0;
-  nEvt1   = -1;
-  nEvt2   = -1;
-  targetThresE = 10*keV;
-  detectorThresE = 10*keV;
-  pulseWidth = 1.*microsecond;
-  histo   = new exrdmHisto();
-  bookHisto();
+  fEdepo.clear();
+  fHisto   = new exrdmHisto();
+  BookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -80,54 +83,63 @@ exrdmAnalysisManager::~exrdmAnalysisManager()
 #define HISTDELETE
 #endif
 #ifdef HISTDELETE
-  delete histo;
+  delete fHisto;
 #endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmAnalysisManager::bookHisto()
+void exrdmAnalysisManager::BookHisto()
 {
-  histEMax = 15.0*MeV;
-  histEMin = .0*MeV;
-  histNBin = 100;
+  fHistEMax = 15.0*MeV;
+  fHistEMin = .0*MeV;
+  fHistNBin = 100;
 
-  histo->add1D("H10",
-    "Energy deposit (MeV) in the traget",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("H11",
-    "Energy deposit (MeV) in the detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("H12",
-    "Total energy spectrum (MeV) of the traget and detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("H13",
-    "Coincidence spectrum (MeV) between the traget and detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("H14",
-    "Anti-coincidence spectrum (MeV) in the traget",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("H15",
-    "Anti-coincidence spectrum (MeV) in the detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("H16",
-	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
+  fHisto->Add1D("H10",
+    "Energy deposit (MeV) in the traget",fHistNBin,fHistEMin,fHistEMax,MeV);
+  fHisto->Add1D("H11",
+    "Energy deposit (MeV) in the detector",fHistNBin,fHistEMin,fHistEMax,MeV);
+  fHisto->Add1D("H12",
+    "Total energy spectrum (MeV) of the traget and detector",fHistNBin,
+    fHistEMin,fHistEMax,MeV);
+  fHisto->Add1D("H13",
+    "Coincidence spectrum (MeV) between the traget and detector",fHistNBin,
+    fHistEMin,fHistEMax,MeV);
+  fHisto->Add1D("H14",
+    "Anti-coincidence spectrum (MeV) in the traget",fHistNBin,
+    fHistEMin,fHistEMax,MeV);
+  fHisto->Add1D("H15",
+    "Anti-coincidence spectrum (MeV) in the detector",fHistNBin,
+    fHistEMin,fHistEMax,MeV);
+  fHisto->Add1D("H16",
+               "Decay emission spectrum (MeV)",fHistNBin,fHistEMin,fHistEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "T1", "Emitted Particles","double PID, Energy, Time, Weight" );
-  histo->addTuple( "T2", "RadioIsotopes","double PID, Time, Weight" );
-  histo->addTuple( "T3", "Energy Depositions","double Energy, Time, Weight" );
-
+  fHisto->AddTuple( "T1", "Emitted Particles",
+                                           "double PID, Energy, Time, Weight" );
+  fHisto->AddTuple( "T2", "RadioIsotopes","double PID, Time, Weight" );
+  fHisto->AddTuple( "T3", "Energy Depositions","double Energy, Time, Weight" );
+  fHisto->AddTuple( "RDecayProducts", "All Products of RDecay",
+                    "double PID, Z, A, Energy, Time, Weight" );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmAnalysisManager::BeginOfRun()
 {
-  histo->book();
+  fHisto->Book();
   G4cout << "exrdmAnalysisManager: Histograms are booked and the run has been started" << G4endl;
   G4ProcessTable *pTable = G4ProcessTable::GetProcessTable();
-  G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *) pTable->FindProcess("RadioactiveDecay", "GenericIon");
+  G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *)
+     pTable->FindProcess("RadioactiveDecay", "GenericIon");
   if (rDecay != NULL) {
     if (!rDecay->IsAnalogueMonteCarlo()) {
-      std::vector<G4RadioactivityTable*> theTables =  rDecay->GetTheRadioactivityTables();
+      std::vector<G4RadioactivityTable*> theTables =
+         rDecay->GetTheRadioactivityTables();
       for (size_t i = 0 ; i < theTables.size(); i++) {
-	theTables[i]->GetTheMap()->clear();
-	G4cout << " Clear the radioactivity map: 0, new size = " << theTables[i]->GetTheMap()->size() << G4endl;  
+          theTables[i]->GetTheMap()->clear();
+          G4cout << " Clear the radioactivity map: 0, new size = "
+                 << theTables[i]->GetTheMap()->size() << G4endl;
       }
     }  
   }
@@ -138,31 +150,37 @@ void exrdmAnalysisManager::BeginOfRun()
 
 void exrdmAnalysisManager::EndOfRun(G4int nevent)
 {
-  histo->save();
+  fHisto->Save();
   G4cout << "exrdmAnalysisManager: Histograms have been saved!" << G4endl;
 
   // Output the induced radioactivities
   //   in VR mode only
   //
   G4ProcessTable *pTable = G4ProcessTable::GetProcessTable();
-  G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *) pTable->FindProcess("RadioactiveDecay", "GenericIon");
+  G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *)
+    pTable->FindProcess("RadioactiveDecay", "GenericIon");
   if (rDecay != NULL) {
     if (!rDecay->IsAnalogueMonteCarlo()) {
-      G4String fileName = histo->getFileName() + ".activity" ;
+      G4String fileName = fHisto->GetFileName() + ".activity" ;
       std::ofstream outfile (fileName, std::ios::out );
-      std::vector<G4RadioactivityTable*> theTables =  rDecay->GetTheRadioactivityTables();
+      std::vector<G4RadioactivityTable*> theTables =
+         rDecay->GetTheRadioactivityTables();
       for (size_t i = 0 ; i < theTables.size(); i++) {
-	G4double rate;
-	outfile << "Radioactivities in decay window no. " << i << G4endl;
-	outfile << "Z \tA \tE \tActivity (decays/window) "<< G4endl;
-	map<G4ThreeVector,G4double> *aMap = theTables[i]->GetTheMap();
-	map<G4ThreeVector,G4double>::iterator iter;
-	for(iter=aMap->begin(); iter != aMap->end(); iter++) {
-	  rate = iter->second;
-	  if ( rate < 0.) rate = 0.; // statically it can be < 0. but it's unphysical
-	  outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"<< iter->first.z() << "\t" << rate/nevent << G4endl;
-	}
-	outfile << G4endl;
+            G4double rate, error;
+            outfile << "Radioactivities in decay window no. " << i << G4endl;
+            outfile <<
+                   "Z \tA \tE \tActivity (decays/window) \tError (decays/window) "
+                    << G4endl;
+            map<G4ThreeVector,G4TwoVector> *aMap = theTables[i]->GetTheMap();
+            map<G4ThreeVector,G4TwoVector>::iterator iter;
+            for(iter=aMap->begin(); iter != aMap->end(); iter++) {
+              rate = iter->second.x()/nevent;
+              error = std::sqrt(iter->second.y())/nevent;
+              if ( rate < 0.) rate = 0.; // statically it can be < 0. but it's unphysical
+              outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"
+                          << iter->first.z() << "\t" << rate <<"\t" << error << G4endl;
+            }
+            outfile << G4endl;
       }
       outfile.close();
     }
@@ -172,18 +190,18 @@ void exrdmAnalysisManager::EndOfRun(G4int nevent)
 
 void exrdmAnalysisManager::BeginOfEvent()
 {
-  Edepo.clear();
+  fEdepo.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmAnalysisManager::EndOfEvent()
 {
-  if (Edepo.size()) {
-    std::sort(Edepo.begin(),Edepo.end());
-    G4double TarE = Edepo[0].GetEnergy();
-    G4double Time = Edepo[0].GetTime();
-    G4double TarW = Edepo[0].GetEnergy()*Edepo[0].GetWeight();
+  if (fEdepo.size()) {
+    std::sort(fEdepo.begin(),fEdepo.end());
+    G4double TarE = fEdepo[0].GetEnergy();
+    G4double Time = fEdepo[0].GetTime();
+    G4double TarW = fEdepo[0].GetEnergy()*fEdepo[0].GetWeight();
     G4double DetE = 0.;
     G4double DetW = 0.;
     G4double ComW = 0.;
@@ -193,43 +211,43 @@ void exrdmAnalysisManager::EndOfEvent()
       TarE = 0.;
       TarW = 0.;
     }
-    for (size_t i = 1; i < Edepo.size(); i++) {
-      if (std::fabs((Edepo[i].GetTime()- Time)/second) <= pulseWidth) {
-	if ( Edepo[i].GetEnergy() > 0. ) {
-	  TarE += Edepo[i].GetEnergy();
-	  TarW += Edepo[i].GetEnergy()*Edepo[i].GetWeight();
-	} else {
-	  DetE -= Edepo[i].GetEnergy();
-	  DetW -= Edepo[i].GetEnergy()*Edepo[i].GetWeight();
-	}
+    for (size_t i = 1; i < fEdepo.size(); i++) {
+      if (std::fabs((fEdepo[i].GetTime()- Time)/second) <= fPulseWidth) {
+        if ( fEdepo[i].GetEnergy() > 0. ) {
+          TarE += fEdepo[i].GetEnergy();
+          TarW += fEdepo[i].GetEnergy()*fEdepo[i].GetWeight();
+        } else {
+          DetE -= fEdepo[i].GetEnergy();
+          DetW -= fEdepo[i].GetEnergy()*fEdepo[i].GetWeight();
+        }
       } else {
-	// tallying
-	if (TarE || DetE) ComW = (TarW+DetW)/(TarE+DetE);
-	if (TarE) TarW /= TarE;
-	if (DetE) DetW /= DetE;
-	//
-	if (TarE) histo->fillHisto(0,TarE,TarW); // target histogram
-	if (DetE) histo->fillHisto(1,DetE,DetW); // Detector histogram
-	if (TarE+DetE)  histo->fillHisto(2,DetE+TarE,ComW); // Total histogram
-	if (DetE >= detectorThresE && TarE >= targetThresE )
-	  histo->fillHisto(3,DetE,DetW); // coincidence histogram
-	if (TarE >= targetThresE && DetE < detectorThresE) 
-	  histo->fillHisto(4,TarE,TarW); // target anti-coincidence histogram
-	if (TarE < targetThresE && DetE >= detectorThresE) 
-	  histo->fillHisto(5,DetE,DetW); // detector anti-coincidence histogram
-	//
-	//reset
-	TarE = Edepo[i].GetEnergy();
-	Time = Edepo[i].GetTime();
-	TarW = Edepo[i].GetEnergy()*Edepo[i].GetWeight();
-	DetE = 0.;
-	DetW = 0.;
-	if (TarE < 0) {
-	  DetE = -TarE;
-	  DetW = -TarW;
-	  TarE = 0.;
-	  TarW = 0.;
-	}
+        // tallying
+        if (TarE || DetE) ComW = (TarW+DetW)/(TarE+DetE);
+        if (TarE) TarW /= TarE;
+        if (DetE) DetW /= DetE;
+        //
+        if (TarE) fHisto->FillHisto(0,TarE,TarW); // target histogram
+        if (DetE) fHisto->FillHisto(1,DetE,DetW); // Detector histogram
+        if (TarE+DetE)  fHisto->FillHisto(2,DetE+TarE,ComW); // Total histogram
+        if (DetE >= fDetectorThresE && TarE >= fTargetThresE )
+          fHisto->FillHisto(3,DetE,DetW); // coincidence histogram
+        if (TarE >= fTargetThresE && DetE < fDetectorThresE) 
+          fHisto->FillHisto(4,TarE,TarW); // target anti-coincidence histogram
+        if (TarE < fTargetThresE && DetE >= fDetectorThresE) 
+          fHisto->FillHisto(5,DetE,DetW); // detector anti-coincidence histogram
+        //
+        //reset
+        TarE = fEdepo[i].GetEnergy();
+        Time = fEdepo[i].GetTime();
+        TarW = fEdepo[i].GetEnergy()*fEdepo[i].GetWeight();
+        DetE = 0.;
+        DetW = 0.;
+        if (TarE < 0) {
+          DetE = -TarE;
+          DetW = -TarW;
+          TarE = 0.;
+          TarW = 0.;
+        }
       }
     }
     //tally the last hit
@@ -237,15 +255,15 @@ void exrdmAnalysisManager::EndOfEvent()
     if (TarE) TarW /= TarE;
     if (DetE) DetW /= DetE;
     //
-    if (TarE) histo->fillHisto(0,TarE,TarW); // target histogram
-    if (DetE) histo->fillHisto(1,DetE,DetW); // Detector histogram
-    if (TarE+DetE)  histo->fillHisto(2,DetE+TarE,ComW); // Total histogram
-    if (DetE >= detectorThresE && TarE >= targetThresE )
-      histo->fillHisto(3,DetE,DetW); // coincidence histogram
-    if (TarE >= targetThresE && DetE < detectorThresE) 
-      histo->fillHisto(4,TarE,TarW); // target anti-coincidence histogram
-    if (TarE < targetThresE && DetE >= detectorThresE) 
-      histo->fillHisto(5,DetE,DetW); // detector anti-coincidence histogram
+    if (TarE) fHisto->FillHisto(0,TarE,TarW); // target histogram
+    if (DetE) fHisto->FillHisto(1,DetE,DetW); // Detector histogram
+    if (TarE+DetE)  fHisto->FillHisto(2,DetE+TarE,ComW); // Total histogram
+    if (DetE >= fDetectorThresE && TarE >= fTargetThresE )
+      fHisto->FillHisto(3,DetE,DetW); // coincidence histogram
+    if (TarE >= fTargetThresE && DetE < fDetectorThresE) 
+      fHisto->FillHisto(4,TarE,TarW); // target anti-coincidence histogram
+    if (TarE < fTargetThresE && DetE >= fDetectorThresE) 
+      fHisto->FillHisto(5,DetE,DetW); // detector anti-coincidence histogram
     // now add zero energy to separat events
     AddEnergy(0.,0.,0.);
   }
@@ -253,50 +271,66 @@ void exrdmAnalysisManager::EndOfEvent()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void exrdmAnalysisManager::AddEnergy(G4double edep, G4double weight, G4double time)
+void exrdmAnalysisManager::AddEnergy(G4double edep, G4double weight,
+                                                                                                                           G4double time)
 {
-  if(1 < verbose) {
+  if(1 < fVerbose) {
     G4cout << "exrdmAnalysisManager::AddEnergy: e(keV)= " << edep/keV 
-	   << " weight = " << weight << " time (s) = " <<  time/second
+           << " weight = " << weight << " time (s) = " <<  time/second
            << G4endl;
   }
-  histo->fillTuple(2, 0, edep/MeV);
-  histo->fillTuple(2,1,time/second);
-  histo->fillTuple(2,2,weight);
-  histo->addRow(2);
+  fHisto->FillTuple(2, 0, edep/MeV);
+  fHisto->FillTuple(2,1,time/second);
+  fHisto->FillTuple(2,2,weight);
+  fHisto->AddRow(2);
   // 
   exrdmEnergyDeposition A(edep,time,weight);
-  Edepo.push_back(A);
+  fEdepo.push_back(A);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmAnalysisManager::AddParticle(G4double pid, G4double energy, G4double weight, G4double time )
+void exrdmAnalysisManager::AddParticle(G4double pid, G4double energy,
+                                       G4double weight, G4double time )
 {
-  if(1 < verbose) {
+  if(1 < fVerbose) {
     G4cout << "exrdmAnalysisManager::AddParticle: " << pid
            << G4endl;
   }
-  histo->fillTuple(0,0, pid);
-  histo->fillTuple(0,1,energy/MeV);
-  histo->fillTuple(0,2,time/second);
-  histo->fillTuple(0,3,weight);
-  histo->addRow(0);
+  fHisto->FillTuple(0,0, pid);
+  fHisto->FillTuple(0,1,energy/MeV);
+  fHisto->FillTuple(0,2,time/second);
+  fHisto->FillTuple(0,3,weight);
+  fHisto->AddRow(0);
   // now fill th emission spectrum
-  if (energy>0.0) histo->fillHisto(6,energy/MeV,weight);
+  if (energy>0.0) fHisto->FillHisto(6,energy/MeV,weight);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmAnalysisManager::AddIsotope(G4double pid,G4double weight, G4double time )
+void exrdmAnalysisManager::AddIsotope(G4double pid,G4double weight,
+                                      G4double time )
 {
-  if(1 < verbose) {
+  if(1 < fVerbose) {
     G4cout << "exrdmAnalysisManager::AddIsotope: " << pid
            << G4endl;
   }
-  histo->fillTuple(1,0,pid);
-  histo->fillTuple(1,1,time/second);
-  histo->fillTuple(1,2,weight);
-  histo->addRow(1);
+  fHisto->FillTuple(1,0,pid);
+  fHisto->FillTuple(1,1,time/second);
+  fHisto->FillTuple(1,2,weight);
+  fHisto->AddRow(1);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void exrdmAnalysisManager::AddDecayProduct(G4double pid,G4int Z, G4int A,
+                                           G4double energy, G4double time,
+                                           G4double weight)
+{
+  fHisto->FillTuple(3,0,pid);
+  fHisto->FillTuple(3,1,double(Z));
+  fHisto->FillTuple(3,2,double(A));
+  fHisto->FillTuple(3,3,energy);
+  fHisto->FillTuple(3,4,time/s);
+  fHisto->FillTuple(3,5,weight);
+  fHisto->AddRow(3);
+}

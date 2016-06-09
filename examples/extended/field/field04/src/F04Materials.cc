@@ -23,42 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04Materials.cc
+/// \brief Implementation of the F04Materials class
 //
 //
-
 #include "F04Materials.hh"
+#include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04Materials::F04Materials()
 {
-  nistMan = G4NistManager::Instance();
+  fNistMan = G4NistManager::Instance();
 
-  nistMan->SetVerbose(2);
+  fNistMan->SetVerbose(2);
 
   CreateMaterials();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04Materials::~F04Materials()
 {
-  delete    Vacuum;
-  delete    Air;
-  delete    Sci;
-  delete    BeO;
+  delete    fVacuum;
+  delete    fAir;
+  delete    fSci;
+  delete    fBeO;
 }
 
-F04Materials* F04Materials::instance = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04Materials* F04Materials::fInstance = 0;
 
 F04Materials* F04Materials::GetInstance()
 {
-  if (instance == 0)
+  if (fInstance == 0)
     {
-      instance = new F04Materials();
+      fInstance = new F04Materials();
     }
-  return instance;
+  return fInstance;
 }
 
-G4Material* F04Materials::GetMaterial(const G4String material)  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* F04Materials::GetMaterial(const G4String material)
 {
-  G4Material* mat =  nistMan->FindOrBuildMaterial(material);
+  G4Material* mat =  fNistMan->FindOrBuildMaterial(material);
 
   if (!mat) mat = G4Material::GetMaterial(material);
   if (!mat) {G4cout << material << "Not Found, Please Retry"<< G4endl;}
@@ -66,9 +76,11 @@ G4Material* F04Materials::GetMaterial(const G4String material)
   return mat;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04Materials::CreateMaterials()
 {
-  G4double density;            
+  G4double density;
   std::vector<G4int>  natoms;
   std::vector<G4double> fractionMass;
   std::vector<G4String> elements;
@@ -78,15 +90,15 @@ void F04Materials::CreateMaterials()
 
   // Define Vacuum
 
-  Vacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
+  fVacuum = fNistMan->FindOrBuildMaterial("G4_Galactic");
 
   // Define Air
 
-  Air = nistMan->FindOrBuildMaterial("G4_AIR");
+  fAir = fNistMan->FindOrBuildMaterial("G4_AIR");
 
   // Define BeO
 
-  BeO = nistMan->FindOrBuildMaterial("G4_BERYLLIUM_OXIDE");
+  fBeO = fNistMan->FindOrBuildMaterial("G4_BERYLLIUM_OXIDE");
 
   // Define Scintillator
 
@@ -95,7 +107,7 @@ void F04Materials::CreateMaterials()
 
   density = 1.032*g/cm3;;
 
-  Sci = nistMan->
+  fSci = fNistMan->
           ConstructNewMaterial("Scintillator", elements, natoms, density);
 
   elements.clear();

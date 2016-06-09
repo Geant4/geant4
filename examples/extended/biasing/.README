@@ -1,0 +1,109 @@
+//$Id$
+
+///\file "biasing/.README"
+///\brief Examples biasing README page
+
+/*! \page Examples_biasing Category "biasing"
+
+\section biasing_s1 B01 and B02
+
+B01 and B02 applications demonstrate the usage of different variance
+reduction techniques supported in Geant4, or possible from the user
+applications.
+
+\subsection biasing_sub_11 General remark to variance reduction
+
+The tools provided for importance sampling (or geometrical splitting and
+Russian roulette) and for the weight window technique require the user to 
+have a good understanding of the physics in the problem. This is because 
+the user has to decide which particle types have to be biased, define the 
+cells (physical volumes, replicas) and assign importances or weight 
+windows to that cells. If this is not done properly it can not be 
+expected that the results describe a real experiment. The examples given 
+here only demonstrate how to use the tools technically. They don't intend 
+to produce physical correct results.
+
+\subsection biasing_sub_12 General remark to scoring
+
+A interface G4VScorer is provided for the user. The user may create his 
+own class to perform the desired scoring. The user defined class 
+therefore should inherit from the interface G4VScorer. 
+An example of an implementation of a scorer is G4Scorer
+which may be found in source/event. 
+The scoring in these examples is done with a G4Scorer.
+The variance reduction techniques and scoring do not support all options
+of the Geant4 geometry. It only supports physical volumes and simple 
+replicas.
+To identify a physical volume (or replica) objects of the class
+G4GeometryCell are used. Scoring is done according to these
+cells and importance values or the weight windows  may be assigned to 
+them.
+When scoring is done in a parallel geometry special action has to be taken
+to prevent counting of "collisions" with boundaries of the mass geometry 
+as interactions. This is differently handled when scoring is done in the 
+mass geometry.
+
+--> G4GeometryCell of the parallel geometry must not share boundaries with
+the world volume! <--
+
+\subsection biasing_sub_13 Known problems
+
+In the following scenario it can happen that a particle is not
+biased and it's weight is therefore not changed even if it crosses
+a boundary where biasing should happen.
+Importance and weight window sampling create particles on boundaries 
+between volumes. If the GPIL method of a physical process returns 
+0 as step length for a particle on a boundary and if the PostStepDoIt of
+that process changes the direction of the particle to go back in the 
+former volume the biasing won't be invoked. 
+This will produce particles with weights that do not correspondent to the
+importance of the current volumes.
+
+\subsection biasing_sub_14 Further information:
+
+Short description of importance sampling and scoring:
+http://cern.ch/geant4/working_groups/geometry/biasing/Sampling.html
+
+\subsection biasing_sub_15 Example B01 
+
+The example uses importance sampling or the weight window technique 
+according to an input parameter. It uses scoring in both cases. 
+Importance values or weight windows are defined according to the mass 
+geometry. In this example the weight window technique is configured such 
+that it behaves equivalent to importance sampling: The window is actually 
+not a window but simply the inverse of the importance value and only
+one energy region is used that covers all energies in the problem.
+The user may change the weight window configuration by changing the
+initialization of the weight window algorithm in example,cc. 
+Different energy bounds for the weight window technique may be specified 
+in B01DetectorConstruction.
+
+The executable takes one optional argument: 0 or 1. Without argument or
+with argument: 0, the importance sampling is applied with argument: 1,
+the weight window technique is applied.
+
+
+\subsection biasing_sub_16 Example B02 
+
+This example uses a parallel geometry to define G4GeometryCell objects
+for scoring and importance sampling. In addition it customizes
+the scoring. In this example one scorer creates a histogram.
+
+\subsection biasing_sub_17 Compiling and running
+
+To compile this example you need AIDA installed. To link 
+and run it you need a AIDA compliant analysis package.
+Histograms are saved in HBOOK format.
+You need to set the following variable in your environment:
+   "G4ANALYSIS_USE"
+The example stores the plot in the file b02.hbook.
+
+\section biasing_s2 Reverse MonteCarlo Technique example
+
+\link ExampleReverseMC01 Example ReverseMC01 \endlink
+
+Example illustrating the use of the Reverse Monte Carlo (RMC) mode in a Geant4
+application. See details in \link ExampleReverseMC01 Example README page
+\endlink.
+
+*/

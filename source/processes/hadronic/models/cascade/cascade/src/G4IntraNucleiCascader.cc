@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IntraNucleiCascader.cc,v 1.69 2010-12-15 07:41:09 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100307  M. Kelsey -- Bug fix: momentum_out[0] should be momentum_out.e()
@@ -109,12 +108,18 @@
 //		for final-state clustering.
 // 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
 //		final-state tables instead of particle "isPhoton()"
+// 20120521  A. Ribon -- Specify mass when decay trapped particle.
+// 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+
+#include <algorithm>
 
 #include "G4IntraNucleiCascader.hh"
-#include "G4CascadParticle.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCoalescence.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CascadeRecoilMaker.hh"
+#include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"
@@ -134,8 +139,6 @@
 #include "G4Proton.hh"
 #include "G4V3DNucleus.hh"
 #include "Randomize.hh"
-#include <algorithm>
-#include <stdlib.h>
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
@@ -158,7 +161,7 @@ G4IntraNucleiCascader::G4IntraNucleiCascader()
     minimum_recoil_A(0.), coulombBarrier(0.),
     nucleusTarget(new G4InuclNuclei),
     protonTarget(new G4InuclElementaryParticle) {
-  if (getenv("G4CASCADE_DO_COALESCENCE"))	// User may set this envvar
+  if (G4CascadeParameters::doCoalescence())
     theClusterMaker = new G4CascadeCoalescence;
 }
 
@@ -827,7 +830,7 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
   }
 
   // Get secondaries from decay in particle's rest frame
-  G4DecayProducts* daughters = unstable->SelectADecayChannel()->DecayIt();
+  G4DecayProducts* daughters = unstable->SelectADecayChannel()->DecayIt( trappedP.getDefinition()->GetPDGMass() );
   if (!daughters) {			// No final state; cannot decay!
     if (verboseLevel > 3)
       G4cerr << " no daughters!  Releasing trapped particle" << G4endl;

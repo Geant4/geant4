@@ -39,6 +39,8 @@
 **************
 
  1 - main()
+  
+    See field05.cc.
 
  2- GEOMETRY DEFINITION
 
@@ -77,15 +79,11 @@
 
  6- HOW TO START ?
 
-        - compile and link to generate an executable
-                % cd $G4INSTALL/example/extended/field/field05
-                % gmake
-
         - execute field05 in 'batch' mode from macro files e.g.
-                % $(G4INSTALL)/bin/$(G4SYSTEM)/field05 field05.in > field.out &
+                % field05 field05.in > field.out &
 
         - execute field05 in 'interactive' mode with visualization e.g.
-                % $(G4INSTALL)/bin/$(G4SYSTEM)/field05
+                % field05
                 ....
                 Idle> type your commands, for example:
                 Idle> run/beamOn 1

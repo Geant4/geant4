@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.hh,v 1.7 2010-10-12 06:02:28 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -57,7 +56,8 @@
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
 class G4HadronNucleonXsc;
-class G4HadronInelasticDataSet;
+//class G4HadronInelasticDataSet;
+class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -103,15 +103,19 @@ private:
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
+  G4double fHighEnergy;  
+  G4double fSAIDHighEnergyLimit;
   G4double theGlauberFac[93];
   G4double theCoulombFac[93];
   G4int    theA[93];
 
   const G4ParticleDefinition*     particle;
+  const G4ParticleDefinition*     theProton;
   G4GlauberGribovCrossSection*    fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4HadronNucleonXsc*             fHadron;
-  G4HadronInelasticDataSet*       fGHEISHA;
+  //G4HadronInelasticDataSet*       fGHEISHA;
+  G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isProton;
   G4bool                          isInitialized;
 };

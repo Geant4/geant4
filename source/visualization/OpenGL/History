@@ -17,6 +17,741 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th November 2012  Laurent Garnier (opengl-V09-05-53)
+- G4OpenGLQtViewer
+  o Fix bug #1385 on Linux at launch. Mouse context try to change before it is initialize.
+    No problem for Mac OS X 
+
+2nd November 2012  John Allison (opengl-V09-05-52)
+- G4OpenGLImmediateQtViewer,G4OpenGLStoredQtViewer :
+  o Fix bug #1368, now Qt batch mode display a window and printEPS is working again
+
+2nd November 2012  John Allison (opengl-V09-05-51)
+- G4OpenGLStoredSceneHandler.cc:
+  o Fixed bug in display-list-re-use algorithm.  (If touchables have
+    been modified it is too risky to re-use display lists.)
+
+2nd November 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix a possible problem in batch mode for scene tree component
+
+1st November 2012  John Allison (tagged: opengl-V09-05-50)
+
+31st October 2012  Fred Jones
+- Fix compiler warnings.
+
+31st October 2012  Laurent Garnier
+- G4OpenGLStored/ImmediateQtViewer: Fix a bug in batch mode for printEPS, size was not correct
+
+30th October 2012  Laurent Garnier (tagged: opengl-V09-05-49)
+
+30th October 2012  John Allison
+- G4OpenGLQtViewer::toggleTransparency: Swapped true<->false.
+
+29th October 2012  John Allison
+- G4OpenGLViewer: The following data members have been made static with the
+  following initial values, modifiable by: "/vis/ogl/set/printSize", 
+  "/vis/ogl/set/printFilename" and used by "/vis/ogl/printEPS", and thus 
+  are used by all OGL viewers.  fPrintFilenameIndex is initialised to zero
+  and counts on for *all* viewers.
+     G4int G4OpenGLViewer::fPrintSizeX = -1;
+     G4int G4OpenGLViewer::fPrintSizeY = -1;
+     G4String G4OpenGLViewer::fPrintFilename = "G4OpenGL";
+     int G4OpenGLViewer::fPrintFilenameIndex = 0;
+
+29th October 2012  Laurent Garnier
+- G4OpenGLQtViewer : Comment out a method and fix a printing caracter non desired 
+
+27th October 2012  John Allison (opengl-V09-05-48, needs visman-V09-05-43)
+- Finally solved problem of batch v. non-Qt session!!!
+  o Introduced G4OpenGLQt, a base class for G4OpenGLImmediate/StoredQt
+    graphics system factories.
+  o Implemented G4OpenGLQt::IsUISessionCompatible().  This finds the original
+    session, if any.  If the session is a G4UIbatch (which can happen if
+    invoked from a command in a macro file), it uses GetPreviousSession
+    (recursively if necessary - the command may call another macro or command)
+    until the original session, if any, is found.  If there is no original
+    session we assume the application is in batch mode, and allow a Qt window.
+    It's OK to have a Qt window in batch - one can open a viewer, create a
+    scene, set view parameters and /vis/ogl/printEPS.  If there *is* an
+    original session, but it is *not* an G4UIQt, we flag it as incompatible.
+    A "fallback" graphics system is found, if any, in /vis/sceneHandler/create.
+
+26th October 2012  John Allison
+- G4OpenGLImmediate/StoredQt.cc:
+  o Use GetG4UIWindow() to tell if G4UIQt has been instantiated.
+    Solves problem of batch v. non-Qt session.
+
+23rd October 2012  John Allison
+- G4OpenGLStoredViewer.hh:
+  o Made CompareForKernelVisit virtual.
+- G4OpenGLStoredQtViewer:
+  o Introduced G4OpenGLStoredQtViewer::CompareForKernelVisit, which
+    is identical to G4OpenGLStoredViewer::CompareForKernelVisit
+    except for checking of VisAttributesModifiers, because
+    G4OpenGLStoredQtViewer keeps track of its own touchable
+    modifiers (fTreeItemModels, etc.).
+- G4OpenGLQtViewer.cc:
+  o Introduced code to capture changes to visibility (selection) in
+    VisAttributesModifiers.  This adds to the code to capture colour
+    and transparency introduced in opengl-V09-05-47.
+
+18th October 2012  Laurent Garnier
+- G4OpenGLQtViewer :
+ o Fix a Qt < 4.5 issue for ColorDialog
+ o Fix a Qt < 4.4 issue for GridLayout::itemAtPosition
+ o Fix a crash at exit on Linux SLC5 (he is right!)
+ o Fix a compilation warning on SLC5
+
+13th October 2012  John Allison
+- G4OpenGLSceneHandler.cc, G4OpenGLImmediateSceneHandler.cc,
+  G4OpenGLStoredSceneHandler.cc, G4OpenGLStoredViewer.cc:
+  o Moved depth testing out of display list for polylines and markers.
+    This allows on-the-fly changing of hidden markers, i.e., without
+    a kernel visit and rebuilding of display lists.
+
+12th October 2012  Laurent Garnier
+- G4OpenGLQtViewer:
+  o Prevent context menu to be called in a non-interactive session
+
+12th October 2012  John Allison (opengl-V09-05-47, co-works
+interfaces-V09-05-20)
+- G4OpenGLQtViewer:
+  o Introduced some trial code for capturing touchable colour changes.
+  o Changed values to references where possible.
+ 
+12th October 2012  Laurent Garnier
+- G4OpenGLStoredQt/G4OpenGLImmediateQt:
+  o Improve instantiation of G4UIQt in all G4VInteractiveSession mode case
+
+11th October 2012  Laurent Garnier
+- G4OpenGLStoredQt/G4OpenGLImmediateQt:
+  o Improve instantiation of G4UIQt in terminal mode case
+
+10th October 2012  Laurent Garnier
+- G4OpenGLStoredQt/G4OpenGLImmediateQt:
+  o Improve instantiation of G4UIQt in batch mode case
+
+9th October 2012  John Allison
+- G4OpenGLSceneHandler::AddPrimitive(const G4Polymarker& polymarker):
+  o Removed glEnable(GL_BLEND) and glBlendFunc(…).  They are in 
+    G4OpenGLViewer::InitializeGLView, which is, I think, all it needs.
+
+9th October 2012  Laurent Garnier (opengl-V09-05-46, co-works interfaces-V09-05-19)
+- G4OpenGLQtViewer/G4OpenGLStoredQtViewer/G4OpenGLImmediateQtViewer : 
+  o Change mapping of context menu/icon in order to get all working together. 
+    Now a click on an icon will change the mouse context menu.
+
+7th October 2012  John Allison
+- G4OpenGLStoredViewer::CompareForKernelVisit:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
+4nd October 2012  Laurent Garnier
+- G4OpenGLQtViewer
+  o Changing color on non touchables now ok (except text)
+  o In DrawText, remove unnecessary (and wrong) glColor change
+- G4OpenGLViewer
+  o In DrawText, remove unnecessary (and wrong) glColor change
+  o Use SetOrthogonalProjection/SetPerspectiveProjection/
+    SetDefaultColour/SetDefaultTextColour instead of hard coded methods
+
+3nd October 2012  Laurent Garnier
+- G4OpenGLQtViewer :
+  o Fix a bug when cloning scene tree in scene tree viewer (bad fix yesterday)
+  o Change color for PO=-1 to "no color" instead of unspecified color
+
+3rd October 2012  John Allison
+- G4OpenGLSceneHandler, G4OpenGLStoredSceneHandler::AddPrimitivePreamble,
+  G4OpenGLStoredQtSceneHandler::ExtraPOProcessing:
+  o Protected the case of G4LogicalVolumeModel.
+
+2nd October 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix a bug when cloning scene tree in scene tree viewer
+
+2nd October 2012  John Allison
+- G4OpenGLStoredViewer.cc:
+  o Improved algorithm in DrawDisplayLists so that if the
+    transparency if changed in DisplayTimePOColourModification,
+    the drawing order is honoured immediately, i.e.,
+    without needing a rebuild.  Objects are drawn in the
+    following order:
+    . Opaque;
+    . Transparent;
+    . Markers and polylines that are "not hidden".
+- G4OpenGLStoredSceneHandler:
+  o Rationalised the recording of transparency in the PO/TO.  (It
+    is not necessary to keep a separate flag for transparency; it
+    is enough to inspect the alpha value of the colour.)
+
+2nd October 2012  John Allison (opengl-V09-05-45)
+- G4OpenGLStoredWin32Viewer.cc:
+  o Re-add inclusion of missing header files on Win32
+
+2nd October 2012  Laurent Garnier (opengl-V09-05-44)
+- G4OpenGLStoredWin32.cc:
+  o Re-add inclusion of missing header files on Win32
+
+1st October 2012  John Allison (opengl-V09-05-43)
+- G4OpenGLStoredViewer.cc:
+  o Removed hidden marker from list of parameters that of changed trigger a
+    kernel re-visit.  DisplayLists() can now cope with a change because the
+    required information is in the PO/TO.
+
+28th September 2012  Laurent Garnier (opengl-V09-05-42)
+- G4OpenGLQtViewer:
+  o Fixed compiler warning
+
+28th September 2012  Gabriele Cosmo (opengl-V09-05-41)
+- Explicitly include units header in G4OpenGLQtViewer.cc.
+
+28th September 2012  Laurent Garnier (opengl-V09-05-40)
+- G4OpenGLQtViewer:
+  o Fixed compiler warning and remove dead code
+
+27th September 2012  John Allison
+- G4OpenGLImmediate/StoredSceneHandler.cc:
+  o Fixed clang compiler warning.
+
+27th September 2012  John Allison (opengl-V09-05-39)
+- G4OpenGLStoredSceneHandler:
+  o Removed RequestPrimitives.  Previously, G4OpenGLStoredSceneHandler had its
+    own version of RequestPrimitives, which attempted to re-use a display list
+    if the geometry object had been encountered earlier with a different
+    transformation.  The transformation is kept in the PO and the display list
+    is re-used.  One has to be careful about replicas and transformations.  Now
+    this code has been moved to AddPrimitivePreAmble.
+
+27th September 2012  John Allison (opengl-V09-05-38)
+- G4OpenGLStoredSceneHandler, 
+  o Minor name changes to improve readability.
+  o Added #include <typeinfo> to fix compiler warnings on Linux.
+- G4OpenGLStoredViewer:
+  o Fix to enable switching from hidden markers to non-hidden and transparent
+    to opaque and v.v.
+- G4OpenGLSceneHandler.cc:
+  o Fix compiler warning on Linux.
+
+27th September 2012  John Allison (opengl-V09-05-37)
+- G4OpenGLSceneHandler, G4OpenGLImmediateSceneHandler, G4OpenGLStoredSceneHandler,
+  G4OpenGLStoredViewer:
+  o Major re-design of scene and transient processing:
+    . Three categories foreseen:
+      ~ Opaque
+      ~ To be treated as transparent
+      ~ To be treated as non-hidden.  This applies to markers and polylines if
+        hidden markers is _not_ requested, which is the default so that
+        trajectories are always visible even if drawing in surface style.
+        To change this - /vis/viewer/set/hiddenMarker true.
+    . Thus G4OpenGLSceneHandler::ProcessScene() is three-pass-capable.
+    . Also G4OpenGLStoredViewer::DrawDisplayLists makes three passes.
+    . Appropriate information is stored in the PO or TO.
+
+26th September 2012  Laurent Garnier
+- G4OpenGLQtViewer : Remove all "ApplyCommand"
+
+25th September 2012  John Allison (opengl-V09-05-36)
+- Tagged for system testing.
+
+25th September 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix a bug with setting color when changing vis parameters 
+  not taken in account
+
+25th September 2012  John Allison (opengl-V09-05-35)
+- G4OpenGLViewer:
+  o Revert to previous version.  glColorMaterial now in G4OpenGLSceneHandler.
+- G4OpenGLSceneHandler:
+  o Uses glColorMaterial judiciously for wireframe and surface (hsr) drawing:
+    . GL_FRONT_AND_BACK for transparent polyhedra;
+    . GL_FRONT for opaque (since back surfaces always hidden).
+  o However, use glMaterial as before for hidden edge (hlr and hlhsr).  Un-
+    fortunately this means "temporary" changes of colour, such as may be obtained
+    with the Qt viewer, are not respected.
+- G4OpenGLImmediateSceneHandler, G4OpenGLStoredSceneHandler, G4OpenGLStoredViewer:
+  o Paid proper respect to transparency_enabled (default = true).  If true use
+    glColor4d, else use glColor3d.
+
+24th September 2012  John Allison (opengl-V09-05-34 - needs interfaces-V09-05-15)
+- G4OpenGLImmediate/StoredQt.cc;
+  o Checked instantiation of G4UIQt.
+- G4OpenGLViewer::InitializeGLView:
+    // Material (for surface rendering) follows glColor at all times.
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+- G4OpenGLSceneHandler.cc:
+  o Commented out all uses of glMaterial.  Material now determined by glColor, since
+    we now specify glColorMaterial - see G4OpenGLViewer::InitializeGLView.
+  o Changed glColor3d to glColor4d.
+- G4OpenGLStoredViewer.cc:
+  o Changed glColor3d to glColor4d (except for "head time").
+- G4OpenGLViewer, G4OpenGLQtViewer.cc, G4OpenGLStoredSceneHandler, G4OpenGLXViewer.cc:
+  o Changed glColor3d to glColor4d.
+
+24th September 2012  John Allison (opengl-V09-05-33)
+- Tidied headers and improved comments.
+
+20th September Laurent Garnier
+- G4OpenGLViewer.cc : Fix uninitialize value
+- G4OpenGLQtViewer :
+  o 10x faster when getting color or visibility on element
+  o Avoid changing Vis Attributes when changing color on PO objects
+  o Fix problem on close/expand sometimes when rebuilding the scene
+  -> But last point means that the scene tree viewer is no longer working
+  on changing color/transparency, will be fix in next commit
+
+7th August 2012  Laurent Garnier
+- G4OpenGLViewer : Fix layout problem on gl2ps text
+- G4OpenGLXViewer : Typo
+
+6th August 2012  John Allison  (opengl-V09-05-31)
+- G4OpenGLSceneHandler and G4OpenGLStoredSceneHandler:
+  o Protected against null result of dynmic_cast on viewer (shouldn't happen!!).
+
+5th August 2012  Laurent Garnier
+- G4OpenGLQtViewer.cc, G4OpenGLStoredSceneHandler.cc
+  o Fix default 43903 43943 ...
+  o Fix potentiel compilation warning
+
+5th August 2012  Laurent Garnier  (opengl-V09-05-30, coworks interfaces-V09-05-12)
+- G4OpenGLImmediateQtViewer : Minor fix
+- G4OpenGLQtViewer.cc :
+  o Now take in account the GUI (interface package) icons status for move/rotate/pick
+  o Move scene tree widgets into tab instead of VBox
+  o Implement Zoom In/Out function, now it zoom on a specific point
+
+11th August 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc/G4OpenGLStoredQtViewer: 
+  o Remove /vis/viewer/select command when changing transparency
+  o Fixed compilation warning
+  o Beginning of removing /vis/geometry/set/colour commands
+
+8th August 2012  John Allison  (opengl-V09-05-29)
+- G4OpenGLQtViewer.cc: Fixed "unused parameter" warning.
+
+8th August 2012  John Allison  (opengl-V09-05-28, coworks interfaces-V09-05-09)
+- Tagged.
+
+7th August 2012  John Allison
+- G4OpenGLStoredSceneHandler:
+  o Moved colour from display list to PO so that a sub-class may
+    modify through the new virtual function below.
+- G4OpenGLStoredViewer:
+  o Added virtual void DisplayTimePOColourModification
+          (G4Colour&, size_t /*currentPOListIndex*/) {}
+    so that a sub-class may modify the colur/transparency.  (If the
+    transparency is modified the rendering may not be optimal since
+    the order of rendering is determined at POList construction time.)
+
+30th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+  o Add search widget in scene tree
+  o Double click now allow to change color/transparency
+
+23th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+  o Do not apply changes to other viewer when moving scene tree slider
+  o Fix a problem on scene tree with non touchable volumes
+ 
+19th July 2012  John Allison
+- G4OpenGLStored/ImmediateSceneHandler.cc:
+  o Disabled GL_DEPTH_TEST and GL_LIGHTING for 2D objects, but see...
+- G4OpenGLSceneHandler.cc:
+  o Disabled GL_DEPTH_TEST and GL_LIGHTING for 2D lines and markers.
+
+17th July 2012  John Allison  (opengl-V09-05-27)
+- Fix Linux compiler warnings.
+
+17th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+ o Fix a problem with Scene tree on mix with some transparent and non physical
+   volumes.
+ o Moving transparency slider does now do not change non physical volume hidden/visible.
+ o Sort item in scene tree
+
+17th July 2012  John Allison  (opengl-V09-05-26, co-works interfaces-V09-05-08)
+- Tagged.
+- Included Laurent's fix for text layout.
+
+17th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+ o Fix text alignement problem
+
+16th July 2012 Laurent Garnier
+- G4OpenGLQtViewer : 
+ o Bug fix for transparent objects in scene tree
+ o Bug fix when closing a viewer on scene tree
+ o bug fix when playing with scene tree and active tab was an immediate viewer
+
+16th July 2012  John Allison
+- G4OpenGLXViewer::DrawText:
+  o Removed glDisable (GL_DEPTH_TEST); glDisable (GL_LIGHTING).
+  o Now 3D text is hidden, when appropiate, by volumes drawn in surface mode.
+  o (The depth testing of 2D objects, including 2D text, is dealt with in
+     the scene handler.)
+- G4OpenGLSceneHandler::Begin/EndPrimitives2D:
+  o Moved fProcessing2D to G4VSceneHandler.
+  o Now may be used by all and any driver.
+
+13th July 2012 Laurent Garnier
+- G4OpenGLQtViewer : Updates in Scene tree viewer algorithm 
+  (speedup and fix transparency bug of 11th July).
+
+11th July 2012 Laurent Garnier  (opengl-V09-05-25 co-works interfaces-V09-05-08)
+- G4OpenGLStoredQtSceneHandler.cc, G4OpenGLStoredQtViewer.cc : change/rename fonction
+- G4OpenGLQtViewer : 
+ o Change Scene tree viewer algorithm (still some bug in tree on transparent objects)
+ o Move scene tree layout to "interfaces", this fix a "bad layout problem"
+   some tags ago
+
+5th July 2012  Gabriele Cosmo  (opengl-V09-05-24)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+3rd July 2012  John Allison  (opengl-V09-05-23)
+- Fixed some Coverity warnings.
+
+2nd July 2012  John Allison  (opengl-V09-05-22)
+- G4OpenGLStoredViewer.cc:
+  o Important bug-fix for non-display-list text (i.e., Qt).
+
+27th June 2012  John Allison
+- G4OpenGLStoredViewer.cc: Tidy.
+
+18th June 2012  John Allison  (opengl-V09-05-21)
+- G4OpenGLStoredViewer::DrawDisplayLists:
+  o For special case of text that must be treated without a display
+    list, call G4OpenGLSceneHandler::AddPrimitive(const G4Text&)
+    directly and call glPushMatrix, glColor, etc., as would be in the
+    display list.
+  o Remove code that changed fMemoryForDisplayLists (was a bad idea!!).
+
+16th June 2012  John Allison  (opengl-V09-05-20)
+- G4OpenGLStoredSceneHandler::AddPrimitivePreamble:
+  o Re-instated glDrawBuffer(GL_FRONT) when memory for display lists is
+    unavailable.  It now draws further trajectories properly.
+- G4OpenGLStoredX(m)Viewer::ShowView:
+  o Removed functions altogether, so parent class functions are now used.
+  o They were issuing an extra Clear/DrawView.
+  o ShowView is invoked at end of run and was thus causing an
+    unneccessary draw.
+  o It also had the effect of losing the above-mentioned "further
+    trajectories" at the end of run.
+
+16th June 2012  John Allison  (opengl-V09-05-19)
+- Added /vis/ogl/set/eventsDrawInterval.
+  o By default, the screen is updated at the end of every event.
+    Allowing OpenGL to buffer several events can make a big
+    improvement in drawing speed.  E.g., with exampleB1, 1000 events
+    took 5 seconds but with "/vis/ogl/set/eventsDrawInterval 100",
+    only 1 second.
+
+15th June 2012  John Allison
+- G4OpenGLImmediateSceneHandler:
+  o Added ClearTransientStore, which issues Set/Clear/DrawView.
+- G4OpenGLStoredSceneHandler.cc:
+  o G4OpenGLStoredSceneHandler::ClearTransientStore:
+    Re-introduced Set/Clear/DrawView.
+
+12th June 2012  Laurent Garnier  (opengl-V09-05-18)
+- G4OpenGLQtMovieDialog.cc
+  o Shadow clean.
+
+8th June 2012  John Allison  (opengl-V09-05-17)
+- G4OpenGLSceneHandler.cc, G4OpenGLXmSliderBar.cc,
+  G4OpenGLStoredViewer.cc, G4OpenGLViewer.cc::
+  o Shadow clean.
+- G4OpenGLQtExportDialog.hh/cc, G4OpenGLStoredQtViewer.cc,
+  G4OpenGLQtMovieDialog.cc, G4OpenGLQtViewer.cc,
+  G4OpenGLImmediateQtViewer.cc:
+  o Clean all possible shadows, but many remain because Q_OBJECT,
+    qobject.h, qdialog.h, qgl.h and others use "s" and/or "sr".
+
+29th May 2012  John Allison  (opengl-V09-05-16)
+- G4OpenGLStoredQtSceneHandler.cc:
+  o Reverted to opengl-V09-05-14 (r58177).
+- Implemented proper treatment of transparency in OpenGL stored mode
+  in the case that trajectories passed through or behind transparent
+  persistent objects (detector components).  Required proper ordering
+  of display list execution. 
+- G4OpenGLStoredViewer::DrawDisplayLists:
+  o Now does two passes for a proper treatment of transparency.
+- G4OpenGLStoredSceneHandler:
+  o Added fDisplayOnSecondPassForTransparency to PO and TO.
+- G4OpenGL(Immediate/Stored)SceneHandler:
+  o Improved name - fSecondPassForTransparency, etc., instead of fSecondPass.
+
+23rd May 2012  John Allison  (opengl-V09-05-15)
+- Health Check 2012: Migrated (see management/History):
+  o G4OpenGLSceneHandler: Added
+      void G4OpenGLSceneHandler::ProcessScene()
+      {
+        G4VSceneHandler::ProcessScene();
+        // Repeat if required...
+        if (fSecondPassRequested) {
+          fSecondPass = true;
+          G4VSceneHandler::ProcessScene();
+          fSecondPass = false;
+          fSecondPassRequested = false;
+        }
+      }
+  o G4OpenGLSceneHandler.cc:
+    . Changed glDepthFunc (GL_LESS) to glDepthFunc (GL_LEQUAL) for
+      hidden polylines and markers.
+    . Changed glDepthMask (0/1) to glDepthMask (GL_FALSE/TRUE).
+  o G4OpenGLStoredSceneHandler.cc, G4OpenGLStoredQtSceneHandler.cc:
+    . Removed calls to G4OpenGLStoredSceneHandler::ClearTransientStore and
+      G4OpenGLStoredSceneHandler::ClearStore.
+    . Removed calls to Set/Clear/DrawView.
+  o G4OpenGLImmediateSceneHandler:
+    . Removed ClearTransientStore.
+  o G4OpenGLStoredXViewer.cc:
+    . Tidied.
+
+22nd May 2012  John Allison  (opengl-V09-05-14)
+- G4OpenGLQtViewer.cc: Fixed Linux compiler warnings.
+
+22nd May 2012  John Allison  (opengl-V09-05-13)
+- Tagged.
+
+9th May 2012  Laurent Garnier
+- G4OpenGLQtViewer, in scene tree
+ o Fix problem with the PO index 0
+ o Improve rendering on slider (send commands only if necessary)
+ o Fix a color problem
+
+5th May 2012  Laurent Garnier
+- G4OpenGLQtViewer
+ o Fix a bug on MacOS French keyboard for Plus key on viewer
+ o Resolve problem on transparency in scene tree by sorting items instead
+    of by PO index (what was done before)
+ o Also check transformation in adding scene tree elements 
+ o Add a depth slider (in test)
+
+27rd April 2012  Laurent Garnier
+- G4OpenGLQtViewer : Add stuff for new transparency depth component (still some bugs)
+
+24rd April 2012  Laurent Garnier
+- G4OpenGLStoredQtSceneHandler: Remove comments and unused variable
+- G4OpenGLQtViewer : Scene Tree improvments
+
+23rd April 2012  John Allison
+- G4OpenGLStoredSceneHandler:
+  o Corrected some error messages.
+  o Removed Set/Clear/Draw from EndModeling.  Should not be necessary.
+
+23th April 2012 Garnier Laurent
+- G4OpenGLStoredQtSceneHandler: Clear the tree when ClearStore and transient store
+- G4OpenGLQtViewer: Add a color box on the scene tree items
+
+10th April 2012  Pere Mato  (opengl-V09-05-12)
+- G4OpenGLWin32Viewer.cc: Make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA
+
+10th April 2012  John Allison  (opengl-V09-05-11)
+- Tagged.
+
+4th April 2012  John Allison
+- opengl-V09-05-10: Don't use.
+- X and Xm drivers: Implemented text layout and offset.
+- Qt drivers: Text OK, but layout and offset not yet implemented.
+- Win32 drivers: Text not implemented at all.
+
+4th April 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix many time tree items on non PV
+- G4OpenGLQtViewer : Add tooltip and font on tree viewer
+
+3rd April 2012  John Allison
+- G4OpenGLXm classes: Change G4Exception id to opengl20xx.
+
+3rd April 2012  Laurent Garnier
+- G4OpenGLQtViewer & G4OpenGLQtSceneHandler : rewriting methods to add a 
+    PV or non P volume in the tree viewer
+
+2nd April 2012  Laurent Garnier  (opengl-V09-05-09)
+- Add some #ifdef around debugging printf
+ 
+30th March 2012  John Allison
+- G4OpenGLStoredSceneHandler.cc: In EndModeling, make sure screen
+  corresponds to graphical database.
+- G4OpenGLImmediateSceneHandler: Removed RequestPrimitives.  No
+  longer needed since tests for transparency and second pass have
+  been moved to AddPrimitivePreamble.
+
+29th March 2012  Laurent Garnier
+- G4OpenGLQtViewer : Add setHiddenMarker On/Off context menu
+- G4OpenGLStoredQtSceneHandler: Add SetScene to clear Qt tree in 
+  case of scene change
+- G4OpenGLStoredSceneHandler.cc: In EndModeling instead of COMPILE_AND_EXECUTE
+  just COMPILE
+
+28th March 2012  John Allison
+- G4OpenGL(Immediate/Stored)SceneHandler: Correct treatment of
+  transparent primitives.  (Previously, only transparent solids
+  were corretly treated.)  This corrects a problem that when there
+  existed a transparent solid, primitives were drawn twice!
+
+28th March 2012  Laurent Garnier
+- 1st version of Qt tree, still some bug to be solved
+
+6th March 2012  John Allison  (opengl-V09-05-08)
+- Fix problem with persistent text that does not use gl commands,
+  e.g., Qt text.
+
+29th February 2012  John Allison  (opengl-V09-05-07)
+- Fixed minor problem with text:
+  o Cleaned up display list drawing.  If special text (G4TextPlus), do
+    not push, mult and pop matrix here (it is done in G4VScenehandler
+    when it is re-used for text).
+  o No need for transform in G4TextPlus.
+
+28th February 2012  John Allison  (opengl-V09-05-06)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
+28th February 2012  Laurent Garnier
+- G4OpenGLStoredViewer.cc : Change matrix comparison
+
+22th February 2012  Laurent Garnier
+- G4OpenGLQtViewer.cc: fix a problem in max frame per second on little scenes
+
+20th February 2012  Laurent Garnier
+- G4OpenGLStoredViewer.cc : OpenGL optimisation. Small thing, but 50% 
+  faster when rotating
+
+14th February 2012  John Allison  (opengl-V09-05-05)
+- G4OpenGLStoredSceneHandler.cc:
+  o Fixed bug in TO copy constructor.
+  o This was causing text to be displayed in the wrong place.  Probably
+    other transients too!!
+- G4OpenGLSceneHandler.cc:
+  o General tidy.
+  o Several functions need to access data and/or methods in G4OpenGLViewer.
+    static_cast doesn't work with a virtual base class, so use dynamic_cast.
+    No need to test the outcome since viewer is guaranteed to be a
+    G4OpenGLViewer.  Make usage consistent.
+  o G4OpenGLSceneHandler::AddPrimitive (const G4Circle& text):
+    . Removed glGetFloatv(GL_CURRENT_COLOR, color).
+    . There is no need to save current colour; colour is defined for
+      every primitive before drawing.
+
+13th February 2012  John Allison  (opengl-V09-05-04)
+- G4OpenGLStoredQtSceneHandler.cc: Added #include <typeinfo> for gcc 4.3.
+
+11th February 2012  John Allison  (opengl-V09-05-03)
+- Merged vis-V09-05-04-2ndbranch (tag vis-V09-05-04-2ndbranch-08) to trunk.
+- G4OpenGLQtViewer : Remove unused method CreateFontLists()
+- Exchange a GL_FRONT to GL_BACK drawing in the case of out of memory
+  for display list.
+- G4OpenGLViewer.cc: Bug fix in error message: maximum window size exceeded.
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-06)
+- Needs greps-V09-05-05:
+  o (G4VisAttributes and G4Visible copy constructor and assignment operator.)
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-05)
+- PO/TOList: Changed G4Text* to G4TextPlus* (includes object transform
+  and 2D flag).
+
+4th February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-04)
+- Needs greps-V09-05-04 (G4Text copy constructor).
+- PO/TOList: Changed G4TextModel* to G4Text*.
+
+2nd February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-03)
+- G4OpenGLStoredSceneHandler.cc:
+  o Removed glDrawBuffer(GL_FRONT) when no memory for display lists.
+- G4OpenGLStoredViewer.cc:
+  o Remove tempMFDL and associated code (see 1st February).The
+    following renders it unnecessary.
+  o When re-using AddPrimitive, by-pass the stored AddPrimitive to
+    avoid making more display lists and other stuff in
+    AddPrimitivePreamble, etc.  Use
+      static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+        G4OpenGLSceneHandler::AddPrimitive(...).
+  o Fixes StoredQt text problem.
+
+1st February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-02)
+- G4OpenGLStoredViewer::DrawDisplayLists:
+  o Some systems, notably Qt, re-use model->DescribeYourselfTo(sceneHandler)
+    but we don't want to create any further display lists, so...
+      G4bool tempMFDL = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+      fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+   ...and restore at the end.
+  o However, back to square one... Text not drawn.  Why not?
+    G4OpenGLQtViewer::DrawText get called so why doesn't it draw?
+    (It seemed that without this fix, DescribeYourselfTo was creating
+    a TO - again and again - and getting drawn that way.  But why
+    does it not get drawn this way???)
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-01)
+- G4OpenGLStoredQtViewer:
+  o Removed DrawText, thereby allowing base class implementation
+    G4OpenGLQtViewer::DrawText to operate.  Fixes text problem altogther!!
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-00)
+- Special case text: skeleton.  Some systems, notabley Qt, process
+  text in a special way; it cannot be stored in display lists.  So the
+  text model pointer is stored in the PO/TO and processed separately.
+  (PO = Persistent object, TO = transient object.)  The nested classes
+  G4OpenGLStoredSceneHandler::PO and TO keep relevent information,
+  e.g., the display list index or, in this case, when relevant, a
+  pointer to the G4TextModel.
+  o G4OpenGLStoredSceneHandler:
+    . Added a G4TextModel* to PO and TO.
+  o G4OpenGLStoredViewer::DrawDisplayLists:
+    . If PO or TO has a G4TextModel*, DescribeYourselfTo(fSceneHandler).
+  o G4OpenGLStoredQtSceneHandler::ExtraPO/TOProcessing:
+    . Stores the G4TextModel pointer in the current PO/TO.
+  o G4OpenGLStoredQtViewer::DrawText:
+    . Added temporary print statement (prints text).
+
+17th January 2012  Laurent Garnier
+- G4OpenGLStoredQtSceneHandler : Add ProcessText method
+- G4OpenGLStoredViewer : Remove DrawOutOfDisplayLists method (moved in G4OpenGLStoredViewerQt)
+- G4OpenGLStoredQtViewer : Add DrawOutOfDisplayLists method
+ 
+13th January 2012  John Allison (opengl-V09-05-02)
+- Tagged.
+
+3rd January 2012 Laurent Garnier
+- G4OpenGLStoredViewer : add a method DrawOutOfDisplayLists () in order, for
+  the moment, to be able to redraw text outside of display list
+- G4OpenGLQtViewer : Remove unused method CreateFontLists()
+- G4OpenGLStoredQtViewer : In ComputeView method, after DrawDisplayLists, now we call DrawOutOfDisplayLists in order to draw text. Also remove DrawText (only print a warning message)
+- G4OpenGLViewer : Better information message
+- G4OpenGLStoredSceneHandler : Add text in store mode special case for Qt viewer.
+  Exchange a GL_FRONT to GL_BACK drawing in the case of out of memory for display list
+
+2nd January 2012  John Allison  (opengl-V09-05-01)
+- G4OpenGLImmediate/StoredQt/X/Xm/Wt.hh:
+  o Removed #ifdef G4VIS... protection from header files so that they
+    can be used for a possible dynamic library.  Of course, the
+    protection remains on the implementation files.
+
+16th December 2011  John Allison  (opengl-V09-05-00)
+- G4OpenGLStoredSceneHandler.cc:
+  o Corrected treatment of colour for transient objects that got
+    slightly mangled in the changes of 15th Decemeber.  Colour should
+    *not* be in the display list since in some circumstances we modify
+    it (fade by time).  Instead it is kept in the TO object.
+
+15th December 2011  John Allison
+- The following changes from vis-V09-04-11-branch:
+27th October 2001 JA (on vis-V09-04-11-branch).
+- Transferred LoadAtts to sub-classes.
+- G4OpenGLStoredViewer.cc: Improved drawing loop.
+- G4OpenGLStoredSceneHandler.hh:
+  o Removed fAddPrimitivePreambleNestingDepth.  (Care in
+    G4OpenGLSceneHandler means it is no longer needed.)
+26th October 2001 JA (on vis-V09-04-11-branch).
+- Minor changes and exposure of some debug statements.
+25th October 2001 JA vis-V09-04-11-01 (on vis-V09-04-11-branch).
+  o G4OpenGLSceneHandler:
+    . Needs G4Polymarker::G4Polymarker (const G4VMarker&).
+    . Reworked AddPrimitive for G4Polymarker, G4Circle and G4Square.
+    . Instead of polymarker calling multiple circles/squares, circles
+      and squares create a polymarker of size 1 and call polymarker.
+    . Removed AddCircleSquare, AddCircleSquareVector and DrawXYPolygon.
+  o G4OpenGLBitMapStore: Removed.
+    . No longer needed.  Circles and squares are drawn as GL_POINTS.  (Why
+      did I not notice this option before; would have saved a lot of trouble.)
+
 30th november Laurent Garnier  (opengl-V09-04-28)
 - Fix pop up warning box at beggining
 - Fix unitialize value before Gl init
@@ -224,7 +959,7 @@ committal in the CVS repository !
 - Fix G4OpenGLXmViewer::get_boolean_userData (mask lower 16 bits).
 
 11th Octobre 2011 Laurent Garnier
-- move pan and rotation sensibility management in G4OpenGLViewer claa
+- move pan and rotation sensibility management in G4OpenGLViewer class
 - Integrate free rotation in all GL viewers
 - G4OpenGLQtViewer : Remove emit of non-used move/rotate signals, remove unused methods
 - OpenGL viewer : Implement ResetView (useful for Xm and Qt for the moment)

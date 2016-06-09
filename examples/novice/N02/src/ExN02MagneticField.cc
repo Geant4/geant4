@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02MagneticField.cc,v 1.9 2007-08-22 13:11:51 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //  
 //   User Field class implementation.
 //

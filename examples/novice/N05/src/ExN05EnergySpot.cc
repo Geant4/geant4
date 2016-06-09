@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EnergySpot.cc,v 1.7 2006-06-29 17:53:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "ExN05EnergySpot.hh"
 
@@ -34,7 +33,7 @@
 #include "G4Polyline.hh"
 #include "G4VVisManager.hh"
 #include "G4Step.hh"
-
+#include "G4SystemOfUnits.hh"
 
 ExN05EnergySpot::ExN05EnergySpot()
 {;}

@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 November 2012: V.Ivant (emmuons-V09-05-06)
+- G4MuBremsstrahlungModel, G4MuPairProductionModel - reduce number of
+    computations of log of the same argument, no change in results
+
+25 October 2012: V.Ivant (emmuons-V09-05-05)
+- G4MuMultipleScattering - use G4UrbanMscModel95 as a default
+
+21 October 2012: V.Ivant (emmuons-V09-05-04)
+- G4MuBremsstrahlung, G4MuIonisation,  G4MuPairProduction -
+    secondary particle type defined in constructors and not in Initialise() 
+    method, this is needed for correct initialisation at G4_PreInit
+
+20 October 2012: V.Ivant (emmuons-V09-05-03)
+- G4MuMultipleScattering - substitute methods Model(), SetModel()
+    by EmModel(), SetEmModel()
+
+10 July 2012: G.Cosmo (emmuons-V09-05-02)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+08 June 2012: V.Ivant (emmuons-V09-05-01)
+- G4MuIonisation - fixed variable shadowing
+
+27 January 2012: V.Ivant (emmuons-V09-05-00)
+- G4EnergyLossForExtrapolator fixed initialisation of transport 
+    cross section
+
 10 November 2011: V.Ivant (emmuons-V09-04-02)
 - G4ErrorEnergyLoss, G4MuIonisation, G4MuPairProduction - fixed
     defects reported by the Coverity tool

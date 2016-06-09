@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/include/RunAction.hh
+/// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -52,19 +54,19 @@ public:
   void BeginOfRunAction(const G4Run*);
   void   EndOfRunAction(const G4Run*);
     
-  void fillPerEvent(G4double, G4double, G4double, G4double); 
+  void FillPerEvent(G4double, G4double, G4double, G4double); 
 
 private:
-  G4double sumEAbs, sum2EAbs;
-  G4double sumEGap, sum2EGap;
+  G4double fSumEAbs, fSum2EAbs;
+  G4double fSumEGap, fSum2EGap;
     
-  G4double sumLAbs, sum2LAbs;
-  G4double sumLGap, sum2LGap;
+  G4double fSumLAbs, fSum2LAbs;
+  G4double fSumLGap, fSum2LGap;
 
-  G4ConvergenceTester* Eabs_tally; 
-  G4ConvergenceTester* Egap_tally; 
-  G4ConvergenceTester* Labs_tally; 
-  G4ConvergenceTester* Lgap_tally;       
+  G4ConvergenceTester* fEabs_tally; 
+  G4ConvergenceTester* fEgap_tally; 
+  G4ConvergenceTester* fLabs_tally; 
+  G4ConvergenceTester* fLgap_tally;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

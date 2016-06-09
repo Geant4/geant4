@@ -24,20 +24,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.cc,v 1.7 2006-06-29 19:09:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4UImessenger.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcommandTree.hh"
 #include "G4ios.hh"
 #include <sstream>
 
+G4UImessenger::G4UImessenger()
+  : baseDir(NULL), baseDirName("")
+{ 
+}
 
-G4UImessenger::G4UImessenger() { }
+G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc)
+  : baseDir(NULL), baseDirName("")
+{
+  CreateDirectory(path, dsc);
+}
 
-G4UImessenger::~G4UImessenger() { }
+G4UImessenger::~G4UImessenger()
+{
+  if(baseDir) delete baseDir;
+}
 
 G4String G4UImessenger::GetCurrentValue(G4UIcommand*) 
 { 
@@ -73,27 +85,27 @@ G4String G4UImessenger::BtoS(G4bool b)
   return vl;
 }
 
-G4int G4UImessenger::StoI(G4String s)
+G4int G4UImessenger::StoI(G4String str)
 {
   G4int vl;
-  const char* t = s;
+  const char* t = str;
   std::istringstream is(t);
   is >> vl;
   return vl;
 }
 
-G4double G4UImessenger::StoD(G4String s)
+G4double G4UImessenger::StoD(G4String str)
 {
   G4double vl;
-  const char* t = s;
+  const char* t = str;
   std::istringstream is(t);
   is >> vl;
   return vl;
 }
 
-G4bool G4UImessenger::StoB(G4String s)
+G4bool G4UImessenger::StoB(G4String str)
 {
-  G4String v = s;
+  G4String v = str;
   v.toUpper();
   G4bool vl = false;
   if( v=="Y" || v=="YES" || v=="1" || v=="T" || v=="TRUE" )
@@ -108,3 +120,19 @@ void G4UImessenger::AddUIcommand(G4UIcommand * newCommand)
          << newCommand->GetCommandPath() << ">." << G4endl;
 }
 
+void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc)
+{
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+
+  G4String fullpath = path;
+  if(fullpath(fullpath.length()-1) != '/') fullpath.append("/");
+
+  G4UIcommandTree* tree= ui-> GetTree()-> FindCommandTree(fullpath.c_str());
+  if (tree) {
+    baseDirName = tree-> GetPathName();
+  } else {
+    baseDir = new G4UIdirectory(fullpath.c_str());
+    baseDirName = fullpath;
+    baseDir-> SetGuidance(dsc.c_str());
+  }
+}

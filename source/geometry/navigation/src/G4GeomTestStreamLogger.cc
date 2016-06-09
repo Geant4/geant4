@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestStreamLogger.cc,v 1.3 2006-06-29 18:36:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,11 +34,12 @@
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
+#include <iomanip>
+
+#include "G4SystemOfUnits.hh"
 #include "G4GeomTestStreamLogger.hh"
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"
-#include <iomanip>
-
 #include "G4GeomTestOverlapList.hh"
 #include "G4GeomTestOvershootList.hh"
 

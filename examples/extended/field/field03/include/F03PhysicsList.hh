@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03PhysicsList.hh
+/// \brief Definition of the F03PhysicsList class
 //
-// $Id: F03PhysicsList.hh,v 1.7 2010-04-08 14:12:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef F03PhysicsList_h

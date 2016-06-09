@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.21 2010-10-27 07:47:05 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -89,7 +88,7 @@ inline void  G4DynamicParticle::AddElectron(G4int orbit, G4int number )
   if ( theElectronOccupancy == 0) AllocateElectronOccupancy();
   if ( theElectronOccupancy != 0) { 
     G4int n = theElectronOccupancy->AddElectron(orbit, number );
-    theDynamicalCharge -= eplus * n;
+    theDynamicalCharge -= CLHEP::eplus * n;
     theDynamicalMass += GetElectronMass() * n;
   }
 }
@@ -99,7 +98,7 @@ inline void    G4DynamicParticle::RemoveElectron(G4int orbit, G4int number)
  if ( theElectronOccupancy == 0) AllocateElectronOccupancy();
  if ( theElectronOccupancy != 0) { 
     G4int n = theElectronOccupancy->RemoveElectron(orbit, number );
-    theDynamicalCharge += eplus * n;
+    theDynamicalCharge += CLHEP::eplus * n;
     theDynamicalMass -= GetElectronMass() * n;
   }
 }
@@ -118,7 +117,7 @@ inline void G4DynamicParticle::SetCharge(G4double newCharge)
 
 inline void G4DynamicParticle::SetCharge(G4int newCharge)
 {
-  theDynamicalCharge = newCharge*eplus;
+  theDynamicalCharge = newCharge*CLHEP::eplus;
 }
 
 inline G4double G4DynamicParticle::GetMass() const

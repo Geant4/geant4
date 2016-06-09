@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file optical/LXe/include/LXeDetectorMessenger.hh
+/// \brief Definition of the LXeDetectorMessenger class
+//
+//
 #ifndef LXeDetectorMessenger_h
 #define LXeDetectorMessenger_h 1
 
@@ -41,32 +44,33 @@ class G4UIcmdWithADouble;
 
 class LXeDetectorMessenger: public G4UImessenger
 {
-public:
-  LXeDetectorMessenger(LXeDetectorConstruction*);
-  ~LXeDetectorMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  LXeDetectorConstruction*     LXeDetector;
-  G4UIdirectory*               detectorDir;
-  G4UIdirectory*               volumesDir;
-  G4UIcmdWith3VectorAndUnit*   dimensionsCmd;
-  G4UIcmdWithADoubleAndUnit*   housingThicknessCmd;
-  G4UIcmdWithADoubleAndUnit*   pmtRadiusCmd;
-  G4UIcmdWithAnInteger*        nxCmd;
-  G4UIcmdWithAnInteger*        nyCmd;
-  G4UIcmdWithAnInteger*        nzCmd;
-  G4UIcmdWithABool*            sphereCmd;
-  G4UIcmdWithADouble*          reflectivityCmd;
-  G4UIcmdWithABool*            wlsCmd;
-  G4UIcmdWithABool*            lxeCmd;
-  G4UIcmdWithAnInteger*        nFibersCmd;
-  G4UIcommand*                 updateCmd;
-  G4UIcommand*                 defaultsCmd;
-  G4UIcmdWithADouble*        MainScintYield;
-  G4UIcmdWithADouble*        WLSScintYield;
+  public:
+
+    LXeDetectorMessenger(LXeDetectorConstruction*);
+    virtual ~LXeDetectorMessenger();
+ 
+    virtual void SetNewValue(G4UIcommand*, G4String);
+ 
+  private:
+
+    LXeDetectorConstruction*     fLXeDetector;
+    G4UIdirectory*               fDetectorDir;
+    G4UIdirectory*               fVolumesDir;
+    G4UIcmdWith3VectorAndUnit*   fDimensionsCmd;
+    G4UIcmdWithADoubleAndUnit*   fHousingThicknessCmd;
+    G4UIcmdWithADoubleAndUnit*   fPmtRadiusCmd;
+    G4UIcmdWithAnInteger*        fNxCmd;
+    G4UIcmdWithAnInteger*        fNyCmd;
+    G4UIcmdWithAnInteger*        fNzCmd;
+    G4UIcmdWithABool*            fSphereCmd;
+    G4UIcmdWithADouble*          fReflectivityCmd;
+    G4UIcmdWithABool*            fWlsCmd;
+    G4UIcmdWithABool*            fLxeCmd;
+    G4UIcmdWithAnInteger*        fNFibersCmd;
+    G4UIcommand*                 fUpdateCmd;
+    G4UIcommand*                 fDefaultsCmd;
+    G4UIcmdWithADouble*        fMainScintYield;
+    G4UIcmdWithADouble*        fWLSScintYield;
 };
 
 #endif
-

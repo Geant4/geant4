@@ -25,6 +25,7 @@
 //
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BaryonPartialWidth.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PartialWidthTable.hh"

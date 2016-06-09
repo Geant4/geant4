@@ -23,10 +23,7 @@
 /testem/det/acceptance25 0.9793 0.00884 2.5
 #
 /run/initialize
-#/process/em/applyCuts      true
 #
-#/testem/histo/fileName  e_pr.root
-#/testem/histo/fileType  root
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
@@ -38,5 +35,23 @@
 /gun/particle mu-
 /gun/energy 20 GeV
 /run/beamOn 1000
+#
+/process/em/setSecBiasing eBrem World 0.1 2 MeV
+/process/em/setSecBiasing eIoni World 0.0 1 MeV
+/process/em/setSecBiasing compt World 0.0 1 MeV
+/process/em/setSecBiasing phot  World 0.0 1 MeV
+/process/em/setSecBiasing conv  World 0.0 1 MeV
+/run/physicsModified
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
+#
+/process/em/deexcitation VertexDetector true false true
+/process/em/fluo true
+/process/em/pixe true
+#/process/em/auger false
+/run/physicsModified
+#
+/run/beamOn 100
 #
 

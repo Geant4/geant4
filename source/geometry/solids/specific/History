@@ -17,6 +17,89 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-Nov-2012  G.Cosmo (geom-specific-V09-05-24)
+- Remove inclusion of G4PhysicalConstants.hh from G4SurfaceVoxelizer.hh.
+- Fixed unit test for compilation errors.
+
+28-Nov-2012  G.Cosmo (geom-specific-V09-05-23)
+- Fixed more cases of inclusion of constants header.
+
+23-Nov-2012  G.Cosmo (geom-specific-V09-05-22)
+- Added 'const' qualifiers to signature in G4VoxelComparator::operator()
+  for porting on AIX-xlC compiler.
+
+14-Nov-2012  P.Mato (geom-specific-V09-05-21)
+- Added #undef NDEBUG in unit tests to ensure assert works also in
+  full optimised mode.
+
+13-Nov-2012  M.Gayer (geom-specific-V09-05-19)
+- More fixes for out-of-bound array accesses in G4SurfaceVoxelizer.
+
+12-Nov-2012  M.Gayer (geom-specific-V09-05-18)
+- Fixed out-of-bound array access in BuildReduceVoxels2().
+
+06-Nov-2012  G.Cosmo (geom-specific-V09-05-17)
+- Correction in sources.cmake script for missing .icc file.
+
+06-Nov-2012  G.Cosmo (geom-specific-V09-05-16)
+- Fixed Coverity defects in new code (M.Gayer).
+- Minor fixes for porting on AIX.
+
+01-Nov-2012  G.Cosmo (geom-specific-V09-05-15)
+- Fixed compilation of debug code under G4SPECSDEBUG.
+
+01-Nov-2012  M.Gayer (geom-specific-V09-05-14)
+- Corrected signature for voxels count methods in G4SurfaceVoxelizer.
+
+31-Oct-2012  M.Gayer (geom-specific-V09-05-13)
+- Added set/get methods for voxels count in G4SurfaceVoxelizer.
+
+30-Oct-2012  M.Gayer (geom-specific-V09-05-12)
+- Fixed indexing of vertices in facets for tessellated-solid and some cleanup.
+
+27-Oct-2012  G.Cosmo (geom-specific-V09-05-11)
+- Fixed initialization of data in G4SurfaceVoxelizer (M.Gayer).
+- Added post-const qualifier to G4VertextComparator::operator() in
+  G4TessellatedSolid.
+- Fixed more compilation warnings on unused variable.
+
+26-Oct-2012  G.Cosmo (geom-specific-V09-05-10)
+- Corrected compilation problem on G4SurfBits for use of fprint().
+- Polished comments in disclaimer in new updated classes.
+
+25-Oct-2012  G.Cosmo (geom-specific-V09-05-09)
+- Corrected compilation warnings on Linux and fixed use of memset/memcpy.
+
+25-Oct-2012  G.Cosmo (geom-specific-V09-05-08)
+- Correction to sources.cmake.
+
+19-Oct-2012  M.Gayer (geom-specific-V09-05-07)
+- Complete rewrite of G4TessellatedSolid resulting in reduced memory
+  requirements by 50%, and factor of tens or more speedup for number of facets
+  of the order of thousands, thanks to ad-hoc voxelization of the surface.
+  Factor of thousands speedup when number of facets of the order of hundreds
+  thousand. New classes introduced, G4SurfBits and G4SurfaceVoxelizer.
+
+12-Jun-2012  G.Cosmo (geom-specific-V09-05-06)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+14-May-2012  G.Cosmo (geom-specific-V09-05-05)
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
+06-Apr-2012  M.Kelsey (geom-specific-V09-05-04)
+- Modified GetPointOnSurface() to throw sqrt(r) uniformly for disk surfaces,
+  in G4Paraboloid, G4Polycone and G4TwistedTubs.
+
+13-Dec-2011  G.Cosmo (geom-specific-V09-05-03, 02, 01)
+- Fixed trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted for
+  missing protection against self-assignment.
+
+09-Dec-2011  T.Nikitina (geom-specific-V09-05-00)
+- Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary solution
+  (virtual cone) when distance is calculated.
+
 10-Nov-2011  G.Cosmo (geom-specific-V09-04-09)
 - Fixed trivial Coverity defects on assignment operators...
 

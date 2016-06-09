@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.4 2009-10-25 19:06:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,11 +60,11 @@ public:
     
 private:
 
-  DetectorConstruction* detector;
-  PhysicsListMessenger* pMessenger; 
+  DetectorConstruction*  fDetector;
+  PhysicsListMessenger*  fMessenger; 
 
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  G4String               fEmName;
+  G4VPhysicsConstructor* fEmPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

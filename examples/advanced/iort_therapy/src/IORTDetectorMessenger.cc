@@ -155,6 +155,20 @@ IORTDetectorMessenger::IORTDetectorMessenger(IORTDetectorConstruction* detector)
     changeDiscoXPositionIORTCmd -> SetUnitCandidates("mm cm m");  
     changeDiscoXPositionIORTCmd -> AvailableForStates(G4State_Idle);
 
+    changeDiscoYPositionIORTCmd = new G4UIcmdWithADoubleAndUnit("/ProtectionDisc1/YPositionDisc1",this);
+    changeDiscoYPositionIORTCmd -> SetGuidance("Set the Y position");
+    changeDiscoYPositionIORTCmd -> SetParameterName("Size",false);
+    changeDiscoYPositionIORTCmd -> SetDefaultUnit("mm");  
+    changeDiscoYPositionIORTCmd -> SetUnitCandidates("mm cm m");  
+    changeDiscoYPositionIORTCmd -> AvailableForStates(G4State_Idle);
+
+    changeDiscoZPositionIORTCmd = new G4UIcmdWithADoubleAndUnit("/ProtectionDisc1/ZPositionDisc1",this);
+    changeDiscoZPositionIORTCmd -> SetGuidance("Set the Z position");
+    changeDiscoZPositionIORTCmd -> SetParameterName("Size",false);
+    changeDiscoZPositionIORTCmd -> SetDefaultUnit("mm");  
+    changeDiscoZPositionIORTCmd -> SetUnitCandidates("mm cm m");  
+    changeDiscoZPositionIORTCmd -> AvailableForStates(G4State_Idle);
+
     changeTheDisc1MaterialCmd = new G4UIcmdWithAString("/ProtectionDisc1/material", this);
     changeTheDisc1MaterialCmd -> SetGuidance("Change the Disc1 material"); 
     changeTheDisc1MaterialCmd -> SetParameterName("Disc1Material", false);
@@ -220,6 +234,16 @@ IORTDetectorMessenger::IORTDetectorMessenger(IORTDetectorConstruction* detector)
     insertdiscCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
     insertdiscCmd->SetGuidance("After this command MUST be applied update command \"beamOn\" ");
     insertdiscCmd->AvailableForStates(G4State_Idle);
+
+    // Change Tilt angle disc1 + disc2
+    changeTheAnglediscDir = new G4UIdirectory("/ChangeTiltAngleDisc1-2/");
+    changeTheAnglediscDir -> SetGuidance("Set tilt angle of the 1-2 Discs");
+
+    changeTheAnglediscCmd = new G4UIcmdWithADoubleAndUnit("/ChangeTiltAngleDisc1-2/TiltAngleDisc1-2",this);
+    changeTheAnglediscCmd -> SetParameterName("Angle",false);
+    changeTheAnglediscCmd -> SetDefaultUnit("deg");  
+    changeTheAnglediscCmd -> SetUnitCandidates("deg rad");  
+    changeTheAnglediscCmd -> AvailableForStates(G4State_Idle); 
    }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -240,6 +264,8 @@ IORTDetectorMessenger::~IORTDetectorMessenger()
     delete changeinnerRadiusDiscoIORTCmd;
     delete changeheightDiscoIORTCmd; 
     delete changeDiscoXPositionIORTCmd;
+    delete changeDiscoYPositionIORTCmd;
+    delete changeDiscoZPositionIORTCmd;
     delete changeTheDisc1MaterialCmd;
 
     delete changeTheDisc2Dir;
@@ -251,6 +277,9 @@ IORTDetectorMessenger::~IORTDetectorMessenger()
 
     delete deletediscCmd;
     delete insertdiscCmd;
+
+    delete changeTheAnglediscDir;
+    delete changeTheAnglediscCmd;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -305,11 +334,18 @@ void IORTDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     { iortDetector -> SetDiscoXPositionIORT
 	(changeDiscoXPositionIORTCmd -> GetNewDoubleValue(newValue));
     }
+  else if( command == changeDiscoYPositionIORTCmd )
+    { iortDetector -> SetDiscoYPositionIORT
+	(changeDiscoYPositionIORTCmd -> GetNewDoubleValue(newValue));
+    }
+  else if( command == changeDiscoZPositionIORTCmd )
+    { iortDetector -> SetDiscoZPositionIORT
+	(changeDiscoZPositionIORTCmd -> GetNewDoubleValue(newValue));
+    }
   else if (command == changeTheDisc1MaterialCmd)
   {
       iortDetector -> SetDiscoMaterialIORT(newValue);
   }
-
 
   else if( command == changeOuterRadiusDisco1IORTCmd )
     { iortDetector -> SetOuterRadiusDiscoIORT1
@@ -331,7 +367,11 @@ void IORTDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   {
       iortDetector -> SetDiscoMaterialIORT1(newValue);
   }
-  
+  else if (command == changeTheAnglediscCmd)
+  {
+      iortDetector -> SetAngleDiscoIORT0
+        (changeTheAnglediscCmd -> GetNewDoubleValue(newValue));
+  }  
 
 
 

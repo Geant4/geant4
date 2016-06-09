@@ -18,8 +18,7 @@
 #
 /testem/gun/rndm 420. um		#beam smearing
 #
-/testem/histo/setFileName results/nofoil/opt0
-/testem/histo/setFileType hbook
+/testem/histo/setFileName eScattering
 /testem/histo/setHisto 1 180 -90. 90. deg	#proj ang
 /testem/histo/setHisto 2 120 0. 24. cm		#dN/dS = f(r)
 /testem/histo/setHisto 3 120 0. 24. cm		#d(N/cost)/dS = f(r)

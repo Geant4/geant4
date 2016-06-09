@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeWLSFiber.hh
+/// \brief Definition of the LXeWLSFiber class
+//
 #ifndef LXeMainVolume_H
 #define LXeMainVolume_H 1
 
@@ -38,40 +41,42 @@
 
 class LXeWLSFiber : public G4PVPlacement
 {
-public:
-  LXeWLSFiber(G4RotationMatrix *pRot,
-		const G4ThreeVector &tlate,
-		G4LogicalVolume *pMotherLogical,
-		G4bool pMany,
-		G4int pCopyNo,
-		LXeDetectorConstruction* c);
-private:
+  public:
 
-  void CopyValues();
+    LXeWLSFiber(G4RotationMatrix *pRot,
+                const G4ThreeVector &tlate,
+                G4LogicalVolume *pMotherLogical,
+                G4bool pMany,
+                G4int pCopyNo,
+                LXeDetectorConstruction* c);
 
-  static G4LogicalVolume* clad2_log;
+  private:
 
-  G4bool updated; //does the fiber need to be rebuilt
-  
-  G4double fiber_rmin;    
-  G4double fiber_rmax;    
-  G4double fiber_z;
-  G4double fiber_sphi;
-  G4double fiber_ephi;
+    void CopyValues();
 
-  G4double clad1_rmin;
-  G4double clad1_rmax;    
-  G4double clad1_z;
-  G4double clad1_sphi;
-  G4double clad1_ephi; 
-  
-  G4double clad2_rmin;
-  G4double clad2_rmax;    
-  G4double clad2_z;
-  G4double clad2_sphi;
-  G4double clad2_ephi;
+    static G4LogicalVolume* fClad2_log;
 
-  LXeDetectorConstruction* constructor;
+    G4bool fUpdated; //does the fiber need to be rebuilt
+ 
+    G4double fFiber_rmin;
+    G4double fFiber_rmax;
+    G4double fFiber_z;
+    G4double fFiber_sphi;
+    G4double fFiber_ephi;
+
+    G4double fClad1_rmin;
+    G4double fClad1_rmax;    
+    G4double fClad1_z;
+    G4double fClad1_sphi;
+    G4double fClad1_ephi; 
+
+    G4double fClad2_rmin;
+    G4double fClad2_rmax;    
+    G4double fClad2_z;
+    G4double fClad2_sphi;
+    G4double fClad2_ephi;
+
+    LXeDetectorConstruction* fConstructor;
 };
 
 #endif

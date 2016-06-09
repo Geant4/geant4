@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4TrackList.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -42,28 +43,28 @@ using namespace std;
 // TrackList_iterator
 G4Track*
 G4TrackList_iterator::operator*()
-{ return fNode->GetTrack(); }
+{ return fpNode->GetTrack(); }
 
 G4Track*
 G4TrackList_iterator::operator->()
-{ return fNode->GetTrack(); }
+{ return fpNode->GetTrack(); }
 
 const G4Track*
 G4TrackList_iterator::operator*() const
-{ return fNode->GetTrack(); }
+{ return fpNode->GetTrack(); }
 
 const G4Track*
 G4TrackList_iterator::operator->() const
-{ return fNode->GetTrack(); }
+{ return fpNode->GetTrack(); }
 
 
 //***********************************************************
 // TrackNodeList
 
 G4TrackListNode::G4TrackListNode(G4Track* track) :
-    fTrack(track),
-    fPrevious(0),
-    fNext(0)
+    fpTrack(track),
+    fpPrevious(0),
+    fpNext(0)
 {
     fAttachedToList = false;
 }
@@ -76,8 +77,8 @@ G4TrackListNode::~G4TrackListNode()
 G4TrackList::G4TrackList() : fBoundary()
 {
     fListRef    = new _ListRef(this);
-    fStart      = 0;
-    fFinish     = 0;
+    fpStart      = 0;
+    fpFinish     = 0;
     fNbTracks   = 0 ;
     fBoundary.SetPrevious(&fBoundary);
     fBoundary.SetNext(&fBoundary);
@@ -89,8 +90,10 @@ G4TrackList::G4TrackList(const G4TrackList& /*other*/) : fBoundary()
 {
     // One track should not belong to two different trackLists
 
-    fFinish = 0;
-    fStart = 0;
+    fpFinish = 0;
+    fpStart = 0;
+    fNbTracks = 0;
+    fListRef = 0;
 }
 
 G4TrackList& G4TrackList::operator=(const G4TrackList& other)
@@ -105,7 +108,7 @@ G4TrackList::~G4TrackList()
 {
     if( fNbTracks != 0 )
     {
-        G4TrackListNode * __stackedTrack = fStart;
+        G4TrackListNode * __stackedTrack = fpStart;
         G4TrackListNode * __nextStackedTrack;
 
         // delete tracks in the stack
@@ -133,7 +136,7 @@ G4TrackList::~G4TrackList()
 
 bool G4TrackList::Holds(const G4Track* track) const
 {
-    return (GetIT(track)->GetTrackListNode()->fListRef->fTrackList == this)  ;
+    return (GetIT(track)->GetTrackListNode()->fListRef->fpTrackList == this)  ;
 }
 
 G4TrackListNode* G4TrackList::Flag(G4Track* __track)
@@ -176,8 +179,8 @@ void G4TrackList::Hook(G4TrackListNode* __position, G4TrackListNode* __toHook)
     {
         // DEBUG
         //        G4cout << "fNbTracks == 0" << G4endl;
-        fStart = __toHook;
-        fFinish = __toHook;
+        fpStart = __toHook;
+        fpFinish = __toHook;
         __toHook->SetNext(&fBoundary);
         __toHook->SetPrevious(&fBoundary);
         fBoundary.SetNext(__toHook);
@@ -187,23 +190,23 @@ void G4TrackList::Hook(G4TrackListNode* __position, G4TrackListNode* __toHook)
     {
         // DEBUG
         //        G4cout << "__position == &fBoundary" << G4endl;
-        fFinish->SetNext( __toHook );
-        __toHook->SetPrevious( fFinish );
+        fpFinish->SetNext( __toHook );
+        __toHook->SetPrevious( fpFinish );
 
         __toHook->SetNext(&fBoundary);
         fBoundary.SetPrevious( __toHook );
 
-        fFinish = __toHook;
+        fpFinish = __toHook;
     }
-    else if( __position == fStart )
+    else if( __position == fpStart )
     {
         // DEBUG
         //        G4cout << "__position == fStart" << G4endl;
         __toHook->SetPrevious( &fBoundary );
         fBoundary.SetNext(__toHook);
-        __toHook->SetNext(fStart);
-        fStart->SetPrevious(__toHook);
-        fStart = __toHook;
+        __toHook->SetNext(fpStart);
+        fpStart->SetPrevious(__toHook);
+        fpStart = __toHook;
     }
     else
     {
@@ -229,18 +232,18 @@ void G4TrackList::Unhook(G4TrackListNode* __toUnHook)
 
     if( fNbTracks == 1 )
     {
-        fStart = 0;
-        fFinish = 0;
+        fpStart = 0;
+        fpFinish = 0;
     }
     else
     {
-        if(__toUnHook == fFinish)
+        if(__toUnHook == fpFinish)
         {
-            fFinish = __previous;
+            fpFinish = __previous;
         }
-        if(__toUnHook == fStart)
+        if(__toUnHook == fpStart)
         {
-            fStart = __next;
+            fpStart = __next;
         }
     }
 
@@ -255,7 +258,7 @@ void G4TrackList::Unhook(G4TrackListNode* __toUnHook)
 G4TrackList::iterator G4TrackList::insert(G4TrackList::iterator __position, G4Track* __track)
 {
     G4TrackListNode* __node = CreateNode(__track);
-    Hook(__position.fNode, __node);
+    Hook(__position.fpNode, __node);
     return iterator(__node);
 }
 
@@ -265,7 +268,7 @@ G4TrackList::iterator G4TrackList::insert(G4TrackList::iterator __position, G4Tr
 //____________________________________________________________________
 void G4TrackList::CheckFlag(G4TrackListNode* __trackListNode)
 {
-    if(__trackListNode -> fListRef->fTrackList != this)
+    if(__trackListNode -> fListRef->fpTrackList != this)
     {
         G4Track* track = __trackListNode->GetTrack();
         G4ExceptionDescription exceptionDescription ;
@@ -294,6 +297,7 @@ G4TrackListNode* G4TrackList::Unflag(G4Track* __track)
         exceptionDescription << " was not connected to any trackList ";
         G4Exception("G4TrackList::Unflag","G4TrackList003",
                     FatalErrorInArgument,exceptionDescription);
+        return 0;
     }
     CheckFlag(__trackListNode);
     __trackListNode->fAttachedToList = false;
@@ -304,7 +308,7 @@ G4TrackListNode* G4TrackList::Unflag(G4Track* __track)
 G4Track* G4TrackList::pop_back()
 {
     if( fNbTracks == 0 ) return 0;
-    G4TrackListNode * __aStackedTrack = fFinish;
+    G4TrackListNode * __aStackedTrack = fpFinish;
     Unhook( __aStackedTrack );
     Unflag( __aStackedTrack->GetTrack() );
     return __aStackedTrack->GetTrack();
@@ -362,7 +366,7 @@ G4TrackList::pop(iterator __first, iterator __last)
 
     while (__first != __last)
     {
-        if(__first . fNode)
+        if(__first . fpNode)
             __first = pop(*__first);
     }
     return __last;
@@ -376,7 +380,7 @@ G4TrackList::erase(iterator __first, iterator __last)
 
     while (__first != __last)
     {
-        if(__first . fNode)
+        if(__first . fpNode)
             __first = erase(*__first);
     }
     return __last;
@@ -388,32 +392,32 @@ void G4TrackList::transferTo(G4TrackList* __destination)
 
     if(__destination->fNbTracks == 0)
     {
-        __destination->fStart       =    this->fStart ;
-        __destination->fFinish      =    this->fFinish ;
+        __destination->fpStart       =    this->fpStart ;
+        __destination->fpFinish      =    this->fpFinish ;
         __destination->fNbTracks    =    this->fNbTracks;
 
-        __destination->fBoundary.SetNext(fStart);
-        __destination->fBoundary.SetPrevious(fFinish);
+        __destination->fBoundary.SetNext(fpStart);
+        __destination->fBoundary.SetPrevious(fpFinish);
 
-        __destination->fFinish->SetNext(&__destination->fBoundary);
-        __destination->fStart->SetPrevious(&__destination->fBoundary);
+        __destination->fpFinish->SetNext(&__destination->fBoundary);
+        __destination->fpStart->SetPrevious(&__destination->fBoundary);
     }
     else
     {
-        this->fStart->SetPrevious(__destination->fFinish);
-        __destination->fFinish->SetNext(this->fStart);
-        __destination->fBoundary.SetPrevious(this->fFinish);
-        this->fFinish->SetNext(&__destination->fBoundary);
+        this->fpStart->SetPrevious(__destination->fpFinish);
+        __destination->fpFinish->SetNext(this->fpStart);
+        __destination->fBoundary.SetPrevious(this->fpFinish);
+        this->fpFinish->SetNext(&__destination->fBoundary);
 
-        __destination->fFinish = this->fFinish;
+        __destination->fpFinish = this->fpFinish;
         __destination->fNbTracks += this->fNbTracks;
     }
 
     fNbTracks = 0;
-    fStart = 0;
-    fFinish = 0;
+    fpStart = 0;
+    fpFinish = 0;
     this->fBoundary.SetPrevious(&this->fBoundary);
     this->fBoundary.SetNext(&this->fBoundary);
 
-    fListRef->fTrackList = __destination;
+    fListRef->fpTrackList = __destination;
 }

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.hh,v 1.3 2007-05-23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file

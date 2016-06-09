@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.53 2010-11-05 15:57:20 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -40,6 +39,7 @@
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 #include "G4Polyhedron.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <sstream>
 #include <cctype>
@@ -298,8 +298,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/picking",this);
   fpCommandPicking->SetGuidance("Sets picking, if available.");
   fpCommandPicking->SetGuidance
-    ("If true, view is set up for picking, if available."
-     "\nFor required actions, watch for instructions for viewer.");
+    ("If true, view is set up for picking, if available.");
+  fpCommandPicking->SetGuidance
+    ("You may need to issue \"/vis/viewer/update\".");
+  fpCommandPicking->SetGuidance
+    ("For required actions, watch for instructions for viewer.");
   fpCommandPicking->SetParameterName("picking",omitable = true);
   fpCommandPicking->SetDefaultValue(true);
 
@@ -581,11 +584,17 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(0.,0.,0.);  // Default black and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (black) if
-						// not found.
+      if (!G4Colour::GetColour(redOrString, colour)) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Text colour \"" << redOrString
+		 << "\" not found.  Defaulting to black and opaque."
+		 << G4endl;
+	}
+      }
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    // Add opacity
     colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     vp.SetBackgroundColour(colour);
     if (verbosity >= G4VisManager::confirmations) {
@@ -692,11 +701,17 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (white) if
-						// not found.
+      if (!G4Colour::GetColour(redOrString, colour)) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Text colour \"" << redOrString
+		 << "\" not found.  Defaulting to white and opaque."
+		 << G4endl;
+	}
+      }
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    // Add opacity
     colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     G4VisAttributes va = vp.GetDefaultVisAttributes();
     va.SetColour(colour);
@@ -717,11 +732,17 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (white) if
-						// not found.
+      if (!G4Colour::GetColour(redOrString, colour)) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Text colour \"" << redOrString
+		 << "\" not found.  Defaulting to white and opaque."
+		 << G4endl;
+	}
+      }
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    // Add opacity
     colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     G4VisAttributes va = vp.GetDefaultTextVisAttributes();
     va.SetColour(colour);
@@ -853,9 +874,10 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandLightsMove) {
-    G4String s (newValue);
-    if (s.find("cam") != G4String::npos) vp.SetLightsMoveWithCamera(true);
-    else if(s.find("obj") != G4String::npos) vp.SetLightsMoveWithCamera(false);
+    if (newValue.find("cam") != G4String::npos)
+      vp.SetLightsMoveWithCamera(true);
+    else if(newValue.find("obj") != G4String::npos)
+      vp.SetLightsMoveWithCamera(false);
     else {
       if (verbosity >= G4VisManager::errors) {
 	G4cout << "ERROR: \"" << newValue << "\" not recognised."
@@ -911,6 +933,10 @@ void G4VisCommandsViewerSet::SetNewValue
       if (vp.IsPicking()) G4cout << "requested.";
       else G4cout << "inhibited.";
       G4cout << G4endl;
+    }
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "You may need to issue \"/vis/viewer/update\"."
+	     << G4endl;
     }
   }
 

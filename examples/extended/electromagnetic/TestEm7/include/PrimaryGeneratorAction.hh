@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.3 2006-06-29 16:57:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,20 +51,20 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:  
-    void SetRndmBeam(G4double val)  {rndmBeam = val;}   
-    void GeneratePrimaries(G4Event*);
+    void SetRndmBeam(G4double val)  {fRndmBeam = val;}   
+    virtual void GeneratePrimaries(G4Event*);
     
-    void   ResetEbeamCumul() {EbeamCumul = 0.;}
-    G4double GetEbeamCumul() {return EbeamCumul;}
+    void   ResetEbeamCumul() {fEbeamCumul = 0.;}
+    G4double GetEbeamCumul() {return fEbeamCumul;}
      
-    G4ParticleGun* GetParticleGun() {return particleGun;}
+    G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
   private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      detector;
-    G4double                   rndmBeam;
-    G4double                   EbeamCumul;       
-    PrimaryGeneratorMessenger* gunMessenger;     
+    G4ParticleGun*             fParticleGun;
+    DetectorConstruction*      fDetector;
+    G4double                   fRndmBeam;
+    G4double                   fEbeamCumul;       
+    PrimaryGeneratorMessenger* fGunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

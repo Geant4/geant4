@@ -1,0 +1,31 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_snpf
+#define tools_snpf
+
+#include <cstdarg>
+#include <cstdio>
+
+namespace tools {
+
+inline int vsnpf(char* a_s,size_t a_n,const char* a_fmt,va_list args){
+#ifdef WIN32
+  return _vsnprintf(a_s,a_n,a_fmt,args);
+#else
+  return ::vsnprintf(a_s,a_n,a_fmt,args);
+#endif
+}
+
+inline int snpf(char* a_s,size_t a_n,const char* a_fmt,...){
+  va_list args;
+  va_start(args,a_fmt);
+  int n = vsnpf(a_s,a_n,a_fmt,args);
+  va_end(args);
+  return n;
+}
+
+
+}
+
+#endif

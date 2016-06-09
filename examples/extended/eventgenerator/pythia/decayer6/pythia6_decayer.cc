@@ -23,25 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: pythia6_decayer.cc,v 1.2 2010-05-12 13:30:38 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// ----------------------------------------------------------------------------
+/// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
+/// \brief Main program of the pythia6Decayer example
+
+#include "P6DExtDecayerPhysics.hh"
+//#include "P6DPhysicsList.hh"
+
+#include "ExG4DetectorConstruction01.hh"
+#include "ExG4PrimaryGeneratorAction01.hh"
+#include "ExG4RunAction01.hh"
+#include "ExG4EventAction01.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4ThreeVector.hh"
+#include "QGSP_BERT.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
-
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -51,73 +52,68 @@
 #include "G4UIExecutive.hh"
 #endif
 
-// ----------------------------------------------------------------------------
-
 int main(int argc,char** argv)
 {
   // Choose the Random engine
   //
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
-  // User Verbose output class
-  //
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-     
   // Construct the default run manager
   //
   G4RunManager * runManager = new G4RunManager;
 
   // Set mandatory initialization classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
-  runManager->SetUserInitialization(detector);
+  runManager->SetUserInitialization(new ExG4DetectorConstruction01);
+  
   //
-  G4VUserPhysicsList* physics = new PhysicsList;
+/*  
+  G4VUserPhysicsList* physics = new P6DPhysicsList;
   runManager->SetUserInitialization(physics);
+*/
+  G4VModularPhysicsList* physicsList = new QGSP_BERT;
+  physicsList->RegisterPhysics(new P6DExtDecayerPhysics());
+  runManager->SetUserInitialization(physicsList);
+
     
   // Set user action classes
   //
-  G4VUserPrimaryGeneratorAction* gen_action = 
-                          new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(gen_action);
+  runManager->SetUserAction(
+    new ExG4PrimaryGeneratorAction01("B-", 50.*MeV));
+    // B- meson has not defined decay in Geant4
+  runManager->SetUserAction(new ExG4RunAction01);
+  runManager->SetUserAction(new ExG4EventAction01);
   //
-  RunAction* run_action = new RunAction;  
-  runManager->SetUserAction(run_action);
-  //
-  EventAction* event_action = new EventAction(run_action);
-  runManager->SetUserAction(event_action);
-  //
-  G4UserSteppingAction* stepping_action =
-                    new SteppingAction(detector, event_action);
-  runManager->SetUserAction(stepping_action);
-  
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
+  //G4UserSteppingAction* stepping_action =
+  //                  new SteppingAction(detector, event_action);
+  //runManager->SetUserAction(stepping_action);
   
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();      
   
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
-  else
-    {  // interactive mode : define UI session
+  if (argc!=1) {
+    // batch mode{
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);    
+  }
+  else {  // interactive mode : define UI session
 #ifdef G4UI_USE
 #ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
 #endif
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      delete visManager;
+    UImanager->ApplyCommand("/control/execute init_vis.mac"); 
+#else
+    UImanager->ApplyCommand("/control/execute init.mac"); 
+#endif
+    ui->SessionStart();
+    delete ui;
+#ifdef G4VIS_USE
+    delete visManager;
 #endif                
 #endif
     }
@@ -130,5 +126,3 @@ int main(int argc,char** argv)
 
   return 0;
 }
-
-// ----------------------------------------------------------------------------

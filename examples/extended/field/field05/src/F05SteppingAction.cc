@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/src/F05SteppingAction.cc
+/// \brief Implementation of the F05SteppingAction class
+//
 //
 //
 // 
@@ -35,6 +38,7 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4ProcessTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

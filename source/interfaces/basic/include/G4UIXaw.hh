@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXaw.hh,v 1.6 2006-06-29 19:09:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4UIXaw_h
 #define G4UIXaw_h 
@@ -57,14 +56,14 @@ public:
   G4UIXaw(int,char**);
   ~G4UIXaw();
   G4UIsession* SessionStart();
-  void Prompt(G4String);
+  void Prompt(const G4String&);
   void SessionTerminate();
-  void PauseSessionStart(G4String);
+  virtual void PauseSessionStart(const G4String&);
   Widget GetDialog();
 private:
   void SecondaryLoop(G4String);
-  G4bool GetHelpChoice(G4int&);
-  void ExitHelp();
+  virtual G4bool GetHelpChoice(G4int&);
+  virtual void ExitHelp() const;
 private:
   Widget shell,dialog;
   G4bool fHelp;

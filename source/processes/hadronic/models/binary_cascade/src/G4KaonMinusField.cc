@@ -35,7 +35,10 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4KaonMinusField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
@@ -51,28 +54,6 @@ G4KaonMinusField::G4KaonMinusField(G4V3DNucleus * nucleus, G4double coeff)
 
 G4KaonMinusField::~G4KaonMinusField()
 { }
-
-
-const G4KaonMinusField & G4KaonMinusField::operator=(const G4KaonMinusField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4KaonMinusField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4KaonMinusField::operator==(const G4KaonMinusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4KaonMinusField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4KaonMinusField::operator!=(const G4KaonMinusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4KaonMinusField::operator!= meant not to be accessible");
-  return 1;
-}
-
 
 
 G4double G4KaonMinusField::GetField(const G4ThreeVector & aPosition)

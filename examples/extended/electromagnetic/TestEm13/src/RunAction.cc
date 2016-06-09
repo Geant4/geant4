@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2010-04-05 13:45:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm13/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,13 +42,14 @@
 #include "G4EmCalculator.hh"
 #include "G4Gamma.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : detector(det), primary(prim)
+  : fDetector(det), fPrimary(prim)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,26 +77,26 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4int  prec = G4cout.precision(5);
     
-  G4Material* material = detector->GetMaterial();
+  G4Material* material = fDetector->GetMaterial();
   G4double density  = material->GetDensity();
-  G4double tickness = detector->GetSize();
+  G4double tickness = fDetector->GetSize();
    
   G4ParticleDefinition* particle = 
-                            primary->GetParticleGun()->GetParticleDefinition();
+                            fPrimary->GetParticleGun()->GetParticleDefinition();
   G4String Particle = particle->GetParticleName();    
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(tickness,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(tickness,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4int totalCount = 0;
   G4int survive = 0;  
   G4cout << "\n Process calls frequency --->";
   std::map<G4String,G4int>::iterator it;  
-  for (it = procCounter.begin(); it != procCounter.end(); it++) {
+  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
      G4String procName = it->first;
      G4int    count    = it->second;
      totalCount += count; 
@@ -107,9 +110,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n Nb of incident particles unaltered after "
          << G4BestUnit(tickness,"Length") << " of "
-	 << material->GetName() << " : " << survive 
-	 << " over " << totalCount << " incident particles."
-	 << "  Ratio = " << 100*ratio << " %" << G4endl;
+         << material->GetName() << " : " << survive 
+         << " over " << totalCount << " incident particles."
+         << "  Ratio = " << 100*ratio << " %" << G4endl;
   
   if (ratio == 0.) return;
   
@@ -119,7 +122,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double massicCS  = CrossSection/density;
    
   G4cout << " ---> CrossSection per volume:\t" << CrossSection*cm << " cm^-1 "
-	 << "\tCrossSection per mass: " << G4BestUnit(massicCS, "Surface/Mass")
+         << "\tCrossSection per mass: " << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
 
   //check cross section from G4EmCalculator
@@ -127,7 +130,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n Verification from G4EmCalculator: \n"; 
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  
-  for (it = procCounter.begin(); it != procCounter.end(); it++) {
+  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
     G4String procName = it->first;  
     G4double massSigma = 
     emCalculator.GetCrossSectionPerVolume(energy,particle,
@@ -140,20 +143,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if (procName != "Transportation")
       G4cout << "\t" << procName << "= " 
              << G4BestUnit(massSigma, "Surface/Mass");
-  }  	   
+  }             
   G4cout << "\ttotal= " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
-	 
+         
   //expected ratio of transmitted particles
   G4double Ratio = std::exp(-sumc*density*tickness);
   G4cout << "\tExpected ratio of transmitted particles= " 
-         << 100*Ratio << " %" << G4endl;	 
-	 	 
-  //restore default format	 
+         << 100*Ratio << " %" << G4endl;         
+                  
+  //restore default format         
   G4cout.precision(prec);         
 
-  // remove all contents in procCounter 
-  procCounter.clear();
+  // remove all contents in fProcCounter 
+  fProcCounter.clear();
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

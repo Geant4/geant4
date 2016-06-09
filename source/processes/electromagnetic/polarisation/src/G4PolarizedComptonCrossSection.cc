@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.cc,v 1.5 2010-11-12 10:38:56 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 Class file
 //
@@ -45,6 +44,7 @@
 //   recalculated by P.Starovoitov
 //
 #include "G4PolarizedComptonCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

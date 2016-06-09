@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.24 2010-07-19 13:41:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------
 //
@@ -42,7 +41,7 @@
 
 #include "G4SteppingVerbose.hh"
 #include "G4SteppingManager.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 #include "G4StepStatus.hh"    // Include from 'tracking'
 

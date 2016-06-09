@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.17 2007-06-01 07:53:27 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------
 // History
@@ -43,6 +42,7 @@
 #include "G4UserSpecialCuts.hh"
 #include "G4TransportationProcessType.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.hh,v 1.4 2009-10-25 19:06:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/MyKleinNishinaCompton.hh
+/// \brief Definition of the MyKleinNishinaCompton class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,10 +47,10 @@ public:
 
   MyKleinNishinaCompton(DetectorConstruction*,
                         const G4ParticleDefinition* p = 0, 
-			const G4String& nam = "myKlein-Nishina");
+                        const G4String& nam = "myKlein-Nishina");
 
   virtual ~MyKleinNishinaCompton();
-				      
+                                      
   virtual G4double CrossSectionPerVolume(
                                 const G4Material*,
                                 const G4ParticleDefinition*,
@@ -57,18 +59,18 @@ public:
                                       G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-				      
-  void SetCSFactor(G4double factor) {CrossSectionFactor = factor;};
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy);
+                                      
+  void SetCSFactor(G4double factor) {fCrossSectionFactor = factor;};
 
 protected:
 
-  DetectorConstruction*    detector;
-  MyKleinNishinaMessenger* pMessenger;
-  G4double  CrossSectionFactor;
+  DetectorConstruction*    fDetector;
+  MyKleinNishinaMessenger* fMessenger;
+  G4double                 fCrossSectionFactor;
 
 };
 

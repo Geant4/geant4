@@ -43,6 +43,8 @@
 #include "G4PSEnergyDeposit.hh"
 #include "G4PSDoseDeposit.hh"
 #include "G4VisAttributes.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -139,7 +141,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   //     
   // define crystal
   //
-  G4double gap = 0.5*mm;	//a gap for wrapping
+  G4double gap = 0.5*mm;        //a gap for wrapping
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap;
   G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
                      

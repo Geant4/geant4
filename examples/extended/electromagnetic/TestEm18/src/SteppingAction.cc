@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2007-02-13 17:57:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,8 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
-:runaction(RA), eventaction(EA), histoManager(HM)
+SteppingAction::SteppingAction(RunAction* RA, EventAction* EA)
+:fRunaction(RA), fEventaction(EA)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,12 +55,12 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
  //continuous energy deposit per event  
- eventaction->AddEnergyDeposit (step->GetTotalEnergyDeposit());
+ fEventaction->AddEnergyDeposit (step->GetTotalEnergyDeposit());
  
  //step size
  G4double stepSize = step->GetStepLength();  
- runaction->AddTrackLength(stepSize);
- histoManager->FillHisto(6,stepSize);
+ fRunaction->AddTrackLength(stepSize);
+ G4AnalysisManager::Instance()->FillH1(6,stepSize);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,9 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.31 2010-10-20 08:54:18 gcosmo Exp $
+// $Id$
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -679,9 +678,9 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
       //
       // Where do we intersect at z = halfLenZ?
       //
-      G4double s = -sigz/vz;
-      G4double xi = p.x() + s*v.x(),
-               yi = p.y() + s*v.y();
+      G4double q = -sigz/vz;
+      G4double xi = p.x() + q*v.x(),
+               yi = p.y() + q*v.y();
          
       //
       // Is this on the endplate? If so, return s, unless
@@ -692,7 +691,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
       {
         if (InnerSurfaceExists())
         {
-          if (pr2 >= endInnerRadius2) return (sigz < halfTol) ? 0 : s;
+          if (pr2 >= endInnerRadius2) return (sigz < halfTol) ? 0 : q;
           //
           // This test is sufficient to ensure that the
           // trajectory cannot miss the inner hyperbolic surface
@@ -714,7 +713,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
         }
         else
         {
-          return (sigz < halfTol) ? 0 : s;
+          return (sigz < halfTol) ? 0 : q;
         }
       }
       else
@@ -749,8 +748,8 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
   //    
   G4double best = kInfinity;
   
-  G4double s[2];
-  G4int n = IntersectHype( p, v, outerRadius2, tanOuterStereo2, s );
+  G4double q[2];
+  G4int n = IntersectHype( p, v, outerRadius2, tanOuterStereo2, q );
   
   if (n > 0)
   {
@@ -773,19 +772,19 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
     
     //
     // We are now certain that p is not on the tolerant surface.
-    // Accept only position distance s
+    // Accept only position distance q
     //
     G4int i;
     for( i=0; i<n; i++ )
     {
-      if (s[i] >= 0)
+      if (q[i] >= 0)
       {
         //
         // Check to make sure this intersection point is
         // on the surface, but only do so if we haven't
         // checked the endplate intersection already
         //
-        G4double zi = pz + s[i]*vz;
+        G4double zi = pz + q[i]*vz;
         
         if (zi < -halfLenZ) continue;
         if (zi > +halfLenZ && couldMissOuter) continue;
@@ -793,12 +792,12 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
         //
         // Check normal
         //
-        G4double xi = p.x() + s[i]*v.x(),
-           yi = p.y() + s[i]*v.y();
+        G4double xi = p.x() + q[i]*v.x(),
+           yi = p.y() + q[i]*v.y();
            
         if (xi*v.x() + yi*v.y() - zi*tanOuterStereo2*vz > 0) continue;
 
-        best = s[i];
+        best = q[i];
         break;
       }
     }
@@ -809,7 +808,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
   //
   // Check intersection with inner hyperbolic surface
   //
-  n = IntersectHype( p, v, innerRadius2, tanInnerStereo2, s );  
+  n = IntersectHype( p, v, innerRadius2, tanInnerStereo2, q );  
   if (n == 0)
   {
     if (cantMissInnerCylinder) return (sigz < halfTol) ? 0 : -sigz/vz;
@@ -834,21 +833,21 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
   }
   
   //
-  // No, so only positive s is valid. Search for a valid intersection
+  // No, so only positive q is valid. Search for a valid intersection
   // that is closer than the outer intersection (if it exists)
   //
   G4int i;
   for( i=0; i<n; i++ )
   {
-    if (s[i] > best) break;
-    if (s[i] >= 0)
+    if (q[i] > best) break;
+    if (q[i] >= 0)
     {
       //
       // Check to make sure this intersection point is
       // on the surface, but only do so if we haven't
       // checked the endplate intersection already
       //
-      G4double zi = pz + s[i]*vz;
+      G4double zi = pz + q[i]*vz;
 
       if (zi < -halfLenZ) continue;
       if (zi > +halfLenZ && couldMissInner) continue;
@@ -856,12 +855,12 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
       //
       // Check normal
       //
-      G4double xi = p.x() + s[i]*v.x(),
-         yi = p.y() + s[i]*v.y();
+      G4double xi = p.x() + q[i]*v.x(),
+         yi = p.y() + q[i]*v.y();
 
       if (xi*v.x() + yi*v.y() - zi*tanOuterStereo2*vz < 0) continue;
 
-      best = s[i];
+      best = q[i];
       break;
     }
   }
@@ -1028,8 +1027,8 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
   //
   G4double r2 = p.x()*p.x() + p.y()*p.y();
   
-  G4double s[2];
-  G4int n = IntersectHype( p, v, outerRadius2, tanOuterStereo2, s );
+  G4double q[2];
+  G4int n = IntersectHype( p, v, outerRadius2, tanOuterStereo2, q );
   
   G4ThreeVector norm1, norm2;
 
@@ -1058,18 +1057,18 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
     G4int i;
     for( i=0; i<n; i++ )
     {
-      if (s[i] > sBest) break;
-      if (s[i] > 0)
+      if (q[i] > sBest) break;
+      if (q[i] > 0)
       {
         //
         // Make sure normal is correct (that this
         // solution is an outgoing solution)
         //
-        G4ThreeVector pi(p+s[i]*v);
-        norm1 = G4ThreeVector( pi.x(), pi.y(), -pi.z()*tanOuterStereo2 );
+        G4ThreeVector pk(p+q[i]*v);
+        norm1 = G4ThreeVector( pk.x(), pk.y(), -pk.z()*tanOuterStereo2 );
         if (norm1.dot(v) > 0)
         {
-          sBest = s[i];
+          sBest = q[i];
           nBest = &norm1;
           vBest = false;
           break;
@@ -1083,7 +1082,7 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
     //
     // Check inner surface
     //
-    n = IntersectHype( p, v, innerRadius2, tanInnerStereo2, s );
+    n = IntersectHype( p, v, innerRadius2, tanInnerStereo2, q );
     if (n > 0)
     {
       //
@@ -1110,14 +1109,14 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
       G4int i;
       for( i=0; i<n; i++ )
       {
-        if (s[i] > sBest) break;
-        if (s[i] > 0)
+        if (q[i] > sBest) break;
+        if (q[i] > 0)
         {
-          G4ThreeVector pi(p+s[i]*v);
-          norm2 = G4ThreeVector( -pi.x(), -pi.y(), pi.z()*tanInnerStereo2 );
+          G4ThreeVector pk(p+q[i]*v);
+          norm2 = G4ThreeVector( -pk.x(), -pk.y(), pk.z()*tanInnerStereo2 );
           if (norm2.dot(v) > 0)
           {
-            sBest = s[i];
+            sBest = q[i];
             nBest = &norm2;
             vBest = false;
             break;
@@ -1184,16 +1183,16 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 //     v       - (in) Vector along trajectory
 //     r2      - (in) Square of radius at z = 0
 //     tan2phi - (in) std::tan(phi)**2
-//     s       - (out) Up to two points of intersection, where the
-//                     intersection point is p + s*v, and if there are
-//                     two intersections, s[0] < s[1]. May be negative.
+//     q       - (out) Up to two points of intersection, where the
+//                     intersection point is p + q*v, and if there are
+//                     two intersections, q[0] < q[1]. May be negative.
 // Returns:
 //     The number of intersections. If 0, the trajectory misses. 
 //
 //
 // Equation of a line:
 //
-//       x = x0 + s*tx      y = y0 + s*ty      z = z0 + s*tz
+//       x = x0 + q*tx      y = y0 + q*ty      z = z0 + q*tz
 //
 // Equation of a hyperbolic surface:
 //
@@ -1201,7 +1200,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 //
 // Solution is quadratic:
 //
-//  a*s**2 + b*s + c = 0
+//  a*q**2 + b*q + c = 0
 //
 // where:
 //
@@ -1213,7 +1212,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 //
 // 
 G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v, 
-                             G4double r2, G4double tan2Phi, G4double s[2] )
+                             G4double r2, G4double tan2Phi, G4double ss[2] )
 {
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
@@ -1230,7 +1229,7 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
     //
     if (std::fabs(b) < DBL_MIN) return 0;  // Unless we travel through exact center
     
-    s[0] = c/b;
+    ss[0] = c/b;
     return 1;
   }
     
@@ -1244,7 +1243,7 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
     //
     // Grazes surface
     //
-    s[0] = -b/a/2.0;
+    ss[0] = -b/a/2.0;
     return 1;
   }
   
@@ -1253,7 +1252,7 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
   G4double q = -0.5*( b + (b < 0 ? -radical : +radical) );
   G4double sa = q/a;
   G4double sb = c/q;    
-  if (sa < sb) { s[0] = sa; s[1] = sb; } else { s[0] = sb; s[1] = sa; }
+  if (sa < sb) { ss[0] = sa; ss[1] = sb; } else { ss[0] = sb; ss[1] = sa; }
   return 2;
 }
   

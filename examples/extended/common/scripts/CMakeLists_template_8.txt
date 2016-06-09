@@ -1,0 +1,5 @@
+#----------------------------------------------------------------------------
+# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
+#
+install(TARGETS EXAMPLE_PROGRAM_NAME DESTINATION bin)
+

@@ -1,0 +1,117 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// ClassName:   CHIPS_HP
+//
+// Author: April 2012 M.Kosov (based on CHIPS)
+//
+//----------------------------------------------------------------------------
+//
+#include <iomanip>   
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+//#include "G4QAtomicPhysics.hh"
+#include "G4QPhotoNuclearPhysics.hh"
+#include "G4QNeutrinoPhysics.hh"
+#include "G4QIonPhysics.hh"
+#include "G4QCaptureAtRestPhysics.hh"
+#include "G4QElasticPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
+
+#include "G4DataQuestionaire.hh"
+#include "HadronPhysicsCHIPS_HP.hh"
+
+#include "G4WarnPLStatus.hh"
+
+
+template<class T> TCHIPS_HP<T>::TCHIPS_HP(G4int ver):  T()
+{
+  // default cut value  (1.0mm) 
+  // defaultCutValue = 1.0*CLHEP::mm;
+  G4DataQuestionaire it(photon);
+  G4cout << "<<< Geant4 Physics List simulation engine: CHIPS_HP 1.1"<<G4endl;
+  G4cout <<G4endl<<G4endl;
+  this->defaultCutValue = 0.7*CLHEP::mm;  
+  this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("CHIPS_HP", "QGSP_BERT_HP");
+
+  // EM Physics
+  //this->RegisterPhysics( new G4QAtomicPhysics(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+
+  // Synchroton Radiation & Photo-Nuclear Physics
+  this->RegisterPhysics( new G4QPhotoNuclearPhysics(ver));
+
+  // Neutrino-Nuclear Physics
+  this->RegisterPhysics( new G4QNeutrinoPhysics(ver));
+
+  // Decays
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
+
+  // Hadron CHIPS Elastic Physics
+  this->RegisterPhysics( new G4QElasticPhysics(ver));
+
+  // Hadron CHIPS Inelastic Physics + HP for neutrons < 20 MeV
+  this->RegisterPhysics(  new HadronPhysicsCHIPS_HP(ver));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4QCaptureAtRestPhysics(ver) );
+
+  // Ion Physics
+  this->RegisterPhysics( new G4QIonPhysics(ver));
+  
+  // Neutron tracking cut
+  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
+
+}
+
+template<class T> TCHIPS_HP<T>::~TCHIPS_HP() {}
+
+template<class T> void TCHIPS_HP<T>::SetCuts()
+{
+  if (this->verboseLevel >1) G4cout << "CHIPS_HP::SetCuts:"; 
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+
+  this->SetCutsWithDefault();   
+  
+//  if (this->verboseLevel >0)
+//    G4VUserPhysicsList::DumpCutValuesTable();  
+  
+}
+

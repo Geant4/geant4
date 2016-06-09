@@ -15,7 +15,7 @@ $Id$
   the following sets of classes:
 
   - analysis
-    - ExG4HbookManager - the analysis manager class for HBOOK
+    - ExG4HbookAnalysisManager - the analysis manager class for HBOOK
       As this class requires CERNLIB libraries, its compilation
       is optional. To build it, the following environment variables
       must be defined:

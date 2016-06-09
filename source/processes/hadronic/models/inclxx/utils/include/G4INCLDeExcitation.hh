@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,6 +40,7 @@
 #define G4INCLDeExcitation_hh 1
 
 #include "G4INCLEventInfo.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
   class IDeExcitation {

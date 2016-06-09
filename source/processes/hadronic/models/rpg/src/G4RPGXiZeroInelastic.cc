@@ -23,46 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGXiZeroInelastic.cc,v 1.1 2007-07-18 21:04:21 dennis Exp $
+// $Id$
 //
  
 #include "G4RPGXiZeroInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
  
- G4HadFinalState *
-  G4RPGXiZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus )
-  {    
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+G4HadFinalState*
+G4RPGXiZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                    G4Nucleus& targetNucleus)
+{    
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy() <= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // create the target particle
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4RPGXiZeroInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4RPGXiZeroInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -89,46 +87,44 @@
       G4ThreeVector momentum = modifiedOriginal.GetMomentum();
       modifiedOriginal.SetMomentum( momentum * (p/pp) );
     }
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
+  targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize( 0 );
     
-    const G4double cutOff = 0.1;
-    if( currentParticle.GetKineticEnergy()/MeV > cutOff )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
+  const G4double cutOff = 0.1;
+  if (currentParticle.GetKineticEnergy()/MeV > cutOff)
+    Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
     
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
- 
-void G4RPGXiZeroInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-   G4int& vecLen,
-   const G4HadProjectile *originalIncident,
-   G4ReactionProduct &currentParticle,
-   G4ReactionProduct &targetParticle,
-   G4bool &incidentHasChanged,
-   G4bool &targetHasChanged,
-   G4bool &quasiElastic )
+  delete originalTarget;
+  return &theParticleChange;
+}
+
+
+void
+G4RPGXiZeroInelastic::Cascade(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
+                              G4int& vecLen,
+                              const G4HadProjectile* originalIncident,
+                              G4ReactionProduct& currentParticle,
+                              G4ReactionProduct& targetParticle,
+                              G4bool& incidentHasChanged,
+                              G4bool& targetHasChanged,
+                              G4bool& quasiElastic)
 {
   // Derived from H. Fesefeldt's original FORTRAN code CASX0
   //
@@ -143,44 +139,43 @@ void G4RPGXiZeroInelastic::Cascade(
   const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
   const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
   const G4double targetMass = targetParticle.GetMass()/MeV;
-  G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
-                                      targetMass*targetMass +
-                                      2.0*targetMass*etOriginal );
+  G4double centerofmassEnergy = std::sqrt(mOriginal*mOriginal +
+                                          targetMass*targetMass +
+                                          2.0*targetMass*etOriginal);
   G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-  if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV )
-  {
+  if (availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV) {
     quasiElastic = true;
     return;
   }
-    static G4bool first = true;
-    const G4int numMul = 1200;
-    const G4int numSec = 60;
-    static G4double protmul[numMul], protnorm[numSec]; // proton constants
-    static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
-    G4double test;
-    const G4double c = 1.25;    
-    const G4double b[] = { 0.7, 0.7 };
-    if( first )       // compute normalization constants, this will only be Done once
-    {
-      first = false;
-      G4int i;
-      for( i=0; i<numMul; ++i )protmul[i] = 0.0;
-      for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
-      counter = -1;
-      for( np=0; np<(numSec/3); ++np )
+  static G4bool first = true;
+  const G4int numMul = 1200;
+  const G4int numSec = 60;
+  static G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+
+  // np = number of pi+, nneg = number of pi-, nz = number of pi0
+  G4int counter, nt=0, np=0, nneg=0, nz=0;
+  G4double test;
+  const G4double c = 1.25;    
+  const G4double b[] = { 0.7, 0.7 };
+  if (first) {  // Computation of normalization constants will only be done once
+    first = false;
+    G4int i;
+    for (i = 0; i < numMul; ++i) protmul[i] = 0.0;
+    for (i = 0; i < numSec; ++i) protnorm[i] = 0.0;
+    counter = -1;
+    for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=std::max(0,np-2); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,np-2); nneg<=(np+1); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -192,16 +187,16 @@ void G4RPGXiZeroInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+2); ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+2); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -234,13 +229,13 @@ void G4RPGXiZeroInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=std::max(0,np-2); nm<=(np+1) && ran>=excs; ++nm )
+        for( nneg=std::max(0,np-2); nneg<=(np+1) && ran>=excs; ++nneg )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -261,16 +256,16 @@ void G4RPGXiZeroInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
+      np--; nneg--; nz--;
       //
       // number of secondary mesons determined by kno distribution
       // check for total charge of final state mesons to determine
       // the kind of baryons to be produced, taking into account
       // charge and strangeness conservation
       //
-      if( np < nm+1 )
+      if( np < nneg+1 )
       {
-        if( np != nm )   // charge mismatch
+        if( np != nneg )   // charge mismatch
         {
           currentParticle.SetDefinitionAndUpdateE( aSigmaPlus );
           incidentHasChanged = true;
@@ -282,10 +277,10 @@ void G4RPGXiZeroInelastic::Cascade(
           p->SetDefinition( aKaonMinus );
           (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
           vec.SetElement( vecLen++, p );
-          --nm;
+          --nneg;
         }
       }
-      else if( np == nm+1 )
+      else if( np == nneg+1 )
       {
         if( G4UniformRand() < 0.5 )
         {
@@ -311,13 +306,13 @@ void G4RPGXiZeroInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+2) && ran>=excs; ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+2) && ran>=excs; ++nneg )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -338,10 +333,10 @@ void G4RPGXiZeroInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
-      if( np < nm )
+      np--; nneg--; nz--;
+      if( np < nneg )
       {
-        if( np+1 == nm )
+        if( np+1 == nneg )
         {
           targetParticle.SetDefinitionAndUpdateE( aProton );
           targetHasChanged = true;
@@ -360,10 +355,10 @@ void G4RPGXiZeroInelastic::Cascade(
           p->SetDefinition( aKaonMinus );
           (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
           vec.SetElement( vecLen++, p );
-          --nm;
+          --nneg;
         }
       }
-      else if( np == nm )
+      else if( np == nneg )
       {
         if( G4UniformRand() >= 0.5 )
         {
@@ -378,8 +373,9 @@ void G4RPGXiZeroInelastic::Cascade(
         currentParticle.SetDefinitionAndUpdateE( aXiMinus );
         incidentHasChanged = true;
       }        
-    }
-  SetUpPions( np, nm, nz, vec, vecLen );
+  }
+
+  SetUpPions(np, nneg, nz, vec, vecLen);
   return;
 }
 

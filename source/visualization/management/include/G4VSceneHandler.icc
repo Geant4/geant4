@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.20 2007-01-11 16:38:14 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  19th July 1996.
@@ -98,6 +97,10 @@ inline G4bool G4VSceneHandler::GetTransientsDrawnThisRun () const {
   return fTransientsDrawnThisRun;
 }
 
+inline const G4Transform3D& G4VSceneHandler::GetObjectTransformation () const {
+  return fObjectTransformation;
+}
+
 inline void G4VSceneHandler::SetCurrentViewer (G4VViewer* pViewer) {
   fpViewer = pViewer;
 }
@@ -122,6 +125,11 @@ inline void G4VSceneHandler::SetTransientsDrawnThisEvent (G4bool drawn) {
 inline void G4VSceneHandler::SetTransientsDrawnThisRun (G4bool drawn) {
   fTransientsDrawnThisRun = drawn;
 }
+
+inline void G4VSceneHandler::SetObjectTransformation (const G4Transform3D& t) {
+  fObjectTransformation = t;
+}
+
 
 inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {
   return GetColour (visible);

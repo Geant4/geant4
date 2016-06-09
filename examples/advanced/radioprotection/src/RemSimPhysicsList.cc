@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.10 2006-06-29 16:24:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Susanna Guatelli, susanna@uow.edu.au
 
 #include "RemSimPhysicsList.hh"
 #include "RemSimPhysicsListMessenger.hh"
-#include "G4ParticleDefinition.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VPhysicsConstructor.hh"
 
@@ -54,6 +54,7 @@
 #include "HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
+
 // The electromagnetic physics and the decay are 
 // registered by default. The user has to execute the
 // macro physics.mac to activate the hadronic component of the physics.

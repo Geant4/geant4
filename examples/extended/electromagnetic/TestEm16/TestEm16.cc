@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm16.cc,v 1.4 2010-05-20 21:38:19 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/TestEm16.cc
+/// \brief Main program of the electromagnetic/TestEm16 example
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +43,6 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "SteppingAction.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -70,14 +71,12 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(new PrimaryGeneratorAction(det));
 
-  HistoManager*  histo = new HistoManager();
-
   //set user action classes
   RunAction* RunAct;
 
-  runManager->SetUserAction(RunAct = new RunAction(histo));
+  runManager->SetUserAction(RunAct = new RunAction);
   runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(RunAct,histo));
+  runManager->SetUserAction(new SteppingAction(RunAct));
 
   //get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -109,7 +108,6 @@ int main(int argc,char** argv) {
 
   //job termination
   //
-  delete histo; 
   delete runManager;
 
   return 0;

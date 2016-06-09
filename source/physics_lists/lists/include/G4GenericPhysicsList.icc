@@ -1,0 +1,97 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id$
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: Witek Pokorski
+//
+//
+//----------------------------------------------------------------------------
+//
+
+#include "globals.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+#include "G4ios.hh"
+#include <iomanip>   
+
+#include "G4DataQuestionaire.hh"
+
+
+
+template<class T> TG4GenericPhysicsList<T>::TG4GenericPhysicsList(G4int ver):  T(), messenger(this, "/PhysicsList/")
+{
+  DeclareProperties();
+
+  G4DataQuestionaire it(photon);
+  G4cout << "<<< Geant4 Physics List simulation engine: G4GenericPhysicsList"<<G4endl;
+  G4cout <<G4endl;
+    this->defaultCutValue = 0.7*CLHEP::mm;
+  this->SetVerboseLevel(ver);
+}
+
+template<class T> TG4GenericPhysicsList<T>::TG4GenericPhysicsList(std::vector<G4String>* physConstr, G4int ver):  T(), messenger(this, "/PhysicsList/")
+{
+  DeclareProperties();
+
+  G4DataQuestionaire it(photon);
+  G4cout << "<<< Geant4 Physics List simulation engine: G4GenericPhysicsList"<<G4endl;
+  G4cout <<G4endl;
+    this->defaultCutValue = 0.7*CLHEP::mm;
+  this->SetVerboseLevel(ver);
+
+  for(std::vector<G4String>::iterator i=physConstr->begin(); i!=physConstr->end(); i++) RegisterPhysicsConstructor(*i);
+}
+
+template<class T> TG4GenericPhysicsList<T>::~TG4GenericPhysicsList()
+{
+}
+
+template<class T> void TG4GenericPhysicsList<T>::SetCuts()
+{
+  if (this->verboseLevel >1){
+    G4cout << "G4GenericPhysicsList::SetCuts:";
+  }  
+
+  this->SetCutsWithDefault();   
+ 
+}
+
+template<class T> void TG4GenericPhysicsList<T>::DeclareProperties()
+{
+  messenger.DeclareProperty("defaultCutValue", this->defaultCutValue, "Default Cut Value");
+  messenger.DeclareMethod("SetVerboseLevel", &TG4GenericPhysicsList::SetVerboseLevel, "Verbose Level");
+  
+  messenger.DeclareMethod("RegisterPhysics", &TG4GenericPhysicsList::RegisterPhysicsConstructor, "Register Physics Constructor");
+}

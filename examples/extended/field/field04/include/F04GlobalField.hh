@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04GlobalField.hh
+/// \brief Definition of the F04GlobalField class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04GlobalField_h
 #define F04GlobalField_h 1
 
@@ -72,37 +69,37 @@ private:
   F04GlobalField();
   F04GlobalField(const F04GlobalField&);
 
-  ~F04GlobalField();
+  virtual ~F04GlobalField();
 
   F04GlobalField& operator=(const F04GlobalField&);
 
-  void setupArray();
+  void SetupArray();
 
 public:
 
-  /// getObject() returns the single F04GlobalField object.
+  /// GetObject() returns the single F04GlobalField object.
   /// It is constructed, if necessary.
-  static F04GlobalField* getObject();
+  static F04GlobalField* GetObject();
 
   /// GetFieldValue() returns the field value at a given point[].
   /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
   /// point[] is in global coordinates: x,y,z,t.
-  void GetFieldValue(const G4double* point, G4double* field) const;
+  virtual void GetFieldValue(const G4double* point, G4double* field) const;
 
   /// DoesFieldChangeEnergy() returns true.
-  G4bool DoesFieldChangeEnergy() const { return true; }
+  virtual G4bool DoesFieldChangeEnergy() const { return true; }
 
-  /// addElementField() adds the ElementField object for a single
+  /// AddElementField() adds the ElementField object for a single
   /// element to the global field.
-  void addElementField(F04ElementField* f) { if (fields) fields->push_back(f); }
+  void AddElementField(F04ElementField* f) { if (fFields) fFields->push_back(f); }
 
-  /// clear() removes all ElementField-s from the global object,
+  /// Clear() removes all ElementField-s from the global object,
   /// and destroys them. Used before the geometry is completely
   /// re-created.
-  void clear();
+  void Clear();
 
-  /// updates all field tracking objects and clear()
-  void updateField();
+  /// updates all field tracking objects and Clear()
+  void UpdateField();
 
   /// Set the Stepper types
   void SetStepperType( G4int i ) { fStepperType = i; }
@@ -111,25 +108,25 @@ public:
   void SetStepper();
 
   /// Set the minimum step length
-  void SetMinStep(G4double s) { minStep = s; }
+  void SetMinStep(G4double stp) { fMinStep = stp; }
 
   /// Set the delta chord length
-  void SetDeltaChord(G4double s) { deltaChord = s; }
+  void SetDeltaChord(G4double dcr) { fDeltaChord = dcr; }
 
   /// Set the delta one step length
-  void SetDeltaOneStep(G4double s) { deltaOneStep = s; }
+  void SetDeltaOneStep(G4double stp) { fDeltaOneStep = stp; }
 
   /// Set the delta intersection length
-  void SetDeltaIntersection(G4double s) { deltaIntersection = s; }
+  void SetDeltaIntersection(G4double its) { fDeltaIntersection = its; }
 
   /// Set the minimum eps length
-  void SetEpsMin(G4double s) { epsMin = s; }
+  void SetEpsMin(G4double eps) { fEpsMin = eps; }
 
   /// Set the maximum eps length
-  void SetEpsMax(G4double s) { epsMax = s; }
+  void SetEpsMax(G4double eps) { fEpsMax = eps; }
 
   /// Return the list of Element Fields
-  FieldList* getFields() { return fields; }
+  FieldList* GetFields() { return fFields; }
 
 protected:
 
@@ -138,25 +135,25 @@ protected:
 
 private:
 
-  static F04GlobalField* object;
+  static F04GlobalField* fObject;
 
-  G4int nfp;
-  G4bool first;
+  G4int fNfp;
+  G4bool fFirst;
 
-  FieldList* fields;
+  FieldList* fFields;
 
-  const F04ElementField **fp;
+  const F04ElementField **fFp;
 
 private:
 
   G4int fStepperType;
 
-  G4double minStep;
-  G4double deltaChord;
-  G4double deltaOneStep;
-  G4double deltaIntersection;
-  G4double epsMin;
-  G4double epsMax;
+  G4double fMinStep;
+  G4double fDeltaChord;
+  G4double fDeltaOneStep;
+  G4double fDeltaIntersection;
+  G4double fEpsMin;
+  G4double fEpsMax;
 
 //  G4Mag_EqRhs*            fEquation;
 //  G4Mag_SpinEqRhs*        fEquation;

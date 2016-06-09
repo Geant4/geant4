@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.16 2010-11-10 09:16:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4VDivisionParameterisation Implementation file
 //

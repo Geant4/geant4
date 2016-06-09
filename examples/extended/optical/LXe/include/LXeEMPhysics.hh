@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeEMPhysics.hh
+/// \brief Definition of the LXeEMPhysics class
+//
+//
 #ifndef LXeEMPhysics_h
 #define LXeEMPhysics_h 1
 
@@ -41,42 +45,39 @@
 
 class LXeEMPhysics : public G4VPhysicsConstructor
 {
-  public: 
+  public:
+
     LXeEMPhysics(const G4String& name ="EM");
     virtual ~LXeEMPhysics();
 
-  public: 
-    // This method will be invoked in the Construct() method. 
+  public:
+
+    // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
     virtual void ConstructParticle();
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
+    // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
   protected:
+
    // Gamma physics
-    G4PhotoElectricEffect* thePhotoEffect;
-    G4ComptonScattering* theComptonEffect;
-    G4GammaConversion* thePairProduction;
-  
+    G4PhotoElectricEffect* fPhotoEffect;
+    G4ComptonScattering* fComptonEffect;
+    G4GammaConversion* fPairProduction;
+ 
     // Electron physics
-    G4eMultipleScattering* theElectronMultipleScattering;
-    G4eIonisation* theElectronIonisation;
-    G4eBremsstrahlung* theElectronBremsStrahlung;
-  
+    G4eMultipleScattering* fElectronMultipleScattering;
+    G4eIonisation* fElectronIonisation;
+    G4eBremsstrahlung* fElectronBremsStrahlung;
+ 
     //Positron physics
-    G4eMultipleScattering* thePositronMultipleScattering;
-    G4eIonisation* thePositronIonisation; 
-    G4eBremsstrahlung* thePositronBremsStrahlung;  
-    G4eplusAnnihilation* theAnnihilation;
+    G4eMultipleScattering* fPositronMultipleScattering;
+    G4eIonisation* fPositronIonisation;
+    G4eBremsstrahlung* fPositronBremsStrahlung;
+    G4eplusAnnihilation* fAnnihilation;
 };
 
-
 #endif
-
-
-
-
-

@@ -23,16 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh,v 1.13 2010-11-17 16:20:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
-//
-// Modif (30 June 1998) by V. Lara:
+// Modifications:
+// 30 June 1998 by V. Lara:
 //      -Using G4ParticleTable and therefore G4IonTable
 //       it can return all kind of fragments produced in 
 //       deexcitation
@@ -41,10 +38,13 @@
 //              MultiFragmentation: G4DummyMF (a dummy one)
 //              Fermi Breakup model: G4StatFermiBreakUp
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
-// JMQ (06 September 2008) Also external choices have been added for 
-// superimposed Coulomb barrier (if useSICBis set true, by default is false) 
+// 03 September 2008 by J. M. Quesada for external choice of inverse 
+//    cross section option
+// 06 September 2008 JMQ Also external choices have been added for 
+//    superimposed Coulomb barrier (if useSICBis set true, by default is false)  
+// 23 January 2012 by V.Ivanchenko remove obsolete data members; added access
+//    methods to deexcitation components
+//                   
 
 #ifndef G4ExcitationHandler_h
 #define G4ExcitationHandler_h 1
@@ -58,7 +58,6 @@ class G4VMultiFragmentation;
 class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
-class G4IonTable;
 class G4FermiFragmentsPool;
 
 class G4ExcitationHandler 
@@ -79,18 +78,24 @@ public:
 
   G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState) const;
 
-  void SetEvaporation(G4VEvaporation *const  value);
+  void SetEvaporation(G4VEvaporation* ptr);
 
-  void SetMultiFragmentation(G4VMultiFragmentation *const  value);
+  void SetMultiFragmentation(G4VMultiFragmentation* ptr);
 
-  void SetFermiModel(G4VFermiBreakUp *const  value);
+  void SetFermiModel(G4VFermiBreakUp* ptr);
 
-  void SetPhotonEvaporation(G4VEvaporationChannel * const value);
+  void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
   void SetMaxZForFermiBreakUp(G4int aZ);
   void SetMaxAForFermiBreakUp(G4int anA);
   void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
   void SetMinEForMultiFrag(G4double anE);
+
+  // access methods
+  inline G4VEvaporation* GetEvaporation();
+  inline G4VMultiFragmentation* GetMultiFragmentation();
+  inline G4VFermiBreakUp* GetFermiModel();
+  inline G4VEvaporationChannel* SetPhotonEvaporation();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt);
@@ -118,13 +123,31 @@ private:
 
   G4IonTable* theTableOfIons;
 
-  G4bool MyOwnEvaporationClass;
-  G4bool MyOwnPhotonEvaporationClass;
-
   G4int OPTxs;
   G4bool useSICB;
+  G4bool isEvapLocal;
   
 };
+
+inline G4VEvaporation* G4ExcitationHandler::GetEvaporation()
+{
+  return theEvaporation;
+}
+
+inline G4VMultiFragmentation* G4ExcitationHandler::GetMultiFragmentation()
+{
+  return theMultiFragmentation;
+}
+
+inline G4VFermiBreakUp* G4ExcitationHandler::GetFermiModel()
+{
+  return theFermiModel;
+}
+
+inline G4VEvaporationChannel* G4ExcitationHandler::SetPhotonEvaporation()
+{
+  return thePhotonEvaporation;
+}
 
 inline void G4ExcitationHandler::SetOPTxs(G4int opt) 
 { 

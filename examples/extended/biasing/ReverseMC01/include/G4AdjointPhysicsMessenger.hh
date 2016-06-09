@@ -23,22 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhysicsMessenger.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/include/G4AdjointPhysicsMessenger.hh
+/// \brief Definition of the G4AdjointPhysicsMessenger class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	G4AdjointPhysicsMessenger
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        G4AdjointPhysicsMessenger
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef G4AdjointPhysicsMessenger_h
 #define G4AdjointPhysicsMessenger_h 1
 
@@ -61,40 +67,28 @@ class G4AdjointPhysicsMessenger: public G4UImessenger
 {
   public:
     G4AdjointPhysicsMessenger(G4AdjointPhysicsList* );
-   ~G4AdjointPhysicsMessenger();
+    virtual ~G4AdjointPhysicsMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    G4AdjointPhysicsList* thePhysicsList;
+    G4AdjointPhysicsList* fPhysicsList;
     
 
-    G4UIdirectory*             PhysicsDir;
+    G4UIdirectory*             fPhysicsDir;
     
     //Physics Model
-    
-    G4UIcmdWithABool*  UseIonisationCmd;
-    G4UIcmdWithABool*  UsepIonisationCmd;
-    G4UIcmdWithABool*  UseBremCmd;
-    G4UIcmdWithABool*  UseComptonCmd;
-    G4UIcmdWithABool*  UseMSCmd;
-    G4UIcmdWithABool*  UsePEEffectCmd;
-    G4UIcmdWithABool*  UseGammaConversionCmd;
-    G4UIcmdWithABool*  UseEgainFluctuationCmd;
-  
-    G4UIcmdWithADoubleAndUnit* SetEminAdjModelsCmd;
-    G4UIcmdWithADoubleAndUnit* SetEmaxAdjModelsCmd;
 
-/*
-#ifdef TEST_MODE    
-    G4UIcmdWithADouble* SetCSBiasingFactorComptonCmd;
-    G4UIcmdWithADouble* SetCSBiasingFactorBremCmd;
-    G4UIcmdWithADouble* SetCSBiasingFactorIonisationCmd;
-    G4UIcmdWithADouble* SetCSBiasingFactorPEeffectCmd;
- 
-#endif  
-*/   
-    
+    G4UIcmdWithABool*  fUsepIonisationCmd;
+    G4UIcmdWithABool*  fUseBremCmd;
+    G4UIcmdWithABool*  fUseComptonCmd;
+    G4UIcmdWithABool*  fUseMSCmd;
+    G4UIcmdWithABool*  fUsePEEffectCmd;
+    G4UIcmdWithABool*  fUseGammaConversionCmd;
+    G4UIcmdWithABool*  fUseEgainFluctuationCmd;
+  
+    G4UIcmdWithADoubleAndUnit* fSetEminAdjModelsCmd;
+    G4UIcmdWithADoubleAndUnit* fSetEmaxAdjModelsCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

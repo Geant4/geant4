@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegCoder.cc,v 1.6 2006-06-29 21:23:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //
@@ -51,8 +50,8 @@ G4JpegCoder::G4JpegCoder(u_char* colorR,u_char* colorG,u_char* colorB)
   mOBSP = 0;
 
   for(int n=0; n<8; n++)
-                for(int m=0; m<8; m++)
-                                mCosT[n][m] = std::cos((2 * m + 1) * n * PaiDiv16);
+                for(int im=0; im<8; im++)
+                                mCosT[n][im] = std::cos((2 * im + 1) * n * PaiDiv16);
 }
 
 G4JpegCoder::~G4JpegCoder(void)
@@ -219,12 +218,12 @@ G4JpegCoder::CodeHuffman(int cs)
                 mOBSP->SetBits((acT.CodeT)[zrlIdx], (acT.SizeT)[zrlIdx]);
                 run -= 16;
                 }
-                int s = 0;
+                int is = 0;
                 while( absCoefficient > 0 ){
                         absCoefficient >>= 1;
-                        s++;
+                        is++;
                 }
-                int     aIdx = run * 10 + s + (run == 15);
+                int     aIdx = run * 10 + is + (run == 15);
                 if( aIdx >= acT.numOfElement ) 
                   throw( G4IndexError( acT.numOfElement, aIdx, "CodeHuffman:AC" )
  );
@@ -232,7 +231,7 @@ G4JpegCoder::CodeHuffman(int cs)
                 int     v = mDCTData[ Zigzag[n] ];
                 if( v < 0 )
                   v--;
-                mOBSP->SetBits( v, s );
+                mOBSP->SetBits( v, is );
                 run = 0;
                 }
                 else{

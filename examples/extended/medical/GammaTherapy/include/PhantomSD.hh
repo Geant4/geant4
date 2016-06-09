@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/PhantomSD.hh
+/// \brief Definition of the PhantomSD class
+//
 #ifndef PhantomSD_h
 #define PhantomSD_h 1
 
@@ -49,23 +52,28 @@ class Histo;
 
 class PhantomSD : public G4VSensitiveDetector
 {
-public: // Without description
+public: 
 
-      PhantomSD(const G4String&);
-     ~PhantomSD();
+  PhantomSD(const G4String&);
+  virtual ~PhantomSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-      void clear();
-      void PrintAll();
-      void setShiftZ(G4double val) {shiftZ = val;};
+  // virtual methods
+  void Initialize(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*);
+  void clear();
+  void PrintAll();
 
-  private:
+  inline void SetShiftZ(G4double val) { fShiftZ = val;};
 
-      Histo* theHisto;
-      G4int evno;
-      G4double shiftZ;
+private:
+
+  PhantomSD & operator=(const PhantomSD &right);
+  PhantomSD(const PhantomSD&);
+
+  Histo*   fHisto;
+  G4double fShiftZ;
+  G4int    fCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

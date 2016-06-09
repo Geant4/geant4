@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.57 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //
@@ -40,9 +39,11 @@
 //  7 Oct 96  V. Grichine       First version
 // --------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4GeometryTolerance.hh"
 #include <iomanip>
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4GeometryTolerance.hh"
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
 

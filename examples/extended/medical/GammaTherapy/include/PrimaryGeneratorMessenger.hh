@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/PrimaryGeneratorMessenger.hh
+/// \brief Definition of the PrimaryGeneratorMessenger class
+//
 #ifndef PrimaryGeneratorMessenger_h
 #define PrimaryGeneratorMessenger_h 1
 
@@ -53,31 +56,34 @@ class PrimaryGeneratorAction;
 
 class PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PrimaryGeneratorMessenger(PrimaryGeneratorAction* gen);
-   ~PrimaryGeneratorMessenger();
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction* gen);
+  virtual ~PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand* command, G4String newValue);
+  void SetNewValue(G4UIcommand* command, G4String newValue);
 
-  private:
+private:
   
-    PrimaryGeneratorAction*  theGen;
+  PrimaryGeneratorMessenger & operator=(const PrimaryGeneratorMessenger &right);
+  PrimaryGeneratorMessenger(const PrimaryGeneratorMessenger&);
 
-    G4UIcmdWithADoubleAndUnit* beamXCmd;
-    G4UIcmdWithADoubleAndUnit* beamYCmd;
-    G4UIcmdWithADoubleAndUnit* beamZCmd;
-    G4UIcmdWithADoubleAndUnit* beamECmd;
-    G4UIcmdWithADoubleAndUnit* sigmaXCmd;
-    G4UIcmdWithADoubleAndUnit* sigmaYCmd;
-    G4UIcmdWithADoubleAndUnit* sigmaZCmd;
-    G4UIcmdWithADoubleAndUnit* sigmaECmd;
-    G4UIcmdWithADoubleAndUnit* maxThetaCmd;
-    G4UIcmdWithADoubleAndUnit* sThetaCmd;
-    G4UIcmdWithADouble* beamBetaCmd;
-    G4UIcmdWithADouble* sigmaBetaCmd;
-    G4UIcmdWithAString* partCmd;
-    G4UIcmdWithAString* randCmd;
+  PrimaryGeneratorAction*  fGen;
+
+  G4UIcmdWithADoubleAndUnit* fBeamXCmd;
+  G4UIcmdWithADoubleAndUnit* fBeamYCmd;
+  G4UIcmdWithADoubleAndUnit* fBeamZCmd;
+  G4UIcmdWithADoubleAndUnit* fBeamECmd;
+  G4UIcmdWithADoubleAndUnit* fSigmaXCmd;
+  G4UIcmdWithADoubleAndUnit* fSigmaYCmd;
+  G4UIcmdWithADoubleAndUnit* fSigmaZCmd;
+  G4UIcmdWithADoubleAndUnit* fSigmaECmd;
+  G4UIcmdWithADoubleAndUnit* fMaxThetaCmd;
+  G4UIcmdWithADoubleAndUnit* fThetaCmd;
+  G4UIcmdWithADouble* fBeamBetaCmd;
+  G4UIcmdWithADouble* fSigmaBetaCmd;
+  G4UIcmdWithAString* fPartCmd;
+  G4UIcmdWithAString* fRandCmd;
 
 };
 

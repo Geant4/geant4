@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.16 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1

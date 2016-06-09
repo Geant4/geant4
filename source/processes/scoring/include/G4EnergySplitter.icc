@@ -23,45 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4RegularNavigationHelper.hh"
 #include "G4UIcommand.hh"
 #include "G4PhantomParameterisation.hh"
-
-//-----------------------------------------------------------------------
-inline void G4EnergySplitter::GetLastVoxelID( G4int& voxelID)
-{	
-  voxelID = (*(G4RegularNavigationHelper::theStepLengths.begin())).first;
-}
-
-//-----------------------------------------------------------------------
-inline void G4EnergySplitter::GetFirstVoxelID( G4int& voxelID)
-{
-  voxelID =  (*(G4RegularNavigationHelper::theStepLengths.rbegin())).first;
-}
-
-//-----------------------------------------------------------------------
-inline void G4EnergySplitter::GetVoxelID( G4int stepNo, G4int& voxelID )
-{
-  if( stepNo < 0 || stepNo >= G4int(G4RegularNavigationHelper::theStepLengths.size()) ) {
-  G4Exception("G4EnergySplitter::GetVoxelID",
-	      "Invalid stepNo, smaller than 0 or bigger or equal to number of voxels traversed",
-	      FatalErrorInArgument,
-	      G4String("stepNo = " + G4UIcommand::ConvertToString(stepNo) + ", number of voxels = " + G4UIcommand::ConvertToString(G4int(G4RegularNavigationHelper::theStepLengths.size())) ).c_str());
-  }
-  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::theStepLengths.begin();
-  advance( ite, stepNo );
-  voxelID = (*ite).first;
-
-}
-
-
-//-----------------------------------------------------------------------
-inline void G4EnergySplitter::GetStepLength( G4int stepNo, G4double& stepLength )
-{
-  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::theStepLengths.begin();
-  advance( ite, stepNo );
-  stepLength = (*ite).second;
-}
 
 //-----------------------------------------------------------------------
 inline void G4EnergySplitter::GetVoxelIDAndLength( G4int stepNo, G4int& voxelID, G4double& stepLength )

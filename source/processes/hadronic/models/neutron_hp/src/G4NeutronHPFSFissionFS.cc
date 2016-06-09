@@ -45,6 +45,7 @@
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
     G4String filename = aFile.GetName();
+    SetAZMs( A, Z, M, aFile ); 
     if(!dbool)
     {
       hasAnyData = false;
@@ -134,10 +135,10 @@
 // already in lab. Add neutrons to dynamic particle vector
    for(i=0; i<nPrompt+nDelayed; i++)
    {
-      G4DynamicParticle * it = new G4DynamicParticle;
-      it->SetDefinition(theNeutrons[i].GetDefinition());
-      it->SetMomentum(theNeutrons[i].GetMomentum());
-      aResult->push_back(it);
+      G4DynamicParticle * dp = new G4DynamicParticle;
+      dp->SetDefinition(theNeutrons[i].GetDefinition());
+      dp->SetMomentum(theNeutrons[i].GetMomentum());
+      aResult->push_back(dp);
    }
    delete [] theNeutrons;
 // return the result

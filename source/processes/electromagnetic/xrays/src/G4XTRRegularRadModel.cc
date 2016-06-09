@@ -28,6 +28,7 @@
 #include <complex>
 
 #include "G4XTRRegularRadModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 #include "G4Gamma.hh"
@@ -58,6 +59,99 @@ G4XTRRegularRadModel::G4XTRRegularRadModel(G4LogicalVolume *anEnvelope,
 G4XTRRegularRadModel::~G4XTRRegularRadModel()
 {
   ;
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4XTRRegularRadModel::SpectralXTRdEdx(G4double energy)
+{
+  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC, theta2, theta2k; 
+    G4double aMa, bMb ,sigma, dump;
+  G4int k, kMax, kMin;
+
+  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
+  bMb = fGasThick*GetGasLinearPhotoAbs(energy);
+  sigma = 0.5*(aMa + bMb);
+  dump = std::exp(-fPlateNumber*sigma);
+  if(verboseLevel > 2)  G4cout<<" dump = "<<dump<<G4endl;  
+  cofPHC  = 4*pi*hbarc;
+  tmp     = (fSigma1 - fSigma2)/cofPHC/energy;  
+  cof1    = fPlateThick*tmp;
+  cof2    = fGasThick*tmp;
+
+  cofMin  =  energy*(fPlateThick + fGasThick)/fGamma/fGamma;
+  cofMin += (fPlateThick*fSigma1 + fGasThick*fSigma2)/energy;
+  cofMin /= cofPHC;
+
+  theta2 = cofPHC/(energy*(fPlateThick + fGasThick));
+
+  //  if (fGamma < 1200) kMin = G4int(cofMin);  // 1200 ?
+  // else               kMin = 1;
+
+
+  kMin = G4int(cofMin);
+  if (cofMin > kMin) kMin++;
+
+  // tmp  = (fPlateThick + fGasThick)*energy*fMaxThetaTR;
+  // tmp /= cofPHC;
+  // kMax = G4int(tmp);
+  // if(kMax < 0) kMax = 0;
+  // kMax += kMin;
+  
+
+  kMax = kMin + 49; //  19; // kMin + G4int(tmp);
+
+  // tmp /= fGamma;
+  // if( G4int(tmp) < kMin ) kMin = G4int(tmp);
+
+  if(verboseLevel > 2)
+  {    
+    G4cout<<cof1<<"     "<<cof2<<"        "<<cofMin<<G4endl;
+    G4cout<<"kMin = "<<kMin<<";    kMax = "<<kMax<<G4endl;
+  }
+  for( k = kMin; k <= kMax; k++ )
+  {
+    tmp    = pi*fPlateThick*(k + cof2)/(fPlateThick + fGasThick);
+    result = (k - cof1)*(k - cof1)*(k + cof2)*(k + cof2);
+    // tmp = std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
+    if( k == kMin && kMin == G4int(cofMin) )
+    {
+      sum   += 0.5*std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
+    }
+    else
+    {
+      sum   += std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
+    }
+    theta2k = std::sqrt(theta2*std::abs(k-cofMin));
+
+    if(verboseLevel > 2)
+    {    
+      // G4cout<<"k = "<<k<<"; sqrt(theta2k) = "<<theta2k<<"; tmp = "<<std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
+      //     <<";    sum = "<<sum<<G4endl;  
+      G4cout<<k<<"   "<<theta2k<<"     "<<std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
+              <<"      "<<sum<<G4endl;  
+    }  
+  }
+  result = 2*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
+  // result *= ( 1 - std::exp(-0.5*fPlateNumber*sigma) )/( 1 - std::exp(-0.5*sigma) );  
+  // fPlateNumber;
+  result *= dump*( -1 + dump + 2*fPlateNumber ); 
+  /*  
+  fEnergy = energy;
+  //  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
+  G4Integrator<G4TransparentRegXTRadiator,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
+ 
+  tmp = integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.0,0.3*fMaxThetaTR) +
+      integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.3*fMaxThetaTR,0.6*fMaxThetaTR) +         
+      integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.6*fMaxThetaTR,fMaxThetaTR) ;
+  result += tmp;
+  */
+  return result;
 }
 
 

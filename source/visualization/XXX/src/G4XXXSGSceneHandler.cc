@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc,v 1.6 2006-11-05 20:41:36 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  10th March 2006
@@ -36,6 +35,7 @@
 
 #include "G4XXXSGViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
@@ -78,6 +78,7 @@ void G4XXXSGSceneHandler::PrintThings() {
       "\n  current physical volume: "
            << pPVModel->GetCurrentPV()->GetName() <<
       "\n  current logical volume: "
+// There might be a problem with the LV pointer if this is a G4LogicalVolumeModel
            << pPVModel->GetCurrentLV()->GetName() <<
       "\n  current depth of geometry tree: "
            << pPVModel->GetCurrentDepth();
@@ -91,8 +92,9 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& /*header*/) {
   
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  
-  if (pPVModel) {
+  G4LogicalVolumeModel* pLVModel =
+    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+  if (pPVModel && !pLVModel) {
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of
@@ -407,17 +409,13 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4NURBS&) {
   //?? Don't bother implementing this.  NURBS are not functional.
 }
 
-void G4XXXSGSceneHandler::ClearStore () {
-
-  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
+void G4XXXSGSceneHandler::ClearStore ()
+{
   JA::Clear(&fSceneGraph);
 }
 
-void G4XXXSGSceneHandler::ClearTransientStore () {
-
-  G4VSceneHandler::ClearTransientStore ();
-
+void G4XXXSGSceneHandler::ClearTransientStore ()
+{
   JA::Clear(&fSceneGraph);
 }
 
@@ -440,8 +438,8 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
 
   // See if node has been encountered before
   G4bool found = false; size_t foundPosition = 0;
-  for (size_t i = 0; i < node->daughters.size(); ++i) {
-    PVNodeID& daughterPVNodeID = node->daughters[i]->pvNodeID;
+  for (size_t i = 0; i < node->fDaughters.size(); ++i) {
+    PVNodeID& daughterPVNodeID = node->fDaughters[i]->fPVNodeID;
     // It is enough to compare volume and copy number at a given position in the tree
     if (daughterPVNodeID.GetPhysicalVolume() == pvPath[0].GetPhysicalVolume() &&
 	daughterPVNodeID.GetCopyNo() == pvPath[0].GetCopyNo()) {
@@ -453,9 +451,9 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
 
   if (pathLength == 1) {  // This is a leaf
     if (found) {  // Update index
-      node->daughters[foundPosition]->index = index;
+      node->fDaughters[foundPosition]->fIndex = index;
     } else {      // Make a new full entry
-      node->daughters.push_back(new Node(pvPath[0],index));
+      node->fDaughters.push_back(new Node(pvPath[0],index));
     }
     /* Debug
     std::cout << std::endl;
@@ -463,11 +461,11 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
   } else {  // Not a leaf - carry on with rest of path
     if (found) {  // Just carry on
       Insert(pvPath+1,--pathLength,index,
-	     node->daughters[foundPosition]);
+	     node->fDaughters[foundPosition]);
     } else {      // Insert place holder, then carry on
-      node->daughters.push_back(new Node(pvPath[0]));
+      node->fDaughters.push_back(new Node(pvPath[0]));
       Insert(pvPath+1,--pathLength,index,
-	     node->daughters[node->daughters.size()-1]);
+	     node->fDaughters[node->fDaughters.size()-1]);
     }
   }
 }
@@ -476,9 +474,9 @@ void PrintTree(std::ostream& os, Node* node)
 {
   static G4int depth = -1;
   depth++;
-  PVNodeID& thisPVNodeID = node->pvNodeID;
-  G4int& thisIndex = node->index;
-  const size_t& nDaughters = node->daughters.size();
+  PVNodeID& thisPVNodeID = node->fPVNodeID;
+  G4int& thisIndex = node->fIndex;
+  const size_t& nDaughters = node->fDaughters.size();
   G4VPhysicalVolume* thisPhysicalVolume= thisPVNodeID.GetPhysicalVolume();
   if (!thisPhysicalVolume) os << "Root" << std::endl;
   else {
@@ -488,17 +486,17 @@ void PrintTree(std::ostream& os, Node* node)
        << thisIndex << ")" << std::endl;;
   }
   for (size_t i = 0; i < nDaughters; ++i) {
-    PrintTree(os, node->daughters[i]);
+    PrintTree(os, node->fDaughters[i]);
   }
   depth--;
 }
 
 void Clear(Node* node)
 {
-  const size_t& nDaughters = node->daughters.size();
+  const size_t& nDaughters = node->fDaughters.size();
   for (size_t i = 0; i < nDaughters; ++i) {
-    Clear(node->daughters[i]);
-    delete node->daughters[i];
+    Clear(node->fDaughters[i]);
+    delete node->fDaughters[i];
   }
 }
 

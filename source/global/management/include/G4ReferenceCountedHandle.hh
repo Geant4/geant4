@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.15 2006-06-29 19:02:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4ReferenceCountedHandle
@@ -123,9 +122,13 @@ private:
 
   G4CountedObject<X>*     fObj;
     // The object subject to reference counting.
-
-  static G4Allocator<G4ReferenceCountedHandle<X> > aRCHAllocator;
 };
+
+#ifdef G4GLOB_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4ReferenceCountedHandle<void> > aRCHAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4ReferenceCountedHandle<void> > aRCHAllocator;
+#endif
 
 template <class X>
 class G4CountedObject
@@ -163,10 +166,13 @@ private:
     // Reference counter.
   X* fRep;
     // The counted object.
-
-  static G4Allocator<G4CountedObject<X> > aCountedObjectAllocator;
 };
 
+#ifdef G4GLOB_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4CountedObject<void> > aCountedObjectAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4CountedObject<void> > aCountedObjectAllocator;
+#endif
 
 // --------- G4CountedObject<X> Inline function definitions ---------
 
@@ -206,7 +212,7 @@ void* G4CountedObject<X>::operator new( size_t )
 template <class X>
 void G4CountedObject<X>::operator delete( void *pObj )
 {
-    aCountedObjectAllocator.FreeSingle( (G4CountedObject<X>*)pObj );
+    aCountedObjectAllocator.FreeSingle( (G4CountedObject<void>*)pObj );
 }
 
 // --------- G4ReferenceCountedHandle<X> Inline function definitions ---------
@@ -297,7 +303,7 @@ void* G4ReferenceCountedHandle<X>::operator new( size_t )
 template <class X>
 void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
 {
-    aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<X>*)pObj );
+    aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
 }
 
 #ifdef G4RF_DEBUG
@@ -307,16 +313,6 @@ void* G4ReferenceCountedHandle<X>::operator new( size_t, void *pObj )
     return pObj;
 }
 #endif
-
-// ------------------ Static allocators definitions -----------------
-
-template <class X>
-G4Allocator<G4CountedObject<X> >
-  G4CountedObject<X>::aCountedObjectAllocator;
-
-template <class X>
-G4Allocator<G4ReferenceCountedHandle<X> >
-  G4ReferenceCountedHandle<X>::aRCHAllocator;
 
 #endif // _G4REFERENCECOUNTEDHANDLE_H_
 

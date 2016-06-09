@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITReactionChange.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -52,7 +53,10 @@ G4ITReactionChange::~G4ITReactionChange()
 
 // Should not be used
 G4ITReactionChange::G4ITReactionChange(const G4ITReactionChange& /*other*/) :
-    fSecondaries(0)
+    fSecondaries(0),
+    fNumberOfSecondaries(0),
+    fKillParents(false),
+    fParticleChangeIsSet(false)
 {
     //copy ctor
 }

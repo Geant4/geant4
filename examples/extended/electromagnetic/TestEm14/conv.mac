@@ -19,10 +19,9 @@
 /gun/particle gamma
 /gun/energy 20 MeV
 #
-/testem/histo/setFileName conv
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 3  200 0. 20. MeV	#energy  of ch. secondaries  
-/testem/histo/setHisto 4  200 0. +1.  none 	#costeta of ch. secondaries
+/analysis/setFileName conv
+/analysis/h1/set 3  200 0. 20. MeV	#energy  of ch. secondaries  
+/analysis/h1/set 4  200 0. +1.  none 	#costeta of ch. secondaries
 #
 ##/tracking/verbose 2
 ##/run/beamOn 1

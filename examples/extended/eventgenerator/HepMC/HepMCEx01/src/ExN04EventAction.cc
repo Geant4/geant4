@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04EventAction.cc
+/// \brief Implementation of the ExN04EventAction class
+//
 
 #include "ExN04EventAction.hh"
 
@@ -36,6 +39,7 @@
 #include "G4VHitsCollection.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04EventAction::ExN04EventAction()

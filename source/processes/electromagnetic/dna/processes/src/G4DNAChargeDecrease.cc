@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeDecrease.cc,v 1.4 2010-03-18 16:36:48 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4DNAChargeDecrease.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,20 +73,20 @@ void G4DNAChargeDecrease::InitialiseProcess(const G4ParticleDefinition* p)
 
     if( name == "proton" )
     {
-      if(!Model()) SetModel(new G4DNADingfelderChargeDecreaseModel);
-      Model()->SetLowEnergyLimit(100*eV);
-      Model()->SetHighEnergyLimit(100*MeV);
+      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeDecreaseModel);
+      EmModel()->SetLowEnergyLimit(100*eV);
+      EmModel()->SetHighEnergyLimit(100*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
     
     if( name == "alpha" || name == "alpha+" )
     {
-      if(!Model()) SetModel(new G4DNADingfelderChargeDecreaseModel);
-      Model()->SetLowEnergyLimit(1*keV);
-      Model()->SetHighEnergyLimit(400*MeV);
+      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeDecreaseModel);
+      EmModel()->SetLowEnergyLimit(1*keV);
+      EmModel()->SetHighEnergyLimit(400*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
     
   } 
@@ -97,7 +97,7 @@ void G4DNAChargeDecrease::InitialiseProcess(const G4ParticleDefinition* p)
 void G4DNAChargeDecrease::PrintInfo()
 {
   G4cout
-    << " Total cross sections computed from " << Model()->GetName() << " model"
+    << " Total cross sections computed from " << EmModel()->GetName() << " model"
     << G4endl;
 }         
 

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2006-06-29 16:46:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm15/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,22 +45,24 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pWorld(0), pBox(0), aMaterial(0)
+:fWorld(0), fBox(0), fMaterial(0)
 {
-  boxSize = 100*m;  worldSize = 1.2*boxSize;
+  fBoxSize = 100*m;  fWorldSize = 1.2*fBoxSize;
   DefineMaterials();
   SetMaterial("Water");  
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -151,7 +155,7 @@ void DetectorConstruction::DefineMaterials()
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
  //default material
- wMaterial = vacuum;  
+ fWMaterial = vacuum;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -167,54 +171,54 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Box*
-  sWorld = new G4Box("World",					//name
-                   worldSize/2,worldSize/2,worldSize/2);	//dimensions
+  sWorld = new G4Box("World",                                        //name
+                   fWorldSize/2,fWorldSize/2,fWorldSize/2);        //dimensions
 
-  G4LogicalVolume*		   			                      
-  lWorld = new G4LogicalVolume(sWorld,			//shape
-                               wMaterial,		//material
-                              "World");			//name
+  G4LogicalVolume*                                                                 
+  lWorld = new G4LogicalVolume(sWorld,                        //shape
+                               fWMaterial,                //material
+                              "World");                        //name
 
-  pWorld = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lWorld,			//logical volume
-			   "World",			//name
-                           0,	       		        //mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   			   
+  fWorld = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           lWorld,                        //logical volume
+                           "World",                        //name
+                           0,                                       //mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                                                      
   // Box
-  //			   
+  //                           
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   boxSize/2,boxSize/2,boxSize/2);	//its dimensions
-		   
+  sBox = new G4Box("Container",                                //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+                   
   G4LogicalVolume*
-  lBox = new G4LogicalVolume(sBox,			//its shape
-                             aMaterial,			//its material
-                             aMaterial->GetName());	//its name
+  lBox = new G4LogicalVolume(sBox,                        //its shape
+                             fMaterial,                        //its material
+                             fMaterial->GetName());        //its name
 
-  pBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume			   
-                           aMaterial->GetName(),	//its name
-                           lWorld,			//its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   
+  fBox = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           lBox,                        //its logical volume                           
+                           fMaterial->GetName(),        //its name
+                           lWorld,                        //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                           
   PrintParameters();
   
   //always return the root volume
   //
-  return pWorld;
+  return fWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n The Box is " << G4BestUnit(boxSize,"Length")
-         << " of " << aMaterial->GetName() << G4endl;
+  G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
+         << " of " << fMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,7 +228,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) {
-    aMaterial = pttoMaterial;
+    fMaterial = pttoMaterial;
     UpdateGeometry();
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
@@ -236,7 +240,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 
 void DetectorConstruction::SetSize(G4double value)
 {
-  boxSize = value; worldSize = 1.2*boxSize;
+  fBoxSize = value; fWorldSize = 1.2*fBoxSize;
   UpdateGeometry();
 }
 
@@ -246,7 +250,7 @@ void DetectorConstruction::SetSize(G4double value)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  if (pWorld) 
+  if (fWorld) 
     G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 

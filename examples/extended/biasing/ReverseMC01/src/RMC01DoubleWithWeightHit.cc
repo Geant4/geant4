@@ -23,47 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DoubleWithWeightHit.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/src/RMC01DoubleWithWeightHit.cc
+/// \brief Implementation of the RMC01DoubleWithWeightHit class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01DoubleWithWeightHit
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//      Class Name:        RMC01DoubleWithWeightHit
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "RMC01DoubleWithWeightHit.hh"
 
 G4Allocator<RMC01DoubleWithWeightHit> RMC01DoubleWithWeightHitAllocator;
 
-RMC01DoubleWithWeightHit::RMC01DoubleWithWeightHit(G4double aValue, G4double aWeight)
-{
- theValue = aValue;
- theWeight = aWeight;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RMC01DoubleWithWeightHit::RMC01DoubleWithWeightHit(G4double aValue,
+                                                                      G4double aWeight)
+: fValue(aValue),fWeight (aWeight)
+{;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01DoubleWithWeightHit::~RMC01DoubleWithWeightHit()
 {
 }
 
-RMC01DoubleWithWeightHit::RMC01DoubleWithWeightHit(const RMC01DoubleWithWeightHit &right)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RMC01DoubleWithWeightHit::RMC01DoubleWithWeightHit(
+                                                 const RMC01DoubleWithWeightHit &right)
   : G4VHit()
 {
-  theValue = right.theValue;
-  theWeight = right.theWeight;
+  fValue = right.fValue;
+  fWeight = right.fWeight;
 }
 
-const RMC01DoubleWithWeightHit& RMC01DoubleWithWeightHit::operator=(const RMC01DoubleWithWeightHit &right)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const RMC01DoubleWithWeightHit& RMC01DoubleWithWeightHit::operator=(
+                                                 const RMC01DoubleWithWeightHit &right)
 {
-  theValue = right.theValue;
-  theWeight = right.theWeight;
+  fValue = right.fValue;
+  fWeight = right.fWeight;
  return *this;
 }
 
-int RMC01DoubleWithWeightHit::operator==(const RMC01DoubleWithWeightHit &right) const
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+int RMC01DoubleWithWeightHit::operator==
+                                         (const RMC01DoubleWithWeightHit &right) const
 {
- return(theValue == right.theValue && theWeight == right.theWeight);
+ return(fValue == right.fValue && fWeight == right.fWeight);
 }
 
 

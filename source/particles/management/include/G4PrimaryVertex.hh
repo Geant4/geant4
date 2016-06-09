@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.6 2010-10-27 07:47:05 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

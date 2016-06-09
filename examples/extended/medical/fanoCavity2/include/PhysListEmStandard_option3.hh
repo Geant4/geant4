@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_option3.hh,v 1.1 2009-10-31 18:05:56 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/include/PhysListEmStandard_option3.hh
+/// \brief Definition of the PhysListEmStandard_option3 class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +58,7 @@ public:
   void ConstructProcess();
   
 private:
-  DetectorConstruction* detector;  
+  DetectorConstruction* fDetector;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

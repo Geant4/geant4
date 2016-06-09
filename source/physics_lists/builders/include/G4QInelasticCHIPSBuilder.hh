@@ -35,13 +35,11 @@
 //
 //----------------------------------------------------------------------------
 //
-// Short comment: This is a physics list of only one model G4QInelastic for
-// all hadron-nuclear interactions at all energies. There is no model- or
-// process-mixing, while it is possible to merge (G4QProcessMixer) the G4_HP
-// processes at low energies if the G4QInelastic, which includes all necessary
-// nA inelastic processes, is found to be not saficient for some applications.
+// Short comment: This is a physics list of only one model G4QInelastic for all
+// hadron-nuclear interactions at all energies (+CHIPS (n,gamma) for neutrons).
+// There's no model- or process-mixing (CHIPS_HP) as in G4Hadr Physics Package.
 // In this particular builder the G4QInelastic process is attached to all
-// hadrons other than nucleons or pi and K-mesons. Previously it could be done
+// hadrons (+ G4QNGamma for neutrons). Previously it could be done
 // only using the LHEP parameterized package or in a temporary form by the
 // QGSC model conditionally extended (just not crashing) to low energies.
 // *** Important *** As the CHIPS treatment of all hadrons is very simple,
@@ -55,6 +53,8 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4QInelastic.hh"
+#include "G4QNGamma.hh"
+//#include "G4QFission.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -78,6 +78,8 @@ class G4QInelasticCHIPSBuilder
   G4int  verbose;
   G4bool wasActivated;
   G4QInelastic* inelastic;
+  G4QNGamma*    nGamma;
+  //G4QFission*   fission;
 };
 // 2009 by M. Kossov
 

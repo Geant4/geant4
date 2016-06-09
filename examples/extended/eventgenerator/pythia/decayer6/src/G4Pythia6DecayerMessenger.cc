@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: G4Pythia6DecayerMessenger.cc,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+/// \file eventgenerator/pythia/decayer6/src/G4Pythia6DecayerMessenger.cc
+/// \brief Implementation of the G4Pythia6DecayerMessenger class
+
+// ----------------------------------------------------------------------------
 // Messenger class that defines commands for G4Pythia6Decayer.
 //
 // Implements command
@@ -43,7 +45,8 @@
 
 #include <sstream>
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Pythia6DecayerMessenger::G4Pythia6DecayerMessenger(
                                G4Pythia6Decayer* pythia6Decayer)
   : G4UImessenger(),
@@ -57,23 +60,26 @@ G4Pythia6DecayerMessenger::G4Pythia6DecayerMessenger(
   fDirectory = new G4UIdirectory("/pythia6Decayer/");
   fDirectory->SetGuidance("G4Pythia6Decayer control commands.");
 
-  fVerboseCmd = new G4UIcmdWithAnInteger("/pythia6Decayer/verbose", this);
+  fVerboseCmd 
+    = new G4UIcmdWithAnInteger("/pythia6Decayer/verbose", this);
   fVerboseCmd->SetGuidance("Set Pythia6Decayer verbose level");
   fVerboseCmd->SetParameterName("VerboseLevel", false);
-  fVerboseCmd->SetRange("VerboseLevel >= 0 && VerboseLevel <= 5");
-  fVerboseCmd->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle);
+  fVerboseCmd->SetRange("VerboseLevel >= 0 && VerboseLevel <= 1");
+  fVerboseCmd->AvailableForStates(G4State_Idle);
 
-  fDecayTypeCmd = new G4UIcmdWithAnInteger("/pythia6Decayer/forceDecayType", this);
+  fDecayTypeCmd 
+    = new G4UIcmdWithAnInteger("/pythia6Decayer/forceDecayType", this);
   fDecayTypeCmd->SetGuidance("Force the specified decay type");
   fDecayTypeCmd->SetParameterName("DecayType", false);
   std::ostringstream os;
   os << "DecayType >=  " << kSemiElectronic 
      << " && DecayType <= " << kMaxDecay;
   fDecayTypeCmd->SetRange(os.str().c_str());
-  fDecayTypeCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+  fDecayTypeCmd->AvailableForStates(G4State_Idle);
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Pythia6DecayerMessenger::~G4Pythia6DecayerMessenger() 
 {
 /// Destructor
@@ -87,7 +93,8 @@ G4Pythia6DecayerMessenger::~G4Pythia6DecayerMessenger()
 // public methods
 //
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6DecayerMessenger::SetNewValue(G4UIcommand* command, 
        G4String newValue)
 { 
@@ -102,3 +109,5 @@ void G4Pythia6DecayerMessenger::SetNewValue(G4UIcommand* command,
       ->ForceDecayType(EDecayType(fDecayTypeCmd->GetNewIntValue(newValue))); 
   }   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

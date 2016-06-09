@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.cc,v 1.14 2008-04-24 12:33:35 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -40,6 +39,8 @@
 
 #include "G4EqMagElectricField.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units

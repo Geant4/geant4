@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/src/G4Monopole.cc
+/// \brief Implementation of the G4Monopole class
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4Monopole
@@ -42,6 +45,8 @@
 
 #include "G4Monopole.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // ######################################################################
 // ###                        Monopole                                ###
@@ -49,6 +54,8 @@
 
 G4Monopole* G4Monopole::theMonopole = 0;
 G4double    G4Monopole::magCharge = 0.0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4Monopole::G4Monopole(
        const G4String&     aName,        G4double            mass,
@@ -81,22 +88,23 @@ G4Monopole::~G4Monopole()
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge, G4double eCharge)
+G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge, 
+                                           G4double eCharge)
 {    
   if(!theMonopole) {
     magCharge = eplus * mCharge / fine_structure_const * 0.5;
     theMonopole = new G4Monopole(
-				 "monopole",         mass,       0.0*MeV,       eplus*eCharge, 
-				 0,               0,             0,          
-				 0,               0,             0,             
-				 "boson",               0,             0,           0,
-				 true,            -1.0,             0);
+       "monopole",         mass,       0.0*MeV,       eplus*eCharge, 
+                0,               0,             0,          
+                0,               0,             0,             
+          "boson",               0,             0,           0,
+             true,            -1.0,             0);
     
     
     G4cout << "Monopole is created: m(GeV)= " << theMonopole->GetPDGMass()/GeV 
-	   << " Qel= " << theMonopole->GetPDGCharge()/eplus
-	   << " Qmag= " << magCharge/eplus
-	   << G4endl;
+           << " Qel= " << theMonopole->GetPDGCharge()/eplus
+           << " Qmag= " << magCharge/eplus
+           << G4endl;
   }
   return theMonopole;
 }

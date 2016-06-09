@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc,v 1.18 2008-08-28 15:28:04 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,12 +40,14 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
-                               EventAction* EA, HistoManager* HM)
-:detector(DET), runaction(RA), eventaction(EA), histoManager(HM)
+                               EventAction* EA)
+:fDetector(DET), fRunAction(RA), fEventAction(EA)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,9 +57,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
   // few initialisations
   //
   if (aTrack->GetTrackID() == 1) {
-    xstartAbs = detector->GetxstartAbs();
-    xendAbs   = detector->GetxendAbs();
-    primaryCharge = aTrack->GetDefinition()->GetPDGCharge();
+    fXstartAbs = fDetector->GetxstartAbs();
+    fXendAbs   = fDetector->GetxendAbs();
+    fPrimaryCharge = aTrack->GetDefinition()->GetPDGCharge();
   }
 }
 
@@ -63,21 +67,23 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
   G4ThreeVector position = aTrack->GetPosition();
   G4ThreeVector vertex   = aTrack->GetVertexPosition();  
   G4double charge        = aTrack->GetDefinition()->GetPDGCharge();
 
-  G4bool transmit = ((position.x() >= xendAbs) && (vertex.x() < xendAbs));
-  G4bool reflect  =  (position.x() <= xstartAbs);
+  G4bool transmit = ((position.x() >= fXendAbs) && (vertex.x() < fXendAbs));
+  G4bool reflect  =  (position.x() <= fXstartAbs);
   G4bool notabsor = (transmit || reflect);
 
   //transmitted + reflected particles counter
   //
   G4int flag = 0;
-  if (charge == primaryCharge)   flag = 1;
+  if (charge == fPrimaryCharge)  flag = 1;
   if (aTrack->GetTrackID() == 1) flag = 2;
-  if (transmit) eventaction->SetTransmitFlag(flag);
-  if (reflect)  eventaction->SetReflectFlag(flag);
+  if (transmit) fEventAction->SetTransmitFlag(flag);
+  if (reflect)  fEventAction->SetReflectFlag(flag);
       
   //
   //histograms
@@ -94,7 +100,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && neutral) id = 40;
 
   if (id>0)   
-  histoManager->FillHisto(id, aTrack->GetKineticEnergy());
+  analysisManager->FillH1(id, aTrack->GetKineticEnergy());
     
   //energy leakage
   //
@@ -104,7 +110,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     G4double eleak = aTrack->GetKineticEnergy();
     if ((aTrack->GetDefinition() == G4Positron::Positron()) && (trackID > 1))
       eleak += 2*electron_mass_c2;
-    runaction->AddEnergyLeak(eleak,index);  
+    fRunAction->AddEnergyLeak(eleak,index);  
   }
 
   //space angle distribution at exit : dN/dOmega
@@ -118,45 +124,58 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    G4double dteta  = histoManager->GetBinWidth(id);
-    G4double unit   = histoManager->GetHistoUnit(id);    
-    G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-    histoManager->FillHisto(id,theta,weight);
+    if (theta > 0.0) {
+      G4double dteta  = analysisManager->GetH1Width(id);
+      G4double unit   = analysisManager->GetH1Unit(id);    
+      G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+      /*
+      G4cout << "theta, dteta, unit, weight: " 
+             << theta << "  "   
+             << dteta << "  "   
+             << unit << "  "   
+             << weight << G4endl;   
+      */
+      analysisManager->FillH1(id,theta,weight);
+    }
   }
   
   //energy fluence at exit : dE(MeV)/dOmega
   //
   id = 0;  
-       if (transmit && charged) id = 11;
+  if (transmit && charged) id = 11;
   else if (transmit && neutral) id = 21;
   else if (reflect  && charged) id = 31;
   else if (reflect  && neutral) id = 41;
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    G4double dteta  = histoManager->GetBinWidth(id);
-    G4double unit   = histoManager->GetHistoUnit(id);    
-    G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-    weight *= (aTrack->GetKineticEnergy()/MeV); 
-    histoManager->FillHisto(id,theta,weight);    
+    if (theta > 0.0) {
+      G4double dteta  = analysisManager->GetH1Width(id);
+      G4double unit   = analysisManager->GetH1Unit(id);    
+      G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+      weight *= (aTrack->GetKineticEnergy()/MeV); 
+      analysisManager->FillH1(id,theta,weight);
+    } 
   }
   
   //projected angles distribution at exit
   //
   id = 0;   
-       if (transmit && charged) id = 13;
+  if (transmit && charged) id = 13;
   else if (transmit && neutral) id = 23;
   else if (reflect  && charged) id = 33;
   else if (reflect  && neutral) id = 43;
 
-  if(id>0) {
-    G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
-    histoManager->FillHisto(id,tet);
-    if (transmit && (flag == 2)) runaction->AddMscProjTheta(tet);
+  if (id>0) {
+    if (direction.x() != 0.0) {
+      G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
+      analysisManager->FillH1(id,tet);
+      if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
 
-    tet = std::atan(direction.z()/std::fabs(direction.x()));
-    histoManager->FillHisto(id,tet);
-    if (transmit && (flag == 2)) runaction->AddMscProjTheta(tet);
+      tet = std::atan(direction.z()/std::fabs(direction.x()));
+      analysisManager->FillH1(id,tet);
+      if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
+    }
   }
 
   //projected position and radius at exit
@@ -167,17 +186,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   if (id>0) {
     G4double y = position.y(), z = position.z();
     G4double r = std::sqrt(y*y + z*z);
-    histoManager->FillHisto(id,   y);
-    histoManager->FillHisto(id,   z);
-    histoManager->FillHisto(id+1, r);
+    analysisManager->FillH1(id,   y);
+    analysisManager->FillH1(id,   z);
+    analysisManager->FillH1(id+1, r);
   }
   
   //x-vertex of charged secondaries
   //
   if ((aTrack->GetParentID() == 1) && charged) {
     G4double xVertex = (aTrack->GetVertexPosition()).x();
-    histoManager->FillHisto(4, xVertex);
-    if (notabsor) histoManager->FillHisto(5, xVertex); 
+    analysisManager->FillH1(6, xVertex);
+    if (notabsor) analysisManager->FillH1(7, xVertex); 
   }
 }
 

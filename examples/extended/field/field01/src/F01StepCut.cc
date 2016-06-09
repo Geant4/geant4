@@ -23,10 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01StepCut.cc
+/// \brief Implementation of the F01StepCut class
 //
-// $Id: F01StepCut.cc,v 1.3 2006-06-29 17:16:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// $Id$
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "F01StepCut.hh"
 
@@ -35,25 +40,35 @@
 #include "G4VParticleChange.hh"
 #include "G4EnergyLossTables.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 F01StepCut::F01StepCut(const G4String& aName)
-  : G4VDiscreteProcess(aName),MaxChargedStep(DBL_MAX)
+ : G4VDiscreteProcess(aName),
+   fMaxChargedStep(DBL_MAX)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 F01StepCut::~F01StepCut()
-{
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01StepCut::F01StepCut(F01StepCut& right)
-    :G4VDiscreteProcess(right)
+ : G4VDiscreteProcess(right)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01StepCut::SetMaxStep(G4double step)
 {
-  MaxChargedStep = step ;
+  fMaxChargedStep = step ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 

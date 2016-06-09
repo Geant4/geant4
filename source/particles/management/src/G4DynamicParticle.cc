@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.30 2010-08-10 15:47:42 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -63,11 +62,14 @@
 //--------------------------------------------------------------
 
 #include "G4DynamicParticle.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4PrimaryParticle.hh"
 
 G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
 
@@ -370,9 +372,9 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 ////////////////////
 //  --- Dump Information --
 ////////////////////
+#ifdef G4VERBOSE
 void G4DynamicParticle::DumpInfo(G4int mode) const
 {
-#ifdef G4VERBOSE
   if (theParticleDefinition == 0) {
     G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << G4endl;
   } else {
@@ -397,8 +399,13 @@ void G4DynamicParticle::DumpInfo(G4int mode) const
       }
     }
   }
-#endif
 }
+#else
+void G4DynamicParticle::DumpInfo(G4int) const
+{
+  return;
+}
+#endif
 
 ////////////////////////
 G4double  G4DynamicParticle::GetElectronMass() const

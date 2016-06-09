@@ -33,6 +33,8 @@
 // 110510 delete above protection with more coordinated work to other classes 
 //
 #include "G4NeutronHPAngular.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
 {
@@ -96,6 +98,9 @@ void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
 void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
 {
 
+  //********************************************************************
+  //EMendoza -> sampling can be isotropic in LAB or in CMS
+  /*
   if(theIsoFlag)
   {
 //  G4cout << "Angular result "<<aHadron.GetTotalMomentum()<<" ";
@@ -111,6 +116,8 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
   }
   else
   {
+  */
+  //********************************************************************
     if(frameFlag == 1) // LAB
     {
       G4double en = aHadron.GetTotalMomentum();
@@ -118,8 +125,21 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       boosted.Lorentz(theNeutron, theTarget);
       G4double kineticEnergy = boosted.GetKineticEnergy();
       G4double cosTh = 0.0; 
+      //********************************************************************
+      //EMendoza --> sampling can be also isotropic
+      /*
       if(theAngularDistributionType == 1) cosTh = theCoefficients->SampleMax(kineticEnergy); 
       if(theAngularDistributionType == 2) cosTh = theProbArray->Sample(kineticEnergy); 
+      */
+      //********************************************************************
+      if(theIsoFlag){cosTh =2.*G4UniformRand()-1;}
+      else if(theAngularDistributionType == 1) {cosTh = theCoefficients->SampleMax(kineticEnergy);}
+      else if(theAngularDistributionType == 2) {cosTh = theProbArray->Sample(kineticEnergy);}
+      else{
+        G4cout << "unknown distribution found for Angular"<<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, "unknown distribution needs implementation!!!");
+      }
+      //********************************************************************
       G4double theta = std::acos(cosTh);
       G4double phi = twopi*G4UniformRand();
       G4double sinth = std::sin(theta);
@@ -133,9 +153,21 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       G4double kineticEnergy = boostedN.GetKineticEnergy();
 
       G4double cosTh = 0.0; 
+      //********************************************************************
+      //EMendoza --> sampling can be also isotropic
+      /*
       if(theAngularDistributionType == 1) cosTh = theCoefficients->SampleMax(kineticEnergy); 
       if(theAngularDistributionType == 2) cosTh = theProbArray->Sample(kineticEnergy); 
-
+      */
+      //********************************************************************
+      if(theIsoFlag){cosTh =2.*G4UniformRand()-1;}
+      else if(theAngularDistributionType == 1) {cosTh = theCoefficients->SampleMax(kineticEnergy);}
+      else if(theAngularDistributionType == 2) {cosTh = theProbArray->Sample(kineticEnergy);}
+      else{
+        G4cout << "unknown distribution found for Angular"<<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, "unknown distribution needs implementation!!!");
+      }
+      //********************************************************************
 //080612TK bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) 
 /*
     if(theAngularDistributionType == 1) // LAB
@@ -151,8 +183,8 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
       aHadron.SetMomentum( temp );
     }
-    else if(theAngularDistributionType == 2) // costh in CMS
-    {
+    else if(theAngularDistributionType == 2) // costh in CMS {
+    }
 */
 
 //      G4ReactionProduct boostedN;
@@ -251,7 +283,6 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
     {
       throw G4HadronicException(__FILE__, __LINE__, "Tried to sample non isotropic neutron angular");
     }
-  }
   aHadron.Lorentz(aHadron, -1.*theTarget); 
 //  G4cout << aHadron.GetMomentum()<<" ";
 //  G4cout << aHadron.GetTotalMomentum()<<G4endl;

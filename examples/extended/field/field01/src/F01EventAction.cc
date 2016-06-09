@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01EventAction.cc
+/// \brief Implementation of the F01EventAction class
 //
-// $Id: F01EventAction.cc,v 1.7 2010-06-06 04:55:22 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -51,35 +53,38 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01EventAction::F01EventAction(F01RunAction* F01RA)
- : calorimeterCollID(-1), eventMessenger(0),
-   runaction(F01RA), verboselevel(0),
-   drawFlag("all"), printModulo(10000)
+ : G4UserEventAction(),
+   fCalorimeterCollID(-1), 
+   fEventMessenger(0),
+   fRunAction(F01RA), 
+   fVerboseLevel(0),
+   fPrintModulo(10000)
 {
-  eventMessenger = new F01EventActionMessenger(this);
+  fEventMessenger = new F01EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01EventAction::~F01EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01EventAction::BeginOfEventAction(const G4Event* evt)
 {
- G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0) 
+  G4int evtNb = evt->GetEventID();
+  if (evtNb%fPrintModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
      
-  if(verboselevel>1)
+  if (fVerboseLevel>1)
     G4cout << "<<< Event  " << evtNb << " started." << G4endl;
     
-  if (calorimeterCollID==-1)
+  if (fCalorimeterCollID==-1)
     {
      G4SDManager * SDman = G4SDManager::GetSDMpointer();
-     calorimeterCollID = SDman->GetCollectionID("CalCollection");
+     fCalorimeterCollID = SDman->GetCollectionID("CalCollection");
     } 
 }
 
@@ -87,16 +92,16 @@ void F01EventAction::BeginOfEventAction(const G4Event* evt)
 
 void F01EventAction::EndOfEventAction(const G4Event* evt)
 {
-  if(verboselevel>0)
+  if (fVerboseLevel>0)
     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
   
   
   //save rndm status
-  if (runaction->GetRndmFreq() == 2)
+  if (fRunAction->GetRndmFreq() == 2)
     { 
      CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");   
      G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
+     if (evtNb%fPrintModulo == 0)
        { 
          G4cout << "\n---> End of Event: " << evtNb << G4endl;
          CLHEP::HepRandom::showEngineStatus();
@@ -106,17 +111,9 @@ void F01EventAction::EndOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int F01EventAction::GetEventno()
+void F01EventAction::SetEventVerbose(G4int level)
 {
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
-  return evno ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F01EventAction::setEventVerbose(G4int level)
-{
-  verboselevel = level ;
+  fVerboseLevel = level ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

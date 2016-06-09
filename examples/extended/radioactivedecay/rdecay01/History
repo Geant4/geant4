@@ -14,6 +14,70 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-11-12 I. Hrivnacova (rdecay01-V09-05-14)
+- Fixed order of instantiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+    
+28-10-12 mma (rdecay01-V09-05-13)
+- update README and .README
+     
+07-10-12 mma (rdecay01-V09-05-12)
+- use G4AnalysisManager
+
+02-10-12 V.Ivantchenko (rdecay01-V09-05-11)
+- PhysicsList - removed initialisation of de-excitation, because it can 
+    be called only after initialisation of geometry and not when 
+    processes are instantiated
+     
+22-09-12 mma
+- DetectorConstruction : fWorldSize = 2 cm
+     
+05-05-12 mma (rdecay01-V09-05-10)
+- add macro No252.mac to demonstrate UserEvapData file
+- update readme
+      
+03-05-12 mma (rdecay01-V09-05-09)
+- add macro Cf238.mac to demonstrate UserRadData file 
+     
+26-03-12 mma (rdecay01-V09-05-08)
+- all classes : apply G4 coding conventions
+     
+23-02-12 mma (rdecay01-V09-05-07)
+- HistoManager : GetFileType()
+     
+11-02-12 mma (rdecay01-V09-05-06)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+      
+25-01-12 mma (rdecay01-V09-05-05) 
+- HistoManager : add protections for histo file management 
+    
+15-01-12 mma (rdecay01-V09-05-04) 
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)
+- HistoManager and HistoMessenger : coding conventions
+       
+13-01-12 mma (rdecay01-V09-05-03)
+- Functions Normalize() and saveAscii() re-activated  
+- RunAction.cc : normalize histos 1 to 5
+     
+10-01-12 mma (rdecay01-V09-05-02)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- Functions Normalize() and saveAscii() temporarily empty  
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+  
+02-01-12 mma (rdecay01-V09-05-01)
+- PhysicsList : use G4PhysicsHelper
+- RunAction : cosmetic in Activity calculation
+- fullChain.mac : example of command /grdm/nuleusLimits
+- new macro electronicCapture.mac
+
+19-12-11 V.Ivanchenko (rdecay01-V09-05-00)
+- RunAction : added protections against division by zero
+- PhysicsList : added atomic deexcitation
      
 08-11-11 mma (rdecay01-V09-04-06)
 - modify SteppingVerbose for OutOfWorld

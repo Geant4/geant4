@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.9 2009-03-06 18:04:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,20 +49,20 @@ class PhysicsListMessenger: public G4UImessenger
 public:
   
   PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
+ ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   
-  PhysicsList* pPhysicsList;
+  PhysicsList*               fPhysicsList;
     
-  G4UIdirectory*             physDir;    
-  G4UIcmdWithAString*        pListCmd;    
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;        
+  G4UIdirectory*             fPhysDir;    
+  G4UIcmdWithAString*        fListCmd;    
+  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* fAllCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

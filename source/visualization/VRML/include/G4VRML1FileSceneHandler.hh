@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.19 2010-05-30 10:14:39 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -109,7 +108,7 @@ private:
 
 	void SendMaterialNode( const G4VisAttributes*  pAV ); // NEW NEW NEW
 	void SendMaterialNode();
-	void SendMatrixTransformNode(const G4Transform3D *);
+	void SendMatrixTransformNode(const G4Transform3D &);
 	void SendCubeNode(G4double, G4double, G4double);
 	void SendCylinderNode(G4double, G4double);
 	void SendSphereNode(G4double);

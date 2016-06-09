@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh,v 1.10 2006-06-29 18:21:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4ClassicalRK4

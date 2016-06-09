@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.16 2010-09-06 09:13:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -151,7 +150,7 @@ G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 
 
 
-void G4IStore::Error(const G4String &m) const
+void G4IStore::Error(const G4String &msg) const
 {
-  G4Exception("G4IStore::Error()", "GeomBias0002", FatalException, m);
+  G4Exception("G4IStore::Error()", "GeomBias0002", FatalException, msg);
 }

@@ -45,6 +45,7 @@
 // the line of code and recompiling
 
 #include "LocalINCLIonIonInelasticPhysic.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -60,7 +61,7 @@
 #include "G4LETritonInelastic.hh"
 #include "G4LEAlphaInelastic.hh"
 #include "G4BinaryLightIonReaction.hh"
-#include "G4InclAblaLightIonInterface.hh"
+#include "G4INCLXXInterface.hh"
 #include "G4QMDReaction.hh"
 #include "G4WilsonAbrasionModel.hh"
 #include "G4IonInelasticProcess.hh"
@@ -101,7 +102,7 @@ void LocalINCLIonIonInelasticPhysic::ConstructProcess()
   WilsonModel -> SetMinEnergy(0*MeV);
   WilsonModel -> SetMaxEnergy(10 *GeV);
 
-  //  G4InclAblaLightIonInterface* INCLIonModel = new G4InclAblaLightIonInterface();
+  //  G4INCLXXInterface* INCLIonModel = new G4INCLXXInterface();
 
   G4TripathiCrossSection* TripatiCrossSections = new G4TripathiCrossSection;
   G4TripathiCrossSection* TripatiLightCrossSections = new G4TripathiCrossSection;

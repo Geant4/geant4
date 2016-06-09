@@ -24,17 +24,16 @@
 // ********************************************************************
 //
 // 20110922  M. Kelsey -- Created to hold implementation of stream operator<<.
+// 20121009  M. Kelsey -- Reduce output to single line, with no EOL.
 
 #include "G4ExitonConfiguration.hh"
 #include "G4ios.hh"
 
 
 std::ostream& operator<<(std::ostream& os, const G4ExitonConfiguration& ex) {
-  os << " Exiton configuration " << G4endl
-     << " proton particles " << ex.protonQuasiParticles << " holes " 
-     << ex.protonHoles << G4endl
-     << " neutron particles " << ex.neutronQuasiParticles << " holes " 
-     << ex.neutronHoles << G4endl;
+  os << " Exitons: protons " << ex.protonQuasiParticles << " holes " 
+     << ex.protonHoles << "; neutrons " << ex.neutronQuasiParticles
+     << " holes " << ex.neutronHoles;
 
   return os;
 }

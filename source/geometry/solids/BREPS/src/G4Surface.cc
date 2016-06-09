@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.20 2010-09-06 16:02:12 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -85,9 +84,9 @@ G4Surface::operator=( const G4Surface& c )
 }
 
 
-G4int G4Surface::operator==( const G4Surface& s )
+G4int G4Surface::operator==( const G4Surface& surf )
 {
-  return origin == s.origin;
+  return origin == surf.origin;
 }
 
 G4String G4Surface::GetEntityType() const
@@ -221,9 +220,9 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
     {
       G4CompositeCurve* cc= (G4CompositeCurve*)c;
       const G4CurveVector& segments= cc->GetSegments();
-      for (size_t i=0; i<segments.size(); i++) 
+      for (size_t j=0; j<segments.size(); j++) 
       {
-	G4Curve* ccc= segments[i];
+	G4Curve* ccc= segments[j];
 	tmpDistance= (G4Point3D(Pt.x(), Pt.y(), Pt.z())-ccc->GetEnd()).mag2();
 	if (pointDistance > tmpDistance) 
 	{

@@ -1,0 +1,119 @@
+$Id: History,v 1.19 2010-11-08 10:38:44 maire Exp $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example AnaEx03 History file
+                    ----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+13-11-12 I. Hrivnacova (AnaEx03-V09-05-05)   
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+
+03-09-12 I. Hrivnacova (AnaEx03-V09-05-04)   
+- New tag to be synchronized with the update in tests/ctest;
+  no changes in the example itself   
+
+31-08-12 I. Hrivnacova (AnaEx03-V09-05-03)      
+- Updated CMakeLists.tx:
+  adding install target, minor fixes
+- Added .README
+- UseOpenScientist.txt, InstallAida.txt moved in A01 
+  (as README.AIDA, README.OpenScientist)
+
+21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-02)   
+- Updated CMakeLists.txt to get FindAIDA.cmake module found 
+  by CMake automatically
+     
+21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-01)   
+- Added AIDA support in CMake build
+
+15 June 2012 Gabriele Cosmo (AnaEx03-V09-05-00)     
+- Fixed compilation warnings in case analysis is not used...
+
+16 April 2012 Ivana Hrivnacova
+- Restored AnaEx01 example with AIDA under new name AnaEx03.
+
+07 June 2011 mma (AnaEx01-V09-04-01)     
+- PhysicsList migrated to new scheme G4PhysListHelper
+     
+03 February 2011 mma (AnaEx01-V09-04-00)
+- delete subdirectory analysis
+     
+08 November 2010 Michel Maire (AnaEx01-V09-03-00)
+- revised version of example :
+  class HistoManager to replace AnaEx01AnalysisManager
+
+13 May 2009 Guy Barrand (AnaEx01-V09-02-00)
+- Tagged all changes.
+
+13 May 2009 Guy Barrand
+- update the README.
+- remove the content of the analysis/[Falsetto,jas,Lab] directories.
+  In fact the analysis directory should not be distributed anymore.
+- have a run.mac in the main example directory.
+- AnaEx01AnalysisManager : arrange to have histo and tuple name
+  as interger in case of hbook file format. 
+
+5 March 2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since
+  it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
+16th August 2006  Gabriele Cosmo (AnaEx01-V08-01-00)
+- Corrected text in README for AIDA setup.
+
+6th December 2005  Gabriele Cosmo
+- Trivial change in main() for support of CLHEP-2.0.X series.
+
+15th November 2005  Guy Barrand (AnaEx01-V07-01-01)
+- Tagged all changes.
+
+25th October 2005  Guy Barrand
+- Have .aida as a default file format.
+
+24th October 2005  Guy Barrand
+- Put AIDA_createAnalysisFactory() in the main in order
+  to be able to instrumenet easily this example with G4Lab::UIOnX.
+
+31th August 2005  Guy Barrand
+- Update README, analyis/Lab/AnaEx01.py to work with OpenScientist-v14r0.
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+3rd December 2003  Gabriele Cosmo (AnaEx01-V05-02-01)
+- Fixed minor compilation warnings and added 'aida-config' in
+  GNUmakefile, activated through G4ANALYSIS_USE.
+
+17th October 2003  Guy Barrand
+- AnaEx01VisManager: removed OPACS driver.
+
+20th June 2003  Guy Barrand (AnaEx01-V05-02-00)
+- * : AIDA-3.0 compliant. Usage of AIDA namespace, etc...
+
+03th December 2001  Guy Barrand (AnaEx01-V03-02-01)
+- Change README : Explain CMTSITE setup for Lab usage.
+
+19th November 2001  Guy Barrand
+- Change README : G4ANALYSIS_USE_AIDA -> G4ANALYSIS_USE.
+
+16rd November 2001  Guy Barrand
+- * : AIDA 2.2 compliant code. Usage of tuple.
+
+20 June 2001, Guy Barrand :
+- AnaEx01SteppingVerbose.cc : replace "entries" to "size" in order
+  to compile with 03-00-ref-03 kernel.
+
+14 September 2000, Guy Barrand :
+- Birth.

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: DicomPhysicsList.hh,v 1.7 2009-10-26 11:21:01 chauvie Exp $
-// -------------------------------------------------------------------
+/// \file medical/DICOM/include/DicomPhysicsList.hh
+/// \brief Definition of the DicomPhysicsList class
+//
+// $Id$
 
 #ifndef DicomPhysicsList_h
 #define DicomPhysicsList_h 1
@@ -42,9 +43,9 @@ public:
 
 private:
   
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
   
 protected:
   

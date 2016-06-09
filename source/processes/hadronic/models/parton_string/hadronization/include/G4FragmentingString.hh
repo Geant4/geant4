@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh,v 1.5 2010-09-20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4FragmentingString_h
@@ -62,6 +61,7 @@ class G4FragmentingString
 			  
       ~G4FragmentingString();
 
+      G4FragmentingString& operator=(const G4FragmentingString &);
       int operator==(const G4FragmentingString &right) const;
 
       int operator!=(const G4FragmentingString &right) const;

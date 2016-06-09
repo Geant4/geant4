@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.cc,v 1.5 2008-06-23 08:58:26 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -44,9 +43,9 @@ G4ProcessVector::G4ProcessVector()
   pProcVector = new G4ProcVector();
 }
 
-G4ProcessVector::G4ProcessVector(size_t s)
+G4ProcessVector::G4ProcessVector(size_t siz)
 {
-  pProcVector = new G4ProcVector(s);
+  pProcVector = new G4ProcVector(siz);
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)

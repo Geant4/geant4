@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.3 2007-10-29 12:36:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,55 +61,55 @@ class RunAction : public G4UserRunAction
     
     void SurveyConvergence(G4int);
     
-    void sumEsecond(G4double e)    { Esecondary += e; Esecondary2 += e*e;
-                                     nbSec++;};
+    void sumEsecond(G4double e)    { fEsecondary += e; fEsecondary2 += e*e;
+                                     fNbSec++;};
     
-    void FlowInCavity(G4int k, G4double e) { EnerFlowCavity[k] += e;  
-                                             PartFlowCavity[k]++;};
-				                
-    void AddEdepCavity(G4double de) { EdepCavity += de; EdepCavity2 += de*de;
-                                      nbEventCavity++;};
-    void AddTrakCavity(G4double dt) { trkSegmCavity += dt;};
+    void FlowInCavity(G4int k, G4double e) { fEnerFlowCavity[k] += e;  
+                                             fPartFlowCavity[k]++;};
+                                                
+    void AddEdepCavity(G4double de) { fEdepCavity += de; fEdepCavity2 += de*de;
+                                      fNbEventCavity++;};
+    void AddTrakCavity(G4double dt) { fTrkSegmCavity += dt;};
         
-    void StepInWall   (G4double s)  { stepWall += s; stepWall2 += s*s; 
-                                      nbStepWall++;};
-    void StepInCavity (G4double s)  { stepCavity += s; stepCavity2 += s*s; 
-                                      nbStepCavity++;};				      
+    void StepInWall   (G4double s)  { fStepWall += s; fStepWall2 += s*s; 
+                                      fNbStepWall++;};
+    void StepInCavity (G4double s)  { fStepCavity += s; fStepCavity2 += s*s; 
+                                      fNbStepCavity++;};                                      
     
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* kinematic;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fKinematic;
+    ProcessesCount*         fProcCounter;
+    HistoManager*           fHistoManager;
     
-    G4double                Esecondary, Esecondary2;
-    G4long                  nbSec;
+    G4double                fEsecondary, fEsecondary2;
+    G4long                  fNbSec;
     
-    G4long                  PartFlowCavity[2];
-    G4double                EnerFlowCavity[2];        
-    G4double                EdepCavity, EdepCavity2;
-    G4double                trkSegmCavity;
-    G4long                  nbEventCavity;    
+    G4long                  fPartFlowCavity[2];
+    G4double                fEnerFlowCavity[2];        
+    G4double                fEdepCavity, fEdepCavity2;
+    G4double                fTrkSegmCavity;
+    G4long                  fNbEventCavity;    
     
-    G4double                oldEmean, oldDose;
+    G4double                fOldEmean, fOldDose;
         
-    G4double                stepWall,   stepWall2;
-    G4double                stepCavity, stepCavity2;    
-    G4long                  nbStepWall, nbStepCavity;
+    G4double                fStepWall,   fStepWall2;
+    G4double                fStepCavity, fStepCavity2;    
+    G4long                  fNbStepWall, fNbStepCavity;
     
   private:
-    G4double                wallThickness;
-    G4double                wallRadius;
-    G4Material*             mateWall;
-    G4double                densityWall;
+    G4double                fWallThickness;
+    G4double                fWallRadius;
+    G4Material*             fMateWall;
+    G4double                fDensityWall;
 
-    G4double                cavityThickness;
-    G4double                cavityRadius;
-    G4double                surfaceCavity;
-    G4double                volumeCavity;   		     
-    G4Material*             mateCavity;
-    G4double                densityCavity;
-    G4double                massCavity;  
+    G4double                fCavityThickness;
+    G4double                fCavityRadius;
+    G4double                fSurfaceCavity;
+    G4double                fVolumeCavity;                        
+    G4Material*             fMateCavity;
+    G4double                fDensityCavity;
+    G4double                fMassCavity;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

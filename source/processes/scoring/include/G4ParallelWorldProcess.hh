@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.hh,v 1.4 2007/05/30 17:47:10 ahoward Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -59,6 +59,7 @@ class G4ParticleChange;
 #include "G4VProcess.hh"
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"
+#include "G4MultiNavigator.hh"
 
 //------------------------------------------
 //
@@ -164,6 +165,18 @@ private:
   // Flag for material switching
   //-----------------------------------------------------------------------
   G4bool layeredMaterialFlag;
+
+  //-----------------------------------------------------------------------
+  // Static G4Step object for "Hyper-step"
+  //-----------------------------------------------------------------------
+public:
+  static const G4Step* GetHyperStep();
+  static G4int GetHypNavigatorID();
+private:
+  static G4Step* fpHyperStep;
+  static G4int nParallelWorlds;
+  static G4int fNavIDHyp;
+  G4int iParallelWorld;
 };
 
 #endif

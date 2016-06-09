@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.28 2010-11-10 16:20:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class description:
 // G4ElectroNuclearReaction = eA interface to use CHIPS in the G4Hadronic frame
@@ -36,6 +35,9 @@
 
 #ifndef G4ElectroNuclearReaction_h
 #define G4ElectroNuclearReaction_h 1
+
+#include <iostream>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
 #include "G4HadronicInteraction.hh"
@@ -54,7 +56,6 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4ExcitedStringDecay.hh"
-#include <iostream>
 
 
 class G4ElectroNuclearReaction : public G4HadronicInteraction
@@ -62,8 +63,8 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
 public: 
   G4ElectroNuclearReaction():G4HadronicInteraction("CHIPSElectroNuclear")
   {
-    SetMinEnergy(0*GeV);
-    SetMaxEnergy(30*TeV);
+    SetMinEnergy(0*CLHEP::GeV);
+    SetMaxEnergy(100*CLHEP::TeV);
       
     theHEModel = new G4TheoFSGenerator;
     theCascade = new G4GeneratorPrecompoundInterface;
@@ -71,8 +72,8 @@ public:
     theHEModel->SetHighEnergyGenerator(&theStringModel);
     theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
     theStringModel.SetFragmentationModel(theStringDecay);
-    theHEModel->SetMinEnergy(2.5*GeV);
-    theHEModel->SetMaxEnergy(100*TeV);
+    theHEModel->SetMinEnergy(2.5*CLHEP::GeV);
+    theHEModel->SetMaxEnergy(100*CLHEP::TeV);
     theElectronData = new G4ElectroNuclearCrossSection;
     thePhotonData = new G4PhotoNuclearCrossSection;
     Description();
@@ -208,7 +209,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   }
   G4DynamicParticle* theDynamicPhoton = new 
                      G4DynamicParticle(G4Gamma::GammaDefinition(), 
-                     G4ParticleMomentum(1.,0.,0.), photonEnergy*MeV);         //----->-*
+                     G4ParticleMomentum(1.,0.,0.), photonEnergy*CLHEP::MeV);         //----->-*
   G4double sigNu=thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
   theDynamicPhoton->SetKineticEnergy(W);  // Redefine photon with equivalent energy    |
   G4double sigK =thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
@@ -238,7 +239,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   G4ThreeVector ortx = ort.unit();       // First unit vector orthogonal to the direction
   G4ThreeVector orty = dir.cross(ortx);  // Second unit vector orthoganal to the direction
   G4double sint=std::sqrt(1.-cost*cost);      // Perpendicular component
-  G4double phi=twopi*G4UniformRand();      // phi of scattered electron
+  G4double phi=CLHEP::twopi*G4UniformRand();      // phi of scattered electron
   G4double sinx=sint*std::sin(phi);           // x-component
   G4double siny=sint*std::cos(phi);           // y-component
   G4ThreeVector findir=cost*dir+sinx*ortx+siny*orty;
@@ -250,7 +251,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   G4ThreeVector position(0,0,0);
   G4HadProjectile localTrack(localGamma);
   G4HadFinalState * result;
-  if (photonEnergy < 3*GeV)
+  if (photonEnergy < 3*CLHEP::GeV)
     result = theLEModel.ApplyYourself(localTrack, aTargetNucleus, &theResult);
   else {
     // G4cout << "0) Getting a high energy electro-nuclear reaction"<<G4endl;

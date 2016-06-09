@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,7 +52,7 @@ namespace G4INCL {
     ~ClusteringModelNone() {}
 
     virtual Cluster* getCluster(Nucleus*, Particle*) { return 0; }
-    virtual G4bool clusterCanEscape(Cluster const * const) { return false; }
+    virtual G4bool clusterCanEscape(Nucleus const * const, Cluster const * const) { return false; }
 
   };
 

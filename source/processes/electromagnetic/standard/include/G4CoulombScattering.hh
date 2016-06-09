@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.15 2010-10-25 19:13:23 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +69,9 @@ public:
 protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*);
 
 private:
 

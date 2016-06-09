@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLRecombinationChannel.cc
  * \brief Delta-nucleon recombination channel.
  *
- *  Created on: 25 March 2011
- *      Author: Davide Mancusi
+ *  \date 25 March 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLRecombinationChannel.hh"
@@ -58,11 +58,11 @@ namespace G4INCL {
     :theNucleus(n)
   {
     if(p1->isDelta()) {
-      // assert(p2->isNucleon());
+// assert(p2->isNucleon());
       theDelta = p1;
       theNucleon = p2;
     } else {
-      // assert(p1->isNucleon());
+// assert(p1->isNucleon());
       theDelta = p2;
       theNucleon = p1;
     }
@@ -80,7 +80,7 @@ namespace G4INCL {
     // Assign the types of the final-state particles
     switch(theDelta->getType()) {
       case DeltaPlusPlus:
-        // assert(theNucleon->getType()!=Proton);
+// assert(theNucleon->getType()!=Proton);
         theDelta->setType(Proton);
         theNucleon->setType(Proton);
         break;
@@ -91,7 +91,7 @@ namespace G4INCL {
         theDelta->setType(Neutron);
         break;
       case DeltaMinus:
-        // assert(theNucleon->getType()!=Neutron);
+// assert(theNucleon->getType()!=Neutron);
         theDelta->setType(Neutron);
         theNucleon->setType(Neutron);
         break;

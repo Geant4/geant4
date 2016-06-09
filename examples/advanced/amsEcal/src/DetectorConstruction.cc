@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.12 2010-05-22 21:36:46 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +31,8 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4Box.hh"

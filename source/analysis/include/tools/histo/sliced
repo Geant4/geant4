@@ -56,6 +56,10 @@ inline h2d* slice_xy(const h3d& a_from,
   return slice;
 }
 
+inline h2d* projection_xy(const h3d& a_from,const std::string& a_title) {
+  return slice_xy(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
 inline h2d* slice_yz(const h3d& a_from,
                              int aIbeg,int aIend,
                              const std::string& a_title) {
@@ -70,6 +74,10 @@ inline h2d* slice_yz(const h3d& a_from,
   return slice;
 }
 
+inline h2d* projection_yz(const h3d& a_from,const std::string& a_title) {
+  return slice_yz(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
 inline h2d* slice_xz(const h3d& a_from,
                              int aJbeg,int aJend,
                              const std::string& a_title) {
@@ -82,6 +90,10 @@ inline h2d* slice_xz(const h3d& a_from,
                                               a_from.axis_z().upper_edge());
   if(!fill_slice_xz(a_from,aJbeg,aJend,*slice)) {delete slice;return 0;}
   return slice;
+}
+
+inline h2d* projection_xz(const h3d& a_from,const std::string& a_title) {
+  return slice_xz(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
 }
 
 }}

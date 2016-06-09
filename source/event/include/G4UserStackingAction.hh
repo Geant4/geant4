@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStackingAction.hh,v 1.6 2006-06-29 18:09:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UserStackingAction_h

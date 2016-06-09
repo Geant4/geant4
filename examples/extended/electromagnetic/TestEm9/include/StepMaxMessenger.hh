@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.hh,v 1.3 2006-06-29 17:02:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm9/include/StepMaxMessenger.hh
+/// \brief Definition of the StepMaxMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,14 +45,15 @@ class G4UIcmdWithADoubleAndUnit;
 class StepMaxMessenger: public G4UImessenger
 {
 public:
+
   StepMaxMessenger(StepMax*);
-  ~StepMaxMessenger();
+  virtual ~StepMaxMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  StepMax* stepMax;
-  G4UIcmdWithADoubleAndUnit* StepMaxCmd;
+  StepMax* fStepMax;
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

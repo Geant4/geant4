@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EMPhysics.hh,v 1.7 2009-11-21 01:00:19 perl Exp $
+/// \file analysis/A01/include/A01EMPhysics.hh
+/// \brief Definition of the A01EMPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi
@@ -51,7 +54,6 @@ class A01EMPhysics : public G4VPhysicsConstructor
     A01EMPhysics(const G4String& name ="EM");
     virtual ~A01EMPhysics();
 
-  public:
     // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
     virtual void ConstructParticle(){;};
@@ -60,10 +62,6 @@ class A01EMPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
-  protected:
-
 };
-
 
 #endif

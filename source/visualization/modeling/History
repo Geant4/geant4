@@ -20,6 +20,141 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+24th October 2012  John Allison  (modeling-V09-05-22)
+- G4ModelingParameters:
+  o Added fVisAttributesModifiers to operator<< and operator!=.
+  o Added static functions VAMSNotEqual and PVNameCopyNoPathNotEqual to
+    facilitate the above.
+- G4PhysicalVolumeModel:
+  o Allowed default constructor.  fpTopPV defaults to 0, checked with
+    G4Exception(…FatalException…) in DescribeYourselfTo.  This allows
+    one to instantiate a dummy so that one can print AttDefs, for example.
+
+11th October 2012  John Allison  (modeling-V09-05-21)
+- G4PhysicalVolumeModel and G4ModelingParameters:
+  o Tidying. 
+
+9th October 2012  John Allison  (modeling-V09-05-20)
+- G4PhysicalVolumeModel and G4ModelingParameters:
+  o Moved code for converting PVPath to the simpler version from
+    G4PhysicalVolumeModel (in modeling-V09-05-19) to a new
+    constructor of G4ModelingParameters::VisAttributesModifier.
+
+9th October 2012  John Allison  (modeling-V09-05-19)
+- G4PhysicalVolumeModel:
+  o Added GetFullPVNameCopyNoPath, which converts fFullPVPath into a
+    simpler (full) path for G4ModelingParameters and G4ViewParameters.
+
+8th October 2012  John Allison  (modeling-V09-05-18)
+- G4PhysicalVolumeModel.cc: Removed debug printing.
+- G4ModelingParameters.cc: Improved operator<< for PVNameCopyNoPath.
+
+8th October 2012  John Allison  (modeling-V09-05-17)
+- G4ModelingParameters:
+  o Further refinement to interface for /vis/touchable/set/...
+  o Added operator<< for PVNameCopyNoPath.
+
+8th October 2012  John Allison  (modeling-V09-05-16)
+- G4ModelingParameters:
+  o Refined interface for /vis/touchable/set/...
+- G4PhysicalVolumeModel:
+  o Added code for /vis/touchable/set/...
+
+7th October 2012  John Allison  (modeling-V09-05-15)
+- G4ModelingParameters:
+  o Added enums and a nested class for communicating a modification to the vis
+    attributes for a specfic touchable defined by PVNameCopyNoPath, to be used
+    by new commands, /vis/touchable/set/...
+
+6th October 2012  John Allison  (modeling-V09-05-14)
+- G4PhysicalVolumeModel:
+  o Added SetBaseFullPVPath.  The base full path is the full path of the top
+    physical volume (actually the full path of the mother of the top physical
+    volume), so that even if a user issues "/vis/drawVolume sub-detector", the
+    full path includes the base full path, i.e., the full path up to the world
+    volume.
+- G4PhysicalVolumeSearchScene:
+  o Added GetFoundFullPVPath.
+ 
+1st October 2012  John Allison  (modeling-V09-05-13)
+- G4PhysicalVolumeModel:: GetAttDefs: Small bug fix.
+- G4TrajectoriesModel:
+  o Added fEventID;
+  o Added GetAttDefs and CreateCurrentAttValues for event ID.
+
+28th September 2012  Gabriele Cosmo  (modeling-V09-05-12)
+- Explicitly include units header in G4ArrowModel.cc.
+
+25th September 2012  John Allison  (modeling-V09-05-11)
+- G4ArrowModel.cc:
+  o Added protection, limited width to length/50.
+
+4th September 2012  John Allison  (modeling-V09-05-10)
+- G4LogicalVolumeModel:
+  o Added G4bool Validate(G4bool){return true;} - i.e., always valid.
+  o Correct spelling of name.
+- G4PhysicalVolumeModel.cc: Minor improvement to a message.
+
+15th July 2012  John Allison  (modeling-V09-05-09)
+- Introduced G4ArrowModel.
+- G4AxesModel: Re-implemented (uses G4ArrowModel).
+
+5th July 2012  Gabriele Cosmo  (modeling-V09-05-08)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+7th June 2012  John Allison  (modeling-V09-05-07)
+- Shadow clean.
+
+31st May 2012  John Allison  (modeling-V09-05-06)
+- G4TrajectoryOriginVolumeFilter.cc:
+  o Brought stray print statement under control of verbosity.
+  o Fixes bug report 1310.
+
+10th April 2012  John Allison  (modeling-V09-05-05)
+- G4CallbackModel: It ws a bad idea to delete function in destructor
+  (see 7th March).  OK to delete, but catastrophe when you try to use
+  it a second time, for example, when model is replaced by same model.
+
+4th April 2012  John Allison  (modeling-V09-05-04)
+- Tagged.
+
+30th March 2012  John Allison
+- G4PhysicalVolumeModel.cc:
+  o If top volume is a replica or a parameterised, only draw first one.
+
+26th March 2012  John Allison
+- G4VModel: Added Get/SetType. The sub-class should set its type,
+  which could be the class name, or, in the case of G4CallBackModel,
+  it could be the type of object it is coding.
+- G4PhysicalVolumeModel: Added GetFullPVPath.
+
+23rd March 2012  John Allison  (modeling-V09-05-03)
+- G4AxesModel: Augmented global description to allow more than one
+  set of axes to be added to scene if significantly different.
+
+7th March 2012  John Allison  (modeling-V09-05-02)
+- G4CallbackModel: Delete function in destructor.  (Good practice
+  to delete all stuff created on the heap.)
+
+3rd January 2012  John Allison  (modeling-V09-05-01)
+- Tagged.
+
+30th December 2011  John Allison
+- G4PhysicalVolumeModel::Validate: Searches also in parallel worlds.
+
+30th December 2011  John Allison  (modeling-V09-05-00)
+- G4TrajectoriesModel::DescribeYourselfTo:
+  o Used Begin/EndDraw to improve drawing speed.
+  o Assumes all trajectories are drawn with the same transformation.
+    If not, a fatal exception with be raised in G4VisManager::DrawT.
+
+12th November 2011  John Allison
+- G4AttributeFilterT<T>::AddInterval and AddValue:
+  o Relaxed exception in case of already existing interval/value.
+  o Changed from Fatal to JustWarning.
+  o In that case, return with no action.
+
 11th November 2011  John Allison  (modeling-V09-04-05)
 - G4VTrajectoryModel.hh: Coverity fix.
 

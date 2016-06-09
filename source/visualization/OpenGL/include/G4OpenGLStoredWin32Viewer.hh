@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.hh,v 1.8 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from

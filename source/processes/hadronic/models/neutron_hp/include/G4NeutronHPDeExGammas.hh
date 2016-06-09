@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1
 
+#include <fstream>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
 #include "G4ReactionProductVector.hh"
 #include "G4Gamma.hh"
 #include "G4NeutronHPLevel.hh"
@@ -76,7 +77,7 @@ class G4NeutronHPDeExGammas
       delete theResult->operator[](i);
       G4double costheta = 2.*G4UniformRand()-1;
       G4double theta = std::acos(costheta);
-      G4double phi = twopi*G4UniformRand();
+      G4double phi = CLHEP::twopi*G4UniformRand();
       G4double sinth = std::sin(theta);
       G4double en = theCurrent->GetTotalMomentum();
       G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costheta );

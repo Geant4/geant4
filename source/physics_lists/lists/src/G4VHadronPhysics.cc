@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronPhysics.cc,v 1.3 2009-11-25 19:33:18 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -38,6 +37,7 @@
 //
 
 #include "G4VHadronPhysics.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4HadronicProcessType.hh"
@@ -238,7 +238,7 @@ G4VHadronPhysics::FindInelasticProcess(const G4ParticleDefinition* p)
     }
   }
   G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(p);
-  had = new G4HadronInelasticProcess("hInelastic",part);
+  had = new G4HadronInelasticProcess(part->GetParticleName()+"Inelastic",part);
   pmanager->AddDiscreteProcess(had);
   return had;
 }

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC_HP.hh,v 1.1 2006-11-24 16:31:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,8 +39,10 @@
 #ifndef TQGSP_BIC_HP_h
 #define TQGSP_BIC_HP_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>

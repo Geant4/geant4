@@ -45,6 +45,7 @@
 //#define debugs
 
 #include "G4QPionMinusNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QPionMinusNuclearCrossSection::lastLEN=0; // Pointer to lastArray of LowEn CS
@@ -80,7 +81,7 @@ G4QPionMinusNuclearCrossSection::~G4QPionMinusNuclearCrossSection()
 G4double G4QPionMinusNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                        G4int tgZ, G4int tgN, G4int PDG)
 {
-  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
+  //A.R.23-Oct-2012 Shadowed variable  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
@@ -266,9 +267,9 @@ G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-     for(G4int m=0; m<nL; m++)
+     for(G4int n=0; n<nL; n++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[n] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -370,8 +371,8 @@ G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
     G4double p2=P*P;
     G4double d=lP-2.7;
     G4double f=lP+1.25;
-    G4double g=lP-.017;
-    sigma=(.55*d*d+38.+23./std::sqrt(P))/(1.+.3/p2/p2)+18./(f*f+.1089)+.02/(g*g+.0025);
+    G4double g_value=lP-.017;
+    sigma=(.55*d*d+38.+23./std::sqrt(P))/(1.+.3/p2/p2)+18./(f*f+.1089)+.02/(g_value*g_value+.0025);
   }
   else if(tZ<97 && tN<152)                // General solution
   {
@@ -385,12 +386,12 @@ G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
     G4double a2=a*a;
     G4double c=41.*std::exp(al*.68)*(1.+44./a2)/(1.+8./a)/(1.+200./a2/a2);
     G4double f=120*sa/(1.+24./a/ssa);
-    G4double g=-1.32-al*.043;
-    G4double u=lP-g;
+    G4double g_value=-1.32-al*.043;
+    G4double u=lP-g_value;
     G4double h=al*(.388-.046*al);
     sigma=(c+d*d)/(1.+.17/p4)+f/(u*u+h*h);
 #ifdef pdebug
-    G4cout<<"G4QPiMinusNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g
+    G4cout<<"G4QPiMinusNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g_value
           <<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/include/B02DetectorConstruction.hh
+/// \brief Definition of the B02DetectorConstruction class
 //
-// $Id: B02DetectorConstruction.hh,v 1.6 2007-06-22 13:38:55 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef B02DetectorConstruction_hh

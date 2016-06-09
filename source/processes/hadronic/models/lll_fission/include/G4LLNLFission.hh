@@ -52,7 +52,7 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4LLNLFission.hh,v 1.2 2007-05-30 00:43:20 dennis Exp $
+// $Id$
 //
 
 //

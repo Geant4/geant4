@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBuilder.cc,v 1.3 2009-12-29 17:54:25 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -46,42 +45,45 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4BinaryCascade.hh"
 #include "G4PreCompoundModel.hh"
-
+#include "G4ExcitationHandler.hh"
 
 G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p) 
   : G4VHadronModelBuilder(aName), 
-    theStringModel(0), theStringDecay(0), thePreCompound(p)
+    fStringModel(0), fStringDecay(0),
+    fPreCompound(p),fPrecoInterface(0),fLund(0)
 {}
 
 G4FTFBuilder::~G4FTFBuilder() 
 {
-  delete theStringDecay;
+  delete fStringDecay;
+  //delete fPrecoInterface;
+  delete fLund;
 }                                     
 
 G4HadronicInteraction* G4FTFBuilder::BuildModel()
 {
   G4TheoFSGenerator* theFTFModel = new G4TheoFSGenerator(GetName());
-  theStringModel  = new G4FTFModel();
-  theStringDecay  = new G4ExcitedStringDecay(new G4LundStringFragmentation());
-  theStringModel->SetFragmentationModel(theStringDecay);
-  theFTFModel->SetHighEnergyGenerator(theStringModel);
+  fStringModel  = new G4FTFModel();
+  fLund = new G4LundStringFragmentation();
+  fStringDecay  = new G4ExcitedStringDecay(fLund);
+  fStringModel->SetFragmentationModel(fStringDecay);
+  theFTFModel->SetHighEnergyGenerator(fStringModel);
 
-  if(!thePreCompound) {
-    thePreCompound = new G4PreCompoundModel(new G4ExcitationHandler());
+  if(!fPreCompound) {
+    //G4ExcitationHandler* handler = new G4ExcitationHandler();
+    fPreCompound = new G4PreCompoundModel();
   }
 
   if(GetName() == "FTFC") {
     theFTFModel->SetTransport(new G4QStringChipsParticleLevelInterface());
 
   } else if(GetName() == "FTFB") {
-    G4BinaryCascade* bic = new G4BinaryCascade();
-    bic->SetDeExcitation(thePreCompound);
+    G4BinaryCascade* bic = new G4BinaryCascade(fPreCompound);
     theFTFModel->SetTransport(bic);
 
   } else {
-    G4GeneratorPrecompoundInterface* pint = new G4GeneratorPrecompoundInterface();
-    pint->SetDeExcitation(thePreCompound);
-    theFTFModel->SetTransport(pint);
+    fPrecoInterface = new G4GeneratorPrecompoundInterface(fPreCompound);
+    theFTFModel->SetTransport(fPrecoInterface);
   }
 
   return theFTFModel;

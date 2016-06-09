@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/PrimaryGeneratorAction2.hh
+/// \brief Definition of the PrimaryGeneratorAction2 class
 //
-// $Id: PrimaryGeneratorAction2.hh,v 1.3 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -58,12 +60,12 @@ class PrimaryGeneratorAction2
   private:    
     G4ParticleGun*         particleGun;
  
-    G4int                  nPoints;	//tabulated function
+    G4int                  nPoints;     //tabulated function
     std::vector<G4double>  x;
-    std::vector<G4double>  f;		//f(x)
-    std::vector<G4double>  a;		//slopes
-    std::vector<G4double>  Fc;		//cumulative of f
-    G4double               fMax;	//max(f)
+    std::vector<G4double>  f;           //f(x)
+    std::vector<G4double>  a;           //slopes
+    std::vector<G4double>  Fc;          //cumulative of f
+    G4double               fMax;        //max(f)
 
   private:
     void InitFunction();                        

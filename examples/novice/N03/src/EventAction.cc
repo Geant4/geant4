@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -87,7 +86,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   //
   G4int evtNb = evt->GetEventID();
   if (evtNb%printModulo == 0) {
-    G4cout << "---> End of event: " << evtNb << G4endl;	
+    G4cout << "---> End of event: " << evtNb << G4endl;        
 
     G4cout
        << "   Absorber: total energy: " << std::setw(7)
@@ -100,7 +99,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
        << "       total track length: " << std::setw(7)
                                         << G4BestUnit(TrackLGap,"Length")
        << G4endl;
-	  
+          
   }
 }  
 

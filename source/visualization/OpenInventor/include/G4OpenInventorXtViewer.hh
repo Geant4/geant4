@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.15 2009-09-18 12:48:43 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -55,10 +54,9 @@ public:
   void Initialise();
 
   virtual ~G4OpenInventorXtViewer();
-private:
+protected:
   Widget AddMenu(Widget,const G4String&,const G4String&);
   void AddButton(Widget,const G4String&,XtCallbackProc);
-private:
   static void PostScriptCbk(Widget,XtPointer,XtPointer);
   static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
   static void WriteInventorCbk(Widget,XtPointer,XtPointer);
@@ -75,7 +73,6 @@ private:
   static void HelpCancelCbk(Widget,XtPointer,XtPointer);
   static void SetPreviewCbk(Widget,XtPointer,XtPointer);
   static void SetPreviewAndFullCbk(Widget,XtPointer,XtPointer);
-private:
   Widget fShell;
   SoXtExaminerViewer* fViewer;
   Widget fHelpForm;

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomPhantomZSliceHeader.cc
+/// \brief Implementation of the DicomPhantomZSliceHeader class
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -32,7 +34,7 @@
 
 #include "DicomPhantomZSliceHeader.hh"
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& rhs )
 {
   fNoVoxelX = rhs.GetNoVoxelX();
@@ -48,7 +50,7 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( const DicomPhantomZSliceHead
 
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
 {
   //----- Read material indices and names
@@ -85,13 +87,13 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
   fin >> fMinZ >> fMaxZ;
 #ifdef G4VERBOSE
   G4cout << " Extension in X " << fMinX << " " << fMaxX << G4endl 
-	 << " Extension in Y " << fMinY << " " << fMaxY << G4endl 
-	 << " Extension in Z " << fMinZ << " " << fMaxZ << G4endl; 
+         << " Extension in Y " << fMinY << " " << fMaxY << G4endl 
+         << " Extension in Z " << fMinZ << " " << fMaxZ << G4endl; 
 #endif
 
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool DicomPhantomZSliceHeader::CheckMaterialExists( const G4String& mateName )
 {
   G4bool bFound = FALSE;
@@ -109,35 +111,34 @@ G4bool DicomPhantomZSliceHeader::CheckMaterialExists( const G4String& mateName )
 
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomPhantomZSliceHeader::operator+=( const DicomPhantomZSliceHeader& rhs )
 {
   *this = *this + rhs;
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( const DicomPhantomZSliceHeader& rhs )
 {
   //----- Check that both slices has the same dimensions
   if( fNoVoxelX != rhs.GetNoVoxelX() 
       || fNoVoxelY != rhs.GetNoVoxelY() ) {
     G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different number of voxels: " 
-	   << "  X= " << fNoVoxelX << " =? " << rhs.GetNoVoxelX() 
-	   << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()  
-	   << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ() 
-	   << G4endl;
+           << "  X= " << fNoVoxelX << " =? " << rhs.GetNoVoxelX() 
+           << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()  
+           << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ() 
+           << G4endl;
     G4Exception("DicomPhantomZSliceHeader::DicomPhantomZSliceHeader","",FatalErrorInArgument,"");
   }
   //----- Check that both slices has the same extensions
   if( fMinX != rhs.GetMinX() || fMaxX != rhs.GetMaxX() 
       || fMinY != rhs.GetMinY() || fMaxY != rhs.GetMaxY() ) {
     G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different extensions: " 
-	   << "  Xmin= " << fMinX << " =? " << rhs.GetMinX() 
-	   << "  Xmax= " << fMaxX << " =? " << rhs.GetMaxX() 
-	   << "  Ymin= " << fMinY << " =? " << rhs.GetMinY() 
-	   << "  Ymax= " << fMaxY << " =? " << rhs.GetMaxY() 
-	   << G4endl;
+           << "  Xmin= " << fMinX << " =? " << rhs.GetMinX() 
+           << "  Xmax= " << fMaxX << " =? " << rhs.GetMaxX() 
+           << "  Ymin= " << fMinY << " =? " << rhs.GetMinY() 
+           << "  Ymax= " << fMaxY << " =? " << rhs.GetMaxY() 
+           << G4endl;
     G4Exception("DicomPhantomZSliceHeader::operator+","",FatalErrorInArgument,"");
   }
   
@@ -158,9 +159,9 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( const DicomPhantom
   if( std::fabs( fMinZ - rhs.GetMaxZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() && 
       std::fabs( fMaxZ - rhs.GetMinZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() ){
     G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Slices are not contiguous in Z "
-	   << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ() 
-	   << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ() 
-	   << G4endl;
+           << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ() 
+           << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ() 
+           << G4endl;
     G4Exception("DicomPhantomZSliceHeader::operator+","",FatalErrorInArgument,"");
   }
 

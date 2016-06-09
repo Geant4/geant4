@@ -38,6 +38,8 @@
 #include "G4DecayTable.hh"
 #include "G4MuonDecayChannelWithSpin.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Vector3D.hh"
 
 #include "G4TransportationManager.hh"

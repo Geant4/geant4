@@ -18,6 +18,7 @@ namespace histo {
 template <class TC,class TN,class TW,class TH,class TV>
 class p1 : public b1<TC,TN,TW,TH> {
   typedef b1<TC,TN,TW,TH> parent;
+public:
   typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
 protected:
   virtual TH get_bin_height(int a_offset) const {
@@ -47,10 +48,10 @@ public:
     if(sw==0) return 0;
     TV svw = m_bin_Svw[offset];    //ROOT cont
     TV sv2w = m_bin_Sv2w[offset];  //ROOT err2
-    TV mean = (svw / sw);        //ROOT contsum
-    TV rms = ::sqrt(::fabs((sv2w/sw) - mean * mean)); //ROOT eprim
+    TV _mean = (svw / sw);        //ROOT contsum
+    TV _rms = ::sqrt(::fabs((sv2w/sw) - _mean * _mean)); //ROOT eprim
     // rms = get_bin_rms_value.
-    return rms/::sqrt(sw); //ROOT kERRORMEAN mode returned value
+    return _rms/::sqrt(sw); //ROOT kERRORMEAN mode returned value
   }
 
 public:
@@ -59,7 +60,7 @@ public:
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] *= aFactor;
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool scale(TW aFactor) {return multiply(aFactor);}
@@ -68,13 +69,13 @@ public:
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
-    return parent::m_bin_Svw(offset);
+    return m_bin_Svw[offset];
   }
   TV bin_Sv2w(int aI) const {
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
-    return parent::m_bin_Sv2w(offset);
+    return m_bin_Sv2w[offset];
   }
 
   bool reset() {
@@ -83,7 +84,7 @@ public:
       m_bin_Svw[ibin] = 0;
       m_bin_Sv2w[ibin] = 0;
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -146,8 +147,8 @@ public:
     if(sw==0) return 0;
     TV svw = m_bin_Svw[offset];
     TV sv2w = m_bin_Sv2w[offset];
-    TV mean = (svw / sw);
-    return ::sqrt(::fabs((sv2w / sw) - mean * mean));
+    TV _mean = (svw / sw);
+    return ::sqrt(::fabs((sv2w / sw) - _mean * _mean));
   }
 
   bool add(const p1& a_histo){
@@ -156,7 +157,7 @@ public:
       m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool subtract(const p1& a_histo){
@@ -165,7 +166,7 @@ public:
       m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -173,9 +174,8 @@ public:
     if(!a_factor) return false;
 
     // actual bin number must be a multiple of a_factor.
-    typedef typename b1<TC,TN,TW,TH>::bn_t bn_t;
     
-    const histo::axis<TC>& _axis = this->axis();
+    const histo::axis<TC>& _axis = parent::axis();
 
     bn_t n = _axis.bins();
     if(!n) return false;

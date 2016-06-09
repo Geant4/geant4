@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -57,10 +57,12 @@ namespace G4INCL {
       nBlockedDecays = 0;
       currentTime = 0.0;
       firstCollisionTime = 0.0;
+      firstCollisionXSec = 0.0;
       nAvatars[SurfaceAvatarType] = 0;
       nAvatars[CollisionAvatarType] = 0;
       nAvatars[DecayAvatarType] = 0;
-      nParticipants = 0;
+      nAvatars[ParticleEntryAvatarType] = 0;
+      nCascading = 0;
     };
 
     void incrementAcceptedCollisions() { nAcceptedCollisions++; };
@@ -68,8 +70,8 @@ namespace G4INCL {
     void incrementAcceptedDecays() { nAcceptedDecays++; };
     void incrementBlockedDecays() { nBlockedDecays++; };
     void incrementAvatars(AvatarType type) { nAvatars[type]++; };
-    void incrementParticipants() { nParticipants++; }
-    void decrementParticipants() { nParticipants--; }
+    void incrementCascading() { nCascading++; }
+    void decrementCascading() { nCascading--; }
 
     void setFirstCollisionTime(G4double t) { firstCollisionTime = t; };
     G4double getFirstCollisionTime() { return firstCollisionTime; };
@@ -85,7 +87,7 @@ namespace G4INCL {
     G4int getAcceptedDecays() const { return nAcceptedDecays; };
     G4int getBlockedDecays() const {return nBlockedDecays; };
     G4int getAvatars(AvatarType type) const { return nAvatars.find(type)->second; };
-    G4int getParticipants() const { return nParticipants; };
+    G4int getCascading() const { return nCascading; };
 
   private:
     G4int nAcceptedCollisions;
@@ -96,7 +98,7 @@ namespace G4INCL {
     G4double firstCollisionTime;
     G4double firstCollisionXSec;
     std::map<AvatarType,G4int> nAvatars;
-    G4int nParticipants;
+    G4int nCascading;
   };
 }
 

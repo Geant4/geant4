@@ -8,9 +8,30 @@ $Id: History,v 1.37 2010-11-18 19:46:38 allison Exp $
 
                       Example History file
                       ---------------------
+02.11.2012 - L.Garnier Tag (ccal-V09-05-05)
+- Fix CMakeFile.txt, gui.mac and icons.mac. Now ok for cmake
+
+02.11.2012 - L.Garnier Tag (ccal-V09-05-04)
+- Add icons.mac
+
+12.10.2012 - A. Dotti (ccal-V09-05-03)
+- Adding use of AIDA in CMake
+- Removing unused variable (compilation warning)
+
+11.10.2012 - G. Cosmo (ccal-V09-05-02)
+- Explicit inclusion of units and constants headers.
+
+11.10.2012 - A. Dotti (ccal-V09-05-01)
+- Fixed compilation error due to inclusion of deprecated/to-be-removed physics
+  lists: QGSP.hh; use PhysListFactory to set physics list.
+- Adding CMakeLists.txt file.
+
+07.08.2012 - A.Ribon (ccal-V09-05-00)
+- Fixed crashes due to high global times converted to integers values.
+  (bug #1337).
 
 17.01.2011 - G.A.P.Cirrone (ccal-V09-04-00)
-- Physics lists updated
+- Physics lists updated.
 
 18.11.2010 - J.Allison (ccal-V09-03-02)
 - Improve comment line about GUI menu bar.
@@ -19,7 +40,7 @@ $Id: History,v 1.37 2010-11-18 19:46:38 allison Exp $
 - Inroduced G4UIExecutive.
 
 04.06.2010 - J.Perl (ccal-V09-03-00)
-- Updated vis usage 
+- Updated vis usage.
 
 12.11.2009 - A.Ribon (ccal-V09-02-01)
 - Use QGSP_BIC_EMY as default Physics List to test the 

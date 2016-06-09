@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceSimple.cc,v 1.7 2010-10-13 07:56:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrPlaceSimple
@@ -35,6 +34,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrPlaceSimple.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrVolume.hh"
 #include "G4tgrMessenger.hh"

@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/include/RE03UserScoreWriter.hh
+/// \brief Definition of the RE03UserScoreWriter class
+//
+// $Id: $
 //
 
 #ifndef RE03UserScoreWriter_h
@@ -36,7 +40,6 @@
 //  This class represents storing the scored quantity into a file.
 //
 
-
 class RE03UserScoreWriter : public G4VScoreWriter {
 
 public:
@@ -45,7 +48,9 @@ public:
 
 public:
   // store a quantity into a file
-  void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
+  virtual void DumpQuantityToFile(const G4String & psName, 
+                                  const G4String & fileName, 
+                                  const G4String & option);
 
 };
 

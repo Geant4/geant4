@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.39 2010-06-04 15:42:23 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +41,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -67,49 +70,52 @@
 #include "G4BraggIonGasModel.hh"
 #include "G4BetheBlochIonGasModel.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
 
-  helIsRegisted  = false;
-  bicIsRegisted  = false;
-  biciIsRegisted = false;
+  fHelIsRegisted  = false;
+  fBicIsRegisted  = false;
+  fBiciIsRegisted = false;
 
-  stepMaxProcess  = 0;
+  fStepMaxProcess  = 0;
 
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("emstandard_opt0");  
-  emPhysicsList = new G4EmStandardPhysics(1);
+  fEmName = G4String("emstandard_opt0");  
+  fEmPhysicsList = new G4EmStandardPhysics(1);
 
   // Deacy physics and all particles
-  decPhysicsList = new G4DecayPhysics();
+  fDecPhysicsList = new G4DecayPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
-  delete emPhysicsList;
-  delete decPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
+  delete fMessenger;
+  delete fEmPhysicsList;
+  delete fDecPhysicsList;
+  for(size_t i=0; i<fHadronPhys.size(); i++) {delete fHadronPhys[i];}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  decPhysicsList->ConstructParticle();
+  fDecPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,15 +128,15 @@ void PhysicsList::ConstructProcess()
   
   // electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
 
   // decay physics list
   //
-  decPhysicsList->ConstructProcess();
+  fDecPhysicsList->ConstructProcess();
   
   // hadronic physics lists
-  for(size_t i=0; i<hadronPhys.size(); i++) {
-    hadronPhys[i]->ConstructProcess();
+  for(size_t i=0; i<fHadronPhys.size(); i++) {
+    fHadronPhys[i]->ConstructProcess();
   }
   
   // step limitation (as a full process)
@@ -146,89 +152,95 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "local") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
 
   } else if (name == "emstandard_opt0") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics(1);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics(1);
 
   } else if (name == "emstandard_opt1") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option2();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
     
   } else if (name == "emstandard_opt3") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();    
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();    
+    
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();    
 
   } else if (name == "standardSS") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardSS(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandardSS(name);
 
   } else if (name == "ionGasModels") {
 
     AddPhysicsList("emstandard_opt0");
-    emName = name;
+    fEmName = name;
     AddIonGasModels();
 
   } else if (name == "standardNR") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardNR(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandardNR(name);
 
   } else if (name == "emlivermore") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
 
   } else if (name == "empenelope") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
 
-  } else if (name == "elastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics());
-    helIsRegisted = true;
+  } else if (name == "elastic" && !fHelIsRegisted) {
+    fHadronPhys.push_back( new G4HadronElasticPhysics());
+    fHelIsRegisted = true;
 
-  } else if (name == "DElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronDElasticPhysics());
-    helIsRegisted = true;
+  } else if (name == "DElastic" && !fHelIsRegisted) {
+    fHadronPhys.push_back( new G4HadronDElasticPhysics());
+    fHelIsRegisted = true;
 
-  } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics());
-    helIsRegisted = true;
+  } else if (name == "HElastic" && !fHelIsRegisted) {
+    fHadronPhys.push_back( new G4HadronHElasticPhysics());
+    fHelIsRegisted = true;
 
-  } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronQElasticPhysics());
-    helIsRegisted = true;
+  } else if (name == "QElastic" && !fHelIsRegisted) {
+    fHadronPhys.push_back( new G4HadronQElasticPhysics());
+    fHelIsRegisted = true;
 
-  } else if (name == "binary" && !bicIsRegisted) {
-    hadronPhys.push_back(new G4HadronInelasticQBBC());
-    bicIsRegisted = true;
+  } else if (name == "binary" && !fBicIsRegisted) {
+    fHadronPhys.push_back(new G4HadronInelasticQBBC());
+    fBicIsRegisted = true;
 
-  } else if (name == "binary_ion" && !biciIsRegisted) {
-    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
-    biciIsRegisted = true;
+  } else if (name == "binary_ion" && !fBiciIsRegisted) {
+    fHadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    fBiciIsRegisted = true;
 
   } else {
 
@@ -243,16 +255,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
+  fStepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+    if (fStepMaxProcess->IsApplicable(*particle) && pmanager)
       {
-	pmanager ->AddDiscreteProcess(stepMaxProcess);
+        pmanager ->AddDiscreteProcess(fStepMaxProcess);
       }
   }
 }
@@ -268,9 +280,9 @@ void PhysicsList::SetCuts()
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -279,24 +291,24 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -314,9 +326,9 @@ void PhysicsList::AddIonGasModels()
       G4BetheBlochIonGasModel* mod2 = new G4BetheBlochIonGasModel();
       G4double eth = 2.*MeV*particle->GetPDGMass()/proton_mass_c2;
       em_config->SetExtraEmModel(partname,"ionIoni",mod1,"",0.0,eth,
-				 new G4IonFluctuations());
+                                 new G4IonFluctuations());
       em_config->SetExtraEmModel(partname,"ionIoni",mod2,"",eth,100*TeV,
-				 new G4UniversalFluctuation());
+                                 new G4UniversalFluctuation());
 
     }
   }

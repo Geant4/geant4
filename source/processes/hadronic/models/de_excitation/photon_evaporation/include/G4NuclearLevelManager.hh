@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.hh,v 1.6 2010-11-17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -54,9 +53,11 @@
 #ifndef G4NUCLEARLEVELMANAGER_HH
 #define G4NUCLEARLEVELMANAGER_HH 1
 
+#include <iosfwd>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4PtrLevelVector.hh"
-#include <iosfwd>
 
 class G4NuclearLevel;
 
@@ -81,7 +82,7 @@ public:
   const G4NuclearLevel* GetLevel(G4int i) const;
 
   const G4NuclearLevel* NearestLevel(G4double energy,
-				     G4double eDiffMax=9999.*GeV) const;
+				     G4double eDiffMax=9999.*CLHEP::GeV) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;

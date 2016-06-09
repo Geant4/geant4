@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.icc,v 1.8 2006-06-29 18:30:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4AffineTransformation Inline implementation
@@ -363,10 +362,10 @@ G4bool G4AffineTransform::IsTranslated() const
 }
 
 inline G4RotationMatrix G4AffineTransform::NetRotation() const {
-  G4RotationMatrix m;
-  return m.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
-                      G4ThreeVector(rxy,ryy,rzy),
-                      G4ThreeVector(rxz,ryz,rzz));
+  G4RotationMatrix mat;
+  return mat.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
+                        G4ThreeVector(rxy,ryy,rzy),
+                        G4ThreeVector(rxz,ryz,rzz));
 }
 
 inline

@@ -32,6 +32,8 @@
 //
 #include "G4QMDCollision.hh"
 #include "G4Scatterer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4QMDCollision::G4QMDCollision()
@@ -306,9 +308,10 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 //       Here we assume elab (beam momentum less than 5 GeV/n )
          if ( rr2 > deltar*deltar ) continue;
 
-         G4double s = (p4i+p4j)*(p4i+p4j);
+         //G4double s = (p4i+p4j)*(p4i+p4j);
+         //G4double srt = std::sqrt ( s );
 
-         G4double srt = std::sqrt ( s );
+         G4double srt = std::sqrt( (p4i+p4j)*(p4i+p4j) );
 
          G4double cutoff = 0.0;
          G4double bcmax = 0.0;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.18 2010-11-04 17:30:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eBremsstrahlungRelModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -66,6 +67,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4DipBustGenerator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -79,15 +81,15 @@ const G4double G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5
 using namespace std;
 
 G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
-						     const G4String& name)
-  : G4VEmModel(name),
+						     const G4String& nam)
+  : G4VEmModel(nam),
     particle(0),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     isElectron(true),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
     fXiLPM(0), fPhiLPM(0), fGLPM(0),
-    use_completescreening(true),isInitialised(false)
+    use_completescreening(false),isInitialised(false)
 {
   fParticleChange = 0;
   theGamma = G4Gamma::Gamma();
@@ -98,7 +100,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   nist = G4NistManager::Instance();  
 
   SetLPMFlag(true);
-  SetAngularDistribution(new G4ModifiedTsai());
+  //SetAngularDistribution(new G4ModifiedTsai());
+  SetAngularDistribution(new G4DipBustGenerator());
 
   particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
     = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 
@@ -339,45 +342,45 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
     xiLPM = 1+h-0.08*(1-h)*(1-sqr(1-h))/logTS1;
   }
 
-  G4double s = sprime/sqrt(xiLPM); 
+  G4double s0 = sprime/sqrt(xiLPM); 
 
   // *** merging with density effect***  should be only necessary in region "close to" kp, e.g. k<100*kp
   // using Ter-Mikaelian eq. (20.9)
   G4double k2 = k*k;
-  s = s * (1 + (densityCorr/k2) );
+  s0 *= (1 + (densityCorr/k2) );
 
   // recalculate Xi using modified s above
   // Klein eq. (75)
   xiLPM = 1.;
-  if (s<=s1) xiLPM = 2.;
-  else if ( (s1<s) && (s<=1) ) xiLPM = 1. + log(s)/logS1;
+  if (s0<=s1) xiLPM = 2.;
+  else if ( (s1<s0) && (s0<=1) ) xiLPM = 1. + log(s0)/logS1;
   
 
   // *** calculate supression functions phi and G ***
   // Klein eqs. (77)
-  G4double s2=s*s;
-  G4double s3=s*s2;
+  G4double s2=s0*s0;
+  G4double s3=s0*s2;
   G4double s4=s2*s2;
 
-  if (s<0.1) {
+  if (s0<0.1) {
     // high suppression limit
-    phiLPM = 6.*s - 18.84955592153876*s2 + 39.47841760435743*s3 
+    phiLPM = 6.*s0 - 18.84955592153876*s2 + 39.47841760435743*s3 
       - 57.69873135166053*s4;
     gLPM = 37.69911184307752*s2 - 236.8705056261446*s3 + 807.7822389*s4;
   }
-  else if (s<1.9516) {
+  else if (s0<1.9516) {
     // intermediate suppression
     // using eq.77 approxim. valid s<2.      
-    phiLPM = 1.-exp(-6.*s*(1.+(3.-pi)*s)
-		+s3/(0.623+0.795*s+0.658*s2));
-    if (s<0.415827397755) {
+    phiLPM = 1.-exp(-6.*s0*(1.+(3.-pi)*s0)
+		+s3/(0.623+0.795*s0+0.658*s2));
+    if (s0<0.415827397755) {
       // using eq.77 approxim. valid 0.07<s<2
-      G4double psiLPM = 1-exp(-4*s-8*s2/(1+3.936*s+4.97*s2-0.05*s3+7.50*s4));
+      G4double psiLPM = 1-exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
       gLPM = 3*psiLPM-2*phiLPM;
     }
     else {
       // using alternative parametrisiation
-      G4double pre = -0.16072300849123999 + s*3.7550300067531581 + s2*-1.7981383069010097 
+      G4double pre = -0.16072300849123999 + s0*3.7550300067531581 + s2*-1.7981383069010097 
 	+ s3*0.67282686077812381 + s4*-0.1207722909879257;
       gLPM = tanh(pre);
     }
@@ -390,7 +393,7 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
 
   // *** make sure suppression is smaller than 1 ***
   // *** caused by Migdal approximation in xi    ***
-  if (xiLPM*phiLPM>1. || s>0.57)  { xiLPM=1./phiLPM; }
+  if (xiLPM*phiLPM>1. || s0>0.57)  { xiLPM=1./phiLPM; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -443,8 +446,8 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
   else {
     // ** intermediate screening using Thomas-Fermi FF from Tsai only valid for Z>=5** 
     G4double dd=100.*electron_mass_c2*y/(totalEnergy-gammaEnergy);
-    G4double gg=dd*z13;
-    G4double eps=dd*z23;
+    G4double gg=dd/z13;
+    G4double eps=dd/z23;
     G4double phi1=Phi1(gg,currentZ),  phi1m2=Phi1M2(gg,currentZ);
     G4double psi1=Psi1(eps,currentZ),  psi1m2=Psi1M2(eps,currentZ);
     
@@ -479,7 +482,6 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
   densityCorr = densityFactor*totalEnergy*totalEnergy;
-  G4ThreeVector direction = dp->GetMomentumDirection();
 
   //G4double fmax= fMax;
   G4bool highe = true;
@@ -511,23 +513,20 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   // angles of the emitted gamma. ( Z - axis along the parent particle)
   // use general interface
   //
-  G4double theta = GetAngularDistribution()->PolarAngle(totalEnergy,
-							totalEnergy-gammaEnergy,
-							(G4int)currentZ);
 
-  G4double sint = sin(theta);
-  G4double phi = twopi * G4UniformRand();
-  G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
-  gammaDirection.rotateUz(direction);
+  G4ThreeVector gammaDirection = 
+    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
+					      G4lrint(currentZ), 
+					      couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,
-                                                        gammaEnergy);
-  vdp->push_back(g);
+  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
+						   gammaEnergy);
+  vdp->push_back(gamma);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
-  G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
-  direction = dir.unit();
+  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
+			     - gammaEnergy*gammaDirection).unit();
 
   // energy of primary
   G4double finalE = kineticEnergy - gammaEnergy;

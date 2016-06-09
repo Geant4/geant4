@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh,v 1.8 2010-11-05 06:25:23 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH
@@ -60,6 +59,7 @@ private:
   G4UIcmdWithAnInteger* fpCommandDisplayListLimit;
   G4UIcommand* fpCommandDisplayLightFront;
   G4UIcommand* fpCommandEndTime;
+  G4UIcmdWithAnInteger* fpCommandEventsDrawInterval;
   G4UIcmdWithADouble* fpCommandFade;
   G4UIcmdWithAString* fpCommandPrintMode;
   G4UIcommand* fpCommandStartTime;

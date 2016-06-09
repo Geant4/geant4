@@ -28,17 +28,20 @@
 // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
 //                          from NuclearReaction
 
-#include "G4LEAlphaInelastic.hh"
-#include "Randomize.hh"
-#include "G4Electron.hh"
 #include <iostream>
 
+#include "G4LEAlphaInelastic.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4Electron.hh"
 
 G4LEAlphaInelastic::G4LEAlphaInelastic(const G4String& name)
  : G4InelasticInteraction(name)
 {
   SetMinEnergy(0.0*GeV);
   SetMaxEnergy(10.*TeV);
+  G4cout << "WARNING: model G4LEAlphaInelastic is being deprecated and will\n"
+         << "disappear in Geant4 version 10.0"  << G4endl;
 }
 
 
@@ -61,6 +64,8 @@ G4LEAlphaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                   G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
+  const G4HadProjectile* originalIncident = &aTrack;
+
   G4double A = targetNucleus.GetA_asInt();
   G4double Z = targetNucleus.GetZ_asInt();
         
@@ -120,5 +125,6 @@ G4LEAlphaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     delete vec[i];
   }
 
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus); 
   return &theParticleChange;
 }

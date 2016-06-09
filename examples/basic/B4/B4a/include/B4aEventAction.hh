@@ -34,9 +34,9 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#include "B4aEventActionMessenger.hh"
-
 class B4RunAction;
+
+class G4GenericMessenger;
 
 /// Event action class
 ///
@@ -48,7 +48,8 @@ class B4RunAction;
 /// 
 /// The data member fPrintModulo defines the frequency of printing
 /// the accumulated quantities. Its value can be changed via a command
-/// defined in B4aEventActionMassenger class. 
+/// defined using G4GenericMessenger class:
+/// - /B4/event/setPrintModulo value
 
 class B4aEventAction : public G4UserEventAction
 {
@@ -65,7 +66,7 @@ class B4aEventAction : public G4UserEventAction
     void SetPrintModulo(G4int value);
     
   private:
-    B4aEventActionMessenger  fMessenger;
+    G4GenericMessenger*  fMessenger;
     B4RunAction*  fRunAction;
    
     G4double  fEnergyAbs;

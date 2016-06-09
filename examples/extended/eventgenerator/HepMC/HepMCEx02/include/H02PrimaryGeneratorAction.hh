@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/include/H02PrimaryGeneratorAction.hh
+/// \brief Definition of the H02PrimaryGeneratorAction class
+//
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.hh
-//   $Id: H02PrimaryGeneratorAction.hh,v 1.5 2006-06-29 17:10:02 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_ACTION_H

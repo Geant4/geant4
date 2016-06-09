@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field06/src/F06Field.cc
+/// \brief Implementation of the F06Field class
+//
 //
 //
 //
@@ -40,6 +43,8 @@
 #include "G4PropagatorInField.hh"
 
 #include "G4ClassicalRK4.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

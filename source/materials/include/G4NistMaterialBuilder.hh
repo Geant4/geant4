@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.17 2010-10-26 16:25:24 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -45,6 +44,7 @@
 // 27.07.07 V.Ivanchneko add matIndex vector to control built materials
 // 28.07.07 V.Ivanchneko add BuildMaterial method using Nist index
 // 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method using Nist index
+// 09.02.12 P.Gumplinger add ConstructNewIdealGasMaterial
 //
 //----------------------------------------------------------------------------
 //
@@ -56,9 +56,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4Material.hh"
-#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,9 +88,9 @@ public:
 				    G4double  dens, 
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
-				    G4double  temp     = STP_Temperature,  
-				    G4double  pressure = STP_Pressure); 
-				      
+				    G4double  temp     = CLHEP::STP_Temperature,  
+				    G4double  pressure = CLHEP::STP_Pressure);
+
   // construct a G4Material from scratch by fraction mass
   //
   G4Material* ConstructNewMaterial (const G4String& name,
@@ -97,8 +99,8 @@ public:
 				    G4double  dens, 
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
-				    G4double  temp     = STP_Temperature,  
-				    G4double  pressure = STP_Pressure); 
+				    G4double  temp     = CLHEP::STP_Temperature,  
+				    G4double  pressure = CLHEP::STP_Pressure); 
 
 
   // construct a gas G4Material from scratch by atome count
@@ -108,6 +110,15 @@ public:
 				      G4double temp, G4double pres, 
 				      G4bool isotopes = true);
 
+  // Construct an ideal gas G4Material from scratch by atom count
+  //
+  G4Material* ConstructNewIdealGasMaterial(const G4String& name,
+                                           const std::vector<G4String>& elm,
+                                           const std::vector<G4int>& nbAtoms,
+                                           G4bool    isotopes = true,
+                                           G4double  temp     = CLHEP::STP_Temperature,
+                                           G4double  pressure = CLHEP::STP_Pressure); 
+				      
   // verbosity level defined by G4NistManager
   //
   void SetVerbose(G4int val);
@@ -116,6 +127,7 @@ public:
   // "simple" - only pure materials in basic state (Z = 1, ..., 98)
   // "compound" - NIST compounds
   // "hep" - HEP materials and compounds
+  // "biochemical" - bio-chemical materials 
   // "all" - all
   //
   void ListMaterials(const G4String&);
@@ -152,8 +164,8 @@ private:
 		   G4double pot=0.0, G4int ncomp=1,
 		   G4State=kStateSolid, G4bool stp = true);
 
-  void AddGas(const G4String& nameMat, G4double t=STP_Temperature,
-              G4double p=STP_Pressure);
+  void AddGas(const G4String& nameMat, G4double t=CLHEP::STP_Temperature,
+                                       G4double p=CLHEP::STP_Pressure);
 
   void AddElementByWeightFraction(G4int Z, G4double);
   void AddElementByAtomCount     (G4int Z, G4int);
@@ -187,6 +199,7 @@ private:
   std::vector<G4double>  ionPotentials;
   std::vector<G4State>   states;
   std::vector<G4double>  fractions;
+  std::vector<G4bool>    atomCount;
   std::vector<G4int>     components;
   std::vector<G4int>     indexes;
   std::vector<G4int>     elements;

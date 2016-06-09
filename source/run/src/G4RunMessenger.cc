@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.31 2007-11-16 22:37:43 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4RunMessenger.hh"
@@ -280,14 +279,14 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if( command==beamOnCmd )
   {
     G4int nev;
-    G4int ns;
+    G4int nst;
     const char* nv = (const char*)newValue;
     std::istringstream is(nv);
-    is >> nev >> macroFileName >> ns;
+    is >> nev >> macroFileName >> nst;
     if(macroFileName=="***NULL***")
     { runManager->BeamOn(nev); }
     else
-    { runManager->BeamOn(nev,macroFileName,ns); }
+    { runManager->BeamOn(nev,macroFileName,nst); }
   }
   else if( command==verboseCmd )
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }

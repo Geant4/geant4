@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrEvaluator.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrEvaluator
@@ -52,9 +51,9 @@ G4tgrEvaluator::~G4tgrEvaluator()
 
 
 // -------------------------------------------------------------------------
-void G4tgrEvaluator::print_error( G4int status ) const
+void G4tgrEvaluator::print_error( G4int estatus ) const
 {
-  switch (status)
+  switch (estatus)
   {
     case ERROR_SYNTAX_ERROR:
       G4cerr << "G4tgrEvaluator: syntax error!" << G4endl;

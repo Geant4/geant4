@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.13 2010-08-25 06:09:57 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UIcontrolMessenger_h
@@ -44,6 +43,7 @@ class G4UIcommand;
 // commands affecting to the G4UImanager. Commands defined by
 // this messenger are
 //   /control/ 
+//   /control/macroPath
 //   /control/execute
 //   /control/loop
 //   /control/foreach
@@ -76,6 +76,7 @@ class G4UIcontrolMessenger : public G4UImessenger
 
   private:
       G4UIdirectory * controlDirectory;
+      G4UIcmdWithAString * macroPathCommand;
       G4UIcmdWithAString * ExecuteCommand;
       G4UIcmdWithAnInteger * suppressAbortionCommand;
       G4UIcmdWithAnInteger * verboseCommand;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.24 2008/05/30 16:04:40 grichine Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-03-ref-06 $
 //
 // 
@@ -51,6 +51,8 @@
 #include "G4PAIxSection.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "G4Material.hh"

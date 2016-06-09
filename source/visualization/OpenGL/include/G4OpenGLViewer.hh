@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.33 2010-10-05 15:45:19 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -41,6 +40,7 @@
 
 class G4OpenGLSceneHandler;
 class G4OpenGL2PSAction;
+class G4Text;
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
@@ -59,10 +59,16 @@ public:
 protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLViewer ();
+
+private:
+  G4OpenGLViewer(const G4OpenGLViewer&);
+  G4OpenGLViewer& operator= (const G4OpenGLViewer&);
+
+protected:
   void SetView    ();
   void ResetView ();
 
-  virtual void DrawText(const char * ,double x,double y,double z, double size);
+  virtual void DrawText(const G4Text&);
   void ChangePointSize(G4double size);
   void ChangeLineWidth(G4double width);
   void HaloingFirstPass ();
@@ -121,10 +127,10 @@ protected:
   G4double     fPan_sens;        // Translation sensibility
 
 private :
-  G4int                             fPrintSizeX;
-  G4int                             fPrintSizeY;
-  G4String                          fPrintFilename;
-  int                               fPrintFilenameIndex;
+  static G4int                             fPrintSizeX;
+  static G4int                             fPrintSizeY;
+  static G4String                          fPrintFilename;
+  static int                               fPrintFilenameIndex;
   unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
   G4bool fSizeHasChanged;

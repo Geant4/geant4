@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.10 2009-11-27 14:54:58 hbu Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,15 +38,12 @@
 #include "ProcessesCount.hh"
 #include "globals.hh"
 
+#include "g4root.hh"
+////#include "g4xml.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,17 +54,12 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     void     CountProcesses(G4String);
-
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
     
   private:
-    AIDA::IAnalysisFactory* af;          
-    AIDA::ITree* tree;
-    AIDA::IHistogram1D* histo[6];
-    ProcessesCount*     ProcCounter;
+    ProcessesCount*     fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

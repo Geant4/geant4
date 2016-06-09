@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.26 2009-11-17 14:37:06 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  27th March 1996
@@ -115,16 +114,16 @@ void G4VViewer::ShowView () {}
 
 void G4VViewer::ProcessView ()
 {
-  // If ClearStore has been requested, e.g., if the scene has changed,
-  // or if the concrete viewer has decided that it necessary to visit
-  // the kernel, perhaps because the view parameters have changed
-  // significantly (this should be done in the concrete viewer's
-  // DrawView)...
+  // If the scene has changed, or if the concrete viewer has decided
+  // that it necessary to visit the kernel, perhaps because the view
+  // parameters have changed significantly (this should be done in the
+  // concrete viewer's DrawView)...
   if (fNeedKernelVisit) {
     // Reset flag.  This must be done before ProcessScene to prevent
     // recursive calls when recomputing transients...
     fNeedKernelVisit = false;
-    fSceneHandler.ProcessScene (*this);
+    fSceneHandler.ClearStore ();
+    fSceneHandler.ProcessScene ();
   }
 }
 

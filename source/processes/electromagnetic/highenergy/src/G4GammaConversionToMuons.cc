@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.8 2010-10-26 14:15:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -36,6 +35,8 @@
 // ---------------------------------------------------------------------------
 
 #include "G4GammaConversionToMuons.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"

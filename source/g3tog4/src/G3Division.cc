@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.17 2006-06-29 18:12:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
@@ -34,6 +33,7 @@
 #include "G3toG4MakeSolid.hh"
 #include "G4Para.hh"
 #include "G3Pos.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"

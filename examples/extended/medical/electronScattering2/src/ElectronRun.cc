@@ -23,11 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/ElectronRun.cc
+/// \brief Implementation of the ElectronRun class
+//
 
 #include "ElectronRun.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
 #include "G4VPrimitiveScorer.hh"
+#include "G4SystemOfUnits.hh"
 #include <assert.h>
 
 ElectronRun::ElectronRun(const G4String& detectorName)
@@ -176,13 +180,18 @@ void ElectronRun::Print(const std::vector<G4String>& title,
     
     std::vector<G4double>::const_iterator energyBinIter = iter->second.begin();
     
+	// The built-in scorers do not automatically account for the area of the cylinder replica rings.
+	// We must account for this now by multiplying our result by the ratio of the area of the full cylinder end
+    // over the area of the actual scoring ring.
+    // In this ratio, PI divides out, as does the width of the scoring rings.
+	// Left with just the number of rings squared divided by the ring index plus 1 squared minus ring index squared.
 	G4int ringNum = iter->first;
-	G4double area = (ringNum+1)*(ringNum+1) - ringNum*ringNum; 
+	G4double areaCorrection = 233.*233. / ( (ringNum+1)*(ringNum+1) - ringNum*ringNum ); 
     G4int counter = 0;
  
     while (energyBinIter != iter->second.end()) {
       G4double value = *energyBinIter;
-      if (counter < 2) value = value/area;
+      if (counter < 2) value = value*areaCorrection;
 	  G4cout << std::setw(10)<<std::setprecision(5)<< value*mm*mm<<" ";
       outFile << value*mm*mm;
       if (counter < 3) outFile <<",";

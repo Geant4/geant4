@@ -54,6 +54,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4IonCoulombCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
@@ -115,37 +116,36 @@ void G4IonCoulombCrossSection::Initialise(const G4ParticleDefinition* p,
 void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
                                                      G4double cut,G4int iz )
 {
-        if(ekin != tkinLab || ecut != cut) {
+  if(ekin != tkinLab || ecut != cut) {
 
-                // lab
-                tkinLab = ekin;
-                momLab2 = tkinLab*(tkinLab + 2.0*mass);
-                invbetaLab2 = 1.0 +  mass*mass/momLab2;
+    // lab
+    tkinLab = ekin;
+    momLab2 = tkinLab*(tkinLab + 2.0*mass);
+    invbetaLab2 = 1.0 +  mass*mass/momLab2;
 
-                G4double etot = tkinLab + mass;
-                G4double ptot = sqrt(momLab2);
-                G4double m12  = mass*mass;
+    G4double etot = tkinLab + mass;
+    G4double ptot = sqrt(momLab2);
+    G4double m12  = mass*mass;
 
-                targetMass=fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-                G4double m2   = targetMass;
+    targetMass=fNistManager->GetAtomicMassAmu(iz)*amu_c2;
 
-        // relativistic reduced mass from publucation
-        // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
+    // relativistic reduced mass from publucation
+    // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
         
-		//incident particle & target nucleus
-	        G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-                G4double mu_rel=mass*m2/Ecm;
-                G4double momCM= ptot*m2/Ecm;
-                // relative system
-                mom2 = momCM*momCM;
-                invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
-                tkin = momCM*sqrt(invbeta2) - mu_rel;//Ekin of mu_rel
-                //.........................................................
+    //incident particle & target nucleus
+    G4double Ecm=sqrt(m12 + targetMass*targetMass + 2.0*etot*targetMass);
+    G4double mu_rel=mass*targetMass/Ecm;
+    G4double momCM= ptot*targetMass/Ecm;
+    // relative system
+    mom2 = momCM*momCM;
+    invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
+    tkin = momCM*sqrt(invbeta2) - mu_rel;//Ekin of mu_rel
+    //.........................................................
 
-                cosTetMinNuc = cosThetaMin;
-                cosTetMaxNuc = cosThetaMax;
+    cosTetMinNuc = cosThetaMin;
+    cosTetMaxNuc = cosThetaMax;
 
-        }
+  }
 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -245,8 +245,6 @@ G4double G4IonCoulombCrossSection::SampleCosineTheta()
 
     		z1 = x1*x2/(x1 + G4UniformRand()*dx) - screenZ;
                 //grej = 1.0/(1.0 + z1);
-  
-
   return z1;
 }
 

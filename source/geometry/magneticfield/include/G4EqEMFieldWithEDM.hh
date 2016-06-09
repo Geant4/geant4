@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.hh,v 1.2 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4EqEMFieldWithEDM

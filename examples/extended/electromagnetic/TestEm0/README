@@ -14,12 +14,8 @@ $Id: README,v 1.3 2009-11-17 22:48:26 maire Exp $
 	
   The program can be used in batch or interactively.	
  
-  - compile and link to generate an executable
-	% cd geant4/examples/extended/electromagnetic/TestEm0
-	% gmake
- 		
   - execute TestEm0 in 'batch' mode from macro files :
-	% TestEm0   TestEm1.in
+	% TestEm0   TestEm0.in
  		
   - Interactively, a typical sequence will be :
 	% TestEm0

@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30 Oct 2012: L. Desorgher (emadjoint-V09-05-04)
+-Inclusion of headers for system of units and physical constants in G4AdjointBremsstrahlungModel
+
+26 Oct 2012: L.Desorgher (emadjoint-V09-05-03)
+-G4AdjointBremsstrahlungModel changed to use G4SeltzerBergerModel as forward model  by default
+-Correct differential CS expression in G4VEmAdjointModel
+-Get the weight from PostStepPoint instead of from Track when correcting the step in along stepping actions of 
+ G4ContinuousGainOfEnergy and G4AdjointAlongStepWeightCorrection. THis is needed for a correct propagation 
+ of weight correction in different along step actions. 
+
+10 Jul 2012: G.Cosmo (emadjoint-V09-05-02)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+08 Jun 2012: V.Ivanchenko (emadjoint-V09-05-01)
+- Fixed shadowing
+
+06 Jun 2012: V.Ivanchenko (emadjoint-V09-05-00)
+- G4AdjointhMultipleScattering - comment out obsolete call
 
 24 Jun 2011: V.Ivanchenko (emadjoint-V09-04-03)
 - G4AdjointAlongStepWeightCorrection,G4ContinuousGainOfEnergy,

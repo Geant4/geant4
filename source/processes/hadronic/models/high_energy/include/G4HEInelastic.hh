@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEInelastic.hh,v 1.17 2010-11-29 05:45:06 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Gheisha High Energy (GHE) model class -- header file
@@ -39,11 +38,6 @@
 // stopping particles, the low energy neutron
 // slowing down description and the low energy
 // nuclear reactions a(A,A')b.
-// All routines pass the compiler and give
-// some reasonable numbers as output.
-// A statistically significant comparison
-// with GEANT3 and experimental data has
-// still to be done. 
 
 #ifndef G4HEInelastic_h
 #define G4HEInelastic_h 1
@@ -89,6 +83,8 @@ class G4HEInelastic : public G4HadronicInteraction
               {conserveEnergy = energyConservation;}
 
    G4bool EnergyConservation(void) {return conserveEnergy;} 
+
+   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
    G4double Amin(G4double a, G4double b);
    G4double Amax(G4double a, G4double b);

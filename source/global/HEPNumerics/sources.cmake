@@ -44,6 +44,7 @@ GEANT4_DEFINE_MODULE(NAME G4hepnumerics
         G4SimpleIntegration.hh
         G4SimplexDownhill.hh
         G4SimplexDownhill.icc
+        G4StatDouble.hh
         G4VGaussianQuadrature.hh
     SOURCES
         G4AnalyticalPolSolver.cc
@@ -57,6 +58,7 @@ GEANT4_DEFINE_MODULE(NAME G4hepnumerics
         G4GaussLegendreQ.cc
         G4JTPolynomialSolver.cc
         G4SimpleIntegration.cc
+        G4StatDouble.cc
         G4VGaussianQuadrature.cc
     GRANULAR_DEPENDENCIES
         G4globman

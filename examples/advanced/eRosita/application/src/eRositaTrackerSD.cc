@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerSD.cc,v 1.4 2010-11-25 17:32:05 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "eRositaTrackerSD.hh"

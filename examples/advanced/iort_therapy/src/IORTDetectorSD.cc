@@ -46,16 +46,17 @@
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 #include "IORTMatrix.hh"
+#include "G4SystemOfUnits.hh"
+
 
 /////////////////////////////////////////////////////////////////////////////
-IORTDetectorSD::IORTDetectorSD(G4String name):
-    G4VSensitiveDetector(name)
+IORTDetectorSD::IORTDetectorSD(G4String dname):
+    G4VSensitiveDetector(dname)
 { 
     G4String HCname;
     collectionName.insert(HCname="IORTDetectorHitsCollection");
     HitsCollection = NULL; 
-    G4String sensitiveDetectorName = name;
-
+    sensitiveDetectorName = dname;
 }
 
 /////////////////////////////////////////////////////////////////////////////

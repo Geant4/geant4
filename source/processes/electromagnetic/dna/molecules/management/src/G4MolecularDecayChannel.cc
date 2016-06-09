@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// $Id: G4MolecularDecayChannel.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -86,29 +85,13 @@ G4MolecularDecayChannel::~G4MolecularDecayChannel()
 
 G4MolecularDecayChannel::G4MolecularDecayChannel(const G4MolecularDecayChannel& right)
 {
-    // String
-    fName  = right.fName;
-    //displacement type
-    fDisplacementType = right.fDisplacementType;
-    // pointers
-    if(right.fProductsVector)
-        fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector) );
-    else
-        fProductsVector = 0 ;
-
-    // double
-    fReleasedEnergy = right.fReleasedEnergy;
-    fDecayTime      = right.fDecayTime;
-    fProbability    = right.fProbability;
-    // vector
-    fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
-    fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
+    *this = right;
 }
 
 G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
 (const G4MolecularDecayChannel& right)
 {
-    if(this == &right) return *this; // hendle self assignement
+    if (&right==this) return *this;
 
     // string
     fName = right.fName;
@@ -129,6 +112,7 @@ G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
     fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
     fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
     return *this;
+
 }
 
 void G4MolecularDecayChannel::AddProduct(const G4Molecule* molecule, G4double displacement)

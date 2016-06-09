@@ -31,7 +31,9 @@
 // 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
 //
 #include "G4NeutronHPElastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPElasticFS.hh"
+#include "G4NeutronHPManager.hh"
 
   G4NeutronHPElastic::G4NeutronHPElastic()
     :G4HadronicInteraction("NeutronHPElastic")
@@ -45,11 +47,17 @@
     dirName = dirName + tString;
 //    G4cout <<"G4NeutronHPElastic::G4NeutronHPElastic testit "<<dirName<<G4endl;
     numEle = G4Element::GetNumberOfElements();
-    theElastic = new G4NeutronHPChannel[numEle];
-    for (G4int i=0; i<numEle; i++)
+    //theElastic = new G4NeutronHPChannel[numEle];
+    //for (G4int i=0; i<numEle; i++)
+    //{
+    //  theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
+    //  while(!theElastic[i].Register(theFS)) ;
+    //}
+    for ( G4int i = 0 ; i < numEle ; i++ ) 
     {
-      theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
-      while(!theElastic[i].Register(theFS)) ;
+       theElastic.push_back( new G4NeutronHPChannel );
+       (*theElastic[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+       while(!(*theElastic[i]).Register(theFS)) ;
     }
     delete theFS;
     SetMinEnergy(0.*eV);
@@ -58,13 +66,23 @@
   
   G4NeutronHPElastic::~G4NeutronHPElastic()
   {
-    delete [] theElastic;
+     //delete [] theElastic;
+     for ( std::vector<G4NeutronHPChannel*>::iterator 
+           it = theElastic.begin() ; it != theElastic.end() ; it++ )
+     {
+        delete *it;
+     }
+     theElastic.clear();
   }
   
   #include "G4NeutronHPThermalBoost.hh"
   
-  G4HadFinalState * G4NeutronHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
+  G4HadFinalState * G4NeutronHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
+
+    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+
+    G4NeutronHPManager::GetInstance()->OpenReactionWhiteBoard();
     const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
@@ -80,7 +98,8 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        //xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = (*theElastic[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                     theMaterial->GetElement(i),
   								     theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -98,7 +117,30 @@
       delete [] xSec;
       // it is element-wise initialised.
     }
-    G4HadFinalState* finalState = theElastic[index].ApplyYourself(aTrack);
+    //G4HadFinalState* finalState = theElastic[index].ApplyYourself(aTrack);
+    G4HadFinalState* finalState = (*theElastic[index]).ApplyYourself(aTrack);
     if (overrideSuspension) finalState->SetStatusChange(isAlive);
+    aNucleus.SetParameters(G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
+    G4NeutronHPManager::GetInstance()->CloseReactionWhiteBoard();
     return finalState; 
   }
+
+const std::pair<G4double, G4double> G4NeutronHPElastic::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}
+
+void G4NeutronHPElastic::addChannelForNewElement()
+{
+   G4NeutronHPElasticFS* theFS = new G4NeutronHPElasticFS;
+   for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
+   {
+      G4cout << "G4NeutronHPElastic Prepairing Data for the new element of " << (*(G4Element::GetElementTable()))[i]->GetName() << G4endl;
+      theElastic.push_back( new G4NeutronHPChannel );
+      (*theElastic[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+      while(!(*theElastic[i]).Register(theFS)) ;
+   }
+   delete theFS;
+   numEle = (G4int)G4Element::GetNumberOfElements();
+}

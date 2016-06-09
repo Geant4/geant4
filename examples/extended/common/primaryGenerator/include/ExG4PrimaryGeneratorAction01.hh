@@ -35,6 +35,8 @@
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 class G4ParticleGun;
 class G4Event;
 
@@ -48,7 +50,7 @@ class ExG4PrimaryGeneratorAction01 : public G4VUserPrimaryGeneratorAction
   public:
     ExG4PrimaryGeneratorAction01(
       const G4String& particleName = "geantino",
-      G4double energy = 1.*MeV,
+      G4double energy = 1.*CLHEP::MeV,
       G4ThreeVector position= G4ThreeVector(0,0,0),
       G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));    
     ~ExG4PrimaryGeneratorAction01();

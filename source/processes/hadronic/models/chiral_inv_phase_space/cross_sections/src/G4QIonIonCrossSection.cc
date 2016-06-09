@@ -45,6 +45,7 @@
 //#define debugs
 
 #include "G4QIonIonCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QIonIonCrossSection::lastLENI=0;// Pointer to the lastArray of LowEn Inelast CS
@@ -505,8 +506,8 @@ G4double G4QIonIonCrossSection::CalculateElTot(G4double pA, G4double tA, G4doubl
   else if(std::fabs(pA-4.)<.1 && std::fabs(tA-3.)<.1) e=1.32;
   else if(std::fabs(pA-4.)<.1 && std::fabs(tA-4.)<.1) e=1.;
   G4double f=.37+.0188*al;
-  G4double g=std::log(std::pow(pA,0.35)+std::pow(tA,0.35));
-  G4double h=g*g;
+  G4double g_value=std::log(std::pow(pA,0.35)+std::pow(tA,0.35));
+  G4double h=g_value*g_value;
   G4double c=f/(1.+e/h/h);
 #ifdef pdebug
   G4cout<<"G4QIonIonCS::CalcElT:P="<<Mom<<",el/tot="<<c+d*r*r<<",d="<<d<<", r="<<r<<G4endl;

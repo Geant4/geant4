@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.17 2010-11-17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -55,15 +54,15 @@
 //      
 // -------------------------------------------------------------------
 
+#include <fstream>
+#include <sstream>
+
 #include "G4DiscreteGammaDeexcitation.hh"
 #include "G4DiscreteGammaTransition.hh"
 #include "G4NuclearLevelManager.hh"
 #include "G4NuclearLevelStore.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
-#include <fstream>
-#include <sstream>
-
 
 G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation(): 
   _nucleusZ(0), _nucleusA(0), _max_hl(1e-6*second), _icm(false),

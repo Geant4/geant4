@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc,v 1.6 2010-11-17 16:21:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Physics model class G4NeutronRadCapture 
@@ -36,6 +35,7 @@
 //
 
 #include "G4NeutronRadCapture.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"
@@ -86,18 +86,18 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     G4double M  = lv1.mag();
 
     ++A;
-    G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
-    if(M - m2 <= lowestEnergyLimit) {
+    G4double mass = G4NucleiProperties::GetNuclearMass(A, Z);
+    if(M - mass <= lowestEnergyLimit) {
       return &theParticleChange;
     }
  
     if (verboseLevel > 1) {
       G4cout << "G4NeutronRadCapture::DoIt: Eini(MeV)=" 
 	     << aTrack.GetKineticEnergy()/MeV << "  Eexc(MeV)= " 
-	     << (M - m2)/MeV 
+	     << (M - mass)/MeV 
 	     << "  Z= " << Z << "  A= " << A << G4endl;
     }
-    G4double e1 = (M - m2)*(M + m2)/(2*M);
+    G4double e1 = (M - mass)*(M + mass)/(2*M);
     G4double cost = 2.0*G4UniformRand() - 1.0;
     if(cost > 1.0) {cost = 1.0;}
     else if(cost < -1.0) {cost = -1.0;}

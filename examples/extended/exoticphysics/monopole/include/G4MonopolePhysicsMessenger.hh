@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopolePhysicsMessenger.hh,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/G4MonopolePhysicsMessenger.hh
+/// \brief Definition of the G4MonopolePhysicsMessenger class
 //
-//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
+// $Id$
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,13 +57,13 @@ public:
     
 private:
 
-  G4MonopolePhysics*    phys;
+  G4MonopolePhysics*         fPhys;
     
-  G4UIdirectory*             mPhysicsDir;    
-  G4UIcommand*               mPhysicsCmd;
-  G4UIcmdWithADouble*      mCmd;
-  G4UIcmdWithADouble*      zCmd;
-  G4UIcmdWithADoubleAndUnit* massCmd;
+  G4UIdirectory*             fPhysicsDir;    
+  G4UIcommand*               fPhysicsCmd;
+  G4UIcmdWithADouble*        fMCmd;
+  G4UIcmdWithADouble*        fZCmd;
+  G4UIcmdWithADoubleAndUnit* fMassCmd;
 
 };
 

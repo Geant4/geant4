@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/Histo.hh
+/// \brief Definition of the Histo class
+//
 #ifndef Histo_h
 #define Histo_h 1
 
@@ -49,21 +52,16 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
 #include "G4Track.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-namespace AIDA {
-  class ITree;
-  class ITuple;
-  class IHistogram1D;
-  class IAnalysisFactory;
-}
+class G4RootAnalysisManager;
 
 class Histo
 {
 
 public:
-  // With description
 
   static Histo* GetPointer();
 
@@ -77,130 +75,106 @@ public:
   void EndOfHisto();
   // In this method bookHisto method is called in which histogramms are filled
 
-public: // Without description
+public: 
   
-  void SetHistoName(const G4String& name) {histName = name;};
-  void SetHistoType(const G4String& type) {histType = type;};
-  void bookHisto();
-  void SaveToTuple(const G4String&, G4double);
-  void SaveToTuple(const G4String&, G4double, G4double);
-  void SaveEvent();
+  void ScoreNewTrack(const G4Track* aTrack);
 
-  G4double GetTrackLength() const {return trackLength;};
-  void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
-  void SetTrackOutAbsorber() {trackAbs = false;};
-  G4bool GetTrackInAbsorber() const {return trackAbs;};
-  void AddTrackLength(G4double x)   {trackLength += x;};
+  void AddPhantomStep(G4double e, G4double r1, G4double z1, 
+                      G4double r2, G4double z2,
+                      G4double r0, G4double z0);
 
-  void AddDeltaElectron(const G4DynamicParticle*);
-  void AddPhoton(const G4DynamicParticle*);
+  void AddPhantomGamma(G4double e, G4double r);
+
+  inline void SetHistoName(const G4String& name)   { fHistName = name; };
+  inline void AddStepInTarget()                    { ++fNstepTarget;};
+
+  inline void SetVerbose(G4int val)                { fVerbose = val;};
+  inline G4int GetVerbose() const                  { return fVerbose;};
+
+  inline void SetNumberDivZ(G4int val)             { fNBinsZ = val; };
+  inline G4int GetNumberDivZ() const               { return fNBinsZ; };
+
+  inline void SetNumberDivR(G4int val)             { fNBinsR = val; };
+  inline G4int GetNumberDivR() const               { return fNBinsR; };
+
+  inline void SetNumberDivE(G4int val)             { fNBinsE = val; };
+
+  inline void SetAbsorberZ(G4double val)           { fAbsorberZ = val; };
+  inline void SetAbsorberR(G4double val)           { fAbsorberR = val; };
+  inline void SetScoreZ(G4double val)              { fScoreZ = val; };
+
+  inline void SetMaxEnergy(G4double val)           { fMaxEnergy = val; };
+  inline G4double  GetMaxEnergy() const            { return fMaxEnergy;};
+
+  inline void SetCheckVolume(G4VPhysicalVolume* v) { fCheckVolume = v;};
+  inline void SetGasVolume(G4VPhysicalVolume* v)   { fGasVolume = v;};
+  inline void SetPhantom(G4VPhysicalVolume* v)     { fPhantom = v; };
+  inline void SetTarget1(G4VPhysicalVolume* v)     { fTarget1 = v; };
+  inline void SetTarget2(G4VPhysicalVolume* v)     { fTarget2 = v; };
+  
+private:
+
+  void BookHisto();
+
   void AddPhantomPhoton(const G4DynamicParticle*);
   void AddTargetPhoton(const G4DynamicParticle*);
   void AddPhantomElectron(const G4DynamicParticle*);
   void AddTargetElectron(const G4DynamicParticle*);
-  inline void AddPositron(const G4DynamicParticle*) { ++n_posit;};
-  inline void AddStepInTarget() { ++n_step_target;};
 
-  inline void SetVerbose(G4int val) {verbose = val;};
-  inline G4int GetVerbose() const {return verbose;};
-
-  inline void SetHistoNumber(G4int val) {nHisto = val;};
-  inline void SetNtuple(G4bool val) {nTuple = val;};
-
-  inline void SetNumberDivZ(G4int val) {nBinsZ = val; };
-  inline G4int GetNumberDivZ() const    {return nBinsZ;};
-  inline void SetNumberDivR(G4int val) {nBinsR = val; };
-  inline G4int GetNumberDivR() const    {return nBinsR;};
-  inline void SetNumberDivE(G4int val) {nBinsE = val; };
-
-  inline void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
-  inline G4int FirstEventToDebug() const {return nEvt1;};
-  inline void SetLastEventToDebug(G4int val) {nEvt2 = val;};
-  inline G4int LastEventToDebug() const {return nEvt2;};
-
-  inline void SetAbsorberZ(G4double val) {absorberZ = val;};
-  inline void SetAbsorberR(G4double val) {absorberR = val;};
-  inline void SetScoreZ(G4double val)    {scoreZ = val;};
-
-  inline void SetMaxEnergy(G4double val) {maxEnergy = val;};
-  inline G4double  GetMaxEnergy() const {return maxEnergy;};
-
-  inline void AddEvent() { ++n_evt; };
-  inline void AddStep()  { ++n_step; };
-
-  inline void SetCheckVolume(G4VPhysicalVolume* v) {checkVolume = v;};
-  inline void SetGasVolume(G4VPhysicalVolume* v) {gasVolume = v;};
-  inline G4VPhysicalVolume* CheckVolume() const {return checkVolume;};
-  inline G4VPhysicalVolume* GasVolume() const {return gasVolume;};
-
-  inline void SetPhantom(G4VPhysicalVolume* v) {phantom = v;};
-  inline void SetTarget1(G4VPhysicalVolume* v) {target1 = v;};
-  inline void SetTarget2(G4VPhysicalVolume* v) {target2 = v;};
-  
-  void AddStep(G4double e, G4double r1, G4double z1, G4double r2, G4double z2,
-                             G4double r0, G4double z0);
-  void AddGamma(G4double e, G4double r);
-  void ScoreNewTrack(const G4Track* aTrack);
-
-private:
+  inline void AddPhoton(const G4DynamicParticle*)  { ++fNgam; };
+  inline void AddElectron(const G4DynamicParticle*){ ++fNelec; };
+  inline void AddPositron(const G4DynamicParticle*){ ++fNposit; };
 
   // MEMBERS
   static Histo* fManager;
+  G4RootAnalysisManager* fAnalysisManager;
 
-  const G4ParticleDefinition* gamma;
-  const G4ParticleDefinition* electron;
-  const G4ParticleDefinition* positron;
-  const G4ParticleDefinition* neutron;
+  const G4ParticleDefinition* fGamma;
+  const G4ParticleDefinition* fElectron;
+  const G4ParticleDefinition* fPositron;
 
-  G4VPhysicalVolume* checkVolume;
-  G4VPhysicalVolume* gasVolume;
-  G4VPhysicalVolume* phantom;
-  G4VPhysicalVolume* target1;
-  G4VPhysicalVolume* target2;
-  G4String histName;
-  G4String histType;
+  G4VPhysicalVolume* fCheckVolume;
+  G4VPhysicalVolume* fGasVolume;
+  G4VPhysicalVolume* fPhantom;
+  G4VPhysicalVolume* fTarget1;
+  G4VPhysicalVolume* fTarget2;
+  G4String fHistName;
 
-  std::vector<AIDA::IHistogram1D*> histo;
-  AIDA::IAnalysisFactory* af;  
-  AIDA::ITuple* ntup;
-  AIDA::ITree* tree;
-  G4int nHisto;
-  G4int nHisto1;
-  G4int verbose;
-  G4int nBinsZ;
-  G4int nBinsR;
-  G4int nBinsE;
-  G4int nScoreBin;
-  G4int nEvt1;
-  G4int nEvt2;
+  G4int fNHisto;
+  G4int fVerbose;
+  G4int fNBinsZ;
+  G4int fNBinsR;
+  G4int fNBinsE;
+  G4int fScoreBin;
 
-  G4double absorberZ;
-  G4double stepZ;
-  G4double scoreZ;
-  G4double absorberR;
-  G4double stepR;
-  G4double maxEnergy;
-  G4double stepE;
-  G4double normZ;
-  G4double sumR;
+  G4double fScoreZ;
+  G4double fAbsorberZ;
+  G4double fAbsorberR;
 
-  G4double trackLength;
-  G4bool trackAbs;        // Track is in absorber
-  G4int n_evt;
-  G4int n_elec;
-  G4int n_posit;
-  G4int n_gam;
-  G4int n_step;
-  G4int n_gam_ph;
-  G4int n_gam_tar;
-  G4int n_e_tar;
-  G4int n_e_ph;
-  G4int n_step_target;
-  G4int n_neutron;
-  G4bool nTuple;
-  G4DataVector   volumeR;
-  G4DataVector   gammaE;
+  G4double fMaxEnergy;
 
+  G4double fStepZ;
+  G4double fStepR;
+  G4double fStepE;
+  G4double fNormZ;
+  G4double fSumR;
+
+  G4int fNevt;
+  G4int fNelec;
+  G4int fNposit;
+  G4int fNgam;
+  G4int fNstep;
+  G4int fNgamPh;
+  G4int fNgamTar;
+  G4int fNeTar;
+  G4int fNePh;
+  G4int fNstepTarget;
+
+  G4DataVector fVolumeR;
+  G4DataVector fGammaE;
+  G4DataVector fEdep;
+  std::vector<G4int> fHisto;
+ 
 };
 
 #endif

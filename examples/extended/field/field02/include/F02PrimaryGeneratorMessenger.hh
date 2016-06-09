@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/include/F02PrimaryGeneratorMessenger.hh
+/// \brief Definition of the F02PrimaryGeneratorMessenger class
 //
-// $Id: F02PrimaryGeneratorMessenger.hh,v 1.3 2006-06-29 17:17:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,16 +48,16 @@ class F02PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
     F02PrimaryGeneratorMessenger(F02PrimaryGeneratorAction*);
-   ~F02PrimaryGeneratorMessenger();
+    ~F02PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    F02PrimaryGeneratorAction* F02Action; 
-    G4UIcmdWithAString*        RndmCmd;
-    G4UIcmdWithADoubleAndUnit* setxvertexCmd;
-    G4UIcmdWithADoubleAndUnit* setyvertexCmd;
-    G4UIcmdWithADoubleAndUnit* setzvertexCmd;
+    F02PrimaryGeneratorAction* fAction; 
+    G4UIcmdWithAString*        fRndmCmd;
+    G4UIcmdWithADoubleAndUnit* fSetXVertexCmd;
+    G4UIcmdWithADoubleAndUnit* fSetYVertexCmd;
+    G4UIcmdWithADoubleAndUnit* fSetZVertexCmd;
 };
 
 #endif

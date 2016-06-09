@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstRK4.cc,v 1.5 2010-09-10 15:51:10 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // - 18.09.2008 - J.Apostolakis, T.Nikitina - Created

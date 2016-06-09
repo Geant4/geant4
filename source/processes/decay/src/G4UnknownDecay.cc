@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.cc,v 1.6 2007-12-15 12:29:16 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -35,12 +34,14 @@
 //
 
 #include "G4UnknownDecay.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
 #include "G4DecayProcessType.hh"
-
 
 // constructor
 G4UnknownDecay::G4UnknownDecay(const G4String& processName)

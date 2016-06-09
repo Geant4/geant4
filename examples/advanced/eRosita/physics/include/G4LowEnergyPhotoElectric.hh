@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.28 2006/06/29 19:36:03 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: A. Forti

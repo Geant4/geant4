@@ -38,6 +38,7 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)

@@ -53,18 +53,20 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissLib.cc,v 1.2 2007-06-27 09:57:42 gcosmo Exp $
+// $Id$
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007
 // A prototype of the low energy neutron transport model.
 //
 #include "G4FissLib.hh"
+#include "G4SystemOfUnits.hh"
 
 G4FissLib::G4FissLib()
+ :xSec(0)
 {
-  SetMinEnergy( 0.0 );
-  SetMaxEnergy( 20.*MeV );
+  SetMinEnergy(0.0);
+  SetMaxEnergy(20.*MeV);
   if(!getenv("G4NEUTRONHPDATA")) {
      G4cout << "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files." << G4endl;
      throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -91,33 +93,34 @@ G4FissLib::~G4FissLib()
   delete [] theFission;
 }
   
-G4HadFinalState * G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
+G4HadFinalState*
+G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus&)
 {
-  const G4Material * theMaterial = aTrack.GetMaterial();
+  const G4Material* theMaterial = aTrack.GetMaterial();
   G4int n = theMaterial->GetNumberOfElements();
   G4int index = theMaterial->GetElement(0)->GetIndex();
-  if(n!=1)
-  {
+
+  if (n != 1) {
     xSec = new G4double[n];
-    G4double sum=0;
-    G4int i, index;
+    G4double sum = 0;
+    G4int i;
+    G4int imat;
     const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
     G4double rWeight;    
     G4NeutronHPThermalBoost aThermalE;
-    for (i=0; i<n; i++)
-    {
-      index = theMaterial->GetElement(i)->GetIndex();
+    for (i = 0; i < n; i++) {
+      imat = theMaterial->GetElement(i)->GetIndex();
       rWeight = NumAtomsPerVolume[i];
-      xSec[i] = theFission[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-		                                                      theMaterial->GetElement(i),
+      xSec[i] = theFission[imat].GetXsec(aThermalE.GetThermalEnergy(aTrack,
+		                                                    theMaterial->GetElement(i),
   						      theMaterial->GetTemperature()));
       xSec[i] *= rWeight;
       sum+=xSec[i];
     }
+
     G4double random = G4UniformRand();
     G4double running = 0;
-    for (i=0; i<n; i++)
-    {
+    for (i = 0; i < n; i++) {
       running += xSec[i];
       index = theMaterial->GetElement(i)->GetIndex();
       if(random<=running/sum) break;

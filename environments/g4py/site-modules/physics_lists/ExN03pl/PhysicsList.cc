@@ -33,6 +33,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ProcessManager.hh"
 

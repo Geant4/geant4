@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SteppingActionMessenger.hh,v 1.5 2006-06-29 17:52:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef ExN05SteppingActionMessenger_h

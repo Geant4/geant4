@@ -23,12 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/include/RE04TrackingAction.hh
+/// \brief Definition of the RE04TrackingAction class
+//
+// $Id: $
+//
 #ifndef RE04TrackingAction_h
 #define RE04TrackingAction_h 1
 
 #include "G4UserTrackingAction.hh"
 
+//
+/// User tracking action class
+///
+/// - void PreUserTrackingAction(const G4Track*)
+///     sets a concrete user trajectory class object, RE04Trajectory
+///
+/// - void PostUserTrackingAction(const G4Track*)
+///     does nothing
+//
 class RE04TrackingAction : public G4UserTrackingAction {
 
   public:

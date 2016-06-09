@@ -30,6 +30,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04MuonSD::ExN04MuonSD(G4String name)

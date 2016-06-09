@@ -48,7 +48,9 @@ G4CrossSectionSourcePtr::G4CrossSectionSourcePtr(G4VCrossSectionSource* x): x_(x
 
 G4CrossSectionSourcePtr& G4CrossSectionSourcePtr::operator= (const G4CrossSectionSourcePtr& xw)
 {
-  x_ = xw.x_; 
+  if (this != &xw) {
+	x_ = xw.x_;
+  }
   return *this; 
 }
 

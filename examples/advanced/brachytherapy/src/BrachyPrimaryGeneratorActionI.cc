@@ -37,16 +37,15 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.10 2006-06-29 15:48:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
 #include "globals.hh"
-#include "G4ParticleTable.hh"
 #include "Randomize.hh"  
+#include "G4SystemOfUnits.hh"
+#include "G4ParticleTable.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-//#include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
 

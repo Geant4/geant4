@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.14 2010-12-03 16:03:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //         on base of G4LowEnergyIonisation developed by A.Forti and V.Ivanchenko
@@ -53,6 +52,8 @@
 //
 
 #include "G4LivermoreIonisationModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
@@ -73,8 +74,10 @@
 
 
 G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinition*,
-  const G4String& nam) : G4VEmModel(nam), isInitialised(false),
-			 crossSectionHandler(0), energySpectrum(0)
+						       const G4String& nam) : 
+  G4VEmModel(nam), fParticleChange(0), 
+  isInitialised(false),
+  crossSectionHandler(0), energySpectrum(0)
 {
   fIntrinsicLowEnergyLimit = 10.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -331,10 +334,10 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
     } 
   else 
     {
-      G4double norm = 1.0/std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-      finalPx *= norm;
-      finalPy *= norm;
-      finalPz *= norm;
+      G4double normLocal = 1.0/std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+      finalPx *= normLocal;
+      finalPy *= normLocal;
+      finalPz *= normLocal;
       fParticleChange->ProposeMomentumDirection(finalPx, finalPy, finalPz);
     }
   fParticleChange->SetProposedKineticEnergy(finalKinEnergy);

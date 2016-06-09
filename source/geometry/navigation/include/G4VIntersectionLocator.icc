@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.icc,v 1.3 2008-11-14 18:26:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4VIntersectionLocator inline methods
@@ -101,8 +100,8 @@ inline void G4VIntersectionLocator::SetVerboseFor(G4int fVerbose)
 }
 
 inline G4bool
-G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA, 
-                                        G4ThreeVector  EndPointB,
+G4VIntersectionLocator::IntersectChord( const G4ThreeVector&  StartPointA,
+                                        const G4ThreeVector&  EndPointB,
                                         G4double      &NewSafety,
                                         G4double      &PreviousSafety,
                                         G4ThreeVector &PreviousSftOrigin,
@@ -138,18 +137,23 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
     LinearStepLength = ChordAB_Length;
     intersects = false;
     NewSafety= currentSafety;
-    CalledNavigator= false; 
+    CalledNavigator= false;
+    // G4cout << " IntersectChord> Step 'guaranteed' taken:  safety= " << currentSafety << " chordAB-len= " << ChordAB_Length << G4endl;
   }
   else
   {
+    // G4cout << " IntersectChord> Step asking Navigator:    safety= " << currentSafety << " chordAB-len= " << ChordAB_Length << G4endl;
+    
     // Check whether any volumes are encountered by the chord AB
 
     LinearStepLength = GetNavigatorFor()->ComputeStep( StartPointA,
                                  ChordAB_Dir, ChordAB_Length, NewSafety );
     intersects = (LinearStepLength <= ChordAB_Length); 
-
        // G4Navigator contracts to return k_infinity if len==asked
        // and it did not find a surface boundary at that length
+    
+    // G4cout << "G4VIntersectionLocator:  intersect= " << intersects
+    //       << " step= " << LinearStepLength << " Chord length= " << ChordAB_Length;
 
     LinearStepLength = std::min( LinearStepLength, ChordAB_Length);
     CalledNavigator = true; 

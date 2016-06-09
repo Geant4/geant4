@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/OlapPhysicsList.cc
+/// \brief Implementation of the OlapPhysicsList class
 //
-// $Id: OlapPhysicsList.cc,v 1.3 2010-08-16 08:23:55 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -43,6 +45,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
 
 OlapPhysicsList::OlapPhysicsList():  G4VUserPhysicsList()
 {

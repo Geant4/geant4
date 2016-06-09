@@ -31,16 +31,13 @@ Several simple GDML files are provided:
 
 HOW TO BUILD THE EXAMPLE ?
 
-- You need to have built the persistency/gdml plugin module by having
-  set G4LIB_BUILD_GDML variable in your environment.
-  It is also required you specify the path where the XercesC XML parser
-  package is installed in your system, through the variable XERCESCROOT.
-  Note: if you are using dynamic libraries, you should add and
-        $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
-        equivalent on your system).
+- You need to have built the persistency/gdml module by having
+  set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+  as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+  the path where the XercesC XML parser package is installed in your system.
 
-- Compile and link to generate the executable:
- 	      % gmake
+- Compile and link to generate the executable (in your CMAKE build directory):
+ 	      % make
 
 - Execute the application.
   o For reading and visualize interactively a GDML file:

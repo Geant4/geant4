@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewerList.hh,v 1.8 2006-06-29 21:28:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  May 1996

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.hh,v 1.10 2006-06-29 19:06:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  17/11/96.
@@ -79,7 +78,9 @@ public: // With description
   G4Text (const G4String& text);
   G4Text (const G4String& text, const G4Point3D& position);
   G4Text (const G4VMarker&);
-  ~G4Text ();
+  G4Text (const G4Text&);
+  virtual ~G4Text ();
+  G4Text& operator= (const G4Text&);
 
   G4String GetText   () const;
   Layout   GetLayout () const;
@@ -90,7 +91,7 @@ public: // With description
   void SetText   (const G4String& text);
   void SetLayout (Layout);
 
-  void SetOffset ( double dx,  double dy ) ;   
+  void SetOffset (double dx, double dy) ;   
 
 private:
   G4String fText;
@@ -101,5 +102,6 @@ private:
 #include "G4Text.icc"
 
 std::ostream& operator<< (std::ostream& os, const G4Text&);
+std::ostream& operator<< (std::ostream& os, G4Text::Layout);
 
 #endif

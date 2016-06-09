@@ -33,16 +33,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/G4FullGlaubAADataSet.cc
+/// \brief Implementation of the G4FullGlaubAADataSet class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4FullGlaubAADataSet.cc
 //
-// Version:		0.B
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.B
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
@@ -75,7 +78,7 @@ G4FullGlaubAADataSet::G4FullGlaubAADataSet()
     }
   }
 
-  wu10 = std::sqrt(10.0);	// WU10=SQRT(10.)
+  wu10 = std::sqrt(10.0);        // WU10=SQRT(10.)
 
   glauberDataSetType = 0;
 }
@@ -99,7 +102,7 @@ G4FullGlaubAADataSet::G4FullGlaubAADataSet(const G4int AP1, const G4int AT1)
     }
   }
 
-  wu10 = std::sqrt(10.0);	// WU10=SQRT(10.)
+  wu10 = std::sqrt(10.0);        // WU10=SQRT(10.)
 
   glauberDataSetType = 0;
 
@@ -127,39 +130,39 @@ G4bool G4FullGlaubAADataSet::CreateGlauberData (const G4int AP1, const G4int AT1
   AP = AP1;
   AT = AT1;
 
-  nucc_.ijproj   = 1;					// IJPROJ=1
-  collis_.ijprox = 1;					// IJPROX=1
-  nuccc_.jjproj  = 1;					// JJPROJ=1
-  G4int jjprox   = 1;					// JJPROX=1
-  G4int ishc     = 0;					// ISHC=0
+  nucc_.ijproj   = 1;                                  // IJPROJ=1
+  collis_.ijprox = 1;                                  // IJPROX=1
+  nuccc_.jjproj  = 1;                                  // JJPROJ=1
+  G4int jjprox   = 1;                                  // JJPROX=1
+  G4int ishc     = 0;                                  // ISHC=0
 
   G4int ZP1 = stabZ[AP];
   G4int ZT1 = stabZ[AT];
 
   for (G4int ig = 0; ig < maxig; ig++)
   {
-    G4double ppn = std::pow(wu10,ig+2);			// PPN = WU10**(IG+1)
+    G4double ppn = std::pow(wu10,ig+2);                // PPN = WU10**(IG+1)
     shmaki_ (&AP, &ZP1, &AT, &ZT1, &rptshm_.rproj, &rptshm_.rtarg, &ppn);
     for (G4int i=0; i<maxArray; i++)
     {
       bsiten[ig][i] = dshm_.bsite[i][1];
     }
-    ishc++;						// ISHC = ISHC + 1
-    if (ishc == 1) {					// IF(ISHC.EQ.1)THEN
-      rproj = rptshm_.rproj;				// RPROJJ(MATNUM) = RPROJ
-      rtarg = rptshm_.rtarg;				// RTARGG(MATNUM) = RTARG
-      bmax  = dshm_.bmax;				// BMAXX(MATNUM)  = BMAX
-      bstep = dshm_.bstep;				// BSTEPP(MATNUM) = BSTEP
+    ishc++;                                            // ISHC = ISHC + 1
+    if (ishc == 1) {                                   // IF(ISHC.EQ.1)THEN
+      rproj = rptshm_.rproj;                           // RPROJJ(MATNUM) = RPROJ
+      rtarg = rptshm_.rtarg;                           // RTARGG(MATNUM) = RTARG
+      bmax  = dshm_.bmax;                              // BMAXX(MATNUM)  = BMAX
+      bstep = dshm_.bstep;                             // BSTEPP(MATNUM) = BSTEP
     }
   }
-  nucc_.ijproj   = 13;					// IJPROJ=13
-  collis_.ijprox = 13;					// IJPROX=13
-  nuccc_.jjproj  = 13;					// JJPROJ=13
-  jjprox         = 13;					// JJPROX=13
+  nucc_.ijproj   = 13;                                 // IJPROJ=13
+  collis_.ijprox = 13;                                 // IJPROX=13
+  nuccc_.jjproj  = 13;                                 // JJPROJ=13
+  jjprox         = 13;                                 // JJPROX=13
 
   for (G4int ig = 0; ig < maxig; ig++)
   {
-    G4double ppn = std::pow(wu10,ig+2);			// PPN = WU10**(IG+1)
+    G4double ppn = std::pow(wu10,ig+2);                // PPN = WU10**(IG+1)
     shmaki_ (&AP, &ZP1, &AT, &ZT1, &rptshm_.rproj, &rptshm_.rtarg, &ppn);
     for (G4int i=0; i<maxArray; i++)
     {

@@ -23,55 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04ElementField.cc
+/// \brief Implementation of the F04ElementField class
 //
 //
-
 #include "G4GeometryManager.hh"
 
 #include "F04ElementField.hh"
 
 #include "F04GlobalField.hh"
 
-G4Navigator* F04ElementField::aNavigator;
+#include "G4SystemOfUnits.hh"
+
+G4Navigator* F04ElementField::fNavigator;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04ElementField::F04ElementField(G4ThreeVector c, G4LogicalVolume* lv)
-{ 
-  center = c;
+{
+  fCenter = c;
 
-  minX = minY = minZ = -DBL_MAX;
-  maxX = maxY = maxZ =  DBL_MAX;
+  fMinX = fMinY = fMinZ = -DBL_MAX;
+  fMaxX = fMaxY = fMaxZ =  DBL_MAX;
 
-  F04GlobalField::getObject()->addElementField(this);
+  F04GlobalField::GetObject()->AddElementField(this);
 
-  color = "1,1,1";
+  fColor = "1,1,1";
 
-  userLimits = new G4UserLimits();
+  fUserLimits = new G4UserLimits();
 
-  lvolume = lv;
-  lvolume->SetVisAttributes(getVisAttribute(color));
+  fVolume = lv;
+  fVolume->SetVisAttributes(GetVisAttribute(fColor));
 
-  maxStep = 1*mm;
+  fMaxStep = 1*mm;
 
-  userLimits->SetMaxAllowedStep(maxStep);
+  fUserLimits->SetMaxAllowedStep(fMaxStep);
 
-  userLimits->SetUserMaxTrackLength(500.*m);
-  userLimits->SetUserMaxTime(10*ms);
-  userLimits->SetUserMinEkine(0.1*MeV);
-//  userLimits->SetUserMinRange(1*mm);
+  fUserLimits->SetUserMaxTrackLength(500.*m);
+  fUserLimits->SetUserMaxTime(10*ms);
+  fUserLimits->SetUserMinEkine(0.1*MeV);
+//  fUserLimits->SetUserMinRange(1*mm);
 
-  lvolume->SetUserLimits(userLimits);
+  fVolume->SetUserLimits(fUserLimits);
 }
 
-void F04ElementField::construct()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04ElementField::Construct()
 {
-  G4Navigator* theNavigator = 
+  G4Navigator* theNavigator =
                     G4TransportationManager::GetTransportationManager()->
                                                  GetNavigatorForTracking();
 
-  if (!aNavigator) {
-     aNavigator = new G4Navigator();
+  if (!fNavigator) {
+     fNavigator = new G4Navigator();
      if ( theNavigator->GetWorldVolume() )
-               aNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
+               fNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
    }
 
   G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
@@ -81,19 +88,19 @@ void F04ElementField::construct()
      geomManager->CloseGeometry(true);
   }
 
-  aNavigator->LocateGlobalPointAndSetup(center,0,false);
+  fNavigator->LocateGlobalPointAndSetup(fCenter,0,false);
 
-  G4TouchableHistoryHandle fTouchable = aNavigator->
+  G4TouchableHistoryHandle touchable = fNavigator->
                                          CreateTouchableHistoryHandle();
 
-  G4int depth = fTouchable->GetHistoryDepth();
+  G4int depth = touchable->GetHistoryDepth();
   for (G4int i = 0; i<depth; ++i) {
-      if(fTouchable->GetVolume()->GetLogicalVolume() == lvolume)break;
-      fTouchable->MoveUpHistory();
+      if(touchable->GetVolume()->GetLogicalVolume() == fVolume)break;
+      touchable->MoveUpHistory();
   }
 
-  // set global2local transform
-  global2local = fTouchable->GetHistory()->GetTopTransform();
+  // set fGlobal2local transform
+  fGlobal2local = touchable->GetHistory()->GetTopTransform();
 
   // set global bounding box
   G4double local[4], global[4];
@@ -101,24 +108,26 @@ void F04ElementField::construct()
   G4ThreeVector globalPosition;
   local[3] = 0.0;
   for (int i=0; i<2; ++i) {
-      local[0] = (i==0 ? -1.0 : 1.0) * getWidth()/2.;
+      local[0] = (i==0 ? -1.0 : 1.0) * GetWidth()/2.;
       for (int j=0; j<2; ++j) {
-          local[1] = (j==0 ? -1.0 : 1.0) * getHeight()/2.;
+          local[1] = (j==0 ? -1.0 : 1.0) * GetHeight()/2.;
           for (int k=0; k<2; ++k) {
-              local[2] = (k==0 ? -1.0 : 1.0) * getLength()/2.;
+              local[2] = (k==0 ? -1.0 : 1.0) * GetLength()/2.;
               G4ThreeVector localPosition(local[0],local[1],local[2]);
-              globalPosition = 
-                         global2local.Inverse().TransformPoint(localPosition);
+              globalPosition =
+                         fGlobal2local.Inverse().TransformPoint(localPosition);
               global[0] = globalPosition.x();
               global[1] = globalPosition.y();
               global[2] = globalPosition.z();
-              setGlobalPoint(global);
+              SetGlobalPoint(global);
            }
       }
   }
 }
 
-G4VisAttributes* F04ElementField::getVisAttribute(G4String color)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VisAttributes* F04ElementField::GetVisAttribute(G4String color)
 {
    G4VisAttributes* p = NULL;
    if(color.size() > 0 &&

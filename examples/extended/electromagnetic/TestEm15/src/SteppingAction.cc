@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2007-03-15 15:52:39 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm15/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,9 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
-                               PrimaryGeneratorAction* prim, RunAction* RuAct, 
-			       HistoManager* Hist)
-:detector(det), primary(prim), runAction(RuAct), histoManager(Hist)
+                               PrimaryGeneratorAction* prim, RunAction* RuAct)
+:fDetector(det), fPrimary(prim), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +58,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4StepPoint* prePoint = aStep->GetPreStepPoint();
   
   // if World --> return
-  if (prePoint->GetTouchableHandle()->GetVolume()==detector->GetWorld()) return;
+  if(prePoint->GetTouchableHandle()->GetVolume()==fDetector->GetWorld()) return;
   
   // here we enter in the absorber Box
   // tag the event to be killed anyway after this step
@@ -68,9 +69,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //  
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
-  runAction->CountProcesses(procName);
+  fRunAction->CountProcesses(procName);
       
-  if (procName != "msc" && procName != "stepMax") return;
+  if (procName != "msc" && procName != "muMsc" && procName != "stepMax") return;
   
   //below, only multiple Scattering happens
   //
@@ -78,40 +79,41 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4ThreeVector direction = endPoint->GetMomentumDirection();
   
   G4double truePathLength = aStep->GetStepLength();      
-  G4double geomPathLength = position.x() + 0.5*detector->GetBoxSize();
+  G4double geomPathLength = position.x() + 0.5*fDetector->GetBoxSize();
   G4double ratio = geomPathLength/truePathLength;
-  runAction->SumPathLength(truePathLength,geomPathLength);
-  histoManager->FillHisto(1,truePathLength);
-  histoManager->FillHisto(2,geomPathLength);
-  histoManager->FillHisto(3,ratio);
+  fRunAction->SumPathLength(truePathLength,geomPathLength);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  analysisManager->FillH1(1,truePathLength);
+  analysisManager->FillH1(2,geomPathLength);
+  analysisManager->FillH1(3,ratio);
    
   G4double yend = position.y(), zend = position.z();
   G4double lateralDisplacement = std::sqrt(yend*yend + zend*zend);
-  runAction->SumLateralDisplacement(lateralDisplacement);
-  histoManager->FillHisto(4,lateralDisplacement);
+  fRunAction->SumLateralDisplacement(lateralDisplacement);
+  analysisManager->FillH1(4,lateralDisplacement);
   
   G4double psi = std::atan(lateralDisplacement/geomPathLength); 
-  runAction->SumPsi(psi);
-  histoManager->FillHisto(5,psi);
+  fRunAction->SumPsi(psi);
+  analysisManager->FillH1(5,psi);
   
   G4double xdir = direction.x(),  ydir = direction.y(), zdir = direction.z();
   G4double tetaPlane = std::atan2(ydir, xdir); 
-  runAction->SumTetaPlane(tetaPlane);
-  histoManager->FillHisto(6,tetaPlane);
+  fRunAction->SumTetaPlane(tetaPlane);
+  analysisManager->FillH1(6,tetaPlane);
   tetaPlane = std::atan2(zdir, xdir); 
-  runAction->SumTetaPlane(tetaPlane);
-  histoManager->FillHisto(6,tetaPlane);
+  fRunAction->SumTetaPlane(tetaPlane);
+  analysisManager->FillH1(6,tetaPlane);
   
   G4double phiPos = std::atan2(zend, yend); 
-  histoManager->FillHisto(7,phiPos);
+  analysisManager->FillH1(7,phiPos);
   G4double phiDir = std::atan2(zdir, ydir); 
-  histoManager->FillHisto(8,phiDir);
+  analysisManager->FillH1(8,phiDir);
 
   G4double phiCorrel = 0.;
   if (lateralDisplacement > 0.)  
     phiCorrel = (yend*ydir + zend*zdir)/lateralDisplacement;
-  runAction->SumPhiCorrel(phiCorrel);
-  histoManager->FillHisto(9,phiCorrel);    
+  fRunAction->SumPhiCorrel(phiCorrel);
+  analysisManager->FillH1(9,phiCorrel);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

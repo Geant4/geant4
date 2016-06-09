@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.77 2010-11-07 11:14:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -41,9 +40,11 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
+#include "G4Point3D.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include <sstream>
+#include <fstream>
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -64,8 +65,9 @@ void G4VVisCommandViewer::RefreshIfRequired(G4VViewer* viewer) {
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
     else {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+	       << G4endl;
       }
     }
   }
@@ -504,6 +506,84 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 }
 
+////////////// /vis/viewer/copyViewFrom //////////////////////////
+
+G4VisCommandViewerCopyViewFrom::G4VisCommandViewerCopyViewFrom () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/copyViewFrom", this);
+  fpCommand -> SetGuidance
+  ("Copy the camera-specific parameters from the specified viewer.");
+  fpCommand -> SetGuidance
+  ("Note: To copy scene modifications - style, etc. - please use"
+   "\n\"/vis/viewer/set/all\"");
+  fpCommand -> SetParameterName ("from-viewer-name", omitable = false);
+}
+
+G4VisCommandViewerCopyViewFrom::~G4VisCommandViewerCopyViewFrom () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerCopyViewFrom::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << 
+  "ERROR: G4VisCommandsViewerCopyViewFrom::SetNewValue: no current viewer."
+             << G4endl;
+    }
+    return;
+  }
+
+  const G4String& fromViewerName = newValue;
+  G4VViewer* fromViewer = fpVisManager -> GetViewer (fromViewerName);
+  if (!fromViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << fromViewerName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  if (fromViewer == currentViewer) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+        "WARNING: G4VisCommandsViewerSet::SetNewValue:"
+        "\n  from-viewer and current viewer are identical."
+             << G4endl;
+    }
+    return;
+  }
+
+  // Copy camera-specific view parameters
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+  const G4ViewParameters& fromVP = fromViewer->GetViewParameters();
+  vp.SetViewpointDirection  (fromVP.GetViewpointDirection());
+  vp.SetLightpointDirection (fromVP.GetLightpointDirection());
+  vp.SetLightsMoveWithCamera(fromVP.GetLightsMoveWithCamera());
+  vp.SetUpVector            (fromVP.GetUpVector());
+  vp.SetFieldHalfAngle      (fromVP.GetFieldHalfAngle());
+  vp.SetZoomFactor          (fromVP.GetZoomFactor());
+  vp.SetScaleFactor         (fromVP.GetScaleFactor());
+  vp.SetCurrentTargetPoint  (fromVP.GetCurrentTargetPoint());
+  vp.SetDolly               (fromVP.GetDolly());
+  SetViewParameters(currentViewer, vp);
+  
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Camera parameters of viewer \"" << currentViewer->GetName()
+	   << "\"\n  set to those of viewer \"" << fromViewer->GetName()
+	   << "\"."
+	   << G4endl;
+  }
+}
+
 ////////////// /vis/viewer/create ///////////////////////////////////////
 
 G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
@@ -640,9 +720,9 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   if (newName == nextName) fId++;
   G4String newShortName = fpVisManager -> ViewerShortName (newName);
 
-  for (iHandler = 0; iHandler < nHandlers; iHandler++) {
-    G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
-    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
+  for (G4int ih = 0; ih < nHandlers; ih++) {
+    G4VSceneHandler* sh = sceneHandlerList [ih];
+    const G4ViewerList& viewerList = sh -> GetViewerList ();
     for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       if (viewerList [iViewer] -> GetShortName () == newShortName ) {
 	if (verbosity >= G4VisManager::errors) {
@@ -681,8 +761,9 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
     else {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+	       << G4endl;
       }
     }
   }
@@ -870,7 +951,8 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
     currentViewerShortName = "none";
   }
 
-  const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
+  const G4SceneHandlerList& sceneHandlerList =
+    fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.size ();
   G4bool found = false;
   G4bool foundCurrent = false;
@@ -1224,6 +1306,114 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
 
   viewer->ResetView();
   RefreshIfRequired(viewer);
+}
+
+////////////// /vis/viewer/save ///////////////////////////////////////
+
+G4VisCommandViewerSave::G4VisCommandViewerSave () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/save", this);
+  fpCommand -> SetGuidance
+  ("Write commands that define the current view to file.");
+  fpCommand -> SetParameterName ("file-name", omitable = true);
+  fpCommand -> SetDefaultValue ("G4cout");
+}
+
+G4VisCommandViewerSave::~G4VisCommandViewerSave () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerSave::GetCurrentValue
+(G4UIcommand*) {
+  return "";
+}
+
+namespace {
+  void WriteCommands
+  (std::ostream& os,
+   const G4ViewParameters& vp,
+   const G4Point3D& stp)
+  {
+    os
+    << vp.CameraAndLightingCommands(stp)
+    << vp.DrawingStyleCommands()
+    << vp.SceneModifyingCommands()
+    << vp.TouchableCommands()
+    << std::endl;
+  }
+}
+
+void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
+  
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  
+  const G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "ERROR: G4VisCommandsViewerSave::SetNewValue: no current viewer."
+      << G4endl;
+    }
+    return;
+  }
+  
+  const G4Scene* currentScene = currentViewer->GetSceneHandler()->GetScene();
+  if (!currentScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "ERROR: G4VisCommandsViewerSave::SetNewValue: no current scene."
+      << G4endl;
+    }
+    return;
+  }
+  
+  std::ofstream ofs;
+  if (newValue != "G4cout") {
+    // Check if file exists
+    std::ifstream ifs(newValue);
+    if (ifs) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout <<
+        "ERROR: G4VisCommandsViewerSave::SetNewValue: File \""
+        << newValue << "\" already exists."
+        << G4endl;
+      }
+      ifs.close();
+      return;
+    }
+    ofs.open(newValue);
+    if (!ofs) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout <<
+        "ERROR: G4VisCommandsViewerSave::SetNewValue: Trouble opening file \""
+        << newValue << "\"."
+        << G4endl;
+      }
+      ofs.close();
+      return;
+    }
+  }
+  
+  const G4ViewParameters& vp = currentViewer->GetViewParameters();
+  const G4Point3D& stp = currentScene->GetStandardTargetPoint();
+  
+  if (newValue == "G4cout") {
+    WriteCommands(G4cout,vp,stp);
+  } else {
+    WriteCommands(ofs,vp,stp);
+    ofs.close();
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << currentViewer -> GetName ()
+    << "\"" << " saved to ";
+    if (newValue == "G4cout") {
+      G4cout << "G4cout.";
+    } else {
+      G4cout << "file \'" << newValue << "\".";
+    }
+    G4cout << G4endl;
+  }
 }
 
 ////////////// /vis/viewer/scale and scaleTo ////////////////////////////

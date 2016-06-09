@@ -14,6 +14,57 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 3 October 2012 - Dennis Wright (hadr-lep-V09-05-10)
+----------------------------------------------------
+- add deprecation warnings to ctors of model classes
+
+26 September 2012 - Gabriele Cosmo (hadr-lep-V09-05-09)
+-------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+10 June 2012 - Dennis Wright  (hadr-lep-V09-05-08)
+--------------------------------------------------
+- Fix compiler shadowing warning by replacing variable nm with nneg,
+  m with pvec and m2 with mass2.  Also replace np with npos, nz with
+  nzero
+
+10 May 2012 - Gunter Folger   (hadr-lep-V09-05-07)
+----------------------------------------------------
+-  Fix typo in previous tag 
+
+10 May 2012 - Gunter Folger   (hadr-lep-V09-05-06)
+----------------------------------------------------
+-  also relax limits on check for "catastrophic" energy non-conservation
+    for G4LFission
+
+12 April 2012 - Gunter Folger   (hadr-lep-V09-05-05)
+----------------------------------------------------
+-  GetFatalEnergyCheckLevels() returns const std::pair<>
+
+19 March 2012 - Gunter Folger   (hadr-lep-V09-05-04)
+----------------------------------------------------
+-  also relax limits on check for "catastrophic" energy non-conservation
+    for G4Lelastic.
+      (tag hadr-lep-V09-05-04 had .cc not committed)
+    
+19 March 2012 - Gunter Folger   (hadr-lep-V09-05-02)
+----------------------------------------------------
+-  also relax limits on check for "catastrophic" energy non-conservation
+    for G4LCapture.
+    
+16 March 2012 - Gunter Folger   (hadr-lep-V09-05-01)
+----------------------------------------------------
+-  relax limits on check for "catastrophic" energy non-conservation,
+    allow deviation by the mass of heavy nucleus.
+
+22 January 2012 - Dennis Wright (hadr-lep-V09-05-00)
+----------------------------------------------------
+- moved G4InelasticInteraction to this directory 
+- in ApplyYourself method of all G4LEXXXInelastic classes, add call
+    to DoIsotopeCounting, conditional upon isotope production
+    mode being turned on 
+ 
 19 November 2011 - V.Ivanchenko (hadr-lep-V09-04-05)
 ----------------------------------------------------
   Added protection against return back only primary particle with 

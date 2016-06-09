@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/src/RE03DetectorConstruction.cc
+/// \brief Implementation of the RE03DetectorConstruction class
 //
-// $Id: RE03DetectorConstruction.cc,v 1.1 2007-11-13 19:55:43 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
 #include "RE03DetectorConstruction.hh"
 
+#include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -47,87 +50,64 @@
 #include "G4PSNofStep.hh"
 #include "G4SDParticleFilter.hh"
 
+#include "G4SystemOfUnits.hh"    
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03DetectorConstruction::RE03DetectorConstruction()
-:constructed(false)
+  :G4VUserDetectorConstruction(),
+   fAir(0),fWater(0),fWorldPhys(0),fPhantomPhys(0),
+   fConstructed(false)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03DetectorConstruction::~RE03DetectorConstruction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* RE03DetectorConstruction::Construct()
 {
-  if(!constructed)
+  if(!fConstructed)
   { 
-    constructed = true;
+    fConstructed = true;
     DefineMaterials();
     SetupGeometry();
   }
-  return worldPhys;
+  return fWorldPhys;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03DetectorConstruction::DefineMaterials()
 { 
-  G4String name, symbol;             //a=mass of a mole;
-  G4double a, z, density;            //z=mean number of protons;  
-
-  G4int ncomponents, natoms;
-  G4double fractionmass;
-
-  //
-  // define Elements
-  //
-
-  a = 1.01*g/mole;
-  G4Element* H  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
-
-  a = 14.01*g/mole;
-  G4Element* N  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
-
-  a = 16.00*g/mole;
-  G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
-
-  //
-  // define a material from elements.   case 1: chemical molecule
-  //
- 
-  density = 1.000*g/cm3;
-  water = new G4Material(name="Water", density, ncomponents=2);
-  water->AddElement(H, natoms=2);
-  water->AddElement(O, natoms=1);
-
-  //
-  // define a material from elements.   case 2: mixture by fractional mass
-  //
-
-  density = 1.290*mg/cm3;
-  air = new G4Material(name="Air"  , density, ncomponents=2);
-  air->AddElement(N, fractionmass=0.7);
-  air->AddElement(O, fractionmass=0.3);
+  //-------- NIST Materials -----------------------------------------------
+  //  Material Information imported from NIST database. 
+  G4NistManager* NISTman = G4NistManager::Instance();
+  fWater = NISTman->FindOrBuildMaterial("G4_WATER");
+  fAir   = NISTman->FindOrBuildMaterial("G4_AIR");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03DetectorConstruction::SetupGeometry()
 {
   //     
   // World
   //
   G4VSolid* worldSolid = new G4Box("World",2.*m,2.*m,2.*m);
-  G4LogicalVolume* worldLogical = new G4LogicalVolume(worldSolid,air,"World");
-  worldPhys = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"World",
+  G4LogicalVolume* worldLogical = new G4LogicalVolume(worldSolid,fAir,"World");
+  fWorldPhys = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"World",
                         0,false,0);
   
   //                               
   // Phantom
   //  
   G4VSolid* phantomSolid = new G4Box("Calor",1.*m,1.*m,1.*m);
-  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid,water,"Phantom");
-  phantomPhys = new G4PVPlacement(0,G4ThreeVector(),phantomLogical,"Phantom",
+  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid,fWater,"Phantom");
+  fPhantomPhys = new G4PVPlacement(0,G4ThreeVector(),phantomLogical,"Phantom",
                          worldLogical,false,0);
   //                                        
   // Visualization attributes
   //
-//  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+  // worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);

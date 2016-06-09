@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.36 2010-10-26 13:52:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +62,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuBremsstrahlungModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
@@ -95,6 +96,15 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
   nist = G4NistManager::Instance();
 
   mass = rmass = cc = coeff = 1.0;
+
+  fDN[0] = 0.0;
+  for(G4int i=1; i<93; ++i) {
+    G4double dn = 1.54*nist->GetA27(i);
+    fDN[i] = dn;
+    if(1 < i) {
+      fDN[i] /= std::pow(dn, 1./G4double(i));
+    }
+  }
 
   if(p) { SetParticle(p); }
 }
@@ -300,23 +310,19 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 
   G4int iz = G4int(Z);
   if(iz < 1) iz = 1;
+  else if(iz > 92) iz = 92;
 
   G4double z13 = 1.0/nist->GetZ13(iz);
-  G4double dn  = 1.54*nist->GetA27(iz);
+  G4double dnstar = fDN[iz];
 
-  G4double b,b1,dnstar ;
+  G4double b,b1;
 
-  if(1 == iz)
-  {
+  if(1 == iz) {
     b  = bh;
     b1 = bh1;
-    dnstar = dn;
-  }
-  else
-  {
+  } else {
     b  = btf;
     b1 = btf1;
-    dnstar = dn/std::pow(dn, 1./Z);
   }
 
   // nucleus contribution logarithm
@@ -425,9 +431,12 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   G4double lnepksi, epksi;
   G4double func2;
 
+  G4double xmin = log(tmin/MeV);
+  G4double xmax = log(kineticEnergy/tmin);
+
   do {
-    lnepksi = log(tmin) + G4UniformRand()*log(kineticEnergy/tmin);
-    epksi   = exp(lnepksi);
+    lnepksi = xmin + G4UniformRand()*xmax;
+    epksi   = MeV*exp(lnepksi);
     func2   = epksi*ComputeDMicroscopicCrossSection(kineticEnergy,Z,epksi);
 
   } while(func2 < func1*G4UniformRand());

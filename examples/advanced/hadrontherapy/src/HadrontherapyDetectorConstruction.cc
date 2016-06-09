@@ -32,6 +32,7 @@
 // Institute in the framework of the MC-INFN Group
 //
 
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
@@ -83,17 +84,17 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
 
   // Default detector voxels size
   // 200 slabs along the beam direction (X)
-  sizeOfVoxelAlongX = 200 *um; 
-  sizeOfVoxelAlongY = 4 *cm; 
-  sizeOfVoxelAlongZ = 4 *cm; 
+  sizeOfVoxelAlongX = 200 *CLHEP::um; 
+  sizeOfVoxelAlongY = 4 *CLHEP::cm; 
+  sizeOfVoxelAlongZ = 4 *CLHEP::cm; 
 
   // Define here the material of the water phantom and of the detector
   SetPhantomMaterial("G4_WATER"); 
   // Construct geometry (messenger commands)
-  SetDetectorSize(4.*cm, 4.*cm, 4.*cm);
-  SetPhantomSize(40. *cm, 40. *cm, 40. *cm);
-  SetPhantomPosition(G4ThreeVector(20. *cm, 0. *cm, 0. *cm));
-  SetDetectorToPhantomPosition(G4ThreeVector(0. *cm, 18. *cm, 18. *cm));
+  SetDetectorSize(4.*CLHEP::cm, 4.*CLHEP::cm, 4.*CLHEP::cm);
+  SetPhantomSize(40. *CLHEP::cm, 40. *CLHEP::cm, 40. *CLHEP::cm);
+  SetPhantomPosition(G4ThreeVector(20. *CLHEP::cm, 0. *CLHEP::cm, 0. *CLHEP::cm));
+  SetDetectorToPhantomPosition(G4ThreeVector(0. *CLHEP::cm, 18. *CLHEP::cm, 18. *CLHEP::cm));
 
 
   // Write virtual parameters to the real ones and check for consistency      
@@ -139,7 +140,7 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
     red = new G4VisAttributes(G4Colour(255/255., 0/255. ,0/255.));
     red -> SetVisibility(true);
     red -> SetForceSolid(true);
-    //red -> SetForceWireframe(true);
+    red -> SetForceWireframe(true);
     phantomLogicalVolume -> SetVisAttributes(red);
 }
 

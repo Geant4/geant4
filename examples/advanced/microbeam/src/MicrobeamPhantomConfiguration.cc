@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhantomConfiguration.cc,v 1.9 2010-06-25 09:41:03 gunter Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "MicrobeamPhantomConfiguration.hh"
+#include "G4SystemOfUnits.hh"
 
 G4int MicrobeamPhantomConfiguration::phantomTotalPixels = 0;
 G4int MicrobeamPhantomConfiguration::nucleusTotalPixels = 0;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAVibExcitation.hh,v 1.1 2010-09-08 13:46:45 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

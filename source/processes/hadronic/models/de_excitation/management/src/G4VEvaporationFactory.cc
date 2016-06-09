@@ -24,26 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.cc,v 1.7 2010-04-27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modifications:
+//
+// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
 #include "G4VEvaporationFactory.hh"
 
-G4VEvaporationFactory::G4VEvaporationFactory() : channel(0) 
+G4VEvaporationFactory::G4VEvaporationFactory(G4VEvaporationChannel* ptr)
+  : thePhotonEvaporation(ptr)
 {}
 
 G4VEvaporationFactory::~G4VEvaporationFactory()
-{
-  if (channel != 0) {
-    size_t n = channel->size();
-    for(size_t i=0; i<n; ++i) { delete (*channel)[i]; }
-    delete channel;
-    channel = 0;
-  }
-}
+{}
 
 
 

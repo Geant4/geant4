@@ -35,9 +35,9 @@ public:
   args(const std::vector<std::string>& a_args){add(a_args);}
   args(const std::vector<arg>& a_args):m_args(a_args){}
   args(const std::string& a_args,const std::string& a_sep = " ",bool a_strip = false){
-    std::vector<std::string> args;
-    words(a_args,a_sep,false,args);  
-    add(args,a_strip);
+    std::vector<std::string> _args;
+    words(a_args,a_sep,false,_args);  
+    add(_args,a_strip);
   }
   virtual ~args(){}
 public:
@@ -56,6 +56,7 @@ public:
     }
     return false;
   }
+  bool is_empty() const {return m_args.size()?false:true;}
   unsigned int size() const {return m_args.size();}
   unsigned int number() const {return m_args.size();} //back comp.
   bool find(const std::string& a_key,std::string& a_value) const {
@@ -84,9 +85,9 @@ public:
   }
   template <class aT>
   bool find(const std::string& a_string,aT& a_value) const {
-    std::string s;
-    if(!find(a_string,s)) {a_value = aT();return false;}
-    return to<aT>(s,a_value);
+    std::string _s;
+    if(!find(a_string,_s)) {a_value = aT();return false;}
+    return to<aT>(_s,a_value);
   }
   std::vector<std::string> tovector() const {
     // Return a vector of string <name=value>
@@ -106,7 +107,9 @@ public:
     return vec;
   }
 
-  bool add(const std::string& a_key,const std::string& a_value,bool a_override = true){
+  bool add(const std::string& a_key,
+           const std::string& a_value = "",
+           bool a_override = true){
     if(a_override) {
       for(std::vector<arg>::iterator it = m_args.begin();
           it!=m_args.end();++it) {
@@ -185,18 +188,18 @@ public:
     // and without a value (not of the form [-]xxx=yyy). 
     // Note that an argument like that in between arguments
     // is NOT taken into account. 
-    std::vector<std::string> files;
-    if(m_args.empty()) return files;
+    std::vector<std::string> _files;
+    if(m_args.empty()) return _files;
     std::vector<arg>::const_iterator it = m_args.begin();
     if(a_skip_first) it++;
     for(;it!=m_args.end();++it) {
       if( ((*it).first.find('-')==0) || (*it).second.size() ) {
-        files.clear();
+        _files.clear();
       } else {
-        files.push_back((*it).first);
+        _files.push_back((*it).first);
       }
     }
-    return files;
+    return _files;
   }  
   bool argcv(int& a_argc,char**& a_argv) const {
     // If using with :
@@ -206,8 +209,8 @@ public:
     // you can delete with :
     //   args.delete_argcv(argc,argv);
     if(m_args.empty()) {a_argc = 0;a_argv = 0;return true;}
-    typedef char* cstr_t;
-    cstr_t* av = new cstr_t[m_args.size()];
+    typedef char* _cstr_t;
+    _cstr_t* av = new _cstr_t[m_args.size()];
     if(!av) {a_argc = 0;a_argv = 0;return false;}
     a_argv = av;
     for(std::vector<arg>::const_iterator it = m_args.begin();
@@ -261,30 +264,26 @@ public:
   void files_at_end(bool a_skip_first = true) {
     // reorder to have "file" arguments at end.
     if(m_args.empty()) return;
-    std::vector<arg> args;
-    if(a_skip_first) args.push_back(*(m_args.begin()));
+    std::vector<arg> _args;
+    if(a_skip_first) _args.push_back(*(m_args.begin()));
     //first pass :
-    //FIXME : Android : with inlib/stl/vector having
-    //        const_iterator does not compile.
-   {std::vector<arg>::iterator it = m_args.begin();
+   {std::vector<arg>::const_iterator it = m_args.begin();
     if(a_skip_first) it++;
     for(;it!=m_args.end();++it) {
       if( ((*it).first.find('-')==0) || (*it).second.size() ) {
-        args.push_back(*it);
+        _args.push_back(*it);
       }
     }}
     //second pass :
-    //FIXME : Android : with inlib/stl/vector having
-    //        const_iterator does not compile.
-   {std::vector<arg>::iterator it = m_args.begin();
+   {std::vector<arg>::const_iterator it = m_args.begin();
     if(a_skip_first) it++;
     for(;it!=m_args.end();++it) {
       if( ((*it).first.find('-')==0) || (*it).second.size() ) {
       } else {
-        args.push_back(*it);
+        _args.push_back(*it);
       }
     }}
-    m_args = args;
+    m_args = _args;
   }
 
   //NOTE : print is a Python keyword.
@@ -297,7 +296,7 @@ public:
     }
   }
 
-private:
+protected:
   std::vector<arg> m_args;
 };
 

@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 8, 2012 I.Hrivnacova (exampleRE01-V09-05-02)
+- Added copying pythia_event.data in the build area
+
+Oct 15, 2012 I.Hrivnacova (exampleRE01-V09-05-01)
+- Replaced tabulators with space characters
+
+Oct 14, 2012 T.Aso
+- revised all codes according to the coding guideline for extended examples
+
+Jul. 28, 2012 Vladimir Ivanchenko (exampleRE01-V09-05-00)
+- Fixed elastic physics
+
 Sep. 28, 2011 Pere Mato (exampleRE01-V09-04-00)
 - Changed SVN property eol to native for file sample.err needed for testing
 

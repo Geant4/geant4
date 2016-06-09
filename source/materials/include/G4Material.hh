@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.28 2010-05-14 14:34:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 //---------------------------------------------------------------------------
@@ -91,15 +90,20 @@
 // 26-02-02, fIndexInTable renewed
 // 06-08-02, remove constructors with ChemicalFormula (mma)
 // 15-11-05, GetMaterial(materialName, G4bool warning=true)
+// 13-04-12, std::map<G4Material*,G4double> fMatComponents (mma)
+// 21-04-12, fMassOfMolecule (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4MATERIAL_HH
 #define G4MATERIAL_HH 1
 
+#include <vector>
+#include <map>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
@@ -123,8 +127,8 @@ public:  // with description
                    G4double  a,					//mass of mole
                    G4double  density, 				//density
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
+                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
   // Constructor to create a material from a combination of elements
@@ -134,8 +138,8 @@ public:  // with description
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
+                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
   // Constructor to create a material from the base material
@@ -144,8 +148,8 @@ public:  // with description
                    G4double  density, 				//density
              const G4Material* baseMaterial,			//base material
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
+                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
   // Add an element, giving number of atoms
@@ -227,6 +231,15 @@ public:  // with description
   inline 
   const G4Material* GetBaseMaterial()     const {return fBaseMaterial;}
   
+  // material components:
+  inline 
+  std::map<G4Material*,G4double> GetMatComponents() const 
+                                               {return fMatComponents;}
+					       
+  //for chemical compound
+  inline 
+  G4double GetMassOfMolecule()     const {return fMassOfMolecule;}
+      
   //meaningful only for single material:
   G4double GetZ() const;
   G4double GetA() const;
@@ -302,7 +315,7 @@ private:
   G4double         fPressure;             // Pressure    (defaults: STP)
 
   G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
-  G4int            fArrayLength;          // the length of FAtomVector 
+  G4int            fArrayLength;          // the length of fAtomsVector 
   size_t           fNumberOfComponents;   // Nb of components declared so far
 
   size_t           fNumberOfElements;     // Nb of Elements in the material
@@ -329,8 +342,14 @@ private:
   G4double  fNuclInterLen;                // Nuclear interaction length  
   
   G4IonisParamMat* fIonisation;           // ionisation parameters
-  G4SandiaTable*   fSandiaTable;          // Sandia table         
+  G4SandiaTable*   fSandiaTable;          // Sandia table
+  
+  // utilities
+  //         
   const G4Material* fBaseMaterial;        // Pointer to the base material
+  G4double fMassOfMolecule; 		  // for materials built by atoms count
+  std::map<G4Material*,G4double> fMatComponents; // for composites built via
+                                                 // AddMaterial()
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

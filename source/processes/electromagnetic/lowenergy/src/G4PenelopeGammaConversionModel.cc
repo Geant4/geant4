@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc,v 1.5 2010-12-15 10:26:41 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -35,6 +34,8 @@
 //
 
 #include "G4PenelopeGammaConversionModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
@@ -50,7 +51,8 @@
 
 G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleDefinition*,
 							       const G4String& nam)
-  :G4VEmModel(nam),logAtomicCrossSection(0),fEffectiveCharge(0),fMaterialInvScreeningRadius(0),
+  :G4VEmModel(nam),fParticleChange(0),logAtomicCrossSection(0),
+   fEffectiveCharge(0),fMaterialInvScreeningRadius(0),
    fScreeningFunction(0),isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 2.0*electron_mass_c2;
@@ -74,7 +76,7 @@ G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleD
 
 G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
 {
-  std::map <const G4int,G4PhysicsFreeVector*>::iterator i;
+  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
   if (logAtomicCrossSection)
     {
       for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
@@ -100,7 +102,7 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
 
   // logAtomicCrossSection is created only once, since it is  never cleared
   if (!logAtomicCrossSection)
-    logAtomicCrossSection =  new std::map<const G4int,G4PhysicsFreeVector*>;
+    logAtomicCrossSection =  new std::map<G4int,G4PhysicsFreeVector*>;
 
   //delete old material data...
   if (fEffectiveCharge)
@@ -536,7 +538,7 @@ void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Materi
       for (G4int i=0;i<nElements;i++)
 	{
 	  G4double Zelement = (*elementVector)[i]->GetZ();
-	  G4double Aelement = (*elementVector)[i]->GetA();
+	  G4double Aelement = (*elementVector)[i]->GetAtomicMassAmu();
 	  atot += Aelement*fractionVector[i];
 	  zeff += Zelement*Aelement*fractionVector[i]; //average with the number of nuclei
 	}

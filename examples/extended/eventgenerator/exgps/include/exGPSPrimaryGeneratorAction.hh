@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSPrimaryGeneratorAction.hh
+/// \brief Definition of the exGPSPrimaryGeneratorAction class
+//
 
 #ifndef exGPSPrimaryGeneratorAction_h
 #define exGPSPrimaryGeneratorAction_h 1
@@ -36,14 +39,14 @@ class exGPSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     exGPSPrimaryGeneratorAction();
-    ~exGPSPrimaryGeneratorAction();
+    virtual ~exGPSPrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 
-    G4GeneralParticleSource* particleGun;
+    G4GeneralParticleSource* fParticleGun;
 };
 
 #endif

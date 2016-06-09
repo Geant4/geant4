@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.3 2007-10-29 17:09:53 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,13 +51,13 @@ class TrackingAction : public G4UserTrackingAction {
     void  PreUserTrackingAction(const G4Track*);
     void PostUserTrackingAction(const G4Track*);
     
-    void AddEdepCavity(G4double de) { EdepCavity += de;};
+    void AddEdepCavity(G4double de) { fEdepCavity += de;};
         
   private:
-    RunAction*     runAction;
-    HistoManager*  histoManager;
+    RunAction*     fRunAction;
+    HistoManager*  fHistoManager;
     
-    G4double       EdepCavity;            
+    G4double       fEdepCavity;            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

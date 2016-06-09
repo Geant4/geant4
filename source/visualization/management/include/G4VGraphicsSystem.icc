@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.icc,v 1.8 2010-05-20 07:55:47 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  27th March 1996
@@ -52,7 +51,7 @@ inline void G4VGraphicsSystem::SetName (const G4String& name) {
   fName = name;
 }
 
-inline void G4VGraphicsSystem::SetNickName (const G4String& nickname) {
+inline void G4VGraphicsSystem::SetNickname (const G4String& nickname) {
   fNickname = nickname;
 }
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.16 2010-05-28 15:03:46 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -630,7 +629,7 @@ G4QIsotope::G4QIsotope()
     G4cout<<"G4QIsotope::Constructor: Element # "<<i<<", nOfIsotopes="<<n<<G4endl;
 #endif
     vector<pair<G4int,G4double>*>*a=new vector<pair<G4int,G4double>*>;
-    vector<pair<G4int,G4double>*>*s=new vector<pair<G4int,G4double>*>;
+    vector<pair<G4int,G4double>*>*s_vec=new vector<pair<G4int,G4double>*>;
     G4double last=0.;
     if(n) for(G4int j=0; j<n; j++)
     {
@@ -640,13 +639,13 @@ G4QIsotope::G4QIsotope()
       last=cur;                     // Update the summed value
       pair<G4int,G4double>* sP = new pair<G4int,G4double>((*is)[j]);
       a->push_back(aP);
-      s->push_back(sP);
+      s_vec->push_back(sP);
 #ifdef cdebug
       G4cout<<"G4QIsotope::Constructor:Element# "<<i<<", Pair # "<<j<<" is filled"<<G4endl;
 #endif
     }
     natElements.push_back(a);       // Fill abundancies for the particular isotope
-    natSumAbund.push_back(s);       // Fill summes abundancies up to this isotope
+    natSumAbund.push_back(s_vec);   // Fill summes abundancies up to this isotope
 #ifdef cdebug
     G4cout<<"G4QIsotope::Constructor: natElements is filled"<<G4endl;
 #endif
@@ -683,8 +682,8 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
     if(nn) for(G4int n=0; n<nn; n++) delete (*curA)[n]; // Delete pair(N,Ab)
     delete curA;                   // Delet abundancy vector
     vector<pair<G4int,G4double>*>* curS=natSumAbund[i];
-    G4int ns=curS->size();         // Can not be 0 by definition
-    if(ns) for(G4int m=0; m<ns; m++) delete (*curS)[m]; // Delete pair(N,Ab)
+    G4int ns_value=curS->size();   // Can not be 0 by definition
+    if(ns_value) for(G4int n=0; n<ns_value; n++) delete (*curS)[n]; // Delete pair(N,Ab)
     delete curS;                   // Delet abundancy vector
     vector<pair<G4int,G4double>*>* curC=natIsoCrosS[i];
     G4int nc=curC->size();         // Can not be 0 by definition
@@ -708,7 +707,7 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
     //
     pair<G4int, vector<pair<G4int,G4double>*>* >* nCS= newIsoCS[j];
     G4int nCn=nCS->second->size();
-    if(nCn) for(G4int m=0; m<nCn; m++) delete (*(nCS->second))[m]; // Del vect<pair(N,C)*>
+    if(nCn) for(G4int n=0; n<nCn; n++) delete (*(nCS->second))[n]; // Del vect<pair(N,C)*>
     delete nCS->second;            // Delete the vector
     delete nCS;                    // Delete vect<IndZ,vect<pair(N,CS)*>*> newIsoCroSVector
     //

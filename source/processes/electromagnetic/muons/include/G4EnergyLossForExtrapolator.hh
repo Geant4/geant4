@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.12 2008-11-13 14:14:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -51,10 +50,11 @@
 #ifndef G4EnergyLossForExtrapolator_h
 #define G4EnergyLossForExtrapolator_h 1
 
+#include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
-#include <vector>
 
 class G4ParticleDefinition;
 class G4Material;
@@ -243,7 +243,7 @@ G4EnergyLossForExtrapolator::AverageScatteringAngle(G4double kinEnergy,
   if(SetupKinematics(part, mat, kinEnergy)) {
     G4double t = stepLength/radLength;
     G4double y = std::max(0.001, t); 
-    theta = 19.23*MeV*std::sqrt(charge2*t)*(1.0 + 0.038*std::log(y))/(beta2*gam*mass);
+    theta = 19.23*CLHEP::MeV*std::sqrt(charge2*t)*(1.0 + 0.038*std::log(y))/(beta2*gam*mass);
   }
   return theta;
 }
@@ -271,7 +271,7 @@ G4double G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy,
   G4double sig2 = 0.0;
   if(SetupKinematics(part, mat, kinEnergy)) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
-    sig2 = (1.0/beta2 - 0.5)*twopi_mc2_rcl2*tmax*step*electronDensity*charge2;
+    sig2 = (1.0/beta2 - 0.5)*CLHEP::twopi_mc2_rcl2*tmax*step*electronDensity*charge2;
   }
   return sig2;
 }

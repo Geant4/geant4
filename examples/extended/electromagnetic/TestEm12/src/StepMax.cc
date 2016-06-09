@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.3 2006-06-29 16:43:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/src/StepMax.cc
+/// \brief Implementation of the StepMax class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,14 +37,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName, G4ProcessType type)
- : G4VDiscreteProcess(processName,type), MaxChargedStep(DBL_MAX), apply(true)
+ : G4VDiscreteProcess(processName,type)
 {
-  pMess = new StepMaxMessenger(this);
+  fMaxStep1 = fMaxStep2 = DBL_MAX;
+  fApplyMaxStep2 = true;
+  fMess = new StepMaxMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
+StepMax::~StepMax() { delete fMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,11 +57,15 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+void StepMax::SetMaxStep1(G4double step) {fMaxStep1 = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::ApplyMaxStep(G4bool value) {apply = value;}
+void StepMax::SetMaxStep2(G4double step) {fMaxStep2 = step;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StepMax::ApplyMaxStep2(G4bool value) {fApplyMaxStep2 = value;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,8 +76,8 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-  if (apply) return MaxChargedStep;
-  else       return DBL_MAX;
+  if (fApplyMaxStep2 ) return fMaxStep2;
+  else                return fMaxStep1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

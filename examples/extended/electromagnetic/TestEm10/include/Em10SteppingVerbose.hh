@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10SteppingVerbose.hh
+/// \brief Definition of the Em10SteppingVerbose class
 //
-// $Id: Em10SteppingVerbose.hh,v 1.3 2006-06-29 16:38:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //  
 //---------------------------------------------------------------

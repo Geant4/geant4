@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadronPhysicsQGSP.cc,v 1.5 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -38,13 +37,15 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 30.03.2007 G.Folger: Add code for quasielastic
 // 12.11.2007 G.Folger: Add code for projectileDiffraction for proton/neutron
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
+#include <iomanip>   
 
 #include "HadronPhysicsQGSP.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
@@ -52,17 +53,43 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP);
+
 HadronPhysicsQGSP::HadronPhysicsQGSP(G4int)
-                 :  G4VPhysicsConstructor("hInelastic QGSP")
-		  , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP")
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0) 
+    , theMisc(0)
+    , QuasiElastic(true)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name, G4bool quasiElastic)
-                 :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+                 :  G4VPhysicsConstructor(name)
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0) 
+    , theMisc(0)
+    , QuasiElastic(quasiElastic)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 void HadronPhysicsQGSP::CreateModels()
@@ -85,12 +112,12 @@ void HadronPhysicsQGSP::CreateModels()
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP::~HadronPhysicsQGSP()
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theQGSPPro;
@@ -121,6 +148,6 @@ void HadronPhysicsQGSP::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

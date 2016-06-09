@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuANuNuclearCrossSection.cc,v 1.1 2009-11-16 18:15:42 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QANuANuNuclearCrossSection for gamma+A cross sections
@@ -48,6 +47,7 @@
 //#define sdebug
 
 #include "G4QANuANuNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4bool    G4QANuANuNuclearCrossSection::onlyCS=true;//Flag to calculate only CS (not QE)
@@ -727,9 +727,9 @@ G4double G4QANuANuNuclearCrossSection::GetDirectPart(G4double Q2)
   G4double f=Q2/4.62;
   G4double ff=f*f;
   G4double r=ff*ff;
-  G4double s=std::pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
+  G4double s_value=std::pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
   //@@ It is the same for nu/anu, but for nu it is a bit less, and for anu a bit more (par)
-  return 1.-s*(1.-s/2);
+  return 1.-s_value*(1.-s_value/2);
 }
 
 // #of quark-partons in the nonperturbative phase space is the same for neut and anti-neut

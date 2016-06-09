@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh,v 1.4 2010-11-11 22:32:22 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNAChampionElasticModel_h
@@ -71,8 +70,9 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  // Water density table
+  const std::vector<G4double>* fpMolWaterDensity;
 
-  G4Material* nistwater;
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
@@ -130,15 +130,21 @@ private:
 };
 
 
-inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double threshold) 
+inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double /*threshold*/) 
 { 
-    killBelowEnergy = threshold; 
+
+// SI - commented on 19/06/2013
+/*
+  killBelowEnergy = threshold; 
     
-    if (threshold < 1*eV)
+  if (threshold < 1*eV)
      G4Exception ("*** WARNING : the G4DNAChampionElasticModel class is not validated below 1 eV !","",JustWarning,"") ;
-    
-    if (threshold < 0.025*eV) threshold = 0.025*eV;
-             
+
+  if (threshold < 0.025*eV) threshold = 0.025*eV;
+*/
+
+  G4Exception ("*** WARNING : G4DNAChampionElasticModel::SetKillBelowThreshold INACTIVE for now","",JustWarning,"") ;
+            
 }		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

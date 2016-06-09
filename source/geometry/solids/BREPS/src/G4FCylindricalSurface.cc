@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.cc,v 1.17 2010-07-07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +34,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4FCylindricalSurface.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Sort.hh"
 
 
@@ -178,9 +178,9 @@ G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   G4Vector3D ahat  = Position.GetAxis();
  
   //  array of solutions in distance along the ray
-  G4double s[2];
-  s[0]=-1.0;
-  s[1]=-1.0;
+  G4double sol[2];
+  sol[0]=-1.0;
+  sol[1]=-1.0;
 
   // calculate the two intersections (quadratic equation)   
   G4Vector3D gamma =  G4Vector3D( x - Position.GetLocation() );
@@ -200,20 +200,20 @@ G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   else 
   {
     G4double root = std::sqrt( radical );
-    s[0] = ( - B + root ) / ( 2. * A );
-    s[1] = ( - B - root ) / ( 2. * A );
+    sol[0] = ( - B + root ) / ( 2. * A );
+    sol[1] = ( - B - root ) / ( 2. * A );
   }
   
   // validity of the solutions
   // the hit point must be into the bounding box of the cylindrical surface
-  G4Point3D p0 = G4Point3D( x + s[0]*dhat );
-  G4Point3D p1 = G4Point3D( x + s[1]*dhat );
+  G4Point3D p0 = G4Point3D( x + sol[0]*dhat );
+  G4Point3D p1 = G4Point3D( x + sol[1]*dhat );
 
   if( !GetBBox()->Inside(p0) )
-    s[0] = kInfinity;
+    sol[0] = kInfinity;
 
   if( !GetBBox()->Inside(p1) )
-    s[1] = kInfinity;
+    sol[1] = kInfinity;
   
   //  now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
@@ -222,13 +222,13 @@ G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )
 
   for ( G4int i = 0; i < 2; i++ ) 
   {  
-    if(s[i] < kInfinity) {
-      if ( s[i] >= kCarTolerance*0.5 ) {
+    if(sol[i] < kInfinity) {
+      if ( sol[i] >= kCarTolerance*0.5 ) {
 	nbinter ++;
        	// real intersection
 	// set the distance if it is the smallest
-	if( distance > s[i]*s[i]) {
-	  distance = s[i]*s[i];
+	if( distance > sol[i]*sol[i]) {
+	  distance = sol[i]*sol[i];
 	}
       }
     }    

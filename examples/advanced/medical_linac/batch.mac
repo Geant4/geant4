@@ -1,0 +1,89 @@
+########### Launch parameters #########
+###
+
+###  Visualization 
+
+#/OnlyVisio true                                       # switch the visualization mode
+
+###  Experimental comparison and convergence
+
+/convergence/bCompareExp true                         # to compare the data with an experimental file data
+/convergence/nMaxLoop 2 # it is used if /convergence/bCompareExp is false
+/convergence/fileExperimentalData VoxelsTest.txt       # name of the experimental file
+/convergence/maxNumberOfEvents 5                       # maximum number of events at least in one experimental voxel
+/convergence/fileExperimentalDataOut VoxelsTest_Out # full path and name of the experimental file results
+
+### Phase space
+
+/general/centrePhaseSpace 0 0 550 mm                   # position of the centre of the plane phase space
+/general/halfSizePhaseSpace 200 200 1 mm              # half size of the plane phase space
+/general/bSavePhaseSpace true                         # true if to save the phase space
+/general/bStopAtPhaseSpace false                       # true if to kill the particle at the phase space
+/general/PhaseSpaceOutFile PhSp_Acc1                   # full file name of the phase space
+/general/bForcePhaseSpaceBeforeJaws true
+
+### Simulation oputput
+ 
+/general/bSaveROG true                                 # true if save the ROG volume
+/general/ROGOutFile ROG_Out  # full path of the ROG file name
+
+
+### Number of primary events
+
+/general/nBeam 100000                                  # number of events to run
+
+
+### NUMBER STORED  
+
+/general/nMaxParticlesInRamPlanePhaseSpace 100000        # maximum particle number stored in RAM before saving - for phase space
+/general/saving_in_Selected_Voxels_every_events 10000   # maximum particle number stored before saving - for experiemntal data comparison
+/general/saving_in_ROG_Voxels_every_events 10000      # maximum particle number stored before saving - for ROG
+/general/max_N_particles_in_PhSp_File 10000000            # maximum particle number stored in the phase space file
+
+
+### Primary generator 
+
+/primaryParticleData/nMaxParticlesInRamPhaseSpace 1000 # maximum particle number loaded from the phase space file each time
+/primaryParticleData/nIdenticalParticles 1             # number of identical particles generated in the primary generator  
+/primaryParticleData/GunMeanEnegy 6 MeV                # mean energy of the primary particles 
+/primaryParticleData/GunStdEnegy 0.127 MeV             # std energy of the primary particles 
+/primaryParticleData/GunRadious 0.5 mm                 # radious primary particles beam
+/primaryParticleData/sourceTypeName randomTarget       # type of particle generator source
+/primaryParticleData/calculatedPhaseSpaceFileIN PhSp_Acc1_1.txt # full path and file name of the phase space file to be used as particle generator
+
+### PHANTOM
+
+/phantom/PhantomName fullWater				# phantom name to select among those implemented
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/phantom/centre 0 0 -200 # phantom centre coordinates in the world [mm]
+
+### ACCELERATOR
+
+/accelerator/AcceleratorName acc1			# accelerator name to select among those implemented 
+/accelerator/AcceleratorMacFileName acc1.mac	# full path and macro file name containing specific setup data for the accelerator chosen
+/accelerator/isoCentre 1000 mm # distance between the isocentre and the target of the accelerator
+/accelerator/rotation90Y false # to rotate the accelerator of 90 deg around the Y axis (true)
+/accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
+/accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
+
+### Physic
+
+#/physic/addPhysics standard_opt3 			# Standard Electromagnetic models
+/physic/addPhysics LowE_Livermore  		        # Lowenergy-Livermore Electromagnetic models
+#/physic/addPackage QGSP_BIC    		        # use of the Package Physic lists
+
+####################	INFO   ######################################
+
+# All possible choices
+
+#    Particle sources
+# randomTarget // random from target
+# phaseSpace // from phase space
+
+#    Accelerators
+# acc1 // non real accelearator but working
+
+
+#    Phantoms
+# fullWater // water box
+# boxInBox  // box in a box with a layer of PMMA at the exposed surface

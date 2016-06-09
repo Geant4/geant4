@@ -14,6 +14,59 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-11-12 I. Hrivnacova (testem5-V09-05-12)
+- Synchronized .README with changes in README
+
+08-11-12 V.Ivant (testem5-V09-05-11)
+- Fixed README and pixe.mac
+     
+19-10-12 mma (testem5-V09-05-10)
+- PhysListEmStandard: use G4UrbanMsc96 
+ 
+12-10-12 V.Ivant (testem5-V09-05-09)
+- Migration to the updated analysis tool and explicit units
+- RunAction - by default do not save random number for each event
+    -because it is a serious overhead in CPU performance    
+ 
+11-10-12 mma (testem5-V09-05-08)
+- PhysicsList: add EM option4
+
+24-09-12 V.Ivant (testem5-V09-05-07)
+- Added code cleanup and protections against division by zero
+     
+23-08-12 mma (testem5-V09-05-06)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - Need analysis-V09-05-09
+    - all userAction classes and all macros affected
+     
+20-05-12 SI (testem5-V09-05-05)
+- added fluo.mac
+
+02-04-12 mma (testem5-V09-05-04)
+- all classes : apply G4 coding conventions
+        
+04-03-12 mma (testem5-V09-05-03)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+
+09-02-12 V.Ivant (testem5-V09-05-02)
+- PhysListEmStandardSSM - added alternative single scattering models 
+
+09-02-12 V.Ivant (testem5-V09-05-01)
+- PhysListEmStandardWVI,PhysListEmStandardSS - more correct process 
+    order and WVI model 
+     
+05-02-12 mma (testem5-V09-05-00)
+- new histograms --> modify numbering :
+	2	"energy of charged secondaries at creation"
+	3	"energy of neutral secondaries at creation"	
+	4	"energy of charged at creation (log10(Ekin/MeV))"
+	5	"energy of neutral at creation (log10(Ekin/MeV))"	
+	6       "x_vertex of charged secondaries (all)"
+	7       "x_vertex of charged secondaries (not absorbed)" 
      
 09-11-11 SI (testem5-V09-04-13)
 - added Auger production in pixe.mac

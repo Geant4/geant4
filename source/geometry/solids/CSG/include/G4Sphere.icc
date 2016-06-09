@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.11 2009-05-13 11:23:00 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -120,7 +119,7 @@ void G4Sphere::InitializeThetaTrigonometry()
 inline
 void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
 {
-  if ( (sTheta<0) || (sTheta>pi) )
+  if ( (sTheta<0) || (sTheta>CLHEP::pi) )
   {
     std::ostringstream message;
     message << "sTheta outside 0-PI range." << G4endl
@@ -132,9 +131,9 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
   {
     fSTheta=sTheta;
   }
-  if ( dTheta+sTheta >= pi )
+  if ( dTheta+sTheta >= CLHEP::pi )
   {
-    fDTheta=pi-sTheta;
+    fDTheta=CLHEP::pi-sTheta;
   }
   else if ( dTheta > 0 )
   {
@@ -149,8 +148,8 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
     G4Exception("G4Sphere::CheckThetaAngles()", "GeomSolids0002",
                 FatalException, message);
   }
-  if ( fDTheta-fSTheta < pi ) { fFullThetaSphere = false; }
-  else                        { fFullThetaSphere = true ; }
+  if ( fDTheta-fSTheta < CLHEP::pi ) { fFullThetaSphere = false; }
+  else                               { fFullThetaSphere = true ; }
   fFullSphere = fFullPhiSphere && fFullThetaSphere;
 
   InitializeThetaTrigonometry();
@@ -163,15 +162,15 @@ void G4Sphere::CheckSPhiAngle(G4double sPhi)
 
   if ( sPhi < 0 )
   {
-    fSPhi = twopi - std::fmod(std::fabs(sPhi),twopi);
+    fSPhi = CLHEP::twopi - std::fmod(std::fabs(sPhi),CLHEP::twopi);
   }
   else
   {
-    fSPhi = std::fmod(sPhi,twopi) ;
+    fSPhi = std::fmod(sPhi,CLHEP::twopi) ;
   }
-  if ( fSPhi+fDPhi > twopi )
+  if ( fSPhi+fDPhi > CLHEP::twopi )
   {
-    fSPhi -= twopi ;
+    fSPhi -= CLHEP::twopi ;
   }
 }
 
@@ -179,9 +178,9 @@ inline
 void G4Sphere::CheckDPhiAngle(G4double dPhi)
 {
   fFullPhiSphere = true;
-  if ( dPhi >= twopi-kAngTolerance*0.5 )
+  if ( dPhi >= CLHEP::twopi-kAngTolerance*0.5 )
   {
-    fDPhi=twopi;
+    fDPhi=CLHEP::twopi;
     fSPhi=0;
   }
   else

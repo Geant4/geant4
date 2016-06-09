@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.11 2006-06-29 20:49:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPSimpleEvapSpectrum_h
 #define G4NeutronHPSimpleEvapSpectrum_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEDis.hh"
 
 // we will need a List of these .... one per term.
@@ -52,8 +53,8 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
   
   inline void Init(std::ifstream & aDataFile)
   {
-    theFractionalProb.Init(aDataFile,eV);
-    theThetaDist.Init(aDataFile, eV);
+    theFractionalProb.Init(aDataFile, CLHEP::eV);
+    theThetaDist.Init(aDataFile, CLHEP::eV);
   }
   
   inline G4double GetFractionalProbability(G4double anEnergy)
@@ -63,7 +64,7 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
   
   inline G4double Sample(G4double anEnergy) 
   {
-    G4double theta = theThetaDist.GetY(anEnergy)*eV;
+    G4double theta = theThetaDist.GetY(anEnergy)*CLHEP::eV;
     G4double random, cut, max, result;
     max = 10.*theta;
     do
@@ -80,7 +81,7 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
   
   inline G4double Evapo(G4double anEnergy, G4double theta)
   {
-    G4double result = (anEnergy*eV)*std::exp(-anEnergy*eV/theta);
+    G4double result = (anEnergy*CLHEP::eV)*std::exp(-anEnergy*CLHEP::eV/theta);
     return result;
   }
   

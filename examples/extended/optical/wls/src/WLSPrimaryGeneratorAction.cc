@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSPrimaryGeneratorAction.cc
+/// \brief Implementation of the WLSPrimaryGeneratorAction class
+//
 //
 //
 
@@ -45,6 +48,8 @@
 
 #include "WLSDetectorConstruction.hh"
 #include "WLSPrimaryGeneratorMessenger.hh"
+
+#include "G4SystemOfUnits.hh"
 
 G4bool WLSPrimaryGeneratorAction::first = false;
 
@@ -117,12 +122,12 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
                 G4double prevCII = currentCII;
                 G4double prevIN  = currentIN;
 
-                for (size_t i = 1;
-                     i < theWLSVector->GetVectorLength();
-                     i++)
+                for (size_t j = 1;
+                     j < theWLSVector->GetVectorLength();
+                     j++)
                 {
-                  currentPM = theWLSVector->Energy(i);
-                  currentIN = (*theWLSVector)[i];
+                  currentPM = theWLSVector->Energy(j);
+                  currentIN = (*theWLSVector)[j];
                   currentCII = 0.5 * (prevIN + currentIN);
                   currentCII = prevCII + (currentPM - prevPM) * currentCII;
                   aPhysicsOrderedFreeVector->

@@ -1,0 +1,146 @@
+$Id: History,v 1.11 2010-09-08 08:59:29 vnivanch Exp $
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+            History file for hadronic/models/util directory
+            -----------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+4 October 2012 J. Apostolakis (hadr-lepnuc-V09-05-02)
+-----------------------------------------------------
+- Fixed GNUmakefile.
+
+4 October 2012  G. Cosmo  (hadr-lepnuc-V09-05-01)
+-------------------------------------------------
+- Explicit inclusion of headers for units and constants.
+- Corrected dependencies and sources.cmake script.
+
+24 September 2012  D.H. Wright  (hadr-lepnuc-V09-05-00)
+-------------------------------------------------------
+- create new lepto-nuclear directory containing only the
+  G4ElectroVDNuclearModel and G4MuonVDNuclearModel classes.  Begin new tag
+  name sequence as well.
+
+===========================================================================
+  Note:  history notes from old photolepton_hadron/muon_nuclear directory
+         are copied below
+===========================================================================
+
+27 June 2012  D.H. Wright    (hadr-munuclear-V09-05-07)
+-------------------------------------------------------
+- G4ElectroVDNuclearModel::CalculateHadronicVertex : fix nan value of
+  pion momentum at low gamma energies
+
+8 June 2012  D.H. Wright     (hadr-munuclear-V09-05-06)
+-------------------------------------------------------
+- G4ElectroVDNuclearModel.cc : replace variable "m2" which shadows
+  a CLHEP variable
+
+1 June 2012  D.H. Wright     (hadr-munuclear-V09-05-05)
+-------------------------------------------------------
+- G4MuonVDNuclearModel.cc : fix negative KE bug in CalculateHadronicVertex 
+
+22 May 2012  D.H. Wright     (hadr-munuclear-V09-05-04)
+-------------------------------------------------------
+- fix bug in sources.cmake
+
+18 May 2012  D.H. Wright     (hadr-munuclear-V09-05-03)
+-------------------------------------------------------
+- added new model G4ElectroVDNuclearModel
+- remove classes G4LeptonHadronProcess and G4LeptonHadronInteractionModel
+- changed name of G4VDMuonNuclearModel to G4MuonVDNuclearModel to 
+  avoid any confusion with virtual class names
+- sources.cmake: remove files and dependencies corresponding to above changes 
+
+ 7 May 2012  D.H. Wright     (hadr-munuclear-V09-05-02)
+------------------------------------------------------
+- G4VDMuonNuclearModel: for gammas below 10 GeV use Bertini cascade to
+  interact gammas directly with nucleus.  Above 10 GeV, treat gamma as
+  pi0 and use FTFP model.
+
+1 May 2012, D.Wright        ( ..trunk.. )
+-------------------------------------------------------
+- revert changes by Mikhail ( rev. r58262)
+-    added to History 2-May 2012, G.Folger
+
+27 April 2012, M.Kosov      (hadr-munuclear-V09-05-01)
+-------------------------------------------------------
+- hadronic/models/chiral_inv_phase_space moved to hadronic/chips
+
+17 January 2012  D.H. Wright (hadr-munuclear-V09-05-00)
+-------------------------------------------------------
+- derive G4VDMuonNuclearModel from G4HadronicInteraction instead of 
+  G4InelasticInteraction. 
+
+03 October 2011  D.H. Wright (hadr-munuclear-V09-04-03)
+-------------------------------------------------------
+- G4VDMuonNuclearModel.cc: fix winxp compiler complaint by converting
+  G4int arg (GetZ_asInt) of std::log to G4double arg
+
+27 September 2011  D.H. Wright (hadr-munuclear-V09-04-02)
+---------------------------------------------------------
+- Migrate to integer Z and A.  File affected:
+    G4VDMuonNuclearModel.cc
+
+02 May 2011 D.H. Wright (hadr-munuclear-V09-04-01)
+--------------------------------------------------
+- remove G4MuonNucleusProcess and G4MuonNucleusInteractionModel.  These
+  were the old GHEISHA-style models and no longer used.
+
+16 February 2011 D.H. Wright (hadr-munuclear-V09-04-00)
+-------------------------------------------------------
+- create new model G4VDMuonNuclearModel to replace old-style
+  G4MuNuclearInteraction and G4ParametrizedHadronicVertex
+- add more libraries to list in GNUmakefile for above new model
+
+08 Sept 2010 V.Ivantchenko (hadr-munuclear-V09-03-00)
+----------------------------------------------------
+G4MuNuclearInteraction - clear hadronic tracks PostStepDoIt
+
+20 Nov 2009 V.Ivantchenko (hadr-munuclear-V09-02-03)
+----------------------------------------------------
+- Cleanup
+
+04 Mar 2009 V.Ivantchenko (hadr-munuclear-V09-02-02)
+----------------------------------------------------
+- move constructors, destructors and virtual methods to source
+
+06 Feb 2009 V.Ivantchenko (hadr-munuclear-V09-02-01)
+----------------------------------------------------
+
+24 Jan 2009 V.Ivantchenko (hadr-munuclear-V09-02-00)
+----------------------------------------------------
+- G4MuNuclearInteraction added deregistration of the process 
+
+ 4 Oct 2008 Dennis Wright (hadr-munuclear-V09-01-01)
+----------------------------------------------------
+- G4MuNuclearInteraction - include process type enum and change type from
+  12 to fHadronInelastic
+
+ 2 Sep 2008 V.Ivanchenko (hadr-munuclear-V09-01-00)
+---------------------------------------------------
+- G4MuNuclearInteraction added SubType and registration in the 
+                         G4HadronicProcessStore; added PreparePhysicsTable
+                         method and cleanup for readability 
+
+ 4 Nov 2006 Dennis Wright for V.Ivanchenko (hadr-munuclear-V08-01-00)
+-----------------------------------------------------------------------
+- G4MuNuclearInteraction::ComputeMicroscopicCrossSection: prevent NaN
+  by checking that upper energy limit is not less than lower limit. 
+
+
+30 Nov 2005 Gabriele Cosmo (hadr-munuclear-V07-01-00)
+----------------------------------------------------
+- Trivial fix in G4MuonNucleusInteractionModel and
+  G4ParametrizedHadronicVertex for support of CLHEP-2.0.X series.
+  NOTE: use of RandBit() can lead to event irreproducibility !
+- Created History file.

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.hh,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //
@@ -95,6 +94,10 @@ protected:
   void InitialiseProcess(const G4ParticleDefinition*);
 
 private:       
+
+  // copy constructor and hide assignment operator
+  G4NuclearStopping(G4NuclearStopping &);
+  G4NuclearStopping & operator=(const G4NuclearStopping &right);
 
   G4ParticleChangeForLoss nParticleChange;
 

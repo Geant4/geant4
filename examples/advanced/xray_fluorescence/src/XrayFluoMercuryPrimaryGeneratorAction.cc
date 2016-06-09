@@ -36,17 +36,19 @@
 // -------------------------------------------------------------------
 
 #include "XrayFluoMercuryPrimaryGeneratorAction.hh"
-#include "G4DataVector.hh"
 #include "XrayFluoMercuryDetectorConstruction.hh"
 #include "XrayFluoMercuryPrimaryGeneratorMessenger.hh"
 #include "XrayFluoRunAction.hh"
+#include "XrayFluoAnalysisManager.hh"
+#include "XrayFluoDataSet.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4DataVector.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-#include "XrayFluoAnalysisManager.hh"
-#include "XrayFluoDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

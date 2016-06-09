@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:48:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,22 +64,22 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      const
-     G4VPhysicalVolume* GetWorld()      {return pBox;};           
+     G4VPhysicalVolume* GetWorld()      {return fPBox;};           
                     
-     G4double           GetSize()       {return BoxSize;};      
-     G4Material*        GetMaterial()   {return aMaterial;};
+     G4double           GetSize()       {return fBoxSize;};      
+     G4Material*        GetMaterial()   {return fMaterial;};
      
      void               PrintParameters();
                        
   private:
   
-     G4VPhysicalVolume*    pBox;
-     G4LogicalVolume*      lBox;
+     G4VPhysicalVolume* fPBox;
+     G4LogicalVolume*   fLBox;
      
-     G4double              BoxSize;
-     G4Material*           aMaterial;     
+     G4double           fBoxSize;
+     G4Material*        fMaterial;     
      
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger* fDetectorMessenger;
 
   private:
     

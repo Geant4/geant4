@@ -23,9 +23,8 @@
 /gun/particle proton 
 /gun/energy 6.56 MeV
 #
-/testem/histo/setFileName vincour
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 12  60 0. 6. deg		#space angle  
+/analysis/setFileName vincour
+/analysis/h1/set 12  60 0. 6. deg		#space angle  
 #
 /testem/stack/killSecondaries
 #

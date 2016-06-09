@@ -49,14 +49,14 @@ $Id: README,v 1.12 2008-08-22 14:35:12 vnivanch Exp $
     - "emstandard"        (default)
     - "emstandard_opt1"   (EMV)
     - "emstandard_opt2"   (EMX)
-    - "emstandard_opt3"   recommended for medical and space applications
+    - "emstandard_opt3"   (EMY) - best for standard models
+    - "emstandard_opt4"   recommended for medical and space applications
+                          the best combination of standard and low-energy 
+                          models
 
     There are local to this example variants of EM physics: 
-    - "emstandard_local"   close to opt3
-    - "standardIG"         close to opt2
-    - "standardLPM"        relativistic bremsstrahlung model added to opt1  
-    - "Livermore"          low-energy EM physics using Livermore data
-    - "Penelope"           low-energy EM physics implementing Penelope models
+    - "emlivermore"       low-energy EM physics using Livermore data
+    - "empenelope"        low-energy EM physics implementing Penelope models
 
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons
@@ -69,7 +69,7 @@ $Id: README,v 1.12 2008-08-22 14:35:12 vnivanch Exp $
      The primary kinematic consists of a single particle which hits the
      cylinder perpendicular to the input face. The type of the particle
      and its energy are set in the PrimaryGeneratorAction class, and can
-     changed via the G4 build-in commands of ParticleGun class.
+     changed via the G4 build-in commands of G4ParticleGun class.
 
  4- OUTPUT
 
@@ -95,24 +95,11 @@ $Id: README,v 1.12 2008-08-22 14:35:12 vnivanch Exp $
 
  6- ANALYSIS
 
-     To create histograms/ntuple for further analysis one should define
-     environment variable G4ANALYSIS_USE and setup local AIDA implementation.
-     The example should be recompiled:
-
-     gmake histclean
-     gmake
-      
-     The macro file csi.mac can be used as exmple of macro for analysis. It
-     can be executed in the following way:
-     $G4WORKDIR/bin/$G4SYSTEM/TestEm9 csi.mac
-
+     Number of histograms are built inside the example using internal
+     analysis sub-package. Histograms are saved in a root file.
+     Histogram booking and saving is done only if any of histogram
  
- 7- Using histograms
- ------------------- 
+     /testem/histo/fileName myname
+     /testem/histo/setHisto id nbins xmin xmax unit
 
-     By default the histograms are not activated. To activate histograms
-     the environment variable G4ANALYSIS_USE should be defined. For instance
-     uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-     To use histograms any of implementations of AIDA interfaces should
-     be available. See InstallAida.txt
+     

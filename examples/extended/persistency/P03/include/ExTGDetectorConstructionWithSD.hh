@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P03/include/ExTGDetectorConstructionWithSD.hh
+/// \brief Definition of the ExTGDetectorConstructionWithSD class
 //
-// $Id: ExTGDetectorConstructionWithSD.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ---------------------------------------------------------------------------
+// $Id$
 
 #ifndef ExTGDetectorConstructionWithSD_h
 #define ExTGDetectorConstructionWithSD_h 1
@@ -36,6 +35,8 @@
 #include "G4VUserDetectorConstruction.hh"
 
 class G4tgrMessenger;
+
+/// Detector construction class using text geometry file and using a sensitive detector
 
 class ExTGDetectorConstructionWithSD : public G4VUserDetectorConstruction
 {
@@ -48,7 +49,7 @@ class ExTGDetectorConstructionWithSD : public G4VUserDetectorConstruction
 
   private:
 
-     G4tgrMessenger* messenger;
+     G4tgrMessenger* fMessenger;
 };
 
 #endif

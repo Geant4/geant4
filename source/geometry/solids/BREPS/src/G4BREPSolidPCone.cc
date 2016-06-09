@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.43 2010-10-20 09:14:11 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,6 +42,8 @@
 #include <sstream>
 
 #include "G4BREPSolidPCone.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4FCylindricalSurface.hh"
 #include "G4FConicalSurface.hh"
 #include "G4CircularCurve.hh"
@@ -565,9 +566,6 @@ void G4BREPSolidPCone::InitializePCone()
         }
         else
         {
-          // Create cylinder
-          //
-          G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
           SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis,
                                                     RMAX[a], Length );
           SurfaceVec[b]->SetSameSense(1);

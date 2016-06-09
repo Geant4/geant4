@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicProcessType.hh,v 1.1 2008-10-02 19:02:03 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //---------------------------------------------------------------
@@ -47,6 +46,7 @@ enum G4HadronicProcessType
   fCapture =          131,
   fFission =          141,
   fHadronAtRest =     151,
+  fLeptonAtRest =     152,
   fChargeExchange =   161,
   fRadioactiveDecay = 210
 };

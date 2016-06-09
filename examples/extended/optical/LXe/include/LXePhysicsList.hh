@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file optical/LXe/include/LXePhysicsList.hh
+/// \brief Definition of the LXePhysicsList class
+//
+//
 #ifndef LXePhysicsList_h
 #define LXePhysicsList_h 1
 
@@ -32,19 +35,16 @@
 
 class LXePhysicsList: public G4VModularPhysicsList
 {
-public:
-  LXePhysicsList();
-  virtual ~LXePhysicsList();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+  public:
 
+    LXePhysicsList();
+    virtual ~LXePhysicsList();
+
+  public:
+
+    // SetCuts()
+    virtual void SetCuts();
 
 };
 
-
 #endif
-
-
-

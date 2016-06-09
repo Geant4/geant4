@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.hh,v 1.5 2010-02-16 07:53:05 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QElastic header ----------------
 //                 by Mikhail Kossov, December 2003.

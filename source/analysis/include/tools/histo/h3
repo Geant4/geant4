@@ -37,7 +37,7 @@ public:
 public:
   bool multiply(TW aFactor){
     if(!parent::base_multiply(aFactor)) return false;
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool scale(TW aFactor) {return multiply(aFactor);}
@@ -51,7 +51,7 @@ public:
 
   bool reset() {
     parent::base_reset();
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -66,7 +66,7 @@ public:
     bn_t ibin,jbin,kbin;
     if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
     if(!parent::m_axes[1].coord_to_absolute_index(aY,jbin)) return false;
-    if(!parent::m_axes[3].coord_to_absolute_index(aZ,kbin)) return false;
+    if(!parent::m_axes[2].coord_to_absolute_index(aZ,kbin)) return false;
   
     bn_t offset = ibin + jbin * parent::m_axes[1].m_offset + 
                          kbin * parent::m_axes[2].m_offset;
@@ -119,24 +119,24 @@ public:
 
   bool add(const h3& a_histo){
     parent::base_add(a_histo);
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool subtract(const h3& a_histo){
     parent::base_subtract(a_histo);
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
   bool multiply(const h3& a_histo) {  
     if(!parent::base_multiply(a_histo)) return false;
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   
   bool divide(const h3& a_histo) {
     if(!parent::base_divide(a_histo)) return false;
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 

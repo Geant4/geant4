@@ -30,6 +30,7 @@
 // 02-08-06 Modified Harmonise to reslove cross section trouble at high-end. T. KOI
 //
 #include "G4NeutronHPElementData.hh"
+#include "G4SystemOfUnits.hh"
 
   G4NeutronHPElementData::G4NeutronHPElementData()
   {
@@ -60,10 +61,10 @@
     count = 0;
     G4int nIso = theElement->GetNumberOfIsotopes();
     G4int Z = static_cast<G4int> (theElement->GetZ());
-    G4int i1;
+    //G4int i1;
     if(nIso!=0)
     {
-      for (i1=0; i1<nIso; i1++)
+      for (G4int i1=0; i1<nIso; i1++)
       {
 //        G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
@@ -140,28 +141,28 @@
   void G4NeutronHPElementData::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
   {
     if(theNew == 0) { return; }
-    G4int s = 0, n=0, m=0;
+    G4int s_tmp = 0, n=0, m_tmp=0;
     G4NeutronHPVector * theMerge = new G4NeutronHPVector(theStore->GetVectorLength());
 //    G4cout << "Harmonise 1: "<<theStore->GetEnergy(s)<<" "<<theNew->GetEnergy(0)<<G4endl;
-    while ( theStore->GetEnergy(s)<theNew->GetEnergy(0)&&s<theStore->GetVectorLength() )
+    while ( theStore->GetEnergy(s_tmp)<theNew->GetEnergy(0)&&s_tmp<theStore->GetVectorLength() )
     {
-      theMerge->SetData(m++, theStore->GetEnergy(s), theStore->GetXsec(s));
-      s++;
+      theMerge->SetData(m_tmp++, theStore->GetEnergy(s_tmp), theStore->GetXsec(s_tmp));
+      s_tmp++;
     }
     G4NeutronHPVector *active = theStore;
     G4NeutronHPVector * passive = theNew;
     G4NeutronHPVector * tmp;
-    G4int a = s, p = n, t;
+    G4int a = s_tmp, p = n, t;
 //    G4cout << "Harmonise 2: "<<active->GetVectorLength()<<" "<<passive->GetVectorLength()<<G4endl;
     while (a<active->GetVectorLength()&&p<passive->GetVectorLength())
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
-        theMerge->SetData(m, active->GetEnergy(a), active->GetXsec(a));
-        G4double x  = theMerge->GetEnergy(m);
+        theMerge->SetData(m_tmp, active->GetEnergy(a), active->GetXsec(a));
+        G4double x  = theMerge->GetEnergy(m_tmp);
         G4double y = std::max(0., passive->GetXsec(x)); 
-        theMerge->SetData(m, x, theMerge->GetXsec(m)+y);
-        m++;
+        theMerge->SetData(m_tmp, x, theMerge->GetXsec(m_tmp)+y);
+        m_tmp++;
         a++;
       } else {
 //        G4cout << "swapping in Harmonise"<<G4endl;
@@ -173,7 +174,7 @@
 //    G4cout << "Harmonise 3: "<< a <<" "<<active->GetVectorLength()<<" "<<m<<G4endl;
     while (a!=active->GetVectorLength())
     {
-      theMerge->SetData(m++, active->GetEnergy(a), active->GetXsec(a));
+      theMerge->SetData(m_tmp++, active->GetEnergy(a), active->GetXsec(a));
       a++;
     }
 //    G4cout << "Harmonise 4: "<< p <<" "<<passive->GetVectorLength()<<" "<<m<<G4endl;
@@ -183,7 +184,7 @@
       //theMerge->SetData(m++, passive->GetEnergy(p), passive->GetXsec(p));
       G4double x = passive->GetEnergy(p);
       G4double y = std::max(0., active->GetXsec(x));
-      theMerge->SetData(m++, x, passive->GetXsec(p)+y);
+      theMerge->SetData(m_tmp++, x, passive->GetXsec(p)+y);
       p++;
     }
 //    G4cout <<"Harmonise 5: "<< theMerge->GetVectorLength() << " " << m << G4endl;

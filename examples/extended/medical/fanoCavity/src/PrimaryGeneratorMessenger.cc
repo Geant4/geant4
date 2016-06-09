@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,23 +41,23 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                                    PrimaryGeneratorAction* Gun)
-:Action(Gun)
+:fAction(Gun)
 { 
-  gunDir = new G4UIdirectory("/testem/gun/");
-  gunDir->SetGuidance("gun control");
+  fGunDir = new G4UIdirectory("/testem/gun/");
+  fGunDir->SetGuidance("gun control");
 
-  beam = new G4UIcmdWithADouble("/testem/gun/beamRadius",this);
-  beam->SetGuidance("radius on the beam");
-  beam->SetParameterName("rBeam",false);
-  beam->SetRange("rBeam>=0 && rBeam<=1");
+  fBeam = new G4UIcmdWithADouble("/testem/gun/beamRadius",this);
+  fBeam->SetGuidance("radius on the beam");
+  fBeam->SetParameterName("rBeam",false);
+  fBeam->SetRange("rBeam>=0 && rBeam<=1");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-  delete beam;
-  delete gunDir;
+  delete fBeam;
+  delete fGunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,8 +65,8 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                                G4String newValue)
 { 
-  if (command == beam)
-   {Action->SetBeamRadius(beam->GetNewDoubleValue(newValue));}   
+  if (command == fBeam)
+   {fAction->SetBeamRadius(fBeam->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

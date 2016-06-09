@@ -24,6 +24,7 @@
 // ********************************************************************
 //
  #include "G4INCLXXPiKBuilder.hh"
+ #include "G4SystemOfUnits.hh"
  #include "G4ParticleDefinition.hh"
  #include "G4ParticleTable.hh"
  #include "G4ProcessManager.hh"
@@ -33,7 +34,7 @@
  {
    theMin = 0*GeV;
    theMax = 3.0*GeV;
-   theModel = new G4INCLXXInterface;
+   theModel = new G4INCLXXInterface();
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax); 
    theBertiniModel = new G4CascadeInterface;

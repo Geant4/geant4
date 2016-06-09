@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,34 +14,94 @@
 ***** Table : Nb of materials = 9 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  78.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Copper    density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.515 cm   Imean: 322.000 eV 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole
+         --->  Isotope:    63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:    65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Tungsten    density: 19.350 g/cm3   RadL:   3.495 mm   Nucl.Int.Length:  10.279 cm   Imean: 727.000 eV 
-   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.84 g/mole
+         --->  Isotope:   180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+         --->  Isotope:   182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+         --->  Isotope:   183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+         --->  Isotope:   184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+         --->  Isotope:   186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
-   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole
+         --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope:   207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope:   208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.447 cm   Imean: 890.000 eV 
-   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole
+         --->  Isotope:   234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
+         --->  Isotope:   235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
+         --->  Isotope:   238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:      BGO    density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.788 cm   Imean: 473.785 eV 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
-   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
-   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  15.41 %  ElmAbundance  63.16 % 
+
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole
+         --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance:  20.84 %
+         --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance:  27.54 %
+         --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:   7.73 %
+         --->  Isotope:  Ge74   Z = 32   N =  74   A =  73.92 g/mole   abundance:  36.28 %
+         --->  Isotope:  Ge76   Z = 32   N =  76   A =  75.92 g/mole   abundance:   7.61 %
+          ElmMassFraction:  17.48 %  ElmAbundance  15.79 % 
+
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole
+         --->  Isotope: Bi209   Z = 83   N = 209   A = 208.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:  67.10 %  ElmAbundance  21.05 % 
+
 
 
 /run/verbose 1
@@ -56,20 +116,26 @@ PhysicsList::AddPhysicsList: <emstandard_opt0>
 Absorber is 17.8491 cm  of G4_PbWO4
  Material: G4_PbWO4    density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.741 cm   Imean: 542.741 eV 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  14.06 %  ElmAbundance  66.67 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  14.06 %  ElmAbundance  66.67 % 
+
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
-   --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction:  45.54 %  ElmAbundance  16.67 %
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction:  45.54 %  ElmAbundance  16.67 % 
+
    --->  Element: W (W)   Z = 74.0   N = 183.9   A = 183.84 g/mole
-   --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
-   --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
-   --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
-   --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
-   --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
+         --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+         --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+         --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+         --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+         --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %
+          ElmMassFraction:  40.40 %  ElmAbundance  16.67 % 
+
 PhysicsList::SetCuts:CutLength : 1 mm 
 /process/eLoss/verbose 1
 /gun/particle e-
@@ -78,24 +144,27 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -109,8 +178,20 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+CoulombScat:   for  e-    SubType= 1
+      Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -124,18 +205,23 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+CoulombScat:   for  e+    SubType= 1
+      Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -160,7 +246,7 @@ hPairProd:   for  proton    SubType= 4
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -171,6 +257,24 @@ ionIoni:   for  GenericIon    SubType= 2
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -179,11 +283,22 @@ hIoni:   for  anti_proton    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -205,6 +320,11 @@ hPairProd:   for  kaon+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -225,11 +345,10 @@ hPairProd:   for  kaon-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -253,10 +372,15 @@ muPairProd:   for  mu+    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -280,10 +404,15 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -306,10 +435,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -348,6 +476,8 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
+
+----> Histogram file is opened in testem2.root
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -362,25 +492,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.82s Real=4.84s Sys=0.01s
+  User=5.03s Real=5.07s Sys=0s
 
  SUMMARY 
 
- energy deposit :   95.00 % E0 +-    1.11 % E0
- charged traklen:  482.36 radl +-    6.09 radl
- neutral traklen: 4209.41 radl +-  134.48 radl
 
- 90.00 % confinement: radius = 2.90 radl  (2.59 cm )
+ Mean number of charged steps:  7289.47
+ Mean number of neutral steps:  3921.76
+
+ energy deposit :   95.05 % E0 +-    0.85 % E0
+ charged traklen:  482.44 radl +-    4.72 radl
+ neutral traklen: 4222.91 radl +-  117.12 radl
+
+ 90.00 % confinement: radius = 2.92 radl  (2.61 cm )
+
+... write Root file : testem2.root - done
+... close Root file : testem2.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 482174111, 1823525018
+ Current couple of seeds = 1918418437, 255561390
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.949979  delEdep= 0.000978607 nrms= 1.19342
-Erms: 0.0110614  delErms= 0.00286143 nrms= 3.48954
+Edep: 0.950513  delEdep= 0.00151344 nrms= 1.84565
+Erms: 0.0084966  delErms= 0.000296596 nrms= 0.361703
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.
-

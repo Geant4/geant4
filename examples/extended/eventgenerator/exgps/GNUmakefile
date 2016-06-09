@@ -3,7 +3,7 @@
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
-name := exGPS
+name := exgps
 G4TARGET := $(name)
 G4EXLIB := true
 

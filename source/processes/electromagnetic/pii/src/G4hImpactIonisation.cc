@@ -28,8 +28,7 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc,v 1.4 2010-11-25 19:49:43 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //
@@ -47,6 +46,8 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Poisson.hh"
 #include "G4UnitsTable.hh"
 #include "G4EnergyLossTables.hh"
@@ -1367,7 +1368,7 @@ G4double G4hImpactIonisation::BarkasTerm(const G4Material* material,
   G4double beta2 = 1.0 - 1.0/(gamma*gamma) ;
   if(0.0 >= beta2) return 0.0;
 
-  G4double BarkasTerm = 0.0;
+  G4double BTerm = 0.0;
   //G4double AMaterial = 0.0;
   G4double ZMaterial = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -1404,12 +1405,12 @@ G4double G4hImpactIonisation::BarkasTerm(const G4Material* material,
 
     }
 
-    BarkasTerm += FunctionOfW /( std::sqrt(ZMaterial * X) * X);
+    BTerm += FunctionOfW /( std::sqrt(ZMaterial * X) * X);
   }
 
-  BarkasTerm *= twopi_mc2_rcl2 * (material->GetElectronDensity()) / beta2 ;
+  BTerm *= twopi_mc2_rcl2 * (material->GetElectronDensity()) / beta2 ;
 
-  return BarkasTerm;
+  return BTerm;
 }
 
 

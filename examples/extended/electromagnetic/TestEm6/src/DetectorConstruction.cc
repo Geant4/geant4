@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.10 2006-06-29 16:57:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,26 +47,27 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pBox(0), lBox(0), BoxSize(500*m), aMaterial(0), magField(0)
+:fP_Box(0), fL_Box(0), fBoxSize(500*m), fMaterial(0), fMagField(0)
 {
   DefineMaterials();
   SetMaterial("Iron");
   
   // create UserLimits
-  userLimits = new G4UserLimits();
+  fUserLimits = new G4UserLimits();
 
   // create commands for interactive definition of the detector  
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,37 +99,37 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
   
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
-		   			                      
-  lBox = new G4LogicalVolume(sBox,			//its shape
-                             aMaterial,			//its material
-                             aMaterial->GetName());	//its name
-			     
-  lBox->SetUserLimits(userLimits);			     
+  sBox = new G4Box("Container",                                //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+                                                                 
+  fL_Box = new G4LogicalVolume(sBox,                        //its shape
+                             fMaterial,                        //its material
+                             fMaterial->GetName());        //its name
+                             
+  fL_Box->SetUserLimits(fUserLimits);                             
                                    
-  pBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume
-			   aMaterial->GetName(),	//its name
-                           0,	       		        //its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
+  fP_Box = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           fL_Box,                        //its logical volume
+                           fMaterial->GetName(),        //its name
+                           0,                                       //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
                            
   PrintParameters();
     
   //
   //always return the root volume
   //
-  return pBox;
+  return fP_Box;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n The Box is " << G4BestUnit(BoxSize,"Length")
-         << " of " << aMaterial->GetName() << G4endl;
+  G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
+         << " of " << fMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,14 +138,14 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) aMaterial = pttoMaterial;             
+  if (pttoMaterial) fMaterial = pttoMaterial;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetSize(G4double value)
 {
-  BoxSize = value;
+  fBoxSize = value;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,18 +159,18 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr 
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if (magField) delete magField;	//delete the existing magn field
+  if (fMagField) delete fMagField;        //delete the existing magn field
   
-  if (fieldValue!=0.)			// create a new one if non nul
+  if (fieldValue!=0.)                        // create a new one if non nul
     {
-      magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
-      fieldMgr->SetDetectorField(magField);
-      fieldMgr->CreateChordFinder(magField);
+      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
+      fieldMgr->SetDetectorField(fMagField);
+      fieldMgr->CreateChordFinder(fMagField);
     }
    else
     {
-      magField = 0;
-      fieldMgr->SetDetectorField(magField);
+      fMagField = 0;
+      fieldMgr->SetDetectorField(fMagField);
     }
 }
 
@@ -182,7 +185,7 @@ void DetectorConstruction::SetMaxStepSize(G4double val)
              << val  << " out of range. Command refused" << G4endl;
       return;
     }       
-  userLimits->SetMaxAllowedStep(val);
+  fUserLimits->SetMaxAllowedStep(val);
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

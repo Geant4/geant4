@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/OlapManager.cc
+/// \brief Implementation of the OlapManager class
 //
-// $Id: OlapManager.cc,v 1.4 2010-08-24 07:57:14 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

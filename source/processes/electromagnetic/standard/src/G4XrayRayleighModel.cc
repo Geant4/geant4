@@ -28,10 +28,13 @@
 // Author: Vladimir Grichine
 //
 // History:
-// 
-// 25.052011   first implementation
+//
+// 14.10.12 V.Grichine, update of xsc and angular distribution
+// 25.05.2011   first implementation
 
 #include "G4XrayRayleighModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +52,8 @@ G4XrayRayleighModel::G4XrayRayleighModel(const G4ParticleDefinition*,
 {
   fParticleChange = 0;
   lowEnergyLimit  = 250*eV; 
-  highEnergyLimit = 1.*MeV;
+  highEnergyLimit = 10.*MeV;
+  fFormFactor     = 0.0;
   
   //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
@@ -114,20 +118,34 @@ G4double G4XrayRayleighModel::ComputeCrossSectionPerAtom(
   {
     return 0.0;
   }
-  const G4double p0 =  1.78076e+00;  // 1.77457e+00;
-  const G4double p1 = -6.0911e-02;    // -1.78171e-02;
-  // const G4double p2 =  4.60444e-04;
-  G4double    alpha = p0 + p1*std::log(Z); //  + p2*Z*Z;
+  G4double k   = gammaEnergy/hbarc;
+           k  *= Bohr_radius;
+  G4double p0  =  0.680654;  
+  G4double p1  = -0.0224188;
+  G4double lnZ = std::log(Z);    
 
-  G4double k    = gammaEnergy/hbarc;
-  G4double k2   = std::pow(k, alpha); // k*k; 1.69 for Z=6, 1.5 for Z=82
-  G4double z2p3 = std::pow( Z, 0.66667); // 2/3~0.66667
-  G4double a    = fCofA*z2p3*k2; 
-  G4double b    = 1. + 2.*a;
+  G4double lna = p0 + p1*lnZ; 
+
+  G4double  alpha = std::exp(lna);
+
+  G4double fo   = std::pow(k, alpha); 
+
+  p0 = 3.68455;
+  p1 = -0.464806;
+  lna = p0 + p1*lnZ; 
+
+  fo *= 0.01*std::exp(lna);
+
+  fFormFactor = fo;
+
+  G4double b    = 1. + 2.*fo;
   G4double b2   = b*b;
   G4double b3   = b*b2;
+
   G4double xsc  = fCofR*Z*Z/b3;
-           xsc *= a*a + (1. + a)*(1. + a);  
+           xsc *= fo*fo + (1. + fo)*(1. + fo);  
+
+
   return   xsc;   
 
 }
@@ -135,7 +153,7 @@ G4double G4XrayRayleighModel::ComputeCrossSectionPerAtom(
 ///////////////////////////////////////////////////////////////////////////////////
 
 void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
-					    const G4MaterialCutsCouple*, // couple,
+					    const G4MaterialCutsCouple* couple,
 					      const G4DynamicParticle* aDynamicGamma,
 					      G4double,
 					      G4double)
@@ -152,7 +170,7 @@ void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*f
   // Sample the angle of the scattered photon
   // according to 1 + cosTheta*cosTheta distribution
 
-  G4double cosTheta, sinTheta;
+  G4double cosDipole, cosTheta, sinTheta;
   G4double c, delta, cofA, signc = 1., a, power = 1./3.;
 
   c = 4. - 8.*G4UniformRand();
@@ -167,7 +185,35 @@ void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*f
   delta += a;
   delta *= 0.5; 
   cofA = -signc*std::pow(delta, power);
-  cosTheta = cofA - 1./cofA;
+  cosDipole = cofA - 1./cofA;
+
+  // select atom
+  const G4Element* elm = SelectRandomAtom(couple, aDynamicGamma->GetParticleDefinition(), photonEnergy0);
+  G4double Z = elm->GetZ();
+
+  G4double k   = photonEnergy0/hbarc;
+           k  *= Bohr_radius;
+  G4double p0  =  0.680654;  
+  G4double p1  = -0.0224188;
+  G4double lnZ = std::log(Z);    
+
+  G4double lna = p0 + p1*lnZ; 
+
+  G4double  alpha = std::exp(lna);
+
+  G4double fo   = std::pow(k, alpha); 
+
+  p0 = 3.68455;
+  p1 = -0.464806;
+  lna = p0 + p1*lnZ; 
+
+  fo *= 0.01*pi*std::exp(lna);
+
+  
+  G4double beta = fo/(1 + fo);
+
+  cosTheta = (cosDipole + beta)/(1. + cosDipole*beta);
+
 
   if( cosTheta >  1.) cosTheta =  1.;
   if( cosTheta < -1.) cosTheta = -1.;

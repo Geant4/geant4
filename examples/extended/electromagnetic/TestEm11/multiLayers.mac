@@ -20,9 +20,8 @@
 /gun/particle gamma
 /gun/energy 6 MeV
 #
-/testem/histo/setFileType root
-/testem/histo/setFileName bone
-/testem/histo/setHisto 1 300 0. 300. mm		#edep profile
+/analysis/setFileName bone
+/analysis/h1/set 1 300 0. 300. mm		#edep profile
 #
 /testem/event/printModulo 100000
 #

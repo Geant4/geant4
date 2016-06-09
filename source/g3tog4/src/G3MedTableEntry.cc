@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTableEntry.cc,v 1.4 2006-06-29 18:13:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -55,9 +54,9 @@ G3MedTableEntry::G3MedTableEntry(const G3MedTableEntry& right)
 G3MedTableEntry::~G3MedTableEntry()
 {}
 
-const G3MedTableEntry& 
-G3MedTableEntry::operator=(const G3MedTableEntry& right)
+G3MedTableEntry& G3MedTableEntry::operator=(const G3MedTableEntry& right)
 { 
+  if (&right == this)  { return *this; }
   fID = right.GetID();
   fMaterial = right.GetMaterial();     
   fField = right.GetField();

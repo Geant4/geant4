@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh,v 1.9 2010-09-01 14:51:21 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -78,7 +77,8 @@ private:
 			   const G4Fragment& aFragment,
 			   G4double KineticEnergy);
 		
-  G4double rho(G4int p, G4int h, G4double g, G4double E, G4double Ef) const;
+  G4double rho(G4int p, G4int h, G4double gg, 
+	       G4double E, G4double Ef) const;
 
   G4PreCompoundEmission(const G4PreCompoundEmission &right);
   const G4PreCompoundEmission& operator=(const G4PreCompoundEmission &right);

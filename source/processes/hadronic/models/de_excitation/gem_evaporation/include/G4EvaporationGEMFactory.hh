@@ -24,33 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.hh,v 1.8 2010-04-27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modifications:
+// 23 January 2012 by V.Ivanchenko added pointer of G4VPhotonEvaporation to 
+//    the constructor
 
 
 #ifndef G4EvaporationGEMFactory_hh
-#define G4EvaporationGEMFactory_hh
-
+#define G4EvaporationGEMFactory_hh 1
 
 #include "G4VEvaporationFactory.hh"
 
 class G4EvaporationGEMFactory : public G4VEvaporationFactory
 {
 public:
-  G4EvaporationGEMFactory();
+
+  G4EvaporationGEMFactory(G4VEvaporationChannel* ptotoEvaporation);
+
   virtual ~G4EvaporationGEMFactory(); 
 
+  virtual std::vector<G4VEvaporationChannel*>* GetChannel();
+
 private:
+
   G4EvaporationGEMFactory(const G4EvaporationGEMFactory & );
   const G4EvaporationGEMFactory & operator=(const G4EvaporationGEMFactory & val);
   G4bool operator==(const G4EvaporationGEMFactory & val) const;
   G4bool operator!=(const G4EvaporationGEMFactory & val) const;
-
-private:
-  std::vector<G4VEvaporationChannel*> * CreateChannel();
 
 };
 

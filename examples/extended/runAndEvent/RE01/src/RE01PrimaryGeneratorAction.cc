@@ -23,54 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01PrimaryGeneratorAction.cc,v 1.2 2006-06-29 17:44:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01PrimaryGeneratorAction.cc
+/// \brief Implementation of the RE01PrimaryGeneratorAction class
+//
+// $Id$
 //
 
-
 #include "RE01PrimaryGeneratorAction.hh"
+#include "RE01PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
 #include "G4HEPEvtInterface.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "RE01PrimaryGeneratorMessenger.hh"
+#include "G4SystemOfUnits.hh"    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
+  : G4VUserPrimaryGeneratorAction()
 {
   const char* filename = "pythia_event.data";
-  HEPEvt = new G4HEPEvtInterface(filename);
+  fHEPEvt = new G4HEPEvtInterface(filename);
 
   G4int n_particle = 1;
-  G4ParticleGun* fParticleGun = new G4ParticleGun(n_particle);
+  G4ParticleGun* particleGun = new G4ParticleGun(n_particle);
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="mu+");
-  fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,1.,0.));
-  fParticleGun->SetParticleEnergy(100.*GeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
-  particleGun = fParticleGun;
+  particleGun->SetParticleDefinition(particle);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,1.,0.));
+  particleGun->SetParticleEnergy(100.*GeV);
+  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
+  fParticleGun = particleGun;
 
-  messenger = new RE01PrimaryGeneratorMessenger(this);
-  useHEPEvt = true;
+  fMessenger = new RE01PrimaryGeneratorMessenger(this);
+  fUseHEPEvt = true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorAction::~RE01PrimaryGeneratorAction()
 {
-  delete HEPEvt;
-  delete particleGun;
-  delete messenger;
+  delete fHEPEvt;
+  delete fParticleGun;
+  delete fMessenger;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(useHEPEvt)
-  { HEPEvt->GeneratePrimaryVertex(anEvent); }
+  if(fUseHEPEvt)
+  { fHEPEvt->GeneratePrimaryVertex(anEvent); }
   else
-  { particleGun->GeneratePrimaryVertex(anEvent); }
+  { fParticleGun->GeneratePrimaryVertex(anEvent); }
 }
-
-

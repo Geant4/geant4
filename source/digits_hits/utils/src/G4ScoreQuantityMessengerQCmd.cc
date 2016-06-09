@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.8 2010-11-03 08:29:02 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ---------------------------------------------------------------------
 // Modifications
 // 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
+//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options 
+//                      in flatCurrent and flatFulx commands.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -265,11 +266,19 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qFlatSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
   qFlatSurfFluxCmd->SetGuidance("         : 1 = In only");
   qFlatSurfFluxCmd->SetGuidance("         : 2 = Out only");
+  qFlatSurfFluxCmd->SetGuidance("  wflag  :(Bool) weighted");
+  qFlatSurfFluxCmd->SetGuidance("  aflag  :(Bool) divide by area");
   qFlatSurfFluxCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
   qFlatSurfFluxCmd->SetParameter(param);
   param = new G4UIparameter("dflag",'i',true);
   param->SetDefaultValue("0");
+  qFlatSurfFluxCmd->SetParameter(param);
+  param = new G4UIparameter("wflag",'b',true);
+  param->SetDefaultValue("true");
+  qFlatSurfFluxCmd->SetParameter(param);
+  param = new G4UIparameter("aflag",'b',true);
+  param->SetDefaultValue("true");
   qFlatSurfFluxCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
   param->SetDefaultValue("percm2");
@@ -312,11 +321,19 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  qSphereSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
 //  qSphereSurfFluxCmd->SetGuidance("         : 1 = In only");
 //  qSphereSurfFluxCmd->SetGuidance("         : 2 = Out only");
+//  qSphereSurfFluxCmd->SetGuidance("  wflag  :(Bool) weighted");
+//  qSphereSurfFluxCmd->SetGuidance("  aflag  :(Bool) divide by area");
 //  qSphereSurfFluxCmd->SetGuidance("  unit   :(String) unit");
 //  param = new G4UIparameter("qname",'s',false);
 //  qSphereSurfFluxCmd->SetParameter(param);
 //  param = new G4UIparameter("dflag",'i',true);
 //  param->SetDefaultValue("0");
+//  qSphereSurfFluxCmd->SetParameter(param);
+//  param = new G4UIparameter("wflag",'b',true);
+//  param->SetDefaultValue("true");
+//  qSphereSurfFluxCmd->SetParameter(param);
+//  param = new G4UIparameter("aflag",'b',true);
+//  param->SetDefaultValue("true");
 //  qSphereSurfFluxCmd->SetParameter(param);
 //  param = new G4UIparameter("unit",'s',true);
 //  param->SetDefaultValue("percm2");
@@ -349,7 +366,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  param = new G4UIparameter("unit",'s',true);
 //  param->SetDefaultValue("percm2");
 //  qCylSurfCurrCmd->SetParameter(param);
-  //
+//
 //  qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylinderSurfaceFlux",this);
 //  qCylSurfFluxCmd->SetGuidance("Cylinder surface Flux Scorer.");
 //  qCylSurfFluxCmd->
@@ -359,11 +376,19 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  qCylSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
 //  qCylSurfFluxCmd->SetGuidance("         : 1 = In only");
 //  qCylSurfFluxCmd->SetGuidance("         : 2 = Out only");
+//  qCylSurfFluxCmd->SetGuidance("  wflag  :(Bool) weighted");
+//  qCylSurfFluxCmd->SetGuidance("  aflag  :(Bool) divide by area");
 //  qCylSurfFluxCmd->SetGuidance("  unit   :(String) unit");
 //  param = new G4UIparameter("qname",'s',false);
 //  qCylSurfFluxCmd->SetParameter(param);
 //  param = new G4UIparameter("dflag",'i',true);
 //  param->SetDefaultValue("0");
+//  qCylSurfFluxCmd->SetParameter(param);
+//  param = new G4UIparameter("wflag",'b',true);
+//  param->SetDefaultValue("true");
+//  qCylSurfFluxCmd->SetParameter(param);
+//  param = new G4UIparameter("aflag",'b',true);
+//  param->SetDefaultValue("true");
 //  qCylSurfFluxCmd->SetParameter(param);
 //  param = new G4UIparameter("unit",'s',true);
 //  param->SetDefaultValue("percm2");

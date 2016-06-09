@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.cc,v 1.3 2006-06-29 20:55:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

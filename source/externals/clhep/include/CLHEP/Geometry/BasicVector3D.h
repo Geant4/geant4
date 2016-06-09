@@ -48,7 +48,7 @@ namespace HepGeom {
 
     /**
      * Constructor from three numbers. */
-    BasicVector3D(T x, T y, T z) { v_[0] = x; v_[1] = y; v_[2] = z; }
+    BasicVector3D(T x1, T y1, T z1) { v_[0] = x1; v_[1] = y1; v_[2] = z1; }
 
     /**
      * Copy constructor.
@@ -158,7 +158,7 @@ namespace HepGeom {
 
     /**
      * Sets components in cartesian coordinate system.  */
-    void set(T x, T y, T z) { v_[0] = x; v_[1] = y; v_[2] = z; }
+    void set(T x1, T y1, T z1) { v_[0] = x1; v_[1] = y1; v_[2] = z1; }
 
     // ------------------------------------------
     // Cylindrical coordinate system: rho, phi, z
@@ -247,7 +247,7 @@ namespace HepGeom {
     // ---------------
 
     /**
-     * Gets pseudo-rapidity: -std::ln(std::tan(theta/2)) */
+     * Gets pseudo-rapidity: -ln(tan(theta/2)) */
     T pseudoRapidity() const;
     /**
      * Gets pseudo-rapidity. */

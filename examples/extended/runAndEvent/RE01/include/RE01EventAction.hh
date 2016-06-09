@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01EventAction.hh,v 1.2 2006-06-29 17:42:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01EventAction.hh
+/// \brief Definition of the RE01EventAction class
 //
-
+// $Id$
+//
 
 #ifndef RE01EventAction_h
 #define RE01EventAction_h 1
@@ -38,20 +39,20 @@ class G4PrimaryParticle;
 
 class RE01EventAction : public G4UserEventAction
 {
-  public:
-    RE01EventAction();
-    ~RE01EventAction();
+public:
+  RE01EventAction();
+  virtual ~RE01EventAction();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+public:
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void EndOfEventAction(const G4Event*);
 
-  private:
-    G4int trackerCollID;
-    G4int calorimeterCollID;
-    G4int muonCollID;
-
-    void PrintPrimary(G4PrimaryParticle* pp,G4int ind);
+private:
+  G4int fTrackerCollID;
+  G4int fCalorimeterCollID;
+  G4int fMuonCollID;
+  
+  void PrintPrimary(G4PrimaryParticle* pp,G4int ind);
 };
 
 #endif

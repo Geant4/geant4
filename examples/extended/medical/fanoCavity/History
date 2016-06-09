@@ -15,6 +15,46 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+28-11-12 G. Cosmo (fano-V09-05-09)
+- Fixed cases of variable shadowing.
+
+13-10-12 A. Dotti (fano-V09-05-08)
+- Removing double include of system of units
+
+13-10-12 A. Dotti (fano-V09-05-07)
+- Adding explicit use of system of units
+
+04-09-12 I. Hrivnacova (fano-V09-05-06)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added .README  
+     
+18-04-12 mma (fano-V09-05-05)
+- all classes : apply G4 coding conventions
+     
+23-02-12 mma (fano-V09-05-04)
+- HistoManager : GetFileType()
+     
+14-02-12 mma (fano-V09-05-03)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+
+09-02-12 V.Ivant (fano-V09-05-02)
+- PhysListEmStandard_WVI - fixed typo
+
+09-02-12 V.Ivant (fano-V09-05-01)
+- PhysListEmStandard_WVI - more safe initialisation method         
+     
+17-01-12 mma (fano-V09-05-00)        
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)  
+- HistoMessenger.hh and .cc : suppress fileType command
+- HistoManager and HistoMessenger : coding conventions
+- Update Readme and all macros accordingly
+          
 08-11-11 mma (fano-V09-04-03)
 - modify SteppingVerbose for OutOfWorld
           

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.cc,v 1.10 2010/09/23 05:33:56 mkelsey Exp $
+// $Id$
 // Geant4 tag: $Name:  $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
@@ -37,9 +37,11 @@
 // 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
 //		reuse of objects as buffers; c.f. G4InuclNuclei.
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "G4InuclElementaryParticle.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -176,16 +178,16 @@ void G4InuclElementaryParticle::setType(G4int ityp) {
 
 // Overwrite data structure (avoids creating/copying temporaries)
 
-void G4InuclElementaryParticle::fill(const G4LorentzVector& mom, G4int type,
+void G4InuclElementaryParticle::fill(const G4LorentzVector& mom, G4int ityp,
 				     G4InuclParticle::Model model) {
-  setType(type);
+  setType(ityp);
   setMomentum(mom);
   setModel(model);
 }
 
-void G4InuclElementaryParticle::fill(G4double ekin, G4int type,
+void G4InuclElementaryParticle::fill(G4double ekin, G4int ityp,
 				     G4InuclParticle::Model model) {
-  setType(type);
+  setType(ityp);
   setKineticEnergy(ekin);
   setModel(model);
 }
@@ -207,13 +209,13 @@ G4InuclElementaryParticle::operator=(const G4InuclElementaryParticle& right) {
 }
 
 
-G4int G4InuclElementaryParticle::getStrangeness(G4int type) {
-  G4ParticleDefinition* pd = makeDefinition(type);
+G4int G4InuclElementaryParticle::getStrangeness(G4int ityp) {
+  G4ParticleDefinition* pd = makeDefinition(ityp);
   return pd ? (pd->GetQuarkContent(3) - pd->GetAntiQuarkContent(3)) : 0;
 }
 
-G4double G4InuclElementaryParticle::getParticleMass(G4int type) {
-  G4ParticleDefinition* pd = makeDefinition(type);
+G4double G4InuclElementaryParticle::getParticleMass(G4int ityp) {
+  G4ParticleDefinition* pd = makeDefinition(ityp);
   return pd ? pd->GetPDGMass()*MeV/GeV : 0.0;	// From G4 to Bertini units
 }
 

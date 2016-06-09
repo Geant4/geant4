@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPlaneSurfaceTarget.cc,v 1.2 2007-06-19 11:28:39 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -44,8 +43,8 @@
 //---------------------------------------------------------------------
 
 G4ErrorPlaneSurfaceTarget::
-G4ErrorPlaneSurfaceTarget(G4double a, G4double b, G4double c, G4double d)
-  : G4Plane3D( a, b, c, d ) 
+G4ErrorPlaneSurfaceTarget(G4double aa, G4double ab, G4double ac, G4double ad)
+  : G4Plane3D( aa, ab, ac, ad ) 
 {
   theType = G4ErrorTarget_PlaneSurface;
 
@@ -60,8 +59,8 @@ G4ErrorPlaneSurfaceTarget(G4double a, G4double b, G4double c, G4double d)
 //---------------------------------------------------------------------
 
 G4ErrorPlaneSurfaceTarget::
-G4ErrorPlaneSurfaceTarget(const G4Normal3D &n, const G4Point3D &p)
-  : G4Plane3D( n, p ) 
+G4ErrorPlaneSurfaceTarget(const G4Normal3D &norm, const G4Point3D &pt)
+  : G4Plane3D( norm, pt ) 
 {
   theType = G4ErrorTarget_PlaneSurface;
 

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2009-10-31 18:05:56 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,10 +55,10 @@ class PhysicsListMessenger: public G4UImessenger
     
   private:
   
-    PhysicsList*               pPhysicsList;
+    PhysicsList*               fPhysicsList;
     
-    G4UIdirectory*             physDir;
-    G4UIcmdWithAString*        pListCmd;
+    G4UIdirectory*             fPhysDir;
+    G4UIcmdWithAString*        fListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

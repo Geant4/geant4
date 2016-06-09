@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.18 2006-06-29 21:24:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  5th April 2001
@@ -59,8 +58,6 @@ public:
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
 
-  virtual void BeginPrimitives (const G4Transform3D&) {}
-  virtual void EndPrimitives () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Text&)       {}
   virtual void AddPrimitive (const G4Circle&)     {}

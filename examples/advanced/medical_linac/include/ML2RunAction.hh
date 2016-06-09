@@ -56,7 +56,7 @@ public:
 	~CML2RunAction(void);
 	void BeginOfRunAction(const G4Run *aRun);
 	void EndOfRunAction(const G4Run *aRun);
-	void setActualLoop(G4int nLoop){this->nLoop=nLoop;};
+	void setActualLoop(G4int nL){nLoop=nL;}
 private:
 
 	G4bool bRotationTranslationFilesNames;

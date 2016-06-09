@@ -23,15 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh,v 1.1 2010-07-28 07:12:13 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
 // 30 Mar 2010   L. Pandola   1st implementation. 
-// 25 May 2011   L. Pandola  Renamed (make v2008 as default Penelope)
+// 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 09 Mar 2012   L. Pandola   Moved the management and calculation of 
+//                            cross sections to a separate class
 //
 // -------------------------------------------------------------------
 //
@@ -47,7 +48,7 @@
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4PhysicsFreeVector;
 class G4PhysicsLogVector;
@@ -58,6 +59,7 @@ class G4Material;
 class G4PenelopeOscillatorManager;
 class G4PenelopeOscillator;
 class G4PenelopeCrossSection;
+class G4PenelopeIonisationXSHandler;
 
 class G4PenelopeIonisationModel : public G4VEmModel 
 {
@@ -105,35 +107,14 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
-  void ActivateAuger(G4bool);
-
-  G4double GetDensityCorrection(const G4Material*,G4double energy);
-
 protected:
   G4ParticleChangeForLoss* fParticleChange;
 
 private:
-  void ClearTables();
-
+ 
   G4PenelopeIonisationModel & operator=(const G4PenelopeIonisationModel &right);
   G4PenelopeIonisationModel(const G4PenelopeIonisationModel&);
 
-  G4PenelopeCrossSection* GetCrossSectionTableForCouple(const G4ParticleDefinition*,
-							const G4Material*,G4double cut);
- 
-  void BuildXSTable(const G4Material*,G4double cut,
-		    const G4ParticleDefinition*);
-
-
-  void BuildDeltaTable(const G4Material*);
-
-  G4DataVector* ComputeShellCrossSectionsElectron(G4PenelopeOscillator* ,
-						  G4double energy,G4double cut,
-					          G4double delta);
-    
-  G4DataVector* ComputeShellCrossSectionsPositron(G4PenelopeOscillator* ,
-						  G4double energy,G4double cut,
-		                                  G4double delta);
 
   void SampleFinalStateElectron(const G4Material*,G4double cutEnergy,G4double kineticEnergy);
   void SampleFinalStatePositron(const G4Material*,G4double cutEnergy,G4double kineticEnergy);
@@ -145,8 +126,8 @@ private:
   G4int verboseLevel;
 
   G4bool isInitialised;
- 
-  G4AtomicDeexcitation deexcitationManager;
+  G4VAtomDeexcitation* fAtomDeexcitation;
+
 
   G4double kineticEnergy1;
   G4double cosThetaPrimary;
@@ -155,17 +136,9 @@ private:
   G4int targetOscillator;				   
 
   G4PenelopeOscillatorManager* oscManager;
-
-  //G4PenelopeCrossSection takes care of the logs
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*> *XSTableElectron;
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*> *XSTablePositron;
-  
-  //delta vs. log(energy)
-  std::map<const G4Material*,G4PhysicsFreeVector*> *theDeltaTable;
-  G4PhysicsLogVector* energyGrid;
+  G4PenelopeIonisationXSHandler* theCrossSectionHandler;
 
   size_t nBins;
-
 
 };
 

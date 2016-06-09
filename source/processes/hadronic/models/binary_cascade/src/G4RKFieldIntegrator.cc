@@ -25,6 +25,8 @@
 //
 // G4RKFieldIntegrator
 #include "G4RKFieldIntegrator.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiProperties.hh"
 #include "G4FermiMomentum.hh"
 #include "G4NuclearFermiDensity.hh"
@@ -64,8 +66,7 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
       for(G4int c2 = c1 + 1; c2 < nBarion; c2++)
          {
          G4KineticTrack* p2 = Barions.operator[](c2);
-         G4ThreeVector   rv = p1->GetPosition() - p2->GetPosition();
-         G4double r12 = std::sqrt(rv*rv)*fermi;
+         G4double r12 = (p1->GetPosition() - p2->GetPosition()).mag()*fermi;
 
          //  Esk2
          Etot += t1*std::pow(Alpha/pi, 3/2)*std::exp(-Alpha*r12*r12); 
@@ -84,8 +85,7 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
          for(G4int c3 = c2 + 1; c3 < nBarion; c3++)
             {
             G4KineticTrack* p3 = Barions.operator[](c3);
-            G4ThreeVector rv = p1->GetPosition() - p3->GetPosition();
-            G4double r13 = std::sqrt(rv*rv)*fermi;
+            G4double r13 = (p1->GetPosition() - p3->GetPosition()).mag()*fermi;
 
             // Esk3
             Etot  = tGamma*std::pow(4*Alpha*Alpha/3/pi/pi, 1.5)*std::exp(-Alpha*(r12*r12 + r13*r13));

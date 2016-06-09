@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNucleonInelastic.cc,v 1.2 2009-05-25 19:06:03 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGNucleonInelastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4RPGNucleonInelastic::G4RPGNucleonInelastic(const G4String& modelName)
@@ -40,22 +40,22 @@ G4RPGNucleonInelastic::G4RPGNucleonInelastic(const G4String& modelName)
   //   nucleon-nucleon inelastic cross sections for a given multiplicity 
   //   for |T_z| = 1 and 0, respectively 
 
-  G4int i, k, m;
+  G4int i, j, k;
   G4int start, stop;
 
-  for (m = 0; m < 8; m++) {
-    start = pPindex[m][0];
-    stop = pPindex[m][1] + 1;
+  for (j = 0; j < 8; j++) {
+    start = pPindex[j][0];
+    stop = pPindex[j][1] + 1;
     for (k = 0; k < 30; k++) {
-      t1_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t1_dSigma_dMult[m][k] += pPCrossSections[i][k];
+      t1_dSigma_dMult[j][k] = 0.0;
+      for (i = start; i < stop; i++) t1_dSigma_dMult[j][k] += pPCrossSections[i][k];
     }
 
-    start = pNindex[m][0];
-    stop = pNindex[m][1] + 1;
+    start = pNindex[j][0];
+    stop = pNindex[j][1] + 1;
     for (k = 0; k < 30; k++) {
-      t0_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t0_dSigma_dMult[m][k] += pNCrossSections[i][k];
+      t0_dSigma_dMult[j][k] = 0.0;
+      for (i = start; i < stop; i++) t0_dSigma_dMult[j][k] += pNCrossSections[i][k];
     }
   }
 
@@ -64,14 +64,13 @@ G4RPGNucleonInelastic::G4RPGNucleonInelastic(const G4String& modelName)
   for (k = 0; k < 30; k++) {
     pPtot[k] = 0.0;
     pNtot[k] = 0.0;
-    for (m = 0; m < 8; m++) {
-      pPtot[k] += t1_dSigma_dMult[m][k];
-      pNtot[k] += t0_dSigma_dMult[m][k];
+    for (j = 0; j < 8; j++) {
+      pPtot[k] += t1_dSigma_dMult[j][k];
+      pNtot[k] += t0_dSigma_dMult[j][k];
     }
   }
   
   //  printCrossSections();
-
 }
 
 /*
@@ -106,9 +105,9 @@ G4int G4RPGNucleonInelastic::GetMultiplicityT0(G4double KE) const
   G4int k = epair.first;
   G4double fraction = epair.second;
 
-  for(G4int m = 0; m < 8; m++) {
-    multint = t0_dSigma_dMult[m][k]
-         + fraction*(t0_dSigma_dMult[m][k+1] - t0_dSigma_dMult[m][k]);
+  for(G4int j = 0; j < 8; j++) {
+    multint = t0_dSigma_dMult[j][k]
+         + fraction*(t0_dSigma_dMult[j][k+1] - t0_dSigma_dMult[j][k]);
       sigma.push_back(multint);
   }
 
@@ -125,9 +124,9 @@ G4int G4RPGNucleonInelastic::GetMultiplicityT1(G4double KE) const
   G4int k = epair.first;
   G4double fraction = epair.second;
 
-  for(G4int m = 0; m < 8; m++) {
-    multint = t1_dSigma_dMult[m][k]
-         + fraction*(t1_dSigma_dMult[m][k+1] - t1_dSigma_dMult[m][k]);
+  for(G4int j = 0; j < 8; j++) {
+    multint = t1_dSigma_dMult[j][k]
+         + fraction*(t1_dSigma_dMult[j][k+1] - t1_dSigma_dMult[j][k]);
       sigma.push_back(multint);
   }
 

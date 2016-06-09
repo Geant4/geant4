@@ -26,6 +26,11 @@
 //
 //
 #include "G4FermiMomentum.hh"
+#include "G4PhysicalConstants.hh"
 
-G4FermiMomentum::G4FermiMomentum() : constofpmax(hbarc*cbrt(3.*pi2)) {}
+G4FermiMomentum::G4FermiMomentum() :
+   theA(0), theZ(0),
+   constofpmax(hbarc*cbrt(3.*pi2))
+{}
+
 G4FermiMomentum::~G4FermiMomentum(){}    

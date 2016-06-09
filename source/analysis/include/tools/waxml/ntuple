@@ -18,14 +18,13 @@
 #include "../scast"
 #include <sstream>
 
+#include "../ntuple_booking"
+
 namespace tools {
 namespace waxml {
 
 class ntuple {
 protected:
-  static cid _cid(int)    {return 1;}
-  static cid _cid(float)  {return 2;}
-  static cid _cid(double) {return 3;}
 
   class iobj {
   public:
@@ -191,10 +190,38 @@ public:
   };
 
 public:
-  ntuple(std::ostream& a_writer,
-                unsigned int a_spaces = 0)
+  ntuple(std::ostream& a_writer,unsigned int a_spaces = 0)
   :m_writer(a_writer){
     for(unsigned int i=0;i<a_spaces;i++) m_spaces += " ";
+  }
+  ntuple(std::ostream& a_writer,
+         std::ostream& a_out,
+         const ntuple_booking& a_bkg,
+         unsigned int a_spaces = 0)
+  :m_writer(a_writer){
+    for(unsigned int i=0;i<a_spaces;i++) m_spaces += " ";
+
+    const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
+    std::vector<ntuple_booking::col_t>::const_iterator it;
+    for(it=cols.begin();it!=cols.end();++it){
+
+      if((*it).second==_cid(int(0))) {
+        create_column<int>((*it).first);
+      } else if((*it).second==_cid(float(0))) {
+        create_column<float>((*it).first);
+      } else if((*it).second==_cid(double(0))) {
+        create_column<double>((*it).first);
+
+      } else {
+        a_out << "tools::waxml::ntuple :"
+              << " for column " << sout((*it).first)
+              << ", type with cid " << (*it).second << " not yet handled."
+              << std::endl;
+        //throw
+        tools::clear<iobj>(m_cols);
+        return;
+      }      
+    }
   }
   virtual ~ntuple() {
     tools::clear<iobj>(m_cols);
@@ -212,13 +239,19 @@ public:
   const std::vector<iobj*>& columns() const {return m_cols;}
 
   template <class T>
-  column<T>* create_column(const std::string& a_name,
-                                  const T& a_def = T()) {
+  column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
     if(find_named<iobj>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(a_name,a_def);
     if(!col) return 0;
     m_cols.push_back(col);
     return col;
+  }
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    iobj* col = find_named<iobj>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<iobj, column<T> >(*col);
   }
 
   sub_ntuple* create_sub_ntuple(const std::string& a_name){
@@ -253,11 +286,11 @@ public:
                  << " type=" << sout("ITuple")
                  << " booking=" << sout(sub->booking())
                  << "/>" << std::endl;
-      } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
+      } else if(/*leaf* lf =*/ id_cast<iobj,leaf>(*(*it))){
         m_writer << m_spaces << "      <column"
                  << " name=" << sout((*it)->name()) 
                  << " type=" << sout((*it)->aida_type())
-                 << " default=" << sout(lf->s_def())
+               //<< " default=" << sout(lf->s_def()) //not understood by jas3
                  << "/>" << std::endl;
       }
     }

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc,v 1.6 2010-06-04 15:28:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -38,11 +37,18 @@
 
 #include "G4NeutronTrackingCut.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
 #include "G4Neutron.hh"
 #include "G4NeutronKiller.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
+//
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
   :  G4VPhysicsConstructor("neutronTrackingCut")
@@ -50,6 +56,7 @@ G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
+  pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
@@ -57,14 +64,12 @@ G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
+  pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::~G4NeutronTrackingCut()
 {
-  if(wasActivated) 
-  {
-    delete pNeutronKiller;
-  }    
+  delete pNeutronKiller;
 }
 
 void G4NeutronTrackingCut::ConstructParticle()

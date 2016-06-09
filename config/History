@@ -16,6 +16,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th October 2012 Gabriele Cosmo (config-V09-05-12, config-V09-05-11)
+- binmake.gmk: replaced "photolepton_hadron" module with "lepto_nuclear".
+- Cowork with tag "hadr-V09-05-00".
+
+23rd August 2012 Gabriele Cosmo (config-V09-05-10)
+- Updated paths for X11 in X11FLAGS on Darwin targets, for porting on
+  MacOSX 10.8.
+
+9th July 2012 Alberto Ribon (config-V09-05-09)
+- Removed INCL package: processes/hadronic/models/incl .
+
+22th May 2012 Garnier Laurent (config-V09-05-08)
+- fix moc.gmk generation in order to generate moc in G4TMP dir
+
+2nd May 2012 Gunter Folger
+- revert changes by Mikhail (rev r58246)
+
+27th April 2012 Mikhail Kosov  (config-V09-05-07)
+- hadronic/model/chiral_inv_phase_space moved to hadronic/chips
+
+5th April 2012 Gabriele Cosmo  (config-V09-05-06)
+- Exclude "setup" and "clean_setup" targets from dependencies step.
+
+16th February 2012 Gabriele Cosmo  (config-V09-05-05)
+- Moved basic "-lm -lstdc++" link options in LOADLIBS within platform specific
+  configuration scripts. Avoid using "-lm" on Linux-icc platform.
+
+2nd February 2012 Gabriele Cosmo  (config-V09-05-04)
+- Corrected debug compilation option in WIN32-VC, to use -MDd instead of -MD.
+
+27th January 2012 Gunter Folger  (config-V09-05-03)
+- For WIN32-VC increase stack size of executable to 12Mb.
+
+9th December 2011 Gabriele Cosmo (config-V09-05-02)
+- Corrected condition for determining QT_AS_FRAMEWORK flag depending on
+  how QTHOME is defined in Darwin setups. Addresses problem report #1267.
+
+8th December 2011 Gabriele Cosmo (config-V09-05-01)
+- Added Darwin-clang experimental configuration. Requires explicit addition
+  of -lstdc++ to LDLIBS in architecture.gmk.
+
+8th December 2011 Gabriele Cosmo (config-V09-05-00)
+- Removed unnecessary 'gcov' linkage for dynamic libraries in Darwin-g++.gmk.
+
 22nd November 2011 Gabriele Cosmo (config-V09-04-19)
 - Corrected path in Darwin-g++ setup introduced in previous tag.
 

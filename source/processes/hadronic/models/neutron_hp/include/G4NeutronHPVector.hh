@@ -43,6 +43,10 @@
 #include <cmath>
 #include <vector>
 
+#if defined WIN32-VC
+   #include <float.h>
+#endif
+
 class G4NeutronHPVector
 {
   friend G4NeutronHPVector & operator + (G4NeutronHPVector & left, 
@@ -263,18 +267,18 @@ class G4NeutronHPVector
   inline void Merge(G4NeutronHPVector * active, G4NeutronHPVector * passive)
   {
     CleanUp();
-    G4int s = 0, n=0, m=0;
+    G4int s_tmp = 0, n=0, m_tmp=0;
     G4NeutronHPVector * tmp;
-    G4int a = s, p = n, t;
+    G4int a = s_tmp, p = n, t;
     while (a<active->GetVectorLength()&&p<passive->GetVectorLength())
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
         G4double xa = active->GetEnergy(a);
         G4double yy = active->GetXsec(a);
-        SetData(m, xa, yy);
-        theManager.AppendScheme(m, active->GetScheme(a));
-        m++;
+        SetData(m_tmp, xa, yy);
+        theManager.AppendScheme(m_tmp, active->GetScheme(a));
+        m_tmp++;
         a++;
         G4double xp = passive->GetEnergy(p);
 
@@ -292,17 +296,17 @@ class G4NeutronHPVector
     }
     while (a!=active->GetVectorLength())
     {
-      SetData(m, active->GetEnergy(a), active->GetXsec(a));
-      theManager.AppendScheme(m++, active->GetScheme(a));
+      SetData(m_tmp, active->GetEnergy(a), active->GetXsec(a));
+      theManager.AppendScheme(m_tmp++, active->GetScheme(a));
       a++;
     }
     while (p!=passive->GetVectorLength())
     {
-      if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
+      if(std::abs(GetEnergy(m_tmp-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
       //if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
       {
-        SetData(m, passive->GetEnergy(p), passive->GetXsec(p));
-        theManager.AppendScheme(m++, active->GetScheme(p));
+        SetData(m_tmp, passive->GetEnergy(p), passive->GetXsec(p));
+        theManager.AppendScheme(m_tmp++, active->GetScheme(p));
       }
       p++;
     }
@@ -380,8 +384,26 @@ class G4NeutronHPVector
       x0 = theData[i-1].GetX();
       if (std::abs(x1-x0) > std::abs(x1*0.0000001) )
       {
+	//********************************************************************
+	//EMendoza -> the interpolation scheme is not always lin-lin
+	/*
         sum+= 0.5*(theData[i].GetY()+theData[i-1].GetY())*
                   (x1-x0);
+	*/
+	//********************************************************************
+        G4InterpolationScheme aScheme = theManager.GetScheme(i);
+        G4double y0 = theData[i-1].GetY();
+        G4double y1 = theData[i].GetY();
+	G4double integ=theInt.GetBinIntegral(aScheme,x0,x1,y0,y1);
+#if defined WIN32-VC
+	if(!_finite(integ)){integ=0;}
+#elif defined __IBMCPP__
+	if(isinf(integ)||isnan(integ)){integ=0;}
+#else
+	if(std::isinf(integ)||std::isnan(integ)){integ=0;}
+#endif
+	sum+=integ;
+	//********************************************************************
       }
       theIntegral[i] = sum;
     }

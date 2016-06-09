@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.hh,v 1.6 2006-06-29 19:07:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UIaliasList_h

@@ -30,21 +30,21 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /* \file G4INCLInteractionAvatar.hh
- * \brief Virtual class for G4interaction avatars.
+ * \brief Virtual class for interaction avatars.
  *
  * This class is inherited by decay and collision avatars. The goal is to
  * provide a uniform treatment of common physics, such as Pauli blocking,
  * enforcement of energy conservation, etc.
  *
- *  Created on: Mar 1st, 2011
- *      Author: Davide Mancusi
+ *  \date Mar 1st, 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLINTERACTIONAVATAR_HH_
@@ -80,9 +80,9 @@ namespace G4INCL {
        */
       void preInteractionLocalEnergy(Particle * const p);
 
-      /** \brief Store the state of the particles before the G4interaction
+      /** \brief Store the state of the particles before the interaction
        *
-       * If the G4interaction cannot be realised for any reason, we will need to
+       * If the interaction cannot be realised for any reason, we will need to
        * restore the particle state as it was before. This is done by calling
        * the restoreParticles() method.
        */
@@ -136,7 +136,7 @@ namespace G4INCL {
 
           /** \brief Compute the energy-conservation violation.
            *
-           * \param alpha scale factor for the particle momenta
+           * \param x scale factor for the particle momenta
            * \return the energy-conservation violation
            */
           G4double operator()(const G4double x) const;
@@ -149,11 +149,11 @@ namespace G4INCL {
           ParticleList finalParticles;
           /// \brief CM particle momenta, as determined by the channel.
           std::list<ThreeVector> particleMomenta;
-          /// \brief Total energy before the G4interaction.
+          /// \brief Total energy before the interaction.
           G4double initialEnergy;
-          /// \brief PoG4inter to the nucleus
+          /// \brief Pointer to the nucleus
           Nucleus *theNucleus;
-          /// \brief PoG4inter to the boost vector
+          /// \brief Pointer to the boost vector
           ThreeVector const *boostVector;
           /// \brief true if we must apply local energy to nucleons
           G4bool hasLocalEnergy;
@@ -187,7 +187,7 @@ namespace G4INCL {
 
           /** \brief Compute the energy-conservation violation.
            *
-           * \param alpha scale factor for the particle momenta
+           * \param x scale factor for the particle momenta
            * \return the energy-conservation violation
            */
           G4double operator()(const G4double x) const;
@@ -202,9 +202,9 @@ namespace G4INCL {
           void setParticleEnergy(const G4double energy) const;
 
         private:
-          /// \brief Total energy before the G4interaction.
+          /// \brief Total energy before the interaction.
           G4double initialEnergy;
-          /// \brief PoG4inter to the nucleus.
+          /// \brief Pointer to the nucleus.
           Nucleus *theNucleus;
           /// \brief The final-state particle.
           Particle *theParticle;

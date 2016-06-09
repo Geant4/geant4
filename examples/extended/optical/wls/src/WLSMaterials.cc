@@ -23,10 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSMaterials.cc
+/// \brief Implementation of the WLSMaterials class
+//
 //
 //
 
 #include "WLSMaterials.hh"
+
+#include "G4SystemOfUnits.hh"
 
 WLSMaterials::WLSMaterials()
 {

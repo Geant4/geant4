@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10PhysicsList.hh
+/// \brief Definition of the Em10PhysicsList class
 //
-// $Id: Em10PhysicsList.hh,v 1.11 2006-06-29 16:37:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef Em10PhysicsList_h

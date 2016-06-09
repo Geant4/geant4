@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.10 2006-06-29 16:37:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm1/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,9 +40,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, RunAction* run, 
-                               HistoManager* histo)
-:primary(prim), runAction(run), histoManager(histo)
+TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, RunAction* run)
+:fPrimary(prim), fRunAction(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,32 +57,33 @@ void TrackingAction::PreUserTrackingAction(const G4Track*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{
+{  
   //increase nb of processed tracks 
   //count nb of steps of this track
   G4int   nbSteps = aTrack->GetCurrentStepNumber();
   G4double Trleng = aTrack->GetTrackLength();
     
   if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {
-    runAction->CountTraks0(1); 
-    runAction->CountSteps0(nbSteps);
+    fRunAction->CountTraks0(1); 
+    fRunAction->CountSteps0(nbSteps);
   
   } else {
-    runAction->CountTraks1(1); 
-    runAction->CountSteps1(nbSteps);
+    fRunAction->CountTraks1(1); 
+    fRunAction->CountSteps1(nbSteps);
   }
   
   //true and projected ranges for primary particle
   if (aTrack->GetTrackID() == 1) {
-    runAction->AddTrueRange(Trleng);
-    G4ThreeVector vertex = primary->GetParticleGun()->GetParticlePosition();    
+    fRunAction->AddTrueRange(Trleng);
+    G4ThreeVector vertex = fPrimary->GetParticleGun()->GetParticlePosition();    
     G4ThreeVector position = aTrack->GetPosition() - vertex;      
-    runAction->AddProjRange(position.x());
-    runAction->AddTransvDev(position.y());
-    runAction->AddTransvDev(position.z());
+    fRunAction->AddProjRange(position.x());
+    fRunAction->AddTransvDev(position.y());
+    fRunAction->AddTransvDev(position.z());
     
-    histoManager->FillHisto(1,Trleng);
-    histoManager->FillHisto(2,(float)nbSteps);    
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillH1(1,Trleng);
+    analysisManager->FillH1(2,(float)nbSteps);        
   }        
 }
 

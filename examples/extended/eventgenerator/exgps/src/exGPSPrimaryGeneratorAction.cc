@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/src/exGPSPrimaryGeneratorAction.cc
+/// \brief Implementation of the exGPSPrimaryGeneratorAction class
+//
 
 #include "exGPSPrimaryGeneratorAction.hh"
 
@@ -32,23 +35,25 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 exGPSPrimaryGeneratorAction::exGPSPrimaryGeneratorAction()
 {
-   particleGun = new G4GeneralParticleSource();
+   fParticleGun = new G4GeneralParticleSource();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSPrimaryGeneratorAction::~exGPSPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exGPSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent) ;
+  fParticleGun->GeneratePrimaryVertex(anEvent) ;
 }
 
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

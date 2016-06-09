@@ -64,6 +64,7 @@
 #include "G4RDPhotoElectricAngularGeneratorPolarized.hh"
 #include "G4RotationMatrix.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 //    
 

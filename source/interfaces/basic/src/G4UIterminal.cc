@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.28 2008-07-18 06:38:59 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ====================================================================
 //   G4UIterminal.cc
@@ -145,9 +144,9 @@ G4UIsession* G4UIterminal::SessionStart()
   return NULL;
 }
 
-//////////////////////////////////////////////////
-void G4UIterminal::PauseSessionStart(G4String msg)
-//////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+void G4UIterminal::PauseSessionStart(const G4String& msg)
+/////////////////////////////////////////////////////////
 {
   iCont= TRUE;
 
@@ -158,9 +157,9 @@ void G4UIterminal::PauseSessionStart(G4String msg)
   }
 }
 
-////////////////////////////////////////////////////
-void G4UIterminal::ExecuteCommand(G4String aCommand)
-////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+void G4UIterminal::ExecuteCommand(const G4String& aCommand)
+///////////////////////////////////////////////////////////
 {
   if(aCommand.length()<2) return;
 
@@ -209,16 +208,16 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
   }
 }
 
-///////////////////////////////////
+//////////////////////////////////////////////////
 G4String G4UIterminal::GetCommand(const char* msg)
-///////////////////////////////////
+//////////////////////////////////////////////////
 {
   G4String newCommand;
   G4String nullString;
 
-  newCommand= shell-> GetCommandLine(msg);
+  newCommand= shell-> GetCommandLineString(msg);
 
-  G4String nC= newCommand.strip(G4String::leading);
+  G4String nC = newCommand.strip(G4String::leading);
   if( nC.length() == 0 ) {
     newCommand= nullString;
 
@@ -304,17 +303,17 @@ G4String G4UIterminal::GetCommand(const char* msg)
 }
 
 
-//////////////////////////////////////////////////////
-G4int G4UIterminal::ReceiveG4cout(G4String coutString)
-//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+G4int G4UIterminal::ReceiveG4cout(const G4String& coutString)
+/////////////////////////////////////////////////////////////
 {
   std::cout << coutString << std::flush;
   return 0;
 }
 
-//////////////////////////////////////////////////////
-G4int G4UIterminal::ReceiveG4cerr(G4String cerrString)
-//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+G4int G4UIterminal::ReceiveG4cerr(const G4String& cerrString)
+/////////////////////////////////////////////////////////////
 {
   std::cerr << cerrString << std::flush;
   return 0;
@@ -333,9 +332,9 @@ G4bool G4UIterminal::GetHelpChoice(G4int& aInt)
   return TRUE;
 }
 
-/////////////////////////////
-void G4UIterminal::ExitHelp()
-/////////////////////////////
+///////////////////////////////////
+void G4UIterminal::ExitHelp() const
+///////////////////////////////////
 {
   char temp[100];
   G4cin.getline(temp, 100);

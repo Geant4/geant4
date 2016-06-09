@@ -47,6 +47,8 @@ class G4AnalysisVerbose
                  const G4String& object, 
                  G4ExceptionDescription& description,
                  G4bool success = true);
+                 
+    G4String GetType() const;                 
         
   private:
     // data members
@@ -56,6 +58,12 @@ class G4AnalysisVerbose
     G4String fDoneText;
     G4String fFailureText;
 };
+
+// inline functions
+
+inline  G4String G4AnalysisVerbose::GetType() const {
+  return fType;
+}  
 
 #endif
 

@@ -20,6 +20,39 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+20th July 2012  John Allison  (DAWN-V09-05-05)
+- Added print-once warnings for 2D.
+
+19th July 2012  John Allison
+- G4FukuiRendererSceneHandler.hh, G4DAWNFILESceneHandler.hh:
+  o Added SendStrDouble3Str.
+- G4FRSceneFunc.icc:
+  o G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text ):
+    . Intercepted 2D text.
+    . First try: Mapped -1<x<1, -1<y<1 to 10<x<200, 53<y<243.
+  o Implemented SendStrDouble3Str.
+
+5th July 2012  Gabriele Cosmo  (DAWN-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+8th June 2012  John Allison  (DAWN-V09-05-03)
+- Shadow clean.
+
+23rd May 2012  John Allison  (DAWN-V09-05-02)
+- Health Check 2012: Migrated (see management/History):
+  o G4FukuiRendererSceneHandler.cc, G4DAWNFILESceneHandler.cc:
+    . Removed ClearStore.
+  o G4FRSCENEHANDLER::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
+28th February 2012  John Allison  (DAWN-V09-05-01)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
+13th January 2012  John Allison  (DAWN-V09-05-00)
+- G4DAWNFILEViewer.cc:
+  o Fixed Ubuntu warning about ignoring return value of system call.
+
 17th May 2010  John Allison  (DAWN-V09-04-00)
 - G4FRSceneFunc.icc: Fixed gcc-4.6.0 warning.
 

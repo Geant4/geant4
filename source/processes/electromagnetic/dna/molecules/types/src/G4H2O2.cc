@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4H2O2.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -33,6 +34,8 @@
 // -------------------------------------------------------------------
 
 #include "G4H2O2.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
@@ -43,7 +46,7 @@ G4H2O2* G4H2O2::theInstance = 0;
 G4H2O2* G4H2O2::Definition()
 {
     if (theInstance !=0) return theInstance;
-    const G4String name = "H2O2";
+    const G4String name = "H_{2}O_{2}";
     // search in particle table]
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* anInstance = pTable->FindParticle(name);
@@ -64,7 +67,7 @@ G4H2O2* G4H2O2::Definition()
         //                             );
 
         G4double mass = 34.01468*g/Avogadro * c_squared;
-        anInstance = new G4MoleculeDefinition("H2O2", mass,
+        anInstance = new G4MoleculeDefinition(name, mass,
                                               18, 10,
                                               1.4e-9*(m*m/s),
                                               4, 3 * angstrom);

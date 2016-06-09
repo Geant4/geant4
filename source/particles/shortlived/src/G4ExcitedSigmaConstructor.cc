@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.12 2010-10-01 02:41:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -38,6 +37,7 @@
 
 #include "G4ExcitedSigmaConstructor.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ShortLivedTable.hh"

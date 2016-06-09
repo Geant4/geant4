@@ -20,6 +20,28 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+8th August 2012  John Allison  (gMocren-V09-05-05)
+- G4GMocrenFileSceneHandler.cc:
+  o Intercepted 2D primitives - JustWarning printed.
+
+5th July 2012  Gabriele Cosmo  (gMocren-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+8th June 2012  John Allison (gMocren-V09-05-03)
+- Shadow clean.
+
+23rd May 2012  John Allison (gMocren-V09-05-02)
+- Health Check 2012: Migrated (see management/History):
+  o G4GMocrenFileSceneHandler::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
+10th April 2012  John Allison (gMocren-V09-05-01)
+- Migrated to G4Scene::Model.
+
+28th February 2012  John Allison (gMocren-V09-05-00)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
 8th October 2011  Akinori Kimura (gMocren-V09-04-02)
 - Fixed Coverity defects in G4GMocrenFileSceneHandler.cc, G4GMocrenIO.cc, 
   G4GMocrenFileViewer.cc, and G4GMocrenMessenger.cc.

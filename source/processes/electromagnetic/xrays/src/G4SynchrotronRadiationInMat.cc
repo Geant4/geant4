@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.5 2010-10-14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -41,6 +40,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "G4SynchrotronRadiationInMat.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Integrator.hh"
 #include "G4EmProcessSubType.hh"
 
@@ -126,7 +127,12 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
   TotBin(200),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
-  thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80),
+  thePositron ( G4Positron::Positron() ), 
+  GammaCutInKineticEnergy(0),
+  ElectronCutInKineticEnergy(0),
+  PositronCutInKineticEnergy(0),
+  ParticleCutInKineticEnergy(0),
+  fAlpha(0.0), fRootNumber(80),
   fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
@@ -321,15 +327,33 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
       G4ParticleMomentum 
       particleDirection = aDynamicParticle->GetMomentumDirection();
 
-      // M-C of its direction
+      // M-C of its direction, simplified dipole busted approach
       
-      G4double Teta = G4UniformRand()/gamma ;    // Very roughly
+      // G4double Teta = G4UniformRand()/gamma ;    // Very roughly
+
+      G4double cosTheta, sinTheta, fcos, beta;
+
+  do
+  { 
+    cosTheta = 1. - 2.*G4UniformRand();
+    fcos     = (1 + cosTheta*cosTheta)*0.5;
+  }
+  while( fcos < G4UniformRand() );
+
+  beta = std::sqrt(1. - 1./(gamma*gamma));
+
+  cosTheta = (cosTheta + beta)/(1. + beta*cosTheta);
+
+  if( cosTheta >  1. ) cosTheta =  1.;
+  if( cosTheta < -1. ) cosTheta = -1.;
+
+  sinTheta = std::sqrt(1. - cosTheta*cosTheta );
 
       G4double Phi  = twopi * G4UniformRand() ;
 
-      G4double dirx = std::sin(Teta)*std::cos(Phi) , 
-               diry = std::sin(Teta)*std::sin(Phi) , 
-               dirz = std::cos(Teta) ;
+      G4double dirx = sinTheta*std::cos(Phi) , 
+               diry = sinTheta*std::sin(Phi) , 
+               dirz = cosTheta;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);   

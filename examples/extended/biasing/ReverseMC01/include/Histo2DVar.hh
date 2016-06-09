@@ -23,18 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/include/Histo2DVar.hh
+/// \brief Definition of the Histo2DVar class
+//
 #ifndef Histo2DVar_h
 #define Histo2DVar_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              Histo2DVar.hh
 //
-// Version:		1.0
-// Date:		09/03/00
-// Author:		P R Truscott, F Lei
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/96/NL/JG Work Order No. 3
+// Version:                1.0
+// Date:                09/03/00
+// Author:                P R Truscott, F Lei
+// Organisation:        DERA UK
+// Customer:                ESA/ESTEC, NOORDWIJK
+// Contract:                12115/96/NL/JG Work Order No. 3
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

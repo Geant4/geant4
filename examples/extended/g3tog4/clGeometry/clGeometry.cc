@@ -23,32 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file g3tog4/clGeometry/clGeometry.cc
+/// \brief Main program of the g3tog4/clGeometry example
 //
-// $Id: clGeometry.cc,v 1.9 2010-11-04 21:47:43 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
-// controls whether drawing is to be Done or not
-
-#include <fstream>
-#include <cmath>
-#include "G4ios.hh"
-
 // package includes
-
 #include "G3toG4DetectorConstruction.hh"
-#include "G3toG4RunAction.hh"
-#include "G3toG4PrimaryGeneratorAction.hh"
-#include "G3toG4PhysicsList.hh"
-#include "G3toG4EventAction.hh"
-#include "G4LogicalVolume.hh"
-#include "G3VolTable.hh"
+
+// common package includes
+#include "ExG4EventAction01.hh"
+#include "ExG4RunAction01.hh"
+#include "ExG4PrimaryGeneratorAction01.hh"
 
 // geant4 includes
-
+#include "FTFP_BERT.hh"
+#include "G3VolTable.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4ios.hh"
 
 // visualization
 #ifdef G4VIS_USE
@@ -60,30 +56,35 @@
 #include "G4UIExecutive.hh"
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc, char** argv)
 {
   G4String inFile;
   G4String macroFile = "";
+  G4bool batchMode = false;
     
-  if (argc < 2) {
+  if (argc < 2 || argc >= 4) {
     G4cerr << "clGeometry: Correct syntax: clGeometry <call_list_file> [ <macro_file> ]"
-	   << G4endl;
+           << G4endl;
     G4cerr << "If only one argument is specified, interactive mode will be "
-	   << "entered." << G4endl << "The second argument, if specified, is "
-	   << "the name of the macro file (batch mode)." << G4endl;
+           << "entered." << G4endl << "The second argument, if specified, is "
+           << "the name of the macro file (batch mode)." << G4endl;
         
     return EXIT_FAILURE;
   }
   if (argc >= 2) {
     // Process the command line
     inFile = argv[1];
+    G4cout << "Geometry data file: " << inFile << G4endl;
     std::ifstream in(inFile);
     if (!in) {
       G4cerr << "Cannot open input file \"" << inFile << "\"" << G4endl;
       return EXIT_FAILURE;
     }
   }
-  if (argc >= 3) {
+  if (argc == 3) {
+    batchMode = true;
     macroFile = argv[2];
     std::ifstream mac(macroFile);
     if (!mac) {
@@ -91,72 +92,56 @@ int main(int argc, char** argv)
       return 2;
     }
   }
-  if (argc >= 4) {
-    G4cerr << "Too many command line arguments (" << argc <<")" << G4endl;
-    return EXIT_FAILURE;
-  }
     
   // Construct the default run manager
-  G4RunManager* RunManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager;
     
   // set mandatory initialization classes
-  RunManager->SetUserInitialization(new G3toG4DetectorConstruction(inFile));
-
-  G3toG4PhysicsList* thePhysicsList = new G3toG4PhysicsList;
-
-  // set verbosity of PhysicsList
-  thePhysicsList->SetVerboseLevel(2);
-  RunManager->SetUserInitialization(thePhysicsList);
+  runManager->SetUserInitialization(new G3toG4DetectorConstruction(inFile));
+  runManager->SetUserInitialization(new FTFP_BERT);
     
+  // set user action classes
+  runManager->SetUserAction(new ExG4PrimaryGeneratorAction01());
+  runManager->SetUserAction(new ExG4RunAction01);
+  runManager->SetUserAction(new ExG4EventAction01);
+    
+  // Initialize G4 kernel
+  //
+  runManager->Initialize();
+
   //----------------
   // Visualization:
   //----------------
 
-#ifdef G4VIS_USE
-  G4VisManager* VisManager = new G4VisExecutive;
-  VisManager -> Initialize();
-#endif
-    
-  // set user action classes
-
-  RunManager->SetUserAction(new G3toG4RunAction);
-
-  G3toG4EventAction* theEventAction = new G3toG4EventAction;
-  theEventAction->SetDrawFlag("all");
-  RunManager->SetUserAction(theEventAction);
-
-  RunManager->SetUserAction(new G3toG4PrimaryGeneratorAction);
-    
   // the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* uiManager = G4UImanager::GetUIpointer();  
 
-  // set some additional defaults and initial actions
-    
-  UImanager->ApplyCommand("/control/verbose 1");
-  UImanager->ApplyCommand("/run/verbose 1");
-  UImanager->ApplyCommand("/tracking/verbose 1");
-  UImanager->ApplyCommand("/tracking/storeTrajectory 1");
-  UImanager->ApplyCommand("/run/initialize");
-
-  G4bool batch_mode = macroFile != "";
-    
-  if(!batch_mode) {
+  if ( batchMode ) {
+    // batch mode
+    uiManager->ApplyCommand("/control/execute init.mac"); 
+    G4String command = "/control/execute ";
+    uiManager->ApplyCommand(command+macroFile);
+  }
+  else {
+    // interactive mode : define UI session
 #ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager -> Initialize();
+    uiManager->ApplyCommand("/control/execute init_vis.mac");
+#else
+    uiManager->ApplyCommand("/control/execute init.mac"); 
 #endif
     ui->SessionStart();
     delete ui;
 #endif
-  } else {
-    // Batch mode
-    G4String command = "/control/execute ";
-    UImanager->ApplyCommand(command+macroFile);
-  }
+
 #ifdef G4VIS_USE
-  delete VisManager;
+    delete visManager;
 #endif
-  delete RunManager;
+  } 
+
+  delete runManager;
   return EXIT_SUCCESS;
 }

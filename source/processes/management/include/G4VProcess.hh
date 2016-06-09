@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.25 2007-11-15 04:09:58 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -298,18 +297,28 @@ class G4VProcess
       G4double          currentInteractionLength;
      // The InteractionLength in the current material
 
+      G4double          theInitialNumberOfInteractionLength;
+     // The initial value when ResetNumberOfInteractionLengthLeft is invoked
+
  public: // with description
       virtual void      ResetNumberOfInteractionLengthLeft();
      // reset (determine the value of)NumberOfInteractionLengthLeft
- 
+
+      G4double GetNumberOfInteractionLengthLeft() const;
+     // get NumberOfInteractionLengthLeft
+
+      G4double GetTotalNumberOfInteractionLengthTraversed() const;
+     // get NumberOfInteractionLength 
+     //   after  ResetNumberOfInteractionLengthLeft is invoked
+
  protected:  // with description
-     virtual void      SubtractNumberOfInteractionLengthLeft(
+     void      SubtractNumberOfInteractionLengthLeft(
 				  G4double previousStepSize
                                 );
      // subtract NumberOfInteractionLengthLeft by the value corresponding to 
      // previousStepSize      
  
-     virtual void      ClearNumberOfInteractionLengthLeft();
+     void      ClearNumberOfInteractionLengthLeft();
      // clear NumberOfInteractionLengthLeft 
      // !!! This method should be at the end of PostStepDoIt()
      // !!! and AtRestDoIt
@@ -406,15 +415,20 @@ inline  G4int G4VProcess::GetVerboseLevel() const
   return  verboseLevel;
 }
 
-inline void G4VProcess::ResetNumberOfInteractionLengthLeft()
-{
-  theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
-}
-
 inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
 {
+  theInitialNumberOfInteractionLength = -1.0; 
   theNumberOfInteractionLengthLeft =  -1.0;
 }
+
+inline G4double G4VProcess::GetNumberOfInteractionLengthLeft() const
+{
+  return theNumberOfInteractionLengthLeft;
+}
+
+inline G4double G4VProcess::GetTotalNumberOfInteractionLengthTraversed() const
+{
+  return theInitialNumberOfInteractionLength - theNumberOfInteractionLengthLeft;}
 
 inline G4double G4VProcess::GetCurrentInteractionLength() const
 {

@@ -1,0 +1,39 @@
+# $Id: mumsc.mac,v 1.21 2010-05-19 09:35:37 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# mu+, transmitted through 1 m of iron
+#
+/control/verbose 2
+/run/verbose 2
+#/tracking/verbose 1
+#
+/testem/det/setAbsMat Iron
+/testem/det/setAbsMat G4_WATER
+/testem/det/setAbsThick 10 m
+/testem/det/setAbsYZ    10 m
+/testem/det/setWorldX   10 m
+/testem/det/setWorldYZ  10 m
+#
+/testem/phys/addPhysics local
+###/testem/phys/addPhysics emstandard_opt0
+#
+/testem/phys/setCuts 1 km
+#
+/run/initialize
+#
+#/process/msc/ThetaLimit 0. rad
+#/process/msc/LateralDisplacement false
+#
+/testem/gun/setDefault
+/gun/particle mu+
+/gun/energy 1000 GeV
+#
+#/analysis/setFileName mumsc/local
+/analysis/h1/set 14  100 -5.0  +5.0 mm		#x-position at exit  
+/analysis/h1/set 15  100  0.  +10.0 mm		#radius at exit  
+#
+/testem/stack/killSecondaries 2
+#
+/testem/event/printModulo 100
+/run/beamOn 1000

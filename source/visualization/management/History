@@ -26,6 +26,421 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+17th November 2012  John Allison  (visman-V09-05-47)
+- G4VisManager.cc:
+  o Improved guidance on /vis/set/ and /vis/touchable/ command directories.
+
+2nd November 2012  John Allison  (visman-V09-05-46)
+- G4ViewParameters.hh: Tidied.
+
+30th October 2012  John Allison  (visman-V09-05-45)
+- G4VisManager.cc:
+  o Improved PrintAvailableGraphicsSystems.  Collected systems of same
+    name on one line with a list of nicknames.
+
+29th October 2012  John Allison  (visman-V09-05-44)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/date:
+  o Added user-specified date-time as last argument(s) on command line.
+
+24th October 2012  John Allison  (visman-V09-05-43)
+- G4VGraphicsSystem:
+  o Added virtual function IsUISessionCompatible.
+  o Changed spelling of SetNickname for consistency.
+- G4VisCommandsSceneHandler.cc: /vis/sceneHandler/create:
+  o If UI session is incompatible, look for a "fallback" graphics system.
+- G4VisExecutive.icc:
+  o Added "fallback" graphics systems for Qt.
+
+24th October 2012  John Allison  (visman-V09-05-42)
+- G4ViewParameters.cc:
+  o Added fVisAttributesModifiers to operator<< and operator!=.
+- G4VisCommands.cc: /vis/list:
+  o Added printing of possible attributes for trajectories and touchables.
+- G4VisCommandsViewer.cc: /vis/viewer/copyViewFrom:
+  o Added reference to /vis/viewer/set/all for copying scene modifications.
+
+18th October 2012  John Allison  (visman-V09-05-41)
+- G4VisExecutive.icc:
+  o Reverted to G4OpenInventorXt as the default OI for X Windows.
+  o Get G4OpenInventorXtExtended with "/vis/open OIXE".
+
+17th October 2012  John Allison  (visman-V09-05-40)
+- G4VisExecutive.icc:
+  o Added G4OpenInventorXtExtended and made it the default OI for X Windows.
+
+11th October 2012  John Allison  (visman-V09-05-39)
+- G4ViewParameters:
+  o Added "Commands" functions for saving state to /vis/ commands.
+- G4VisManager, G4VisCommandsViewer.cc:
+  o Added /vis/viewer/save.
+- G4VSceneHandler:
+  o Tidied.
+
+9th October 2012  John Allison  (visman-V09-05-38)
+- G4VisCommandsTouchableSet:
+  o Fixed compiler warnings on Windows.
+- G4VisManager.cc:
+  o Fixed run-time warning about command directory.
+
+9th October 2012  John Allison  (visman-V09-05-37)
+- Completed /vis/touchable/set/ commands.
+
+8th October 2012  John Allison
+- First attempt at /vis/touchable/set/ commands.
+- Only /vis/set/touchable and /vis/touchable/set/colour implemented.
+- sources.cmake:
+  o Added new files G4VisCommandsTouchableSet.hh/cc.
+- G4VisManager.cc:
+  o Added the above commands.
+- G4VVisCommand.cc:
+  o Added static cache for current touchable path.
+- G4VisCommandsSet.cc:
+  o Added /vis/set/touchable.
+- G4VisCommandsTouchableSet:
+  o New class for /vis/touchable/set/ commands.
+
+7th October 2012  John Allison  (visman-V09-05-36)
+- G4ViewParameters:
+  o Added VisAttributesModifiers.  This is to be used by new commands,
+    /vis/touchable/set/...
+- G4VSceneHandler:: CreateModelingParameters:
+  o Added copying of VisAttributesModifiers.
+- G4VisCommandsSceneAdd.cc:
+  o Code tidy.
+
+6th October 2012  John Allison  (visman-V09-05-35)
+- G4VisCommandSceneAdd.cc: G4VisCommandSceneAddVolume:
+  o Pick up found full path from G4PhysicalVolumeSearchScene so that it can
+    be passed to G4PhysicalVolumeModel as a base.  The base full path is the
+    full path of the top physical volume (actually the full path of the mother
+    of the top physical volume), so that even if a user issues
+    "/vis/drawVolume sub-detector", the full path includes the base full path,
+    i.e., the full path up to the world volume.
+- G4VSceneHandler:
+  o Deprecated NURBS at next major release.
+  o Changed G4Exception labels to 101+.
+
+1st October 2012  John Allison  (visman-V09-05-34)
+- G4VSceneHandler::LoadAtts:
+  o Added G4Atts from trajectories model to access event ID.
+- G4VisCommandSceneAddTrajectories:
+  o Print G4Atts from trajectories (to advertise availability of event ID).
+
+28th September 2012  Gabriele Cosmo  (visman-V09-05-33)
+- Explicitly include units header in G4ViewParameters.hh.
+
+27th September 2012  John Allison  (visman-V09-05-32)
+- G4VisManager.cc:
+  o Added an extra refresh for auto-refresh viewers at end of run.
+
+26th September 2012  John Allison  (visman-V09-05-31)
+- G4ViewParameters: Added:
+  o SetOrthogonalProjection();
+  o SetPerspectiveProjection(G4double fieldHalfAngle = 30. * deg);
+  o SetDefaultColour(const G4Colour&);
+  o SetDefaultTextColour(const G4Colour&);
+
+26th September 2012  John Allison  (visman-V09-05-29)
+- G4VViewer: Added non-virtual RefreshView() that simply calls SetView(),
+  ClearView(); DrawView().
+
+25th September 2012  John Allison  (visman-V09-05-28)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/axes:
+  o Added protection, limited width to length/50.
+
+6th September 2012  John Allison  (visman-V09-05-27)
+- G4VisCommandsSceneAdd.cc:
+  o Removed multi-requested parameter guidance.  Collapsed guidance to one
+    long string with '\n' for new lines.
+
+8th August 2012  John Allison  (visman-V09-05-26)
+- Tagged.
+
+6th August 2012  John Allison
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/frame: Fixed bug in SetParameterRange.
+
+17th July 2012  John Allison  (visman-V09-05-25)
+- Tagged.
+
+16th July 2012  John Allison
+- G4VisCommandsViewer.cc: /vis/viewer/copyViewFrom:
+  o Added LightpointDirection and LightsMoveWithCamera to list of copied
+    view parameters.
+- G4VSceneHandler::Begin/EndPrimitives2D:
+  o Moved fProcessing2D from G4OpenGLSceneHandler.
+  o Now may be used by all and any driver.
+
+15th July 2012  John Allison  (visman-V09-05-24, needs modeling-V09-05-09)
+- G4VisCommandsSceneAdd: Re-implemented:
+  o /vis/scene/add/arrow
+  o /vis/scene/add/axes
+
+13th July 2012  John Allison
+- G4VisCommandsSceneAdd.cc/hh:
+  o Re-implemented /vis/scene/add/axes with annotated arrows.
+
+5th July 2012  Gabriele Cosmo  (visman-V09-05-23)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+15th June 2012  John Allison
+- G4VSceneHandler.cc: Spelling correction in comment.
+
+7th June 2012  John Allison  (visman-V09-05-22)
+- Shadow clean.
+
+6th June 2012  John Allison  (visman-V09-05-21)
+- G4VisCommandsSceneAdd.cc: Fix compiler warning.
+
+5th June 2012  John Allison  (visman-V09-05-20)
+- Added /vis/scene/add/line(2D) and arrow(2D).
+
+3rd June 2012  John Allison  (visman-V09-05-19)
+- G4VisCommandsSceneAdd.cc/hh, G4VisCommandsGeometrySet.cc:
+  o Coverity fixes.
+
+23rd May 2012  John Allison  (visman-V09-05-18)
+- Health Check 2012:
+  o Over the years we have added drivers and features and added fixes.
+    A health check revealed several instances of code duplication,
+    unnecessary screen refeshing, incorrect buffer switching
+    (necessitating extra refreshing), etc.  This tag is an attempt to
+    bring the basic vis algorithms up to full health and efficiency.
+  o G4VSceneHandler:
+    . ClearStore and ClearTransientStore become "ordinary" virtual
+      functions *not* requiring to be called by sub-class
+      implementations.  The default implementation in G4VSceneHandler
+      is an empty function.
+    . ProcessScene:
+      - Changed from a private function (called only by friend
+        G4VViewer::ProcessView) to a straightforward protected virtual
+        function that can be overloaded by the subclass.  A typical
+        example of overloading is by
+        G4OpenGLScenehandler::ProcessScene, which simply invokes the
+        base class function twice, as is required for a good treatment
+        of transparency, e.g.,
+          void G4OpenGLSceneHandler::ProcessScene()
+          {
+            G4VSceneHandler::ProcessScene();
+            // Repeat if required...
+            if (fSecondPassRequested) {
+              fSecondPass = true;
+              G4VSceneHandler::ProcessScene();
+              fSecondPass = false;
+              fSecondPassRequested = false;
+            }
+          }
+      - Now assumes graphics database store has already been cleared,
+        i.e., ClearStore has been called.  ClearStore is now called
+        from G4VViewer::ProcessView just before calling ProcessScene.
+      - Existing call to ClearStore removed.
+      - Second pass of run-duration models removed (in accordance with
+        above change from private to protected virtual function).
+      - Call to FinishView removed - this is the repsonsibility of the
+        viewer.
+  o G4VViewer::ProcessView: ClearStore before ProcessScene.
+  o G4VisCommandsScene.cc:
+    . /vis/scene/notifyHandlers:
+      - Remove a superfluous call to
+        ClearTransientStore and associated tentative comments.
+
+22nd April 2012  John Allison  (visman-V09-05-17)
+- G4VisCommandsSceneAdd: Fixed compiler warnings.
+
+12th April 2012  John Allison
+- G4VSceneHandler::ProcessScene: Moved FinishView to end.
+- G4VisCommandsScene.cc:
+  o The above is a fix of the "curious problem" in visman-V09-05-16.
+  o Code reverted.
+- G4VisCommandsSceneAdd: /vis/scene/add/date:
+  o G4Timer fTimer instantiated in constructor - more efficient.
+- G4Scene.cc: Improved warning message.
+
+12th April 2012  John Allison
+- G4VisManager.hh: Removed unnecessary unnamed namespace around some typedef's.
+- G4VisManager.cc: Removed unused #include "G4VisFeaturesOf...".
+- /vis/scene/add/date: Removed trailing \n.
+
+11th April 2012  John Allison  (visman-V09-05-16)
+- G4VisManager.cc, G4VisCommandsScene.cc/hh
+  o Added /vis/scene/activateModel.
+- G4VSceneHandler.cc:
+  o Augmented drawing loops to take account of model activation state.
+- G4Scene.cc:
+  o Improved CalculateExtent to take account of model activation state.
+  o Tidied operator<<.
+- G4VisCommandsScene.cc:
+  o /vis/scene/notifyHandlers:
+    . Instead of Set+Clear+DrawView, used ApplyCommand("/vis/viewer/refresh")
+      twice!!  This was an attempt to fix a curious problem whereby
+      trajectories were not refreshed.  Probably the go only to the
+      back buffer, because a second refresh seems to do the trick.
+  o /vis/scene/list: Improved. 
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:
+  o Small improvement to guidance and code readability.
+
+10th April 2012  John Allison
+- /vis/scene/list: Changed verbosity check to warnings.
+
+10th April 2012  John Allison  (visman-V09-05-15)
+- Migrated to G4Scene::Model.
+- G4VisManager.cc: Minor improvements to printing.
+- /vis/list: Added PrintAvailableUserVisActions and improved.
+- /vis/scene/list: Added printing of end-of-run models.
+
+10th April 2012  John Allison  (visman-V09-05-14)
+- G4VisManager::RegisterRunDuration/EndOfEvent/EndOfRunUserVisAction.
+  Now you can register any number of named vis actions and associate
+  them with particular types of action.  They are added to the scene
+  with /vis/scene/add/userAction [<name>] (default all).
+
+8th April 2012  John Allison  (visman-V09-05-13)
+- Added /vis/viewer/copyViewFrom.
+- G4VisManager.hh: Tidy.
+- G4VisCommandsSceneAddUserAction: Tidy model name.
+
+8th April 2012  John Allison  (visman-V09-05-12)
+- Added /vis/set/colour and /vis/set/lineWidth.  (/vis/set/ commands
+  set "current quantities" for future /vis/scene/add/ commands.)
+- /vis/scene/add/frame: Modified to use the above "current quantities".
+
+5th April 2012  John Allison
+- G4Scene::CalculateExtent: Include validation of models.  This
+  re-calculated extent.  Solves problem of change of extent if a
+  volume chnages visibility, for example, by a /vis/geometry command.
+- /vis/scene/notifyHandlers:
+  o Fix warning message if no scene exists.
+  o Call G4Scene::CalculateExtent to ensure extent is up to date.
+
+4th April 2012  John Allison  (visman-V09-05-11)
+- G4VVisCommand: Commented out as-yet-unused "current quantities".
+- /vis/set/textLayout: Allow omitable argument - default "left".
+
+30th March 2012  John Allison
+- G4ViewParameters:
+  o Moved XGeometry constants (fXValue, etc.) to static.
+  o Added fGeometryMask to list of those tested in PrintDifferences
+    and operator!=.
+  o Added fGeometryMask to those printed in operator<<.
+
+30th March 2012  John Allison
+- G4Scene.cc::operator!=:
+  o Added test on size of fEndOfEventModelList and fEndOfRunModelList.
+  o Improved comments.
+
+29th March 2012  Laurent Garnier
+- G4VSceneHandler: Made SetScene virtual
+
+28th March 2012  John Allison
+- G4VisCommandsViewer.cc: Improved some warning messages.
+
+27th March 2012  John Allison
+- G4VisCommandsSceneAdd.cc: Added SetType for classes using G4CallBackModel,
+
+27th March 2012  John Allison
+- /vis/viewer/set/picking: Improved guidance.
+- /vis/scene/add commands: Rationalised tag names.
+
+26th March 2012  John Allison  (visman-V09-05-10)
+- G4VisCommandsSet.cc: Added #include <cctype> for strict Windows compiler.
+
+23rd March 2012  John Allison  (visman-V09-05-09.  Needs greps-V09-05-06.)
+- Added /vis/set/textLayout and tidied.
+- Modified list of "current quantities" for vis commands.
+  From G4VVisCommands.hh:
+  // Current quantities for use in appropriate commands
+  static G4Colour                   fCurrentColour;
+  static G4Colour                   fCurrentTextColour;
+  static G4Text::Layout             fCurrentTextLayout;
+  static G4double                   fCurrentLineThickness;
+  static G4VisAttributes::LineStyle fCurrentLineStyle;
+  static G4VMarker::FillStyle       fCurrentFillStyle;
+  static G4VMarker::SizeType        fCurrentSizeType;
+  The default values are (from G4VVisCommands.cc):
+  G4VVisCommand::fCurrentColour = G4Colour::White();
+  G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
+  G4VVisCommand::fCurrentTextLayout = G4Text::left;
+  G4VVisCommand::fCurrentLineThickness = 1.;
+  G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
+  G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
+  G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
+
+21st March 2012  John Allison  (visman-V09-05-08)
+- Introduced concept of "current quantities" for use in vis commands.
+- Added /vis/set/textColour, the first command in the series that
+  will allow the user to change the above current quantities for use by
+  subsequent commands.
+- Some tidying of the vis command structure:
+  o Moved /vis/default/ to /vis/viewer/default/ (it is specific to viewers).
+- Files removed:
+  o G4VisCommandsDefault.hh/cc
+- New files:
+  o G4VisCommandsViewerDefault.hh/cc
+  o G4VisCommandsSet.hh/cc
+
+7th March 2012  John Allison  (visman-V09-05-07)
+- G4VisCommandsSceneAdd:
+  o Added /vis/scene/add/logo2D and text2D.
+  o Improved /vis/scene/add/axes, logo and scale:
+    . Size computed automatically by default.
+  o /vis/scene/add/date:
+    . Placed left-adjusted to centre of screen pending implementation
+      of right-adjustment.
+  o Tidied.
+
+28th February 2012  John Allison  (visman-V09-05-06)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
+13th February 2012  John Allison  (visman-V09-05-05)
+- G4VisCommandsSceneAdd.cc: Small improvement to /vis/scene/add/eventID.
+
+11th February 2012  John Allison  (visman-V09-05-04)
+- Merged vis-V09-05-04-2ndbranch (tag vis-V09-05-04-2ndbranch-08) to trunk.
+
+9th February 2012  John Allison (visman-V09-05-03)
+- Needs global-V09-05-00 (for date).
+- Added /vis/scene/add/date and /vis/scene/add/frame.
+- /vis/scene/add/eventID: Added layout parameter.
+
+17th January 2012  Laurent Garnier
+- Removed ProcessText.
+
+13th January 2012  John Allison (visman-V09-05-02)
+- Tagged.
+
+3rd January 2012 Laurent Garnier
+- G4VSceneHandler : Add ProcessText method in order to draw text
+
+3rd January 2012  John Allison (visman-V09-05-01)
+- G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
+  o Downgraded "scene has changed" from WARNING to NOTE. 
+
+2nd January 2012  John Allison
+- G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
+  causing two copies of the geometry to be drawn.
+
+30th December 2011  John Allison  (visman-V09-05-00)
+- G4VisManager: Implemented Begin/EndDraw(2D).
+  o Note that this forces all thus-bracketed Draw messages to have the
+    same transformation.  If an attempt to change the transformation
+    is detected, a fatal exception is raised.
+- G4VSceneHandler: Added Get/SetObjectTransformation.
+
+12th December 2011  John Allison
+- G4VSceneHandler::GetMarkerSize: Bug fix:
+  o Bug: If size < 1., size = 1. for all markers.
+  o Fix: Applies only to "screen-size" markers.
+- G4VisCommandSceneAddLogo: Improvements to /vis/scene/add/logo:
+  o In "auto" mode, logo is placed front-bottom-right facing the viewer
+    regardless of currenrt viewpoint direction.  (Many examples set the
+    viewpoint direction to (-1,0,0) so that the y-axis is up and the
+    z-axis horizontal; the beam is usually fired down the z-axis.  This
+    improvement puts the G4 logo in a sensible place.)
+  o More choices for facing direction:
+    . auto|[-]x|[-]y|[-]z - defaults to auto
+    . If automatic, faces the user.
+
 12th November 2011  John Allison  (visman-V09-04-12)
 - G4VisListManager<T>::SetCurrent:
   o Changed "Fatal" to "JustWarning" for non-existent model.

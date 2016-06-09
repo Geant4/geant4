@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryOriginVolumeFilter.cc,v 1.3 2006-08-25 19:44:14 tinslay Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Filter trajectories according to volume name. Only registered 
 // volumes will pass the filter.
@@ -59,9 +58,10 @@ G4TrajectoryOriginVolumeFilter::Evaluate(const G4VTrajectory& traj) const
   G4String logicalName = logicalVolume->GetName();
   G4String physicalName = volume->GetName();
 
-  if (GetVerbose()) G4cout<<"G4TrajectoryOriginVolumeFilter processing trajectory with originating volume "<<G4endl;
-  G4cout<<"logical and physical names:  "<<logicalName<<" "<<physicalName<<G4endl;
-
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryOriginVolumeFilter processing trajectory with originating volume "<<G4endl;
+    G4cout<<"logical and physical names:  "<<logicalName<<" "<<physicalName<<G4endl;
+  }
   // Search for logical volume name
   std::vector<G4String>::const_iterator iterLogical = std::find(fVolumes.begin(), fVolumes.end(), logicalName);
 

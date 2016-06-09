@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc,v 1.1 2009-04-21 15:35:45 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -96,17 +95,10 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
 
   MPTCiterator j;
   j = MPTC.find(G4String(key));
-  G4double val = 0.0;
-  if ( j != MPTC.end() )
-  {
-    val = j->second;
-  } 
-  else
-  {
-    G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
-                FatalException, "Constant Material Property not found.");
-  }
-  return val;
+  if ( j != MPTC.end() ) return j->second;
+  G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
+              FatalException, "Constant Material Property not found.");
+  return 0.;
 }
 
 inline
@@ -116,12 +108,8 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
 
   MPTCiterator j;
   j = MPTC.find(G4String(key));
-  G4bool exists = false;
-  if ( j != MPTC.end() )
-  {
-    exists = true;
-  } 
-  return exists;
+  if ( j != MPTC.end() ) return true;
+  return false;
 }
 
 inline G4MaterialPropertyVector*
@@ -129,12 +117,11 @@ G4MaterialPropertiesTable::GetProperty(const char *key)
 {
   // Returns a Material Property Vector corresponding to a key
 
-  G4MaterialPropertyVector* pvec = MPT[G4String(key)];
-  if ((!pvec) && (G4String(key) == "GROUPVEL"))
-  {
-    pvec = SetGROUPVEL();
-  }
-  return pvec;
+  MPTiterator i;
+  i = MPT.find(G4String(key));
+  if ( i != MPT.end() ) return i->second;
+  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
+  return NULL;
 }
 
 inline

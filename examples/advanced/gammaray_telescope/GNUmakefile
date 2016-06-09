@@ -15,7 +15,7 @@ endif
 all:  had_list lib bin
 
 had_list:
-	@echo "Gamma Ray Tel Advanced example"
+	@echo "Gamma-Ray Telescope advanced example"
 
 include $(G4INSTALL)/config/binmake.gmk
 

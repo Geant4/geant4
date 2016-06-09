@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.hh,v 1.14 2010-08-10 15:47:42 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -124,10 +123,6 @@ inline G4int G4ShortLivedTable::size() const
   return fShortLivedList->size();
 }
 
-inline void G4ShortLivedTable::clear()
-{
-  fShortLivedList->clear();
-}
 
 inline 
  G4ParticleDefinition*  G4ShortLivedTable::GetParticle(G4int index) const

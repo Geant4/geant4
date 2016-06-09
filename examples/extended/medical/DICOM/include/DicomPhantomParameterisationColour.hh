@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class DicomPhantomParameterisationColour
+/// \file medical/DICOM/include/DicomPhantomParameterisationColour.hh
+/// \brief Definition of the DicomPhantomParameterisationColour class
 //
-// Class description:
-// 
-// Class inherited from G4PhantomParameterisation to provide different colour for each material
-// History:
-// - Created.    P. Arce, 5 December 2007
-// *********************************************************************
 
 #ifndef DicomPhantomParameterisationColour_HH
 #define DicomPhantomParameterisationColour_HH
@@ -40,6 +35,14 @@
 #include "G4PhantomParameterisation.hh"
 class G4VisAttributes;
 
+// *********************************************************************
+/// Class inherited from G4PhantomParameterisation to provide different colour for each material
+///
+/// History:
+/// - Created.    5 December 2007
+/// \author       P. Arce
+// *********************************************************************
+
 class DicomPhantomParameterisationColour : public G4PhantomParameterisation
 {
 public:  // with description
@@ -48,8 +51,8 @@ public:  // with description
   ~DicomPhantomParameterisationColour();
   
   virtual G4Material* ComputeMaterial(const G4int repNo, 
-				      G4VPhysicalVolume *currentVol,
-				      const G4VTouchable *parentTouch=0);
+                                      G4VPhysicalVolume *currentVol,
+                                      const G4VTouchable *parentTouch=0);
   
 private:
   void ReadColourData();

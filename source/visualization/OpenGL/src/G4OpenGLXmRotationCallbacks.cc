@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.17 2009-01-19 16:53:42 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -38,6 +37,7 @@
 
 #include "G4OpenGLXmViewer.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Scene.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -214,7 +214,7 @@ void G4OpenGLXmViewer::set_rot_sens_callback (Widget w,
   } else {
     G4Exception
       ("G4OpenGLXmViewer::set_rot_sens_callback",
-       "opengl0004", FatalException,
+       "opengl2004", FatalException,
        "Bad value returned for dp in set_rot_sens_callback");
   }
 
@@ -244,7 +244,7 @@ void G4OpenGLXmViewer::set_rot_subject_callback (Widget w,
     {
       G4Exception
 	("G4OpenGLXmViewer::set_rot_subject_callback",
-	 "opengl0005", FatalException,
+	 "opengl2005", FatalException,
 	 "Unrecognised choice made in set_rot_subject_callback"); 
     }
   }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.32 2006-06-29 21:29:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -244,7 +243,32 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     }
     return;
   }
-  // Valid index.  Set current graphics system in preparation for
+
+  // Check UI session compatibility.
+  if (!gsl[iGS]->IsUISessionCompatible()) {
+    G4String fallbackNickname = gsl[iGS]->GetNickname() + "_FALLBACK";
+    for (iGS = 0; iGS < nSystems; iGS++) {
+      if (fallbackNickname.compareTo (gsl [iGS] -> GetNickname (),
+                                      G4String::ignoreCase) == 0) {
+        break;  // Match found.
+      }
+    }
+    if (iGS < 0 || iGS >= nSystems) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+        " could not find fallback graphics system."
+        << G4endl;
+      }
+      return;
+    }
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: G4VisCommandSceneHandlerCreate::SetNewValue:"
+      " using fallback graphics system."
+      << G4endl;
+    }
+  }
+
+  // Set current graphics system in preparation for
   // creating scene handler.
   G4VGraphicsSystem* pSystem = gsl [iGS];
   fpVisManager -> SetCurrentGraphicsSystem (pSystem);

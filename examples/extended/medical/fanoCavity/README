@@ -152,22 +152,15 @@ $Id: README,v 1.16 2009-10-25 19:06:26 maire Exp $
    One can control the name of the histograms file with the command:
    /testem/histo/setFileName  name  (default fanoCavity)
    
-   It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (root by default)
+   It is possible to choose the format of the histogram file :
+   root(default), xml, hbook.  See HistoManager.hh
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id
    All selected histos will be written on a file name.ascii (default fanocavity)
-           
-   Note that, by default, histograms are disabled. To activate them, uncomment
-   the flag G4ANALYSIS_USE in GNUmakefile.
  	
  6- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd geant4/examples/extended/medical/fanoCavity
- 		% gmake
- 		
  	- execute fanoCavity in 'batch' mode from macro files
  		% fanoCavity   run01.mac
  		
@@ -177,9 +170,3 @@ $Id: README,v 1.16 2009-10-25 19:06:26 maire Exp $
  		Idle> type your commands
  		....
  		Idle> exit
-		 
- 7- USING HISTOGRAMS
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
-  

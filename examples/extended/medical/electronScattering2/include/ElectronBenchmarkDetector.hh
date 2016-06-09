@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
+/// \brief Definition of the ElectronBenchmarkDetector class
+//
 
 #ifndef ElectronBenchmarkDetector_h
 #define ElectronBenchmarkDetector_h 1
@@ -42,7 +45,7 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
   public:
   
     ElectronBenchmarkDetector();
-   ~ElectronBenchmarkDetector();
+    virtual ~ElectronBenchmarkDetector();
 
     virtual G4VPhysicalVolume* Construct();
 
@@ -108,14 +111,14 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     ElectronBenchmarkDetectorMessenger* fMessenger;
     
     // Visualization Attributes
-    G4VisAttributes* worldVisAtt;
-    G4VisAttributes* windowVisAtt;
-    G4VisAttributes* primFoilVisAtt;
-    G4VisAttributes* monVisAtt;
-    G4VisAttributes* bagVisAtt;
-    G4VisAttributes* heliumVisAtt;
-    G4VisAttributes* ringVisAtt;
-    G4VisAttributes* scorerVisAtt;
+    G4VisAttributes* fWorldVisAtt;
+    G4VisAttributes* fWindowVisAtt;
+    G4VisAttributes* fPrimFoilVisAtt;
+    G4VisAttributes* fMonVisAtt;
+    G4VisAttributes* fBagVisAtt;
+    G4VisAttributes* fHeliumVisAtt;
+    G4VisAttributes* fRingVisAtt;
+    G4VisAttributes* fScorerVisAtt;
 };
 
 #endif

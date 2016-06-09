@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PrimaryGeneratorAction.hh,v 1.4 2006-06-29 16:31:35 gunter Exp $
+/// \file analysis/A01/include/A01PrimaryGeneratorAction.hh
+/// \brief Definition of the A01PrimaryGeneratorAction class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -47,29 +50,27 @@ class A01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun* particleGun;
-    A01PrimaryGeneratorMessenger* gunMessenger;
-    G4ParticleDefinition* positron;
-    G4ParticleDefinition* muon;
-    G4ParticleDefinition* pion;
-    G4ParticleDefinition* kaon;
-    G4ParticleDefinition* proton;
-    G4double momentum;
-    G4double sigmaMomentum;
-    G4double sigmaAngle;
-    G4bool randomizePrimary;
+    G4ParticleGun* fParticleGun;
+    A01PrimaryGeneratorMessenger* fGunMessenger;
+    G4ParticleDefinition* fPositron;
+    G4ParticleDefinition* fMuon;
+    G4ParticleDefinition* fPion;
+    G4ParticleDefinition* fKaon;
+    G4ParticleDefinition* fProton;
+    G4double fMomentum;
+    G4double fSigmaMomentum;
+    G4double fSigmaAngle;
+    G4bool fRandomizePrimary;
 
   public:
-    inline void SetMomentum(G4double val) { momentum = val; }
-    inline G4double GetMomentum() const { return momentum; }
-    inline void SetSigmaMomentum(G4double val) { sigmaMomentum = val; }
-    inline G4double GetSigmaMomentum() const { return sigmaMomentum; }
-    inline void SetSigmaAngle(G4double val) { sigmaAngle = val; }
-    inline G4double GetSigmaAngle() const { return sigmaAngle; }
-    inline void SetRandomize(G4bool val) { randomizePrimary = val; }
-    inline G4bool GetRandomize() const { return randomizePrimary; }
+    inline void SetMomentum(G4double val) { fMomentum = val; }
+    inline G4double GetMomentum() const { return fMomentum; }
+    inline void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
+    inline G4double GetSigmaMomentum() const { return fSigmaMomentum; }
+    inline void SetSigmaAngle(G4double val) { fSigmaAngle = val; }
+    inline G4double GetSigmaAngle() const { return fSigmaAngle; }
+    inline void SetRandomize(G4bool val) { fRandomizePrimary = val; }
+    inline G4bool GetRandomize() const { return fRandomizePrimary; }
 };
 
 #endif
-
-

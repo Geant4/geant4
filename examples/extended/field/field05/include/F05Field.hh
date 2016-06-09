@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/include/F05Field.hh
+/// \brief Definition of the F05Field class
+//
 //
 //
 //

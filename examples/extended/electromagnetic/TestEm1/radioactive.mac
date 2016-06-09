@@ -1,0 +1,31 @@
+# $Id: range.mac,v 1.12 2009-09-15 12:51:49 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+/testem/det/setSize 100 m
+#
+/testem/phys/addPhysics  local
+#
+/run/initialize
+#
+/process/em/fluo true
+/process/em/auger true
+#
+/testem/gun/setDefault
+/gun/particle ion
+/gun/ion 82 210 0 0
+/gun/energy 1 eV
+/gun/position 0 0 0 mm
+#
+/grdm/nucleusLimits 210 210 82 82
+#
+/analysis/setFileName rdecay
+/analysis/h1/set 4 100 0 80 keV	#total edep
+#	 
+/testem/event/printModulo 40000
+#
+/run/beamOn 400000

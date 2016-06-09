@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN02/ParN02.cc
+/// \brief The user main program of the parallel/ParN02 example
 //
-// $Id: ParN02.cc,v 1.6 2010-11-05 09:28:00 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

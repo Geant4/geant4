@@ -41,6 +41,8 @@
  
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
  
@@ -55,6 +57,7 @@ G4Nucleus::G4Nucleus()
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
   theTemp = 293.16*kelvin;
+  fIsotope = 0;
 }
 
 G4Nucleus::G4Nucleus( const G4double A, const G4double Z )
@@ -68,6 +71,7 @@ G4Nucleus::G4Nucleus( const G4double A, const G4double Z )
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
   theTemp = 293.16*kelvin;
+  fIsotope = 0;
 }
 
 G4Nucleus::G4Nucleus( const G4int A, const G4int Z )
@@ -81,6 +85,7 @@ G4Nucleus::G4Nucleus( const G4int A, const G4int Z )
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
   theTemp = 293.16*kelvin;
+  fIsotope = 0;
 }
 
 G4Nucleus::G4Nucleus( const G4Material *aMaterial )
@@ -94,6 +99,7 @@ G4Nucleus::G4Nucleus( const G4Material *aMaterial )
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
   theTemp = aMaterial->GetTemperature();
+  fIsotope = 0;
 }
 
 G4Nucleus::~G4Nucleus() {}
@@ -189,31 +195,33 @@ G4Nucleus::ChooseParameters(const G4Material* aMaterial)
 
 
 void
-G4Nucleus::SetParameters(const G4double A, const G4double Z)
+G4Nucleus::SetParameters(G4double A, G4double Z)
 {
-  theZ = G4int(Z + 0.5);
-  theA = G4int(A + 0.5);   
+  theZ = G4lrint(Z);
+  theA = G4lrint(A);   
   if (theA<1 || theZ<0 || theZ>theA) {
     throw G4HadronicException(__FILE__, __LINE__,
             "G4Nucleus::SetParameters called with non-physical parameters");
   }
   aEff = A;  // atomic weight
   zEff = Z;  // atomic number
+  fIsotope = 0;
 }
 
- void
-  G4Nucleus::SetParameters( const G4int A, const G4int Z )
-  {
-    theZ = Z;
-    theA = A;   
-    if( theA<1 || theZ<0 || theZ>theA )
+void
+G4Nucleus::SetParameters(G4int A, const G4int Z )
+{
+  theZ = Z;
+  theA = A;   
+  if( theA<1 || theZ<0 || theZ>theA )
     {
       throw G4HadronicException(__FILE__, __LINE__,
-                               "G4Nucleus::SetParameters called with non-physical parameters");
+				"G4Nucleus::SetParameters called with non-physical parameters");
     }
-    aEff = A;  // atomic weight
-    zEff = Z;  // atomic number
-  }
+  aEff = A;  // atomic weight
+  zEff = Z;  // atomic number
+  fIsotope = 0;
+}
 
  G4DynamicParticle *
   G4Nucleus::ReturnTargetParticle() const

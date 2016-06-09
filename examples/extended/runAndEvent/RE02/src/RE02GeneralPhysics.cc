@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02GeneralPhysics.cc,v 1.2 2006-06-29 17:45:16 gunter Exp $
+/// \file runAndEvent/RE02/src/RE02GeneralPhysics.cc
+/// \brief Implementation of the RE02GeneralPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
-// 22-Nov-2004 Construt ALL Particles by T. Koi
-
+// 22-Nov-2004 Construct ALL Particles by T. Koi
 
 #include "RE02GeneralPhysics.hh"
 
@@ -35,11 +37,13 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02GeneralPhysics::RE02GeneralPhysics(const G4String& name)
                      :  G4VPhysicsConstructor(name)
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02GeneralPhysics::~RE02GeneralPhysics()
 {
 }
@@ -51,6 +55,7 @@ RE02GeneralPhysics::~RE02GeneralPhysics()
 #include "G4MesonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02GeneralPhysics::ConstructParticle()
 {
    // In Alphabetical Order 
@@ -81,7 +86,8 @@ void RE02GeneralPhysics::ConstructParticle()
    delete mesonConstructor;
 
    //  Construct  resonaces and quarks
-   G4ShortLivedConstructor* shortLivedConstructor = new G4ShortLivedConstructor();
+   G4ShortLivedConstructor* shortLivedConstructor =
+     new G4ShortLivedConstructor();
    shortLivedConstructor -> ConstructParticle();
    delete shortLivedConstructor;
 
@@ -91,10 +97,11 @@ void RE02GeneralPhysics::ConstructParticle()
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02GeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
-   G4Decay* theDecayProcess = new G4Decay();  
+  G4Decay* theDecayProcess = new G4Decay();  
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();

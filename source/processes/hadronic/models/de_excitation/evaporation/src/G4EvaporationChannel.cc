@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.19 2010-11-24 15:30:49 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -44,6 +43,8 @@
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Alpha.hh"
 
@@ -86,22 +87,25 @@ G4EvaporationChannel::~G4EvaporationChannel()
   delete theLevelDensityPtr;
 }
 
-void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
+//void G4EvaporationChannel::Initialize(const G4Fragment &)
+//{}
+
+G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 {
   //for inverse cross section choice
   theEvaporationProbabilityPtr->SetOPTxs(OPTxs);
   // for superimposed Coulomb Barrier for inverse cross sections
   theEvaporationProbabilityPtr->UseSICB(useSICB);
   
-  G4int FragmentA = fragment.GetA_asInt();
-  G4int FragmentZ = fragment.GetZ_asInt();
+  G4int FragmentA = fragment->GetA_asInt();
+  G4int FragmentZ = fragment->GetZ_asInt();
   ResidualA = FragmentA - theA;
   ResidualZ = FragmentZ - theZ;
   //G4cout << "G4EvaporationChannel::Initialize Z= " << theZ << " A= " << theA 
   //	 << " FragZ= " << FragmentZ << " FragA= " << FragmentA << G4endl;
   
   //Effective excitation energy
-  G4double ExEnergy = fragment.GetExcitationEnergy() - 
+  G4double ExEnergy = fragment->GetExcitationEnergy() - 
     G4PairingCorrection::GetInstance()->GetPairingCorrection(FragmentA,FragmentZ);
   
   // Only channels which are physically allowed are taken into account 
@@ -112,7 +116,7 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
     EmissionProbability = 0.0;
   } else {
     ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
-    G4double FragmentMass = fragment.GetGroundStateMass();
+    G4double FragmentMass = fragment->GetGroundStateMass();
     CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
     // Maximal Kinetic Energy
     MaximalKineticEnergy = CalcMaximalKineticEnergy(FragmentMass + ExEnergy);
@@ -136,12 +140,12 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
     else { 
       // Total emission probability for this channel
       EmissionProbability = theEvaporationProbabilityPtr->
-        EmissionProbability(fragment, MaximalKineticEnergy);
+        EmissionProbability(*fragment, MaximalKineticEnergy);
     }
   }
   //G4cout << "G4EvaporationChannel:: probability= " << EmissionProbability << G4endl; 
   
-  return;
+  return EmissionProbability;
 }
 
 G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
@@ -295,7 +299,7 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
         T=V+G4UniformRand()*(Tmax-V);
         NormalizedProbability = 
 	  theEvaporationProbabilityPtr->ProbabilityDistributionFunction(aFragment,T)/
-          GetEmissionProbability();
+          GetEmissionProbability(const_cast<G4Fragment*>(&aFragment));
         
       }
     while (G4UniformRand() > NormalizedProbability);

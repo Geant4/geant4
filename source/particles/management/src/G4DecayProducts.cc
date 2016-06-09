@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.19 2010-10-30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -35,65 +34,57 @@
 //      10 July 1996 H.Kurashige
 //      21 Oct  1996 H.Kurashige
 //      12 Dec 1997 H.Kurashige
+//      4 Apr. 2012 H.Kurashige use std::vector
 // ------------------------------------------------------------
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
-G4Allocator<G4DecayProducts> aDecayProductsAllocator;
-
 
 G4DecayProducts::G4DecayProducts()
                 :numberOfProducts(0),theParentParticle(0)
 { 
-  //clear theProductVector
-  for (size_t i=0;i<MaxNumberOfProducts; i+=1){
-    theProductVector[i]=0; 
-  }
+   theProductVector = new G4DecayProductVector();
 }
 
 G4DecayProducts::G4DecayProducts(const G4DynamicParticle &aParticle)
   :numberOfProducts(0),theParentParticle(0)
 {
   theParentParticle = new G4DynamicParticle(aParticle);
-  //clear theProductVector
-  for (size_t i=0;i<MaxNumberOfProducts; i+=1){
-    theProductVector[i]=0; 
-  }
+  theProductVector = new G4DecayProductVector();
 }
 
 G4DecayProducts::G4DecayProducts(const G4DecayProducts &right) 
                 :numberOfProducts(0)
 {
-  //clear theProductVector
-  for (size_t i=0;i<MaxNumberOfProducts; i+=1){
-    theProductVector[i]=0; 
-  }
+  theProductVector = new G4DecayProductVector();
 
   // copy parent (Deep Copy)
   theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
   //copy daughters (Deep Copy)
-  for (G4int index=0; index < right.numberOfProducts; index++)
-  {
-    G4DynamicParticle* daughter = right.theProductVector[index];
-    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
-    G4double properTime = daughter->GetPreAssignedDecayProperTime();
+  for (G4int index=0; index < right.numberOfProducts; index++) {
+    G4DynamicParticle* daughter = right.theProductVector->at(index);
     G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
 
+    G4double properTime = daughter->GetPreAssignedDecayProperTime();
+    if(properTime>0.0)pDaughter->SetPreAssignedDecayProperTime(properTime); 
+
+    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
     if (pPreAssigned) {
       G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
       pDaughter->SetPreAssignedDecayProducts(pPA);
-      if(properTime>0.0)
-      { pDaughter->SetPreAssignedDecayProperTime(properTime); }
     }
 
-    PushProducts( pDaughter );
+    theProductVector->push_back( pDaughter );
   }
+  numberOfProducts = right.numberOfProducts;
 }
 
 G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
@@ -107,14 +98,25 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
     theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
     // delete G4DynamicParticle objects
-    for (index=0; index < numberOfProducts; index++)
-    {
-      delete theProductVector[index];
+    for (index=0; index < numberOfProducts; index++) {
+      delete theProductVector->at(index);
     }
+    theProductVector->clear();
 
     //copy daughters (Deep Copy)
     for (index=0; index < right.numberOfProducts; index++) {
-      PushProducts( new G4DynamicParticle(*right.theProductVector[index]) );
+      G4DynamicParticle* daughter = right.theProductVector->at(index);
+      G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
+
+      G4double properTime = daughter->GetPreAssignedDecayProperTime();
+      if(properTime>0.0) pDaughter->SetPreAssignedDecayProperTime(properTime); 
+      
+      const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+      if (pPreAssigned) {
+	G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
+	pDaughter->SetPreAssignedDecayProducts(pPA);
+      }
+      theProductVector->push_back( pDaughter );
     } 
     numberOfProducts = right.numberOfProducts;
     
@@ -128,18 +130,21 @@ G4DecayProducts::~G4DecayProducts()
   if (theParentParticle != 0) delete theParentParticle;
   
   // delete G4DynamicParticle object
-  for (G4int index=0; index < numberOfProducts; index++)
-  {
-      delete theProductVector[index];
+  for (G4int index=0; index < numberOfProducts; index++) {
+      delete theProductVector->at(index);
   }
+  theProductVector->clear();
   numberOfProducts = 0;    
+  delete theProductVector;
 }
 
 G4DynamicParticle* G4DecayProducts::PopProducts()
 {
    if ( numberOfProducts >0 ) {
      numberOfProducts -= 1;   
-     return  theProductVector[numberOfProducts];
+     G4DynamicParticle* part = theProductVector->back();
+     theProductVector->pop_back();
+     return part;
    } else {
      return 0;
    }
@@ -147,24 +152,15 @@ G4DynamicParticle* G4DecayProducts::PopProducts()
 
 G4int G4DecayProducts::PushProducts(G4DynamicParticle *aParticle)
 {
-   if ( numberOfProducts < MaxNumberOfProducts) {
-     theProductVector[numberOfProducts]= aParticle;
-     numberOfProducts += 1; 
-   } else {
-#ifdef G4VERBOSE
-     G4cerr << "G4DecayProducts::PushProducts "
-            << " exceeds MaxNumberOfProducts(="
-            << G4int(MaxNumberOfProducts) << ")"
-            << G4endl;
-#endif
-   }
-   return numberOfProducts;
+  theProductVector->push_back(aParticle);
+  numberOfProducts += 1; 
+  return numberOfProducts;
 }
 
 G4DynamicParticle* G4DecayProducts::operator[](G4int anIndex) const
 {
    if ((numberOfProducts > anIndex) && (anIndex >=0) ) {
-     return  theProductVector[anIndex];
+     return  theProductVector->at(anIndex);
    } else {
      return 0;
    }
@@ -208,7 +204,7 @@ void G4DecayProducts::Boost(G4double newbetax, G4double newbetay, G4double newbe
     
     for (G4int index=0; index < numberOfProducts; index++) {
        // make G4LorentzVector for secondaries
-       p4 = theProductVector[index]->Get4Momentum();
+       p4 = (theProductVector->at(index))->Get4Momentum();
 
        // boost secondaries to theParentParticle's rest frame 
        p4.boost(betax, betay, betaz);
@@ -217,18 +213,18 @@ void G4DecayProducts::Boost(G4double newbetax, G4double newbetay, G4double newbe
        p4.boost(newbetax, newbetay, newbetaz);
 
        // change energy/momentum
-       theProductVector[index]->Set4Momentum(p4);
+       (theProductVector->at(index))->Set4Momentum(p4);
      }
    } else {
      for (G4int index=0; index < numberOfProducts; index++) {
        // make G4LorentzVector for secondaries
-       p4 = theProductVector[index]->Get4Momentum();
+       p4 = (theProductVector->at(index))->Get4Momentum();
 
        // boost secondaries to  new frame 
        p4.boost(newbetax, newbetay, newbetaz);
 
        // change energy/momentum
-       theProductVector[index]->Set4Momentum(p4);
+       (theProductVector->at(index))->Set4Momentum(p4);
       }
    }
    // make G4LorentzVector for parent in its rest frame
@@ -268,10 +264,11 @@ G4bool G4DecayProducts::IsChecked() const
   G4ThreeVector total_momentum =  parent_momentum;
   for (G4int index=0; index < numberOfProducts; index++) 
   {
-    mass = theProductVector[index]->GetMass();
-    energy  = theProductVector[index]->GetTotalEnergy();
-    direction = theProductVector[index]->GetMomentumDirection();
-    momentum = direction*(theProductVector[index]->GetTotalMomentum());
+    G4DynamicParticle* part = theProductVector->at(index);
+    mass = part->GetMass();
+    energy  = part->GetTotalEnergy();
+    direction = part->GetMomentumDirection();
+    momentum = direction*(part->GetTotalMomentum());
     // check momentum dirction is a unit vector
     if ( (momentum.mag()>0.0) && (std::fabs(direction.mag()-1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
@@ -320,7 +317,7 @@ void G4DecayProducts::DumpInfo() const
    for (G4int index=0; index < numberOfProducts; index++) 
    {
       G4cout << " ----------" << index+1 << " -------------" << G4endl;  
-      theProductVector[index]-> DumpInfo();
+      (theProductVector->at(index))-> DumpInfo();
    }
    G4cout << " ----- End List of DecayProducts  -----" << G4endl;
    G4cout << G4endl;

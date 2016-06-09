@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04RunAction.cc
+/// \brief Implementation of the F04RunAction class
 //
 //
-
 #include "F04RunAction.hh"
 #include "F04RunActionMessenger.hh"
 
@@ -38,25 +39,31 @@
 
 #include <ctime>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04RunAction::F04RunAction()
-  : saveRndm(0), autoSeed(false)
+  : fSaveRndm(0), fAutoSeed(false)
 {
-  runMessenger = new F04RunActionMessenger(this);
+  fRunMessenger = new F04RunActionMessenger(this);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04RunAction::~F04RunAction()
 {
-  delete runMessenger;
+  delete fRunMessenger;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
 
-  if (autoSeed) {
+  if (fAutoSeed) {
      // automatic (time-based) random seeds for each run
      G4cout << "*******************" << G4endl;
      G4cout << "*** AUTOSEED ON ***" << G4endl;
@@ -70,23 +77,25 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
   } else {
      CLHEP::HepRandom::showEngineStatus();
   }
-  
-  if (saveRndm > 0) CLHEP::HepRandom::saveEngineStatus("BeginOfRun.rndm");
 
-  FieldList* fields = F04GlobalField::getObject()->getFields();
+  if (fSaveRndm > 0) CLHEP::HepRandom::saveEngineStatus("BeginOfRun.rndm");
+
+  FieldList* fields = F04GlobalField::GetObject()->GetFields();
 
   if (fields) {
      if (fields->size()>0) {
         FieldList::iterator i;
-        for (i=fields->begin(); i!=fields->end(); ++i)(*i)->construct();
+        for (i=fields->begin(); i!=fields->end(); ++i)(*i)->Construct();
      }
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04RunAction::EndOfRunAction(const G4Run*)
 {
-  if (saveRndm == 1) {
+  if (fSaveRndm == 1) {
      CLHEP::HepRandom::showEngineStatus();
      CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
-  }     
+  }
 }

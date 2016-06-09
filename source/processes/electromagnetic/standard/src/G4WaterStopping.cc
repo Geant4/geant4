@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.22 2010-10-26 10:06:12 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 //---------------------------------------------------------------------------
 //
@@ -45,6 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4WaterStopping.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EmCorrections.hh"
 #include "G4LPhysicsFreeVector.hh"
 

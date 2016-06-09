@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNeutronYield.hh,v 1.10 2006-06-29 20:49:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPNeutronYield_h
 #define G4NeutronHPNeutronYield_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4NeutronHPVector.hh"
@@ -56,7 +57,7 @@ class G4NeutronHPNeutronYield
     if(iflag == 1) simpleMean=false;
     if(simpleMean)
     {
-      theSimpleMean.Init(aDataFile, eV);
+      theSimpleMean.Init(aDataFile, CLHEP::eV);
     }
     else
     {
@@ -76,7 +77,7 @@ class G4NeutronHPNeutronYield
     }
     else
     {
-      thePrompt.Init(aDataFile, eV);
+      thePrompt.Init(aDataFile, CLHEP::eV);
     }
   }
  
@@ -85,7 +86,7 @@ class G4NeutronHPNeutronYield
     hasDelayedData = true;
     G4int iflag;
     aDataFile >> targetMass >>iflag;
-    thePrecursorDecayConstants.Init(aDataFile, 1./s); // s is the CLHEP unit second
+    thePrecursorDecayConstants.Init(aDataFile, 1./CLHEP::s); // s is the CLHEP unit second
     if(iflag == 2) spontDelayed = false;
     if(spontDelayed)
     {
@@ -93,7 +94,7 @@ class G4NeutronHPNeutronYield
     }
     else
     {
-      theDelayed.Init(aDataFile, eV);
+      theDelayed.Init(aDataFile, CLHEP::eV);
     }
   }
   

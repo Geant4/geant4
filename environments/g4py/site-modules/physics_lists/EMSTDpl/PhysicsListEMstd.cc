@@ -31,6 +31,7 @@
 //                                         2006 Q
 // ====================================================================
 #include "PhysicsListEMstd.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"

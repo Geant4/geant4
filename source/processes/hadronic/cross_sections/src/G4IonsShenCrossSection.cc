@@ -32,6 +32,8 @@
 //
 
 #include "G4IonsShenCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"

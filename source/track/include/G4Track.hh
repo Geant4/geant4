@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.23 2010-11-08 21:25:38 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //---------------------------------------------------------------
@@ -182,6 +181,9 @@ public: // With description
    G4double CalculateVelocity() const;
    G4double CalculateVelocityForOpticalPhoton() const;
 
+   G4bool   UseGivenVelocity() const; 
+   void     UseGivenVelocity(G4bool val);
+
   // polarization 
    const G4ThreeVector& GetPolarization() const;
    void SetPolarization(const G4ThreeVector& aValue);
@@ -307,7 +309,12 @@ public: // With description
 
    G4bool          is_OpticalPhoton; 
    static G4VelocityTable*  velTable;
-};
+ 
+   G4bool          useGivenVelocity;
+      // do not calclulate velocity and just use current fVelocity
+      // if this flag is set
+      
+};  
 
 #include "G4Track.icc"
 

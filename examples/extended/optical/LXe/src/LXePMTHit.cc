@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXePMTHit.cc
+/// \brief Implementation of the LXePMTHit class
+//
+//
 #include "LXePMTHit.hh"
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
@@ -33,65 +37,59 @@
 
 G4Allocator<LXePMTHit> LXePMTHitAllocator;
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXePMTHit::LXePMTHit()
-  :pmtNumber(-1),photons(0),physVol(0),drawit(false)
-{}
+  : fPmtNumber(-1),fPhotons(0),fPhysVol(0),fDrawit(false) {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXePMTHit::~LXePMTHit()
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXePMTHit::LXePMTHit(const LXePMTHit &right)
-  : G4VHit()
+LXePMTHit::~LXePMTHit() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXePMTHit::LXePMTHit(const LXePMTHit &right) : G4VHit()
 {
-  pmtNumber=right.pmtNumber;
-  photons=right.photons;
-  physVol=right.physVol;
-  drawit=right.drawit;
+  fPmtNumber=right.fPmtNumber;
+  fPhotons=right.fPhotons;
+  fPhysVol=right.fPhysVol;
+  fDrawit=right.fDrawit;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const LXePMTHit& LXePMTHit::operator=(const LXePMTHit &right){
-  pmtNumber = right.pmtNumber;
-  photons=right.photons;
-  physVol=right.physVol;
-  drawit=right.drawit;
+  fPmtNumber = right.fPmtNumber;
+  fPhotons=right.fPhotons;
+  fPhysVol=right.fPhysVol;
+  fDrawit=right.fDrawit;
   return *this;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int LXePMTHit::operator==(const LXePMTHit &right) const{
-  return (pmtNumber==right.pmtNumber);
+  return (fPmtNumber==right.fPmtNumber);
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXePMTHit::Draw(){
-  if(drawit&&physVol){ //ReDraw only the PMTs that have hit counts > 0
+  if(fDrawit&&fPhysVol){ //ReDraw only the PMTs that have hit counts > 0
     //Also need a physical volume to be able to draw anything
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if(pVVisManager){//Make sure that the VisManager exists
       G4VisAttributes attribs(G4Colour(1.,0.,0.));
       attribs.SetForceSolid(true);
       G4RotationMatrix rot;
-      if(physVol->GetRotation())//If a rotation is defined use it
-	rot=*(physVol->GetRotation());
-      G4Transform3D trans(rot,physVol->GetTranslation());//Create transform
-      pVVisManager->Draw(*physVol,attribs,trans);//Draw it
+      if(fPhysVol->GetRotation())//If a rotation is defined use it
+        rot=*(fPhysVol->GetRotation());
+      G4Transform3D trans(rot,fPhysVol->GetTranslation());//Create transform
+      pVVisManager->Draw(*fPhysVol,attribs,trans);//Draw it
     }
   }
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTHit::Print(){
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
-
-
-
-
-
+void LXePMTHit::Print() {}

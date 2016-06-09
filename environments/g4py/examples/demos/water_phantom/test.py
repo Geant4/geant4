@@ -57,7 +57,7 @@ myMaterials.Construct()
 myDC= demo_wp.MyDetectorConstruction()
 gRunManager.SetUserInitialization(myDC)
 
-myPL= demo_wp.MyPhysicsList()
+myPL= FTFP_BERT()
 gRunManager.SetUserInitialization(myPL)
 
 # set user actions...

@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 22nd, 2012 G.Cosmo (geombias-V09-05-03)
+- Added static flag on deprecation warning...
+
+October 15th, 2012 G.Cosmo (geombias-V09-05-02)
+- Moved warning message to cout instead of cerr and formatted text.
+  Corrected compilation error due to missing inclusion of G4ios.hh....
+
+October 12th, 2012 M.Asai (geombias-V09-05-01)
+- Added obsolete warning message to G4VCellScorer and G4VCellScorerStore
+  classes, pleanned for removal in release 10.
+
+May 14th, 2012 G.Cosmo (geombias-V09-05-00)
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 August 11th, 2011 G.Cosmo (geombias-V09-04-01)
 - Defined scheme for warnings/errors coding:
   + 1xxx for warnings, 0xxx for errors.

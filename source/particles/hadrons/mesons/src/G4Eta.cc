@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.19 2008-09-18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,6 +40,7 @@
 //
 
 #include "G4Eta.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

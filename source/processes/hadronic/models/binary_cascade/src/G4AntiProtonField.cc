@@ -35,7 +35,10 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4AntiProtonField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
@@ -53,26 +56,6 @@ G4AntiProtonField::G4AntiProtonField(G4V3DNucleus * nucleus, G4double coeff)
 G4AntiProtonField::~G4AntiProtonField()
 { }
 
-
-const G4AntiProtonField & G4AntiProtonField::operator=(const G4AntiProtonField & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4AntiProtonField::operator==(const G4AntiProtonField & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4AntiProtonField::operator!=(const G4AntiProtonField & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator!= meant not to be accessible");
-  return 1;
-}
 
 
 

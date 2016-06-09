@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2006-06-29 16:48:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm17/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +66,10 @@ class RunAction : public G4UserRunAction
     G4double GetEnergyCut  (G4Material*, G4int);
                         
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    ProcessesCount*         fProcCounter;
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

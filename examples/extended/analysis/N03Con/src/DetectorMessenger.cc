@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -44,107 +46,107 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(
-                                           DetectorConstruction* Det)
-:Detector(Det)
+                                           DetectorConstruction* det)
+:fDetector(det)
 { 
-  N03Dir = new G4UIdirectory("/N03/");
-  N03Dir->SetGuidance("UI commands of this example");
+  fN03Dir = new G4UIdirectory("/N03/");
+  fN03Dir->SetGuidance("UI commands of this example");
   
-  detDir = new G4UIdirectory("/N03/det/");
-  detDir->SetGuidance("detector control");
+  fDetDir = new G4UIdirectory("/N03/det/");
+  fDetDir->SetGuidance("detector control");
        
-  AbsMaterCmd = new G4UIcmdWithAString("/N03/det/setAbsMat",this);
-  AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsMaterCmd = new G4UIcmdWithAString("/N03/det/setAbsMat",this);
+  fAbsMaterCmd->SetGuidance("Select Material of the Absorber.");
+  fAbsMaterCmd->SetParameterName("choice",false);
+  fAbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  GapMaterCmd = new G4UIcmdWithAString("/N03/det/setGapMat",this);
-  GapMaterCmd->SetGuidance("Select Material of the Gap.");
-  GapMaterCmd->SetParameterName("choice",false);
-  GapMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fGapMaterCmd = new G4UIcmdWithAString("/N03/det/setGapMat",this);
+  fGapMaterCmd->SetGuidance("Select Material of the Gap.");
+  fGapMaterCmd->SetParameterName("choice",false);
+  fGapMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setAbsThick",this);
-  AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
-  AbsThickCmd->SetParameterName("Size",false);
-  AbsThickCmd->SetRange("Size>=0.");
-  AbsThickCmd->SetUnitCategory("Length");
-  AbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setAbsThick",this);
+  fAbsThickCmd->SetGuidance("Set Thickness of the Absorber");
+  fAbsThickCmd->SetParameterName("Size",false);
+  fAbsThickCmd->SetRange("Size>=0.");
+  fAbsThickCmd->SetUnitCategory("Length");
+  fAbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  GapThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setGapThick",this);
-  GapThickCmd->SetGuidance("Set Thickness of the Gap");
-  GapThickCmd->SetParameterName("Size",false);
-  GapThickCmd->SetRange("Size>=0.");
-  GapThickCmd->SetUnitCategory("Length");  
-  GapThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fGapThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setGapThick",this);
+  fGapThickCmd->SetGuidance("Set Thickness of the Gap");
+  fGapThickCmd->SetParameterName("Size",false);
+  fGapThickCmd->SetRange("Size>=0.");
+  fGapThickCmd->SetUnitCategory("Length");  
+  fGapThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setSizeYZ",this);
-  SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
-  SizeYZCmd->SetParameterName("Size",false);
-  SizeYZCmd->SetRange("Size>0.");
-  SizeYZCmd->SetUnitCategory("Length");    
-  SizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeYZCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setSizeYZ",this);
+  fSizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
+  fSizeYZCmd->SetParameterName("Size",false);
+  fSizeYZCmd->SetRange("Size>0.");
+  fSizeYZCmd->SetUnitCategory("Length");    
+  fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  NbLayersCmd = new G4UIcmdWithAnInteger("/N03/det/setNbOfLayers",this);
-  NbLayersCmd->SetGuidance("Set number of layers.");
-  NbLayersCmd->SetParameterName("NbLayers",false);
-  NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
-  NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNbLayersCmd = new G4UIcmdWithAnInteger("/N03/det/setNbOfLayers",this);
+  fNbLayersCmd->SetGuidance("Set number of layers.");
+  fNbLayersCmd->SetParameterName("NbLayers",false);
+  fNbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
+  fNbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/N03/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/N03/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setField",this);  
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete NbLayersCmd;
-  delete AbsMaterCmd; delete GapMaterCmd;
-  delete AbsThickCmd; delete GapThickCmd;
-  delete SizeYZCmd;   delete UpdateCmd;
-  delete MagFieldCmd;
-  delete detDir;
-  delete N03Dir;  
+  delete fNbLayersCmd;
+  delete fAbsMaterCmd; delete fGapMaterCmd;
+  delete fAbsThickCmd; delete fGapThickCmd;
+  delete fSizeYZCmd;   delete fUpdateCmd;
+  delete fMagFieldCmd;
+  delete fDetDir;
+  delete fN03Dir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-   { Detector->SetAbsorberMaterial(newValue);}
+  if( command == fAbsMaterCmd )
+   { fDetector->SetAbsorberMaterial(newValue);}
    
-  if( command == GapMaterCmd )
-   { Detector->SetGapMaterial(newValue);}
+  if( command == fGapMaterCmd )
+   { fDetector->SetGapMaterial(newValue);}
   
-  if( command == AbsThickCmd )
-   { Detector->SetAbsorberThickness(AbsThickCmd
+  if( command == fAbsThickCmd )
+   { fDetector->SetAbsorberThickness(fAbsThickCmd
                                                ->GetNewDoubleValue(newValue));}
    
-  if( command == GapThickCmd )
-   { Detector->SetGapThickness(GapThickCmd->GetNewDoubleValue(newValue));}
+  if( command == fGapThickCmd )
+   { fDetector->SetGapThickness(fGapThickCmd->GetNewDoubleValue(newValue));}
    
-  if( command == SizeYZCmd )
-   { Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeYZCmd )
+   { fDetector->SetCalorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}
    
-  if( command == NbLayersCmd )
-   { Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
+  if( command == fNbLayersCmd )
+   { fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));}
   
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry(); }
 
-  if( command == MagFieldCmd )
-   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fMagFieldCmd )
+   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

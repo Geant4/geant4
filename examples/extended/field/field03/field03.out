@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,47 +14,161 @@
 ***** Table : Nb of materials = 11 *****
 
  Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.391 cm   Imean:  75.967 eV 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  62.49 %  ElmAbundance  45.45 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
+
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.49 %  ElmAbundance  45.45 % 
+
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
+
 
  Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.517 cm   Imean:  56.518 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  14.40 %  ElmAbundance  66.67 % 
+
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  85.60 %  ElmAbundance  33.33 % 
+
 
  Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.292 m    Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole
+         --->  Isotope:    78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
+         --->  Isotope:    80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
+         --->  Isotope:    82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
+         --->  Isotope:    83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
+         --->  Isotope:    84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
+         --->  Isotope:    86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:    Argon    density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.233 m    Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:       N2    density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 675.036 m    Imean:  82.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:       O2    density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m    Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:      Air    density:  0.000 kg/m3   RadL: 28329263.098 km   Nucl.Int.Length: 66202169.471 km   Imean:  85.664 eV   temperature: 273.15 K  pressure:   0.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.57 %  ElmAbundance  78.48 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.15 %  ElmAbundance  21.05 %
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.57 %  ElmAbundance  78.48 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.15 %  ElmAbundance  21.05 % 
+
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
 
  Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 304.114 m    Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
+         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:      CO2    density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.112 m    Imean:  90.958 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  27.29 %  ElmAbundance  33.33 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
+
 
  Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.445 m    Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  92.20 %  ElmAbundance  56.91 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.13 %  ElmAbundance  14.36 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   5.67 %  ElmAbundance  28.73 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
+         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+          ElmMassFraction:  92.20 %  ElmAbundance  56.91 % 
+
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   2.13 %  ElmAbundance  14.36 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:   5.67 %  ElmAbundance  28.73 % 
+
 
  Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.057 m    Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction:  89.00 %  ElmAbundance  58.62 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   3.00 %  ElmAbundance  13.79 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   8.00 %  ElmAbundance  27.59 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole
+         --->  Isotope:    78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
+         --->  Isotope:    80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
+         --->  Isotope:    82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
+         --->  Isotope:    83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
+         --->  Isotope:    84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
+         --->  Isotope:    86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
+          ElmMassFraction:  89.00 %  ElmAbundance  58.62 % 
+
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   3.00 %  ElmAbundance  13.79 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:   8.00 %  ElmAbundance  27.59 % 
+
 
 
 G4ClassicalRK4 (default) is called
@@ -84,15 +198,17 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -110,26 +226,34 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
-  black, blue, cyan, gray, green, grey, magenta, red, white, yellow
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 10 mm
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -143,8 +267,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -158,14 +282,13 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -176,10 +299,9 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -189,6 +311,11 @@ hIoni:   for  kaon+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -197,11 +324,10 @@ hIoni:   for  kaon-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -224,6 +350,11 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -245,6 +376,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -254,10 +390,9 @@ hIoni:   for  pi+    SubType= 2
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -279,7 +414,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 0 start.
-WARNING: Scene "refresh" not found.
+WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
 Start Run processing.
 
@@ -293,17 +428,17 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
     1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049461795 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 um    -920.6619 um 
     2          0 fm  6.5801506 cm      21.74 m         500 MeV0.00014146974 eV  5.8028637 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 um   -869.93607 um 
-    3          0 fm  19.942497 cm   21.58699 m         500 MeV0.00049863857 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 um   -605.81452 um 
+    3          0 fm  19.942497 cm   21.58699 m         500 MeV0.00049863856 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 um   -605.81452 um 
     4          0 fm  81.240793 cm   21.58699 m         500 MeV0.001605352 eV  65.848987 cm  1.1239365 m       World  Transportation           0 fm    795.60595 um    605.81447 um 
     5          0 fm  94.603131 cm      21.74 m         500 MeV0.00049863839 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 um    869.93596 um 
     6          0 fm  98.923943 cm      21.84 m         500 MeV0.00026609282 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 um    955.34163 um 
-    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.00036999486 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1791511 Ang        1000 um 
+    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.00036999486 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1791508 Ang        1000 um 
     8          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379313e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763932 um    999.99805 um 
-    9          0 fm  1.0117238 m          22 m         500 MeV2.3162171e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm   -20.754201 um    999.78461 um 
+    9          0 fm  1.0117238 m          22 m         500 MeV2.316217e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm   -20.754201 um    999.78461 um 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -318,7 +453,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 1 start.
-WARNING: Scene "refresh" not found.
+WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
 Start Run processing.
 
@@ -328,7 +463,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -344,7 +479,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 2 start.
-WARNING: Scene "refresh" not found.
+WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
 Start Run processing.
 
@@ -352,9 +487,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-

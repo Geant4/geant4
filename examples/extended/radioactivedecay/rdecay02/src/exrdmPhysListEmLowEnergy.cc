@@ -23,9 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmPhysListEmLowEnergy.cc
+/// \brief Implementation of the exrdmPhysListEmLowEnergy class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "exrdmPhysListEmLowEnergy.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -83,6 +87,9 @@
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4CoulombScattering.hh"
 
+#include "G4SystemOfUnits.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmPhysListEmLowEnergy::exrdmPhysListEmLowEnergy(const G4String& name)
@@ -112,21 +119,21 @@ void exrdmPhysListEmLowEnergy::ConstructProcess()
      
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-	new G4LivermorePhotoElectricModel();
+        new G4LivermorePhotoElectricModel();
       theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4LivermoreComptonModel* theLivermoreComptonModel = 
-	new G4LivermoreComptonModel();
+        new G4LivermoreComptonModel();
       theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
-	new G4LivermoreGammaConversionModel();
+        new G4LivermoreGammaConversionModel();
       theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
@@ -161,7 +168,7 @@ void exrdmPhysListEmLowEnergy::ConstructProcess()
       theBremLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       eBrem->AddEmModel(0, theBremLivermore);
       pmanager->AddProcess(eBrem, -1,-3, 3);
-	    
+            
     } else if (particleName == "e+") {
 
       // Identical to G4EmStandardPhysics_option3
@@ -221,7 +228,7 @@ void exrdmPhysListEmLowEnergy::ConstructProcess()
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ||
-	       particleName == "kaon+" ||
+               particleName == "kaon+" ||
                particleName == "kaon-" ||
                particleName == "proton" ) {
 

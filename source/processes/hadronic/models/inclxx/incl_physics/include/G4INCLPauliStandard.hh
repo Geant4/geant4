@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,6 +49,16 @@ namespace G4INCL {
 
     G4bool isBlocked(ParticleList const, Nucleus const * const) const;
     G4double getBlockingProbability(Particle const * const, Nucleus const * const) const;
+
+  private:
+    /** \brief Phase-space blocking cell
+     *
+     * This variable is the third root of volume of the blocking phase-space
+     * cell. Its value is
+     * \f[ {\left(2.38\cdot\frac{9\pi}{2}\right)}^{1/6}\sqrt\hbar \f]
+     * which yields a phase-space test volume of \f$2.38h\f$.
+     */
+    const G4double cellSize;
   };
 }
 

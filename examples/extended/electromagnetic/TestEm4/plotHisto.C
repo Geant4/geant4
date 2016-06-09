@@ -10,6 +10,6 @@
   c1->cd();
   c1->Update();
   
-  TH1D* hist = (TH1D*)f.Get("1");   
+  TH1D* hist = (TH1D*)f.Get("1");
   hist->Draw("HIST");    
 }  

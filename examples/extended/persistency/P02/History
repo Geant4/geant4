@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 11th, 2012 A. Dotti (exampleP02-V09-05-00)
+- Adding protection in case GCCXML is not available, disabling the example
+
+September 25th, 2012 I. Hrivnacova
+- Fixes in GNUmakefile (was failing when building with internal CLHEP)
 
 November 30th, 2010  I.Hrivnacova (exampleP02-V09-03-02)
 - Migrated to use particle-based multiple-scattering.

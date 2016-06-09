@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc,v 1.3 2006-06-29 17:03:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -54,86 +56,85 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
+  :fDetector(det)
 {
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance(" detector control.");
+  fAtestemDir = new G4UIdirectory("/testem/");
+  fAtestemDir->SetGuidance(" detector control.");
 
-  MaterCmd = new G4UIcmdWithAString("/testem/det/CalMat",this);
-  MaterCmd->SetGuidance("Select Material for calorimeter");
-  MaterCmd->SetParameterName("calMaterial",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAMaterCmd = new G4UIcmdWithAString("/testem/det/CalMat",this);
+  fAMaterCmd->SetGuidance("Select Material for calorimeter");
+  fAMaterCmd->SetParameterName("calMaterial",false);
+  fAMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  LBinCmd = new G4UIcmdWithAString("/testem/det/AbsMat",this);
-  LBinCmd->SetGuidance("Select Material for absorber");
-  LBinCmd->SetParameterName("absMarerial",false);
-  LBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fALBinCmd = new G4UIcmdWithAString("/testem/det/AbsMat",this);
+  fALBinCmd->SetGuidance("Select Material for absorber");
+  fALBinCmd->SetParameterName("absMarerial",false);
+  fALBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  l1Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/EcalLength",this);
-  l1Cmd->SetGuidance("Set length of Ecal");
-  l1Cmd->SetParameterName("lEcal",false);
-  l1Cmd->SetUnitCategory("Length");
-  l1Cmd->SetRange("lEcal>0");
-  l1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAl1Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/EcalLength",this);
+  fAl1Cmd->SetGuidance("Set length of Ecal");
+  fAl1Cmd->SetParameterName("lEcal",false);
+  fAl1Cmd->SetUnitCategory("Length");
+  fAl1Cmd->SetRange("lEcal>0");
+  fAl1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  l2Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/EcalWidth",this);
-  l2Cmd->SetGuidance("Set width of Ecal crystal");
-  l2Cmd->SetParameterName("wEcal",false);
-  l2Cmd->SetUnitCategory("Length");
-  l2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAl2Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/EcalWidth",this);
+  fAl2Cmd->SetGuidance("Set width of Ecal crystal");
+  fAl2Cmd->SetParameterName("wEcal",false);
+  fAl2Cmd->SetUnitCategory("Length");
+  fAl2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  l3Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/AbsLength",this);
-  l3Cmd->SetGuidance("Set length of the absorber");
-  l3Cmd->SetParameterName("lAbs",false);
-  l3Cmd->SetUnitCategory("Length");
-  l3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAl3Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/AbsLength",this);
+  fAl3Cmd->SetGuidance("Set length of the absorber");
+  fAl3Cmd->SetParameterName("lAbs",false);
+  fAl3Cmd->SetUnitCategory("Length");
+  fAl3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  l4Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/VertexLength",this);
-  l4Cmd->SetGuidance("Set length of the vertex region");
-  l4Cmd->SetParameterName("lVert",false);
-  l4Cmd->SetUnitCategory("Length");
-  l4Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAl4Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/VertexLength",this);
+  fAl4Cmd->SetGuidance("Set length of the vertex region");
+  fAl4Cmd->SetParameterName("lVert",false);
+  fAl4Cmd->SetUnitCategory("Length");
+  fAl4Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  l5Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/PadLength",this);
-  l5Cmd->SetGuidance("Set length of vertex detector");
-  l5Cmd->SetParameterName("lPad",false);
-  l5Cmd->SetUnitCategory("Length");
-  l5Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAl5Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/PadLength",this);
+  fAl5Cmd->SetGuidance("Set length of vertex detector");
+  fAl5Cmd->SetParameterName("lPad",false);
+  fAl5Cmd->SetUnitCategory("Length");
+  fAl5Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  l6Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/PadWidth",this);
-  l6Cmd->SetGuidance("Set width of a vertex pad");
-  l6Cmd->SetParameterName("wPad",false);
-  l6Cmd->SetUnitCategory("Length");
-  l6Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAl6Cmd = new G4UIcmdWithADoubleAndUnit("/testem/det/PadWidth",this);
+  fAl6Cmd->SetGuidance("Set width of a vertex pad");
+  fAl6Cmd->SetParameterName("wPad",false);
+  fAl6Cmd->SetUnitCategory("Length");
+  fAl6Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s)");
-  UpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fAUpdateCmd->SetGuidance("Update geometry.");
+  fAUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fAUpdateCmd->SetGuidance("if you changed geometrical value(s)");
+  fAUpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fAaccCmd1 = new G4UIcmdWith3Vector("/testem/det/acceptance1",this);
+  fAaccCmd1->SetGuidance("set Edep and RMS");
+  fAaccCmd1->SetGuidance("acceptance values for central cell");
+  fAaccCmd1->SetParameterName("edep","rms","limit",true);
+  fAaccCmd1->SetRange("edep>0 && edep<1 && rms>0");
+  fAaccCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  accCmd1 = new G4UIcmdWith3Vector("/testem/det/acceptance1",this);
-  accCmd1->SetGuidance("set Edep and RMS");
-  accCmd1->SetGuidance("acceptance values for central cell");
-  accCmd1->SetParameterName("edep","rms","limit",true);
-  accCmd1->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAaccCmd2 = new G4UIcmdWith3Vector("/testem/det/acceptance9",this);
+  fAaccCmd2->SetGuidance("set Edep and RMS");
+  fAaccCmd2->SetGuidance("acceptance values for 3x3 matrix");
+  fAaccCmd2->SetParameterName("edep","rms","limit",true);
+  fAaccCmd2->SetRange("edep>0 && edep<1 && rms>0");
+  fAaccCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  accCmd2 = new G4UIcmdWith3Vector("/testem/det/acceptance9",this);
-  accCmd2->SetGuidance("set Edep and RMS");
-  accCmd2->SetGuidance("acceptance values for 3x3 matrix");
-  accCmd2->SetParameterName("edep","rms","limit",true);
-  accCmd2->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  accCmd3 = new G4UIcmdWith3Vector("/testem/det/acceptance25",this);
-  accCmd3->SetGuidance("set Edep and RMS");
-  accCmd3->SetGuidance("acceptance values for 5x5 matrix");
-  accCmd3->SetParameterName("edep","rms","limit",true);
-  accCmd3->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd3->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAaccCmd3 = new G4UIcmdWith3Vector("/testem/det/acceptance25",this);
+  fAaccCmd3->SetGuidance("set Edep and RMS");
+  fAaccCmd3->SetGuidance("acceptance values for 5x5 matrix");
+  fAaccCmd3->SetParameterName("edep","rms","limit",true);
+  fAaccCmd3->SetRange("edep>0 && edep<1 && rms>0");
+  fAaccCmd3->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 
@@ -141,61 +142,61 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete LBinCmd;
-  delete l1Cmd;
-  delete l2Cmd;
-  delete l3Cmd;
-  delete l4Cmd;
-  delete l5Cmd;
-  delete l6Cmd;
-  delete UpdateCmd;
-  delete testemDir;
-  delete accCmd1;
-  delete accCmd2;
-  delete accCmd3;
+  delete fAMaterCmd;
+  delete fALBinCmd;
+  delete fAl1Cmd;
+  delete fAl2Cmd;
+  delete fAl3Cmd;
+  delete fAl4Cmd;
+  delete fAl5Cmd;
+  delete fAl6Cmd;
+  delete fAUpdateCmd;
+  delete fAtestemDir;
+  delete fAaccCmd1;
+  delete fAaccCmd2;
+  delete fAaccCmd3;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if( command == MaterCmd )
-   { Detector->SetEcalMaterial(newValue);}
+  if( command == fAMaterCmd )
+   { fDetector->SetEcalMaterial(newValue);}
 
-  if( command == LBinCmd )
-   { Detector->SetAbsMaterial(newValue);}
+  if( command == fALBinCmd )
+   { fDetector->SetAbsMaterial(newValue);}
 
-  if( command == l1Cmd )
-   { Detector->SetEcalLength(l1Cmd->GetNewDoubleValue(newValue));}
+  if( command == fAl1Cmd )
+   { fDetector->SetEcalLength(fAl1Cmd->GetNewDoubleValue(newValue));}
 
-  if( command == l2Cmd )
-   { Detector->SetEcalWidth(l2Cmd->GetNewDoubleValue(newValue));}
+  if( command == fAl2Cmd )
+   { fDetector->SetEcalWidth(fAl2Cmd->GetNewDoubleValue(newValue));}
 
-  if( command == l3Cmd )
-   { Detector->SetAbsLength(l3Cmd->GetNewDoubleValue(newValue));}
+  if( command == fAl3Cmd )
+   { fDetector->SetAbsLength(fAl3Cmd->GetNewDoubleValue(newValue));}
 
-  if( command == l4Cmd )
-   { Detector->SetVertexLength(l4Cmd->GetNewDoubleValue(newValue));}
+  if( command == fAl4Cmd )
+   { fDetector->SetVertexLength(fAl4Cmd->GetNewDoubleValue(newValue));}
 
-  if( command == l5Cmd )
-   { Detector->SetPadLength(l5Cmd->GetNewDoubleValue(newValue));}
+  if( command == fAl5Cmd )
+   { fDetector->SetPadLength(fAl5Cmd->GetNewDoubleValue(newValue));}
 
-  if( command == l6Cmd )
-   { Detector->SetPadWidth(l6Cmd->GetNewDoubleValue(newValue));}
+  if( command == fAl6Cmd )
+   { fDetector->SetPadWidth(fAl6Cmd->GetNewDoubleValue(newValue));}
 
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
+  if( command == fAUpdateCmd )
+   { fDetector->UpdateGeometry();}
 
   HistoManager* histo = HistoManager::GetPointer();
-  if( command == accCmd1 )
-   { histo->SetEdepAndRMS(0,accCmd1->GetNew3VectorValue(newValue));}
+  if( command == fAaccCmd1 )
+   { histo->SetEdepAndRMS(0,fAaccCmd1->GetNew3VectorValue(newValue));}
 
-  if( command == accCmd2 )
-   { histo->SetEdepAndRMS(1,accCmd2->GetNew3VectorValue(newValue));}
+  if( command == fAaccCmd2 )
+   { histo->SetEdepAndRMS(1,fAaccCmd2->GetNew3VectorValue(newValue));}
 
-  if( command == accCmd3 )
-   { histo->SetEdepAndRMS(2,accCmd3->GetNew3VectorValue(newValue));}
+  if( command == fAaccCmd3 )
+   { histo->SetEdepAndRMS(2,fAaccCmd3->GetNew3VectorValue(newValue));}
 
 
 }

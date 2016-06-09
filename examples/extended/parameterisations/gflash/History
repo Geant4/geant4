@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-November 2012, Ivana Hrivnacova  (exgflash-V09-05-01)
+- Fixed .README file for artefacts from Markdown support
+
+15-November 2012, Ivana Hrivnacova  (exgflash-V09-05-00)
+- Minor fix in .README
+
 24-November 2010, Gunter Folger  (exgflash-V09-04-01)
 -  Fix bug in ExGflashSensitiveDetector::Initialize():
     create/new Collection before adding it to HCE

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Analyser.cc,v 1.24 2010-10-19 19:48:15 mkelsey Exp $
+// $Id$
 //
 // 20100726  M. Kelsey -- Use references for fetched lists
 // 20101010  M. Kelsey -- Migrate to integer A and Z

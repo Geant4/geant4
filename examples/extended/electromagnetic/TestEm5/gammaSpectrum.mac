@@ -7,23 +7,24 @@
 /testem/det/setAbsThick 3 mm
 /testem/det/setAbsYZ   10 mm
 #
-###/testem/phys/addPhysics local
-/testem/phys/addPhysics emstandard_opt3
+/testem/phys/addPhysics local
+###/testem/phys/addPhysics emstandard_opt3
 /testem/phys/setCuts 100 um
+###/run/setCut 100 um
 #
 /run/initialize
 #
-/process/em/fluo true
+###/process/em/fluo true
 #
 /testem/gun/setDefault
 /gun/particle e- 
 /gun/energy 6 MeV
 # 
-/testem/histo/setFileName gammaSpectrum
-/testem/histo/setFileType root
-/testem/histo/setHisto  3 200 0.01 10 MeV	#gamma: energy at vertex	
-/testem/histo/setHisto 20 200 0 6 MeV		#gamma: energy at exit
-/testem/histo/setHisto 40 200 0 6 MeV		#gamma: energy at back
+/analysis/setFileName gammaSpectrum
+/analysis/h1/set  3 200 0.01 10 MeV	  #gamma: energy at vertex
+/analysis/h1/set  5 200 0.01 10 MeV log10 #gamma: energy at vertex (log10) 	
+/analysis/h1/set 20 200 0 6 MeV		  #gamma: energy at exit
+/analysis/h1/set 40 200 0 6 MeV		  #gamma: energy at back
 #
 /testem/event/printModulo 10000
 # 

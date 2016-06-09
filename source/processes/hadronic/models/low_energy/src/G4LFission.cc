@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LFission.cc,v 1.15 2007-02-26 19:29:30 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Model: Low Energy Fission
@@ -40,11 +39,13 @@
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 
-#include "globals.hh"
-#include "G4LFission.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LFission.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LFission::G4LFission(const G4String& name)
  : G4HadronicInteraction(name)
@@ -90,24 +91,24 @@ void G4LFission::init()
 }
 
 
-G4HadFinalState*
-G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucleus)
+G4HadFinalState* G4LFission::ApplyYourself(const G4HadProjectile& aTrack,
+                                           G4Nucleus& targetNucleus)
 {
-   theParticleChange.Clear();
-   const G4HadProjectile* aParticle = &aTrack;
+  theParticleChange.Clear();
+  const G4HadProjectile* aParticle = &aTrack;
 
-   G4double N = targetNucleus.GetA_asInt();
-   G4double Z = targetNucleus.GetZ_asInt();
-   theParticleChange.SetStatusChange(stopAndKill);
+  G4double N = targetNucleus.GetA_asInt();
+  G4double Z = targetNucleus.GetZ_asInt();
+  theParticleChange.SetStatusChange(stopAndKill);
 
-   G4double P = aParticle->GetTotalMomentum()/MeV;
-   G4double Px = aParticle->Get4Momentum().vect().x();
-   G4double Py = aParticle->Get4Momentum().vect().y();
-   G4double Pz = aParticle->Get4Momentum().vect().z();
-   G4double E = aParticle->GetTotalEnergy()/MeV;
-   G4double E0 = aParticle->GetDefinition()->GetPDGMass()/MeV;
-   G4double Q = aParticle->GetDefinition()->GetPDGCharge();
-   if (verboseLevel > 1) {
+  G4double P = aParticle->GetTotalMomentum()/MeV;
+  G4double Px = aParticle->Get4Momentum().vect().x();
+  G4double Py = aParticle->Get4Momentum().vect().y();
+  G4double Pz = aParticle->Get4Momentum().vect().z();
+  G4double E = aParticle->GetTotalEnergy()/MeV;
+  G4double E0 = aParticle->GetDefinition()->GetPDGMass()/MeV;
+  G4double Q = aParticle->GetDefinition()->GetPDGCharge();
+  if (verboseLevel > 1) {
       G4cout << "G4LFission:ApplyYourself: incident particle:" << G4endl;
       G4cout << "P      " << P << " MeV/c" << G4endl;
       G4cout << "Px     " << Px << " MeV/c" << G4endl;
@@ -116,8 +117,8 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
       G4cout << "E      " << E << " MeV" << G4endl;
       G4cout << "mass   " << E0 << " MeV" << G4endl;
       G4cout << "charge " << Q << G4endl;
-   }
-// GHEISHA ADD operation to get total energy, mass, charge:
+  }
+  // GHEISHA ADD operation to get total energy, mass, charge:
    if (verboseLevel > 1) {
       G4cout << "G4LFission:ApplyYourself: material:" << G4endl;
       G4cout << "A      " << N << G4endl;
@@ -125,22 +126,22 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
       G4cout << "atomic mass " << 
         Atomas(N, Z) << "MeV" << G4endl;
    }
-   E = E + Atomas(N, Z);
-   G4double E02 = E*E - P*P;
-   E0 = std::sqrt(std::abs(E02));
-   if (E02 < 0) E0 = -E0;
-   Q = Q + Z;
-   if (verboseLevel > 1) {
+  E = E + Atomas(N, Z);
+  G4double E02 = E*E - P*P;
+  E0 = std::sqrt(std::abs(E02));
+  if (E02 < 0) E0 = -E0;
+  Q = Q + Z;
+  if (verboseLevel > 1) {
       G4cout << "G4LFission:ApplyYourself: total:" << G4endl;
       G4cout << "E      " << E << " MeV" << G4endl;
       G4cout << "mass   " << E0 << " MeV" << G4endl;
       G4cout << "charge " << Q << G4endl;
-   }
-   Px = -Px;
-   Py = -Py;
-   Pz = -Pz;
+  }
+  Px = -Px;
+  Py = -Py;
+  Pz = -Pz;
 
-   G4double e1 = aParticle->GetKineticEnergy()/MeV;
+  G4double e1 = aParticle->GetKineticEnergy()/MeV;
    if (e1 < 1.) e1 = 1.;
 
 // Average number of neutrons
@@ -233,22 +234,21 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
       theSecondary->GetParticle()->SetKineticEnergy(ekin*MeV);
    }
    
-   return &theParticleChange;
+  return &theParticleChange;
 }
 
 // Computes atomic mass in MeV (translation of GHEISHA routine ATOMAS)
 // Not optimized: conforms closely to original Fortran.
 
-G4double
-G4LFission::Atomas(const G4double A, const G4double Z)
+G4double G4LFission::Atomas(const G4double A, const G4double Z)
 {
-   G4double rmel = G4Electron::ElectronDefinition()->GetPDGMass()/MeV;
-   G4double rmp  = G4Proton::ProtonDefinition()->GetPDGMass()/MeV;
-   G4double rmn  = G4Neutron::NeutronDefinition()->GetPDGMass()/MeV;
-   G4double rmd  = G4Deuteron::DeuteronDefinition()->GetPDGMass()/MeV;
-   G4double rma  = G4Alpha::AlphaDefinition()->GetPDGMass()/MeV;
+  G4double rmel = G4Electron::ElectronDefinition()->GetPDGMass()/MeV;
+  G4double rmp  = G4Proton::ProtonDefinition()->GetPDGMass()/MeV;
+  G4double rmn  = G4Neutron::NeutronDefinition()->GetPDGMass()/MeV;
+  G4double rmd  = G4Deuteron::DeuteronDefinition()->GetPDGMass()/MeV;
+  G4double rma  = G4Alpha::AlphaDefinition()->GetPDGMass()/MeV;
 
-   G4int ia = static_cast<G4int>(A + 0.5);
+  G4int ia = static_cast<G4int>(A + 0.5);
    if (ia < 1) return 0;
    G4int iz = static_cast<G4int>(Z + 0.5);
    if (iz < 0) return 0;
@@ -265,14 +265,19 @@ G4LFission::Atomas(const G4double A, const G4double Z)
       return rma;                       //Alpha
    }
 
-   G4double mass = (A - Z)*rmn + Z*rmp + Z*rmel
-                   - 15.67*A
-                   + 17.23*std::pow(A, 2./3.)
-                   + 93.15*(A/2. - Z)*(A/2. - Z)/A
-                   + 0.6984523*Z*Z/std::pow(A, 1./3.);
-   G4int ipp = (ia - iz)%2;
-   G4int izz = iz%2;
-   if (ipp == izz) mass = mass + (ipp + izz -1)*12.*std::pow(A, -0.5);
+  G4double mass = (A - Z)*rmn + Z*rmp + Z*rmel - 15.67*A
+                  + 17.23*std::pow(A, 2./3.)
+                  + 93.15*(A/2. - Z)*(A/2. - Z)/A
+                  + 0.6984523*Z*Z/std::pow(A, 1./3.);
+  G4int ipp = (ia - iz)%2;
+  G4int izz = iz%2;
+  if (ipp == izz) mass = mass + (ipp + izz -1)*12.*std::pow(A, -0.5);
 
-   return mass;
+  return mass;
+}
+
+const std::pair<G4double, G4double> G4LFission::GetFatalEnergyCheckLevels() const
+{
+  // max energy non-conservation is mass of heavy nucleus
+  return std::pair<G4double, G4double>(5*perCent,250*GeV);
 }

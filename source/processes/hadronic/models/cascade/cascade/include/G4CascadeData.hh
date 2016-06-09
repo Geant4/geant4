@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.hh,v 1.10 2010-08-04 05:28:24 mkelsey Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
 //		to arrays,for use in passing to functions as dimensioned.

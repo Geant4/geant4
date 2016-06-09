@@ -214,10 +214,6 @@ $Id: README,v 1.2 2006-11-18 01:37:22 asaim Exp $
        	
  7- HOW TO START ?
  
-      - compile and link to generate an executable
- 	      % cd RE02
- 	      % gmake
- 		
       - execute RE02 in 'batch' mode from macro files (without visualization)
  	      % exampleRE02   run1.mac
  		

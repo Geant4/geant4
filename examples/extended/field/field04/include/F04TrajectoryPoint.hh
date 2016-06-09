@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04TrajectoryPoint.hh
+/// \brief Definition of the F04TrajectoryPoint class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04TrajectoryPoint_h
 #define F04TrajectoryPoint_h 1
 
@@ -84,18 +81,14 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
 // Member data
 
-    G4double fTime;
+    G4double      fTime;
     G4ThreeVector fMomentum;
-    G4StepStatus fStepStatus;
-    G4String fVolumeName;
+    G4StepStatus  fStepStatus;
+    G4String      fVolumeName;
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
-#endif
+extern G4DLLEXPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
 
 inline void* F04TrajectoryPoint::operator new(size_t)
 {

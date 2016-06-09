@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh,v 1.9 2010-11-19 20:12:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -34,7 +36,7 @@
 // Created: 31.04.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -77,17 +79,17 @@ private:
   void SetBuilderList3();
   void SetBuilderList4();
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4double cutForProton;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4double fCutForProton;
 
-  G4VPhysicsConstructor*  emPhysicsList;
-  G4VPhysicsConstructor*  particleList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fParticleList;
+  std::vector<G4VPhysicsConstructor*>  fHadronPhys;
     
-  PhysicsListMessenger* pMessenger;
-  G4bool dump;
+  PhysicsListMessenger* fMessenger;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

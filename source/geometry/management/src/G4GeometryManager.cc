@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.24 2010-07-16 15:52:57 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4GeometryManager
 //
@@ -38,6 +37,7 @@
 #include <iomanip>
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
+#include "G4SystemOfUnits.hh"
 
 #ifdef  G4GEOMETRY_VOXELDEBUG
 #include "G4ios.hh"

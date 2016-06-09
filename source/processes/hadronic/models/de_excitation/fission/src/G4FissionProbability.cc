@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.10 2010-11-17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -35,6 +34,7 @@
 
 
 #include "G4FissionProbability.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PairingCorrection.hh"
 
 G4FissionProbability::G4FissionProbability()

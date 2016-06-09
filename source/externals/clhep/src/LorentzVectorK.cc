@@ -22,9 +22,9 @@ namespace CLHEP  {
 // Metric flexibility
 //-******************
 
-ZMpvMetric_t HepLorentzVector::setMetric( ZMpvMetric_t m ) {
+ZMpvMetric_t HepLorentzVector::setMetric( ZMpvMetric_t met ) {
   ZMpvMetric_t oldMetric = (metric > 0) ? TimePositive : TimeNegative;
-  if ( m == TimeNegative ) {
+  if ( met == TimeNegative ) {
     metric = -1.0;
   } else {
     metric =  1.0;
@@ -126,19 +126,19 @@ double HepLorentzVector::gamma() const {
 //-***************
 
 double HepLorentzVector::rapidity() const {
-  register double z = pp.getZ();
-//  if (std::fabs(ee) == std::fabs(z)) {
+  register double z1 = pp.getZ();
+//  if (std::fabs(ee) == std::fabs(z1)) {
 //    std::cerr << "HepLorentzVector::rapidity() - "
 //      << "rapidity for 4-vector with |E| = |Pz| -- infinite result"
 //      << std::endl;
 //  }
-  if (std::fabs(ee) < std::fabs(z)) {
+  if (std::fabs(ee) < std::fabs(z1)) {
     std::cerr << "HepLorentzVector::rapidity() - "
       << "rapidity for spacelike 4-vector with |E| < |Pz| -- undefined"
       << std::endl;
     return 0;
   }
-  double q = (ee + z) / (ee - z);
+  double q = (ee + z1) / (ee - z1);
         //-| This cannot be negative now, since both numerator
         //-| and denominator have the same sign as ee.
   return .5 * std::log(q);
@@ -169,19 +169,19 @@ double HepLorentzVector::rapidity(const Hep3Vector & ref) const {
 } /* rapidity(ref) */
 
 double HepLorentzVector::coLinearRapidity() const {
-  register double v = pp.mag();
-//  if (std::fabs(ee) == std::fabs(v)) {
+  register double v1 = pp.mag();
+//  if (std::fabs(ee) == std::fabs(v1)) {
 //    std::cerr << "HepLorentzVector::coLinearRapidity() - "
 //      << "co-Linear rapidity for 4-vector with |E| = |P| -- infinite result"
 //      << std::endl;
 //  }
-  if (std::fabs(ee) < std::fabs(v)) {
+  if (std::fabs(ee) < std::fabs(v1)) {
     std::cerr << "HepLorentzVector::coLinearRapidity() - "
       << "co-linear rapidity for spacelike 4-vector -- undefined"
       << std::endl;
     return 0;
   }
-  double q = (ee + v) / (ee - v);
+  double q = (ee + v1) / (ee - v1);
   return .5 * std::log(q);
 } /* rapidity */
 
@@ -190,8 +190,8 @@ double HepLorentzVector::coLinearRapidity() const {
 //-*************
 
 double HepLorentzVector::invariantMass(const HepLorentzVector & w) const {
-  double m2 = invariantMass2(w);
-  if (m2 < 0) {
+  double m1 = invariantMass2(w);
+  if (m1 < 0) {
     // We should find out why:
     if ( ee * w.ee < 0 ) {
       std::cerr << "HepLorentzVector::invariantMass() - "
@@ -213,7 +213,7 @@ double HepLorentzVector::invariantMass(const HepLorentzVector & w) const {
       return 0;
     }
   }
-  return (ee+w.ee >=0 ) ? std::sqrt(m2) : - std::sqrt(m2);
+  return (ee+w.ee >=0 ) ? std::sqrt(m1) : - std::sqrt(m1);
 } /* invariantMass */
 
 //-***************
@@ -225,25 +225,25 @@ Hep3Vector HepLorentzVector::findBoostToCM() const {
 } /* boostToCM() */
 
 Hep3Vector HepLorentzVector::findBoostToCM (const HepLorentzVector & w) const {
-  double t = ee + w.ee;
-  Hep3Vector v = pp + w.pp;
-  if (t == 0) {
-    if (v.mag2() == 0) {
+  double t1 = ee + w.ee;
+  Hep3Vector v1 = pp + w.pp;
+  if (t1 == 0) {
+    if (v1.mag2() == 0) {
       return Hep3Vector(0,0,0);
     } else {
       std::cerr << "HepLorentzVector::findBoostToCM() - "
         << "boostToCM computed for two 4-vectors with combined t=0 -- "
         << "infinite result" << std::endl;
-      return Hep3Vector(v*(1./t)); // Yup, 1/0 -- that is how we return infinity
+      return Hep3Vector(v1*(1./t1)); // Yup, 1/0 -- that is how we return infinity
     }
   }
-//  if (t*t - v.mag2() <= 0) {
+//  if (t1*t1 - v1.mag2() <= 0) {
 //    std::cerr << "HepLorentzVector::findBoostToCM() - "
 //      << "boostToCM  computed for pair of HepLorentzVectors with non-timelike sum"
 //      << std::endl;
 //        // result will make analytic sense but is physically meaningless
 //  }
-  return Hep3Vector(v * (-1./t));
+  return Hep3Vector(v1 * (-1./t1));
 } /* boostToCM(w) */
 
 }  // namespace CLHEP

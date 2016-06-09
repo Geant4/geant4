@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.9 2010-06-19 07:46:44 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -48,6 +47,8 @@
 //#define ppdebug
 
 #include "G4QIonIonCollision.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Promoting model parameters from local variables class properties @@(? M.K.)
 
@@ -252,22 +253,22 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
               <<", pA="<<curProjNucleus<<", tA="<<curTargNucleus<<G4endl;
 #endif
         // Check the reaction threshold 
-        G4double s = (tNuc4M + pNuc4M).mag2();         // Squared CM Energy of compound
+        G4double s_value = (tNuc4M + pNuc4M).mag2();   // Squared CM Energy of compound
         G4double ThresholdMass = pNucleon->GetMass() + tNucleon->GetMass();
 #ifdef debug
-        G4cout<<"G4QInel::Constr: s="<<s<<", ThreshM="<<sqr(ThresholdMass)<<G4endl;
+        G4cout<<"G4QInel::Constr: s="<<s_value<<", ThreshM="<<sqr(ThresholdMass)<<G4endl;
 #endif
         ModelMode = SOFT;                              // NOT-Diffractive hadronization
-        if (s < 0.)                                    // At ThP=0 is impossible(virtNucl)
+        if (s_value < 0.)                              // At ThP=0 is impossible(virtNucl)
         {
-          G4cerr<<"*G4QInelast::Constr:s="<<s<<",pN4M="<<pNuc4M<<",tN4M="<<tNuc4M<<G4endl;
+          G4cerr<<"*G4QInelast::Constr:s="<<s_value<<",pN4M="<<pNuc4M<<",tN4M="<<tNuc4M<<G4endl;
           G4Exception("G4QIonIonCollision::Construct:","72",FatalException,"LowEn(NegS)");
         }
-        if (s < sqr(ThresholdMass))                    // --> Only diffractive interaction
+        if (s_value < sqr(ThresholdMass))              // --> Only diffractive interaction
         {
 #ifdef debug
           G4cout<<"G4QIonIonCollision::Constr: ***OnlyDiffraction***, ThM="<<ThresholdMass
-                <<">sqrt(s)="<<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl;
+                <<">sqrt(s)="<<std::sqrt(s_value)<<" -> only Diffraction is possible"<<G4endl;
 #endif
           ModelMode = DIFFRACTIVE;
         }
@@ -276,16 +277,16 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
         G4double dImpY = pImpY-tNucR.y();
         G4double Distance2=dImpX*dImpX+dImpY*dImpY;
 #ifdef sdebug
-        G4cout<<"G4QIonIonCollision::Construct: s="<<s<<", D2="<<Distance2<<G4endl;
+        G4cout<<"G4QIonIonCollision::Construct: s="<<s_value<<", D2="<<Distance2<<G4endl;
 #endif
         // Needs to be moved to Probability class @@
-        if(s<=10000.)
+        if(s_value<=10000.)
         {
           G4cout<<"-Warning-G4QIonIonCollision::Construct: s < .01 GeV^2, p4M="
                 <<pNucleon->Get4Momentum()<<",t4M="<<tNucleon->Get4Momentum()<<G4endl;
           continue;                                  // skip the rest of the targetNucleons
         }
-        G4double Probability = theProbability.GetPomInelProbability(s, Distance2);// P_INEL
+        G4double Probability = theProbability.GetPomInelProbability(s_value, Distance2);// P_INEL
         // test for inelastic collision
 #ifdef sdebug
         G4cout<<"G4QIonIonCollision::Construct: Probubility="<<Probability<<G4endl;
@@ -311,7 +312,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
           curTargNucleus.DoLorentzBoost(theCMVelocity); // Boost theResNucleus toRotatedLS
           curTargNucleus.SubtractNucleon(tNucleon);     // Pointer to the used nucleon
           curTargNucleus.DoLorentzBoost(-theCMVelocity);// Boost theResNucleus back to CM
-          if((theProbability.GetPomDiffProbability(s,Distance2)/Probability >
+          if((theProbability.GetPomDiffProbability(s_value,Distance2)/Probability >
               G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
           { 
             // ------------->> diffractive interaction @@ IsSingleDiffractive called once
@@ -335,7 +336,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
             G4double* running = new G4double[nCutMax];// @@ This limits the max cuts
             for(nCut = 0; nCut < nCutMax; nCut++)    // Calculates multiCut probabilities
             {
-              running[nCut]= theProbability.GetCutPomProbability(s, Distance2, nCut+1);
+              running[nCut]= theProbability.GetCutPomProbability(s_value, Distance2, nCut+1);
               if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
             }
             G4double random = running[nCutMax-1]*G4UniformRand();
@@ -1322,8 +1323,8 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
             G4bool sing=true;
             if(cLT==2 && cRT==2)
             {
-              G4int aLPDG=0;
-              G4int aRPDG=0;
+              aLPDG=0;
+              aRPDG=0;
               if(cLPDG>0)
               {
                 aLPDG=nLPDG/100;
@@ -2279,11 +2280,11 @@ void G4QIonIonCollision::Breeder()
             G4QHadron* selHP=0;                   // Pointer to the used hadron for erasing
             G4QString* cString=strings[astring];  // Must be the last string by definition
             G4LorentzVector cString4M = cString->Get4Momentum();
-            G4QParton* cLeft=cString->GetLeftParton();
-            G4QParton* cRight=cString->GetRightParton();
+            cLeft=cString->GetLeftParton();
+            cRight=cString->GetRightParton();
             G4int sumT=cLeft->GetType()+cRight->GetType();
-            G4int sPDG=cLeft->GetPDGCode();
-            G4int nPDG=cRight->GetPDGCode();
+            sPDG=cLeft->GetPDGCode();
+            nPDG=cRight->GetPDGCode();
             G4int cMax=0;                         // Both or only one cuark can merge
             for (G4int reh=0; reh < nHadr; reh++)
             {

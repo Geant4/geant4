@@ -32,6 +32,7 @@
 
 
 #include "G4ConstantLevelDensityParameter.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
 G4ConstantLevelDensityParameter::G4ConstantLevelDensityParameter() 

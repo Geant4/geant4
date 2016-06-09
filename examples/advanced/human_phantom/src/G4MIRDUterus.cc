@@ -32,7 +32,9 @@
 // design and code review.
 //
 #include "G4MIRDUterus.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Ellipsoid.hh"
@@ -45,6 +47,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4HumanPhantomColour.hh"
+
 G4MIRDUterus::G4MIRDUterus()
 {
 }

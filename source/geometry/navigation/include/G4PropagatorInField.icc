@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.16 2009-11-13 17:34:26 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------------------
@@ -275,8 +274,8 @@ G4VIntersectionLocator* G4PropagatorInField::GetIntersectionLocator()
 } 
 
 inline
-G4bool G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA, 
-                                            G4ThreeVector  EndPointB,
+G4bool G4PropagatorInField::IntersectChord( const G4ThreeVector&  StartPointA,
+                                            const G4ThreeVector&  EndPointB,
                                             G4double      &NewSafety,
                                             G4double      &LinearStepLength,
                                             G4ThreeVector &IntersectionPoint )

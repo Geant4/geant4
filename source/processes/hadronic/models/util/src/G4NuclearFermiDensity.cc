@@ -27,6 +27,8 @@
 //
 
 #include "G4NuclearFermiDensity.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NuclearFermiDensity::G4NuclearFermiDensity(G4int anA, G4int aZ) 
   :  theA(anA), theZ(aZ), a(0.545 * fermi) 

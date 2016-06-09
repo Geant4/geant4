@@ -30,13 +30,14 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 #include "G4INCLAvatarAction.hh"
+#include "G4INCLLogger.hh"
 
 namespace G4INCL {
 
@@ -50,6 +51,7 @@ namespace G4INCL {
 
   void AvatarAction::beforeAvatarAction(IAvatar *a, Nucleus *n) {
     n->getStore()->getBook()->incrementAvatars(a->getType());
+    DEBUG("Next avatar:" << std::endl << a->dump() << std::endl);
   }
 
   void AvatarAction::afterAvatarAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {

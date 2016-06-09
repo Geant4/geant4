@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPiKBuilder.cc,v 1.8 2010-11-18 14:52:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,16 +39,22 @@
 //----------------------------------------------------------------------------
 //
 #include "G4QGSPPiKBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4QGSPPiKBuilder::
 G4QGSPPiKBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
 {
   thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+    
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSP");
 
@@ -90,7 +95,7 @@ G4QGSPPiKBuilder::
   delete theStringModel;
   delete theModel;
   delete theQGSM;
-  delete theHandler;
+  //delete theHandler;
 }
 
 void G4QGSPPiKBuilder::
@@ -119,7 +124,8 @@ Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP->RegisterMe(theModel);
+    aP->RegisterMe(theModel);
+    aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
 }
 
 void G4QGSPPiKBuilder::
@@ -128,6 +134,7 @@ Build(G4KaonMinusInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
 }
 
 void G4QGSPPiKBuilder::
@@ -136,6 +143,7 @@ Build(G4KaonZeroLInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 }
 
 void G4QGSPPiKBuilder::

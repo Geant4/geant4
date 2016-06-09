@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsShielding.hh,v 1.1 2010-06-08 16:05:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -71,12 +70,11 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
   public: 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
-    void UseLEND( G4String s="" ){useLEND=true;evaluation=s;};
+    void UseLEND( G4String ss="" ){useLEND=true;evaluation=ss;};
     void UnuseLEND(){useLEND=false;};
 
   private:
     void CreateModels();
-    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
     
     G4NeutronBuilder * theNeutrons;
     //G4NeutronHPBuilder * theHPNeutron;

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapAlphaSide.cc,v 1.9 2010-07-12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -43,6 +42,7 @@
 #include <cmath>
 
 #include "G4TwistTrapAlphaSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4JTPolynomialSolver.hh"
 
 //=====================================================================
@@ -303,7 +303,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
   else  // general solution for non-zero vz
   {
 
-    G4double c[8],sr[7],si[7] ;  
+    G4double c[8],srd[7],si[7] ;  
 
     c[7] = 57600*
       fDy1*(fa1md1*phiyz + 
@@ -354,16 +354,16 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif    
 
     G4JTPolynomialSolver trapEq ;
-    G4int num = trapEq.FindRoots(c,7,sr,si);
+    G4int num = trapEq.FindRoots(c,7,srd,si);
 
     for (register int i = 0 ; i<num ; i++ )   // loop over all math solutions
     {  
       if ( si[i]==0.0 )  // only real solutions
       { 
 #ifdef G4TWISTDEBUG
-        G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
+        G4cout << "Solution " << i << " : " << srd[i] << G4endl ;
 #endif
-        phi = std::fmod(sr[i] , pihalf)  ;
+        phi = std::fmod(srd[i] , pihalf)  ;
         u   = (fDy1*(4*(phiyz + 2*fDz*phi*v.y() - fdeltaY*phi*v.z())
                      - ((fDx3plus1 + fDx4plus2)*fPhiTwist
                        + 2*(fDx3minus1 + fDx4minus2)*phi)*v.z()*std::sin(phi)))
@@ -1112,7 +1112,7 @@ G4TwistTrapAlphaSide::ProjectPoint(const G4ThreeVector &p, G4bool isglobal)
 //* GetFacets ---------------------------------------------------------
 
 void
-G4TwistTrapAlphaSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
+G4TwistTrapAlphaSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
                                  G4int faces[][4], G4int iside ) 
 {
 
@@ -1125,7 +1125,7 @@ G4TwistTrapAlphaSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
   G4int nnode ;
   G4int nface ;
 
-  // calculate the (n-1)*(m-1) vertices
+  // calculate the (n-1)*(k-1) vertices
 
   for ( register int i = 0 ; i<n ; i++ )
   {
@@ -1133,27 +1133,27 @@ G4TwistTrapAlphaSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
     phi = z*fPhiTwist/(2*fDz) ;
     b = GetValueB(phi) ;
 
-    for ( register int j = 0 ; j<m ; j++ )
+    for ( register int j = 0 ; j<k ; j++ )
     {
-      nnode = GetNode(i,j,m,n,iside) ;
-      u = -b/2 +j*b/(m-1) ;
+      nnode = GetNode(i,j,k,n,iside) ;
+      u = -b/2 +j*b/(k-1) ;
       p = SurfacePoint(phi,u,true) ;  // surface point in global coordinates
 
       xyz[nnode][0] = p.x() ;
       xyz[nnode][1] = p.y() ;
       xyz[nnode][2] = p.z() ;
 
-      if ( i<n-1 && j<m-1 )  // conterclock wise filling 
+      if ( i<n-1 && j<k-1 )  // conterclock wise filling 
       {
-        nface = GetFace(i,j,m,n,iside) ;
-        faces[nface][0] = GetEdgeVisibility(i,j,m,n,0,-1)
-                        * (GetNode(i  ,j  ,m,n,iside)+1) ;  // f77 numbering
-        faces[nface][1] = GetEdgeVisibility(i,j,m,n,1,-1)
-                        * (GetNode(i  ,j+1,m,n,iside)+1) ;
-        faces[nface][2] = GetEdgeVisibility(i,j,m,n,2,-1)
-                        * (GetNode(i+1,j+1,m,n,iside)+1) ;
-        faces[nface][3] = GetEdgeVisibility(i,j,m,n,3,-1)
-                        * (GetNode(i+1,j  ,m,n,iside)+1) ;
+        nface = GetFace(i,j,k,n,iside) ;
+        faces[nface][0] = GetEdgeVisibility(i,j,k,n,0,-1)
+                        * (GetNode(i  ,j  ,k,n,iside)+1) ;  // f77 numbering
+        faces[nface][1] = GetEdgeVisibility(i,j,k,n,1,-1)
+                        * (GetNode(i  ,j+1,k,n,iside)+1) ;
+        faces[nface][2] = GetEdgeVisibility(i,j,k,n,2,-1)
+                        * (GetNode(i+1,j+1,k,n,iside)+1) ;
+        faces[nface][3] = GetEdgeVisibility(i,j,k,n,3,-1)
+                        * (GetNode(i+1,j  ,k,n,iside)+1) ;
       }
     }
   }

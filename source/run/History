@@ -17,6 +17,38 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 15th, 2012, M.Asai (run-V09-05-09)
+- Offering more granular public methods of G4RunManager, which enable
+external framework with its own event loop to execute each individual 
+event without copying context of base class methods of G4RunManager.
+
+Oct. 1st, 2012, G.Cosmo (run-V09-05-08, run-V09-05-07)
+- Move constructors and destructor for G4VPhysicsConstructor to source.
+
+Sep. 14th, 2012, H.Kurashige (run-V09-05-06)
+- Fix ordering parameter for DNA processs (62,63,64)
+- Fix Coverity defects in G4UserPhysicsListMessenger 
+
+Aug. 10th, 2012, H.Kurashige (run-V09-05-05)
+- Added new subType process numbers for DNA processs (62,63,64)
+
+Jul. 5th, 2012, G.Cosmo (run-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+May. 24th, 2012, G.Cosmo (run-V09-05-03)
+- Fixed trivial case of variable shadowing in G4RunMessenger.
+
+May. 14th, 2012, M.Asai (run-V09-05-02)
+- Destructor of G4RunManager now sets G4State_Quit in addition to
+  G4RunManagerKernel.
+
+Mar. 6th, 2012, M.Asai (run-V09-05-01)
+- Add dummy copy constructor and = operator to G4Run.
+
+Dec. 9th, 2011, H.Kurashige (run-V09-05-00)
+- Fix Coverity defects in assignment operator of G4VModularPhysicsList
+
 Nov. 15th, 2011, M.Asai (run-V09-04-27)
 - Added new line to G4ExceptionHandler notification to properly flush buffer.
 

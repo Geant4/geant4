@@ -23,22 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01SD.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/include/RMC01SD.hh
+/// \brief Definition of the RMC01SD class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01SD
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01SD
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef RMC01SD_h
 #define RMC01SD_h 1
 
@@ -55,38 +61,31 @@ class G4VPhysicalVolume;
 #include"G4ios.hh"
 #include"RMC01DoubleWithWeightHit.hh"
 
-//The sensitive detector
-//----------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class RMC01SD : public G4VSensitiveDetector
 {
 
   public:
-      
-      RMC01SD(G4String name);
-      ~RMC01SD();
+    RMC01SD(G4String name);
+    virtual ~RMC01SD();
+    virtual void Initialize(G4HCofThisEvent*HCE);
+    virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent*HCE);
+    virtual void Clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
-    
-     
   private:
- 
-
-     
-     G4double TotalEventEdep;
-     RMC01DoubleWithWeightHitsCollection* EventEdepCollection;
-     RMC01DoubleWithWeightHitsCollection* ProtonCurrentCollection;
-     RMC01DoubleWithWeightHitsCollection* GammaCurrentCollection;
-     RMC01DoubleWithWeightHitsCollection* ElectronCurrentCollection;
-     
+    G4double fTotalEventEdep;
+    RMC01DoubleWithWeightHitsCollection* fEventEdepCollection;
+    RMC01DoubleWithWeightHitsCollection* fProtonCurrentCollection;
+    RMC01DoubleWithWeightHitsCollection* fGammaCurrentCollection;
+    RMC01DoubleWithWeightHitsCollection* fElectronCurrentCollection;
+    
 };
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

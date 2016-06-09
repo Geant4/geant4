@@ -33,9 +33,17 @@ in every event.
 
 3. Physics List 
 
-  QGSP predefined physics list
+  FTFP_BERT predefined physics list
 
 4. User actions
 
   All particles except muons are killed in the calorimeter section.
 
+5. Installation
+ 
+ See HepMC/README how to build this example.
+
+6. Execution
+ 
+ % HepMCEx02 hepmc_pygen.in
+   

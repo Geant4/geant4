@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.hh,v 1.10 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997

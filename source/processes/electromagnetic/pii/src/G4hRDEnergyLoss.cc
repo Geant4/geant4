@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hRDEnergyLoss.cc,v 1.3 2010-11-25 19:49:43 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -65,6 +64,8 @@
 // --------------------------------------------------------------
 
 #include "G4hRDEnergyLoss.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
 #include "G4ProductionCutsTable.hh"

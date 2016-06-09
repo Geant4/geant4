@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.hh,v 1.3 2010-06-12 09:38:06 vnivanch Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,6 +56,11 @@ public:
   ~DetectorConstruction();
 
   G4VPhysicalVolume* Construct();
+
+  G4Region* GetTargetRegion()
+  {
+      return fRegion;
+  }
                          
 private:
    

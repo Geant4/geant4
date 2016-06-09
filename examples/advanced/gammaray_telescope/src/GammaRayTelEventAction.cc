@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.20 2010-06-06 06:18:54 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -49,6 +48,7 @@
 #include "GammaRayTelAnalysis.hh"
 #endif
 
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"

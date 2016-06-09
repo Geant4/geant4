@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.15 2010-11-19 15:13:39 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -134,7 +134,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
                                 G4int& blockedReplicaNo,
                                 G4VPhysicalVolume* pCurrentPhysical)
 {
-  G4RegularNavigationHelper::ClearStepLengths();
+  G4RegularNavigationHelper::Instance()->ClearStepLengths();
 
   G4PhantomParameterisation *param =
     (G4PhantomParameterisation*)(pCurrentPhysical->GetParameterisation());
@@ -219,13 +219,13 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     }
     if(totalNewStep > currentProposedStepLength) 
     { 
-      G4RegularNavigationHelper::
+      G4RegularNavigationHelper::Instance()->
         AddStepLength(copyNo, newStep-totalNewStep+currentProposedStepLength);
       return currentProposedStepLength;
     }
     else
     {
-      G4RegularNavigationHelper::AddStepLength( copyNo, newStep );
+      G4RegularNavigationHelper::Instance()->AddStepLength( copyNo, newStep );
     }
 
 

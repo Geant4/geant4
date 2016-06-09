@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.19 2006-07-10 16:09:30 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  31st December 1997.
@@ -68,6 +67,11 @@ public: // With description
 
   const G4ModelingParameters* GetModelingParameters () const;
 
+  const G4String& GetType() const;
+  // The sub-class should set its type, which could be the class
+  // name, or, in the case of G4CallBackModel, it could be the type of
+  // object it is coding.
+
   virtual G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
 
@@ -91,6 +95,7 @@ public: // With description
   // Set methods for above...
   void SetModelingParameters (const G4ModelingParameters*);
   void SetExtent (const G4VisExtent&);
+  void SetType (const G4String&);
   void SetGlobalDescription (const G4String&);
   void SetGlobalTag (const G4String&);
   void SetTransformation (const G4Transform3D&);
@@ -100,6 +105,7 @@ public: // With description
 
 protected:
 
+  G4String                    fType;
   G4String                    fGlobalTag;
   G4String                    fGlobalDescription;
   G4VisExtent                 fExtent;

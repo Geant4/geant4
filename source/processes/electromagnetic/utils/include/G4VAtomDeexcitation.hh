@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.9 2011-01-03 19:34:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -82,10 +81,10 @@ public:
   virtual void InitialiseForExtraAtom(G4int Z) = 0;
 
   // Activation of deexcitation per detector region
-  void SetDeexcitationActiveRegion(const G4String& rname = "", 
-				   G4bool valDeexcitation = true,
-				   G4bool valAuger = false,
-				   G4bool valPIXE = true);
+  void SetDeexcitationActiveRegion(const G4String& rname, 
+				   G4bool valDeexcitation,
+				   G4bool valAuger,
+				   G4bool valPIXE);
 
   // Activation of deexcitation
   inline void SetFluo(G4bool);
@@ -220,7 +219,7 @@ inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
 
 inline G4bool G4VAtomDeexcitation::IsPIXEActive() const
 {
-  return (flagPIXE && isActive);
+  return flagPIXE;
 }
 
 inline const G4String& G4VAtomDeexcitation::GetName() const
@@ -271,14 +270,14 @@ inline G4int G4VAtomDeexcitation::GetVerboseLevel() const
 inline G4bool 
 G4VAtomDeexcitation::CheckDeexcitationActiveRegion(G4int coupleIndex)
 {
-  return (isActive && activeDeexcitationMedia[coupleIndex]);
+  return (isActive || activeDeexcitationMedia[coupleIndex]);
 }
 
 inline G4bool 
 G4VAtomDeexcitation::CheckAugerActiveRegion(G4int coupleIndex)
 {
 
-  return (flagAuger && activeAugerMedia[coupleIndex]);
+  return (flagAuger || activeAugerMedia[coupleIndex]);
 }
 
 inline void 

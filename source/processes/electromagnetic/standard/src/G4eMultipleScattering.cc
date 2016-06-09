@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.cc,v 1.12 2010-06-04 09:11:02 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //
@@ -69,7 +68,6 @@ G4eMultipleScattering::~G4eMultipleScattering()
 G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
-  //  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,7 +75,8 @@ G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  if(!Model(1)) { AddEmModel(1, new G4UrbanMscModel95()); }
+  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel95(), 1); }
+  AddEmModel(1, EmModel(1));
   isInitialized = true;
 }
 

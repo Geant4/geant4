@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.17 2010-04-22 21:19:14 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -211,6 +210,9 @@ private:
         static const G4int phiIndexMax = 37;
 
         G4float* AngularDistribution;
+
+        // Open LUT with Material and Integer Angle
+        FILE* readFileHandle;
 
 };
 

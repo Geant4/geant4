@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02PVolumeStore.cc
+/// \brief Implementation of the B02PVolumeStore class
 //
-// $Id: B02PVolumeStore.cc,v 1.5 2006-06-29 16:34:50 gunter Exp $
+//
+// $Id$
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -49,7 +52,7 @@ void B02PVolumeStore::AddPVolume(const G4GeometryCell &cell){
     fSetGeometryCell.find(cell);
   if (it != fSetGeometryCell.end()) {
     G4cout << "B02PVolumeStore::AddPVolume: cell already stored" 
-	   << G4endl;
+           << G4endl;
     return;
   }
 
@@ -70,7 +73,7 @@ GetPVolume(const G4String &name) const {
   }
   if (!pvol) {
     G4cout << "B02PVolumeStore::GetPVolume: no physical volume named: " 
-	   << name << ", found" << G4endl;
+           << name << ", found" << G4endl;
   }
   return pvol;
 }

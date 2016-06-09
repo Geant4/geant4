@@ -16,6 +16,23 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Nov 28th, 2012 Gabriele Cosmo (WLS-V09-05-04)
+- Fixed cases of variable shadowing.
+
+Nov 17th, 2012 Ivana Hrivnacova (WLS-V09-05-03)
+- Updated documentation.
+- Removed obsolete instructions (how to compile & link).
+
+Nov 14th, 2012 Ivana Hrivnacova (WLS-V09-05-02)
+- In vis.mac: OGLIX replaced with OGL.
+
+Sep 17th, 2012 Peter Gumplinger (WLS-V09-05-01)
+    remove G4TRACKING_ALLOC_EXPORT, G4DLLEXPORT and G4DLLIMPORT from
+    WLSTrajectory and WLSTrajectoryPoint.
+
+Jun 20th, 2012 Peter Gumplinger (WLS-V09-05-00)
+    remove SetModel from  WLSOpticalPhysics.cc to work with op-V09-05-04
+
 Nov 18th, 2011 Gunter Folger    (WLS-V09-04-03)
 -----------------------------------------------
     migrate to new G4Exception

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc,v 1.2 2006-06-29 16:48:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -43,56 +45,56 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance("commands specific to this example");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance("commands specific to this example");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction");
         
-  MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  MaterCmd->SetGuidance("Select material of the box.");
-  MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the box.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize",this);
-  SizeCmd->SetGuidance("Set size of the box");
-  SizeCmd->SetParameterName("Size",false);
-  SizeCmd->SetRange("Size>0.");
-  SizeCmd->SetUnitCategory("Length");
-  SizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize",this);
+  fSizeCmd->SetGuidance("Set size of the box");
+  fSizeCmd->SetParameterName("Size",false);
+  fSizeCmd->SetRange("Size>0.");
+  fSizeCmd->SetUnitCategory("Length");
+  fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete SizeCmd; 
-  delete UpdateCmd;
-  delete detDir;  
-  delete testemDir;
+  delete fMaterCmd;
+  delete fSizeCmd; 
+  delete fUpdateCmd;
+  delete fDetDir;  
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if( command == MaterCmd )
-   { Detector->SetMaterial(newValue);}
+  if( command == fMaterCmd )
+   { fDetector->SetMaterial(newValue);}
    
-  if( command == SizeCmd )
-   { Detector->SetSize(SizeCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeCmd )
+   { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
      
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/src/B01RunAction.cc
+/// \brief Implementation of the B01RunAction class
 //
-// $Id: B01RunAction.cc,v 1.4 2007-06-22 13:29:45 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 #include "B01RunAction.hh"
 #include "B01Run.hh"
@@ -151,20 +153,20 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
       if ( *SLs    !=0. ) AverageTrackWeight  = (*SLWs)/(*SLs);
       G4String cname = bdet->GetCellName(iz);
       G4cout 
-	<< std::setw(FieldValue) << cname << " |"
-	<< std::setw(FieldValue) << (*TrackEnters) << " |"
-	<< std::setw(FieldValue) << (*Populations) << " |"
-	<< std::setw(FieldValue) << (*SumCollisions) << " |"
-	<< std::setw(FieldValue) << (*SumCollWeight) << " |"
-	<< std::setw(FieldValue) << NumWeightedEnergy << " |"
-	<< std::setw(FieldValue) << FluxWeightedEnergy << " |"
-	<< std::setw(FieldValue) << AverageTrackWeight << " |"
-	<< std::setw(FieldValue) << (*SLs) << " |"
-	<< std::setw(FieldValue) << (*SLWs) << " |"
-	<< std::setw(FieldValue) << (*SLW_Vs) << " |"
-	<< std::setw(FieldValue) << (*SLWEs) << " |"
-	<< std::setw(FieldValue) << (*SLWE_Vs) << " |"
-	<< G4endl;
+        << std::setw(FieldValue) << cname << " |"
+        << std::setw(FieldValue) << (*TrackEnters) << " |"
+        << std::setw(FieldValue) << (*Populations) << " |"
+        << std::setw(FieldValue) << (*SumCollisions) << " |"
+        << std::setw(FieldValue) << (*SumCollWeight) << " |"
+        << std::setw(FieldValue) << NumWeightedEnergy << " |"
+        << std::setw(FieldValue) << FluxWeightedEnergy << " |"
+        << std::setw(FieldValue) << AverageTrackWeight << " |"
+        << std::setw(FieldValue) << (*SLs) << " |"
+        << std::setw(FieldValue) << (*SLWs) << " |"
+        << std::setw(FieldValue) << (*SLW_Vs) << " |"
+        << std::setw(FieldValue) << (*SLWEs) << " |"
+        << std::setw(FieldValue) << (*SLWE_Vs) << " |"
+        << G4endl;
     }
     G4cout << "============================================="<<G4endl;
   }
@@ -196,9 +198,9 @@ void B01RunAction::PrintHeader(std::ostream *out)
   for (std::vector<G4String>::iterator it = vecScoreName.begin();
        it != vecScoreName.end(); it++) {
       //vname = FillString((*it),
-//		       ' ', 
-//		       FieldValue+1, 
-//		       false);
+//                       ' ', 
+//                       FieldValue+1, 
+//                       false);
 //    *out << vname << '|';
       *out << std::setw(FieldValue) << (*it) << " |";
   }
@@ -206,7 +208,7 @@ void B01RunAction::PrintHeader(std::ostream *out)
 }
 
 std::string B01RunAction::FillString(const std::string &name, 
-				       char c, G4int n, G4bool back)
+                                       char c, G4int n, G4bool back)
 {
   std::string fname("");
   G4int k = n - name.size();

@@ -16,6 +16,178 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+29 November 2012 - Gabriele Cosmo (hadr-inclxx-V09-05-31)
+-----------------------------------------------------------
+- Remove inclusion of G4SystemOfUnits from headers!
+
+6 November 2012 - Davide Mancusi (hadr-inclxx-V09-05-30)
+-----------------------------------------------------------
+- INCL++ v5.1.8
+  o Fixes a bug in forced compound nucleus (emission of di-protons or
+    di-neutrons)
+
+4 November 2012 - Davide Mancusi (hadr-inclxx-V09-05-29)
+-----------------------------------------------------------
+- INCL++ v5.1.7
+  o Fixes Coverity warnings
+  o Fixes a bug affecting the choice of the accurate-projectile mode
+
+27 October 2012 - Davide Mancusi (hadr-inclxx-V09-05-28)
+-----------------------------------------------------------
+- INCL++ v5.1.6
+  o Major speed improvement in cluster coalescence -- gained about a factor of
+    2 in 1-GeV p+208Pb
+  o Fix some bugs in reactions induced by composite particles
+
+9 October 2012 - Davide Mancusi (hadr-inclxx-V09-05-27)
+-----------------------------------------------------------
+- INCL++ v5.1.5
+  o Only one model instance for all processes
+  o Messenger interface now creates commands in /process/had/inclxx, for
+    consistency with Bertini
+  o Optimisation of the cluster-coalescence algorithm reduces CPU time by about
+    40% in 1-GeV p+208Pb
+  o Fixes Coverity warnings
+  o Bug fixes
+
+26 September 2012 - Gabriele Cosmo (hadr-inclxx-V09-05-26)
+-----------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+4 September 2012 - Davide Mancusi (hadr-inclxx-V09-05-25)
+-----------------------------------------------------------
+- Fixes GNUmake compilation errors
+
+3 September 2012 - Davide Mancusi (hadr-inclxx-V09-05-24)
+-----------------------------------------------------------
+- INCL++ v5.1.4
+  o Fixes some shadowing warnings
+
+27 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-23)
+-----------------------------------------------------------
+- INCL++ refuses to handle reactions between nuclei with A>18. Those reactions
+  will be handled by BIC.
+- Fix the warning message about BIC being used instead of INCL++.
+
+26 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-22)
+-----------------------------------------------------------
+- Hopefully fix some crashes on Windows.
+
+25 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-21)
+-----------------------------------------------------------
+- Fix missing include paths in GNUmakefile
+- Emit a warning when the backup model is used.
+
+23 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-20)
+-----------------------------------------------------------
+- INCL++ v5.1.3
+  o Realistic densities for deuterons
+  o Can be used for very light systems (e.g. p+alpha)
+  o Fixes some minor memory leaks
+  o Fixes a Coverity warning
+  o Should fix some crashes on Windows
+
+17 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-19)
+-----------------------------------------------------------
+- Remove relic file utils/src/G4INCLBook.cc.
+- Fix a minor bug concerning transmission of delta resonances.
+
+9 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-18)
+-----------------------------------------------------------
+- Fix compilation warning on Windows.
+
+9 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-17)
+-----------------------------------------------------------
+- INCL++ v5.1.1
+  o Should fix all Coverity warnings.
+  o Minor bugfixes.
+
+12 June 2012 - Davide Mancusi (hadr-inclxx-V09-05-16)
+-----------------------------------------------------------
+- Should compile cleanly with -Wshadow.
+
+1 June 2012 - Davide Mancusi (hadr-inclxx-V09-05-15)
+-----------------------------------------------------------
+- INCL++ v5.1
+  o Interface returns an empty G4HadFinalState if no inelastic event could be
+    produced.
+
+25 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-14)
+-----------------------------------------------------------
+- INCL++ v5.1_rc11
+  o Fixes a compiler warning on Windows.
+
+24 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-13)
+-----------------------------------------------------------
+- INCL++ v5.1_rc10
+  o Refactored the configuration part of the interface in a separate
+    G4INCLXXInterfaceConfig singleton. The interface is no longer a singleton.
+  o Fixes a couple of minor bugs.
+
+22 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-12)
+-----------------------------------------------------------
+- INCL++ v5.1_rc9
+  o Fixes a couple of minor bugs.
+
+12 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-11)
+-----------------------------------------------------------
+- INCL++ v5.1_rc8
+  o Fixes a circular library dependency, compilation on Windows and some
+    mistakes in the build system.
+  o Minor bugfix in cluster decay.
+
+12 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-09)
+-----------------------------------------------------------
+- INCL++ v5.1_rc6
+  o Fixes a bug mostly affecting reactions around 200 MeV.
+
+11 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-08)
+-----------------------------------------------------------
+- New INCL++ v5.1_rc5
+  o Can handle heavy-ion collisions
+  o Conserves energy using masses from the G4 tables down
+    to the keV level.
+
+23 April 2012 - Davide Mancusi (hadr-inclxx-V09-05-07)
+-----------------------------------------------------------
+- Bugfix:
+  o Avoid collisions with A=1 targets.
+
+11 April 2012 - Davide Mancusi (hadr-inclxx-V09-05-06)
+-----------------------------------------------------------
+- Bugfix:
+  o De-excitation products should not be boosted using the pre-fragment
+    velocity.
+
+9 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-04,hadr-inclxx-V09-05-05)
+-----------------------------------------------------------
+- Fix compiler warning about an unused function parameter.
+
+6 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-03)
+-----------------------------------------------------------
+- Bugfix:
+  o Sampling of the impact-parameter distribution was incomplete for
+    nucleon-induced reactions and incoming kinetic energies below ~40 MeV.
+
+2 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-02)
+-----------------------------------------------------------
+- Bugfixes:
+  o Do nothing if the projectile is below the Coulomb barrier.
+  o Always apply numerical solutions (used to lead to some minor violations of
+    energy conservation).
+
+16 January 2012 - Davide Mancusi (hadr-inclxx-V09-05-01)
+-----------------------------------------------------------
+- Better (iterative) determination of the remnant recoil at the the end of the
+  cascade.
+- Isospin-dependent back-to-spectator.
+- Cache NuclearDensity objects for better performance (although we do not
+  really exploit this in G4 yet).
+- Bugfix:
+  o Minor bug for negative incident pions -- integration over impact-parameter
+    distribution was incomplete.
+
 21 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-11)
 -----------------------------------------------------------
 - Fixed local energy logic

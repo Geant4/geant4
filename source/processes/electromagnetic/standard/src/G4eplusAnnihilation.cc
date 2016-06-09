@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.30 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +44,7 @@
 // 25-01-06 remove cut dependance in AtRestDoIt (mma)
 // 09-08-06 add SetModel(G4VEmModel*) (mma)
 // 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
+// 30-05-12 propagate parent weight to secondaries (D. Sawkey)
 //
 
 //
@@ -54,6 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eplusAnnihilation.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Gamma.hh"
 #include "G4PhysicsVector.hh"
@@ -103,10 +104,10 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!Model()) SetModel(new G4eeToTwoGammaModel());
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    if(!EmModel(1)) { SetEmModel(new G4eeToTwoGammaModel(),1); }
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(1));
   }
 }
 
@@ -136,13 +137,15 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
   phi = twopi * G4UniformRand();
   G4ThreeVector pol(cos(phi), sin(phi), 0.0);
   pol.rotateUz(dir);
-
+  
+  fParticleChange.ProposeWeight(aTrack.GetWeight());
   // add gammas
   fParticleChange.SetNumberOfSecondaries(2);
   G4DynamicParticle* dp = 
     new G4DynamicParticle(theGamma, dir, electron_mass_c2);
   dp->SetPolarization(pol.x(),pol.y(),pol.z()); 
   fParticleChange.AddSecondary(dp);
+
   dp = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
   dp->SetPolarization(-pol.x(),-pol.y(),-pol.z()); 
   fParticleChange.AddSecondary(dp);

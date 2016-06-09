@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.12 2010-12-27 17:44:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -266,7 +265,7 @@ void G4ShellData::LoadData(const G4String& fileName)
 
   G4double a = 0;
   G4int k = 1;
-  G4int s = 0;
+  G4int sLocal = 0;
   
   G4int Z = 1;
   G4DataVector* energies = new G4DataVector;
@@ -277,7 +276,7 @@ void G4ShellData::LoadData(const G4String& fileName)
     G4int nColumns = 2;
     if (a == -1)
       {
-	if (s == 0)
+	if (sLocal == 0)
 	  {
 	    // End of a shell data set
 	    idMap[Z] = ids;
@@ -290,10 +289,10 @@ void G4ShellData::LoadData(const G4String& fileName)
             energies = new G4DataVector;
             Z++;	    
 	  }      
-	s++;
-	if (s == nColumns)
+	sLocal++;
+	if (sLocal == nColumns)
 	{
-	  s = 0;
+	  sLocal = 0;
 	}
       }
 
@@ -333,19 +332,19 @@ void G4ShellData::LoadData(const G4String& fileName)
     {
       // Build cumulative from raw shell occupancy
 
-      for (G4int Z=zMin; Z <= zMax; Z++)
+      for (G4int ZLocal=zMin; ZLocal <= zMax; ZLocal++)
 	{
-	  std::vector<G4double> occupancy = ShellIdVector(Z);
+	  std::vector<G4double> occupancy = ShellIdVector(ZLocal);
 
 	  std::vector<G4double>* prob = new std::vector<G4double>;
-	  G4double scale = 1. / G4double(Z);
+	  G4double scale = 1. / G4double(ZLocal);
 
 	  prob->push_back(occupancy[0] * scale);
 	  for (size_t i=1; i<occupancy.size(); i++)
 	    {
 	      prob->push_back(occupancy[i]*scale + (*prob)[i-1]);
 	    }
-	  occupancyPdfMap[Z] = prob;
+	  occupancyPdfMap[ZLocal] = prob;
 
 	  /*
 	    G4double scale = 1. / G4double(Z);
@@ -377,8 +376,8 @@ G4int G4ShellData::SelectRandomShell(G4int Z) const
 
   // Binary search the shell with probability less or equal random
 
-  G4int nShells = NumberOfShells(Z);
-  G4int upperBound = nShells;
+  G4int nShellsLocal = NumberOfShells(Z);
+  G4int upperBound = nShellsLocal;
 
   while (shellIndex <= upperBound) 
     {
@@ -388,7 +387,7 @@ G4int G4ShellData::SelectRandomShell(G4int Z) const
       else 
 	shellIndex = midShell + 1;
     }  
-  if (shellIndex >= nShells) shellIndex = nShells - 1;
+  if (shellIndex >= nShellsLocal) shellIndex = nShellsLocal - 1;
 
   return shellIndex;
 }

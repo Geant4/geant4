@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.15 2010-10-27 07:57:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------
 //
@@ -61,6 +60,11 @@ public: // without description
    G4SmoothTrajectoryPoint(G4ThreeVector pos);
    G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right);
    virtual ~G4SmoothTrajectoryPoint();
+
+private:
+   G4SmoothTrajectoryPoint& operator= (const G4SmoothTrajectoryPoint&);
+
+public:
 
 // Operators
    inline void *operator new(size_t);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSEventActionMessenger.hh
+/// \brief Definition of the exGPSEventActionMessenger class
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -30,8 +33,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exGPSEventActionMessenger.hh,v 1.4 2006-06-29 17:14:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -54,14 +56,14 @@ class exGPSEventActionMessenger: public G4UImessenger
 {
   public:
     exGPSEventActionMessenger(exGPSEventAction*);
-   ~exGPSEventActionMessenger();
+    virtual ~exGPSEventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    exGPSEventAction*   eventAction;   
-    G4UIcmdWithAString* DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+    exGPSEventAction*   fEventAction;   
+    G4UIcmdWithAString* fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 #endif

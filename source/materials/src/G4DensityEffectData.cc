@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.12 2010-05-15 15:37:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 //---------------------------------------------------------------------------
 //
@@ -44,8 +43,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4DensityEffectData.hh"
 #include <iomanip>
+
+#include "G4DensityEffectData.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

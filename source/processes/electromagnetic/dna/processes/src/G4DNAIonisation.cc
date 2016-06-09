@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.cc,v 1.5 2010-09-08 14:30:45 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4DNAIonisation.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,54 +79,54 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-      if(!Model()) SetModel(new G4DNABornIonisationModel);
-      Model()->SetLowEnergyLimit(11.*eV);
-      Model()->SetHighEnergyLimit(1.*MeV);
+      if(!EmModel()) SetEmModel(new G4DNABornIonisationModel);
+      EmModel()->SetLowEnergyLimit(11.*eV);
+      EmModel()->SetHighEnergyLimit(1.*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     if(name == "proton")
     {
-      if(!Model(1)) SetModel(new G4DNARuddIonisationModel,1);
-      Model(1)->SetLowEnergyLimit(0*eV);
-      Model(1)->SetHighEnergyLimit(500*keV);
+      if(!EmModel(1)) SetEmModel(new G4DNARuddIonisationModel,1);
+      EmModel(1)->SetLowEnergyLimit(0*eV);
+      EmModel(1)->SetHighEnergyLimit(500*keV);
 
-      if(!Model(2)) SetModel(new G4DNABornIonisationModel,2);
-      Model(2)->SetLowEnergyLimit(500*keV);
-      Model(2)->SetHighEnergyLimit(100*MeV);
+      if(!EmModel(2)) SetEmModel(new G4DNABornIonisationModel,2);
+      EmModel(2)->SetLowEnergyLimit(500*keV);
+      EmModel(2)->SetHighEnergyLimit(100*MeV);
     
-      AddEmModel(1, Model(1));   
-      AddEmModel(2, Model(2));   
+      AddEmModel(1, EmModel(1));   
+      AddEmModel(2, EmModel(2));   
     }
 
     if(name == "hydrogen")
     {
-      if(!Model()) SetModel(new G4DNARuddIonisationModel);
-      Model()->SetLowEnergyLimit(0*eV);
-      Model()->SetHighEnergyLimit(100*MeV);
+      if(!EmModel()) SetEmModel(new G4DNARuddIonisationModel);
+      EmModel()->SetLowEnergyLimit(0*eV);
+      EmModel()->SetHighEnergyLimit(100*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     if(name == "alpha" || name == "alpha+" || name == "helium" )
     {
-      if(!Model()) SetModel(new G4DNARuddIonisationModel);
-      Model()->SetLowEnergyLimit(0*keV);
-      Model()->SetHighEnergyLimit(400*MeV);
+      if(!EmModel()) SetEmModel(new G4DNARuddIonisationModel);
+      EmModel()->SetLowEnergyLimit(0*keV);
+      EmModel()->SetHighEnergyLimit(400*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     // Extension to HZE proposed by Z. Francis
     
     if(name == "carbon" || name == "nitrogen" || name == "oxygen" || name == "iron")
     {
-      if(!Model()) SetModel(new G4DNARuddIonisationExtendedModel);
-      Model()->SetLowEnergyLimit(0*keV);
-      Model()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
+      if(!EmModel()) SetEmModel(new G4DNARuddIonisationExtendedModel);
+      EmModel()->SetLowEnergyLimit(0*keV);
+      EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
   } 
@@ -136,13 +136,13 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4DNAIonisation::PrintInfo()
 {
-  if (Model(2))
+  if (EmModel(2))
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model(1)->GetName() 
+      << EmModel(1)->GetName() 
       << " and "
-      << Model(2)->GetName() 
+      << EmModel(2)->GetName() 
       << " models"
       << G4endl;
   } 
@@ -150,7 +150,7 @@ void G4DNAIonisation::PrintInfo()
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model()->GetName() 
+      << EmModel()->GetName() 
       << G4endl;
   }
 }         

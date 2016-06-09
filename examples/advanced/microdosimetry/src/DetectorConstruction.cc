@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.5 2010-10-06 14:39:41 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
 

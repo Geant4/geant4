@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
+//
 #ifndef RunAction_h
 #define RunAction_h 1
 
@@ -48,8 +53,6 @@ public: // Without description
 
   RunAction();
   ~RunAction();
-
-public: // With description
  
   void BeginOfRunAction(const G4Run*);
   // In this method histogramms are booked

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,14 +63,14 @@ public:
     
 private:
   
-  PhysicsListMessenger* pMessenger; 
+  PhysicsListMessenger*  fMessenger; 
 
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  G4String               fEmName;
+  G4VPhysicsConstructor* fEmPhysicsList;
     
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;    
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -88,7 +88,7 @@
 
        - Emission particles in the RadioactiveDecay process: 
            particle PDGcode,
-           partilce kinetic energy,
+           particle kinetic energy,
 	   particle creation time,
            particle weight.
 
@@ -112,8 +112,13 @@
   6. ANALYSIS:
 
      This example implements an AIDA-compliant analysis system as well as the ROOT system, for accumulating 
-     and output histograms and ntuples. If the the user has an AIDA-compliant tool such as 
-     AIDAJNI, ANAPHE, OpenScientist or PI installed, the analysis part of this example can 
+     and output histograms and ntuples. 
+     
+     When the example is built with CMake the analysis system is activated automatically 
+     when the AIDA-compliant analysis system and/or the ROOT system is found.
+     
+     When the example is built with GNUmake and  the user has an AIDA-compliant tool such 
+     as  AIDAJNI, ANAPHE, OpenScientist or PI installed, the analysis part of this example can 
      be activated by 
 	
 	setenv G4ANALYSIS_USE 1
@@ -170,8 +175,19 @@
      reproduce these histograms, or new histograms, with the ntuple data in an off-line analyis tool.
 
   7. GETTING STARTED:
+    
+     i) Build the exRDM executable:
 
-     i) If you have an AIDA-compliant analysis system installed than you shall switch on the analysis part of
+     A) With CMake
+     
+       Build the executable (in your CMAKE build directory):
+
+         cd to_rdecay02_build 
+         make
+     
+     B) With GNUmake
+
+     - If you have an AIDA-compliant analysis system installed than you shall switch on the analysis part of
      example by 
 
 	setenv G4ANALYSIS_USE 1
@@ -180,12 +196,12 @@
        
         setenv G4ANALYSIS_USE_ROOT 1
 
-     Otherwise make sure the G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT are not definded
+     - Otherwise make sure the G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT are not definded
  
 	unsetenv G4ANALYSIS_USE
 	unsetenv G4ANALYSIS_USE_ROOT
 	 
-     ii) Build the exRDM executable:
+     - Build the exRDM executable:
 
          cd to rdecay02
          gmake clean
@@ -193,7 +209,8 @@
 
      The executable, named rdecay02, will be in $G4WORKDIR/bin/$G4SYSTEM/ directory.
 
-     iii) Run the executable: while in the rdecay02 directory do 
+     ii) Run the executable: while in the rdecay02 build directory (A) or its 
+         source directory (B) do directory do 
 
           rdecay02 rdecay02.in
 

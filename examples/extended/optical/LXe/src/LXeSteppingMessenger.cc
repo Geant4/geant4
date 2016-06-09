@@ -23,32 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeSteppingMessenger.cc
+/// \brief Implementation of the LXeSteppingMessenger class
+//
+//
 #include "LXeSteppingMessenger.hh"
 #include "LXeSteppingAction.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeSteppingMessenger::LXeSteppingMessenger(LXeSteppingAction* step)
-:stepping(step)
+ : fStepping(step)
 {
-  oneStepPrimariesCmd = new G4UIcmdWithABool("/LXe/oneStepPrimaries",this);
-  oneStepPrimariesCmd->SetGuidance("Only allows primaries to go one step in the scintillator volume before being killed.");
+  fOneStepPrimariesCmd = new G4UIcmdWithABool("/LXe/oneStepPrimaries",this);
+  fOneStepPrimariesCmd->SetGuidance("Only allows primaries to go one step in the scintillator volume before being killed.");
+
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeSteppingMessenger::~LXeSteppingMessenger(){
-  delete oneStepPrimariesCmd;
+  delete fOneStepPrimariesCmd;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void 
-LXeSteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValue){ 
-  if( command == oneStepPrimariesCmd ){ 
-    stepping->SetOneStepPrimaries(oneStepPrimariesCmd
-				  ->GetNewBoolValue(newValue));
+LXeSteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValue){
+  if( command == fOneStepPrimariesCmd ){
+    fStepping->SetOneStepPrimaries(fOneStepPrimariesCmd
+                                  ->GetNewBoolValue(newValue));
   }
 }
-
-

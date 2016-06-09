@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmRunAction.cc
+/// \brief Implementation of the exrdmRunAction class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "exrdmRunAction.hh"
@@ -50,7 +53,7 @@ exrdmRunAction::~exrdmRunAction()
 void exrdmRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   // Creation of the analysis manager
-  exrdmAnalysisManager* analysis = exrdmAnalysisManager::getInstance();
+  exrdmAnalysisManager* analysis = exrdmAnalysisManager::GetInstance();
   analysis->BeginOfRun();
  
   G4int RunN = aRun->GetRunID();
@@ -72,7 +75,7 @@ void exrdmRunAction::BeginOfRunAction(const G4Run* aRun)
 void exrdmRunAction::EndOfRunAction(const G4Run* aRun)
 {
   // Get the analysis manager
-  exrdmAnalysisManager* analysis = exrdmAnalysisManager::getInstance();
+  exrdmAnalysisManager* analysis = exrdmAnalysisManager::GetInstance();
   analysis->EndOfRun(aRun->GetNumberOfEvent());
  
 #ifdef G4VIS_USE

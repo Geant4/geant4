@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngular.hh,v 1.12 2007-06-22 09:23:47 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 070613 fix memory leaking by T. Koi
 //

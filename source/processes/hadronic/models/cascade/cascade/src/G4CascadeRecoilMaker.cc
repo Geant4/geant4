@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeRecoilMaker.cc,v 1.8 2010-12-15 07:40:35 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.
@@ -45,8 +44,11 @@
 // 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
+#include <vector>
+
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadParticle.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
@@ -56,7 +58,6 @@
 #include "G4InuclParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzVector.hh"
-#include <vector>
 
 using namespace G4InuclSpecialFunctions;
 

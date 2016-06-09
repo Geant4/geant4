@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/include/tree.hh
+/// \brief Definition of the tree class
 //
-// $Id: tree.hh,v 1.4 2006-06-29 17:22:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -58,23 +60,23 @@ class TreeNode
   
 public:
 
-  TreeNode(TreeNode * parent, Data data)
-    : parent_(parent), firstChild_(0),
-      lastChild_(0), nextSibling_(0), data_(data)
+  TreeNode(TreeNode * prt, Data dta)
+    : parent_(prt), firstChild_(0),
+      lastChild_(0), nextSibling_(0), data_(dta)
     { 
-      if (parent)
+      if (prt)
       {
-        if(!parent->firstChild_)
+        if(!prt->firstChild_)
         {
-	  parent->firstChild_=this;
-	  parent->lastChild_=this;
-	}  
-	else
+          prt->firstChild_=this;
+          prt->lastChild_=this;
+        }  
+        else
         {
-	  parent->lastChild_->nextSibling_ = this;
-	  parent->lastChild_=this;
-	}   
-      }	
+          prt->lastChild_->nextSibling_ = this;
+          prt->lastChild_=this;
+        }   
+      }        
     }
     
   ~TreeNode() // deletes the whole subtree as well!
@@ -82,12 +84,12 @@ public:
       if (parent_)
       {
         TreeNode * i = parent_->firstChild_;
-	while(*i)
+        while(*i)
         {
-	  TreeNode * temp = i;
-	  i = i->nextSibling_;
-	  delete temp;
-	}
+          TreeNode * temp = i;
+          i = i->nextSibling_;
+          delete temp;
+        }
       } 
     } 
 
@@ -117,8 +119,8 @@ protected:
   Data data_;
   
 private:  
-   TreeNode(const TreeNode &);
-   TreeNode & operator=(const TreeNode *);
+  TreeNode(const TreeNode &);
+  TreeNode & operator=(const TreeNode *);
 };
 
 
@@ -174,10 +176,10 @@ public:
        if (curpos_->nextSibling_)
        {
          curpos_ = curpos_->nextSibling_;
-         return curpos_;	 
-       }	 
+         return curpos_;         
+       }         
      }  
-     return 0;   	     
+     return 0;                
   }
   
 protected:

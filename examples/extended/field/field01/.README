@@ -1,0 +1,80 @@
+//$Id$
+
+///\file "field/field01/.README"
+///\brief Example field01 README page
+
+/*! \page Examplefield01 Example field01
+
+ Example enabling investigation of tracking in a magnetic field.
+ Electromagnetic processes also included.
+
+	
+\section field01_s1 GEOMETRY DEFINITION
+ 
+ The "absorber" is a solid made of a given material.                
+
+ Three parameters define the absorber :
+ - the material of the absorber,
+ - the thickness of an absorber,
+ - the transverse size of the absorber (the input face is a square). 
+
+ The volume "World" contains the "absorber". 
+ In this test the parameters of the "World" can be changed , too.
+
+ In addition a transverse uniform magnetic field can be applied.
+
+ The default geometry is constructed in F01DetectorConstruction class,
+ but all the parameters can be changed via
+ the commands defined in the F01DetectorMessenger class.
+ 	
+\section field01_s2 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle (proton, Ekin = 1 GeV)
+ which hits the
+ absorber perpendicular to the input face. The type of the particle
+ and its energy are set in the F01PrimaryGeneratorAction class, and can
+ be changed via the G4 build-in commands of G4ParticleGun class (see
+ the macros provided with this example).
+
+ A RUN is a set of events.
+ 	
+\section field01_s3 DETECTOR RESPONSE
+
+  The spatial distribution of charged particles transported in magnetic
+  field is envistigated.
+  A HIT is a record, event per event , of all the 
+  informations needed to simulate and analyse the detector response.
+
+  In this example a F01CalorHit is defined as a set of 2 informations:
+  - the total energy deposit in the absorber,
+  - the total tracklength of all charged particles in the absorber,  
+
+  Therefore  the absorber is declared
+  'sensitive detector' (SD), see F01CalorimeterSD, which means they can contribute to the hit.
+ 				
+\section field01_s4 PHYSICS DEMO
+ 
+ The particle's type and the physic processes which will be available
+ in this example are set in F01PhysicsList class.
+
+ The  messenger classes, F01PhysicsListMessenger, introduce interactive commands . Using these
+ commands the geometry of the detector, the data of the primary
+ particle, etc. can be changed.
+
+\section field01_s5 HOW TO START ?
+ 
+  - Execute field01 in 'batch' mode from macro file e.g.
+\verbatim
+% field01 field01.in
+\endverbatim
+		
+  - Execute field01 in 'interactive' mode with visualization e.g.
+\verbatim
+% field01
+....
+Idle> /control/execute vis.mac
+....
+\endverbatim
+
+*/
+

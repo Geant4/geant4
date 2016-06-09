@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_EMX.hh,v 1.1 2009-05-11 11:11:38 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,8 +39,8 @@
 #ifndef TQGSP_BERT_EMX_h
 #define TQGSP_BERT_EMX_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>

@@ -23,22 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01RunAction.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/include/RMC01RunAction.hh
+/// \brief Definition of the RMC01RunAction class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01RunAction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01RunAction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef RMC01RunAction_h
 #define RMC01RunAction_h 1
 
@@ -48,6 +54,9 @@
 
 class G4Run;
 class RMC01AnalysisManager;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class RMC01RunAction : public G4UserRunAction
 {
 public:
@@ -61,10 +70,10 @@ public:
   virtual void EndOfRunAction(const G4Run*);
 
 private:
-  RMC01AnalysisManager* theAnalysisManager;
+  RMC01AnalysisManager* fAnalysisManager;
 
 };
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

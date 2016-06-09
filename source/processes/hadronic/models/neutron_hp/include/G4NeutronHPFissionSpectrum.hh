@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionSpectrum.hh,v 1.11 2006-06-29 20:47:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPFissionSpectrum_h
 #define G4NeutronHPFissionSpectrum_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEDis.hh"
 
 // we will need a List of these .... one per term.
@@ -52,8 +53,8 @@ class G4NeutronHPFissionSpectrum : public G4VNeutronHPEDis
   
   inline void Init(std::ifstream & aDataFile)
   {
-    theFractionalProb.Init(aDataFile, eV);
-    theThetaDist.Init(aDataFile, eV);
+    theFractionalProb.Init(aDataFile, CLHEP::eV);
+    theThetaDist.Init(aDataFile, CLHEP::eV);
   }
   
   inline G4double GetFractionalProbability(G4double anEnergy)
@@ -67,8 +68,8 @@ class G4NeutronHPFissionSpectrum : public G4VNeutronHPEDis
     // here we need to sample Maxwells distribution, if 
     // need be.
     G4double result, cut;
-    G4double range =50*MeV;
-    G4double max = Maxwell((theta*eV)/2., theta);
+    G4double range =50*CLHEP::MeV;
+    G4double max = Maxwell((theta*CLHEP::eV)/2., theta);
     G4double value;
     do
     {
@@ -85,7 +86,7 @@ class G4NeutronHPFissionSpectrum : public G4VNeutronHPEDis
   // this is the function to sample from. 
   inline G4double Maxwell(G4double anEnergy, G4double theta)
   {
-    G4double result = std::sqrt(anEnergy/eV)*std::exp(-anEnergy/eV/theta);
+    G4double result = std::sqrt(anEnergy/CLHEP::eV)*std::exp(-anEnergy/CLHEP::eV/theta);
     return result;
   }
   

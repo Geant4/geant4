@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/src/MuNuclearBuilder.cc
+/// \brief Implementation of the MuNuclearBuilder class
 //
-// $Id: MuNuclearBuilder.cc,v 1.2 2006-06-29 16:49:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -37,7 +39,10 @@
 #include "G4MuonMinus.hh"
 
 #include "G4ProcessManager.hh"
-#include "G4MuNuclearInteraction.hh"
+//#include "G4MuNuclearInteraction.hh"
+//#include "G4PreCompoundModel.hh"
+#include "G4MuonNuclearProcess.hh"
+#include "G4MuonVDNuclearModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,6 +59,18 @@ MuNuclearBuilder::~MuNuclearBuilder()
 
 void MuNuclearBuilder::ConstructProcess()
 {
+  G4ProcessManager * pManager = 0;
+
+  G4MuonNuclearProcess* muNucProcess = new G4MuonNuclearProcess();
+  G4MuonVDNuclearModel* muNucModel = new G4MuonVDNuclearModel();
+  muNucProcess->RegisterMe(muNucModel);
+
+  pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+  pManager->AddDiscreteProcess(muNucProcess);
+
+  pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
+  pManager->AddDiscreteProcess(muNucProcess);
+  /*
   // Add standard EM Processes for Muon
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();    
@@ -63,6 +80,7 @@ void MuNuclearBuilder::ConstructProcess()
   pmanager = particle->GetProcessManager();    
 
   pmanager->AddProcess(new G4MuNuclearInteraction("muNucl"),-1,-1,4);
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

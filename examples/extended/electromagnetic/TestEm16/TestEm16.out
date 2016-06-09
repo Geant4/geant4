@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,16 +14,33 @@
 ***** Table : Nb of materials = 4 *****
 
  Material: Beryllium    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
-   --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole
+         --->  Isotope:     9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.410 cm   Imean:  81.000 eV 
-   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Vacuum    density:  0.000 kg/m3   RadL: 25050955080.963 km   Nucl.Int.Length: 55654089760.283 km   Imean:  82.000 eV   temperature: 296.15 K  pressure:   0.00 atm
-   --->  Element: Vacuum ( )   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Vacuum ( )   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:    14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:    15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 /run/verbose 2
@@ -56,6 +73,8 @@ CutLength : 1 km
 /run/physicsModified
 /process/inactivate conv
 /run/physicsModified
+/process/inactivate Rayl
+/run/physicsModified
 #
 /testem/det/setField 1.0 tesla
 #
@@ -69,24 +88,32 @@ CutLength : 1 km
 /run/beamOn 100
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma    SubType= 11
+      Lambda table from 100 eV  to 100 keV in 21 bins, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -100,11 +127,16 @@ eBrem:   for  e-    SubType= 3
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -118,18 +150,17 @@ eBrem:   for  e+    SubType= 3
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -151,6 +182,11 @@ muPairProd:   for  mu+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -208,7 +244,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-G4ANALYSIS_USE was not set, there will be no AIDA histos
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -221,27 +256,26 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.3s Real=0.3s Sys=0s
+  User=0.37s Real=0.37s Sys=0s
 Summary for synchrotron radiation :
-  Number of photons = 64554
-  Emean             = 20.24 +/- 0.1449 keV
-  E_rms             = 36.82 keV
-  Energy Max / Mean = 29.54
-  MeanFreePath      = 16.2 cm 
+  Number of photons = 65065
+  Emean             = 20.16 +/- 0.1452 keV
+  E_rms             = 37.05 keV
+  Energy Max / Mean = 32.53
+  MeanFreePath      = 16.08 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1554742231, 6856043
+ Current couple of seeds = 860561151, 265400964
 ----------------------------------------
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
-
+RunManager is deleted.

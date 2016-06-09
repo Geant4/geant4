@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.41 2010-12-15 07:41:15 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
@@ -44,14 +43,18 @@
 //		a number of G4double terms with G4int, with consequent casts.
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20121009  M. Kelsey -- Add some high-verbosity debugging output
+
+#include <cmath>
 
 #include "G4NonEquilibriumEvaporator.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
-#include <cmath>
 
 using namespace G4InuclSpecialFunctions;
 
@@ -96,7 +99,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4double EEXS = nuclei_target->getExitationEnergy();
   
   G4ExitonConfiguration config = nuclei_target->getExitonConfiguration();  
-  
+
   G4int QPP = config.protonQuasiParticles;
   G4int QNP = config.neutronQuasiParticles; 
   G4int QPH = config.protonHoles;
@@ -145,7 +148,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       if (QEX < std::sqrt(2.0 * EG)) { // ok
 	if (verboseLevel > 3)
 	  G4cout << " QEX " << QEX << " < sqrt(2*EG) " << std::sqrt(2.*EG)
-		 << G4endl;
+		 << " NEX " << NEX << G4endl;
 	
 	paraMakerTruncated(Z, parms);
 	const G4double& AK1 = parms.first;
@@ -159,7 +162,14 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	G4double EMN = EEXS - BN;
 	G4double EMP = EEXS - BP - VP * A / (A-1);
 	G4double ESP = 0.0;
-	
+
+	if (verboseLevel > 3) {
+	  G4cout << " AK1 " << AK1 << " CPA1 " << " VP " << VP
+		 << "\n bind(A,Z) " << DM1 << " dBind(N) " << BN 
+		 << " dBind(P) " << BP
+		 << "\n EMN " << EMN << " EMP " << EMP << G4endl;
+	}
+
 	if (EMN > eexs_cut) { // ok
 	  G4int icase = 0;
 	  
@@ -168,18 +178,24 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    G4double APH1 = APH + 0.5 * (QP + QH);
 	    ESP = EEXS / QEX;
 	    G4double MELE = MEL / ESP / (A*A*A);
-	    
+
+	    if (verboseLevel > 3)
+	      G4cout << " APH " << APH << " APH1 " << APH1 << " ESP " << ESP
+		     << G4endl;
+
 	    if (ESP > 15.0) {
 	      MELE *= std::sqrt(15.0 / ESP);
-	      
 	    } else if(ESP < 7.0) {
 	      MELE *= std::sqrt(ESP / 7.0);
-	      
 	      if (ESP < 2.0) MELE *= std::sqrt(ESP / 2.0);
 	    };    
-            
+
 	    G4double F1 = EG - APH;
 	    G4double F2 = EG - APH1;
+
+	    if (verboseLevel > 3)
+	      G4cout << " MELE " << MELE << " F1 " << F1 << " F2 " << F2
+		     << G4endl;
 	    
 	    if (F1 > 0.0 && F2 > 0.0) {
 	      G4double F = F2 / F1;
@@ -206,22 +222,28 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    G4double D5 = D[0] + D[1] + D[2];
 		    G4double SL = D5 * inuclRndm();
 		    G4double S1 = 0.;
-		    
+
+		    if (verboseLevel > 3)
+		      G4cout << " D5 " << D5 << " SL " << SL << G4endl;
+
 		    for (G4int i = 0; i < 3; i++) {
 		      S1 += D[i]; 	
 		      if (SL <= S1) {
 			icase = i;
 			break;
-		      };
-		    };
-		  }; 
-		};
-	      } else try_again = false;
-	    } else try_again = false;
-	  }
+		      }
+		    }
+
+		    if (verboseLevel > 3)
+		      G4cout << " got icase " << icase << G4endl;
+		  }				// if (try_again)
+		}				// if (NEX >= 2)
+	      } else try_again = false;		// if (D[0] > 0)
+	    } else try_again = false;		// if (F1>0 && F2>0)
+	  }					// if (NEX > 1)
 	  
 	  if (try_again) {
-	    if (icase > 0) { // N -> N - 1 with particle escape
+	    if (icase > 0) { 			// N -> N-1 with particle escape
 	      if (verboseLevel > 3)
 		G4cout << " try_again icase " << icase << G4endl;
 	      
@@ -234,21 +256,21 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      if (try_again) { 
 		
 		if (icase == 1) { // neutron escape
-		  
-		  if (QNP < 1) { 
-		    icase = 0;
-		    
-		  } else {
+		  if (verboseLevel > 3)
+		    G4cout << " trying neutron escape" << G4endl;
+
+		  if (QNP < 1) icase = 0;
+		  else {
 		    B = BN;
 		    V = 0.0;
 		    ptype = 2;		  
 		  };    
-		  
 		} else { // proton esape
-		  if (QPP < 1) { 
-		    icase = 0;
-		    
-		  } else {
+		  if (verboseLevel > 3)
+		    G4cout << " trying proton escape" << G4endl;
+
+		  if (QPP < 1) icase = 0;
+		  else {
 		    B = BP;
 		    V = VP;
 		    ptype = 1;
@@ -258,6 +280,10 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		};
 	        
 		if (try_again && icase != 0) {
+		  if (verboseLevel > 3)
+		    G4cout << " ptype " << ptype << " B " << B << " V " << V
+			   << G4endl;
+
 		  G4double EB = EEXS - B;
 		  G4double E = EB - V * A / (A-1);
 		  
@@ -334,17 +360,17 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      
 		      if (ptype == 2) QNP_new--;
 		      
-		if (verboseLevel > 3) {
-		  G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
-			 << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
-			 << " evaporate px " << mom.px() << " py " << mom.py()
-			 << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-		}
+		      if (verboseLevel > 3) {
+			G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
+			       << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
+			       << " evaporate px " << mom.px() << " py " << mom.py()
+			       << " pz " << mom.pz() << " E " << mom.e() << G4endl;
+		      }
 		
 		      // New excitation energy depends on residual nuclear state
 		      G4double mass_new = G4InuclNuclei::getNucleiMass(A_new, Z_new);
 		      
-		      G4double EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
+		      EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
 		      if (EEXS_new < 0.) continue;	// Sanity check for new nucleus
 		      
 		      if (verboseLevel > 3)
@@ -381,6 +407,8 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    }		// if (icase > 0)
 	    
 	    if (icase == 0 && try_again) { // N -> N + 2 
+	      if (verboseLevel > 3) G4cout << " adding excitons" << G4endl;
+
 	      G4double TNN = 1.6 * EFN + ESP;
 	      G4double TNP = 1.6 * EFP + ESP;
 	      G4double XNUN = 1.0 / (1.6 + ESP / EFN);

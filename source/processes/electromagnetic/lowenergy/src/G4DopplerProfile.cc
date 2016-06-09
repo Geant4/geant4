@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DopplerProfile.cc,v 1.3 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

@@ -56,6 +56,9 @@ public:
 
   virtual G4String GetName() const { return "NN Elastic Collision"; }
   
+private:
+  G4CollisionNNElastic(const G4CollisionNNElastic &);
+  G4CollisionNNElastic & operator= (const G4CollisionNNElastic &);
 
 protected:
 

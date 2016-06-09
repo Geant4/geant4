@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLClusterDecay.hh
  * \brief Static class for carrying out cluster decays
  *
- * Created on: 6th July 2011
- *     Author: Davide Mancusi
+ * \date 6th July 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLCLUSTERDECAY_HH
@@ -88,6 +88,20 @@ namespace G4INCL {
 
     /// \brief Carries out three-body decays
     static void threeBodyDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts);
+
+    /** \brief Disassembles unbound nuclei using a simple phase-space model
+     *
+     * The decay products are assumed to uniformly populate the momentum space
+     * (the "phase-space" naming is a long-standing but misleading convention).
+     * The generation of the final state is done by rejection, using the
+     * Raubold-Lynch method. Parts of our implementation were "inspired" by
+     * ROOT's TGenPhaseSpace class, which in turn is a translation of CERNLIB's
+     * historical GENBOD routine [CERN report 68-15 (1968)]. The ROOT
+     * implementation is documented at the following URL:
+     *
+     * http://root.cern.ch/root/html/TGenPhaseSpace.html#TGenPhaseSpace
+     */
+    static void phaseSpaceDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts);
 
   };
 

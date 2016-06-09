@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.14 2008-10-24 08:22:20 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 inline 
@@ -126,7 +125,7 @@ inline
   
 inline
  G4double G4StepPoint::GetBeta() const
- {  return fVelocity/c_light; }
+ {  return fVelocity/CLHEP::c_light; }
     // Velocity of the track in unit of c(light velocity)
 
 inline

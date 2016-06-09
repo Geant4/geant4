@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Line.icc,v 1.10 2008-03-13 14:18:57 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -131,11 +130,11 @@ void G4Line::IntersectRay2D(const G4Ray& ray,
 inline
 G4int G4Line::IntersectRay2D(const G4Ray& ray)
 {
-  const G4Point3D& s= ray.GetStart();
+  const G4Point3D& st= ray.GetStart();
   const G4Vector3D& d= ray.GetDir();
 
-  G4double num1= (pnt.x()-s.x())*d.y()-(pnt.y()-s.y())*d.x();
-  G4double num2= (pnt.x()-s.x())*dir.y()-(pnt.y()-s.y())*dir.x();
+  G4double num1= (pnt.x()-st.x())*d.y()-(pnt.y()-st.y())*d.x();
+  G4double num2= (pnt.x()-st.x())*dir.y()-(pnt.y()-st.y())*dir.x();
   G4double denom= d.x()*dir.y()-d.y()*dir.x();
   
   G4int nbinter = 0;

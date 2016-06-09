@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2007-01-18 10:24:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,26 +36,29 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(HistoManager* histo)
-:histoManager(histo)
+RunAction::RunAction()
 {
   n_gam_sync = 0;
   e_gam_sync = 0;
   e_gam_sync2 = 0;
   e_gam_sync_max =0;
   lam_gam_sync = 0;
+  fHistoManager = new HistoManager();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+  delete fHistoManager;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,11 +67,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
-
-  //book histograms      
-  histoManager->book();
+     
+  //histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,8 +101,11 @@ void RunAction::EndOfRunAction(const G4Run*)
   CLHEP::HepRandom::showEngineStatus();
 
   //save histograms      
-  histoManager->save();
-
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

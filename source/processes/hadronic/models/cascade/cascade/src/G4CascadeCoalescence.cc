@@ -40,8 +40,10 @@
 //	     "ClusterCandidate"
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20110927  M. Kelsey -- Bug fix; missing <iterator> header, strtof -> strtod
+// 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
 #include "G4CascadeCoalescence.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -53,7 +55,6 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
-#include <stdlib.h>
 
 
 // Short names for lists and iterators for convenience
@@ -63,14 +64,11 @@ typedef hadronList::const_iterator hadronIter;
 
 // Maximum relative momentum (in Bertini GeV) for nucleons in each cluster type
 
-const G4double G4CascadeCoalescence::dpMaxDoublet = 
-  getenv("DPMAX_2CLUSTER") ? strtod(getenv("DPMAX_2CLUSTER"),NULL) : 0.090;
+const G4double G4CascadeCoalescence::dpMaxDoublet = G4CascadeParameters::dpMaxDoublet();
 
-const G4double G4CascadeCoalescence::dpMaxTriplet = 
-  getenv("DPMAX_3CLUSTER") ? strtod(getenv("DPMAX_3CLUSTER"),NULL) : 0.108;
+const G4double G4CascadeCoalescence::dpMaxTriplet = G4CascadeParameters::dpMaxTriplet();
 
-const G4double G4CascadeCoalescence::dpMaxAlpha = 
-  getenv("DPMAX_4CLUSTER") ? strtod(getenv("DPMAX_4CLUSTER"),NULL) : 0.115;
+const G4double G4CascadeCoalescence::dpMaxAlpha = G4CascadeParameters::dpMaxAlpha();
 
 
 // Constructor and Destructor
@@ -90,11 +88,13 @@ void G4CascadeCoalescence::FindClusters(G4CollisionOutput& finalState) {
   thisFinalState = &finalState;		// Save pointers for use in processing
   thisHadrons = &finalState.getOutgoingParticles();
 
+  if (verboseLevel>1) thisFinalState->printCollisionOutput();	// Before
+
   selectCandidates();
   createNuclei();
   removeNucleons();
 
-  if (verboseLevel>1) thisFinalState->printCollisionOutput();
+  if (verboseLevel>1) thisFinalState->printCollisionOutput();	// After
 }
 
 
@@ -104,6 +104,7 @@ void G4CascadeCoalescence::selectCandidates() {
   if (verboseLevel)
     G4cout << " >>> G4CascadeCoalescence::selectCandidates()" << G4endl;
 
+  triedClusters.clear();
   allClusters.clear();
   usedNucleons.clear();
 
@@ -118,7 +119,9 @@ void G4CascadeCoalescence::selectCandidates() {
 	  if (!getHadron(idx4).nucleon()) continue;
 	  tryClusters(idx1, idx2, idx3, idx4);
 	}
+	tryClusters(idx1, idx2, idx3);		// If idx4 loop was empty
       }
+      tryClusters(idx1, idx2);			// If idx3 loop was empty
     }
   }
 
@@ -132,8 +135,8 @@ void G4CascadeCoalescence::selectCandidates() {
 
 // Do combinatorics of current set of four, skip nucleons already used
 
-void 
-G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2, size_t idx3, size_t idx4) {
+void G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2,
+				       size_t idx3, size_t idx4) {
   fillCluster(idx1,idx2,idx3,idx4);
   if (clusterTried(thisCluster)) return;
 
@@ -152,17 +155,13 @@ G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2, size_t idx3, size_t 
       usedNucleons.insert(idx3);
       usedNucleons.insert(idx4);
       return;
-    } else {			// No good alpha, look for triplets
-      tryClusters(idx1,idx2,idx3);
-      tryClusters(idx1,idx2,idx4);
-      tryClusters(idx1,idx3,idx4);
-      tryClusters(idx2,idx3,idx4);
     }
   }
-  if (nucleonUsed(idx1)) tryClusters(idx2,idx3,idx4);
-  if (nucleonUsed(idx2)) tryClusters(idx1,idx3,idx4);
-  if (nucleonUsed(idx3)) tryClusters(idx1,idx2,idx4);
-  if (nucleonUsed(idx4)) tryClusters(idx1,idx2,idx3);
+
+  tryClusters(idx2,idx3,idx4);		// Try constituent subclusters
+  tryClusters(idx1,idx3,idx4);
+  tryClusters(idx1,idx2,idx4);
+  tryClusters(idx1,idx2,idx3);
 }
 
 void 
@@ -184,19 +183,18 @@ G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2, size_t idx3) {
       usedNucleons.insert(idx2);
       usedNucleons.insert(idx3);
       return;
-    } else {			// No good triplet, look for deuterons
-      tryClusters(idx1,idx2);
-      tryClusters(idx1,idx3);
-      tryClusters(idx2,idx3);
     }
   }
-  if (nucleonUsed(idx1)) tryClusters(idx2,idx3);
-  if (nucleonUsed(idx2)) tryClusters(idx1,idx3);
-  if (nucleonUsed(idx3)) tryClusters(idx1,idx2);
+
+  tryClusters(idx2,idx3);		// Try constituent subclusters
+  tryClusters(idx1,idx3);
+  tryClusters(idx1,idx2);
 }
 
 void 
 G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2) {
+  if (nucleonUsed(idx1) || nucleonUsed(idx2)) return;
+
   fillCluster(idx1,idx2);
   if (clusterTried(thisCluster)) return;
 
@@ -205,8 +203,6 @@ G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2) {
 	   << G4endl;
 
   triedClusters.insert(clusterHash(thisCluster));  // Remember current attempt
-
-  if (nucleonUsed(idx1) || nucleonUsed(idx2)) return;
 
   fillCluster(idx1,idx2);
   if (goodCluster(thisCluster)) {
@@ -268,7 +264,7 @@ G4CascadeCoalescence::getClusterMomentum(const ClusterCandidate& aCluster) const
 // Determine magnitude of largest momentum in CM frame
 
 G4double G4CascadeCoalescence::maxDeltaP(const ClusterCandidate& aCluster) const {
-  if (verboseLevel>2) reportArgs("maxDeltaP", aCluster);
+  if (verboseLevel>1) reportArgs("maxDeltaP", aCluster);
 
   G4LorentzVector pcms = getClusterMomentum(aCluster);
   G4ThreeVector boost = pcms.boostVector();
@@ -276,10 +272,12 @@ G4double G4CascadeCoalescence::maxDeltaP(const ClusterCandidate& aCluster) const
   G4double dp, maxDP = -1.;
   for (size_t i=0; i<aCluster.size(); i++) {
     const G4InuclElementaryParticle& nucl = getHadron(aCluster[i]);
+
+    // NOTE:  getMomentum() returns by value, event kinematics are not changed
     if ((dp = nucl.getMomentum().boost(-boost).rho()) > maxDP) maxDP = dp;
   }
 
-  if (verboseLevel>2) G4cout << " maxDP = " << maxDP << G4endl;
+  if (verboseLevel>1) G4cout << " maxDP = " << maxDP << G4endl;
 
   return maxDP;
 }
@@ -350,7 +348,7 @@ bool G4CascadeCoalescence::allNucleons(const ClusterCandidate& clus) const {
 // Determine if collection of nucleons can form a light ion
 
 bool G4CascadeCoalescence::goodCluster(const ClusterCandidate& clus) const {
-  if (verboseLevel>2) reportArgs("goodCluster",clus);
+  if (verboseLevel>2) reportArgs("goodCluster?",clus);
 
   if (!allNucleons(clus)) return false;
 
@@ -404,11 +402,13 @@ void G4CascadeCoalescence::reportArgs(const G4String& name,
 				      const ClusterCandidate& aCluster) const {
   G4cout << " >>> G4CascadeCoalescence::" << name << " ";
   std::copy(aCluster.begin(), aCluster.end(),
-	    std::ostream_iterator<int>(G4cout, " "));
+	    std::ostream_iterator<size_t>(G4cout, " "));
   G4cout << G4endl;
 
-  for (size_t i=0; i<aCluster.size(); i++)
-    G4cout << getHadron(aCluster[i]) << G4endl;
+  if (verboseLevel>2) {
+    for (size_t i=0; i<aCluster.size(); i++)
+      G4cout << getHadron(aCluster[i]) << G4endl;
+  }
 }
 
 void G4CascadeCoalescence::reportResult(const G4String& name,

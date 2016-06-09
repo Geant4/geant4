@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/include/ExGflashPrimaryGeneratorAction.hh
+/// \brief Definition of the ExGflashPrimaryGeneratorAction class
+//
 #ifndef ExGflashPrimaryGeneratorAction_h
 #define ExGflashPrimaryGeneratorAction_h
 
@@ -36,13 +39,13 @@ class G4Event;
 
 class ExGflashPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
-public:
-	ExGflashPrimaryGeneratorAction();
-	~ExGflashPrimaryGeneratorAction();
-	void GeneratePrimaries(G4Event* anEvent);
+  public:
+    ExGflashPrimaryGeneratorAction();
+    ~ExGflashPrimaryGeneratorAction();
+    void GeneratePrimaries(G4Event* anEvent);
 
-private:
-  G4GeneralParticleSource	* particleGun;
+  private:
+    G4GeneralParticleSource    * particleGun;
 };
 
 #endif

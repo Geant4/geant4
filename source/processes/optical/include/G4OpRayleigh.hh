@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.hh,v 1.9 2006-06-29 21:08:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -77,15 +76,7 @@
 class G4OpRayleigh : public G4VDiscreteProcess 
 {
 
-private:
- 
-        //////////////
-        // Operators
-        //////////////
-
-        // G4OpRayleigh& operator=(const G4OpRayleigh &right);
-
-public: // Without description
+public:
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -93,16 +84,23 @@ public: // Without description
  
         G4OpRayleigh(const G4String& processName = "OpRayleigh",
                               G4ProcessType type = fOptical);
-
-        // G4OpRayleigh(const G4OpRayleigh &right);
-
 	~G4OpRayleigh();
+
+private:
+
+        G4OpRayleigh(const G4OpRayleigh &right);
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4OpRayleigh& operator=(const G4OpRayleigh &right);
+
+public:
 
         ////////////
         // Methods
         ////////////
-
-public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable' only for an optical photon.

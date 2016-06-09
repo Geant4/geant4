@@ -15,6 +15,338 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-11-2012, A.Ribon                     (phys-lists-V09-05-81)
+- Included FTFP_BERT_HP in G4PhysListFactory
+
+23-11-2012, A.Ribon                     (phys-lists-V09-05-80)
+- Created the new physics list FTFP_BERT_HP
+
+21-11-2012, B.Morgan        (phys-lists-V09-05-79)
+- lists/sources.cmake - added G4GenericPhysicsList.icc file to
+    header list, fixing issue reported by validate_sources target.
+
+20-11-2012, V.Ivanchenko		(phys-lists-V09-05-78)
+- G4IonPhysics - added old constructor to provide backward
+    compatibility with 9.5 (CMS request) 
+
+06-11-2012, V.Ivanchenko		(phys-lists-V09-05-77)
+- G4EmStandardPhysics_option4 - fixed typo - 2 ionisation for e+-
+
+02-11-2012, V.Ivanchenko		(phys-lists-V09-05-76)
+- G4EmLivermorePolarizedPhysics - fixed extra error  
+
+02-11-2012, V.Ivanchenko		(phys-lists-V09-05-75)
+- G4EmLivermorePolarizedPhysics - fixed typo of previous tag
+
+02-11-2012, V.Ivanchenko		(phys-lists-V09-05-74)
+- In all EM builders use WentzelVI multiple scattering model
+    for e+- above 100 MeV; build transport mean free path for
+    He3 and He4, do not build for all other ions and heavy hadrons 
+
+01-11-2012, A.Ribon			(phys-lists-V09-05-73)
+- Added proper treatment of light anti-ions in G4HadronQElasticPhysics.
+
+01-11-2012, W.Pokorski			(phys-lists-V09-05-72)
+- Instrumenting EM constructors to register factories
+
+01-11-2012, A.Ribon			(phys-lists-V09-05-71)
+- Added missing fission model in FTFP_BERT_TRV.
+  Consistent treatment of _EMV, _EMX, and _EMY physics lists.
+
+01-11-2012, W.Pokorski			(phys-lists-V09-05-70)
+- Instrumenting hadronic constructors to register factories
+
+31-10-2012, A.Ribon			(phys-lists-V09-05-69)
+- Various small changes.
+
+30-10-2012, W.Pokorski			(phys-lists-V09-05-68)
+- moving Shielding to new XS
+
+30-10-2012, W.Pokorski			(phys-lists-V09-05-67)
+- moving QBBC, etc, to new XS 
+
+29-10-2012, W.Pokorski			(phys-lists-V09-05-66)
+- moving QGSP_BERT to new XS 
+
+26-10-2012, W.Pokorski			(phys-lists-V09-05-65)
+- second try with the new ion XS
+
+25-10-2012, W.Pokorski			(phys-lists-V09-05-64)
+- moving FTFP_BERT to use the agreed set of cross-sections
+
+24-10-2012, W.Pokorski			(phys-lists-V09-05-63)
+- moving FTFP_BERT to use BGGNucleonInelastic
+
+20-10-2012, Vladimir Ivanchenko        (phys-lists-V09-05-62)
+- EM builders - substitute obsolete method SetModel() by SetEmModel()
+- G4VHadronPhysics - include name of the hadron in the name of the process
+- G4HadronInelasticQBBC - reuse G4PreCompoundModel if it is already 
+    instantiated
+
+19-10-2012, A. Ribon                    (phys-lists-V09-05-61)
+- Created 4 new physics lists: QGSP_BERT_95, QGSP_BERT_95XS,
+  QGSP_FTFP_BERT_95, QGSP_FTFP_BERT_95XS.
+
+18-10-2012, A. Ribon			(phys-lists-V09-05-60)
+- Replaced G4IonBinaryCascadePhysics with G4IonPhysics in some
+  physics lists. Replaced also G4HadronicDeprecate with G4WarnPLStatus
+  for physics lists.
+
+17-10-2012, M. Karamitros               (phys-lists-V09-05-59)
+- G4EmDNAPhysicsChemistry :
+    Rename G4DNADiffusionControlledModel to G4DNASmoluchowskiReactionModel
+
+17-10-2012, G. Cosmo                    (phys-lists-V09-05-58)
+- Fixed typo in QGSP.hh header.
+
+17-10-2012, A. Ribon			(phys-lists-V09-05-57)
+- Added nuclear capture at rest of anti-nuclei with Fritiof/Precompound.
+
+16-10-2012, A. Ribon			(phys-lists-V09-05-56)
+- Changed default physics for stopping, lepto-nuclear, and ion.
+  Only LHEP- and CHIPS-based physics lists keep using exactly
+  the same physics as before, whereas all other physics lists
+  migrate to the new default.
+  Deprecated the physics lists that will be removed in G4 10.
+
+15-10-2012, W.Pokorski			(phys-lists-V09-05-55)
+- reverting the changes in FTFP_BERT (not using factories for the moment)
+
+12-10-2012, W.Pokorski			(phys-lists-V09-05-54)
+- another fix for GNUbuild (dependencies): moving registry to builders
+
+12-10-2012, W.Pokorski			(phys-lists-V09-05-53)
+- fixing the static builds and a bug introduced in the previous tag
+
+12-10-2012, W.Pokorski			(phys-lists-V09-05-52)
+- moving the templated factory class to builders directory to fix the
+dependencies problem
+
+11-10-2012, W.Pokorski			(phys-lists-V09-05-51)
+- adding the factory machinery, adding the registry, implementing the
+generic physics list, modifying FTFP_BERT to use the registry
+
+04-10-2012, M. Kelsey			(phys-lists-V09-05-50)
+- After discussion with J.Yarba and K.Genser, undo migration of
+  G4MuonMinusCapture from V09-05-46: leave new version in
+  G4bertiniAndFritiofStoppingPhysics, but nowhere else.  Keep migration to
+  forward declarations.
+
+04-10-2012, G.Cosmo			(phys-lists-V09-05-49)
+- Replaced "photonlepton_nuclear" module with "lepto_nuclear" in CMake
+  and GNUmake build scripts.
+
+28-09-2012, V.Ivantchenko		(phys-lists-V09-05-48)
+- G4EmStandardPhysics_option4 - new builder combining standard
+    and low-energy as "the best combination"
+- G4PhysListFactory - added EM opt4
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics - fixed variable 
+    shadowing and cleanup
+
+27-09-2012, G.Cosmo			(phys-lists-V09-05-47)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+21-09-2012, M.Kelsey			(phys-lists-V09-05-46)
+- Replace G4MuonMinusCaptureAtRest with G4MuonMinusCapture everywhere:
+  G4BertiniAndFritiofStoppingPhysics, G4QStoppingPhysics
+  G4LHEPStoppingPhysics, G4StoppingHadronBuilder, LBE.icc
+  Also, move #includes from .hh to .cc above to reduce compile dependencies.
+
+17-09-2012, S.Incerti			(phys-lists-V09-05-45)
+- Created physics builder G4EmLowEPPhysics to take into account renamed
+  Monash U. Compton model, and removed G4EmLivermoreMUPhysics builder.
+
+23-08-2012, D.Mancusi                  (phys-lists-V09-05-44)
+- Fixes Coverity warning in INCL++ ion builder.
+
+27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-43)
+- G4EmPenelopePhysics, G4EmStandardPhysics_option3,
+  G4EmLivermorePhysics,  G4EmPenelopePolarizedPhysics -
+    added upper limit 1 MeV for nuclear stopping for CPU performance
+
+27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-42)
+- Substitute G4WHadronElasticPhysics by G4HadronElasticPhysics in 
+    all elastic builders
+- G4EmStandardPhysics, G4EmStandardPhysics_option1 - use WentzelVI 
+    for pions and kaons
+- G4EmStandardPhysics_option2 - add Rayleigh scattering
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics, 
+  G4EmPenelopePhysics - added nuclear stopping for protons and
+    anti_protons, romove upper energy limit for Rayleigh
+
+27-07-2012, Alberto Ribon              (phys-lists-V09-05-41)
+- Replaced (removed) G4QandFTFStoppingPhysics with the new class
+  G4BertiniAndFritiofStoppingPhysics in FTFP_BERT and FTFP_BERT_TRV.
+
+26-07-2012, Alberto Ribon              (phys-lists-V09-05-40)
+- Coverity fixes in HadronPhysicsQGSP_BERT_HP, adding some
+  missing initialization.
+
+16-07-2012, Gunter Folger              (phys-lists-V09-05-39)
+- coverity fixes in G4ChipsKaonBuilder.hh, adding private copy
+   and assignment operator.
+
+13-07-2012, M.Karamitros               (phys-lists-V09-05-38)
+- Update G4EmDNAPhysicsChemistry : molecules' names changed
+
+09-07-2012, A.Ribon                    (phys-lists-V09-05-37)
+- Fixed a few forgotten changes to remove INCL builders.
+
+09-07-2012, A.Ribon                    (phys-lists-V09-05-36)
+- Removed INCL builders.
+
+09-07-2012, D.Mancusi                  (phys-lists-V09-05-35)
+- Fixes Coverity warnings in INCL++ ion builder.
+
+06-07-2012, A.Ribon                    (phys-lists-V09-05-34)
+- Fixed warnings of shadowed variables.
+
+06-07-2012, A.Ribon                    (phys-lists-V09-05-33)
+- Removed obsolete physics list QGSP_INCL_ABLA 
+  (leaving only QGSP_INCLXX).
+
+26-06-2012, A.Ribon                    (phys-lists-V09-05-32)
+- For nuclear capture at rest in both FTFP_BERT and FTFP_BERT_TRV,
+  use Bertini for pi-, K-, and Sigma-; FTF/Preco for anti-proton
+  and anti-Sigma+; removed CHIPS for Xi- and Omega-.
+
+25-06-2012, A.Ribon                    (phys-lists-V09-05-31)
+- Fixed incorrect class used for Bertini gamma-nuclear.
+
+22-06-2012, W.Pokorski                 (phys-lists-V09-05-30)
+- fixing incorrect classes used for gamma- and electro-nuclear
+
+20-06-2012, P.Gumplinger               (phys-lists-V09-05-29)
+- remove everything to do with SetModel in G4OpBoundaryProcess
+  to cowork with op-V09-05-04
+
+12-06-2012, W.Pokorski                 (phys-lists-V09-05-28)
+- Migrating Elastic and DElastic builders to use factory
+mechanism for Chips cross sections
+
+11-06-2012, W.Pokorski                 (phys-lists-V09-05-27)
+- Migrating FTFP_BERT and FTFP_BERT_TRV to use factory
+mechanism for Chips cross sections
+
+06-05-2012, V.Ivanchenko               (phys-lists-V09-05-26)
+- Return back EM builders to  phys-lists-V09-05-23, because no
+  visible effect on CPU was observed
+
+05-05-2012, V.Ivanchenko               (phys-lists-V09-05-25)
+- Build transport cross section tables for d and t in standard opt0 
+
+05-05-2012, V.Ivanchenko               (phys-lists-V09-05-24)
+- Build transport cross section tables for He3 and He4 in standard opt0 
+
+03-06-2012, Witek Pokorski            (phys-lists-V09-05-23)
+- using the new functionality of cross sections registry allowing
+to share the cross sections data sets
+
+30-05-2012, Witek Pokorski            (phys-lists-V09-05-22)
+- created new builders using Bertini gamma nuclear
+- migrated FTFP_BERT to use the new builders
+
+25-05-2012, Gunter Folger              (phys-lists-V09-05-21)
+- improve creation of cascade to avoid one instantiation of Preco in 
+   G4FTFP{Proton,Neutron,PiK,AntiBarion}Builder.cc
+
+24-05-2012, D. Mancusi                 (phys-lists-V09-05-20)
+- Updates the INCLXX builders for compatibility with the latest INCL++ tag.
+- Requires hadr-inclxx-V09-05-13.
+
+22-05-2012, D.H. Wright                (phys-lists-V09-05-19)
+- in G4EmExtraPhysics.hh, .cc, change name of class G4VDMuonNuclearModel
+  to G4MuonVDNuclearModel.  Requires tag hadr-munuclear-V09-05-03.
+ 
+21-05-2012, M.Kelsey
+- G4QandFTFStoppingPhysics: Use general G4HadronicAbsorptionBertini.
+  Requires use of hadronic/stopping MHK-20120521.
+
+18-05-2012, V.Ivanchenko               (phys-lists-V09-05-18)
+- In all EM builders modified method of instantiation of 
+  multiple scattering: the same process instance is used by mu+ and mu-,
+  for pi+,pi-,K+,K-,proton and anti_protons separate processes which
+  build internal transport x-section tables, for all others the same 
+  process instance is used and no table is built; this should reduce
+  total memory for tables and initialisation time;
+- In standard builders Opt0, Opt1, Opt2 WentzelVI multiple 
+  scattering and G4eCoulombScattering models are applied for 
+  e+ and e- above 100 MeV , below G4UrbanMscModel95 is used
+  
+14-05-2012, W. Pokorski                (phys-lists-V09-05-17)
+- moving FTFP_BERT_TRV to new Chips XS
+
+11-05-2012, W. Pokorski                (phys-lists-V09-05-16)
+- fixing compilation error in HadronPhysicsFTFP_BERT
+
+11-05-2012, W. Pokorski                (phys-lists-V09-05-15)
+- moving to the new XS extracted from CHIPS
+
+11-05-2012, D. Mancusi                 (phys-lists-V09-05-14)
+- Added builders and updated QGSP_INCLXX physics list to treat
+  light-ion-induced collisions with INCL++.
+
+04-05-2012, A. Dotti		       (phys-lists-V09-05-13)
+- Co-working tag with emdna-V09-05-09
+
+04-05-2012, A. Dotti		       (phys-lists-V09-05-12)
+- Coverity fixes
+
+02-05-2012, G.Folger                   ( ..trunk.. )
+- revert changes by Mikhail ( revs: r58248, r58249,r58250 )
+
+28-04-2012, M.Kosov                    (phys-lists-V09-05-11)
+- chips is moved from models/chiral_inv_phase_space to hadronic/chips
+
+25-04-2012, M.Kosov                    (phys-lists-V09-05-10)
+- sources.cmake files ure updated in lists & builders for CHIPS_HP
+
+25-04-2012, T.Koi
+- HadronPhysicsShielding: fixed problem in neutron cross-section for
+  inelastic reaction below 20MeV.
+
+23-04-2012, M.Kosov                    (phys-lists-V09-05-09)
+- Added new CHIPS_HP physics list
+
+06-04-2012, S.Incerti                  (phys-lists-V09-05-08)
+- Added new Physics constructor G4EmLivermoreMUPhysics
+
+05-04-2012, A.Ribon                    (phys-lists-V09-05-07)
+- In G4QandFTFStoppingPhysics the annihilation at rest of anti_sigma+
+  are now handled by FTF.
+
+02-04-2012, G.Cosmo                    (phys-lists-V09-05-06)
+- Corrected GNUMakefile in "lists" for spurious inclusion path.
+
+19-03-2012, V.Ivanchenko               (phys-lists-V09-05-05)
+- previous tag was rejected by mistake
+
+15-03-2012, V.Ivanchenko               (phys-lists-V09-05-04)
+- In all EM builders use the same bremsstrahlung and e+e- pair 
+    production processes to mu+/mu-, pi+/pi-, K+K-, proton/anti_proton;
+    expected reduction of memory for physics tables and initialisation 
+    time for EM physics
+
+01-03-2012, V.Ivanchenko               (phys-lists-V09-05-03)
+- Fixed Coverity warnings in G4HadronInelasticQBBC, all elastic builders, 
+  all ion builders, G4NeutronTrackingCut, G4StepLimiterBuilder;
+- G4HadronInelasticQLHEP - remove obsolete
+
+22-02-2012, V.Ivanchenko               (phys-lists-V09-05-02)
+- G4IonBinaryCascadePhysics, G4IonFTFPBinaryCascadePhysics - Tripathi
+    cross sections are commented out, only Shen and Ion/proton are used
+
+23-01-2012 M.Karamitros                (phys-lists-V09-05-01)
+- change G4WaterExcitation -> G4DNAWaterExcitation in G4EmDNAPhysicsChemistry
+
+- G4FTFBuilder, G4QandFTFStoppingPhysics - reduced number of deleted 
+    objects to avoid double deletion
+
+18-01-2012, V.Ivanchenko               (phys-lists-V09-05-00)
+- Do not delete G4ExcitationHandler in hadronic builders to avoid
+  double deletion
+
 18-11-2011, V.Ivanchenko               (phys-lists-V09-04-74)
 - fix in all EM builders - return back old method of definition of
   high energy model per particle type, new method provoke 

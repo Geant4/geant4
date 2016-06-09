@@ -1,0 +1,34 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+        
+        Configuration files for Examples Doxygen documentation
+     ----------------------------------------------------------
+                    
+                    
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26/11/12 I.Hrivnacova (doxygen-V09-05-02)
+- Updated Doxyfile for removing .README.HowToRunTestEm1
+
+26/11/12 I.Hrivnacova (doxygen-V09-05-01)
+- Completed extended examples
+
+27/06/12 I.Hrivnacova (doxygen-V09-05-00)
+- First tag on Doxygen configuration files which now included
+  extended examples in the generated documentation.
+  See README file how to process to generate complete examples
+  (basic & extended) documentation.
+
+
+

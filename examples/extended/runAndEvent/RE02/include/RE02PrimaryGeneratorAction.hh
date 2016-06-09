@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02PrimaryGeneratorAction.hh
+/// \brief Definition of the RE02PrimaryGeneratorAction class
 //
-// $Id: RE02PrimaryGeneratorAction.hh,v 1.3 2006-11-18 01:37:23 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
  
 #ifndef RE02PrimaryGeneratorAction_h
@@ -39,6 +41,13 @@ class G4ParticleGun;
 class G4Event;
 
 //
+/// User primary particle generator class
+///
+/// - void GeneratePrimaries(G4Event*)
+///     an incident particle is proton with 150 MeV energy at the position 
+///     (x,y,-100 cm) toward the (0,0,1) direction. The x and y positions are
+///     uniformly varied from -5 mm to 5 mm, respectively.
+//
 class RE02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
@@ -46,11 +55,11 @@ class RE02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~RE02PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4double fsigmaPosition; // Initial beam spot size in x-y plane.
-    G4ParticleGun* particleGun;
+    G4double fSigmaPosition; // Initial beam spot size in x-y plane.
+    G4ParticleGun* fParticleGun;
 };
 
 //

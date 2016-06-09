@@ -36,8 +36,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -60,7 +58,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_diff
         G4FTFModel.hh
         G4FTFParameters.hh
         G4FTFParticipants.hh
-        G4ComponentCHIPShadronNuclearXS.hh
     SOURCES
         G4DiffractiveExcitation.cc
         G4DiffractiveHHScatterer.cc
@@ -70,7 +67,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_diff
         G4FTFModel.cc
         G4FTFParameters.cc
         G4FTFParticipants.cc
-        G4ComponentCHIPShadronNuclearXS.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

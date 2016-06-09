@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.16 2009-11-06 06:16:07 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4UIcommandTree.hh"
@@ -159,7 +158,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
 // L. Garnier 01.28.08 This function has not a good name. In fact, it try
 // to match a command name, not a path. It should be rename as FindCommandName
 
-G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
+G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath) const
 {
   G4String remainingPath = commandPath;
   if( remainingPath.index( pathName ) == std::string::npos )
@@ -197,7 +196,7 @@ G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
  * @commandPath : command or path to match
  * @return the commandTree found or NULL if not
  */
-G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
+G4UIcommandTree* G4UIcommandTree::FindCommandTree(const char* commandPath)
 {
   G4String remainingPath = commandPath;
   if( remainingPath.index( pathName ) == std::string::npos )
@@ -225,23 +224,23 @@ G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
   return NULL;
 }
 
-G4String G4UIcommandTree::CompleteCommandPath(const G4String aCommandPath)
+G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
 {
-  G4String pathName = aCommandPath;
+  G4String pName = aCommandPath;
   G4String remainingPath = aCommandPath;
   G4String empty = "";
   G4String matchingPath = empty;
 
   // find the tree
-  G4int jpre= pathName.last('/');
-  if(jpre != G4int(G4String::npos)) pathName.remove(jpre+1);
-  G4UIcommandTree* aTree = FindCommandTree(pathName);
+  G4int jpre= pName.last('/');
+  if(jpre != G4int(G4String::npos)) pName.remove(jpre+1);
+  G4UIcommandTree* aTree = FindCommandTree(pName);
 
   if (!aTree) {
     return empty;
   }
   
-  if( pathName.index( pathName ) == std::string::npos ) return empty;
+  if( pName.index( pName ) == std::string::npos ) return empty;
 
   std::vector<G4String> paths;
 
@@ -326,7 +325,7 @@ G4String G4UIcommandTree::GetFirstMatchedString(const G4String& str1,
   return strMatched;
 }
 
-void G4UIcommandTree::ListCurrent()
+void G4UIcommandTree::ListCurrent() const
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
@@ -346,7 +345,7 @@ void G4UIcommandTree::ListCurrent()
   }
 }
 
-void G4UIcommandTree::ListCurrentWithNum()
+void G4UIcommandTree::ListCurrentWithNum() const
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
@@ -369,7 +368,7 @@ void G4UIcommandTree::ListCurrentWithNum()
   }
 }
 
-void G4UIcommandTree::List()
+void G4UIcommandTree::List() const
 {
   ListCurrent();
   G4int n_commandEntry = command.size();

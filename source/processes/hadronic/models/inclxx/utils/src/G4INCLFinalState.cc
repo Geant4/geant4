@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -70,40 +70,53 @@ namespace G4INCL {
     created.push_back(p);
   }
 
-  ParticleList FinalState::getModifiedParticles() const
+  void FinalState::addEnteringParticle(Particle *p)
+  {
+    entering.push_back(p);
+  }
+
+  ParticleList const &FinalState::getModifiedParticles() const
   {
     return modified;
   }
 
-  ParticleList FinalState::getOutgoingParticles() const
+  ParticleList const &FinalState::getOutgoingParticles() const
   {
     return outgoing;
   }
 
-  ParticleList FinalState::getDestroyedParticles() const
+  ParticleList const &FinalState::getDestroyedParticles() const
   {
     return destroyed;
   }
 
-  ParticleList FinalState::getCreatedParticles() const
+  ParticleList const &FinalState::getCreatedParticles() const
   {
     return created;
   }
 
-  std::string FinalState::prG4int() const {
+  ParticleList const &FinalState::getEnteringParticles() const
+  {
+    return entering;
+  }
+
+  std::string FinalState::print() const {
     std::stringstream ss;
     ss << "Modified particles:" << std::endl;
     for(ParticleIter iter = modified.begin(); iter != modified.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     ss << "Outgoing particles:" << std::endl;
     for(ParticleIter iter = outgoing.begin(); iter != outgoing.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     ss << "Destroyed particles:" << std::endl;
     for(ParticleIter iter = destroyed.begin(); iter != destroyed.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     ss << "Created particles:" << std::endl;
     for(ParticleIter iter = created.begin(); iter != created.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
+    ss << "Entering particles:" << std::endl;
+    for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter)
+      ss << (*iter)->print();
     return ss.str();
   }
 

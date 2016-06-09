@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.icc,v 1.2 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -37,11 +36,15 @@
 // Modified:
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 // 26.04.2011 T.Koi: Add G4RadioactiveDecayPhysics
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
 
+#include <iomanip>   
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -49,15 +52,13 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonQMDPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsLEND.hh"
 
@@ -68,11 +69,11 @@
 template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model ):  T()
 {
   // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+  // defaultCutValue = 1.0*CLHEP::mm;
   G4DataQuestionaire it(photon, neutron, radioactive);
-  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 1.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 2.0"<<G4endl;
   G4cout <<G4endl;
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(verbose);
 
  // EM Physics
@@ -105,7 +106,7 @@ G4cout << LEN_model << G4endl;
   else if ( LEN_model == "LEND" ) 
   {
      this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation) );
-     G4DataQuestionaire it(lend);
+     G4DataQuestionaire itt(lend);
   }
   else 
   {
@@ -136,7 +137,7 @@ G4cout << LEN_model << G4endl;
 
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(verbose) );
+  this->RegisterPhysics( new G4StoppingPhysics(verbose) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonQMDPhysics(verbose));

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file  medical/DICOM/src/DicomDetectorConstruction.cc
+/// \brief Implementation of the DicomDetectorConstruction class
 
 #include "globals.hh"
 
@@ -33,21 +35,45 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4UIcommand.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "DicomDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomDetectorConstruction::DicomDetectorConstruction()
 {
+  fAir = 0;
+
+  fWorld_solid = 0;
+  fWorld_logic = 0;
+  fWorld_phys = 0;
+
+  fContainer_solid = 0;
+  fContainer_logic = 0;
+  fContainer_phys = 0;
+
+  fNoFiles = 0;
+  fMateIDs = 0;
+
+  fZSliceHeaderMerged = 0;
+
+  fNVoxelX = 0;
+  fNVoxelY = 0;
+  fNVoxelZ = 0;
+  fVoxelHalfDimX = 0;
+  fVoxelHalfDimY = 0;
+  fVoxelHalfDimZ = 0;
+
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomDetectorConstruction::~DicomDetectorConstruction()
 {
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* DicomDetectorConstruction::Construct()
 {
   InitialisationOfMaterials();
@@ -57,20 +83,20 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
   G4double worldYDimension = 1.*m;
   G4double worldZDimension = 1.*m;
 
-  world_solid = new G4Box( "WorldSolid",
+  fWorld_solid = new G4Box( "WorldSolid",
                           worldXDimension,
                           worldYDimension,
                           worldZDimension );
 
-  world_logic = new G4LogicalVolume( world_solid, 
-                                    air, 
+  fWorld_logic = new G4LogicalVolume( fWorld_solid, 
+                                    fAir, 
                                     "WorldLogical", 
                                     0, 0, 0 );
 
-  world_phys = new G4PVPlacement( 0,
+  fWorld_phys = new G4PVPlacement( 0,
                                   G4ThreeVector(0,0,0),
                                   "World",
-                                  world_logic,
+                                  fWorld_logic,
                                   0,
                                   false,
                                   0 );
@@ -80,11 +106,11 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
   ConstructPhantomContainer();
   ConstructPhantom();
 
-  return world_phys;
+  return fWorld_phys;
 }
 
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::InitialisationOfMaterials()
 {
   // Creating elements :
@@ -95,11 +121,11 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
                                   symbol = "C",
                                   z = 6.0, a = 12.011 * g/mole );
   G4Element* elH = new G4Element( name = "Hydrogen",
-				  symbol = "H",
-				  z = 1.0, a = 1.008  * g/mole );
+                                  symbol = "H",
+                                  z = 1.0, a = 1.008  * g/mole );
   G4Element* elN = new G4Element( name = "Nitrogen",
-				  symbol = "N",
-				  z = 7.0, a = 14.007 * g/mole );
+                                  symbol = "N",
+                                  z = 7.0, a = 14.007 * g/mole );
   G4Element* elO = new G4Element( name = "Oxygen",
                                   symbol = "O",
                                   z = 8.0, a = 16.00  * g/mole );
@@ -132,11 +158,11 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
   G4int numberofElements;
 
   // Air
-  air = new G4Material( "Air",
+  fAir = new G4Material( "Air",
                         1.290*mg/cm3,
                         numberofElements = 2 );
-  air->AddElement(elN, 0.7);
-  air->AddElement(elO, 0.3); 
+  fAir->AddElement(elN, 0.7);
+  fAir->AddElement(elO, 0.3); 
 
   //  Lung Inhale
   G4Material* lunginhale = new G4Material( "LungInhale", 
@@ -224,12 +250,12 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
   liver->AddElement(elP,0.003);
   liver->AddElement(elS,0.003);
   liver->AddElement(elCl,0.002);
-  liver->AddElement(elK,0.003);	
+  liver->AddElement(elK,0.003);        
  
   // Trabecular Bone 
   G4Material* trabecularBone = new G4Material( "TrabecularBone", 
-				   density = 1.159*g/cm3, 
-				   numberofElements = 12 );
+                                   density = 1.159*g/cm3, 
+                                   numberofElements = 12 );
   trabecularBone->AddElement(elH,0.085);
   trabecularBone->AddElement(elC,0.404);
   trabecularBone->AddElement(elN,0.058);
@@ -260,7 +286,7 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
   denseBone->AddElement(elCa,0.146);
   
   //----- Put the materials in a vector
-  fOriginalMaterials.push_back(air); // rho = 0.00129
+  fOriginalMaterials.push_back(fAir); // rho = 0.00129
   fOriginalMaterials.push_back(lunginhale); // rho = 0.217
   fOriginalMaterials.push_back(lungexhale); // rho = 0.508
   fOriginalMaterials.push_back(adiposeTissue); // rho = 0.967
@@ -274,16 +300,16 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
 }
 
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ReadPhantomData()
 {
   std::ifstream finDF("Data.dat");
   G4String fname;
   if(finDF.good() != 1 ) {
     G4Exception(" DicomDetectorConstruction::ReadPhantomData",
-		"",
-		FatalException,
-		"Problem reading data file: Data.dat");
+                "",
+                FatalException,
+                "Problem reading data file: Data.dat");
   }
 
   G4int compression;
@@ -304,7 +330,7 @@ void DicomDetectorConstruction::ReadPhantomData()
 
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 {
 #ifdef G4VERBOSE
@@ -313,15 +339,14 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
     G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
-		"",
-		FatalErrorInArgument,
-		G4String("File not found " + fname ).c_str());
+                "",
+                FatalErrorInArgument,
+                G4String("File not found " + fname ).c_str());
   }
   //----- Define density differences (maximum density difference to create a new material)
   char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
   G4double densityDiff = -1.;
   if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
-  std::map<G4int,G4double>  fDensityDiffs; // to be able to use a different densityDiff for each material
   if( densityDiff != -1. ) {
     for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
       fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
@@ -329,7 +354,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   }else {
     if( fMaterials.size() == 0 ) { // do it only for first slice
       for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
-	fMaterials.push_back( fOriginalMaterials[ii] );
+        fMaterials.push_back( fOriginalMaterials[ii] );
       }
     }
   }
@@ -362,7 +387,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
     fin >> density;
 
     //-- Get material from list of original materials
-    int mateID = fMateIDs[voxelCopyNo];
+    mateID = fMateIDs[voxelCopyNo];
     G4Material* mateOrig  = fOriginalMaterials[mateID];
 
     //-- Get density bin: middle point of the bin in which the current density is included 
@@ -378,7 +403,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
     unsigned int im;
     for( im = 0; im < fMaterials.size(); im++ ){
       if( fMaterials[im]->GetName() == newMateName ) {
-	break;
+        break;
       }
     }
     //-- If material is already created use index of this material
@@ -387,14 +412,14 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
     //-- else, create the material 
     } else {
       if( densityDiff != -1.) {
-	fMaterials.push_back( BuildMaterialWithChangingDensity( mateOrig, densityBin, newMateName ) );
-	fMateIDs[voxelCopyNo] = fMaterials.size()-1;
+        fMaterials.push_back( BuildMaterialWithChangingDensity( mateOrig, densityBin, newMateName ) );
+        fMateIDs[voxelCopyNo] = fMaterials.size()-1;
       } else {
-	G4cerr << " im " << im << " < " << fMaterials.size() << " name " << newMateName << G4endl;
-	G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
-		    "",
-		    FatalErrorInArgument,
-		    "Wrong index in material"); //it should never reach here
+        G4cerr << " im " << im << " < " << fMaterials.size() << " name " << newMateName << G4endl;
+        G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
+                    "",
+                    FatalErrorInArgument,
+                    "Wrong index in material"); //it should never reach here
       }
     }
   }
@@ -402,7 +427,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 }
 
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::MergeZSliceHeaders()
 {
   //----- Images must have the same dimension ... 
@@ -412,7 +437,7 @@ void DicomDetectorConstruction::MergeZSliceHeaders()
   };
 }
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity( const G4Material* origMate, float density, G4String newMateName )
 {
   //----- Copy original material, but with new density
@@ -428,47 +453,47 @@ G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity( const G
   return mate;
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ConstructPhantomContainer()
 {
   //---- Extract number of voxels and voxel dimensions
-  nVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
-  nVoxelY = fZSliceHeaderMerged->GetNoVoxelY();
-  nVoxelZ = fZSliceHeaderMerged->GetNoVoxelZ();
+  fNVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
+  fNVoxelY = fZSliceHeaderMerged->GetNoVoxelY();
+  fNVoxelZ = fZSliceHeaderMerged->GetNoVoxelZ();
 
-  voxelHalfDimX = fZSliceHeaderMerged->GetVoxelHalfX();
-  voxelHalfDimY = fZSliceHeaderMerged->GetVoxelHalfY();
-  voxelHalfDimZ = fZSliceHeaderMerged->GetVoxelHalfZ();
+  fVoxelHalfDimX = fZSliceHeaderMerged->GetVoxelHalfX();
+  fVoxelHalfDimY = fZSliceHeaderMerged->GetVoxelHalfY();
+  fVoxelHalfDimZ = fZSliceHeaderMerged->GetVoxelHalfZ();
 #ifdef G4VERBOSE
-  G4cout << " nVoxelX " << nVoxelX << " voxelHalfDimX " << voxelHalfDimX <<G4endl;
-  G4cout << " nVoxelY " << nVoxelY << " voxelHalfDimY " << voxelHalfDimY <<G4endl;
-  G4cout << " nVoxelZ " << nVoxelZ << " voxelHalfDimZ " << voxelHalfDimZ <<G4endl;
-  G4cout << " totalPixels " << nVoxelX*nVoxelY*nVoxelZ <<  G4endl;
+  G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX <<G4endl;
+  G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY <<G4endl;
+  G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ <<G4endl;
+  G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
 #endif
 
   //----- Define the volume that contains all the voxels
-  container_solid = new G4Box("phantomContainer",nVoxelX*voxelHalfDimX,nVoxelY*voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
-  container_logic = 
-    new G4LogicalVolume( container_solid, 
-			 fMaterials[0],  //the material is not important, it will be fully filled by the voxels
-			 "phantomContainer", 
-			 0, 0, 0 );
+  fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,fNVoxelY*fVoxelHalfDimY,fNVoxelZ*fVoxelHalfDimZ);
+  fContainer_logic = 
+    new G4LogicalVolume( fContainer_solid, 
+                         fMaterials[0],  //the material is not important, it will be fully filled by the voxels
+                         "phantomContainer", 
+                         0, 0, 0 );
   //--- Place it on the world
-  G4double offsetX = (fZSliceHeaderMerged->GetMaxX() + fZSliceHeaderMerged->GetMinX() ) /2.;
-  G4double offsetY = (fZSliceHeaderMerged->GetMaxY() + fZSliceHeaderMerged->GetMinY() ) /2.;
-  G4double offsetZ = (fZSliceHeaderMerged->GetMaxZ() + fZSliceHeaderMerged->GetMinZ() ) /2.;
-  G4ThreeVector posCentreVoxels(offsetX,offsetY,offsetZ);
+  G4double fOffsetX = (fZSliceHeaderMerged->GetMaxX() + fZSliceHeaderMerged->GetMinX() ) /2.;
+  G4double fOffsetY = (fZSliceHeaderMerged->GetMaxY() + fZSliceHeaderMerged->GetMinY() ) /2.;
+  G4double fOffsetZ = (fZSliceHeaderMerged->GetMaxZ() + fZSliceHeaderMerged->GetMinZ() ) /2.;
+  G4ThreeVector posCentreVoxels(fOffsetX,fOffsetY,fOffsetZ);
 #ifdef G4VERBOSE
   G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
 #endif
-  container_phys = 
+  fContainer_phys = 
     new G4PVPlacement(0,  // rotation
-		      posCentreVoxels,
-		      container_logic,     // The logic volume
-		      "phantomContainer",  // Name
-		      world_logic,  // Mother
-		      false,           // No op. bool.
-		      1);              // Copy number
+                      posCentreVoxels,
+                      fContainer_logic,     // The logic volume
+                      "phantomContainer",  // Name
+                      fWorld_logic,  // Mother
+                      false,           // No op. bool.
+                      1);              // Copy number
 
 }
 
@@ -477,7 +502,7 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSDoseDeposit.hh"
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 {
 

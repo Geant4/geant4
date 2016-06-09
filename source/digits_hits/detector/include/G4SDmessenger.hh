@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDmessenger.hh,v 1.2 2006-06-29 18:05:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4SDmessenger_h

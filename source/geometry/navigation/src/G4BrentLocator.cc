@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.9 2010-07-13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G4BrentLocator implementation
 //
@@ -261,7 +260,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       G4ThreeVector  NewMomentumDir= ApproxIntersecPointV.GetMomentumDir(); 
       G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
      
-#ifdef DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
       G4ThreeVector  ChordAB = Point_B - Point_A;
 
       G4VIntersectionLocator::ReportTrialStep( substep_no, ChordAB,

@@ -3,7 +3,7 @@
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := pol01
+name := Pol01
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -18,7 +18,7 @@ include $(G4INSTALL)/config/binmake.gmk
 
 plots:	plotResults.class
 	@echo calling JAIDA ...
-	java -cp .:$(CLASSPATH) plotResults pol01.aida
+	java -cp .:$(CLASSPATH) plotResults Pol01.aida
 
 plotResults.class: plotResults.java
 	@echo compiling $<

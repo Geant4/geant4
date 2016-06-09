@@ -24,50 +24,58 @@
 // ********************************************************************
 //
 //
-// G4 Hadron Elastic Scattering Process -- header file
-// F.W. Jones, TRIUMF, 04-JUN-96
+// $Id$
+//
+// Geant4 Hadron Elastic Scattering Process -- header file
+// 
+// Created 26 July 2012 V.Ivanchenko from G4WHadronElasticProcess
 //  
-// For further comments see G4HadronElasticProcess.cc
-//
-// Modified by FWJ 03-DEC-96: uses G4LCrossSectionData
-// Modified by FWJ    FEB-97: adapted to new tracking design
-// Modified by FWJ    MAR-97: newer new tracking design
-//
-// Modified by FWJ 27-MAR-97: first version for Alpha release
-// 14-APR-97 FWJ: cross section data class name changed
-//
-// changing design to use Model-scheme: HPW, 20th June 1997
-//
-// 14-APR-98 FWJ: variant G4HadronElastic process for
-// G4CrossSectionDataSet/DataStore class design.
-// 29-JUN-98 FWJ: default data set G4HadronCrossSections
-// 01-SEP-2008 V.Ivanchenko: use methods from the base class
+// Modified:
 //
 
 // Class Description
-// Process for hadron nuclear elastic scattering; 
-// to be used in your physics list in case you need this physics.
+// General process for hadron nuclear elastic scattering  
 // Class Description - End
-
 
 #ifndef G4HadronElasticProcess_h
 #define G4HadronElasticProcess_h 1
  
 #include "globals.hh"
 #include "G4HadronicProcess.hh"
-#include "G4HadronElasticDataSet.hh"
 
+class G4ParticleDefinition;
+class G4CrossSectionDataStore;
 
 class G4HadronElasticProcess : public G4HadronicProcess
 {
-  public:
+public:
 
-    G4HadronElasticProcess(const G4String& processName = "HadronElastic");
+  G4HadronElasticProcess(const G4String& procName = "hadElastic");
 
-    virtual ~G4HadronElasticProcess();
+  virtual ~G4HadronElasticProcess();
  
-    virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+					  const G4Step& aStep);
 
-    virtual void ProcessDescription(std::ostream& outFile) const;
+  // initialise thresholds
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  // set internal limit
+  virtual void SetLowestEnergy(G4double);
+
+  // obsolete method - will be removed
+  virtual void SetLowestEnergyNeutron(G4double);
+
+  virtual void Description() const;
+
+private:
+
+  // hide assignment operator as private 
+  G4HadronElasticProcess& operator=(const G4HadronElasticProcess &right);
+  G4HadronElasticProcess(const G4HadronElasticProcess& );
+
+  G4double lowestEnergy;
+  G4bool   isInitialised;
 };
+
 #endif

@@ -23,15 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/perspective/perspective.cc
+/// \brief Main program of the visualization/perspective example
 //
-// $Id: perspective.cc,v 1.3 2010-11-09 09:49:57 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"
 #include "G4VisExtent.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "PerspectiveVisAction.hh"
 
@@ -42,7 +45,7 @@ int main(int argc,char** argv) {
 
   visManager->SetUserAction
     (new PerspectiveVisAction,
-     G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));  // 2nd argument optional.
+     G4VisExtent(-100*m,100*m,-100*m,100*m,-100*m,100*m));
 
   G4String command = "/control/execute ";
   G4String fileName = "vis.mac";

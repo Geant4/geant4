@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.34 2007-01-05 17:00:27 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  5th April 2001
@@ -134,11 +133,11 @@ void G4ASCIITreeSceneHandler::EndModeling () {
   // This detail to G4cout regardless of outFileName...
   if (detail >= 4) {
     G4cout << "Calculating mass(es)..." << G4endl;
-    const std::vector<G4VModel*>& models = fpScene->GetRunDurationModelList();
-    std::vector<G4VModel*>::const_iterator i;
+    const std::vector<G4Scene::Model>& models = fpScene->GetRunDurationModelList();
+    std::vector<G4Scene::Model>::const_iterator i;
     for (i = models.begin(); i != models.end(); ++i) {
       G4PhysicalVolumeModel* pvModel =
-	dynamic_cast<G4PhysicalVolumeModel*>(*i);
+	dynamic_cast<G4PhysicalVolumeModel*>(i->fpModel);
       if (pvModel) {
 	if (pvModel->GetTopPhysicalVolume() ==
 	    G4TransportationManager::GetTransportationManager()
@@ -198,8 +197,9 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   // PVNodeID object, which is a physical volume and copy number.  It
   // is a vector of PVNodeIDs corresponding to the geometry hierarchy
   // actually selected, i.e., not culled.
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID> PVPath;
+  // The following typedef's already set in header file...
+  //typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  //typedef std::vector<PVNodeID> PVPath;
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
   //G4int currentDepth = pPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhMultipleScattering.cc,v 1.3 2010-04-12 18:57:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 //
@@ -42,6 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4AdjointhMultipleScattering.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UrbanMscModel90.hh"
 #include "G4MscStepLimitType.hh"
 
@@ -93,7 +93,7 @@ void G4AdjointhMultipleScattering::InitialiseProcess(const G4ParticleDefinition*
   if (p->GetParticleType() == "adjoint_nucleus" || p->GetPDGMass() > GeV) {
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
-    SetBuildLambdaTable(false);
+    //SetBuildLambdaTable(false);
     if(p->GetParticleType() == "adjoint_nucleus") isIon = true;
   }
 

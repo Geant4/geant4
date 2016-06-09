@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.7 2010-07-13 15:59:42 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation

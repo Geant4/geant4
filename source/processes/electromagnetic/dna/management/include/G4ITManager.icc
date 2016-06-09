@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -241,6 +242,7 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, const T* key)
             ("Bad request : no node found in the IT you are searching closest neighbourg for");
             G4Exception("G4ITManager::FindNearest","ITManager002",
                         FatalErrorInArgument,exceptionDescription);
+            return 0; // coverity
         }
 
         typename TreeMap::iterator it = fTree.find(*key);
@@ -337,6 +339,9 @@ TEMPLATE
 void G4ITMANAGER::UpdatePositionMap()
 {
     allbox_iterator allbox(this) ;
+
+    if(allbox.GetBox() == 0) return;
+
     const G4ITBox* currentBox = 0 ;
     const G4ITBox* buffBox = 0;
     G4KDTree* currentTree = 0;
@@ -356,7 +361,7 @@ void G4ITMANAGER::UpdatePositionMap()
         fPrevious_tree.clear();
     }
 
-    for(allbox.begin() ; allbox.end() ; allbox++)
+    for(allbox.begin() ; !allbox.end() ; allbox++)
     {
         buffBox = allbox.GetBox() ;
         currentIT = (*allbox);

@@ -23,10 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
+
+#include <fstream>
+#include <iomanip>
+
 #include "G4AdjointCSManager.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"
 #include "G4AdjointCSMatrix.hh"
@@ -48,9 +54,6 @@
 #include "G4AdjointProton.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCutsTable.hh"
-#include <fstream>
-#include <iomanip>
-
 
 G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
 ///////////////////////////////////////////////////////

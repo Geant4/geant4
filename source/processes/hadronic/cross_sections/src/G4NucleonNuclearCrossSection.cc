@@ -35,9 +35,16 @@
 //
 
 #include "G4NucleonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
+
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4NucleonNuclearCrossSection);
+
 
 // Group 1: He, Be, C for 44 energies  
 
@@ -450,7 +457,7 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
- : G4VCrossSectionDataSet("G4NucleonNuclearCrossSection"),
+ : G4VCrossSectionDataSet(Default_Name()),
    fTotalXsc(0.0), fElasticXsc(0.0)
 {
   theNeutron = G4Neutron::Neutron();

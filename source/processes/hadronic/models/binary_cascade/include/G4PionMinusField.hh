@@ -39,6 +39,8 @@
 #ifndef G4PionMinusField_h
 #define  G4PionMinusField_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VNuclearField.hh"
 #include "G4V3DNucleus.hh"
 
@@ -46,11 +48,10 @@ class G4PionMinusField: public G4VNuclearField
 {
 public:
 
-  G4PionMinusField(G4V3DNucleus * nucleus, G4double coeff = 0.042*fermi);
+  G4PionMinusField(G4V3DNucleus * nucleus, G4double coeff = 0.042*CLHEP::fermi);
   virtual ~G4PionMinusField();
 
 private:
-
   G4PionMinusField(const  G4PionMinusField &right);
   const G4PionMinusField & operator=(const G4PionMinusField & right);
   int operator==(const G4PionMinusField & right) const;

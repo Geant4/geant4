@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/src/F03CalorHit.cc
+/// \brief Implementation of the F03CalorHit class
 //
-// $Id: F03CalorHit.cc,v 1.4 2006-06-29 17:19:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -39,31 +39,34 @@ G4Allocator<F03CalorHit> F03CalorHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F03CalorHit::F03CalorHit()
-{
-   EdepAbs = 0.; TrackLengthAbs = 0.;
-   EdepGap = 0.; TrackLengthGap = 0.;
-}
+ : G4VHit(),
+   fEdepAbs(0.), 
+   fTrackLengthAbs(0.),
+   fEdepGap(0.), 
+   fTrackLengthGap(0.)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F03CalorHit::~F03CalorHit()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F03CalorHit::F03CalorHit(const F03CalorHit& right)
-  : G4VHit()
-{
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
-}
+  : G4VHit(),
+    fEdepAbs(right.fEdepAbs), 
+    fTrackLengthAbs(right.fTrackLengthAbs),
+    fEdepGap(right.fEdepGap), 
+    fTrackLengthGap(right.fTrackLengthGap)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const F03CalorHit& F03CalorHit::operator=(const F03CalorHit& right)
 {
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
+  fEdepAbs = right.fEdepAbs; fTrackLengthAbs = right.fTrackLengthAbs;
+  fEdepGap = right.fEdepGap; fTrackLengthGap = right.fTrackLengthGap;
   return *this;
 }
 
@@ -77,7 +80,6 @@ G4int F03CalorHit::operator==(const F03CalorHit& right) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F03CalorHit::Print()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

@@ -23,16 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/include/F02ElectricFieldSetup.hh
+/// \brief Definition of the F02ElectricFieldSetup class
 //
-// $Id: F02ElectricFieldSetup.hh,v 1.2 2006-06-29 17:17:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-//    A class for control of the Electric Field of the detector.
-//  The field for this case is uniform.
-//
-//  It is simply a 'setup' class that creates the field and necessary other parts
-//
-
 
 #ifndef F02ElectricFieldSetup_H
 #define F02ElectricFieldSetup_H
@@ -48,6 +43,13 @@ class G4EqMagElectricField;
 class G4MagIntegratorStepper;
 class G4MagInt_Driver; 
 class F02FieldMessenger;
+
+/// A class for control of the Electric Field of the detector.
+///
+/// The field for this case is uniform.
+/// It is simply a 'setup' class that creates the field and necessary 
+/// other parts
+
 class F02ElectricFieldSetup 
 {
 public:

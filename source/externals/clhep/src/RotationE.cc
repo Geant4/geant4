@@ -20,7 +20,6 @@
 #include "CLHEP/Units/PhysicalConstants.h"
 
 #include <cmath>
-#include <stdlib.h>
 
 namespace CLHEP  {
 
@@ -33,11 +32,11 @@ static inline double safe_acos (double x) {
 
 // Euler angles
 
-HepRotation & HepRotation::set(double phi, double theta, double psi) {
+HepRotation & HepRotation::set(double phi1, double theta1, double psi1) {
 
-  register double sinPhi   = std::sin( phi   ), cosPhi   = std::cos( phi   );
-  register double sinTheta = std::sin( theta ), cosTheta = std::cos( theta );
-  register double sinPsi   = std::sin( psi   ), cosPsi   = std::cos( psi   );
+  register double sinPhi   = std::sin( phi1   ), cosPhi   = std::cos( phi1   );
+  register double sinTheta = std::sin( theta1 ), cosTheta = std::cos( theta1 );
+  register double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
 
   rxx =   cosPsi * cosPhi - cosTheta * sinPhi * sinPsi;
   rxy =   cosPsi * sinPhi + cosTheta * cosPhi * sinPsi;
@@ -55,9 +54,9 @@ HepRotation & HepRotation::set(double phi, double theta, double psi) {
 
 }  // Rotation::set(phi, theta, psi)
 
-HepRotation::HepRotation( double phi, double theta, double psi ) 
+HepRotation::HepRotation( double phi1, double theta1, double psi1 ) 
 {
-  set (phi, theta, psi);
+  set (phi1, theta1, psi1);
 }
 HepRotation & HepRotation::set( const HepEulerAngles & e ) {
   return set(e.phi(), e.theta(), e.psi());
@@ -146,25 +145,25 @@ double HepRotation::psi  () const {
 // Helpers for eulerAngles():
 
 static		     
-void correctByPi ( double& psi, double& phi ) {
-  if (psi > 0) {
-    psi -= CLHEP::pi;
+void correctByPi ( double& psi1, double& phi1 ) {
+  if (psi1 > 0) {
+    psi1 -= CLHEP::pi;
   } else {
-    psi += CLHEP::pi;
+    psi1 += CLHEP::pi;
   }
-  if (phi > 0) {
-    phi -= CLHEP::pi;
+  if (phi1 > 0) {
+    phi1 -= CLHEP::pi;
   } else {
-    phi += CLHEP::pi;
+    phi1 += CLHEP::pi;
   }  
 }
 
 static
 void correctPsiPhi ( double rxz, double rzx, double ryz, double rzy, 
-		     double& psi, double& phi ) {
+		     double& psi1, double& phi1 ) {
 
   // set up quatities which would be positive if sin and cosine of
-  // psi and phi were positive:
+  // psi1 and phi1 were positive:
   double w[4];
   w[0] = rxz; w[1] = rzx; w[2] = ryz; w[3] = -rzy;
 
@@ -181,20 +180,20 @@ void correctPsiPhi ( double rxz, double rzx, double ryz, double rzy,
   // different depending on whether a sine or cosine was the determinor: 
   switch (imax) {
     case 0:
-      if (w[0] > 0 && psi < 0)           correctByPi ( psi, phi );
-      if (w[0] < 0 && psi > 0)           correctByPi ( psi, phi );
+      if (w[0] > 0 && psi1 < 0)           correctByPi ( psi1, phi1 );
+      if (w[0] < 0 && psi1 > 0)           correctByPi ( psi1, phi1 );
       break;
     case 1:
-      if (w[1] > 0 && phi < 0)           correctByPi ( psi, phi );
-      if (w[1] < 0 && phi > 0)           correctByPi ( psi, phi );
+      if (w[1] > 0 && phi1 < 0)           correctByPi ( psi1, phi1 );
+      if (w[1] < 0 && phi1 > 0)           correctByPi ( psi1, phi1 );
       break;
     case 2:
-      if (w[2] > 0 && std::abs(psi) > CLHEP::halfpi) correctByPi ( psi, phi );    
-      if (w[2] < 0 && std::abs(psi) < CLHEP::halfpi) correctByPi ( psi, phi );    
+      if (w[2] > 0 && std::abs(psi1) > CLHEP::halfpi) correctByPi ( psi1, phi1 );    
+      if (w[2] < 0 && std::abs(psi1) < CLHEP::halfpi) correctByPi ( psi1, phi1 );    
       break;
     case 3:
-      if (w[3] > 0 && std::abs(phi) > CLHEP::halfpi) correctByPi ( psi, phi );    
-      if (w[3] < 0 && std::abs(phi) < CLHEP::halfpi) correctByPi ( psi, phi );    
+      if (w[3] > 0 && std::abs(phi1) > CLHEP::halfpi) correctByPi ( psi1, phi1 );    
+      if (w[3] < 0 && std::abs(phi1) < CLHEP::halfpi) correctByPi ( psi1, phi1 );    
       break;
   }          
 }
@@ -203,10 +202,10 @@ HepEulerAngles HepRotation::eulerAngles() const {
 
   // Please see the mathematical justification in eulerAngleComputations.ps
 
-  double phi, theta, psi;
+  double phi1, theta1, psi1;
   double psiPlusPhi, psiMinusPhi;
   
-  theta = safe_acos( rzz );
+  theta1 = safe_acos( rzz );
   
 //  if (rzz > 1 || rzz < -1) {
 //    std::cerr << "HepRotation::eulerAngles() - "
@@ -227,9 +226,9 @@ HepEulerAngles HepRotation::eulerAngles() const {
     psiPlusPhi = std::atan2 ( rxy - ryx, rxx + ryy );
 
     // psi - phi is potentially more subtle, but when unstable it is moot
-    double s = -rxy - ryx; // sin (psi-phi) * (1 - cos theta)
-    double c =  rxx - ryy; // cos (psi-phi) * (1 - cos theta)
-    psiMinusPhi = std::atan2 ( s, c );
+    double s1 = -rxy - ryx; // sin (psi-phi) * (1 - cos theta)
+    double c1 =  rxx - ryy; // cos (psi-phi) * (1 - cos theta)
+    psiMinusPhi = std::atan2 ( s1, c1 );
         
   } else if (cosTheta > -1) {
 
@@ -237,9 +236,9 @@ HepEulerAngles HepRotation::eulerAngles() const {
     psiMinusPhi = std::atan2 ( -rxy - ryx, rxx - ryy );
 
    // psi + phi is potentially more subtle, but when unstable it is moot
-    double s = rxy - ryx; // sin (psi+phi) * (1 + cos theta)
-    double c = rxx + ryy; // cos (psi+phi) * (1 + cos theta)
-    psiPlusPhi = std::atan2 ( s, c );
+    double s1 = rxy - ryx; // sin (psi+phi) * (1 + cos theta)
+    double c1 = rxx + ryy; // cos (psi+phi) * (1 + cos theta)
+    psiPlusPhi = std::atan2 ( s1, c1 );
 
   } else { // cosTheta == -1
 
@@ -248,28 +247,28 @@ HepEulerAngles HepRotation::eulerAngles() const {
 
   }
   
-  psi = .5 * (psiPlusPhi + psiMinusPhi); 
-  phi = .5 * (psiPlusPhi - psiMinusPhi); 
+  psi1 = .5 * (psiPlusPhi + psiMinusPhi); 
+  phi1 = .5 * (psiPlusPhi - psiMinusPhi); 
 
   // Now correct by pi if we have managed to get a value of psiPlusPhi
   // or psiMinusPhi that was off by 2 pi:
-  correctPsiPhi ( rxz, rzx, ryz, rzy, psi, phi );
+  correctPsiPhi ( rxz, rzx, ryz, rzy, psi1, phi1 );
   
-  return  HepEulerAngles( phi, theta, psi );
+  return  HepEulerAngles( phi1, theta1, psi1 );
 
 } // eulerAngles()
 
 
-void HepRotation::setPhi (double phi) {
-  set ( phi, theta(), psi() );
+void HepRotation::setPhi (double phi1) {
+  set ( phi1, theta(), psi() );
 }
 
-void HepRotation::setTheta (double theta) {
-  set ( phi(), theta, psi() );
+void HepRotation::setTheta (double theta1) {
+  set ( phi(), theta1, psi() );
 }
 
-void HepRotation::setPsi (double psi) {
-  set ( phi(), theta(), psi );
+void HepRotation::setPsi (double psi1) {
+  set ( phi(), theta(), psi1 );
 }
 
 }  // namespace CLHEP

@@ -50,6 +50,7 @@
 
 #include "G4RDPhotoElectricAngularGeneratorSauterGavrila.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 //    
 

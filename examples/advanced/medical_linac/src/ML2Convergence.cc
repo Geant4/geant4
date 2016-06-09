@@ -46,77 +46,86 @@
 CML2Convergence::CML2Convergence(void)
 {}
 
-CML2Convergence::CML2Convergence(G4int seed, G4int saving_in_Selected_Voxels_every_events, G4String FileExperimentalData, G4String FileExperimentalDataOut, G4bool bCompareExp, G4int maxNumberOfEvents, G4int nRecycling, G4int nMaxLoops)
-:ML2ExpVoxels(0)
+CML2Convergence::CML2Convergence(G4int seed, G4int saveEvents,
+              G4String FileExperimentalData, G4String FileExperimentalDataOut,
+              G4bool bComp, G4int maxNumEvents, G4int nRecycling, G4int maxLoops)
+    :ML2ExpVoxels(0)
 {
-	this->nGeometry=0;
-	this->nMaxLoops=nMaxLoops;
-	this->idCurrentLoop=this->nMaxLoops;
-	this->bCompareExp=bCompareExp;
-	if (this->bCompareExp){this->nMaxLoops=-1;};
-	this->fileExperimentalData=FileExperimentalData;
+    nGeometry=0;
+    nMaxLoops=maxLoops;
+    idCurrentLoop=nMaxLoops;
+    bCompareExp=bComp;
+    nAccumulatedEvents=0;
+    if (bCompareExp){nMaxLoops=-1;};
+    fileExperimentalData=FileExperimentalData;
 
-// if the flag compareExp if true and the experimental data is given create the class CML2ExpVoxels
-	if (this->bCompareExp && this->fileExperimentalData!="")
-	{
-		this->ML2ExpVoxels=new CML2ExpVoxels(this->bCompareExp, saving_in_Selected_Voxels_every_events, seed, FileExperimentalData, FileExperimentalDataOut);
-		if (!this->ML2ExpVoxels->loadData())
-		{
-			this->ML2ExpVoxels=0;
-		std::cout <<"I don't have any convergence criteria set, I'll do " << this->nMaxLoops << " loop(s) for each rotation"<< G4endl;
-		}
-		else
-		{
-			this->ML2ExpVoxels->setRecycling(nRecycling);
-		}
-	}
-	this->maxNumberOfEvents=maxNumberOfEvents;
+    // if the flag compareExp if true and the experimental data is given create the class CML2ExpVoxels
+    if (bCompareExp && fileExperimentalData!="")
+    {
+        ML2ExpVoxels=new CML2ExpVoxels(bCompareExp, saveEvents, seed, FileExperimentalData, FileExperimentalDataOut);
+        if (!ML2ExpVoxels->loadData())
+        {
+            ML2ExpVoxels=0;
+            std::cout <<"I don't have any convergence criteria set, I'll do " << nMaxLoops << " loop(s) for each rotation"<< G4endl;
+        }
+        else
+        {
+            ML2ExpVoxels->setRecycling(nRecycling);
+        }
+    }
+    maxNumberOfEvents=maxNumEvents;
 }
 
 CML2Convergence::~CML2Convergence(void)
 {
-	if (this->ML2ExpVoxels!=0)
-	{delete this->ML2ExpVoxels;}
+    if (ML2ExpVoxels!=0)
+    {delete ML2ExpVoxels;}
 
 }
 void CML2Convergence::add(const G4Step* aStep)
 {
-// accumulate events in the CML2ExpVoxels class (if created)
-	if (this->ML2ExpVoxels!=0)
-	{
-		if (aStep->GetTotalEnergyDeposit()>0.)
-		{this->ML2ExpVoxels->add(aStep);}
-	}
+    // accumulate events in the CML2ExpVoxels class (if created)
+    if (ML2ExpVoxels!=0)
+    {
+        if (aStep->GetTotalEnergyDeposit()>0.)
+        {ML2ExpVoxels->add(aStep);}
+    }
 }
 G4bool CML2Convergence::stopRun()
 {
-	G4bool bStopRun=false;
-	if (this->ML2ExpVoxels!=0) // true if the experimental data file exists and is used to check the convergence
-	{
-		bStopRun=this->convergenceCriteria();
-		return bStopRun;
-	}
-	else // true if no experiemental data file is used. In this case it runs "nMaxLoops" loops.
-	{
-		this->idCurrentLoop--;
-		if (this->idCurrentLoop==0)
-		{
-			bStopRun=true;
-		}
-	}
-	return bStopRun;
+    G4bool bStopRun=false;
+    if (ML2ExpVoxels!=0) // true if the experimental data file exists and is used to check the convergence
+    {
+        bStopRun=convergenceCriteria();
+        return bStopRun;
+    }
+    else // true if no experiemental data file is used. In this case it runs "nMaxLoops" loops.
+    {
+        idCurrentLoop--;
+        if (idCurrentLoop==0)
+        {
+            bStopRun=true;
+        }
+    }
+    return bStopRun;
 }
 G4bool CML2Convergence::convergenceCriteria()
 {
-	G4bool bStopRun=true;
-	if (this->bCompareExp)
-	{
-// It checks if the maximum number of events is reached at least in one voxel. Having more rotations the limits is incremented each rotation
-		if (this->ML2ExpVoxels->getMaxNumberOfEvents() >= this->maxNumberOfEvents*this->nGeometry)
-		{bStopRun = true;}
-		else
-		{bStopRun = false;}
-	}
-	std::cout << "max n. of events accumulated:"<<this->ML2ExpVoxels->getMaxNumberOfEvents() <<"; max n. of events to be accumulated:" <<this->maxNumberOfEvents<<"  current geometry: " << this->nGeometry<<G4endl;
-	return bStopRun;
+    G4bool bStopRun=true;
+    G4int nEventsAccumulated=0;
+    if (bCompareExp)
+    {
+        nEventsAccumulated=ML2ExpVoxels->getMaxNumberOfEvents();
+        // It checks if the maximum number of events is reached at least in one voxel. Having more rotations the limits is incremented each rotation
+        if (ML2ExpVoxels->getMaxNumberOfEvents()>= maxNumberOfEvents)
+        {bStopRun = true; ML2ExpVoxels->resetNEventsInVoxels();}
+        else
+        {bStopRun = false;}
+    }
+    std::cout <<"\n ++++++++++++++++++++ \n";
+    std::cout <<"current geometry: " << nGeometry;
+    std::cout << "\nNumber of events accumulated in the current geometry:"<<
+                 nEventsAccumulated<<"\nNumber of events to be accumulated:" <<
+                maxNumberOfEvents<< "\n -------------------------\n";
+    return bStopRun;
 }

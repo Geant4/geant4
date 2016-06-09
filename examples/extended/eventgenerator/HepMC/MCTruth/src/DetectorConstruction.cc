@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/MCTruth/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc,v 1.1 2006-11-22 14:51:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -43,6 +45,8 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 DetectorConstruction::DetectorConstruction() :  
   Iron(0), Copper(0), Tungsten(0), Lead(0), Uranium(0), PbWO4(0),

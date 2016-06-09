@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.69 2010-06-05 06:25:03 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Joseph Perl  27th January 2002
@@ -36,6 +35,8 @@
 #include "G4HepRepMessenger.hh"
 #include "G4UIcommand.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Version.hh"
 #include "G4VSolid.hh"
 #include "G4PhysicalVolumeModel.hh"
@@ -123,7 +124,7 @@ void G4HepRepFileSceneHandler::EndPrimitives2D () {
 void G4HepRepFileSceneHandler::PrintThings() {
 	G4cout <<
     "  with transformation "
-	<< (void*)fpObjectTransformation;
+	<< fObjectTransformation;
 	G4PhysicalVolumeModel* pPVModel =
 		dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
 	if (pPVModel) {
@@ -181,14 +182,14 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 	G4Point3D vertex7(G4Point3D(-dx,-dy, dz));
 	G4Point3D vertex8(G4Point3D(-dx, dy, dz));
 	
-	vertex1 = (*fpObjectTransformation) * vertex1;
-	vertex2 = (*fpObjectTransformation) * vertex2;
-	vertex3 = (*fpObjectTransformation) * vertex3;
-	vertex4 = (*fpObjectTransformation) * vertex4;
-	vertex5 = (*fpObjectTransformation) * vertex5;
-	vertex6 = (*fpObjectTransformation) * vertex6;
-	vertex7 = (*fpObjectTransformation) * vertex7;
-	vertex8 = (*fpObjectTransformation) * vertex8;
+	vertex1 = (fObjectTransformation) * vertex1;
+	vertex2 = (fObjectTransformation) * vertex2;
+	vertex3 = (fObjectTransformation) * vertex3;
+	vertex4 = (fObjectTransformation) * vertex4;
+	vertex5 = (fObjectTransformation) * vertex5;
+	vertex6 = (fObjectTransformation) * vertex6;
+	vertex7 = (fObjectTransformation) * vertex7;
+	vertex8 = (fObjectTransformation) * vertex8;
 	
 	hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 	hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
@@ -212,7 +213,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	
 	// HepRApp does not correctly represent the end faces of cones at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	G4RotationMatrix r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fObjectTransformation.getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||
@@ -240,16 +241,14 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
-		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
-		
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
 		G4Point3D vertex1(G4Point3D( 0., 0., -cons.GetZHalfLength()));
 		G4Point3D vertex2(G4Point3D( 0., 0.,  cons.GetZHalfLength()));
 		
-		vertex1 = (*fpObjectTransformation) * vertex1;
-		vertex2 = (*fpObjectTransformation) * vertex2;
+		vertex1 = (fObjectTransformation) * vertex1;
+		vertex2 = (fObjectTransformation) * vertex2;
 				
 		// Outer cylinder.
 		hepRepXMLWriter->addPrimitive();
@@ -279,7 +278,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	
 	// HepRApp does not correctly represent the end faces of cylinders at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	G4RotationMatrix r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fObjectTransformation.getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||
@@ -313,8 +312,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 		G4Point3D vertex1(G4Point3D( 0., 0., -tubs.GetZHalfLength()));
 		G4Point3D vertex2(G4Point3D( 0., 0.,  tubs.GetZHalfLength()));
 		
-		vertex1 = (*fpObjectTransformation) * vertex1;
-		vertex2 = (*fpObjectTransformation) * vertex2;
+		vertex1 = (fObjectTransformation) * vertex1;
+		vertex2 = (fObjectTransformation) * vertex2;
 		
 		// Outer cylinder.
 		hepRepXMLWriter->addPrimitive();
@@ -375,14 +374,14 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 	G4Point3D vertex7(G4Point3D(-dx2,-dy2, dz));
 	G4Point3D vertex8(G4Point3D(-dx2, dy2, dz));
 	
-	vertex1 = (*fpObjectTransformation) * vertex1;
-	vertex2 = (*fpObjectTransformation) * vertex2;
-	vertex3 = (*fpObjectTransformation) * vertex3;
-	vertex4 = (*fpObjectTransformation) * vertex4;
-	vertex5 = (*fpObjectTransformation) * vertex5;
-	vertex6 = (*fpObjectTransformation) * vertex6;
-	vertex7 = (*fpObjectTransformation) * vertex7;
-	vertex8 = (*fpObjectTransformation) * vertex8;
+	vertex1 = (fObjectTransformation) * vertex1;
+	vertex2 = (fObjectTransformation) * vertex2;
+	vertex3 = (fObjectTransformation) * vertex3;
+	vertex4 = (fObjectTransformation) * vertex4;
+	vertex5 = (fObjectTransformation) * vertex5;
+	vertex6 = (fObjectTransformation) * vertex6;
+	vertex7 = (fObjectTransformation) * vertex7;
+	vertex8 = (fObjectTransformation) * vertex8;
 	
 	hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 	hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
@@ -709,7 +708,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 				
 				// Write out point attribute values.
 				if (pointAttValues) {
-					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
 						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
@@ -809,7 +807,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 				
 				// Write out point attribute values.
 				if (pointAttValues) {
-					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
 						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
@@ -1026,7 +1023,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	hepRepXMLWriter->addPrimitive();
 	
 	for (size_t i=0; i < polyline.size(); i++) {
-		G4Point3D vertex = (*fpObjectTransformation) * polyline[i];
+		G4Point3D vertex = (fObjectTransformation) * polyline[i];
 		hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
 	}
 }
@@ -1074,7 +1071,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	hepRepXMLWriter->addPrimitive();
 	
 	for (size_t i=0; i < line.size(); i++) {
-		G4Point3D vertex = (*fpObjectTransformation) * line[i];
+		G4Point3D vertex = (fObjectTransformation) * line[i];
 		hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
 	}
 }
@@ -1177,7 +1174,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	
 	hepRepXMLWriter->addPrimitive();
 	
-	G4Point3D center = (*fpObjectTransformation) * circle.GetPosition();
+	G4Point3D center = (fObjectTransformation) * circle.GetPosition();
 	hepRepXMLWriter->addPoint(center.x(), center.y(), center.z());
 }
 
@@ -1223,7 +1220,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	
 	hepRepXMLWriter->addPrimitive();
 	
-	G4Point3D center = (*fpObjectTransformation) * square.GetPosition();
+	G4Point3D center = (fObjectTransformation) * square.GetPosition();
 	hepRepXMLWriter->addPoint(center.x(), center.y(), center.z());
 }
 
@@ -1264,7 +1261,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 		G4bool notLastEdge;
 		do {
 			notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
-			vertex = (*fpObjectTransformation) * vertex;
+			vertex = (fObjectTransformation) * vertex;
 			hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
 		} while (notLastEdge);
 	} while (notLastFace);
@@ -1558,7 +1555,6 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 
 
 void G4HepRepFileSceneHandler::ClearTransientStore() {
-	G4VSceneHandler::ClearTransientStore();
 	// This is typically called after an update and before drawing hits
 	// of the next event.  To simulate the clearing of "transients"
 	// (hits, etc.) the detector is redrawn...

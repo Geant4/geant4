@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02PSFlatSurfaceCurrent.hh
+/// \brief Definition of the RE02PSFlatSurfaceCurrent class
 //
-// $Id: RE02PSFlatSurfaceCurrent.hh,v 1.2 2006-12-13 15:42:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef RE02PSFlatSurfaceCurrent_h
@@ -51,12 +53,11 @@
 // 17-Nov-2005 T.Aso, Bug fix for area definition.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class RE02PSFlatSurfaceCurrent : public G4PSFlatSurfaceCurrent
 {
    public: // with description
       RE02PSFlatSurfaceCurrent(G4String name, G4int direction,
-			       G4int nx,G4int ny, G4int nz);
+                               G4int nx,G4int ny, G4int nz);
       virtual ~RE02PSFlatSurfaceCurrent();
 
   protected: // with description

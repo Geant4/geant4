@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.cc,v 1.5 2010-10-13 15:20:01 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrMaterial
@@ -35,7 +34,7 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrMaterial.hh"
-
+#include "G4PhysicalConstants.hh"
 
 // -------------------------------------------------------------------------
 G4tgrMaterial::G4tgrMaterial()

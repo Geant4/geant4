@@ -30,6 +30,10 @@
 //
 // 
 
+#include "G4AntiNuclElastic.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
@@ -45,7 +49,6 @@
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
 #include "G4Pow.hh"
-#include "G4AntiNuclElastic.hh"
 
 #include "G4NucleiProperties.hh"       
 
@@ -366,7 +369,8 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
    }
 
    G4double cosTet=1.0-T/(2.*ptot*ptot);
- 
+   if(cosTet >  1.0 ) cosTet= 1.;          // Uzhi 30 Nov. 
+   if(cosTet < -1.0 ) cosTet=-1.;          // Uzhi 30 Nov. 
    fTetaCMS=std::acos(cosTet);
 
    return T;
@@ -397,6 +401,8 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   if(fptot > 0.)                             // Uzhi 24 Nov. 2011
   {
    G4double cosTet=1.0-T/(2.*fptot*fptot);
+   if(cosTet >  1.0 ) cosTet= 1.;          // Uzhi 30 Nov. 
+   if(cosTet < -1.0 ) cosTet=-1.;          // Uzhi 30 Nov. 
    fTetaCMS=std::acos(cosTet); 
    return fTetaCMS;
   } else                                    // Uzhi 24 Nov. 2011

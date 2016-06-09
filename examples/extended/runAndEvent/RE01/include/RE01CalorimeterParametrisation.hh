@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01CalorimeterParametrisation.hh,v 1.2 2006-06-29 17:42:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01CalorimeterParametrisation.hh
+/// \brief Definition of the RE01CalorimeterParametrisation class
 //
-
+// $Id$
+//
 
 #ifndef RE01CalorimeterParametrisation_H
 #define RE01CalorimeterParametrisation_H 1
@@ -52,33 +53,41 @@ class G4Polyhedra;
 
 class RE01CalorimeterParametrisation : public G4VPVParameterisation
 { 
-  public:
+public:
   
-    RE01CalorimeterParametrisation();
-    virtual ~RE01CalorimeterParametrisation();
-    void ComputeTransformation(const G4int copyNo,
+  RE01CalorimeterParametrisation();
+  virtual ~RE01CalorimeterParametrisation();
+  virtual void ComputeTransformation(const G4int copyNo,
                                      G4VPhysicalVolume *physVol) const;
-    void ComputeDimensions(      G4Tubs & calorimeterLayer,
-                           const G4int copyNo,
-                           const G4VPhysicalVolume * physVol) const;
+  virtual void ComputeDimensions(G4Tubs & calorimeterLayer,
+                                 const G4int copyNo,
+                                 const G4VPhysicalVolume * physVol) const;
 
-  private:  // Dummy declarations to get rid of warnings ...
+private:  // Dummy declarations to get rid of warnings ...
+  virtual void ComputeDimensions(G4Trd&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Trap&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Cons&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Sphere&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Torus&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Para&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Hype&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Box&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Orb&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) 
+    const {}
+  virtual void ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
+    const {}
 
-    void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Box&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
-
-
-  private:
-
+private:
 #include "RE01DetectorParameterDef.hh"
 
 };

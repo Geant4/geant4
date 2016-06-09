@@ -45,7 +45,7 @@
 
 #include "globals.hh"
 #include <vector>
-#include "G4VCollision.hh"
+
 class G4VCollision;
 
 typedef std::vector<G4VCollision *> G4CollisionVector;

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.39 2010-06-02 13:53:04 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4GDMLWriteSolids

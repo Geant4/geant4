@@ -34,8 +34,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
@@ -49,6 +47,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
     HEADERS
         G4AntiNuclElastic.hh
+        G4ChipsElasticModel.hh
         G4CHIPSElastic.hh
         G4CHIPSElasticXS.hh
         G4ChargeExchange.hh
@@ -63,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4NuclNuclDiffuseElastic.hh
     SOURCES
         G4AntiNuclElastic.cc
+        G4ChipsElasticModel.cc
         G4CHIPSElastic.cc
         G4CHIPSElasticXS.cc
         G4ChargeExchange.cc

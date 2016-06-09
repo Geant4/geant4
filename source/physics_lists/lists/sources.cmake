@@ -73,12 +73,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/isotope_production/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -87,7 +87,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/qgsm/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/photolepton_hadron/muon_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/radioactive_decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
@@ -111,6 +110,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
     HEADERS
         CHIPS.hh
         CHIPS.icc
+        CHIPS_HP.hh
+        CHIPS_HP.icc
         FTF_BIC.hh
         FTF_BIC.icc
         FTFP_BERT_EMV.hh
@@ -119,15 +120,20 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_BERT_EMX.icc
         FTFP_BERT.hh
         FTFP_BERT.icc
+        FTFP_BERT_HP.hh
+        FTFP_BERT_HP.icc
         FTFP_BERT_TRV.hh
         FTFP_BERT_TRV.icc
+        G4GenericPhysicsList.hh
+        G4GenericPhysicsList.icc
         G4HadronInelasticQBBC.hh
-        G4HadronInelasticQLHEP.hh
         G4PhysListFactory.hh
         G4VHadronPhysics.hh
         HadronPhysicsCHIPS.hh
+        HadronPhysicsCHIPS_HP.hh
         HadronPhysicsFTF_BIC.hh
         HadronPhysicsFTFP_BERT.hh
+        HadronPhysicsFTFP_BERT_HP.hh
         HadronPhysicsFTFP_BERT_TRV.hh
         HadronPhysicsLHEP_EMV.hh
         HadronPhysicsLHEP.hh
@@ -136,15 +142,16 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSC_CHIPS.hh
         HadronPhysicsQGSP_BERT_CHIPS.hh
         HadronPhysicsQGSP_BERT.hh
+        HadronPhysicsQGSP_BERT_95.hh
         HadronPhysicsQGSP_BERT_HP.hh
         HadronPhysicsQGSP_BERT_NOLEP.hh
         HadronPhysicsQGSP_BERT_TRV.hh
         HadronPhysicsQGSP_BIC.hh
         HadronPhysicsQGSP_BIC_HP.hh
         HadronPhysicsQGSP_FTFP_BERT.hh
+        HadronPhysicsQGSP_FTFP_BERT_95.hh
         HadronPhysicsQGSP.hh
 	HadronPhysicsQGSP_INCLXX.hh
-        HadronPhysicsQGSP_INCL_ABLA.hh
         HadronPhysicsShielding.hh
         LBE.hh
         LBE.icc
@@ -168,9 +175,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_BERT_EMX.hh
         QGSP_BERT_EMX.icc
         QGSP_BERT.hh
+        QGSP_BERT.icc
+        QGSP_BERT_95.hh
+        QGSP_BERT_95.icc
+        QGSP_BERT_95XS.hh
+        QGSP_BERT_95XS.icc
         QGSP_BERT_HP.hh
         QGSP_BERT_HP.icc
-        QGSP_BERT.icc
         QGSP_BERT_NOLEP.hh
         QGSP_BERT_NOLEP.icc
         QGSP_BERT_TRV.hh
@@ -183,12 +194,14 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_BIC.icc
         QGSP_FTFP_BERT.hh
         QGSP_FTFP_BERT.icc
+        QGSP_FTFP_BERT_95.hh
+        QGSP_FTFP_BERT_95.icc
+        QGSP_FTFP_BERT_95XS.hh
+        QGSP_FTFP_BERT_95XS.icc
         QGSP.hh
         QGSP.icc
 	QGSP_INCLXX.hh
 	QGSP_INCLXX.icc
-        QGSP_INCL_ABLA.hh
-        QGSP_INCL_ABLA.icc
         QGSP_QEL.hh
         QGSP_QEL.icc
         Shielding.hh
@@ -197,12 +210,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
 	G4PhysListUtil.hh
     SOURCES
         G4HadronInelasticQBBC.cc
-        G4HadronInelasticQLHEP.cc
         G4PhysListFactory.cc
         G4VHadronPhysics.cc
         HadronPhysicsCHIPS.cc
+        HadronPhysicsCHIPS_HP.cc
         HadronPhysicsFTF_BIC.cc
         HadronPhysicsFTFP_BERT.cc
+        HadronPhysicsFTFP_BERT_HP.cc
         HadronPhysicsFTFP_BERT_TRV.cc
         HadronPhysicsLHEP.cc
         HadronPhysicsLHEP_EMV.cc
@@ -210,6 +224,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSC_BERT.cc
         HadronPhysicsQGSC_CHIPS.cc
         HadronPhysicsQGSP_BERT.cc
+        HadronPhysicsQGSP_BERT_95.cc
         HadronPhysicsQGSP_BERT_CHIPS.cc
         HadronPhysicsQGSP_BERT_HP.cc
         HadronPhysicsQGSP_BERT_NOLEP.cc
@@ -218,7 +233,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BIC_HP.cc
         HadronPhysicsQGSP.cc
         HadronPhysicsQGSP_FTFP_BERT.cc
-        HadronPhysicsQGSP_INCL_ABLA.cc
+        HadronPhysicsQGSP_FTFP_BERT_95.cc
         HadronPhysicsQGSP_INCLXX.cc
         HadronPhysicsShielding.cc
         MaxTimeCuts.cc
@@ -244,7 +259,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4had_lend
         G4had_mod_man
         G4had_mod_util
-        G4had_muon_nuclear
+        G4had_lept_nuclear
         G4had_neu_hp
         G4had_preequ_exciton
         G4had_string_diff
@@ -270,7 +285,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4hadronic_fragm_ci
         G4hadronic_hetcpp_evaporation
         G4hadronic_hetcpp_utils
-        G4hadronic_incl_cascade
+        G4had_inclxx
         G4hadronic_interface_ci
         G4hadronic_iso
         G4hadronic_mgt

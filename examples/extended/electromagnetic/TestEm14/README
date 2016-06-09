@@ -62,7 +62,7 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
 	The test contains 6 built-in 1D histograms, which are managed by the
 	HistoManager class and its Messenger. The histos can be individually 
 	activated with the command :
-	/testem/histo/setHisto id nbBins  valMin valMax unit 
+	/analysis/h1/set id nbBins  valMin valMax unit 
 	where unit is the desired unit for the histo (MeV or keV, etc..)
 	(see the macros xxxx.mac).
  
@@ -72,21 +72,28 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
 	4	"charged secondaries: costheta distribution"
 	5	"neutral secondaries: energy spectrum"
 	6	"neutral secondaries: costheta distribution"			
-
-	See below the note on histogram tools.
-	
- 	One can control the name and the type of the histograms file with 
-	the commands:
- 	/testem/histo/setFileName  name  (default testem14)
-   	/testem/histo/setFileType  name  (default root)
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
-        It is also possible to print selected histograms on an ascii file:
-        /testem/histo/printHisto id
-        All selected histos will be written on a file name.ascii  
-	(default testem14) 
-	
-	Note that, by default, histograms are disabled. To activate them, 
-	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default testem14)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default testem14) 
+    
+ Using hbook format
+ ------------------
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh
  	 				
  6- VISUALIZATION
  
@@ -102,10 +109,6 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
 	
  7- HOW TO START ?
  
-	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm14
- 		% gmake
- 		
 	execute TestEm14 in 'batch' mode from macro files :
  		% TestEm14   compt.mac
  		
@@ -116,18 +119,4 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
  		Idle> type your commands
  		....
  		Idle> exit
- 
-
- 8- USING HISTOGRAMS
- 
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-  
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake
-	 
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
   

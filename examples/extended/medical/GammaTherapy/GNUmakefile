@@ -18,8 +18,3 @@ include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
 
-histclean:
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
-
-visclean:
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/VisManager.o

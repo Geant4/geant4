@@ -64,21 +64,25 @@
 class CML2Ph_BoxInBox
 {
 public:
-	CML2Ph_BoxInBox();
-	~CML2Ph_BoxInBox(void);
-	bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
-	inline G4int getTotalNumberOfEvents(){return this->sensDet->getTotalNumberOfEvents();};
-	inline CML2SDWithVoxels* getSensDet(){return  this->sensDet;};
-	inline G4VPhysicalVolume *getPhysicalVolume(){return this->PVWorld;};
-	inline G4ThreeVector getHalfContainerSize(){return this->halfSize;};
-	void writeInfo();
+    CML2Ph_BoxInBox();
+    ~CML2Ph_BoxInBox(void);
+    bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
+    inline G4int getTotalNumberOfEvents(){return sensDet->getTotalNumberOfEvents();}
+    inline CML2SDWithVoxels* getSensDet(){return  sensDet;}
+    inline G4VPhysicalVolume *getPhysicalVolume(){return PVWorld;}
+    inline G4ThreeVector getHalfContainerSize(){return halfSize;}
+    void writeInfo();
 private:
-	G4VPhysicalVolume *PVWorld;
-	CML2SDWithVoxels *sensDet;
+    G4VPhysicalVolume *PVWorld;
+    G4VPhysicalVolume *boxInSidePV;
+    G4VPhysicalVolume *layerPV;
+    G4VPhysicalVolume *OutMinusInBoxPV;
 
-	G4ThreeVector centreBoxInside;
-	G4double halfBoxInside_Thickness, surfaceToTargetZValue; 
-	G4ThreeVector halfSize, centre;
+    CML2SDWithVoxels *sensDet;
+
+    G4ThreeVector centreBoxInside;
+    G4double halfBoxInside_Thickness, surfaceToTargetZValue;
+    G4ThreeVector halfSize, centre;
 };
 
 #endif

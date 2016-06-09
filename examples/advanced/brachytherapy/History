@@ -9,19 +9,25 @@ $Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
                       Category History file
                       ---------------------
 
+12.10.2012 -  L. Pandola; tag brachy-V09-05-01
+	      Added a CMakeLists.txt file
+
+11.10.2012 -  G. Cosmo; tag brachy-V09-05-00
+              Explicit inclusion of units and constants headers.
+
 16.09.2011 -  S. Guatelli; tag brachy-V09-04-01
 
 14.09.2011 -  S. Guatelli; G4 Analysis module substitutes the analysis 
-              done with PI-AIDA. macro.C added.
+              Done with PI-AIDA. macro.C added.
 
 02.09.2011 -  S. Guatelli; scoring mesh introduced. 
               Sensitive detector and ReadOutGeometry components deleted.
            
 29.11.2010 -  G.A.P. Cirrone; tag brachy-V09-03-05
-   	      Compilation warnigs removed
+   	      Compilation warnigs removed.
 
 26.11.2010 -  G.A.P. Cirrone & S. Guatelli; tag brachy-V09-03-04
-   	      General code review 
+   	      General code review.
 
 25.11.2010 -- J.Allison; tag brachy-V09-03-03
               Cleaned up use of G4UIExecutive.
@@ -30,7 +36,7 @@ $Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
    	      Fixed compilation error for a missing obsolete include file
 
 03.06.2010 -- Joseph Perl; tag brachy-V09-03-01
-   	      Updated vis usage 
+   	      Updated vis usage.
 
 01.06.2010 -- G.A.P. Cirrone; tag brachy-V09-03-00
               G4UIExecutiveand minor revisions

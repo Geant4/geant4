@@ -23,11 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01FieldMessenger.cc
+/// \brief Implementation of the F01FieldMessenger class
 //
-// $Id: F01FieldMessenger.cc,v 1.8 2006-06-29 17:16:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "F01FieldMessenger.hh"
 
@@ -38,85 +43,79 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-F01FieldMessenger::F01FieldMessenger(F01FieldSetup* pEMfieldSetup)
-  :fEMfieldSetup(pEMfieldSetup)
+F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
+ : G4UImessenger(),
+   fEMfieldSetup(fieldSetup),
+   fFieldDir(0),
+   fStepperCmd(0),
+   fMagFieldCmd(0),
+   fMinStepCmd(0),
+   fUpdateCmd(0)
 { 
-  F01detDir = new G4UIdirectory("/field/");
-  F01detDir->SetGuidance("F01 field tracking control.");
+  fFieldDir = new G4UIdirectory("/field/");
+  fFieldDir->SetGuidance("F01 field tracking control.");
 
-  StepperCmd = new G4UIcmdWithAnInteger("/field/setStepperType",this);
-  StepperCmd->SetGuidance("Select stepper type for magnetic field");
-  StepperCmd->SetParameterName("choice",true);
-  StepperCmd->SetDefaultValue(4);
-  StepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fStepperCmd = new G4UIcmdWithAnInteger("/field/setStepperType",this);
+  fStepperCmd->SetGuidance("Select stepper type for magnetic field");
+  fStepperCmd->SetParameterName("choice",true);
+  fStepperCmd->SetDefaultValue(4);
+  fStepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
  
-  UpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false,false);
-  MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(G4State_Idle); 
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false,false);
+  fMagFieldCmd->SetDefaultUnit("tesla");
+  fMagFieldCmd->AvailableForStates(G4State_Idle); 
  
-  MinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
-  MinStepCmd->SetGuidance("Define minimal step");
-  MinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MinStepCmd->SetParameterName("min step",false,false);
-  MinStepCmd->SetDefaultUnit("mm");
-  MinStepCmd->AvailableForStates(G4State_Idle);  
-       
-  AbsMaterCmd = new G4UIcmdWithAString("/field/setAbsMat",this);
-  AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  AbsMaterCmd->SetParameterName("choice",true);
-  AbsMaterCmd->SetDefaultValue("Xe");
-  AbsMaterCmd->AvailableForStates(G4State_Idle);
+  fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
+  fMinStepCmd->SetGuidance("Define minimal step");
+  fMinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMinStepCmd->SetParameterName("min step",false,false);
+  fMinStepCmd->SetDefaultUnit("mm");
+  fMinStepCmd->AvailableForStates(G4State_Idle);  
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01FieldMessenger::~F01FieldMessenger()
 {
-  delete StepperCmd;
-  delete MagFieldCmd;
-  delete MinStepCmd;
-  delete F01detDir;
-  delete UpdateCmd;
-
-  delete AbsMaterCmd; 
+  delete fStepperCmd;
+  delete fMagFieldCmd;
+  delete fMinStepCmd;
+  delete fFieldDir;
+  delete fUpdateCmd;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 { 
-  if( command == StepperCmd )
+  if( command == fStepperCmd )
   { 
-    fEMfieldSetup->SetStepperType(StepperCmd->GetNewIntValue(newValue));
+    fEMfieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
   }  
-  if( command == UpdateCmd )
+  if( command == fUpdateCmd )
   { 
     fEMfieldSetup->CreateStepperAndChordFinder(); 
   }
-  if( command == MagFieldCmd )
+  if( command == fMagFieldCmd )
   { 
-    fEMfieldSetup->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
+    fEMfieldSetup->SetFieldValue(fMagFieldCmd->GetNewDoubleValue(newValue));
   }
-  if( command == MinStepCmd )
+  if( command == fMinStepCmd )
   { 
-    fEMfieldSetup->SetMinStep(MinStepCmd->GetNewDoubleValue(newValue));
+    fEMfieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
   }
 }
 
-//
-//
-/////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

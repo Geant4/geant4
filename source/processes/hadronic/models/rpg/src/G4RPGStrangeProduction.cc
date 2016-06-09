@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGStrangeProduction.cc,v 1.1 2007-07-18 21:04:21 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
-#include "G4RPGStrangeProduction.hh"
-// #include "G4AntiProton.hh"
-// #include "G4AntiNeutron.hh"
-#include "Randomize.hh"
 #include <iostream>
-#include "G4HadReentrentException.hh"
 #include <signal.h>
 
+#include "G4RPGStrangeProduction.hh"
+#include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadReentrentException.hh"
 
 G4RPGStrangeProduction::G4RPGStrangeProduction()
   : G4RPGReaction() {}
@@ -116,25 +114,20 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   // the fortran code chooses a random replacement of produced kaons
   //  but does not take into account charge conservation 
   //
-  if( vecLen == 1 )  // we know that vecLen > 0
-  {
+  if (vecLen == 1) { // we know that vecLen > 0
     i3 = 0;
     i4 = 1;   // note that we will be adding a new secondary particle in this case only
-  }
-  else               // otherwise  0 <= i3,i4 < vecLen
-  {
-    G4double ran = G4UniformRand();
-    while( ran == 1.0 )ran = G4UniformRand();
-    i4 = i3 = G4int( vecLen*ran );
-    while( i3 == i4 )
-    {
-      ran = G4UniformRand();
-      while( ran == 1.0 )ran = G4UniformRand();
-      i4 = G4int( vecLen*ran );
+  } else {    // otherwise  0 <= i3,i4 < vecLen
+    G4double rnd = G4UniformRand();
+    while (rnd == 1.0) rnd = G4UniformRand();
+    i4 = i3 = G4int(vecLen*rnd);
+    while(i3 == i4) {
+      rnd = G4UniformRand();
+      while( rnd == 1.0 ) rnd = G4UniformRand();
+      i4 = G4int(vecLen*rnd);
     }
   }
 
-  //
   // use linear interpolation or extrapolation by y=centerofmassEnergy*x+b
   //
   const G4double avkkb[] = { 0.0015, 0.005, 0.012, 0.0285, 0.0525, 0.075,

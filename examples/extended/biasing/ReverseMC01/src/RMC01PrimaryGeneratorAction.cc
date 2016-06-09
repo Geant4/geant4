@@ -23,38 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01PrimaryGeneratorAction.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/src/RMC01PrimaryGeneratorAction.cc
+/// \brief Implementation of the RMC01PrimaryGeneratorAction class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01PrimaryGeneratorAction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//      Class Name:        RMC01PrimaryGeneratorAction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "RMC01PrimaryGeneratorAction.hh"
-#include "G4Event.hh"
-#include "G4SingleParticleSource.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "Randomize.hh"
-#include "G4ParticleTable.hh" 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01PrimaryGeneratorAction::RMC01PrimaryGeneratorAction()
-{theParticleSource = new G4GeneralParticleSource();
+{fParticleSource = new G4GeneralParticleSource();
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01PrimaryGeneratorAction::~RMC01PrimaryGeneratorAction()
-{delete theParticleSource; 
+{delete fParticleSource;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{theParticleSource->GeneratePrimaryVertex(anEvent);			
+{fParticleSource->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

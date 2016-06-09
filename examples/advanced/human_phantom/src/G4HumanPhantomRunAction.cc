@@ -34,9 +34,10 @@
 
 #include "G4HumanPhantomRunAction.hh"
 #include "G4HumanPhantomAnalysis.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include "G4Run.hh"
-#include "G4UnitsTable.hh"
 
 G4HumanPhantomRunAction::G4HumanPhantomRunAction()
 {
@@ -120,11 +121,11 @@ void G4HumanPhantomRunAction::EndOfRunAction(const G4Run* aRun)
 }
 
 
-void G4HumanPhantomRunAction::Fill(G4String bodypartName, 
+void G4HumanPhantomRunAction::Fill(G4String bName, 
 				      G4double energyDeposit)
 
 {
- energyTotal[bodypartName] += energyDeposit;
+ energyTotal[bName] += energyDeposit;
 }
 
 void G4HumanPhantomRunAction::totalRunEnergyDeposit() 

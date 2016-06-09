@@ -19,6 +19,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

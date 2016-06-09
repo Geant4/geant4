@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmHistoMessenger.cc
+/// \brief Implementation of the exrdmHistoMessenger class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "exrdmHistoMessenger.hh"
@@ -38,47 +41,47 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmHistoMessenger::exrdmHistoMessenger(exrdmHisto* manager)
-:histo (manager)
+:fHisto (manager)
 {
-  histoDir = new G4UIdirectory("/histo/");
-  histoDir->SetGuidance("histograms control");
+  fHistoDir = new G4UIdirectory("/histo/");
+  fHistoDir->SetGuidance("histograms control");
 
-  factoryCmd = new G4UIcmdWithAString("/histo/fileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");
-  factoryCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fActoryCmd = new G4UIcmdWithAString("/histo/fileName",this);
+  fActoryCmd->SetGuidance("set name for the histograms file");
+  fActoryCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
-  fileCmd = new G4UIcmdWithAString("/histo/fileType",this);
-  fileCmd->SetGuidance("set type (aida, hbook or root) for the histograms file");
-  fileCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fIleCmd = new G4UIcmdWithAString("/histo/fileType",this);
+  fIleCmd->SetGuidance("set type (aida, hbook or root) for the histograms file");
+  fIleCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
-  histoCmd = new G4UIcommand("/histo/setHisto",this);
-  histoCmd->SetGuidance("Set bining of the histo number ih :");
-  histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
-  histoCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fHistoCmd = new G4UIcommand("/histo/setHisto",this);
+  fHistoCmd->SetGuidance("Set bining of the fHisto number ih :");
+  fHistoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
+  fHistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
-  ih->SetGuidance("histo number : from 0 to MaxexrdmHisto");
+  ih->SetGuidance("fHisto number : from 0 to MaxexrdmHisto");
   ih->SetParameterRange("ih>=0");
-  histoCmd->SetParameter(ih);
+  fHistoCmd->SetParameter(ih);
   //
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
   nbBins->SetGuidance("number of bins");
   nbBins->SetParameterRange("nbBins>0");
-  histoCmd->SetParameter(nbBins);
+  fHistoCmd->SetParameter(nbBins);
   //
   G4UIparameter* valMin = new G4UIparameter("valMin",'d',false);
   valMin->SetGuidance("valMin, expressed in unit");
-  histoCmd->SetParameter(valMin);
+  fHistoCmd->SetParameter(valMin);
   //
   G4UIparameter* valMax = new G4UIparameter("valMax",'d',false);
   valMax->SetGuidance("valMax, expressed in unit");
-  histoCmd->SetParameter(valMax);
+  fHistoCmd->SetParameter(valMax);
   //
   G4UIparameter* unit = new G4UIparameter("unit",'s',true);
   unit->SetGuidance("if omitted, vmin and vmax are assumed dimensionless");
   unit->SetDefaultValue("none");
-  histoCmd->SetParameter(unit);
+  fHistoCmd->SetParameter(unit);
 
 }
 
@@ -86,23 +89,24 @@ exrdmHistoMessenger::exrdmHistoMessenger(exrdmHisto* manager)
 
 exrdmHistoMessenger::~exrdmHistoMessenger()
 {
-  delete fileCmd;
-  delete histoCmd;
-  delete factoryCmd;
-  delete histoDir;
+  delete fIleCmd;
+  delete fHistoCmd;
+  delete fActoryCmd;
+  delete fHistoDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,
+                                      G4String newValues)
 {
-  if (command == factoryCmd)
-    histo->setFileName(newValues);
+  if (command == fActoryCmd)
+    fHisto->SetFileName(newValues);
 
-  if (command == fileCmd)
-    histo->setFileType(newValues);
+  if (command == fIleCmd)
+    fHisto->SetFileType(newValues);
     
-  if (command == histoCmd)
+  if (command == fHistoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
      const char* t = newValues;
      std::istringstream is(t);
@@ -110,7 +114,7 @@ void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
      G4String unit = unts;
      G4double vUnit = 1. ;
      if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
-     histo->setHisto1D(ih,nbBins,vmin,vmax,vUnit);
+     fHisto->SetHisto1D(ih,nbBins,vmin,vmax,vUnit);
    }
 }
 

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2008-03-31 10:22:59 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm17/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* Hist)
-  :runAction(RuAct), histoManager(Hist)
+  :fRunAction(RuAct), fHistoManager(Hist)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +57,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   //count processes 
   //    
-  runAction->CountProcesses(procName);
+  fRunAction->CountProcesses(procName);
   
   //plot energy transfered
   //
@@ -76,7 +78,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   else if (procName == "hIoni")      id = 5; 
   else if (procName == "hPairProd")  id = 6;
   else if (procName == "hBrems")     id = 7;
-  histoManager->FillHisto(id,lgepsE);		       
+  fHistoManager->FillHisto(id,lgepsE);                       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

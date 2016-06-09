@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TargetSD.cc,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/src/TargetSD.cc
+/// \brief Implementation of the TargetSD class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -47,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TargetSD::TargetSD(const G4String& name)
- : G4VSensitiveDetector(name), theHisto(HistoManager::GetPointer())
+ : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,7 +67,7 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep > 0.0) { theHisto->AddEnergy(edep, aStep); }
+  fHisto->AddEnergy(edep, aStep); 
   return true;
 }
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.42 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //------------------ G4PhotoElectricEffect physics process ---------------------
@@ -69,6 +68,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PEEffectFluoModel.hh"
 #include "G4Electron.hh"
 
@@ -83,6 +83,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   SetBuildTableFlag(false);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fPhotoElectricEffect);
+  SetMinKinEnergyPrim(200*keV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,10 +104,10 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!Model()) { SetModel(new G4PEEffectFluoModel()); }
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    if(!EmModel(1)) { SetEmModel(new G4PEEffectFluoModel(),1); }
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(1));
   }
 }
 

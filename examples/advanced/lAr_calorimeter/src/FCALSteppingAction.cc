@@ -23,17 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALSteppingAction.cc,v 1.7 2006-06-29 16:03:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include <iostream>
+
 #include "FCALSteppingAction.hh"
 #include "G4SteppingManager.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
@@ -48,8 +51,6 @@
 #include "G4ThreeVector.hh"
 
 #include "G4ios.hh"
-#include <iostream>
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

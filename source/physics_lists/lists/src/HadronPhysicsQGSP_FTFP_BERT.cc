@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.4 2010-06-19 11:12:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -35,11 +34,13 @@
 // Modified:
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "HadronPhysicsQGSP_FTFP_BERT.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
@@ -48,23 +49,58 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
-
 #include "G4PhysListUtil.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_FTFP_BERT);
+
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
+    , theNeutrons(0)
+    , theFTFPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theFTFPPiK(0)
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theFTFPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
+    , QuasiElastic(true)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String&, 
 							 G4bool quasiElastic)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT"), 
-		       QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
+    , theNeutrons(0)
+    , theFTFPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theFTFPPiK(0)
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theFTFPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
+    , QuasiElastic(quasiElastic)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
@@ -150,8 +186,6 @@ HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
    delete theHyperon;
    delete theAntiBaryon;
    delete theFTFPAntiBaryon;
-
-   delete theCHIPSInelastic;
 }
 
 void HadronPhysicsQGSP_FTFP_BERT::ConstructParticle()
@@ -176,14 +210,6 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  // use CHIPS cross sections also for Kaons
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
-  
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
-
   theHyperon->Build(); 
   theAntiBaryon->Build(); 
 }

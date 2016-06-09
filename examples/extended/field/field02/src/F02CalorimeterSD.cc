@@ -23,17 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02CalorimeterSD.cc
+/// \brief Implementation of the F02CalorimeterSD class
 //
-// $Id: F02CalorimeterSD.cc,v 1.6 2006-06-29 17:17:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "F02CalorimeterSD.hh"
-
 #include "F02CalorHit.hh"
 #include "F02DetectorConstruction.hh"
 
@@ -42,69 +41,70 @@
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-  
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02CalorimeterSD::F02CalorimeterSD(G4String name,
                                    F02DetectorConstruction* det)
-  : G4VSensitiveDetector(name), Detector(det)
+  : G4VSensitiveDetector(name),
+    fCalCollection(0), 
+    fDetector(det),
+    fHitID(new G4int[500])
 {
   collectionName.insert("CalCollection");
-  HitID = new G4int[500];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02CalorimeterSD::~F02CalorimeterSD()
 {
-  delete [] HitID;
+  delete [] fHitID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F02CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  CalCollection = new F02CalorHitsCollection(SensitiveDetectorName,
-                                             collectionName[0]); 
+  fCalCollection = new F02CalorHitsCollection(SensitiveDetectorName,
+                                              collectionName[0]); 
   for (G4int j=0;j<1; j++)
   {
-    HitID[j] = -1;
+    fHitID[j] = -1;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool F02CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+G4bool F02CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double edep = step->GetTotalEnergyDeposit();
   G4double stepl = 0.;
 
-  stepl = aStep->GetStepLength();
+  stepl = step->GetStepLength();
 
   if ((edep == 0.) && (stepl == 0.) ) return false;      
 
   G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+    = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 
-  G4int F02Number = 0 ;
-  if (HitID[F02Number]==-1)
+  G4int number = 0 ;
+  if (fHitID[number]==-1)
     { 
       F02CalorHit* calHit = new F02CalorHit();
-      if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
-      HitID[F02Number] = CalCollection->insert(calHit) - 1;
+      if (physVol == fDetector->GetAbsorber()) calHit->AddAbs(edep,stepl);
+      fHitID[number] = fCalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on F02: " << F02Number << G4endl;
+        G4cout << " New Calorimeter Hit on F02: " << number << G4endl;
     }
   else
     { 
-      if (physVol == Detector->GetAbsorber())
-         (*CalCollection)[HitID[F02Number]]->AddAbs(edep,stepl);
+      if (physVol == fDetector->GetAbsorber())
+         (*fCalCollection)[fHitID[number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to F02: " << F02Number << G4endl; 
+        G4cout << " Energy added to F02: " << number << G4endl; 
     }
     
   return true;
@@ -112,14 +112,14 @@ G4bool F02CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void F02CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
+void F02CalorimeterSD::EndOfEvent(G4HCofThisEvent* hce)
 {
-  static G4int HCID = -1;
-  if(HCID<0)
+  static G4int hcID = -1;
+  if (hcID<0)
   {
-    HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    hcID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
   }
-  HCE->AddHitsCollection(HCID,CalCollection);
+  hce->AddHitsCollection(hcID,fCalCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

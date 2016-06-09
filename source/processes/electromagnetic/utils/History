@@ -17,6 +17,312 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 November 12: V.Ivant (emutils-V09-05-56)
+08 November 12: V.Ivant (emutils-V09-05-55)
+- G4VEnergyLossProcess - fixed non-reproducibility for ions
+
+08 November 12: V.Ivant (emutils-V09-05-54)
+- G4VMultipleScattering - improved logic of computation of PostStep
+    safety and true step length, added more accurate protection 
+    against case when true length exceed physics step limit
+
+06 November 12: V.Ivant (emutils-V09-05-53)
+- G4VMultipleScattering - fixed non-reproducibility for ions, added
+    protection - do not sample scattering if range exceed true step
+    length less than minGeom parameter (1e-6 mm)
+
+03 November 12: V.Ivant (emutils-V09-05-52)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - fixed
+    printout at initialisation 
+
+02 November 12: V.Ivant (emutils-V09-05-51)
+- G4VMultipleScattering - ion multiple scattering is defined 
+    in the class constructor
+- G4VMscModel - build table for all particles except case when
+    multiple scattering process is shared with G4GenericIon  
+
+26 October 12: V.Ivant (emutils-V09-05-50)
+- G4VMultipleScattering - return version 48
+- G4VEmProcess - changed initialisation for ions
+
+25 October 12: V.Ivant (emutils-V09-05-49)
+- G4VMultipleScattering - moved relocation AlongStep and do not 
+	call msc PostStep
+
+21 October 12: V.Ivant (emutils-V09-05-48)
+- G4EmBiasingManager - cleanup the code; do not modify ParticleChange
+    when apply RussianRoulette (monor CPU saving); moved
+    RussianRoulette method to inline; added range cut option
+- G4VEmProcess, G4VEnergyLossProcess, G4EmProcessOption - add
+    corresponding modifiction needed for biasing interface
+
+20 October 12: V.Ivant (emutils-V09-05-47)
+- G4VMultipleScattering - fixed typo in previous tag;
+    compute true path length even is msc model is inactive 
+
+20 October 12: V.Ivant (emutils-V09-05-46)
+- G4VMultipleScattering - critical fix for stopping particles 
+    (ATLAS report on small steps of low-energy ions)
+
+19 October 12: V.Ivant (emutils-V09-05-45)
+- G4VEnergyLossProcess, G4VMultipleScattering - attempt to optimise
+    run time methods called at each step
+- G4EmCalculator - added ComputeGammaAttenuationLength method
+- added warning to obsolete methods and classes
+
+18 October 12: V.Ivant (emutils-V09-05-44)
+- G4VEnergyLossProcess - define flag isIon for all nucleus except
+    deuteron, triton and special DNA ions
+- G4VEmProcess, G4EmModelManager - minor reduce of number of operations
+    at each step
+- G4VMscModel - minor optimisation of inline methods
+
+05 October 12: V.Ivant (emutils-V09-05-43)
+- G4VMultipleScatteringProcess - check that true step length proposed
+    by msc model do not exceed physical true length
+
+01 October 12: V.Ivant (emutils-V09-05-42)
+- G4VAtomDeexcitation - updated initialisation for the case
+    when de-excitation is not used
+
+27 September 12: V.Ivant (emutils-V09-05-41)
+- G4VMscModel - added GetDEDX method
+
+21 September 12: V.Ivant (emutils-V09-05-40)
+- G4VAtomDeexcitation - removed forgotten debug printout
+- G4VMultipleScatteringProcess - minor cleanup
+
+20 September 12: V.Ivant (emutils-V09-05-39)
+- G4VAtomDeexcitation - fixed logic of activation of de-excitation
+    per region and for all geometry
+
+20 September 12: V.Ivant (emutils-V09-05-38)
+- G4VAtomDeexcitation - added computation of sum of energies of
+    de-excitation gamma and electron produced AlongStep;
+    use logical OR instead of AND for de-exitation flags 
+- G4VEnergyLossProcess - fixed energy balance for the case of de-excitation
+    AlongStep  
+
+17 September 12: V.Ivant (emutils-V09-05-37)
+- G4VAtomDeexcitation - fixed de-excitation AlongStep by substitution 
+    which limited de-ecitation from ion ionisation
+- G4VEnergyLossProcess - take into account modifications for
+    G4VAtomDeexcitation in order to keep energy balance  
+
+06 August 12: V.Ivant (emutils-V09-05-36)
+- G4VMultipleScatteringProcess - added call to ReLocate PostStep
+
+06 August 12: V.Ivant (emutils-V09-05-35)
+- G4VMultipleScatteringProcess - change final position PostStep to
+    bypass bug in parallel transportation
+
+28 August 12: V.Ivant (emutils-V09-05-34)
+- G4VMultipleScatteringProcess - improved debug printout
+
+24 August 12: V.Ivant (emutils-V09-05-33)
+- G4VMultipleScatteringProcess, G4VMscModel - sampling scattering
+    is moved from PostStep to AlongStep
+- G4VEmProcess - fixed minor memory leak at destruction
+
+14 August 12: V.Ivant (emutils-V09-05-32)
+- G4VEnergyLossProcess - fixed non-reproducibility by extention
+    of initialisation in StertTracking method for ions
+- G4VEmProcess - removed over initialisation in StartTracking
+- G4EmModelManager - improve printout on models 
+
+09 August 12: V.Ivant (emutils-V09-05-31)
+- G4VMultipleScattering - allowed to change position and direction 
+    AlongStep
+
+01 August 12: V.Ivant (emutils-V09-05-30)
+- G4EnergyLossMessenger - Allow to apply bising UI commands only
+    in G4_Idle state
+
+30 July 12: V.Ivant (emutils-V09-05-29)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering -
+    use the same list of particles for printout at initialisation
+    in the case of verboseLevel=1 
+
+20 July 12: V.Ivant (emutils-V09-05-28)
+- G4VEnergyLossProcess - similar fix as for G4VEmProcess
+- G4VEmAngularGenerator - cleanup comments, removed obsolete methods  
+
+19 July 12: V.Ivant (emutils-V09-05-27)
+- G4VEmProcess - fixed problem introduced in previous tag making
+    possible infinite loop in DNA tracking of 6 eV electron 
+
+17 July 12: V.Ivant (emutils-V09-05-26)
+- G4VEnergyLossProcess, G4VEmProcess - updated tracking parameters 
+    and flags in PostStepGetPhysicalInteractionLength
+- G4EmBiasingManager - fixed bug in bremsstrahlung splitting, which
+    practically forbid splitting
+
+13 July 12: V.Ivant (emutils-V09-05-25)
+- G4VEnergyLossProcess, G4LossTableManager - removed unused method 
+    InitialiseMSC
+
+13 July 12: V.Ivant (emutils-V09-05-24)
+- G4EmBiasingManager - do not using dynamic weight for Russian roulette
+
+12 July 12: V.Ivant (emutils-V09-05-23)
+- G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel - added 
+  implementation of new method StartTracking 
+- G4VMscModel - changed initialisation of the new track using
+    StartTracking method 
+- G4VEmAngularDistribution - add temporary dummy implementation of virtual
+    sampling methods - will be removed when all generators will migrated
+    to the new signature
+
+10 July 12: G.Cosmo (emutils-V09-05-22)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+05 July 12: V.Ivant (emutils-V09-05-21)
+ - G4EmCorrections, G4VEmModel, G4VMscModel - fixed shadowing
+
+04 July 12: V.Ivant (emutils-V09-05-20)
+ - G4VMscModel - method Value() is moved to G4VEmModel
+ - G4VEmProcess - added extra option allowing to build two different tables
+     for low-energy and high-energy using different interpolation method,
+     for that added optinal extra energy limit and SetMinKinEnergyPrim(G4double)
+     method, improved initialisation of tables and initialisation printout
+ - G4EmTableType - added type fIsCrossSectionPrim
+ - G4EmModelManager - added possibility to build high energy table of
+     cross sections
+ - G4VEmAngularDistribution - cleanup user interface 
+
+08 June 12: D. Sawkey
+ - G4VEmProcess fix for first part of bug 1314. Force if step==1 (see 30May12) 
+
+08 June 12: V.Ivant (emutils-V09-05-19)
+ - Fixed shadowing
+
+06 June 12: V.Ivant (emutils-V09-05-18)
+ - G4VMscModel - trying optimise inline methods
+ - G4VMultipleScattering - trying optimise initialisation and reduce
+     number of checks in run time
+ - G4LossTableManager - moved inline methods to the source
+ - G4EmBiasingmanager - add check on number of secondaries PostStep,
+   if it is not 1 then disable both spliting and Russian roulette,
+   this does not affect ordinary delta-electron and bremssrahlung
+   secondary biasing (splitting and Russian roulette);
+   Dynamic weight approach (weight is function of secondary energy)
+   is applied for Russian roulette if biasing limit energy is set 
+   below 1 GeV, alternatively costant factor is used 
+
+05 June 12: V.Ivant (emutils-V09-05-17)
+ - G4VMscModel - allow build transport x-section table for d,t,He3,He4
+
+01 June 12: D. Sawkey (emutils-V09-05-16)
+ - G4EnergyLossMessenger: Put back in guidance for high energy limit for 
+   bremsplitting, russian roulette
+31 May 12: D. Sawkey
+    G4EmBiasingManager:Put back in high energy limit for Russian roulette, 
+    bremsplitting
+
+31 May 12: V.Ivant (emutils-V09-05-15)
+30 May 12: D. Sawkey
+ - G4VEnergyLossProcess bug 1314 fix: for forced biasing, now force if step==1
+
+30 May 12: D. Sawkey 
+ - G4VEmProcess, G4VEnergyLossProcess. for forced interaction, cross-
+   section biasing, set weight consistently
+
+29 May 12: D. Sawkey
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess, 
+  G4EmProcessOptions, G4EnergyLossMessenger: Change brem splitting to 
+  EGS-style with unique secondaries. Only brem split particles with 
+  weight > 1/N (N=brem splitting factor), and only Russian Roulette 
+  with weight < 1. Energy limit no longer used.
+
+28 May 12: V.Ivant (emutils-V09-05-14)
+- G4EmCalculator - fixed FindRegion
+
+18 May 12: V.Ivant (emutils-V09-05-13)
+- G4EmModelManager - improved printout of model energy limits
+- G4VEmModel - added inline methods HighEnergyActivationLimit(),
+    LowEnergyActivationLimit(), ForceBuildTableFlag(), ForceBuildTable()
+- G4VMscModel - updated GetRange() and GetEnergy() methods allowing to
+    use the same model class for many particles
+
+09 May 12: V.Ivant (emutils-V09-05-12)
+- G4ElectronIonPair - use inverse FanoFactor to simplify formula
+
+09 May 12: V.Ivant (emutils-V09-05-11)
+- G4VMultipleScatetring - improved printout at initialisation
+- G4ElectronIonPair - cleanup implementation of sampling of number of ions
+
+26 April 12: V.Ivant (emutils-V09-05-10)
+- G4EmCalculator - fixed GetMeanFreePath for msc processes (bug introduced
+    in previous tags)
+
+20 April 12: V.Ivant (emutils-V09-05-09)
+- G4LossTableManager - added methods MinKinEnergy, MaxkinEnergy
+- G4EmModelManager - extended printout if cross section table is built for
+                     the model
+- G4EmCalculator - improved model selection for msc processes
+- G4VMultipleScatetring - removed transport cross section table,
+                          simplified AlongStepGetPhysicalInteractionLength
+                          method, added protection against zero
+                          kinetic energy into PostStepDoIt,
+                          general cleanup of the code
+- G4VMscModel - added building of transport cross section table and new 
+                method GetTransportCrossSection to be used in run time
+- G4LossTableBuilder - added method BuildTableForModel
+
+19 April 12: V.Ivant (emutils-V09-05-08)
+- G4EmCorrections : A.Ribon fixed reproducibility violation due to the cashing
+    of IonHighOrderCorrections with a vector depending on the ion charge.
+    The correction depends not only on the ion charge but also on its
+    mass, therefore the cashing based on the ion charge only depends on
+    which isotope is encountered first, which depends on the history,
+    and violated the reproducibility. The fix consists of using a map
+    for cashing, with the key given by the PDG encoding of the ion,
+    which is unique for each isotope.
+- G4VEmProcess - use ProposeWeight instead of ProposeParentWeight
+    to fix weights of secondary particle for gamma processes
+- G4LossTableManager - minor correction of number of bins per decade
+
+15 April 12: V.Ivant (emutils-V09-05-07)
+- G4LossTableBuilder - added method BuildTableForModel allowing to build
+    G4PhysicsTable for a model
+- G4VEmModel - added virtual method Value, by default computes cross section
+- G4VMscModel - added method GetTransportMeanFreePath 
+
+19 March 12: V.Ivant (emutils-V09-05-06)
+- G4EmCalculator - fixed compillation warning at gcc 4.6
+
+15 March 12: V.Ivant (emutils-V09-05-05)
+- G4LossTableManager - added a check and protection against double
+    registration of the same process; this addition allows to use
+    the same EM energy loss process for different particle types
+- G4EmCalculator - modifed method to access a process taking into account 
+    that the same process may used by different particle type;
+    added new methods ActiveForParticle, FindEnLossProcess,
+    FindDiscreteProcess, FindMscProcess
+
+5 March 12: V.Ivant (emutils-V09-05-04)
+- G4VEnergyLossProcess fixed crash due to apply G4hIonisation for ions;
+- G4VEnergyLossProcess, G4VEmProcess, G4LossTableBuilder - delete old 
+     G4PhysicsVectors if new vectors are built between runs
+- G4VAtomDeexcitation - use safe method to extract integer Z
+
+29 February 12: V.Ivant (emutils-V09-05-03)
+- G4VEnergyLossProcess fixed computation of delta-electron cross section 
+    for ions and very small cuts (about 1 um), reported by Sergio Ibarmia 
+
+21 February 12: V.Ivant (emutils-V09-05-02)
+- G4VEmAngularDistribution added new method Initialise 
+
+21 February 12: V.Ivant (emutils-V09-05-01)
+- G4VEmAngularDistribution added two new methods SampleCosinePolarAngle
+    and SampleDirection
+
+7 February 12: V.Ivant (emutils-V09-05-00)
+- G4VAtomDeexcitation - add activation of deexcitation for the world
+    if deexcitation is activated but G4Regions for deexcitation 
+    are not defined
+
 10 November 11: V.Ivant (emutils-V09-04-51)
 - G4LossTableManager, G4EmModelManager - fixed defects reported by 
     Coverity - private assignment operator and copy constructor added

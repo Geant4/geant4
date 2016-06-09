@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QException.cc,v 1.10 2009-02-23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QException ----------------
 //           by Mikhail Kossov, November 2003.

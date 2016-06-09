@@ -43,6 +43,7 @@
 #include <cmath>
 
 #include "G4TwistTrapParallelSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4JTPolynomialSolver.hh"
 
 //=====================================================================
@@ -294,7 +295,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
   else {
 
-    G4double c[9],sr[8],si[8] ;  
+    G4double c[9],srd[8],si[8] ;  
 
     c[8] = -3600*(-2*phiyz + fDy2plus1*fPhiTwist*v.z()) ;
     c[7] = -7200*(phixz - 2*fDz*v.y() + (fdeltaY + fDy2minus1)*v.z()) ;
@@ -320,15 +321,15 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif    
 
     G4JTPolynomialSolver trapEq ;
-    G4int num = trapEq.FindRoots(c,8,sr,si);
+    G4int num = trapEq.FindRoots(c,8,srd,si);
   
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
       if ( si[i]==0.0 ) {  // only real solutions
 #ifdef G4TWISTDEBUG
-        G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
+        G4cout << "Solution " << i << " : " << srd[i] << G4endl ;
 #endif
-        phi = std::fmod(sr[i] , pihalf)  ;
+        phi = std::fmod(srd[i] , pihalf)  ;
 
         u = (1/std::cos(phi)*(2*phixz + 4*fDz*phi*v.x() - 2*fdeltaX*phi*v.z() + (fDy2plus1*fPhiTwist + 2*fDy2minus1*phi)*v.z()* std::sin(phi)))/(2.*fPhiTwist*v.z()) ;
 
@@ -998,7 +999,7 @@ G4ThreeVector G4TwistTrapParallelSide::ProjectPoint(const G4ThreeVector &p,
 //=====================================================================
 //* GetFacets() -------------------------------------------------------
 
-void G4TwistTrapParallelSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
+void G4TwistTrapParallelSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
                                          G4int faces[][4], G4int iside ) 
 {
 
@@ -1011,7 +1012,7 @@ void G4TwistTrapParallelSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
 
   G4double umin, umax ;
 
-  // calculate the (n-1)*(m-1) vertices
+  // calculate the (n-1)*(k-1) vertices
 
   G4int i,j ;
 
@@ -1022,23 +1023,23 @@ void G4TwistTrapParallelSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
     umin = GetBoundaryMin(phi) ;
     umax = GetBoundaryMax(phi) ;
 
-    for ( j = 0 ; j<m ; j++ ) {
+    for ( j = 0 ; j<k ; j++ ) {
 
-      nnode = GetNode(i,j,m,n,iside) ;
-      u = umax - j*(umax-umin)/(m-1) ;
+      nnode = GetNode(i,j,k,n,iside) ;
+      u = umax - j*(umax-umin)/(k-1) ;
       p = SurfacePoint(phi,u,true) ;  // surface point in global coordinate system
 
       xyz[nnode][0] = p.x() ;
       xyz[nnode][1] = p.y() ;
       xyz[nnode][2] = p.z() ;
 
-      if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
+      if ( i<n-1 && j<k-1 ) {   // conterclock wise filling
         
-        nface = GetFace(i,j,m,n,iside) ;
-        faces[nface][0] = GetEdgeVisibility(i,j,m,n,0,-1) * (GetNode(i  ,j  ,m,n,iside)+1) ;  // fortran numbering
-        faces[nface][1] = GetEdgeVisibility(i,j,m,n,1,-1) * (GetNode(i  ,j+1,m,n,iside)+1) ;
-        faces[nface][2] = GetEdgeVisibility(i,j,m,n,2,-1) * (GetNode(i+1,j+1,m,n,iside)+1) ;
-        faces[nface][3] = GetEdgeVisibility(i,j,m,n,3,-1) * (GetNode(i+1,j  ,m,n,iside)+1) ;
+        nface = GetFace(i,j,k,n,iside) ;
+        faces[nface][0] = GetEdgeVisibility(i,j,k,n,0,-1) * (GetNode(i  ,j  ,k,n,iside)+1) ;  // fortran numbering
+        faces[nface][1] = GetEdgeVisibility(i,j,k,n,1,-1) * (GetNode(i  ,j+1,k,n,iside)+1) ;
+        faces[nface][2] = GetEdgeVisibility(i,j,k,n,2,-1) * (GetNode(i+1,j+1,k,n,iside)+1) ;
+        faces[nface][3] = GetEdgeVisibility(i,j,k,n,3,-1) * (GetNode(i+1,j  ,k,n,iside)+1) ;
 
       }
     }

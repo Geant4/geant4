@@ -39,6 +39,8 @@
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 #include "G4GeneralPhaseSpaceDecay.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
@@ -47,7 +49,7 @@
 
 G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(G4int Verbose) : 
                           G4VDecayChannel("Phase Space", Verbose),
-			  theDaughterMasses(0)
+                          parentmass(0.), theDaughterMasses(0)
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
 }
@@ -70,9 +72,12 @@ G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName
   
   //   Set the parent particle (resonance) mass to the (default) PDG vale
   if (parent != NULL)
-     {
+  {
       parentmass = parent->GetPDGMass();
-     }
+  } else {
+	  parentmass=0.;
+  }
+
 }
 
 G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName,
@@ -377,7 +382,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
   G4double tmas;
   G4double weight = 1.0;
   G4int    numberOfTry = 0; 
-  G4int index1, index2;
+  G4int index1;
 
   do {
     //Generate rundom number in descending order 
@@ -388,7 +393,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
       rd[index1] = G4UniformRand(); 
     rd[ numberOfDaughters -1] = 0.0;
     for(index1 =1; index1 < numberOfDaughters -1; index1++) {
-      for(index2 = index1+1; index2 < numberOfDaughters; index2++) {
+      for(G4int index2 = index1+1; index2 < numberOfDaughters; index2++) {
         if (rd[index1] < rd[index2]){
           temp         = rd[index1];
           rd[index1]   = rd[index2];

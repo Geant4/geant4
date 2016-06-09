@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.2 2006-06-29 16:43:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +44,7 @@
 
 TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
                                PrimaryGeneratorAction* kin, HistoManager* histo)
-:detector(det), runAction(run), kinematic(kin), histoManager(histo)
+:fDetector(det), fRunAction(run), fKinematic(kin), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,18 +57,18 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
  G4double tracklen = track->GetTrackLength();
  if (trackID == 1) {
-    runAction->AddTrackLength(tracklen);
-    histoManager->FillHisto(3, tracklen);
+    fRunAction->AddTrackLength(tracklen);
+    fHistoManager->FillHisto(3, tracklen);
  } else if (track->GetDefinition()->GetPDGCharge() != 0.)
-    histoManager->FillHisto(6, tracklen);
+    fHistoManager->FillHisto(6, tracklen);
            
  //extract projected range of primary particle
  //
  if (trackID == 1) {
    G4double pr = (track->GetPosition())*
-                 (kinematic->GetParticleGun()->GetParticleMomentumDirection());
-   runAction->AddProjRange(pr);
-   histoManager->FillHisto(5, pr);
+                 (fKinematic->GetParticleGun()->GetParticleMomentumDirection());
+   fRunAction->AddProjRange(pr);
+   fHistoManager->FillHisto(5, pr);
  }
             
  //mean step size of primary particle
@@ -74,7 +76,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  if (trackID == 1) {
    G4int nbOfSteps = track->GetCurrentStepNumber();
    G4double stepSize = tracklen/nbOfSteps;
-   runAction->AddStepSize(nbOfSteps,stepSize);
+   fRunAction->AddStepSize(nbOfSteps,stepSize);
  }
 }
 

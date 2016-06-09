@@ -45,6 +45,7 @@ private:
   G4UIdirectory* interactorDirectory;
   G4UIcommand* addMenu;
   G4UIcommand* addButton;
+  G4UIcommand* addIcon;
   G4UIcommand* sys;
 };
 

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DriftChamber.cc,v 1.6 2006-06-29 16:32:26 gunter Exp $
+/// \file analysis/A01/src/A01DriftChamber.cc
+/// \brief Implementation of the A01DriftChamber class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01DriftChamber.hh"
@@ -41,18 +44,18 @@ A01DriftChamber::A01DriftChamber(G4String name)
 {
   G4String HCname;
   collectionName.insert(HCname="driftChamberColl");
-  HCID = -1;
+  fHCID = -1;
 }
 
 A01DriftChamber::~A01DriftChamber(){;}
 
 void A01DriftChamber::Initialize(G4HCofThisEvent*HCE)
 {
-  hitsCollection = new A01DriftChamberHitsCollection
+  fHitsCollection = new A01DriftChamberHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(hitsCollection); }
-  HCE->AddHitsCollection(HCID,hitsCollection);
+  if(fHCID<0)
+  { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
+  HCE->AddHitsCollection(fHCID,fHitsCollection);
 }
 
 G4bool A01DriftChamber::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
@@ -74,7 +77,7 @@ G4bool A01DriftChamber::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
   aHit->SetLocalPos(localPos);
   aHit->SetTime(preStepPoint->GetGlobalTime());
 
-  hitsCollection->insert(aHit);
+  fHitsCollection->insert(aHit);
 
   return true;
 }

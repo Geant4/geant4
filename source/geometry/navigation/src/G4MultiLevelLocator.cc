@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc,v 1.6 2010-07-13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G4MultiLevelLocator implementation
 //
@@ -234,7 +233,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
       G4ThreeVector  NewMomentumDir= ApproxIntersecPointV.GetMomentumDir(); 
       G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
       
-#ifdef  DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
       if( VerboseLevel > 3 )
       { 
          G4ThreeVector  ChordAB           = Point_B - Point_A;
@@ -607,7 +606,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
 
       if( (Second_half)&&(depth!=0) )
       {
-        // Second part of curve (InterMed[depth],Intermed[depth-1])                       ) 
+        // Second part of curve (InterMed[depth],Intermed[depth-1])) 
         // On the depth-1 level normally we are on the 'second_half'
 
         Second_half = true;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh,v 1.8 2010-11-17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -80,8 +79,6 @@ public:
 
     virtual ~G4PhotonEvaporation();
 
-    virtual void Initialize(const G4Fragment & fragment);
-
     virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
     virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
@@ -90,7 +87,7 @@ public:
 
     virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
 
-    virtual G4double GetEmissionProbability() const;
+    virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
     virtual void SetEmissionStrategy(G4VEmissionProbability * probAlgorithm);
 
@@ -100,7 +97,9 @@ public:
 
     void RDMForced (G4bool);
   
-    void SetMaxHalfLife(G4double) ;
+    void SetMaxHalfLife(G4double);
+
+    void SetTimeLimit(G4double value);
  
     void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 

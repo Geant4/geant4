@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LElastic.hh,v 1.12 2007-02-26 19:05:01 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Model: Low energy elastic scattering -- header file
@@ -71,6 +70,8 @@ class G4LElastic : public G4HadronicInteraction
                                    G4Nucleus& targetNucleus);
 
     virtual void ModelDescription(std::ostream& outFile) const;
+
+    virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   private:
 

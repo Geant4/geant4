@@ -23,26 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// **********************************************************************
-// *                                                                    *
-// *                    GEANT 4 tutorial 1                              *
-// *                                                                    *
-// * MODULE:            A01AnalysisManager.cc                           *
-// * -------                                                            *
-// *                                                                    *
-// * Version:           0.1                                             *
-// * Date:              January 28 2002                                 *
-// * Author:            T.Johnson                                       *
-// * Organisation:      SLAC                                            *
-// *                                                                    *
-// **********************************************************************
-//
-// CHANGE HISTORY
-// --------------
-//
-//
-// **********************************************************************
+/// \file analysis/A01/include/A01AnalysisManager.hh
+/// \brief Definition of the A01AnalysisManager class
 
 #ifndef A01AnalysisManager_h
 #define A01AnalysisManager_h 1
@@ -73,15 +55,14 @@ public:
   IPlotter* getPlotter();
 
 private:
-
   A01AnalysisManager();
-  static A01AnalysisManager* instance;
+  static A01AnalysisManager* fInstance;
 
-  IAnalysisFactory* analysisFactory;
-  IHistogramFactory* hFactory;
+  IAnalysisFactory* fAnalysisFactory;
+  IHistogramFactory* fFactory;
   ITupleFactory* tFactory;
-  IPlotter* plotter;
-  ITree* tree;
+  IPlotter* fPlotter;
+  ITree* fTree;
 };
 
 #endif

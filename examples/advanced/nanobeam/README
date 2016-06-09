@@ -71,7 +71,7 @@ Visualization has not been implemented.
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
 
-1) You must have compiled your Geant4 installation with the full version of the
+1) You must have compiled your Geant4 installation with the FULL version of the
 CLHEP library which can handle matrix operations.
 
 2) The variable G4ANALYSIS_USE must be set to 1.
@@ -81,7 +81,7 @@ CLHEP library which can handle matrix operations.
   
 4) The code should be compiled with gmake and run with :
 
-> $G4WORDIR/bin/$G4SYSTEM/Nanobeam 
+> $G4WORDIR/bin/$G4SYSTEM/nanobeam 
 
 The macro file default.mac is read by default.
 

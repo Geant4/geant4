@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transform3D.hh,v 1.5 2006-06-29 18:59:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4TRANSFORM3D_HH
 #define G4TRANSFORM3D_HH

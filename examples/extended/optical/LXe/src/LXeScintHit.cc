@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeScintHit.cc
+/// \brief Implementation of the LXeScintHit class
+//
+//
 #include "LXeScintHit.hh"
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
@@ -33,56 +37,47 @@
 
 G4Allocator<LXeScintHit> LXeScintHitAllocator;
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeScintHit::LXeScintHit()
-  :physVol(0)
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeScintHit::LXeScintHit(G4VPhysicalVolume* pVol)
-  :physVol(pVol)
-{}
+LXeScintHit::LXeScintHit() : fEdep(0.), fPos(0.), fPhysVol(0) {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeScintHit::~LXeScintHit()
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeScintHit::LXeScintHit(const LXeScintHit &right)
-  : G4VHit()
+LXeScintHit::LXeScintHit(G4VPhysicalVolume* pVol) : fPhysVol(pVol) {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXeScintHit::~LXeScintHit() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXeScintHit::LXeScintHit(const LXeScintHit &right) : G4VHit()
 {
-  edep = right.edep;
-  pos = right.pos;
-  physVol = right.physVol;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fPhysVol = right.fPhysVol;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const LXeScintHit& LXeScintHit::operator=(const LXeScintHit &right){
-  edep = right.edep;
-  pos = right.pos;
-  physVol = right.physVol;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fPhysVol = right.fPhysVol;
   return *this;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int LXeScintHit::operator==(const LXeScintHit&) const{
   return false;
   //returns false because there currently isnt need to check for equality yet
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeScintHit::Draw(){
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeScintHit::Print(){
-}
+void LXeScintHit::Draw() {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
-
-
-
-
+void LXeScintHit::Print() {}

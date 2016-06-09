@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -42,6 +41,9 @@
 #include <iomanip>
 
 #include "G4ExtrudedSolid.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VFacet.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
 

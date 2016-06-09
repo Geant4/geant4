@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronCapture.hh,v 1.1 2010-08-31 11:23:58 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -56,6 +55,7 @@
 
 #include "G4VDiscreteProcess.hh"
 #include "globals.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 class G4Region;
 
@@ -94,6 +94,7 @@ private:
   G4double kinEnergyThreshold;
   G4String regionName;
   G4Region* region;
+  G4ParticleChangeForGamma fParticleChange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

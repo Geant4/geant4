@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2010-09-08 09:12:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -74,27 +76,23 @@ private:
 
   void  AddPAIModel(const G4String&);
   void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
-		    const G4String& procname);
+                    const G4String& procname);
 
-  G4EmConfigurator* em_config;
+  G4EmConfigurator* fConfig;
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4double cutForProton;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4double fCutForProton;
 
-  G4VPhysicsConstructor*  emPhysicsList;
-  G4VPhysicsConstructor*  generalPhysicsList;
-  G4VPhysicsConstructor*  particleList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-  G4String emName;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysicsList;
+  std::vector<G4VPhysicsConstructor*> fHadronPhys;
+  G4String fEmName;
     
-  StepMax* stepMaxProcess;
+  StepMax* fStepMaxProcess;
     
-  PhysicsListMessenger* pMessenger;
-
-  G4VEmModel* em_model;
-  G4VEmFluctuationModel* fm_model;
+  PhysicsListMessenger* fMessenger;
 
 };
 

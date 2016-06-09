@@ -31,6 +31,8 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LorentzRotation.hh"
 
 G4Absorber::G4Absorber(G4double cutOnP)
@@ -208,17 +210,17 @@ G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
   G4LorentzVector momCMS = toCMSFrame*momLab;
 
 // Evaluate the final momentum of products
-  G4double m1 = prod1->GetPDGMass();
-  G4double m2 = prod2->GetPDGMass();
+  G4double ms1 = prod1->GetPDGMass();
+  G4double ms2 = prod2->GetPDGMass();
   G4double e0 = momCMS.e();
-  G4double squareP = (e0*e0*e0*e0-2*e0*e0*(m1*m1+m2*m2)+
-    (m2*m2-m1*m1)*(m2*m2-m1*m1))/(4*e0*e0);
+  G4double squareP = (e0*e0*e0*e0-2*e0*e0*(ms1*ms1+ms2*ms2)+
+    (ms2*ms2-ms1*ms1)*(ms2*ms2-ms1*ms1))/(4*e0*e0);
 //  if(squareP < 0)  // should never happen
 //    squareP = 0;
   G4ThreeVector mom1CMS = GetRandomDirection();
   mom1CMS = std::sqrt(squareP)*mom1CMS;
-  G4LorentzVector final4Mom1CMS(mom1CMS, std::sqrt(squareP+m1*m1));
-  G4LorentzVector final4Mom2CMS((-1)*mom1CMS, std::sqrt(squareP+m2*m2));
+  G4LorentzVector final4Mom1CMS(mom1CMS, std::sqrt(squareP+ms1*ms1));
+  G4LorentzVector final4Mom2CMS((-1)*mom1CMS, std::sqrt(squareP+ms2*ms2));
 
 // Go back to the lab frame
   G4LorentzVector mom1 = toLabFrame*final4Mom1CMS;

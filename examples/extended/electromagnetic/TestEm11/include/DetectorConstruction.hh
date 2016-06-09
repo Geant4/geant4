@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.13 2006-06-29 16:51:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm11/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +44,7 @@ class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 
-     const G4int MaxAbsor = 10;			// 0 + 9  
+     const G4int MaxAbsor = 10;                        // 0 + 9  
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,41 +66,41 @@ public:
     
   void SetMagField      (G4double);
      
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
   void               UpdateGeometry();
      
 public:
 
-  G4int       GetNbOfAbsor()             {return NbOfAbsor;}     
-  G4Material* GetAbsorMaterial (G4int i) {return AbsorMaterial[i];};
-  G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
-  G4double    GetXfront        (G4int i) {return xfront[i];};
+  G4int       GetNbOfAbsor()             {return fNbOfAbsor;}     
+  G4Material* GetAbsorMaterial (G4int i) {return fAbsorMaterial[i];};
+  G4double    GetAbsorThickness(G4int i) {return fAbsorThickness[i];};      
+  G4double    GetXfront        (G4int i) {return fXfront[i];};
             
-  G4double GetAbsorSizeX()               {return AbsorSizeX;}; 
-  G4double GetAbsorSizeYZ()              {return AbsorSizeYZ;};
+  G4double GetAbsorSizeX()               {return fAbsorSizeX;}; 
+  G4double GetAbsorSizeYZ()              {return fAbsorSizeYZ;};
   
-  G4int  GetNbOfDivisions(G4int i)       {return NbOfDivisions[i];}; 
+  G4int  GetNbOfDivisions(G4int i)       {return fNbOfDivisions[i];}; 
   
   void PrintParameters();
    
 private:
 
-  G4int              NbOfAbsor;
-  G4Material*        AbsorMaterial [MaxAbsor];
-  G4double           AbsorThickness[MaxAbsor];
-  G4double           xfront[MaxAbsor];  
+  G4int              fNbOfAbsor;
+  G4Material*        fAbsorMaterial [MaxAbsor];
+  G4double           fAbsorThickness[MaxAbsor];
+  G4double           fXfront[MaxAbsor];  
 
-  G4int              NbOfDivisions[MaxAbsor];
+  G4int              fNbOfDivisions[MaxAbsor];
 
-  G4double           AbsorSizeX;
-  G4double           AbsorSizeYZ;
-  G4Material*        defaultMaterial;  
+  G4double           fAbsorSizeX;
+  G4double           fAbsorSizeYZ;
+  G4Material*        fDefaultMaterial;  
   
-  G4VPhysicalVolume* physiWorld;
+  G4VPhysicalVolume* fPhysiWorld;
   
-  G4UniformMagField* magField;
+  G4UniformMagField* fMagField;
 
-  DetectorMessenger* detectorMessenger;
+  DetectorMessenger* fDetectorMessenger;
 
 private:
 

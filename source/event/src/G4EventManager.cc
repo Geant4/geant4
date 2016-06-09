@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.32 2010-11-08 21:31:35 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //
@@ -387,4 +386,10 @@ G4VUserEventInformation* G4EventManager::GetUserInformation()
 void G4EventManager::KeepTheCurrentEvent()
 { if(currentEvent) currentEvent->KeepTheEvent(); }
 
+void G4EventManager::AbortCurrentEvent()
+{
+  abortRequested = true;
+  trackContainer->clear();
+  if(tracking) trackManager->EventAborted();
+}
 

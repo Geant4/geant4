@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleFieldSetup.cc,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/G4MonopoleFieldSetup.cc
+/// \brief Implementation of the G4MonopoleFieldSetup class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,48 +65,41 @@
 // #include "G4CashKarpRKF45.hh"
 // #include "G4RKG3_Stepper.hh"
 
-// #include "G4SIunits.hh"
+#include "G4SystemOfUnits.hh"
 
 G4MonopoleFieldSetup* G4MonopoleFieldSetup::fMonopoleFieldSetup=0;
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  Constructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4MonopoleFieldSetup::G4MonopoleFieldSetup()
 {
-  if (!fMonopoleFieldSetup)
-  {
-    fChordFinder = 0;
-    fStepper = 0;
-    fMagneticField = 0;
-    
-    fMonopoleFieldMessenger = new G4MonopoleFieldMessenger(this);
-  }
-  else
-  {
-    G4cerr << "Only ONE instance of G4MonopoleFieldSetup is allowed!"
-           << G4endl;
-    G4Exception("G4MonopoleFieldSetup::G4MonopoleFieldSetup()",
-                "InvalidSetup", FatalException,
-                "Only ONE instance of MagneticFieldSetup is allowed!");
-  }
+  fFieldManager = 0;
+  fChordFinder = 0;
+  fEquation = 0;
+  fMonopoleEquation = 0;
+  fMagneticField = 0;
+  fStepper = 0;
+  fMonopoleStepper = 0;
+
+  fMinStep = 0.0;
+   
+  fMonopoleFieldMessenger = new G4MonopoleFieldMessenger(this);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Retrieve the static instance of the singleton
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4MonopoleFieldSetup* G4MonopoleFieldSetup::GetMonopoleFieldSetup()
 {
-   static G4MonopoleFieldSetup theInstance;
-   if (!fMonopoleFieldSetup)
+   if (0 == fMonopoleFieldSetup)
    {
+     static G4MonopoleFieldSetup theInstance;
      fMonopoleFieldSetup = &theInstance;
    }
    
    return fMonopoleFieldSetup;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleFieldSetup::~G4MonopoleFieldSetup()
 {
@@ -115,7 +110,7 @@ G4MonopoleFieldSetup::~G4MonopoleFieldSetup()
   if(fMonopoleStepper)  delete fMonopoleStepper;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopoleFieldSetup::SetMagField(G4double fieldValue)
 {
@@ -134,7 +129,7 @@ void G4MonopoleFieldSetup::SetMagField(G4double fieldValue)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void
 G4MonopoleFieldSetup::InitialiseAll()
@@ -153,10 +148,8 @@ G4MonopoleFieldSetup::InitialiseAll()
   SetStepperAndChordFinder(0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Update field
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MonopoleFieldSetup::SetStepperAndChordFinder(G4int val)
 {
   if (fMagneticField)
@@ -171,7 +164,7 @@ void G4MonopoleFieldSetup::SetStepperAndChordFinder(G4int val)
         fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fStepper);      
         break;
       case 1: 
-	fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fMonopoleStepper);
+        fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fMonopoleStepper);
         break;
     }   
   
@@ -179,11 +172,12 @@ void G4MonopoleFieldSetup::SetStepperAndChordFinder(G4int val)
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Utility method
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4FieldManager*  G4MonopoleFieldSetup::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
                           ->GetFieldManager();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

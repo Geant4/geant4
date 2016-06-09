@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.4 2007-01-18 09:07:20 hbu Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +53,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
 
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
      void SetSize        (G4double);
      void SetMaterial    (G4String);
@@ -64,23 +66,23 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
 
      const
-     G4VPhysicalVolume* GetWorld()      {return pBox;};
+     G4VPhysicalVolume* GetWorld()      {return fBox;};
 
-     G4double           GetSize()       {return BoxSize;};
-     G4Material*        GetMaterial()   {return aMaterial;};
+     G4double           GetSize()       {return fBoxSize;};
+     G4Material*        GetMaterial()   {return fMaterial;};
 
      void               PrintParameters();
 
   private:
 
-     G4VPhysicalVolume*    pBox;
+     G4VPhysicalVolume*  fBox;
 
-     G4double              BoxSize;
-     G4Material*           aMaterial;
-     G4UniformMagField*    magField;
-     G4UserLimits*         userLimits;
+     G4double            fBoxSize;
+     G4Material*         fMaterial;
+     G4UniformMagField*  fMagField;
+     G4UserLimits*       fUserLimits;
 
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger*  fDetectorMessenger;
 
   private:
 

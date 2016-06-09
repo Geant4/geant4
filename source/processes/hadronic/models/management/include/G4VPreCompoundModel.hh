@@ -24,18 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.7 2010-08-20 07:43:28 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VPreCompoundModel_h
 #define G4VPreCompoundModel_h 1
 
+// -----------------------------------------------------------------------------
+//      GEANT 4 class header file
+//
+//      History: first implementation 1998
+//
+//      V.Ivanchenko 03.01.2012
+//          Added G4ExcitationHandler pointer to the constructor and cleanup
+// -----------------------------------------------------------------------------
+
 // Class Description
-// Base class for pre-equilibrium decay models in geant4. By merit of inheriting
-// from this class a pre-equilibrium decay model can be used in conjunction with
-// any cascade, string parton model or other high energy generator in the
-// generation of final states for inelastic scattering.
+// Base class for pre-equilibrium decay models in geant4. By merit of 
+// inheriting from this class a pre-equilibrium decay model can be used 
+// in conjunction with any cascade, string parton model or other high 
+// energy generator in the generation of final states for inelastic scattering.
 // Class Description - End
 
 #include "G4HadronicInteraction.hh"
@@ -52,7 +60,7 @@ class G4VPreCompoundModel : public G4HadronicInteraction
 {
 public:
 
-  G4VPreCompoundModel(G4ExcitationHandler* const value, 
+  G4VPreCompoundModel(G4ExcitationHandler* ptr = 0, 
                       const G4String& modelName = "PrecompoundModel");
 
   virtual ~G4VPreCompoundModel();
@@ -60,7 +68,7 @@ public:
 private:
 
   // default constructor
-  G4VPreCompoundModel();
+  //G4VPreCompoundModel();
   // copy constructor
   G4VPreCompoundModel(const G4VPreCompoundModel &);
   // operators
@@ -75,23 +83,21 @@ public:
   
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
 
-  inline void SetExcitationHandler(G4ExcitationHandler *const  value);
+  inline void SetExcitationHandler(G4ExcitationHandler* ptr);
     
-protected:
-
-  inline const G4ExcitationHandler * GetExcitationHandler() const;
+  inline G4ExcitationHandler* GetExcitationHandler() const;
   
 private:
-  G4ExcitationHandler *theExcitationHandler;
+
+  G4ExcitationHandler* theExcitationHandler;
 };
 
-inline void G4VPreCompoundModel::SetExcitationHandler(G4ExcitationHandler *const  value)
+inline void G4VPreCompoundModel::SetExcitationHandler(G4ExcitationHandler* ptr)
 {
-  theExcitationHandler = value;
+  theExcitationHandler = ptr;
 }
 
-
-inline const G4ExcitationHandler* G4VPreCompoundModel::GetExcitationHandler() const
+inline G4ExcitationHandler* G4VPreCompoundModel::GetExcitationHandler() const
 {
   return theExcitationHandler;
 }

@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/src/DicomEventAction.cc
+/// \brief Implementation of the DicomEventAction class
+//
 //
 // The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//      *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca
 //      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
@@ -42,17 +45,21 @@
 #include "DicomEventAction.hh"
 #include "G4Event.hh"
 
-DicomEventAction::DicomEventAction():drawFlag("all")
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DicomEventAction::DicomEventAction():fDrawFlag("all")
 { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomEventAction::~DicomEventAction()
 { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomEventAction::BeginOfEventAction(const G4Event* evt)
 {
   G4cout << "EV: " << evt->GetEventID() << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomEventAction::EndOfEventAction(const G4Event*)
 {
 }

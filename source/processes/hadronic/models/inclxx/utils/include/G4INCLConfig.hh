@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,7 +39,7 @@
 #ifndef G4INCLConfig_hh
 #define G4INCLConfig_hh 1
 
-#include "G4INCLParticleType.hh"
+#include "G4INCLParticleSpecies.hh"
 #include "G4INCLConfigEnums.hh"
 #include "G4INCLIRandomGenerator.hh"
 #include <iostream>
@@ -64,7 +64,7 @@ namespace G4INCL {
      * Constructor for INCL++ with specified target A, Z, projectile
      * type and energy. All other options are the default ones.
      */
-    Config(G4int, G4int, ParticleType, G4double);
+    Config(G4int, G4int, ParticleSpecies, G4double);
 
     /** \brief Constructor based on command-line and config-file options.
      *
@@ -76,6 +76,9 @@ namespace G4INCL {
 
     /// \brief Default destructor
     ~Config();
+
+    /// \brief Initialise the members
+    void init();
 
     /// \brief Return a summary of the run configuration.
     std::string summary();
@@ -100,22 +103,31 @@ namespace G4INCL {
      * Note that A==0 means natural target. You should first check the
      * isNaturalTarget() method.
      */
-    G4int getTargetA() const { return targetA; }
+    G4int getTargetA() const { return targetSpecies.theA; }
 
     /// \brief Get the target charge number.
-    G4int getTargetZ() const { return targetZ; }
+    G4int getTargetZ() const { return targetSpecies.theZ; }
 
     /// \brief Set target mass number
-    void setTargetA(G4int A) { targetA = A; }
+    void setTargetA(G4int A) { targetSpecies.theA = A; }
 
     /// \brief Set target charge number
-    void setTargetZ(G4int Z) { targetZ = Z; }
+    void setTargetZ(G4int Z) { targetSpecies.theZ = Z; }
 
-    /// \brief Get the projectile type.
-    ParticleType getProjectileType() const { return projectileType; }
+    /// \brief Get the projectile type
+    ParticleType getProjectileType() const { return projectileSpecies.theType; }
+
+    /// \brief Get the projectile species
+    ParticleSpecies getProjectileSpecies() const { return projectileSpecies; }
+
+    /// \brief Set the projectile species
+    void setProjectileSpecies(ParticleSpecies const &ps) { projectileSpecies=ps; }
 
     /// \brief Get the projectile kinetic energy.
     G4float getProjectileKineticEnergy() const { return projectileKineticEnergy; }
+
+    /// \brief Set the projectile kinetic energy.
+    void setProjectileKineticEnergy(G4float const kinE) { projectileKineticEnergy=kinE; }
 
     /// \brief Get the number of the verbose event.
     G4int getVerboseEvent() const { return verboseEvent; }
@@ -158,6 +170,12 @@ namespace G4INCL {
     /// \brief Get the type of local energy for pi-N and decay avatars.
     LocalEnergyType getLocalEnergyPiType() const { return localEnergyPiType; }
 
+    /// \brief Set the type of local energy for N-N avatars.
+    void setLocalEnergyBBType(const LocalEnergyType t) { localEnergyBBType=t; }
+
+    /// \brief Set the type of local energy for N-N avatars.
+    void setLocalEnergyPiType(const LocalEnergyType t) { localEnergyPiType=t; }
+
     /// \brief Get the log file name.
     std::string const &getLogFileName() const { return logFileName; }
 
@@ -170,22 +188,46 @@ namespace G4INCL {
     /// \brief Get the maximum mass for production of clusters.
     G4int getClusterMaxMass() const { return clusterMaxMass; }
 
+    /// \brief Set the maximum mass for production of clusters.
+    void setClusterMaxMass(const G4int m){ clusterMaxMass=m; }
+
     /// \brief Get back-to-spectator
     G4bool getBackToSpectator() const { return backToSpectator; }
 
-    /// \brief Get back-to-spectator
-    G4float getBackToSpectatorThreshold() const { return backToSpectatorThreshold; }
+    /// \brief Whether to use real masses
+    G4bool getUseRealMasses() const { return useRealMasses; }
+
+    /// \brief Set whether to use real masses
+    void setUseRealMasses(G4bool use) { useRealMasses = use; }
 
     /// \brief Echo the input options.
     std::string const echo() const;
 
+    std::string const &getINCLXXDataFilePath() const {
+      return INCLXXDataFilePath;
+    }
+
+#ifdef INCL_DEEXCITATION_ABLAXX
     std::string const &getABLAv3pCxxDataFilePath() const {
       return ablav3pCxxDataFilePath;
     }
+#endif
 
+#ifdef INCL_DEEXCITATION_ABLA07
     std::string const &getABLA07DataFilePath() const {
       return abla07DataFilePath;
     }
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    std::string const &getGEMINIXXDataFilePath() const {
+      return geminixxDataFilePath;
+    }
+#endif
+
+    G4double getImpactParameter() const { return impactParameter; }
+
+    /// \brief Get the separation-energy type.
+    SeparationEnergyType getSeparationEnergyType() const { return separationEnergyType; }
 
   private:
     G4int verbosity;
@@ -196,11 +238,12 @@ namespace G4INCL {
 
     G4int nShots;
 
-    G4int targetA, targetZ;
+    std::string targetString;
+    ParticleSpecies targetSpecies;
     G4bool naturalTarget;
 
     std::string projectileString;
-    ParticleType projectileType;
+    ParticleSpecies projectileSpecies;
     G4float projectileKineticEnergy;
 
     G4int verboseEvent;
@@ -226,8 +269,16 @@ namespace G4INCL {
 
     std::string deExcitationString;
     DeExcitationType deExcitationType;
+#ifdef INCL_DEEXCITATION_ABLAXX
     std::string ablav3pCxxDataFilePath;
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
     std::string abla07DataFilePath;
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    std::string geminixxDataFilePath;
+#endif
+    std::string INCLXXDataFilePath;
 
     std::string clusterAlgorithmString;
     ClusterAlgorithmType clusterAlgorithmType;
@@ -235,7 +286,14 @@ namespace G4INCL {
     G4int clusterMaxMass;
 
     G4bool backToSpectator;
-    G4float backToSpectatorThreshold;
+
+    G4bool useRealMasses;
+
+    G4double impactParameter;
+
+    std::string separationEnergyString;
+    SeparationEnergyType separationEnergyType;
+
   };
 
 }

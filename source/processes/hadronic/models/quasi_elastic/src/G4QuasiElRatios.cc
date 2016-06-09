@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElRatios.cc,v 1.4 2010-09-03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QuasiElRatios for N+A elastic cross sections
@@ -39,12 +38,10 @@
 // reactions in the inelastic reactions.
 // ----------------------------------------------------------------------
 
-//#define debug
-//#define pdebug
-//#define ppdebug
-//#define nandebug
 
 #include "G4QuasiElRatios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4Deuteron.hh"
@@ -52,6 +49,8 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4ThreeVector.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
 
 // initialisation of statics
 std::vector<G4double*> G4QuasiElRatios::vT; // Vector of pointers to LinTable in C++ heap
@@ -60,6 +59,10 @@ std::vector<std::pair<G4double,G4double>*> G4QuasiElRatios::vX; // ETPointers to
 
 G4QuasiElRatios::G4QuasiElRatios()
 {
+    
+    PCSmanager=(G4ChipsProtonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name());
+    
+    NCSmanager=(G4ChipsNeutronElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronElasticXS::Default_Name());
 }
 
 G4QuasiElRatios::~G4QuasiElRatios()
@@ -105,7 +108,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetRatios(G4double pIU, G4int pPDG
 }
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section (mb) and A
-G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
+G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
 {
     static const G4int    nps=150;        // Number of steps in the R(s) LinTable
     static const G4int    mps=nps+1;      // Number of elements in the R(s) LinTable
@@ -116,7 +119,7 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
     static const G4double lsi=5.;         // The min ln(s) logTabEl(s=148.4 < sma=150.)
     static const G4double lsa=9.;         // The max ln(s) logTabEl(s=148.4 - 8103. mb)
     static const G4double mi=std::exp(lsi);// The min s of logTabEl(~ 148.4 mb)
-    static const G4double ms=std::exp(lsa);// The max s of logTabEl(~ 8103. mb)
+    static const G4double min_s=std::exp(lsa);// The max s of logTabEl(~ 8103. mb)
     static const G4double dl=(lsa-lsi)/nls;// Step of the logarithmic Table
     static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
     static const G4double toler=.01;      // The tolarence mb defining the same cross-section
@@ -137,19 +140,18 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
     static G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
     static G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
-    if(s<toler || A<2) return 1.;
-    if(s>ms) return 0.;
+    if(m_s<toler || A<2) return 1.;
+    if(m_s>min_s) return 0.;
     if(A>238)
     {
         G4cout<<"-Warning-G4QuasiElRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
         return 0.;
     }
     G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-    //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
-    if(nDB && lastA==A && s==lastS) return lastR;  // VI do not use tolerance
+    if(nDB && lastA==A && m_s==lastS) return lastR;  // VI do not use tolerance
     G4bool found=false;
     G4int i=-1;
-    if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
+    if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Search for this A in AMDB
     {
         found=true;                         // The A value is found
         break;
@@ -158,7 +160,7 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
     {
         lastA = A;
         lastT = new G4double[mps];          // Create the linear Table
-        lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
+        lastN = static_cast<int>(m_s/ds)+1;   // MaxBin to be initialized
         if(lastN>nps)
         {
             lastN=nps;
@@ -173,9 +175,9 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
             lastT[j]=CalcQF2IN_Ratio(sv,A);
         }
         lastL=new G4double[mls];            // Create the logarithmic Table
-        if(s>sma)                           // Initialize the logarithmic Table
+        if(m_s>sma)                           // Initialize the logarithmic Table
         {
-            G4double ls=std::log(s);
+	  G4double ls=std::log(m_s);
             lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
             if(lastK>nls)
             {
@@ -213,19 +215,21 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
         lastK=vK[i];
         lastT=vT[i];
         lastL=vL[i];
-        if(s>lastM)                          // At least LinTab must be updated
+        if(m_s>lastH)                          // At least LinTab must be updated
         {
             G4int nextN=lastN+1;               // The next bin to be initialized
             if(lastN<nps)
             {
-                lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
+	      G4double sv=lastH; // bug fix by WP
+
+                lastN = static_cast<int>(m_s/ds)+1;// MaxBin to be initialized
                 if(lastN>nps)
                 {
                     lastN=nps;
                     lastH=sma;
                 }
                 else lastH = lastN*ds;           // Calculate max initialized s for LinTab
-                G4double sv=lastM;
+
                 for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
                 {
                     sv+=ds;
@@ -239,10 +243,10 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
             }
             G4int nextK=lastK+1;
             if(!lastK) nextK=0;
-            if(s>sma && lastK<nls)             // LogTab must be updated
+            if(m_s>sma && lastK<nls)             // LogTab must be updated
             {
                 G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
-                G4double ls=std::log(s);
+                G4double ls=std::log(m_s);
                 lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
                 if(lastK>nls)
                 {
@@ -264,16 +268,16 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
         }
     }
     // Now one can use tabeles to calculate the value
-    if(s<sma)                             // Use linear table
+    if(m_s<sma)                             // Use linear table
     {
-        G4int n=static_cast<int>(s/ds);     // Low edge number of the bin
-        G4double d=s-n*ds;                  // Linear shift
+        G4int n=static_cast<int>(m_s/ds);     // Low edge number of the bin
+        G4double d=m_s-n*ds;                  // Linear shift
         G4double v=lastT[n];                // Base
         lastR=v+d*(lastT[n+1]-v)/ds;        // Result
     }
     else                                  // Use log table
     {
-        G4double ls=std::log(s)-lsi;        // ln(s)-l_min
+        G4double ls=std::log(m_s)-lsi;        // ln(s)-l_min
         G4int n=static_cast<int>(ls/dl);    // Low edge number of the bin
         G4double d=ls-n*dl;                 // Log shift
         G4double v=lastL[n];                // Base
@@ -285,14 +289,14 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
 } // End of CalcQF2IN_Ratio
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section and A
-G4double G4QuasiElRatios::CalcQF2IN_Ratio(G4double s, G4int A)
+G4double G4QuasiElRatios::CalcQF2IN_Ratio(G4double m_s, G4int A)
 {
     static const G4double C=1.246;
-    G4double s2=s*s;
+    G4double s2=m_s*m_s;
     G4double s4=s2*s2;
-    G4double ss=std::sqrt(std::sqrt(s));
+    G4double ss=std::sqrt(std::sqrt(m_s));
     G4double P=7.48e-5*s2/(1.+8.77e12/s4/s4/s2);
-    G4double E=.2644+.016/(1.+std::exp((29.54-s)/2.49));
+    G4double E=.2644+.016/(1.+std::exp((29.54-m_s)/2.49));
     G4double F=ss*.1526*std::exp(-s2*ss*.0000859);
     return C*std::exp(-E*std::pow(G4double(A-1.),F))/std::pow(G4double(A),P);
 } // End of CalcQF2IN_Ratio
@@ -833,8 +837,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
     G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
-    G4VCrossSection* PCSmanager=G4ProtonElasticCrossSection::GetPointer();
-    G4VCrossSection* NCSmanager=G4NeutronElasticCrossSection::GetPointer();
     // @@ Temporary NN t-dependence for all hadrons
     if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QE::Scatter: pPDG="<<pPDG<<G4endl;
     G4int PDG=2212;                                                // *TMP* instead of pPDG
@@ -847,8 +849,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
         else if(PDG==2112) PDG=2212;
     }
     G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
-    if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
-    else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
+    if(PDG==2212) xSec=PCSmanager->GetChipsCrossSection(P, Z, N, PDG); // P CrossSect *TMP*
+    else          xSec=NCSmanager->GetChipsCrossSection(P, Z, N, PDG); // N CrossSect *TMP*
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.)                                    // The cross-section iz 0 -> Do Nothing
     {
@@ -952,8 +954,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
     G4double P=std::sqrt(E2-mS2);                   // Momentum in pseudo laboratory system
-    G4VCrossSection* PCSmanager=G4ProtonElasticCrossSection::GetPointer();
-    G4VCrossSection* NCSmanager=G4NeutronElasticCrossSection::GetPointer();
     // @@ Temporary NN t-dependence for all hadrons
     G4int PDG=2212;                                                // *TMP* instead of pPDG
     if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
@@ -965,8 +965,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
         else if(PDG==2112) PDG=2212;
     }
     G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
-    if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
-    else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
+    if(PDG==2212) xSec=PCSmanager->GetChipsCrossSection(P, Z, N, PDG); // P CrossSect *TMP*
+    else          xSec=NCSmanager->GetChipsCrossSection(P, Z, N, PDG); // N CrossSect *TMP*
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
     {

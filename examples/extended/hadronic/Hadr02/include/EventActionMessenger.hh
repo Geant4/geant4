@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.3 2006-06-29 17:23:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr02/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

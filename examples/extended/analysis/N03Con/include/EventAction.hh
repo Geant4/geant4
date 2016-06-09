@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/include/EventAction.hh
+/// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -52,20 +54,20 @@ public:
   void  BeginOfEventAction(const G4Event*);
   void    EndOfEventAction(const G4Event*);
     
-  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
-  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+  void AddAbs(G4double de, G4double dl) {fEnergyAbs += de; fTrackLAbs += dl;};
+  void AddGap(G4double de, G4double dl) {fEnergyGap += de; fTrackLGap += dl;};
                      
-  void SetPrintModulo(G4int    val)  {printModulo = val;};
+  void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
 private:
-   RunAction*  runAct;
+   RunAction*  fRunAct;
    
-   G4double  EnergyAbs, EnergyGap;
-   G4double  TrackLAbs, TrackLGap;
+   G4double  fEnergyAbs, fEnergyGap;
+   G4double  fTrackLAbs, fTrackLGap;
                      
-   G4int     printModulo;
+   G4int     fPrintModulo;
                              
-   EventActionMessenger*  eventMessenger;
+   EventActionMessenger*  fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

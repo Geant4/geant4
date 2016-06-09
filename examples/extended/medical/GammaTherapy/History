@@ -15,6 +15,31 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-11-12 I. Hrivnacova (gtherapy-V09-05-06)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+- Added compilations options G4VIS_USE, G4UI_USE in main  
+
+24-10-12 A. Ribon (gtherapy-V09-05-05)
+- Migrated to the new stopping physics.
+
+14-10-12 A. Dotti (gtherapy-V09-05-04)
+- Adding forgotten explicit use of system of units and physical constant
+
+13-10-12 A. Dotti (gtherapy-V09-05-03)
+- Adding explicit use of system of units and physical constant
+
+04-09-12 I. Hrivnacova (gtherapy-V09-05-02)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added .README  
+     
+14-08-12  V.Ivant (gtherapy-V09-05-01)
+- Added forgoten class
+
+09-08-12  V.Ivant (gtherapy-V09-05-00)
+- Applied code convension
+
 15-11-11  V.Ivant (gtherapy-V09-04-00)
 - rename step limiter classes to avoid clash with class name in kernel
 

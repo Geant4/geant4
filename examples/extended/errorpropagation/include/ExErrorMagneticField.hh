@@ -23,16 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-//
-// Class Description:
-//
-//  A uniform 1 kilogauss field along the Z axis
-//
-// History:
-// - Created:   P. Arce    May 2007
+/// \file errorpropagation/include/ExErrorMagneticField.hh
+/// \brief Definition of the ExErrorMagneticField class
 //
 
 #ifndef ExErrorMagneticField_H
@@ -42,7 +34,15 @@
 
 class G4FieldManager;
 
+/// Magnetic field class
+///
+/// A uniform 1 kilogauss field along the Z axis
+///
+/// History:
+/// Created:   May 2007
+/// \author   P. Arce 
 //------------------------------------------------------------------------
+
 class ExErrorMagneticField: public G4UniformMagField
 {
   public:

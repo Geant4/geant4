@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.12 2010-11-09 21:28:41 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm4/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,62 +36,44 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
-:af(0), tree(0)
 {
-  histo[0] = 0;
+  // Create analysis manager
+  // The choice of analysis technology is done via selection of a namespace
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
-#ifdef G4ANALYSIS_USE 
- // Creating the analysis factory
- af = AIDA_createAnalysisFactory();
- 
- if (af) {
-   // Creating the tree factory
-   AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
-   // Creating a tree mapped to an hbook file.
-   G4bool readOnly  = false;
-   G4bool createNew = true;
-   G4String options =  "";
-   //tree = tf->create("testem4.hbook","hbook",readOnly,createNew, options);
-   tree = tf->create("testem4.root","root",readOnly,createNew, options);
-   //tree = tf->create("testem4.XML" ,"XML" ,readOnly,createNew, options);
-   delete tf;
-   
-   if (tree) {
-     // Creating a histogram factory
-     AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-
-     // Creating the histogram
-     histo[0]=hf->createHistogram1D
-                         ("1","total energy deposit in C6F6(MeV)",100,0.,10.);
-
-     delete hf;
-     G4cout << "\n----> Histogram tree is opened" << G4endl;
-   }
- }
-#endif  
+  // Open an output file
+  //
+  G4String fileName = "testem4";
+  analysisManager->OpenFile(fileName);    
+  analysisManager->SetVerboseLevel(1);
+  G4String extension = analysisManager->GetFileType();
+  fileName = fileName + "." + extension;
+    
+  // Creating histograms
+  //
+  analysisManager->SetFirstHistoId(1);  
+  analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
+  
+  G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
-#ifdef G4ANALYSIS_USE
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-    
-  delete tree;
-  delete af;
-#endif
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  analysisManager->Write();
+  analysisManager->CloseFile();
+
+  delete G4AnalysisManager::Instance();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,17 +81,19 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "\n ### Run " << aRun->GetRunID() << " start." << G4endl;
 
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run*)
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  G4cout << "\n ### Run " << aRun->GetRunID() << " ended." << G4endl;
+  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();         
 }

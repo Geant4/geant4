@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.10 2010-07-12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -871,34 +870,34 @@ void G4VTwistSurface::SetBoundary(const G4int         &axiscode,
 //=====================================================================
 //* GetFace -----------------------------------------------------------
 
-G4int G4VTwistSurface::GetFace( G4int i, G4int j, G4int m,
+G4int G4VTwistSurface::GetFace( G4int i, G4int j, G4int k,
                                 G4int n, G4int iside ) 
 {
   // this is the face mapping function
   // (i,j) -> face number
 
   if ( iside == 0 ) {
-    return i * ( m - 1 ) + j ;
+    return i * ( k - 1 ) + j ;
   }
 
   else if ( iside == 1 ) {
-    return (m-1)*(m-1) + i*(m-1) + j ;
+    return (k-1)*(k-1) + i*(k-1) + j ;
   }
 
   else if ( iside == 2 ) {
-    return 2*(m-1)*(m-1) + i*(m-1) + j ;
+    return 2*(k-1)*(k-1) + i*(k-1) + j ;
   }
 
   else if ( iside == 3 ) {
-    return 2*(m-1)*(m-1) + (n-1)*(m-1) + i*(m-1) + j ;
+    return 2*(k-1)*(k-1) + (n-1)*(k-1) + i*(k-1) + j ;
   }
   
   else if ( iside == 4 ) {
-    return 2*(m-1)*(m-1) + 2*(n-1)*(m-1) + i*(m-1) + j ;
+    return 2*(k-1)*(k-1) + 2*(n-1)*(k-1) + i*(k-1) + j ;
   }
   
   else if ( iside == 5 ) {
-    return 2*(m-1)*(m-1) + 3*(n-1)*(m-1) + i*(m-1) + j ;
+    return 2*(k-1)*(k-1) + 3*(n-1)*(k-1) + i*(k-1) + j ;
   }
 
   else {
@@ -920,7 +919,7 @@ G4int G4VTwistSurface::GetFace( G4int i, G4int j, G4int m,
 //=====================================================================
 //* GetNode -----------------------------------------------------------
 
-G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int m,
+G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int k,
                                 G4int n, G4int iside ) 
 {
   // this is the node mapping function
@@ -928,44 +927,44 @@ G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int m,
   // Depends on the side iside and the used meshing of the surface
 
   if ( iside == 0 ) {
-    // lower endcap is mxm squared. 
-    // n = m 
-    return i * m + j ;
+    // lower endcap is kxk squared. 
+    // n = k 
+    return i * k + j ;
   }
 
   if ( iside == 1 ) {
-    // upper endcap is mxm squared. Shift by m*m
-    // n = m 
-    return  m*m + i*m + j ;
+    // upper endcap is kxk squared. Shift by k*k
+    // n = k 
+    return  k*k + i*k + j ;
   }
 
   else if ( iside == 2 ) {
     // front side.
     if      ( i == 0 )     {   return       j ;  }
-    else if ( i == n-1 )   {   return m*m + j ;  } 
-    else                   {   return 2*m*m + 4*(i-1)*(m-1) + j ; }
+    else if ( i == n-1 )   {   return k*k + j ;  } 
+    else                   {   return 2*k*k + 4*(i-1)*(k-1) + j ; }
   }
 
   else if ( iside == 3 ) {
     // right side
-    if      ( i == 0 )     {   return       (j+1)*m - 1 ; } 
-    else if ( i == n-1 )   {   return m*m + (j+1)*m - 1 ; }
-    else                   {   return 2*m*m + 4*(i-1)*(m-1) + (m-1) + j ; }
+    if      ( i == 0 )     {   return       (j+1)*k - 1 ; } 
+    else if ( i == n-1 )   {   return k*k + (j+1)*k - 1 ; }
+    else                   {   return 2*k*k + 4*(i-1)*(k-1) + (k-1) + j ; }
   }
   else if ( iside == 4 ) {
     // back side.
-    if      ( i == 0 )     {   return   m*m - 1 - j ; }               // reversed order
-    else if ( i == n-1 )   {   return 2*m*m - 1 - j ; }               // reversed order 
-    else                   {   return 2*m*m + 4*(i-1)*(m-1) + 2*(m-1) + j ; // normal order
+    if      ( i == 0 )     {   return   k*k - 1 - j ; }               // reversed order
+    else if ( i == n-1 )   {   return 2*k*k - 1 - j ; }               // reversed order 
+    else                   {   return 2*k*k + 4*(i-1)*(k-1) + 2*(k-1) + j ; // normal order
     }
   }
   else if ( iside == 5 ) {
     // left side 
-    if      ( i == 0 )     {   return m*m   - (j+1)*m ; }             // reversed order
-    else if ( i == n-1)    {   return 2*m*m - (j+1)*m ; }             // reverded order
+    if      ( i == 0 )     {   return k*k   - (j+1)*k ; }             // reversed order
+    else if ( i == n-1)    {   return 2*k*k - (j+1)*k ; }             // reverded order
     else {
-      if ( j == m-1 )      {   return 2*m*m + 4*(i-1)*(m-1) ; }       // special case
-      else                 {   return 2*m*m + 4*(i-1)*(m-1) + 3*(m-1) + j ; }  // normal order
+      if ( j == k-1 )      {   return 2*k*k + 4*(i-1)*(k-1) ; }       // special case
+      else                 {   return 2*k*k + 4*(i-1)*(k-1) + 3*(k-1) + j ; }  // normal order
     }  
   }
 
@@ -985,7 +984,7 @@ G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int m,
 //=====================================================================
 //* GetEdgeVisiblility ------------------------------------------------
 
-G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4int number, G4int orientation) 
+G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int k, G4int n, G4int number, G4int orientation) 
 {
 
   // clockwise filling         -> positive orientation
@@ -1012,7 +1011,7 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
 
   // check first invisible faces
 
-  if ( ( i>0 && i<n-2 ) && ( j>0 && j<m-2 ) ) {
+  if ( ( i>0 && i<n-2 ) && ( j>0 && j<k-2 ) ) {
     return -1 ;   // always invisible, signs:   ----
   }
   
@@ -1021,7 +1020,7 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
   if ( orientation < 0 ) { number = ( 3 - number ) ;  }
   
   // check true edges
-  if ( ( j>=1 && j<=m-3 ) ) {
+  if ( ( j>=1 && j<=k-3 ) ) {
 
     if ( i == 0 )  {        // signs (A):  ---+  
       return ( number == 3 ) ? 1 : -1 ;
@@ -1045,7 +1044,7 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
       return ( number == 0 ) ? 1 : -1 ;
     }
 
-    else if ( j == m-2 ) {  // signs (B):  --+-
+    else if ( j == k-2 ) {  // signs (B):  --+-
       return  ( number == 2 ) ? 1 : -1 ; 
     }
 
@@ -1061,10 +1060,10 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
   if ( i == 0 && j == 0 ) {          // signs (a) : +--+
     return ( number == 0 || number == 3 ) ? 1 : -1 ;
   }
-  else if ( i == 0 && j == m-2 ) {   // signs (b) : --++
+  else if ( i == 0 && j == k-2 ) {   // signs (b) : --++
     return ( number == 2 || number == 3 ) ? 1 : -1 ;
   }
-  else if ( i == n-2 && j == m-2 ) { // signs (c) : -++-
+  else if ( i == n-2 && j == k-2 ) { // signs (c) : -++-
     return ( number == 1 || number == 2 ) ? 1 : -1 ;
   }
   else if ( i == n-2 && j == 0 ) {   // signs (d) : ++--

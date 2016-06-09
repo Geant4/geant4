@@ -14,11 +14,10 @@
 /gun/energy 1 keV
 #
 /testem/histo/setFileName dna
-/testem/histo/setFileType root
 /testem/histo/setHisto 1 50  0.   100 nm	#edep profile
 /testem/histo/setHisto 3 50  0.   300 nm	#true track length
 #
-/testem/applyStepMax false
+/testem/applyAutomaticStepMax false
 #
 /testem/event/printModulo 1000
 #

@@ -56,7 +56,7 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
 
         At EndOfRun, the above results are compared with analytic calculations.
 	The functions which compute the theoretical cross sections have been
-	provided by the G4 MEPhI group, and grouped in MuCrossSection class.
+	provided by the G4 MEPhI group, and grouped in MuCrossSections class.
 
  5- HISTOGRAMS
          
@@ -74,17 +74,15 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
           min and max values of log10(eps/Emu kin).
 	
 	At EndOfRun the corresponding histos for analytic calculations are
-	automatically created and filled (histo 9 to 12), and the comparison
-	(G4 divided by theory) is done in histos 17 to 20.
+	automatically created and filled (histo 11 to 14).
 							  
  	One can control the name and the type of the histograms file with 
-	the commands:
+	the command:
  	/testem/histo/setFileName  name  (default testem17)
-   	/testem/histo/setFileType  name  (default root)
-
-	Note that, by default, histograms are disabled. To activate them, 
-	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
- 	 				
+   
+        It is possible to choose the format of the histogram file :
+        root (default), xml, csv, by using namespace in HistoManager.hh
+     	 				
  6- VISUALIZATION
  
  	The Visualization Manager is set in the main().
@@ -99,10 +97,6 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
 	
  7- HOW TO START ?
  
-	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm17
- 		% gmake
- 		
 	execute TestEm17 in 'batch' mode from macro files :
  		% TestEm17   allproc.mac
  		
@@ -113,17 +107,3 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
  		Idle> type your commands
  		....
  		Idle> exit
-
-  8- USING HISTOGRAMS
- 
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-  
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake
-	 
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
-  

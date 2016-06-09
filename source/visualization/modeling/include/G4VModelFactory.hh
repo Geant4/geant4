@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VModelFactory.hh,v 1.6 2006-06-29 21:32:30 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //

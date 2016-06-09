@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/src/RE04ParallelWorldConstruction.cc
+/// \brief Implementation of the RE04ParallelWorldConstruction class
+//
+// $Id: $
+//
 #include "RE04ParallelWorldConstruction.hh"
 #include "RE04ParallelWorldParam.hh"
 
@@ -32,18 +36,23 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"    
 
-RE04ParallelWorldConstruction::RE04ParallelWorldConstruction(G4String& parallelWorldName)
-:G4VUserParallelWorld(parallelWorldName),constructed(false)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE04ParallelWorldConstruction
+::RE04ParallelWorldConstruction(G4String& parallelWorldName)
+:G4VUserParallelWorld(parallelWorldName),fConstructed(false)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04ParallelWorldConstruction::~RE04ParallelWorldConstruction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04ParallelWorldConstruction::Construct()
 {
-  if(constructed) return;
-  constructed = true;
+  if(fConstructed) return;
+  fConstructed = true;
 
   //
   // World
@@ -60,7 +69,8 @@ void RE04ParallelWorldConstruction::Construct()
   // parallel world placement box
   //
   G4VSolid* paraBox = new G4Box("paraBox",5.0*cm,30.0*cm,5.0*cm);
-  G4LogicalVolume* paraBoxLogical = new G4LogicalVolume(paraBox,water,"paraBox");
+  G4LogicalVolume* paraBoxLogical = new G4LogicalVolume(paraBox,water,
+                                                        "paraBox");
   new G4PVPlacement(0,G4ThreeVector(-25.0*cm,0.,0.),paraBoxLogical,
                     "paraBox",worldLogical,false,0);
 
@@ -76,7 +86,8 @@ void RE04ParallelWorldConstruction::Construct()
   // parallel world parameterized volumes
   //
   G4VSolid* paraPara = new G4Box("paraPara",5.0*cm,15.0*cm,10.0*cm);
-  G4LogicalVolume* paraParaLogical = new G4LogicalVolume(paraPara,water,"paraPara");
+  G4LogicalVolume* paraParaLogical = new G4LogicalVolume(paraPara,water,
+                                                         "paraPara");
   RE04ParallelWorldParam* param = new RE04ParallelWorldParam();
   new G4PVParameterised("paraPara",paraParaLogical,paraMomLogical,
                            kXAxis, 2, param);

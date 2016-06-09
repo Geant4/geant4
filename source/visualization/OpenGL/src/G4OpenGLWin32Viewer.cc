@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.20 2009-05-20 13:19:09 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -74,13 +73,6 @@ void G4OpenGLWin32Viewer::ShowView (
     ::TranslateMessage(&event);
     ::DispatchMessage (&event);
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void G4OpenGLWin32Viewer::DrawText(const char * ,double x,double y,double z, double size) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -144,7 +136,7 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
 			   NULL);
   if(!fWindow) return;
 
-  ::SetWindowLong(fWindow,GWL_USERDATA,LONG(this));
+  ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG(this));
 
   // initialize OpenGL rendering :
   fHDC = ::GetDC(fWindow);
@@ -191,7 +183,7 @@ G4OpenGLWin32Viewer::~G4OpenGLWin32Viewer (
     }
     
     if(fWindow) {
-      ::SetWindowLong(fWindow,GWL_USERDATA,LONG(NULL));
+      ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG(NULL));
       if(fHDC) ::ReleaseDC(fWindow,fHDC);
       ::DestroyWindow(fWindow);
     }

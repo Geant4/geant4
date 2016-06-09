@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGLFontBaseStore.hh,v 1.4 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // J.Allison  Apr 2005.
 
@@ -42,19 +41,22 @@ class G4VViewer;
 
 class G4OpenGLFontBaseStore {
 public:
-  static void AddFontBase(G4VViewer*, G4int fontBase,
-			  G4double size, const G4String& fontName);
-  static G4int GetFontBase(G4VViewer*, G4double size);
-private:
   struct FontInfo {
     FontInfo():
-      fFontName(""), fSize(0), fFontBase(-1) {}
-    FontInfo(const G4String& fontName, G4double size, G4int fontBase):
-      fFontName(fontName), fSize(size), fFontBase(fontBase) {}
+      fFontName(""), fSize(0), fFontBase(-1), fWidth(-1) {}
+    FontInfo
+    (const G4String& fontName, G4double size, G4int fontBase, G4int width):
+      fFontName(fontName), fSize(size), fFontBase(fontBase), fWidth(width) {}
     G4String fFontName;
     G4double fSize;  // In terms of G4VMarker Screen Size.
     G4int fFontBase;
+    G4int fWidth;
   };
+  static void AddFontBase(G4VViewer*, G4int fontBase,
+			  G4double size, const G4String& fontName,
+			  G4int width);
+  static const FontInfo& GetFontInfo(G4VViewer*, G4double size);
+private:
   static std::map<G4VViewer*,std::vector<FontInfo> > fFontBaseMap;
 };
 

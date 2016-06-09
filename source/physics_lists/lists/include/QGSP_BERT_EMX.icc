@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_EMX.icc,v 1.5 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -37,11 +36,14 @@
 // 27.11.2009 G.Folger: Mark as experimental
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 01.11.2012 A.Ribon: Use new default stopping and ion physics
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -49,14 +51,12 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -65,15 +65,41 @@
 
 #include "G4WarnPLStatus.hh"
 
-template<class T> TQGSP_BERT_EMX<T>::TQGSP_BERT_EMX(G4int):  T()
+template<class T> TQGSP_BERT_EMX<T>::TQGSP_BERT_EMX(G4int ver):  T()
 {
-
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_EMX 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_EMX 4.0"<<G4endl;
   G4cout <<G4endl;
+
+  this->defaultCutValue = 0.7*CLHEP::mm;  
+  this->SetVerboseLevel(ver);
 
   G4WarnPLStatus factory;
   factory.OnlyFromFactory("QGSP_BERT_EMX","QGSP_BERT");
+
+  // EM Physics
+  this->RegisterPhysics( new G4EmStandardPhysics_option2(ver) );
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+
+  // Decays
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
+
+   // Hadron Elastic scattering
+  this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
+
+  // Hadron Physics
+  this->RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
+
+  // Ion Physics
+  this->RegisterPhysics( new G4IonPhysics(ver));
+  
+  // Neutron tracking cut
+  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 
  }
 

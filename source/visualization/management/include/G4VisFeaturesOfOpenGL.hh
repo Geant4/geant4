@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisFeaturesOfOpenGL.hh,v 1.6 2007-10-03 14:20:23 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

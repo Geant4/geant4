@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.14 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4Paraboloid
 //
@@ -768,7 +767,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
 
         G4double r = (p.z() > 0)? r2 : r1;
         G4double pDotV = p.dot(v);
-        G4double A = vRho2 * ( sqr(r) - sqr(p.x()) - sqr(p.y()));
+        A = vRho2 * ( sqr(r) - sqr(p.x()) - sqr(p.y()));
         intersection = (-pDotV + std::sqrt(A + sqr(pDotV))) / vRho2;
 
         if(calcNorm)
@@ -1010,16 +1009,12 @@ G4ThreeVector G4Paraboloid::GetPointOnSurface() const
     G4double rho;
     if(pi * sqr(r1) / A > z)
     {
-      rho = RandFlat::shoot(0., 1.);
-      rho = std::sqrt(rho);
-      rho *= r1;
+      rho = r1 * std::sqrt(RandFlat::shoot(0., 1.));
       return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), -dz);
     }
     else
     {
-      rho = RandFlat::shoot(0., 1);
-      rho = std::sqrt(rho);
-      rho *= r2;
+      rho = r2 * std::sqrt(RandFlat::shoot(0., 1));
       return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), dz);
     }
   }

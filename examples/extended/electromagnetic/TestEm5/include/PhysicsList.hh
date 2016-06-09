@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.11 2009-03-06 18:04:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,31 +46,31 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  virtual ~PhysicsList();
+ ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
         
   void AddPhysicsList(const G4String& name);
     
-  void ConstructProcess();    
+  virtual void ConstructProcess();    
   void AddDecay();
   void AddStepMax();       
     
-  void SetCuts();
+  virtual void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
     
 private:
 
-  PhysicsListMessenger* pMessenger; 
+  PhysicsListMessenger* fMessenger; 
 
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  G4String fEmName;
+  G4VPhysicsConstructor*  fEmPhysicsList;
     
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;    
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;    
 
 };
 

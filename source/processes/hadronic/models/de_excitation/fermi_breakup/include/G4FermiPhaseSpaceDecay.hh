@@ -40,12 +40,13 @@
 #ifndef G4FermiPhaseSpaceDecay_hh
 #define G4FermiPhaseSpaceDecay_hh 1
 
+#include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
-
-#include <vector>
 
 class G4FermiPhaseSpaceDecay
 {
@@ -123,7 +124,7 @@ G4FermiPhaseSpaceDecay::IsotropicVector(G4double Magnitude) const
 {
   G4double CosTheta = 2.0*G4UniformRand() - 1.0;
   G4double SinTheta = std::sqrt((1. - CosTheta)*(1. + CosTheta));
-  G4double Phi = twopi*G4UniformRand();
+  G4double Phi = CLHEP::twopi*G4UniformRand();
   G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
 		       Magnitude*std::sin(Phi)*SinTheta,
 		       Magnitude*CosTheta);

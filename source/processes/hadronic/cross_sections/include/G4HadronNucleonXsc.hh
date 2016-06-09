@@ -31,6 +31,8 @@
 //
 //
 // 14.03.07 V. Grichine - first implementation
+// 04.11.11 V. Grichine - update for kaon-(p,n) xsc, vector spline
+// 21.02.12 V. Grichine - update for pion-(p,n) xsc, NS fit++, vector spline
 //
 //
 
@@ -80,6 +82,8 @@ public:
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
+
+  G4double GetCoulombBarrier(const G4DynamicParticle* aParticle, const G4ParticleDefinition* nucleon );
 
   G4double GetTotalHadronNucleonXsc()    { return fTotalXsc;     }; 
   G4double GetElasticHadronNucleonXsc()  { return fElasticXsc;   }; 

@@ -26,16 +26,20 @@
 // Hadronic Process: Low Energy Proton Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Nov-1996
  
-#include "G4LEProtonInelastic.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LEProtonInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LEProtonInelastic::G4LEProtonInelastic(const G4String& name)
  :G4InelasticInteraction(name)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(55.*GeV);
+  G4cout << "WARNING: model G4LEProtonInelastic is being deprecated and will\n"
+         << "disappear in Geant4 version 10.0"  << G4endl;  
 }
 
 
@@ -79,7 +83,8 @@ G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   if (originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9.) {
-    SlowProton( originalIncident, targetNucleus );
+    SlowProton(originalIncident, targetNucleus);
+    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
@@ -117,7 +122,8 @@ G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }
   const G4double cutOff = 0.1;
   if (modifiedOriginal.GetKineticEnergy()/MeV <= cutOff) {
-    SlowProton( originalIncident, targetNucleus );
+    SlowProton( originalIncident, targetNucleus);
+    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
@@ -145,7 +151,8 @@ G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   SetUpChange(vec, vecLen,
               currentParticle, targetParticle,
               incidentHasChanged);
-    
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);    
   delete originalTarget;
   return &theParticleChange;
 }
@@ -246,8 +253,8 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
     const G4int numSec = 60;
     static G4double protmul[numMul], protnorm[numSec]; // proton constants
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
+    // npos = number of pi+, nneg = number of pi-, nzero = number of pi0
+    G4int counter, nt=0, npos=0, nneg=0, nzero=0;
     const G4double c = 1.25;    
     const G4double b[] = { 0.70, 0.35 };
     if( first )      // compute normalization constants, this will only be Done once
@@ -257,20 +264,20 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
       for( i=0; i<numMul; ++i )protmul[i] = 0.0;
       for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<(numSec/3); ++np )
+      for( npos=0; npos<(numSec/3); ++npos )
       {
-        for( nm=std::max(0,np-2); nm<=np; ++nm )
+        for( nneg=std::max(0,npos-2); nneg<=npos; ++nneg )
         {
-          for( nz=0; nz<numSec/3; ++nz )
+          for( nzero=0; nzero<numSec/3; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt>0 && nt<=numSec )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c) /
-                  ( theReactionDynamics.Factorial(2-np+nm)*
-                    theReactionDynamics.Factorial(np-nm) );
+                protmul[counter] = Pmltpc(npos,nneg,nzero,nt,b[0],c) /
+                  ( theReactionDynamics.Factorial(2-npos+nneg)*
+                    theReactionDynamics.Factorial(npos-nneg) );
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -280,20 +287,20 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
       for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
       for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<numSec/3; ++np )
+      for( npos=0; npos<numSec/3; ++npos )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,npos-1); nneg<=(npos+1); ++nneg )
         {
-          for( nz=0; nz<numSec/3; ++nz )
+          for( nzero=0; nzero<numSec/3; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt>0 && nt<=numSec )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c) /
-                  ( theReactionDynamics.Factorial(1-np+nm)*
-                    theReactionDynamics.Factorial(1+np-nm) );
+                neutmul[counter] = Pmltpc(npos,nneg,nzero,nt,b[1],c) /
+                  ( theReactionDynamics.Factorial(1-npos+nneg)*
+                    theReactionDynamics.Factorial(1+npos-nneg) );
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -319,7 +326,7 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
       // suppress high multiplicity events at low momentum
       // only one pion will be produced
       
-      np = nm = nz = 0;
+      npos = nneg = nzero = 0;
       if( targetParticle.GetDefinition() == aProton )
       {
         test = std::exp( std::min( expxu, std::max(
@@ -327,9 +334,9 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
         w0 = test/2.0;
         wp = test;
         if( G4UniformRand() < w0/(w0+wp) )
-          nz = 1;
+          nzero = 1;
         else
-          np = 1;
+          npos = 1;
       }
       else // target is a neutron
       {
@@ -344,11 +351,11 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
         wp += w0;
         G4double ran = G4UniformRand();
         if( ran < w0/wt )
-          nz = 1;
+          nzero = 1;
         else if( ran < wp/wt )
-          np = 1;
+          npos = 1;
         else
-          nm = 1;
+          nneg = 1;
       }
     }
     else // (availableEnergy >= 2.0*GeV) || (random number < supp[ieab])
@@ -360,15 +367,15 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
       if( targetParticle.GetDefinition() == aProton )
       {
         counter = -1;
-        for( np=0; np<numSec/3 && ran>=excs; ++np )
+        for( npos=0; npos<numSec/3 && ran>=excs; ++npos )
         {
-          for( nm=std::max(0,np-2); nm<=np && ran>=excs; ++nm )
+          for( nneg=std::max(0,npos-2); nneg<=npos && ran>=excs; ++nneg )
           {
-            for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
+            for( nzero=0; nzero<numSec/3 && ran>=excs; ++nzero )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = npos+nneg+nzero;
                 if( nt>0 && nt<=numSec )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -393,15 +400,15 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
       else  // target must be a neutron
       {
         counter = -1;
-        for( np=0; np<numSec/3 && ran>=excs; ++np )
+        for( npos=0; npos<numSec/3 && ran>=excs; ++npos )
         {
-          for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nneg=std::max(0,npos-1); nneg<=(npos+1) && ran>=excs; ++nneg )
           {
-            for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
+            for( nzero=0; nzero<numSec/3 && ran>=excs; ++nzero )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = npos+nneg+nzero;
                 if( nt>0 && nt<=numSec )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -423,11 +430,11 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
           return;
         }
       }
-      np--; nm--; nz--;
+      npos--; nneg--; nzero--;
     }
     if( targetParticle.GetDefinition() == aProton )
     {
-      switch( np-nm )
+      switch( npos-nneg )
       {
        case 1:
          if( G4UniformRand() < 0.5 )
@@ -451,7 +458,7 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
     }
     else  // target is a neutron
     {
-      switch( np-nm )
+      switch( npos-nneg )
       {
        case 0:
          if( G4UniformRand() < 0.333333 )
@@ -472,7 +479,7 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
          break;
       }
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
+    SetUpPions( npos, nneg, nzero, vec, vecLen );
     return;
   }
 

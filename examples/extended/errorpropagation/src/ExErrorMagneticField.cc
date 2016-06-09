@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ExErrorMagneticField.cc
+/// \brief Implementation of the ExErrorMagneticField class
 
 #include "ExErrorMagneticField.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorMagneticField::ExErrorMagneticField()
   : G4UniformMagField(G4ThreeVector())
 {
@@ -36,8 +38,7 @@ ExErrorMagneticField::ExErrorMagneticField()
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorMagneticField::ExErrorMagneticField(G4ThreeVector fieldVector)
   : G4UniformMagField(fieldVector)
 {
@@ -45,16 +46,14 @@ ExErrorMagneticField::ExErrorMagneticField(G4ThreeVector fieldVector)
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExErrorMagneticField::SetFieldValue(G4double fieldValue)
 {
   G4UniformMagField::SetFieldValue(G4ThreeVector(0,0,fieldValue));
 
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExErrorMagneticField::SetFieldValue(G4ThreeVector fieldVector)
 {
   // Find the Field Manager for the global field
@@ -72,14 +71,12 @@ void ExErrorMagneticField::SetFieldValue(G4ThreeVector fieldVector)
   }
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorMagneticField::~ExErrorMagneticField()
 {
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4FieldManager*  ExErrorMagneticField::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()->GetFieldManager();

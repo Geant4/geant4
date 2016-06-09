@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.16 2010-12-11 16:40:16 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -66,9 +65,9 @@ namespace G4TrajectoryDrawerUtils {
     // Keep positions.  Don't store unless first or different.
     std::vector<G4ThreeVector> positions;
 
-    for (G4int i=0; i<traj.GetPointEntries(); i++) {
+    for (G4int iPoint=0; iPoint<traj.GetPointEntries(); iPoint++) {
 
-      G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+      G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(iPoint);
       const G4ThreeVector& trajectoryPointPosition =
 	aTrajectoryPoint->GetPosition();
 
@@ -139,7 +138,6 @@ namespace G4TrajectoryDrawerUtils {
 	      auxiliaryPoints.push_back(auxPointPosition);
 	      if (validity == ValidTimes) {
 		// Interpolate time for auxiliary points...
-		const G4ThreeVector& auxPointPosition = (*auxiliaries)[iAux];
 		G4double s1 =
 		  (auxPointPosition - lastTrajectoryPointPosition).mag();
 		G4double s2 =

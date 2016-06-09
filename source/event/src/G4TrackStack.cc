@@ -24,159 +24,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.cc,v 1.9 2010-11-24 22:56:57 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4TrackStack.hh"
 #include "G4SmartTrackStack.hh"
 #include "G4VTrajectory.hh"
-
-G4TrackStack::G4TrackStack()
-:n_stackedTrack(0),firstStackedTrack(0),lastStackedTrack(0)
-{
-  maxNTracks = 0;
-}
+#include "G4Track.hh"
 
 G4TrackStack::~G4TrackStack()
 {
-  if( n_stackedTrack != 0 )
-  {
-    G4StackedTrack * aStackedTrack = firstStackedTrack;
-    G4StackedTrack * nextStackedTrack;
-
-    // delete tracks in the stack
-    while( aStackedTrack != 0 )
-    {
-      nextStackedTrack = aStackedTrack->GetNext();
-      delete aStackedTrack->GetTrack();
-      delete aStackedTrack->GetTrajectory();
-      delete aStackedTrack;
-      aStackedTrack = nextStackedTrack;
-    }
-  }
+  clearAndDestroy();
 }
 
-const G4TrackStack & G4TrackStack::operator=(const G4TrackStack &right) 
+void G4TrackStack::clearAndDestroy()
 {
-  n_stackedTrack = right.n_stackedTrack;
-  firstStackedTrack = right.firstStackedTrack;
-  lastStackedTrack = right.lastStackedTrack;
-  return *this; 
+  for( iterator i = begin(); i != end(); i++ ) {
+    delete (*i).GetTrack();
+    delete (*i).GetTrajectory();
+  }
+  clear();
 }
 
-int G4TrackStack::operator==(const G4TrackStack &right) const
-{ return (firstStackedTrack==right.firstStackedTrack); }
-int G4TrackStack::operator!=(const G4TrackStack &right) const
-{ return (firstStackedTrack!=right.firstStackedTrack); }
-
-void G4TrackStack::TransferTo(G4TrackStack * aStack)
-{
-  if(n_stackedTrack==0) return;
-
-  if(aStack->n_stackedTrack == 0)
-  {
-    *aStack = *this;
-  }
-  else
-  {
-    aStack->lastStackedTrack->SetNext( firstStackedTrack );
-    firstStackedTrack->SetPrevious( aStack->lastStackedTrack );
-    aStack->lastStackedTrack = lastStackedTrack;
-    aStack->n_stackedTrack += n_stackedTrack;
-  }
-
-  n_stackedTrack = 0;
-  firstStackedTrack = 0;
-  lastStackedTrack = 0;
+void G4TrackStack::TransferTo(G4TrackStack* aStack) {
+  for(iterator i = begin(); i != end(); i++) aStack->push_back(*i);
+  clear();
 }
+
 
 void G4TrackStack::TransferTo(G4SmartTrackStack * aStack)
 {
-  while(n_stackedTrack)
-  { aStack->PushToStack(PopFromStack()); }
+  while(size()) { aStack->PushToStack(PopFromStack()); }
 }
 
-G4StackedTrack * G4TrackStack::PopFromStack()
+
+G4double G4TrackStack::getTotalEnergy(void) const
 {
-  if( n_stackedTrack == 0 ) return 0;
-  G4StackedTrack * aStackedTrack = lastStackedTrack;
-  GrabFromStack( aStackedTrack );
-  return aStackedTrack;
+	G4double totalEnergy = 0.0;
+	for (const_iterator i = begin(); i != end(); i++) {
+		totalEnergy += (*i).GetTrack()->GetDynamicParticle()->GetTotalEnergy();
+	}
+	return totalEnergy;
 }
-
-void G4TrackStack::PushToStack( G4StackedTrack * aStackedTrack )
-{
-  if(aStackedTrack)
-  {
-    if( n_stackedTrack == 0 )
-    {
-      aStackedTrack->SetPrevious( 0 );
-      firstStackedTrack = aStackedTrack;
-    }
-    else
-    {
-      lastStackedTrack->SetNext( aStackedTrack );
-      aStackedTrack->SetPrevious( lastStackedTrack );
-    }
-    lastStackedTrack = aStackedTrack;
-    n_stackedTrack++;
-    if(n_stackedTrack>maxNTracks) maxNTracks = n_stackedTrack;
-  }
-}
-
-void G4TrackStack::GrabFromStack( G4StackedTrack * aStackedTrack )
-{
-  if( n_stackedTrack == 1 )
-  {
-    firstStackedTrack = 0;
-    lastStackedTrack = 0;
-  }
-  else
-  {
-    if( aStackedTrack == firstStackedTrack )
-    {
-      firstStackedTrack = aStackedTrack->GetNext();
-      firstStackedTrack->SetPrevious( 0 );
-    }
-    else
-    {
-      if( aStackedTrack == lastStackedTrack )
-      {
-        lastStackedTrack = aStackedTrack->GetPrevious();
-        lastStackedTrack->SetNext( 0 );
-      }
-      else
-      {
-        aStackedTrack->GetPrevious()
-          ->SetNext( aStackedTrack->GetNext() );
-        aStackedTrack->GetNext()
-          ->SetPrevious( aStackedTrack->GetPrevious() );
-      }
-    }
-  }
-  n_stackedTrack--;
-}
-
-void G4TrackStack::clear()
-{
-  G4StackedTrack * aStackedTrack = firstStackedTrack;
-  G4StackedTrack * nextStackedTrack;
-
-  if ( n_stackedTrack == 0 ) return;
-
-  // delete tracks in the stack
-  while( aStackedTrack != 0 )
-  {
-    nextStackedTrack = aStackedTrack->GetNext();
-    delete aStackedTrack->GetTrack();
-    delete aStackedTrack->GetTrajectory();
-    delete aStackedTrack;
-    aStackedTrack = nextStackedTrack;
-  }
-  n_stackedTrack = 0;
-  firstStackedTrack = 0;
-  lastStackedTrack = 0;
-}
-
-

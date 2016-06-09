@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmRunAction.hh
+/// \brief Definition of the exrdmRunAction class
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -40,11 +43,11 @@ class exrdmRunAction : public G4UserRunAction
 {
   public:
     exrdmRunAction();
-   ~exrdmRunAction();
+    virtual ~exrdmRunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
   private:
 
 };

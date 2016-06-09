@@ -1,0 +1,24 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_zfunc
+#define tools_zfunc
+
+#include <ostream>
+
+namespace tools {
+
+typedef bool (*unzip_func)(std::ostream&,
+                           unsigned int,const char*,
+                           unsigned int,char*,
+                           unsigned int&);
+
+typedef bool (*zip_func)(std::ostream&,
+                         unsigned int,
+                         unsigned int,const char*,
+                         unsigned int,char*,
+                         unsigned int&);
+
+}
+
+#endif

@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheRayTracer.cc,v 1.3 2006-06-29 21:24:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //
 
 
 #include "G4TheRayTracer.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EventManager.hh"
 #include "G4RTMessenger.hh"
 #include "G4RayShooter.hh"
@@ -75,8 +75,9 @@ G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
   eyePosition = G4ThreeVector(1.*m,1.*m,1.*m);
   targetPosition = G4ThreeVector(0.,0.,0.);
   lightDirection = G4ThreeVector(-0.1,-0.2,-0.3).unit();
+  up = G4ThreeVector(0,1,0);
   viewSpan = 5.0*deg;
-  headAngle = 270.*deg; 
+  headAngle = 0.;
   attenuationLength = 1.0*m;
 
   distortionOn = false;
@@ -223,12 +224,18 @@ G4bool G4TheRayTracer::CreateBitMap()
       G4ThreeVector rayDirection;
       if(distortionOn)
       {
-	rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
+	rayDirection = G4ThreeVector(-std::tan(angleX)/std::cos(angleY),std::tan(angleY)/std::cos(angleX),1.0);
       }
       else
       {
-	rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
+	rayDirection = G4ThreeVector(-std::tan(angleX),std::tan(angleY),1.0);
       }
+      G4double cp = std::cos(eyeDirection.phi());
+      G4double sp = std::sqrt(1.-cp*cp);
+      G4double ct = std::cos(eyeDirection.theta());
+      G4double st = std::sqrt(1.-ct*ct);
+      G4double gamma = std::atan2(ct*cp*up.x()+ct*sp*up.y()-st*up.z(), -sp*up.x()+cp*up.y());
+      rayDirection.rotateZ(-gamma);
       rayDirection.rotateZ(headAngle);
       rayDirection.rotateUz(eyeDirection);
       G4ThreeVector rayPosition(eyePosition);
@@ -253,7 +260,7 @@ G4bool G4TheRayTracer::CreateBitMap()
 	}
       }
       if (interceptable) {
-	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
+	theRayShooter->Shoot(anEvent,rayPosition,rayDirection.unit());
 	theEventManager->ProcessOneEvent(anEvent);
 	succeeded = GenerateColour(anEvent);
 	colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
@@ -311,11 +318,11 @@ G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent)
 
 G4Colour G4TheRayTracer::GetMixedColour(G4Colour surfCol,G4Colour transCol,G4double weight)
 {
-  G4double r = weight*surfCol.GetRed() + (1.-weight)*transCol.GetRed();
-  G4double g = weight*surfCol.GetGreen() + (1.-weight)*transCol.GetGreen();
-  G4double b = weight*surfCol.GetBlue() + (1.-weight)*transCol.GetBlue();
-  G4double a = weight*surfCol.GetAlpha() + (1.-weight)*transCol.GetAlpha();
-  return G4Colour(r,g,b,a);
+  G4double red   = weight*surfCol.GetRed() + (1.-weight)*transCol.GetRed();
+  G4double green = weight*surfCol.GetGreen() + (1.-weight)*transCol.GetGreen();
+  G4double blue  = weight*surfCol.GetBlue() + (1.-weight)*transCol.GetBlue();
+  G4double alpha = weight*surfCol.GetAlpha() + (1.-weight)*transCol.GetAlpha();
+  return G4Colour(red,green,blue,alpha);
 }
 
 G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
@@ -338,10 +345,11 @@ G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
   if(preVis)
   {
     G4double brill = (1.0-(-lightDirection).dot(normal))/2.0;
-    G4double r = preAtt->GetColour().GetRed();
-    G4double g = preAtt->GetColour().GetGreen();
-    G4double b = preAtt->GetColour().GetBlue();
-    preCol = G4Colour(r*brill,g*brill,b*brill,preAtt->GetColour().GetAlpha());
+    G4double red   = preAtt->GetColour().GetRed();
+    G4double green = preAtt->GetColour().GetGreen();
+    G4double blue  = preAtt->GetColour().GetBlue();
+    preCol = G4Colour
+      (red*brill,green*brill,blue*brill,preAtt->GetColour().GetAlpha());
   }
   else
   { preCol = transparent; }
@@ -349,10 +357,11 @@ G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
   if(postVis)
   {
     G4double brill = (1.0-(-lightDirection).dot(-normal))/2.0;
-    G4double r = postAtt->GetColour().GetRed();
-    G4double g = postAtt->GetColour().GetGreen();
-    G4double b = postAtt->GetColour().GetBlue();
-    postCol = G4Colour(r*brill,g*brill,b*brill,postAtt->GetColour().GetAlpha());
+    G4double red   = postAtt->GetColour().GetRed();
+    G4double green = postAtt->GetColour().GetGreen();
+    G4double blue  = postAtt->GetColour().GetBlue();
+    postCol = G4Colour
+      (red*brill,green*brill,blue*brill,postAtt->GetColour().GetAlpha());
   }
   else
   { postCol = transparent; }

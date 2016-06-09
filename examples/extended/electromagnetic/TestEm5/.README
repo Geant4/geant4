@@ -1,0 +1,200 @@
+//$Id$
+
+///\file "electromagnetic/TestEm5/.README"
+///\brief Example TestEm5 README page
+
+/*! \page ExampleTestEm5 Example TestEm5
+
+ How to study the transmission, absorption and reflexion of particles through
+ a single, thin or thick, layer of material.
+ In particular, the effects of the multiple scattering can be ploted.  
+	
+\section TestEm5_s1 GEOMETRY DEFINITION
+ 
+ The "absorber" is a box made of a given material.                
+ 	
+ Three parameters define the absorber :
+ - the material of the absorber,
+ - the thickness of an absorber,
+ - the transverse size of the absorber (the input face is a square). 
+    
+ A volume "World" contains the "absorber". 
+
+ In addition a transverse uniform magnetic field can be applied.
+ 	
+ The default geometry is constructed in DetectorConstruction class, but all the
+ parameters can be changed via commands defined in the DetectorMessenger class.
+ The parameters of the "World" can be changed, too. However, if World material
+ is not set to vacuum, the plots 10->43 below may be not pertinent.
+ 
+\section TestEm5_s2 PHYSICS LIST
+ 
+ Physics lists can be local (eg. in this example) or from G4 kernel
+ physics_lists subdirectory.
+     
+ Local physics lists:	 
+ - "local"	standard EM physics with current 'best' options setting.
+                these options are explicited in PhysListEmStandard
+ - "standardSS" standard EM physics with single Coulomb scattering 
+                instead of multiple scattering			
+    
+ From geant4/source/physics_lists/builders:	 
+ - "emstandard_opt0" recommended standard EM physics for LHC
+ - "emstandard_opt1" best CPU performance standard physics for LHC
+ - "emstandard_opt2"     
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy   
+ - "emlivermore"  low-energy EM physics using Livermore data
+ - "empenelope"   low-energy EM physics implementing Penelope models
+           
+ Physics lists and options can be (re)set with UI commands
+    
+ Please, notice that options set through G4EmProcessOPtions are global, eg
+ for all particle types. In G4 builders, it is shown how to set options per
+ particle type.
+
+         	
+\section TestEm5_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle which hits the absorber 
+ perpendicular to the input face. The type of the particle and its energy are 
+ set in the PrimaryGeneratorAction class, and can be changed via the G4 build-in
+ commands of G4ParticleGun class (see the macros provided with this example).
+	
+ In addition one can choose randomly the impact point of the incident particle.
+ The interactive command is built in PrimaryGeneratorMessenger class.
+ 
+\section TestEm5_s4 VISUALIZATION
+ 
+ The Visualization Manager is set in the main () (see TestEm5.cc).
+ The initialisation of the drawing is done via the commands in vis.mac
+ In interactive session:
+\verbatim
+ PreInit or Idle > /control/execute vis.mac
+\endverbatim
+ 	
+ The example has a default view which is a longitudinal view of the detector.
+ 	
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionaly one can choose to draw all particles, only the charged, or none.
+ This command is defined in EventActionMessenger class.
+ 
+\section TestEm5_s5 TRACKING
+ 
+ During the tracking, one can keep or not the secondaries : see StackingAction
+ class and its Messenger (StackingMessenger).
+ One can also limit 'by hand' the step lenght of the particle. As an example,
+ this limitation is implemented as a 'full' process : see StepMax class and its
+ Messenger. The 'StepMax process' is registered in the Physics List. 
+  	
+\section TestEm5_s6 DETECTOR RESPONSE
+  	
+ At the end of a run, from the histogram(s), one can study different
+ physics quantities such as :
+ - energy deposit in the absorber,
+ - energy spectrum of secondaries at creation, 
+ - energy spectrum and angle distribution of particles at exit,
+ - transmission and backscattering coefficients,
+ -  ...
+ 
+\section TestEm5_s7 List of the built-in histograms
+        
+ The test contains more than 20 built-in 1D histograms, which are managed by
+ G4AnalysisManager class and its Messenger. The histos can be individually activated
+ with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim
+ where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+ (see the macros xxxx.mac).
+ 
+ - 1 :  "energy deposit in absorber"
+ - 2 :  "energy of charged secondaries at creation"
+ - 3 :  "energy of neutral secondaries at creation"
+ - 4 :  "energy of charged at creation (log10(Ekin))"
+ - 5 :  "energy of neutral at creation (log10(Ekin))"
+ - 6 :  "x_vertex of charged secondaries (all)"
+ - 7 :  "x_vertex of charged secondaries (not absorbed)"
+ - 10 :  "(transmit, charged) : kinetic energy at exit of world"
+ - 11 :  "(transmit, charged) : ener fluence: dE(MeV)/dOmega"      
+ - 12 :  "(transmit, charged) : space angle dN/dOmega"
+ - 13 :  "(transmit, charged) : projected angle at exit of world"
+ - 14 :  "(transmit, charged) : projected position at exit of world"
+ - 15 :  "(transmit, charged) : radius at exit of world"   
+ - 20 :  "(transmit, neutral) : kinetic energy at exit of world"
+ - 21 :  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega"      
+ - 22 :  "(transmit, neutral) : space angle dN/dOmega"
+ - 23 :  "(transmit, neutral) : projected angle at exit of world"
+ - 30 :  "(reflect , charged) : kinetic energy at exit of world"
+ - 31 :  "(reflect , charged) : ener fluence: dE(MeV)/dOmega"      
+ - 32 :  "(reflect , charged) : space angle dN/dOmega"
+ - 33 :  "(reflect , charged) : projected angle at exit of world"
+ - 40 :  "(reflect , neutral) : kinetic energy at exit of world"
+ - 41 :  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"      
+ - 42 :  "(reflect , neutral) : space angle dN/dOmega"
+ - 43 :  "(reflect , neutral) : projected angle at exit of world"
+
+ The histograms can be viewed using ROOT or PAW.
+ 
+ One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default testem5)
+\endverbatim
+    
+ It is possible to choose the format of the histogram file : root (default),
+ hbook, xml, csv, by using namespace in HistoManager.hh
+     
+ It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+ All selected histos will be written on a file name.ascii  (default testem5) 
+    
+\subsection TestEm5_subs1 Using hbook format
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh
+ 				
+\section TestEm5_s8 GEANT4/GEANT3/DATA COMPARISON
+
+ A Geant4/Geant3/exp. data comparison is given here for a few cases.
+ These cases can be classified as follow:
+ - e-/e+ incident particles versus protons and others. 
+ - 3 energy regimes: low: < 1MeV; medium: 1MeV -> few 10MeV; high: > 100MeV
+ 
+ We indicate here the corresponding macros.
+<pre> 
+ 	      |	low energy   |	medium energy	|  high energy
+	--------------------------------------------------------
+	      | acosta.mac   |                  |
+	e-+   |	berger.mac   |	hanson.mac      |
+	      |	hunger.mac   |	kulchi.mac      |
+	      | tavola.mac   |			|
+	--------------------------------------------------------
+	others|	bichsel.mac  | 	vincour.mac	|  shen1.mac shen2.mac
+	      | 	     |	gottsch.mac	|  tramu.mac
+	--------------------------------------------------------
+</pre>
+ The relevant part of the GEANT3 code is in the subdirectory geant3 together 
+ with the xxxx.dat input files.
+	
+\section TestEm5_s9 HOW TO START ?
+ 
+ - Execute TestEm5 in 'batch' mode from macro files e.g.
+\verbatim
+% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
+\endverbatim
+		
+ - Execute TestEm5 in 'interactive' mode with visualization e.g.
+\verbatim
+% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
+\endverbatim
+Then type your commands, for instance :
+\verbatim
+Idle> control/execute vis.mac
+Idle> run/beamOn 5
+....
+\endverbatim
+ 
+*/

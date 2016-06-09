@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.15 2010-10-25 19:02:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +53,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4BetheHeitlerModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -102,8 +103,8 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 //                                   *(GammaEnergy-2electronmass) 
 {
   static const G4double GammaEnergyLimit = 1.5*MeV;
-  G4double CrossSection = 0.0 ;
-  if ( Z < 0.9 || GammaEnergy <= 2.0*electron_mass_c2 ) { return CrossSection; }
+  G4double xSection = 0.0 ;
+  if ( Z < 0.9 || GammaEnergy <= 2.0*electron_mass_c2 ) { return xSection; }
 
   static const G4double
     a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
@@ -126,17 +127,17 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
            F2 = b0 + b1*X + b2*X2 + b3*X3 + b4*X4 + b5*X5,
            F3 = c0 + c1*X + c2*X2 + c3*X3 + c4*X4 + c5*X5;     
 
-  CrossSection = (Z + 1.)*(F1*Z + F2*Z*Z + F3);
+  xSection = (Z + 1.)*(F1*Z + F2*Z*Z + F3);
 
   if (GammaEnergySave < GammaEnergyLimit) {
 
     X = (GammaEnergySave  - 2.*electron_mass_c2)
       / (GammaEnergyLimit - 2.*electron_mass_c2);
-    CrossSection *= X*X;
+    xSection *= X*X;
   }
 
-  if (CrossSection < 0.) { CrossSection = 0.; }
-  return CrossSection;
+  if (xSection < 0.) { xSection = 0.; }
+  return xSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

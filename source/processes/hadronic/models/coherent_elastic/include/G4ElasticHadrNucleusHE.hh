@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.47 2009-09-22 16:21:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4ElasticHadrNucleusHe.hh
 
@@ -39,6 +38,8 @@
 //  23.11.06 General cleanup, ONQ0=3 (V.Ivanchenko)
 //  15.05.07 Redesign and cleanup (V.Ivanchenko)
 //  18.05.07 Cleanup (V.Grichine)
+//  19.04.12 Fixed reproducibility violation (A.Ribon)
+//  12.06.12 Fixed warnings of shadowed variables (A.Ribon)
 //
 
 #ifndef G4ElasticHadrNucleusHE_h
@@ -128,7 +129,7 @@ public:
   void DefineHadronValues(G4int Z);
 
   G4double GetLightFq2(G4int Z, G4int A, G4double Q);
-  G4double GetHeavyFq2(G4int Nucleus, G4double *LineFq2);
+  G4double GetHeavyFq2(G4int Z, G4int Nucleus, G4double *LineFq2); 
 
   G4double GetQ2_2(G4int  N, G4double * Q, 
 		   G4double * F, G4double R);
@@ -137,7 +138,7 @@ public:
 			G4double c1, G4double c2,
 			G4double p);
 
-  G4double HadrNucDifferCrSec(G4int Nucleus, G4double Q2);
+  G4double HadrNucDifferCrSec(G4int Z, G4int Nucleus, G4double Q2); 
 
   void InterpolateHN(G4int n, const G4double EnP[], 
 		     const G4double C0P[], const G4double C1P[], 
@@ -265,9 +266,9 @@ void G4ElasticHadrNucleusHE::InterpolateHN(G4int n, const G4double EnP[],
 ////////////////////////////////////////////////////////////////
 
 inline
-G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int n, G4int m )
+G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int numN, G4int numM )
 {
-  if ( n >= m && n <= 240) return SetBinom[n][m];
+  if ( numN >= numM && numN <= 240) return SetBinom[numN][numM];
   else                     return 0.;
 }
 

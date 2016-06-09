@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10SteppingAction.hh
+/// \brief Definition of the Em10SteppingAction class
 //
-// $Id: Em10SteppingAction.hh,v 1.3 2006-06-29 16:38:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -44,27 +46,25 @@
 class Em10DetectorConstruction;
 class Em10RunAction;
 class Em10EventAction;
-class Em10SteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em10SteppingAction : public G4UserSteppingAction
 {
-  public:
-    Em10SteppingAction(Em10DetectorConstruction*, Em10EventAction*,
-                      Em10RunAction* );
-   ~Em10SteppingAction();
+public:
+  Em10SteppingAction(Em10DetectorConstruction*, Em10EventAction*,
+                     Em10RunAction* );
+  virtual ~Em10SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*);
 
-  private:
-    Em10DetectorConstruction* detector;
-    Em10EventAction*          eventaction;
-    Em10RunAction*            runaction;
-    Em10SteppingMessenger*    steppingMessenger;
+private:
+  Em10DetectorConstruction* detector;
+  Em10EventAction*          eventaction;
+  Em10RunAction*            runaction;
 
-    G4int IDnow,IDold;
-    G4int evnoold ;
+  G4int IDnow,IDold;
+  G4int evnoold ;
 
 };
 

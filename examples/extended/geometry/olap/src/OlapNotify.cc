@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/OlapNotify.cc
+/// \brief Implementation of the OlapNotify class
 //
-// $Id: OlapNotify.cc,v 1.2 2006-06-29 17:23:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

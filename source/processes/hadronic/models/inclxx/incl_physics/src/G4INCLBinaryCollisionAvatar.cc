@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * G4INCLBinaryCollisionAvatar.cc
  *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
+ *  \date Jun 5, 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLBinaryCollisionAvatar.hh"
@@ -58,7 +58,7 @@
 #include "G4INCLLogger.hh"
 #include <string>
 #include <sstream>
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -76,14 +76,21 @@ namespace G4INCL {
   }
 
   G4INCL::IChannel* BinaryCollisionAvatar::getChannel() const {
-    // Commenting out the following block... we don't really need it here, do
-    // we? We already check cutNN at avatar creation time.
-    /*const G4double energyCM2 = KinematicsUtils::totalEnergyInCM(particle1, particle2);
-    // Below a certain cut value we don't do anything:
-    if(energyCM < cutNN) {
-    //return new DummyChannel(particle1, particle2, theNucleus);
-    return NULL;
-    } */
+    // We already check cutNN at avatar creation time, but we have to check it
+    // again here. For composite projectiles, we might have created independent
+    // avatars with no cutNN before any collision took place.
+    if(particle1->isNucleon()
+        && particle2->isNucleon()
+        && theNucleus->getStore()->getBook()->getAcceptedCollisions()!=0) {
+      const G4double energyCM2 = KinematicsUtils::squareTotalEnergyInCM(particle1, particle2);
+      // Below a certain cut value we don't do anything:
+      if(energyCM2 < cutNNSquared) {
+        DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
+            << ") MeV = cutNN" << "; returning a NULL channel" << std::endl);
+        InteractionAvatar::restoreParticles();
+        return NULL;
+      }
+    }
 
     /** Check again the distance of approach. In order for the avatar to be
      * realised, we have to perform a check in the CM system. We define a
@@ -128,11 +135,11 @@ namespace G4INCL {
       }
 
       if(isElastic) { // Elastic NN channel
-        DEBUG("NN G4interaction: elastic channel chosen" << std::endl);
+        DEBUG("NN interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(theNucleus, particle1, particle2);
       } else { // Delta production
         // Inelastic NN channel
-        DEBUG("NN G4interaction: inelastic channel chosen" << std::endl);
+        DEBUG("NN interaction: inelastic channel chosen" << std::endl);
         return new DeltaProductionChannel(particle1, particle2, theNucleus);
       }
     } else if((particle1->isNucleon() && particle2->isDelta()) ||
@@ -149,14 +156,14 @@ namespace G4INCL {
       }
 
       if(isElastic) { // Elastic N Delta channel
-        DEBUG("NDelta G4interaction: elastic channel chosen" << std::endl);
+        DEBUG("NDelta interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(theNucleus, particle1, particle2);
       } else { // Recombination
-        DEBUG("NDelta G4interaction: recombination channel chosen" << std::endl);
+        DEBUG("NDelta interaction: recombination channel chosen" << std::endl);
         return new RecombinationChannel(theNucleus, particle1, particle2);
       }
     } else if(particle1->isDelta() && particle2->isDelta()) {
-        DEBUG("DeltaDelta G4interaction: elastic channel chosen" << std::endl);
+        DEBUG("DeltaDelta interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(theNucleus, particle1, particle2);
     } else if((particle1->isNucleon() && particle2->isPion()) ||
 	      (particle1->isPion() && particle2->isNucleon())) {
@@ -164,9 +171,9 @@ namespace G4INCL {
     } else {
       DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
 	      << std::endl
-	      << particle1->prG4int()
+	      << particle1->print()
 	      << std::endl
-	      << particle2->prG4int()
+	      << particle2->print()
 	      << std::endl);
       InteractionAvatar::restoreParticles();
       return NULL;
@@ -187,6 +194,8 @@ namespace G4INCL {
         theNucleus->getStore()->getBook()->incrementBlockedCollisions();
         break;
       case NoEnergyConservationFS:
+      case ParticleBelowFermiFS:
+      case ParticleBelowZeroFS:
         break;
       case ValidFS:
         theNucleus->getStore()->getBook()->incrementAcceptedCollisions();

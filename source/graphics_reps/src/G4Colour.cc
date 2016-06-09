@@ -24,16 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.11 2007-01-05 14:06:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison 20th October 1996
 
 #include "G4Colour.hh"
 
-G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
-red (r), green (g), blue (b), alpha (a)
+G4Colour::G4Colour (G4double r, G4double gr, G4double b, G4double a):
+red (r), green (gr), blue (b), alpha (a)
 {
   if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
   if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}
@@ -54,8 +53,19 @@ G4Colour::operator G4ThreeVector() {
 }
 
 std::ostream& operator << (std::ostream& os, const G4Colour& c) {
-  return os << '(' << c.red << ',' << c.green << ',' << c.blue
+  os << '(' << c.red << ',' << c.green << ',' << c.blue
 	    << ',' << c.alpha << ')';
+  const std::map<G4String, G4Colour>& colourMap = G4Colour::GetMap();
+  // Reverse iterator to pick up English spelling of grey!!  :)
+  std::map<G4String, G4Colour>::const_reverse_iterator ri;
+  for (ri = colourMap.rbegin(); ri != colourMap.rend(); ++ri) {
+    if (c == ri->second) {
+      os << " (" << ri->first << ')';
+      break;
+    }
+  }
+  
+  return os;
 }
 
 G4bool G4Colour::operator != (const G4Colour& c) const {
@@ -97,9 +107,10 @@ G4Colour::InitialiseColourMap()
 {
   // Standard colours
   AddToMap("white",   G4Colour::White());
-  AddToMap("gray",    G4Colour::Gray());
   AddToMap("grey",    G4Colour::Grey());
+  AddToMap("gray",    G4Colour::Gray());
   AddToMap("black",   G4Colour::Black());
+  AddToMap("brown",   G4Colour::Brown());
   AddToMap("red",     G4Colour::Red());
   AddToMap("green",   G4Colour::Green());
   AddToMap("blue",    G4Colour::Blue());

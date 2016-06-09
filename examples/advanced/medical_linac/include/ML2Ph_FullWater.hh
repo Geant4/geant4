@@ -63,19 +63,21 @@
 class CML2Ph_FullWater
 {
 public:
-	CML2Ph_FullWater();
-	~CML2Ph_FullWater(void);
-	bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
-	inline G4int getTotalNumberOfEvents(){return this->sensDet->getTotalNumberOfEvents();};
-	inline CML2SDWithVoxels* getSensDet(){return  this->sensDet;};
-	inline G4VPhysicalVolume *getPhysicalVolume(){return this->PVWorld;};
-	inline G4ThreeVector getHalfContainerSize(){return this->halfSize;};
-	void writeInfo();
+    CML2Ph_FullWater();
+    ~CML2Ph_FullWater(void);
+    bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
+    inline G4int getTotalNumberOfEvents(){return sensDet->getTotalNumberOfEvents();}
+    inline CML2SDWithVoxels* getSensDet(){return  sensDet;}
+    inline G4VPhysicalVolume *getPhysicalVolume(){return PVWorld;}
+    inline G4ThreeVector getHalfContainerSize(){return halfSize;}
+    void writeInfo();
 private:
-	G4VPhysicalVolume *PVWorld;
-	CML2SDWithVoxels *sensDet;
-	G4ThreeVector centre, halfSize;
-	G4double surfaceToTargetZValue; 
+    G4VPhysicalVolume *PVWorld;
+    G4VPhysicalVolume *fullWaterPhantomPV;
+
+    CML2SDWithVoxels *sensDet;
+    G4ThreeVector centre, halfSize;
+    G4double surfaceToTargetZValue;
 };
 
 

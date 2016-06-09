@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFileSceneHandler.hh,v 1.4 2009-10-21 15:28:53 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  7th March 2006

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.7 2008-11-19 14:33:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -37,6 +36,8 @@
 //          symmetry energy 
 
 #include "G4StatMFMacroMultiNucleon.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Default constructor
 G4StatMFMacroMultiNucleon::

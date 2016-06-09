@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/StepMax.cc
+/// \brief Implementation of the StepMax class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,14 +37,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX)
 {
-  pMess = new StepMaxMessenger(this);
+  fMess = new StepMaxMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
+StepMax::~StepMax() { delete fMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,7 +55,7 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+void StepMax::SetMaxStep(G4double step) {fMaxChargedStep = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,7 +66,7 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-  return MaxChargedStep;
+  return fMaxChargedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

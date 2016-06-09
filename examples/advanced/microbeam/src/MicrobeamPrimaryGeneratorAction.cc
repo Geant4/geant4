@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPrimaryGeneratorAction.cc,v 1.7 2007-08-27 15:51:54 gcosmo Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"

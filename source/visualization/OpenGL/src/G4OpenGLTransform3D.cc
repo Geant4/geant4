@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.cc,v 1.10 2010-12-11 17:04:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  24th October 1996

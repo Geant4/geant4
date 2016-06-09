@@ -23,26 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstructionWithCuts.cc,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// ---------------------------------------------------------------------------
+/// \file ExTGDetectorConstructionWithCuts.cc
+/// \brief Implementation of the ExTGDetectorConstructionWithCuts class
 
 #include "ExTGDetectorConstructionWithCuts.hh"
 #include "ExTGRCDetectorBuilder.hh"
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgrMessenger.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGDetectorConstructionWithCuts::ExTGDetectorConstructionWithCuts()
 {
-  messenger = new G4tgrMessenger;
+  fMessenger = new G4tgrMessenger;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGDetectorConstructionWithCuts::~ExTGDetectorConstructionWithCuts()
 {
-  delete messenger;
+  delete fMessenger;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* ExTGDetectorConstructionWithCuts::Construct()
 {
   //------------------------------------------------ 

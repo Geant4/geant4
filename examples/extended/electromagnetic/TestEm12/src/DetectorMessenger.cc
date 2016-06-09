@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.2 2006-06-29 16:43:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,77 +43,77 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance(" detector control.");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance(" detector control.");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction commands");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction commands");
       
-  MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  MaterCmd->SetGuidance("Select material of the box.");
-  MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the box.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  RadiusCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setRadius",this);
-  RadiusCmd->SetGuidance("Set radius of the absorber");
-  RadiusCmd->SetParameterName("Radius",false);
-  RadiusCmd->SetRange("Radius>0.");
-  RadiusCmd->SetUnitCategory("Length");
-  RadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fRadiusCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setRadius",this);
+  fRadiusCmd->SetGuidance("Set radius of the absorber");
+  fRadiusCmd->SetParameterName("Radius",false);
+  fRadiusCmd->SetRange("Radius>0.");
+  fRadiusCmd->SetUnitCategory("Length");
+  fRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
-  NbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers",this);
-  NbLayersCmd->SetGuidance("Set number of layers");
-  NbLayersCmd->SetParameterName("NbLayers",false);
-  NbLayersCmd->SetRange("NbLayers>0");
-  NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers",this);
+  fNbLayersCmd->SetGuidance("Set number of layers");
+  fNbLayersCmd->SetParameterName("NbLayers",false);
+  fNbLayersCmd->SetRange("NbLayers>0");
+  fNbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
           
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
       
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete RadiusCmd;
-  delete NbLayersCmd;   
-  delete MagFieldCmd;
-  delete UpdateCmd;
-  delete detDir;  
-  delete testemDir;
+  delete fMaterCmd;
+  delete fRadiusCmd;
+  delete fNbLayersCmd;   
+  delete fMagFieldCmd;
+  delete fUpdateCmd;
+  delete fDetDir;  
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == MaterCmd )
-   { Detector->SetMaterial(newValue);}
+  if( command == fMaterCmd )
+   { fDetector->SetMaterial(newValue);}
    
-  if( command == RadiusCmd )
-   { Detector->SetRadius(RadiusCmd->GetNewDoubleValue(newValue));}
+  if( command == fRadiusCmd )
+   { fDetector->SetRadius(fRadiusCmd->GetNewDoubleValue(newValue));}
    
-  if( command == NbLayersCmd )
-   { Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
+  if( command == fNbLayersCmd )
+   { fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));}
          
-  if( command == MagFieldCmd )
-   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fMagFieldCmd )
+   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
               
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

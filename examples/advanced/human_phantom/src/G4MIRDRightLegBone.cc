@@ -35,6 +35,7 @@
 #include "G4MIRDRightLegBone.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4HumanPhantomMaterial.hh"
@@ -46,6 +47,7 @@
 #include "G4Cons.hh"
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
+
 G4MIRDRightLegBone::G4MIRDRightLegBone()
 {
 }

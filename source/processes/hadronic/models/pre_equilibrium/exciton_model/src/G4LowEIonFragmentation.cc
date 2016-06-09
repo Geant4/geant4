@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.cc,v 1.8 2010-10-28 17:34:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -38,11 +37,14 @@
 // 28 Oct 2010 V.Ivanchenko complete migration to integer Z and A; 
 //                          use updated G4Fragment methods
 
+#include <algorithm>
+
 #include "G4LowEIonFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4Proton.hh"
 #include "G4NucleiProperties.hh"
-#include <algorithm>
 
 G4int G4LowEIonFragmentation::hits = 0;
 G4int G4LowEIonFragmentation::totalTries = 0;

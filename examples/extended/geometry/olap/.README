@@ -1,0 +1,423 @@
+//$Id$
+
+///\file "geometry/olap/.README"
+///\brief Example OLAP README page
+
+/*! \page ExampleOLAP Example olap 
+
+Debugging Tool for Ovelapping Geometries
+
+\author Martin.Liendl@cern.ch
+
+-# \ref OLAP_s1  
+-# \ref OLAP_s2  
+-# \ref OLAP_s3  
+-# \ref OLAP_s4  
+-# \ref OLAP_s5  
+
+
+\section OLAP_s1 Abbreviations
+
+LV ... instance of G4LogicalVolume 
+
+PV ... instance of G4VPhysicalVolume (Placement, Replica or Parameterised) 
+
+MV ... mother volume, also referred as NewMother
+
+DV ... daughter volume 
+
+NewWorld ... a geometry consisting of one MV and several DVs. The world
+volume is a enlarged bounding box into which the MV is put. Optionally the
+MV can be rotated according to user given parameters inside the NewWorld.
+
+
+\section OLAP_s2 Introduction
+
+Intersecting DVs inside the same MV or a DV protruding from its MV
+are said to be overlapping. Thus a complete geometry is correct, if
+all direct DVs of any given MV are not intersecting mutually or whith
+their MV. To be noticed that the tool described here cannot do this in
+a perfect way, strictly speaking, but allows to identify most defects in
+the geometry if any. If the check fails, the error is located and can be
+fixed easily. Checking means, that a geantino is shot from a given point
+A to another point B and viceversa from B to A.
+At each step of the geantino's track a boundary crossing has occurred
+(only geometry limits the geantino's steps!). If the set of boundary
+crossings from A to B is different from the set going from B to A
+(within a given Geant4 tolerance), some volumes must be overlapping
+along the line connecting A and B. To locate the overlaps more easily,
+the full geometry (which can be very complex in 'depth' in a hierarchical
+sense) is not used but only a subset consisting of a user selectable
+MV and all contained DVs. Then a user defined 'grid' of geantinos
+is shot through this simple geometry and possible overlaps are detected
+and reported. Checking all MVs in this way is then equivalent to checking
+the full geometry and has the advantage of identifying the cause of
+overlap directly.
+
+
+\section OLAP_s3 Instrumenting the example with a user-geometry
+
+A very tiny geometry (RandomDetector.hh,.cc) is provided within the example. 
+It is instantiated in the file olapex.cc.
+
+
+\subsection OLAP_s31 Configuring the user-geometry
+
+The geometry debugging tools can be used for any Geant4 geometry. The
+geometry which one wants to debug must be available as subclass of
+G4VUserDetectorConstruction and must be used to construct the OlapDetConstr.
+Just read the code in olapex.cc and see how any geometry
+has to be prepared for debugging. The only thing to do is to use the provided
+Olap-UserActions in the main () (see olapex.cc) of the Geant4 program:
+
+\verbatim
+G4RunManager * runManager = new G4RunManager;
+
+// special primary generator for geantino shooting (in a grid)
+
+runManager->SetUserAction(new OlapGenerator); 
+
+// the full geometry (which will be debugged)
+
+G4VUserDetectorConstruction * origGeom = new RandomDetector; 
+
+// wrap full geometry into Olap-Geometry class
+
+OlapDetConstr * olapGeom = new OlapDetConstr(origGeom); 
+
+// set wrapped geometry for Geant4 to use
+
+runManager->SetUserInitialization(olapGeom); 
+
+// special physics list (nothing but transportation)
+
+runManager->SetUserInitialization(new OlapPhysicsList); 
+
+// now create all UserActions ...
+
+OlapRunAction * olapRunAction = new OlapRunAction; 
+
+OlapEventAction * olapEventAction = new OlapEventAction(olapRunAction); 
+
+OlapSteppingAction * olapSteppingAction = 
+
+  new OlapSteppingAction(olapEventAction); 
+
+runManager->SetUserAction(olapRunAction); 
+
+runManager->SetUserAction(olapEventAction); 
+
+runManager->SetUserAction(olapSteppingAction);
+\endverbatim
+
+
+\subsection OLAP_s32 Navigating the geometry from command line
+
+Unix like navigation of the logical volume hierarchy is provided by
+the /olap/cd command. The root of the logical volume tree can be accessed
+by the character '/'.  Any node in the volume tree can be accessed by a '/' 
+separated string of regular expressions. If '/' is at the beginning of the string,
+the tree hierarchy is transversed from the root otherwise from the
+currently chosen logical volume. Further the command /olap/goto <regexp>
+can be used to jump to the first LogicalVolume matching the <regexp>.
+
+Every succesful navigational command (/olap/cd, olap/goto) results
+in the construction of a NewWorld, the MV beeing the argument of the
+navigational command and the DVs beeing the direct daughters of the MV.
+
+/olap/pwd always shows where in the full geometrical hierarchy the
+current NewWorld and MV is located.
+
+
+\subsection OLAP_s33 Detecting Overlaps
+
+First determine the density of the grid of geantinos using
+\verbatim
+/olap/grid 7 7 7
+\endverbatim
+
+which returns the number of events (= pairs of geantinos) which will
+be shot through the NewWorld geometry (in this case 147 geantino pairs).
+
+To start overlap detection type
+\verbatim
+/olap/trigger
+\endverbatim
+
+After all 147 events are processed, a summary of detected overlaps
+is given. Multiple detected overlaps are only reported once 
+
+Error reports are written to G4cerr and to a log file if this is chosen
+(see section on output). The output looks like this:
+\verbatim
+===== collected overlaps of run [1] (ol=2) 
+
+--[1]-------------------------- 
+
+delta=51 
+
+vol 1: point=(-23,0,-40.02) vol 2: point=(-74,0,-40.02) axis=0 
+
+A -> B: 
+[0]: ins=[i] PVName=[NewWorld:0] Type=[N] P=(-0,-0,-0) R=[0,90,90,90,0,0]
+G4Box: x/2=1234.23 y/2=1234.23 z/2=60.06 
+[1]: ins=[o] PVName=[SiliconPatchPanel:0] Type=[N] P=(-0,-0,-0) R=[0,90,90,90,0,0]
+G4Tubs: z/2=60 rIn=74 rOut=1233 startPhi=0 deltaPhi=6.28319 
+[2]: ins=[s] PVName=[SiliconPatchPanel1:1] Type=[N] P=(-0,-0,-40) R=[0,90,90,90,0,0]
+G4Tubs: z/2=20 rIn=23 rOut=1135 startPhi=0 deltaPhi=6.28319 
+
+B -> A: 
+[0]: ins=[i] PVName=[NewWorld:0] Type=[N] P=(-0,-0,-0) R=[0,90,90,90,0,0]
+G4Box: x/2=1234.23 y/2=1234.23 z/2=60.06 
+\endverbatim
+
+'delta' denotes the detected overlap distance. Two volumes are overlapping
+at least this distance. The following coordinates of points are points
+on the boundary of the overlapping volumes. In case of no overlap
+they should be the same points. The first point was found when tracking
+from A to B, while the second point was found when tracking from B
+to A. Using the command
+\verbatim
+/olap/delta <DELTA> <unit>
+\endverbatim
+the accuracy for detecting an overlap can be set. Overlaps will only
+be reported if two volumes overlap at least DELTA*unit on one of the
+genantino tracks scanning the volumes.
+The default value is 1 nm, which is quite tight.
+
+To identify the overlapping volumes,
+the NavigationHistories of the two points are also shown in the output.
+The format of these histories is as follows:
+\verbatim
+[A]: ins=[B] PVName=[C] Type=[D] P=(E) R=[F] G
+
+A --> Level in G4Navigationhistory
+
+B --> Stepping point is 'inside' vol [2], 'on surface' [1] or 'outside'
+  [0] (mostly biased by numerical limits)
+
+C --> PhysicalVolume-name:copy-no
+
+D --> [N]..placement, [R]..repicated, [P]..parameterized
+
+E --> Position(intern.units)
+
+F --> Rotation(in deg:phiX,thetaX,phiY,..)
+
+G --> Solidtype: specification
+\endverbatim
+
+In the sample output given above, one can deduce that 'SiliconPatchPanel1'
+with copy-no 1 is overlapping its mother 'SiliconPatchPanel'.
+A schematic sketch of this situation is below:
+\verbatim
+(x=0)                                                      (x=-1234*mm)
+(B) <----------------------------------------------------> (A)
+ 
+  -------------------------------------------------------
+  |NewWorld                                             |
+  |        -------------------------------------------  |
+  |        |SiliconPatchPanel                        |  |
+  |        |                                         |  |
+  |    -----------------------------------           |  |
+  |    |SiliconPatchPanel1               |           |  |
+  |    |                                 |           |  |
+  |....x...*.............................|...........|..|
+  |    |                                 |           |  |
+  |    -----------------------------------           |  |
+  |        |                                         |  |
+  |        -------------------------------------------  |
+  |                                                     |
+  -------------------------------------------------------                      
+
+... = geantino rays from (A) to (B) and from (B) to (A)
+ x  = point found when tracking from (A) to (B)
+ *  = point found wehn tracking from (B) to (A)
+\endverbatim
+ 
+ 'x' and '*' should be on the same position in case of no
+ overlaps. But they are not, because 'SiliconPatchPanel1' is
+ protruding its mother volume 'SiliconPatchPanel'. 
+ The output report always assigns a point to the volume which
+ is left behind the current direction of the geantino ray.
+ In the example 'x' is assigned to 'SiliconPatchPanel1', because
+ the tracking direction was (A) to (B). On the other hand side,
+ '*' is assigned to 'NewWorld', because the tracking direction
+ was (B) to (A).
+
+\subsection OLAP_s34 Handling the output
+
+The output from the overlap detection can be written to file. The program
+provides two possibilities: 'Global logging', which creates one file,
+or 'logging by volume' where each logical volume puts its overlapping
+error into a file.
+
+To instantiate global logging type:
+\verbatim
+/olap/log <path/filename>
+\endverbatim
+
+where path/filename is omittable, and the default is olap.log which
+will be created in the current directory. Alternatively one can type
+the path (must end with /), or only the filename. To stop the logging,
+type
+\verbatim
+/olap/log false
+\endverbatim
+(or exit the program)
+
+The logging by volume command is
+\verbatim
+/olap/logByVolume <path/>
+\endverbatim
+where the path is once again omittable. If the path is specified, it
+is important that it ends with / . Each log file will then be called
+NameOfLogicalVolume.log, for example SiliconPatchPanel.log. Again
+the logging can be stopped by typing
+\verbatim
+/olap/logByVolume false
+\endverbatim
+
+Logging can be done from batch mode with a macro file, or when running
+the program. If the path is specified, it has to exist. The logging
+files are using the append format.
+
+
+\section OLAP_s4 Reference of command line commands
+
+\subsection OLAP_s41 Terminology
+
+NewWorld: NewWorld is the world volume of the chosen subset of the
+detector where overlap detection takes place. Its solid is a box slightly
+larger than the bounding box of the NewMother solid.
+
+NewMother(MV): The user chosen mother volume where overlap detection takes
+place. It is positioned into origin of the NewWorld. Only
+the first level of daughter volumes is then placed inside the NewMother.
+
+
+\subsection OLAP_s42 Commands for geometry navigation
+
+All command line commands are available in the Geant4 command directory
+/olap. For a short help inside Geant4 type help and choose the olap
+command directory.
+
+Commands for navigating the geometry always navigate the full logical
+hierarchy and set the current logical volume to the NewMother.
+Overlaps are detected only between the volumes of the first layer of 
+daughters of NewMother and between the daughters and their mother
+volume.
+
+List all logical daughters of the current NewMother:
+\verbatim
+/olap/ls
+\endverbatim
+
+Print the position of the current NewMother within the
+logical hierarchy of the full geometry.
+\verbatim
+/olap/pwd
+\endverbatim
+
+Define the rotation of the NewMother inside the NewWorld. The rotation will be applied only
+in subsequent navigational commands such as /olap/goto or /olap/cd:
+\verbatim
+/olap/rotate <theta> <phi> <alpha> <angle-unit>: 
+\endverbatim
+The rotation axis is defined by the angles <theta> and <phi>, the rotation
+angle around this axis by the angle <alpha>.
+Rotating the NewMother can be particulary helpfull in cases where
+boundaries of the NewMother or of the daugher volumes are parallel
+to the bounderies of the NewWorld-box. Parallesl boundaries often cause
+numierical ambiguities during tracking time resulting in fake overlap
+detections. 
+
+Set the current NewMother to the logical Volume
+which name matches <regexp>. 
+\verbatim
+olap/goto <regexp>
+\endverbatim
+Search order is always descending construction
+order of volumes. If more than one volume matches the <regexp> the
+first match is chosen.
+
+Unix-like changing of the current NewMother:
+\verbatim
+/olap/cd <regexp-1>/<regexp-2>
+\endverbatim
+
+ The argument /olap/cd / sets the topmost logical volume
+of the full geometry to NewMother. olap/cd /Tracker sets the first
+logical daughter of the topmost logical volume which name matches
+Tracker to NewMother. olap/cd .. moves up one step in the logical
+hierarchy and sets the corresponding logical volume to NewMother.
+Combinations are possible, e.g.: /olap/cd Abc.*xy/../../cdef
+
+List all logical volumes whose name matches <regexp> without changing 
+the NewMother:
+\verbatim
+/olap/list <regexp>
+\endverbatim
+
+
+\subsection OLAP_s43 Commands for overlap detection
+
+Set a grid for geantino pairs flying through the NewWorld: 
+\verbatim
+/olap/grid a b c
+\endverbatim
+There will be a*b geantino pairs flying parallel to the
+z-axis in a regular grid, b*c parallel to the x-axis and a*c parallel
+to the y-axis.
+
+Set boundary tolerance for overlaps in units of length:
+\verbatim
+/olap/delta value unit
+\endverbatim
+
+Start geantino shooting in the current NewWorld according
+to the defined grid:
+\verbatim
+/olap/trigger
+\endverbatim
+
+Starting from the current NewWorld, the trigger-command
+is applied n times, each time changing the NewWorld by traversing
+the logical volume subtree. If -1 is given as argument (or n > number
+of subtree nodes), the whole subtree is checked.
+\verbatim
+/olap/triggerFull n
+\endverbatim
+
+\subsection OLAP_s44 Commands for logging
+
+Put the output into one global file:
+\verbatim
+/olap/log <path/filename>
+\endverbatim
+Default-filename is olap.log.
+
+Each logical volume makes its own file called
+NameOfLogicalVolume.log where overlap errors for that specific volume
+are put:
+\verbatim
+/olap/logByVolume <path/>
+\endverbatim
+
+\section OLAP_s5 Known Problem
+
+- Overlaps of the same two volumes are sometimes reported more the one
+  time at the end of a run
+
+- Fake overlaps are reported sometimes when many boundaries of volumes
+  are parallel to the axis of 'NewWorld'. In this case, try to
+  use /olap/rotate to rotate the volumes inside 'NewWorld', set the
+  'NewWorld' again and redo the overlap scan.
+
+- Fake overlaps can be reported when the Geant4 tracking algorithm
+  gets 'caught' between volume boundaries (many small steps ...)
+
+- Visualization of overlaps is not yet correctly supported.
+
+
+*/

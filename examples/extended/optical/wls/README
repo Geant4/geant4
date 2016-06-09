@@ -41,7 +41,8 @@ They are:
 
 3- Photon Source
 
-  This program uses the General Particle Source provided by GEANT4 for
+  This program uses the General Particle Source (G4GeneralParticleSource) 
+  provided by GEANT4 for
   generating photons. The energy of the photon must be within 2.00 eV
   to 3.47 eV.  For detail instruction on how to use the General Particle
   Source, please visit their home page at:
@@ -77,10 +78,6 @@ They are:
 
 7- main()
 
- - compile and link to generate an executable
-         % cd wls
-         % make
-                 
  - execute wls in 'batch' mode from macro files
  - you can enter an optional integer seed for batch mode 
          % wls wls.in (optional: enter an integer seed here)

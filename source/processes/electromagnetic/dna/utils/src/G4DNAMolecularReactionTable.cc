@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMolecularReactionTable.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -35,10 +36,13 @@
 //
 // -------------------------------------------------------------------
 
+#include <iomanip>
+
 #include "G4DNAMolecularReactionTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcommand.hh"
 #include "G4VDNAReactionModel.hh"
-#include <iomanip>
 #include "G4MoleculeHandleManager.hh"
 
 using namespace std;
@@ -361,7 +365,6 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + reactive1 -> GetName();
         G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
-        exit(-1);
     }
 
     std::map<const G4Molecule*,
@@ -374,7 +377,6 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + reactive2 -> GetName();
         G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
-        exit(-1);
     }
 
     return (it2->second);
@@ -398,6 +400,7 @@ G4DNAMolecularReactionTable::CanReactWith(const G4Molecule * aMolecule) const
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + aMolecule -> GetName();
         G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+        return 0;
     }
     else
     {
@@ -482,6 +485,7 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* molecule) const
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + molecule -> GetName();
         G4Exception("G4MolecularInteractionTable::GetReactionData","",FatalErrorInArgument, errMsg);
+        return 0; // coverity
     }
 
     return &(it->second);

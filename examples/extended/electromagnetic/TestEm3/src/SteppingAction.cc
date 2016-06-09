@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.28 2008-05-29 16:59:27 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,13 +41,13 @@
 #include "G4Step.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
-                               EventAction* evt, HistoManager* hist)
-:G4UserSteppingAction(),detector(det),runAct(run),eventAct(evt),
- histoManager(hist) 
+                               EventAction* evt)
+:G4UserSteppingAction(),fDetector(det),fRunAct(run),fEventAct(evt) 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +69,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4VPhysicalVolume* volume = prePoint->GetTouchableHandle()->GetVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
-  if (mat == detector->GetWorldMaterial()) return; 
+  if (mat == fDetector->GetWorldMaterial()) return; 
  
   //here we are in an absorber. Locate it
   //
@@ -79,34 +81,38 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   // collect step length of charged particles
   G4double stepl = 0.;
-  if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
+  if (particle->GetPDGCharge() != 0.) {
+    stepl = aStep->GetStepLength();
+    fRunAct->AddChargedStep();
+  } else { fRunAct->AddNeutralStep(); }
   
   //  G4cout << "Nabs= " << absorNum << "   edep(keV)= " << edep << G4endl;
   
   // sum up per event
-  eventAct->SumEnergy(absorNum,edep,stepl);
+  fEventAct->SumEnergy(absorNum,edep,stepl);
   
   //longitudinal profile of edep per absorber
-  if (edep>0.) histoManager->FillHisto(MaxAbsor+absorNum, 
-				       G4double(layerNum+1), edep);
-  
+  if (edep>0.) {
+    G4AnalysisManager::Instance()->FillH1(MaxAbsor+absorNum, 
+					  G4double(layerNum+1), edep);
+  }
   //energy flow
   //
   // unique identificator of layer+absorber
-  G4int Idnow = (detector->GetNbOfAbsor())*layerNum + absorNum;
+  G4int Idnow = (fDetector->GetNbOfAbsor())*layerNum + absorNum;
   G4int plane;
   //
   //leaving the absorber ?
   if (endPoint->GetStepStatus() == fGeomBoundary) {
     G4ThreeVector position  = endPoint->GetPosition();
     G4ThreeVector direction = endPoint->GetMomentumDirection();
-    G4double sizeYZ = 0.5*detector->GetCalorSizeYZ();       
+    G4double sizeYZ = 0.5*fDetector->GetCalorSizeYZ();       
     G4double Eflow = endPoint->GetKineticEnergy();
     if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
     if ((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ)) 
-                                  runAct->sumLateralEleak(Idnow, Eflow);
-    else if (direction.x() >= 0.) runAct->sumEnergyFlow(plane=Idnow+1, Eflow);
-    else                          runAct->sumEnergyFlow(plane=Idnow,  -Eflow);    
+                                  fRunAct->SumLateralEleak(Idnow, Eflow);
+    else if (direction.x() >= 0.) fRunAct->SumEnergyFlow(plane=Idnow+1, Eflow);
+    else                          fRunAct->SumEnergyFlow(plane=Idnow,  -Eflow);    
   }   
 
 ////  example of Birk attenuation

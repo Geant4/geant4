@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN02/src/ExN02SteppingVerbose.cc
+/// \brief Implementation of the ExN02SteppingVerbose class
 //
-// $Id: ExN02SteppingVerbose.cc,v 1.12 2006-06-29 17:48:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

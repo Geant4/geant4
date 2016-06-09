@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,6 +53,14 @@ namespace G4INCL {
     FinalState* getFinalState();
 
   private:
+    /** \brief Modify particle that leaves the nucleus.
+     *
+     * Modify the particle momentum and/or position when the particle leaves
+     * the nucleus.
+     *
+     * \return the Q-value correction for the leaving particle
+     */
+    G4double particleLeaves();
     Nucleus *theNucleus;
     Particle *theParticle;
   };

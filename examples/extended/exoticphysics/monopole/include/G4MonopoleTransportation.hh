@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleTransportation.hh,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/G4MonopoleTransportation.hh
+/// \brief Definition of the G4MonopoleTransportation class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,13 +135,13 @@ class G4MonopoleTransportation : public G4VProcess
                              const G4Track& ,
                              G4ForceCondition* 
                             ) { return -1.0; };
-       // No operation in  AtRestDoIt.
+     // No operation in  AtRestDoIt.
 
      G4VParticleChange* AtRestDoIt(
                              const G4Track& ,
                              const G4Step&
                             ) {return 0;};
-       // No operation in  AtRestDoIt.
+     // No operation in  AtRestDoIt.
 
   void StartTracking(G4Track* aTrack);
        // Reset state for new (potentially resumed) track 
@@ -157,10 +159,7 @@ class G4MonopoleTransportation : public G4VProcess
     
      G4Navigator*         fLinearNavigator;
      G4PropagatorInField* fFieldPropagator;
-       // The Propagators used to transport the particle
-
-     // G4FieldManager*      fGlobalFieldMgr;     // Used MagneticField CC
-       // Field Manager for the whole Detector
+  // The Propagators used to transport the particle
 
      G4ThreeVector        fTransportEndPosition;
      G4ThreeVector        fTransportEndMomentumDir;
@@ -170,16 +169,11 @@ class G4MonopoleTransportation : public G4VProcess
      G4bool               fEnergyChanged;
      G4bool               fEndGlobalTimeComputed; 
      G4double             fCandidateEndGlobalTime;
-       // The particle's state after this Step, Store for DoIt
+  // The particle's state after this Step, Store for DoIt
 
      G4bool               fParticleIsLooping;
 
      G4TouchableHandle    fCurrentTouchableHandle;
-     
-     // G4bool         fFieldExists;
-       // Whether a magnetic field exists ...
-       // A data member for this is problematic: it is useful only if it
-       // can be initialised and updated -- and a scheme is not yet possible.
 
      G4bool fGeometryLimitedStep;
        // Flag to determine whether a boundary was reached.

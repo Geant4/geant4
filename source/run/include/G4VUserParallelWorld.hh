@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserParallelWorld.hh,v 1.2 2006-12-13 15:49:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VUserParallelWorld_h

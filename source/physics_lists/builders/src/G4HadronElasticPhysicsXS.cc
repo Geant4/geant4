@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsXS.cc,v 1.2 2010-06-03 14:28:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -53,6 +52,12 @@
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsXS);
+
 
 G4HadronElasticPhysicsXS::G4HadronElasticPhysicsXS(G4int ver)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_XS"), verbose(ver), 

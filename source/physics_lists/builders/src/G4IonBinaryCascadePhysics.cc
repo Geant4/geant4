@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2010-07-30 14:20:08 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -41,6 +40,7 @@
 
 #include "G4IonBinaryCascadePhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4TritonInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"
@@ -60,9 +60,22 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4IonBinaryCascadePhysics);
+
+
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
   :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
+  fIonH = 0;
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
@@ -74,6 +87,13 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name,
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
+  fIonH = 0;
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
@@ -107,8 +127,8 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
   G4BinaryLightIonReaction* fBC= new G4BinaryLightIonReaction();
   model_list.push_back(fBC);
   fShen = new G4IonsShenCrossSection;
-  fTripathi = new G4TripathiCrossSection;
-  fTripathiLight = new G4TripathiLightCrossSection;
+  //fTripathi = new G4TripathiCrossSection;
+  //fTripathiLight = new G4TripathiLightCrossSection;
   fIonH = new G4IonProtonCrossSection;
 
   fLEDModel = new G4LEDeuteronInelastic();
@@ -133,8 +153,8 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
   hadi->AddDataSet(fShen);
-  hadi->AddDataSet(fTripathi);
-  hadi->AddDataSet(fTripathiLight);
+  //hadi->AddDataSet(fTripathi);
+  //hadi->AddDataSet(fTripathiLight);
   if(p == G4GenericIon::GenericIon()) { hadi->AddDataSet(fIonH); }
   hmodel->SetMinEnergy(eminBIC);
   hmodel->SetMaxEnergy(emax);

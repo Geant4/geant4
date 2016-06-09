@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P02/include/ExP02Classes.hh
+/// \brief Declaration of the classes for generating dictionaries
+//
 #include "ExP02GeoTree.hh"
 //
 #include "ExP02DetectorConstruction.hh"

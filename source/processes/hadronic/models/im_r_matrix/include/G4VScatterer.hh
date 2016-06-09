@@ -51,8 +51,9 @@
 #ifndef G4VSCATTERER_HH
 #define G4VSCATTERER_HH
 
-#include "globals.hh"
 #include <vector>
+
+#include "globals.hh"
 #include "G4KineticTrackVector.hh"
 
 class G4KineticTrack;

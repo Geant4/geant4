@@ -32,13 +32,12 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-
 #include "PassiveProtonBeamLineMessenger.hh"
 #include "PassiveProtonBeamLine.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
-
+#include "G4SystemOfUnits.hh"
 
     PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
 :passiveProton(beamLine)

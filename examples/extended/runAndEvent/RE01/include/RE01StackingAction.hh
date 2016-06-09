@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01StackingAction.hh,v 1.2 2006-06-29 17:43:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01StackingAction.hh
+/// \brief Definition of the RE01StackingAction class
 //
-
+// $Id$
+//
 
 #ifndef RE01StackingAction_H
 #define RE01StackingAction_H 1
@@ -39,21 +40,20 @@ class G4VHitsCollection;
 
 class RE01StackingAction : public G4UserStackingAction
 {
-  public:
-    RE01StackingAction();
-    virtual ~RE01StackingAction();
+public:
+  RE01StackingAction();
+  virtual ~RE01StackingAction();
 
-  public:
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
-    virtual void NewStage();
-    virtual void PrepareNewEvent();
+public:
+  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+  virtual void NewStage();
+  virtual void PrepareNewEvent();
 
-  private:
-    G4VHitsCollection* GetCalCollection();
-
-    G4int stage;
-    G4int trackerHitsColID;
-    G4int calorimeterHitsColID;
+private:
+  G4VHitsCollection* GetCalCollection();
+  
+  G4int fStage;
+  G4int fCalorimeterHitsColID;
 };
 
 #endif

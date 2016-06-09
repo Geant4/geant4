@@ -5,7 +5,7 @@ $Id: History,v 1.10 2010-10-11 11:03:56 vnivanch Exp $
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    hadr00 History file
+                    Hadr00 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-11-12 I. Hrivnacova (exhadr00-V09-05-07)
+- Synchronized .README with changes in README
+
+13-07-12 V.Ivant (exhadr00-V09-05-06)
+- upgraded README
+
+21-09-12 I.Hrivnacova (exhadr00-V09-05-05)
+- Cleanup CMakeLists.txt
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters
+
+12-07-12 V.Ivant (exhadr00-V09-05-04)
+- use FTFP_BERT as a default
+
+23-05-12 V.Ivant (exhadr00-V09-05-03)
+- Histo - fixed n-tuples
+
+30-04-12 V.Ivant (exhadr00-V09-05-02)
+- Fixed compillation problem of previous tag
+
+26-04-12 V.Ivant (exhadr00-V09-05-01)
+- Migration to built-in Geant4 analysis and apply code convention
+
+20-03-12 V.Ivant (exhadr00-V09-05-00)
+- HistoManager - use material pointer in the interface to cross
+   sections (avoid crash for Physics Lists with HP)
 
 11-10-10 V.Ivant (exhadr00-V09-03-04)
 - Cleanup AIDA interface

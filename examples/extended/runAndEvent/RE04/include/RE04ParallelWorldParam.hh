@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/include/RE04ParallelWorldParam.hh
+/// \brief Definition of the RE04ParallelWorldParam class
+//
+// $Id: $
+//
 #ifndef RE04ParallelWorldParam_h
 #define RE04ParallelWorldParam_h 1
 
@@ -47,6 +51,22 @@ class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
 
+//
+/// Parameterisation class for volumes in a parallel world 
+///
+/// - void ComputeTransformation(const G4int copyNo,
+///                              G4VPhysicalVolume *physVol) const
+///     returns a transformation with the physical volume of the 2nd argument
+///     according to copyNo.
+///       copyNo = 0 : the volume is placed at (-10*cm,-10*cm,0*cm)
+///              = 1 : the volume is placed at (10*cm,10*cm,0*cm)
+/// - G4Material* ComputeMaterial(const G4int copyNo,
+///                               G4VPhysicalVolume* currentVol,
+///                               const G4VTouchable* parentTouch=0);
+///     returns a material according to copyNo.
+///       copyNo = 0 : water
+///              = 1 : lead
+//
 class RE04ParallelWorldParam : public G4VPVParameterisation
 {
   public:
@@ -61,25 +81,37 @@ class RE04ParallelWorldParam : public G4VPVParameterisation
                            const G4VTouchable* parentTouch=0);
 
   public:
-    virtual void ComputeDimensions (G4Box&,const G4int,const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Box&,const G4int,const G4VPhysicalVolume*)
+      const {}
 
   private:  // Dummy declarations to get rid of warnings ...
 
-    virtual void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Trd&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Trap&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Cons&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Orb&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Sphere&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Torus&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Para&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Hype&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Tubs&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Polycone&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
+    virtual void ComputeDimensions (G4Polyhedra&,const G4int,
+                                    const G4VPhysicalVolume*) const {}
 
   private:
-    G4Material* water;
-    G4Material* Pb;
+    G4Material* fWater;
+    G4Material* fPb;
 };
 
 #endif

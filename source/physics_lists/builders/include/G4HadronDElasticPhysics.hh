@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.hh,v 1.2 2010-06-03 11:04:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -61,6 +60,9 @@ public:
   virtual void ConstructProcess();
 
 private:
+
+  G4HadronDElasticPhysics(G4HadronDElasticPhysics &);
+  G4HadronDElasticPhysics & operator=(const G4HadronDElasticPhysics &right);
 
   G4int    verbose;
   G4bool   wasActivated;

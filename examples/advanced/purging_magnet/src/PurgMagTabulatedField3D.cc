@@ -32,11 +32,11 @@
 //    *                                   *
 //    *************************************
 //
-// $Id: PurgMagTabulatedField3D.cc,v 1.4 2006-06-29 16:06:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "PurgMagTabulatedField3D.hh"
+#include "G4SystemOfUnits.hh"
 
 PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double zOffset ) 
   :fZoffset(zOffset),invertX(false),invertY(false),invertZ(false)

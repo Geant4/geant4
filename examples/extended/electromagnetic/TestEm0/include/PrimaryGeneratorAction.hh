@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2006-06-29 16:35:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm0/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,13 +51,14 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:
     void SetDefaultKinematic();
+    virtual
     void GeneratePrimaries(G4Event*);
     
-    G4ParticleGun* GetParticleGun() {return particleGun;}
+    G4ParticleGun* GetParticleGun() {return fParticleGun;}
 
   private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      Detector;  
+    G4ParticleGun*             fParticleGun;
+    DetectorConstruction*      fDetector;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

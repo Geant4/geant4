@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.hh,v 1.1 2007-11-16 16:52:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -39,8 +38,10 @@
 #ifndef TFTF_BIC_h
 #define TFTF_BIC_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>

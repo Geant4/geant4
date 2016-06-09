@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.hh,v 1.8 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // OpenGLStoredWin32 graphics system factory.
-
-#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
 
 #ifndef G4OPENGLSTOREDWIN32_HH
 #define G4OPENGLSTOREDWIN32_HH
@@ -43,7 +40,5 @@ public:
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

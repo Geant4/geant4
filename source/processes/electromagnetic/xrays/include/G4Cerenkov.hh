@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.11 2009-07-29 23:45:02 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -52,6 +51,8 @@
 /////////////
 // Includes
 /////////////
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "templates.hh"
@@ -80,15 +81,7 @@
 class G4Cerenkov : public G4VProcess
 {
 
-private:
-
-        //////////////
-        // Operators
-        //////////////
-
-	// G4Cerenkov& operator=(const G4Cerenkov &right);
-
-public: // Without description
+public:
 
 	////////////////////////////////
 	// Constructors and Destructor
@@ -96,16 +89,23 @@ public: // Without description
 
 	G4Cerenkov(const G4String& processName = "Cerenkov", 
                             G4ProcessType type = fElectromagnetic);
+	~G4Cerenkov();
 
-	// G4Cerenkov(const G4Cerenkov &right);
+        G4Cerenkov(const G4Cerenkov &right);
 
-	~G4Cerenkov();	
+private:
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4Cerenkov& operator=(const G4Cerenkov &right);
+
+public:
 
         ////////////
         // Methods
         ////////////
-
-public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable', for all charged particles
@@ -228,7 +228,7 @@ void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state)
 inline
 void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
 {
-        fMaxBetaChange = value*perCent;
+        fMaxBetaChange = value*CLHEP::perCent;
 }
 
 inline

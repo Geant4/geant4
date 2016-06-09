@@ -24,18 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonXSection.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPPhotonXSection_h
 #define G4NeutronHPPhotonXSection_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronVector.hh"
 
 // we will need a List of these .... one per term.
@@ -66,7 +66,7 @@ class G4NeutronHPPhotonXSection
     if(nChannels!=1) 
     {
       aDataFile >> theIncEnergy>>theIncShell>>theIncFlag>>theIncDisFlag;
-      theaDataFileInclusive.Init(aDataFile, eV);
+      theaDataFileInclusive.Init(aDataFile, CLHEP::eV);
     }
     theExclusive = new G4NeutronHPVector[nChannels];
     theExShell = new G4double[nChannels];
@@ -76,7 +76,7 @@ class G4NeutronHPPhotonXSection
     for(G4int i=0; i<nChannels; i++)
     {
       aDataFile>>theExEnergy[i]>>theExShell[i]>>theExFlag[i]>>theExDisFlag[i];
-      theExclusive[i].Init(aDataFile,eV);
+      theExclusive[i].Init(aDataFile,CLHEP::eV);
     }
   }
   

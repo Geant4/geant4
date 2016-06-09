@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.16 2009-09-16 18:07:30 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +40,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -48,6 +51,7 @@
 #include "G4ProcessManager.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -100,27 +104,27 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
 
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
-  ///emName = "emstandard_opt0";  
-  ///emPhysicsList = new G4EmStandardPhysics();
-  emName = "local";    
-  emPhysicsList = new PhysListEmStandard(emName);    
+  ///fEmName = "emstandard_opt0";  
+  ///fEmPhysicsList = new G4EmStandardPhysics();
+  fEmName = "local";    
+  fEmPhysicsList = new PhysListEmStandard(fEmName);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
-  delete emPhysicsList;
+  delete fMessenger;
+  delete fEmPhysicsList;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,7 +186,7 @@ void PhysicsList::ConstructProcess()
   
   // electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
   
   // decay process
   //
@@ -201,47 +205,53 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "local") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
     
   } else if (name == "emstandard_opt0") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
 
   } else if (name == "emstandard_opt1") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option2();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
 
   } else if (name == "emstandard_opt3") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();
-    
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
+
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+        
   } else if (name == "empenelope"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
 
   } else if (name == "emlivermore"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
 
   } else {
 
@@ -290,7 +300,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle))
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }
@@ -306,9 +316,9 @@ void PhysicsList::SetCuts()
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -317,24 +327,24 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

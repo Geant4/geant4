@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementData.cc,v 1.12 2010-05-15 15:37:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -46,8 +45,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ElementData::G4ElementData(const G4String& nam):name(nam) 
+G4ElementData::G4ElementData()
 {
+  name = "";
   for(G4int i=0; i<maxNumElements; ++i) {
     elmData[i] = 0;
     compLength[i] = 0;
@@ -90,23 +90,17 @@ void G4ElementData::InitialiseForComponent(G4int Z, G4int nComponents)
                  FatalException, "Wrong data handling");	   
     return;
   }
-  // delete old structure 
-  if(compLength[Z] > 0) {
-    for(size_t j=0; j<compLength[Z]; ++j) {
-      delete (compData[Z])[j];
-    }
-  }
-  compLength[Z] = 0;
-  if(0 >= nComponents) { return; }
 
-  // create a new structure
-  compLength[Z] = nComponents;
-  (compData[Z]).resize(nComponents, 0);
-  (compID[Z]).resize(nComponents, 0);
+  // only one initialisation is allowed
+  if(0 != compLength[Z]) { return; }
+
+  // reserve a new structure
+  (compData[Z]).reserve(nComponents);
+  (compID[Z]).reserve(nComponents);
 }
 
 void 
-G4ElementData::AddComponent(G4int Z, G4int id, size_t idx, G4PhysicsVector* v)
+G4ElementData::AddComponent(G4int Z, G4int id, G4PhysicsVector* v)
 {
   if(Z < 1 || Z >= maxNumElements) {
     G4cout << "G4ElementData::AddComponent ERROR for " << name 
@@ -115,14 +109,7 @@ G4ElementData::AddComponent(G4int Z, G4int id, size_t idx, G4PhysicsVector* v)
                  FatalException, "Wrong data handling");	   
     return;
   }
-  if(idx >= compLength[Z]) {
-    G4cout << "G4ElementData::AddComponent ERROR for " << name 
-	   << "  Z = " << Z << " idx= " << idx 
-	   << " nComponents= " << compLength[Z] << G4endl;
-    G4Exception("G4ElementData::AddComponent()", "mat604", 
-                 FatalException, "Wrong data handling");	   	   
-    return;
-  }
-  (compData[Z])[idx] = v;
-  (compID[Z])[idx] = id;
+  (compData[Z]).push_back(v);
+  (compID[Z]).push_back(id);
+  ++compLength[Z];
 }

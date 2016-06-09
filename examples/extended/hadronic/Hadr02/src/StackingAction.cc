@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr02/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -43,23 +45,24 @@
 #include "StackingMessenger.hh"
 
 #include "G4Track.hh"
+#include "G4SystemOfUnits.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
 {
-  stackMessenger = new StackingMessenger(this);
-  histoManager   = HistoManager::GetPointer();
-  killAll        = true;
-  killEM         = true; 
+  fStackMessenger = new StackingMessenger(this);
+  fHistoManager   = HistoManager::GetPointer();
+  fKillAll        = true;
+  fKillEM         = true; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::~StackingAction()
 {
-  delete stackMessenger;
+  delete fStackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,24 +72,21 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4ClassificationOfNewTrack status = fUrgent;
 
-  histoManager->ScoreNewTrack(aTrack);
+  fHistoManager->ScoreNewTrack(aTrack);
 
-  if(histoManager->GetVerbose() > 1 ) {
+  if(fHistoManager->GetVerbose() > 1 ) {
     G4cout << "Track #"
-	   << aTrack->GetTrackID() << " of " 
-	   << aTrack->GetDefinition()->GetParticleName()
-	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
-	   << " produced by " 
-	   << histoManager->CurrentParticle()->GetParticleName()
-	   << " ID= " << aTrack->GetParentID()
-	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
-	   << G4endl;
+           << aTrack->GetTrackID() << " of " 
+           << aTrack->GetDefinition()->GetParticleName()
+           << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
+           << " ID= " << aTrack->GetParentID()
+           << G4endl;
   }
   if(aTrack->GetTrackID() == 1) { return status; }
 
   //stack or delete secondaries
-  if (killAll)  { status = fKill; }
-  else if(killEM && aTrack->GetDefinition()->GetPDGMass() < MeV) 
+  if (fKillAll)  { status = fKill; }
+  else if(fKillEM && aTrack->GetDefinition()->GetPDGMass() < MeV) 
     { status = fKill; }
 
   return status;

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01PrimaryGeneratorAction.hh
+/// \brief Definition of the ExP01PrimaryGeneratorAction class
 //
-// $Id: ExP01PrimaryGeneratorAction.hh,v 1.2 2006-06-29 17:38:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +42,8 @@ class G4ParticleGun;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Primary generator action for the persistency example
  
 class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {

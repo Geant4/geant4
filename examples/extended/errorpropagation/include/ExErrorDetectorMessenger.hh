@@ -23,16 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-//
-// Class Description:
-//
-//  Defines a G4UIcommand to set the value of the constant field
-//
-// History:
-// - Created:   P. Arce,    May 2007
+/// \file errorpropagation/include/ExErrorDetectorMessenger.hh
+/// \brief Definition of the ExErrorDetectorMessenger class
 //
 
 #ifndef ExErrorDetectorMessenger_hh
@@ -46,7 +38,15 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 
+/// Detector messenger class
+///
+/// Defines a G4UIcommand to set the value of the constant field
+///
+/// History:
+/// Created:  May 2007
+/// \author   P. Arce 
 //------------------------------------------------------------------------
+
 class ExErrorDetectorMessenger: public G4UImessenger
 {
 public:
@@ -56,10 +56,10 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  ExErrorDetectorConstruction* myDetector;
+  ExErrorDetectorConstruction* fMyDetector;
   
-  G4UIdirectory*             mydetDir;
-  G4UIcmdWithADoubleAndUnit* FieldCmd;
+  G4UIdirectory*             fMydetDir;
+  G4UIcmdWithADoubleAndUnit* fFieldCmd;
 };
 
 #endif

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeShellDataSet.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -47,9 +46,11 @@
 #ifndef  G4PIXESHELLDATASET_HH
 #define  G4PIXESHELLDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4IDataSet.hh"
-#include <vector>
 
 class G4IInterpolator;
 
@@ -62,8 +63,8 @@ public:
                      const G4String& modelK="ecpssr",
 		     const G4String& modelL="ecpssr",
 		     const G4String& modelM="ecpssr",
-		     G4double eUnit=MeV, 
-		     G4double dataUnit=barn);
+		     G4double eUnit=CLHEP::MeV, 
+		     G4double dataUnit=CLHEP::barn);
 
   virtual ~G4PixeShellDataSet();
  

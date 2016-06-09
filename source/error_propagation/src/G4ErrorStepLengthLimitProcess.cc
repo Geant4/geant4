@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorStepLengthLimitProcess.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -33,6 +32,7 @@
 
 #include "G4ErrorStepLengthLimitProcess.hh"
 #include "G4ErrorMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 #ifdef G4VERBOSE
 #include "G4ErrorPropagatorData.hh"

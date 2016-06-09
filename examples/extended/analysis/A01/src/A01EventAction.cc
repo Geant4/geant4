@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.10 2007-05-17 09:55:14 duns Exp $
+/// \file analysis/A01/src/A01EventAction.cc
+/// \brief Implementation of the A01EventAction class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -43,36 +46,32 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "A01HodoscopeHit.hh"
 #include "A01DriftChamberHit.hh"
 #include "A01EmCalorimeterHit.hh"
 
-
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #include "A01HadCalorimeterHit.hh"
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 A01EventAction::A01EventAction()
 {
   G4String colName;
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  HHC1ID = SDman->GetCollectionID(colName="hodoscope1/hodoscopeColl");
-  HHC2ID = SDman->GetCollectionID(colName="hodoscope2/hodoscopeColl");
-  DHC1ID = SDman->GetCollectionID(colName="chamber1/driftChamberColl");
-  DHC2ID = SDman->GetCollectionID(colName="chamber2/driftChamberColl");
-  ECHCID = SDman->GetCollectionID(colName="EMcalorimeter/EMcalorimeterColl");
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  HCHCID = SDman->GetCollectionID(colName="HadCalorimeter/HadCalorimeterColl");
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  verboseLevel = 1;
-  messenger = new A01EventActionMessenger(this);
+  fHHC1ID = SDman->GetCollectionID(colName="hodoscope1/hodoscopeColl");
+  fHHC2ID = SDman->GetCollectionID(colName="hodoscope2/hodoscopeColl");
+  fDHC1ID = SDman->GetCollectionID(colName="chamber1/driftChamberColl");
+  fDHC2ID = SDman->GetCollectionID(colName="chamber2/driftChamberColl");
+  fECHCID = SDman->GetCollectionID(colName="EMcalorimeter/EMcalorimeterColl");
+  fHCHCID = SDman->GetCollectionID(colName="HadCalorimeter/HadCalorimeterColl");
+  fVerboseLevel = 1;
+  fMessenger = new A01EventActionMessenger(this);
 
 #ifdef G4ANALYSIS_USE
-  plotter = 0;
-  tuple = 0;
-  dc1Hits = dc2Hits = 0;
-  dc1XY = dc2XY = evstof = 0;
+  fPlotter = 0;
+  fTuple = 0;
+  fDc1Hits = fDc2Hits = 0;
+  fDc1XY = fDc2XY = fEvstof = 0;
 
   // Do some analysis
 
@@ -82,24 +81,24 @@ A01EventAction::A01EventAction()
   if (hFactory)
   {
     // Create some histograms
-    dc1Hits = hFactory->createHistogram1D("Drift Chamber 1 # Hits",50,0,50);
-    dc2Hits = hFactory->createHistogram1D("Drift Chamber 2 # Hits",50,0,50);
+    fDc1Hits = hFactory->createHistogram1D("Drift Chamber 1 # Hits",50,0,50);
+    fDc2Hits = hFactory->createHistogram1D("Drift Chamber 2 # Hits",50,0,50);
 
     // Create some clouds (Scatter Plots)
-    dc1XY = hFactory->createCloud2D("Drift Chamber 1 X vs Y");
-    dc2XY = hFactory->createCloud2D("Drift Chamber 2 X vs Y");
-    evstof = hFactory->createCloud2D("EDep vs Time-of-flight");
+    fDc1XY = hFactory->createCloud2D("Drift Chamber 1 X vs Y");
+    fDc2XY = hFactory->createCloud2D("Drift Chamber 2 X vs Y");
+    fEvstof = hFactory->createCloud2D("EDep vs Time-of-flight");
 
-    plotter = analysisManager->getPlotter();
-    if (plotter)
+    fPlotter = analysisManager->getPlotter();
+    if (fPlotter)
     {
-       plotter->createRegions(3,2);
-       plotter->region(0)->plot(*dc1Hits);
-       plotter->region(1)->plot(*dc2Hits);
-       plotter->region(2)->plot(*dc1XY);
-       plotter->region(3)->plot(*dc2XY);
-       plotter->region(4)->plot(*evstof);
-       plotter->show();
+       fPlotter->createRegions(3,2);
+       fPlotter->region(0)->plot(*fDc1Hits);
+       fPlotter->region(1)->plot(*fDc2Hits);
+       fPlotter->region(2)->plot(*fDc1XY);
+       fPlotter->region(3)->plot(*fDc2XY);
+       fPlotter->region(4)->plot(*fEvstof);
+       fPlotter->show();
      }
   }
 
@@ -108,7 +107,7 @@ A01EventAction::A01EventAction()
   ITupleFactory* tFactory = analysisManager->getTupleFactory();
   if (tFactory)
   {
-     tuple = tFactory->create("MyTuple","MyTuple","int dc1Hits, dc2Hits, double ECEnergy, HCEnergy, time1, time2","");
+     fTuple = tFactory->create("MyTuple","MyTuple","int fDc1Hits, fDc2Hits, double ECEnergy, HCEnergy, time1, time2","");
   }
 #endif // G4ANALYSIS_USE
 }
@@ -118,7 +117,7 @@ A01EventAction::~A01EventAction()
 #ifdef G4ANALYSIS_USE
   A01AnalysisManager::dispose();
 #endif // G4ANALYSIS_USE
-  delete messenger;
+  delete fMessenger;
 }
 
 void A01EventAction::BeginOfEventAction(const G4Event*)
@@ -128,55 +127,55 @@ void A01EventAction::BeginOfEventAction(const G4Event*)
 void A01EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
-  A01HodoscopeHitsCollection* HHC1 = 0;
-  A01HodoscopeHitsCollection* HHC2 = 0;
-  A01DriftChamberHitsCollection* DHC1 = 0;
-  A01DriftChamberHitsCollection* DHC2 = 0;
+  A01HodoscopeHitsCollection* fHHC1 = 0;
+  A01HodoscopeHitsCollection* fHHC2 = 0;
+  A01DriftChamberHitsCollection* fDHC1 = 0;
+  A01DriftChamberHitsCollection* fDHC2 = 0;
   A01EmCalorimeterHitsCollection* ECHC = 0;
   A01HadCalorimeterHitsCollection* HCHC = 0;
   if(HCE)
   {
-    HHC1 = (A01HodoscopeHitsCollection*)(HCE->GetHC(HHC1ID));
-    HHC2 = (A01HodoscopeHitsCollection*)(HCE->GetHC(HHC2ID));
-    DHC1 = (A01DriftChamberHitsCollection*)(HCE->GetHC(DHC1ID));
-    DHC2 = (A01DriftChamberHitsCollection*)(HCE->GetHC(DHC2ID));
-    ECHC = (A01EmCalorimeterHitsCollection*)(HCE->GetHC(ECHCID));
-    HCHC = (A01HadCalorimeterHitsCollection*)(HCE->GetHC(HCHCID));
+    fHHC1 = (A01HodoscopeHitsCollection*)(HCE->GetHC(fHHC1ID));
+    fHHC2 = (A01HodoscopeHitsCollection*)(HCE->GetHC(fHHC2ID));
+    fDHC1 = (A01DriftChamberHitsCollection*)(HCE->GetHC(fDHC1ID));
+    fDHC2 = (A01DriftChamberHitsCollection*)(HCE->GetHC(fDHC2ID));
+    ECHC = (A01EmCalorimeterHitsCollection*)(HCE->GetHC(fECHCID));
+    HCHC = (A01HadCalorimeterHitsCollection*)(HCE->GetHC(fHCHCID));
   }
 
 #ifdef G4ANALYSIS_USE
   // Fill some histograms
 
-  if (DHC1 && dc1Hits)
+  if (fDHC1 && fDc1Hits)
   {
-    int n_hit = DHC1->entries();
-    dc1Hits->fill(n_hit);
+    int n_hit = fDHC1->entries();
+    fDc1Hits->fill(n_hit);
     for(int i1=0;i1<n_hit;i1++)
     {
-      A01DriftChamberHit* aHit = (*DHC1)[i1];
+      A01DriftChamberHit* aHit = (*fDHC1)[i1];
       G4ThreeVector localPos = aHit->GetLocalPos();
-      if (dc1XY) dc1XY->fill(localPos.y(), localPos.x());
+      if (fDc1XY) fDc1XY->fill(localPos.y(), localPos.x());
     }
   }
-  if (DHC2 && dc2Hits)
+  if (fDHC2 && fDc2Hits)
   {
-    int n_hit = DHC2->entries();
-    dc2Hits->fill(n_hit);
+    int n_hit = fDHC2->entries();
+    fDc2Hits->fill(n_hit);
     for(int i1=0;i1<n_hit;i1++)
     {
-      A01DriftChamberHit* aHit = (*DHC2)[i1];
+      A01DriftChamberHit* aHit = (*fDHC2)[i1];
       G4ThreeVector localPos = aHit->GetLocalPos();
-      if (dc2XY) dc2XY->fill(localPos.y(), localPos.x());
+      if (fDc2XY) fDc2XY->fill(localPos.y(), localPos.x());
     }
   }
 
   // Fill the tuple
 
-  if (tuple)
+  if (fTuple)
   {
-	if (DHC1) tuple->fill(0,DHC1->entries());
-	if (DHC2) tuple->fill(1,DHC2->entries());
-	if(ECHC)
+    if (fDHC1) fTuple->fill(0,fDHC1->entries());
+    if (fDHC2) fTuple->fill(1,fDHC2->entries());
+    if(ECHC)
     {
       int iHit = 0;
       double totalE = 0.;
@@ -190,13 +189,13 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
           totalE += eDep;
         }
       }
-      tuple->fill(2,totalE);
+      fTuple->fill(2,totalE);
 
-	  if (HHC1 && HHC2 && HHC1->entries()==1 && HHC2->entries()==1)
-	  {
-	     double tof = (*HHC2)[0]->GetTime() - (*HHC1)[0]->GetTime();
-		 if (evstof) evstof->fill(tof,totalE);
-	  }
+          if (fHHC1 && fHHC2 && fHHC1->entries()==1 && fHHC2->entries()==1)
+          {
+             double tof = (*fHHC2)[0]->GetTime() - (*fHHC1)[0]->GetTime();
+                 if (fEvstof) fEvstof->fill(tof,totalE);
+          }
     }
     if(HCHC)
     {
@@ -212,19 +211,19 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
           totalE += eDep;
         }
       }
-      tuple->fill(3,totalE);
+      fTuple->fill(3,totalE);
     }
-	if (HHC1 && HHC1->entries()==1) tuple->fill(4,(*HHC1)[0]->GetTime());
-	if (HHC2 && HHC2->entries()==1) tuple->fill(5,(*HHC2)[0]->GetTime());
-	tuple->addRow();
+    if (fHHC1 && fHHC1->entries()==1) fTuple->fill(4,(*fHHC1)[0]->GetTime());
+    if (fHHC2 && fHHC2->entries()==1) fTuple->fill(5,(*fHHC2)[0]->GetTime());
+        fTuple->addRow();
   }
-  if (plotter) plotter->refresh();
+  if (fPlotter) fPlotter->refresh();
 #endif // G4ANALYSIS_USE
 
 
   // Diagnostics
 
-  if (verboseLevel==0 || evt->GetEventID() % verboseLevel != 0) return;
+  if (fVerboseLevel==0 || evt->GetEventID() % fVerboseLevel != 0) return;
 
   G4PrimaryParticle* primary = evt->GetPrimaryVertex(0)->GetPrimary(0);
   G4cout << G4endl
@@ -232,48 +231,48 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
          << primary->GetG4code()->GetParticleName()
          << " " << primary->GetMomentum() << G4endl;
 
-  if(HHC1)
+  if(fHHC1)
   {
-    int n_hit = HHC1->entries();
+    int n_hit = fHHC1->entries();
     G4cout << "Hodoscope 1 has " << n_hit << " hits." << G4endl;
     for(int i1=0;i1<n_hit;i1++)
     {
-      A01HodoscopeHit* aHit = (*HHC1)[i1];
+      A01HodoscopeHit* aHit = (*fHHC1)[i1];
       aHit->Print();
     }
   }
-  if(HHC2)
+  if(fHHC2)
   {
-    int n_hit = HHC2->entries();
+    int n_hit = fHHC2->entries();
     G4cout << "Hodoscope 2 has " << n_hit << " hits." << G4endl;
     for(int i1=0;i1<n_hit;i1++)
     {
-      A01HodoscopeHit* aHit = (*HHC2)[i1];
+      A01HodoscopeHit* aHit = (*fHHC2)[i1];
       aHit->Print();
     }
   }
-  if(DHC1)
+  if(fDHC1)
   {
-    int n_hit = DHC1->entries();
+    int n_hit = fDHC1->entries();
     G4cout << "Drift Chamber 1 has " << n_hit << " hits." << G4endl;
     for(int i2=0;i2<5;i2++)
     {
       for(int i1=0;i1<n_hit;i1++)
       {
-        A01DriftChamberHit* aHit = (*DHC1)[i1];
+        A01DriftChamberHit* aHit = (*fDHC1)[i1];
         if(aHit->GetLayerID()==i2) aHit->Print();
       }
     }
   }
-  if(DHC2)
+  if(fDHC2)
   {
-    int n_hit = DHC2->entries();
+    int n_hit = fDHC2->entries();
     G4cout << "Drift Chamber 2 has " << n_hit << " hits." << G4endl;
     for(int i2=0;i2<5;i2++)
     {
       for(int i1=0;i1<n_hit;i1++)
       {
-        A01DriftChamberHit* aHit = (*DHC2)[i1];
+        A01DriftChamberHit* aHit = (*fDHC2)[i1];
         if(aHit->GetLayerID()==i2) aHit->Print();
       }
     }

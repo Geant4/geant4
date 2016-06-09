@@ -78,10 +78,6 @@ $Id: README,v 1.5 2008-09-26 20:05:13 maire Exp $
 		  	
  6- HOW TO START ?
 
-     - compile and link to generate an executable
-	% cd geant4/examples/extended/electromagnetic/TestEm16
- 	% make
-
      - execute Test  in 'batch' mode from macro files
  	% TestEm16    run01.mac
 
@@ -110,18 +106,19 @@ $Id: README,v 1.5 2008-09-26 20:05:13 maire Exp $
   The photon energy spectrum (photons / energy bin) and the power spectrum
   (photon spectrum weighted with the photon energy) and a histogram
   of the path length between photon radiation is produced.
-
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-  Before compilation of the example it is optimal to clean up old files:
-	make histclean
-	make
-
-  By default the histograms are saved as testem16.root
-  It is possible to choose the format of the histogram file (hbook, root, XML)
-  and the binning using /testem/histo/ command, see run01.mac
 	 
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
+  The histograms are managed by G4AnalysisManager and its Messenger.
+     	
+  The histos can be activated individually with the command :
+  /analysis/h1/set id nbBins valMin valMax unit
+  where 'unit' is the desired unit for the histo (MeV or KeV, cm or mm, etc..)
+								  
+  One can control the name of the histograms file with the command:
+  /analysis/setFileName  name  (default testem16)
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 	
+   
+  It is also possible to print selected histograms on an ascii file:
+  /analysis/h1/setAscii id
+  All selected histos will be written on a file name.ascii  (default testem16)

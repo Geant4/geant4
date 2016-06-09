@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/src/exGPSAnalysisMessenger.cc
+/// \brief Implementation of the exGPSAnalysisMessenger class
+//
 #ifdef G4ANALYSIS_USE
 
 #include "exGPSAnalysisMessenger.hh"
@@ -35,45 +38,45 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSAnalysisMessenger::exGPSAnalysisMessenger(exGPSAnalysisManager* analysisManager)
-  :exGPSAnalysis(analysisManager)
+  :fExGPSAnalysis(analysisManager)
 
 { 
-  exGPSAnalysisDir = new G4UIdirectory("/analysis/");
-  exGPSAnalysisDir->SetGuidance("exGPS analysis control.");
+  fExGPSAnalysisDir = new G4UIdirectory("/analysis/");
+  fExGPSAnalysisDir->SetGuidance("exGPS analysis control.");
   
-  FileNameCmd = new G4UIcmdWithAString("/analysis/filename",this);
-  FileNameCmd->SetGuidance("Input the name for the AIDA output file.");
-  FileNameCmd->SetParameterName("filename",true,true);
-  FileNameCmd->SetDefaultValue("exgps.aida");
+  fFileNameCmd = new G4UIcmdWithAString("/analysis/filename",this);
+  fFileNameCmd->SetGuidance("Input the name for the AIDA output file.");
+  fFileNameCmd->SetParameterName("filename",true,true);
+  fFileNameCmd->SetDefaultValue("exgps.aida");
 
-  FileTypeCmd = new G4UIcmdWithAString("/analysis/filetype",this);
-  FileTypeCmd->SetGuidance("Input the type (xml/hbook) for the AIDA output file.");
-  FileTypeCmd->SetParameterName("filetype",true,true);
-  FileTypeCmd->SetDefaultValue("xml");
+  fFileTypeCmd = new G4UIcmdWithAString("/analysis/filetype",this);
+  fFileTypeCmd->SetGuidance("Input the type (xml/hbook/root) for the AIDA output file.");
+  fFileTypeCmd->SetParameterName("filetype",true,true);
+  fFileTypeCmd->SetDefaultValue("xml");
 
-  MaxEngCmd = new G4UIcmdWithADoubleAndUnit("/analysis/maxeng",this);
-  MaxEngCmd->SetGuidance("Sets the maximum energy of histo");
-  MaxEngCmd->SetParameterName("maxeng",true,true);
-  MaxEngCmd->SetDefaultUnit("keV");
-  MaxEngCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  fMaxEngCmd = new G4UIcmdWithADoubleAndUnit("/analysis/maxeng",this);
+  fMaxEngCmd->SetGuidance("Sets the maximum energy of histo");
+  fMaxEngCmd->SetParameterName("maxeng",true,true);
+  fMaxEngCmd->SetDefaultUnit("keV");
+  fMaxEngCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
-  MinEngCmd = new G4UIcmdWithADoubleAndUnit("/analysis/mineng",this);
-  MinEngCmd->SetGuidance("Sets the minimum energy of histo");
-  MinEngCmd->SetParameterName("mineng",true,true);
-  MinEngCmd->SetDefaultUnit("keV");
-  MinEngCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  fMinEngCmd = new G4UIcmdWithADoubleAndUnit("/analysis/mineng",this);
+  fMinEngCmd->SetGuidance("Sets the minimum energy of histo");
+  fMinEngCmd->SetParameterName("mineng",true,true);
+  fMinEngCmd->SetDefaultUnit("keV");
+  fMinEngCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
-  MaxPosCmd = new G4UIcmdWithADoubleAndUnit("/analysis/maxpos",this);
-  MaxPosCmd->SetGuidance("Set max length of source position");
-  MaxPosCmd->SetParameterName("maxpos",true,true);
-  MaxPosCmd->SetDefaultUnit("cm");
-  MaxPosCmd->SetUnitCandidates("micron mm cm m km");
+  fMaxPosCmd = new G4UIcmdWithADoubleAndUnit("/analysis/maxpos",this);
+  fMaxPosCmd->SetGuidance("Set max length of source position");
+  fMaxPosCmd->SetParameterName("maxpos",true,true);
+  fMaxPosCmd->SetDefaultUnit("cm");
+  fMaxPosCmd->SetUnitCandidates("micron mm cm m km");
 
-  MinPosCmd = new G4UIcmdWithADoubleAndUnit("/analysis/minpos",this);
-  MinPosCmd->SetGuidance("Set min length of source position");
-  MinPosCmd->SetParameterName("minpos",true,true);
-  MinPosCmd->SetDefaultUnit("cm");
-  MinPosCmd->SetUnitCandidates("micron mm cm m km");
+  fMinPosCmd = new G4UIcmdWithADoubleAndUnit("/analysis/minpos",this);
+  fMinPosCmd->SetGuidance("Set min length of source position");
+  fMinPosCmd->SetParameterName("minpos",true,true);
+  fMinPosCmd->SetDefaultUnit("cm");
+  fMinPosCmd->SetUnitCandidates("micron mm cm m km");
 
 }
 
@@ -81,44 +84,45 @@ exGPSAnalysisMessenger::exGPSAnalysisMessenger(exGPSAnalysisManager* analysisMan
 
 exGPSAnalysisMessenger::~exGPSAnalysisMessenger()
 {
-  delete FileNameCmd; 
-  delete FileTypeCmd; 
-  delete MaxEngCmd;
-  delete MinEngCmd;
-  delete MaxPosCmd;
-  delete MinPosCmd;
+  delete fFileNameCmd; 
+  delete fFileTypeCmd; 
+  delete fMaxEngCmd;
+  delete fMinEngCmd;
+  delete fMaxPosCmd;
+  delete fMinPosCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,
+                                                                                                                        G4String newValue)
 { 
 
   // 1D Histograms
 
-  if( command == FileNameCmd )
+  if( command == fFileNameCmd )
     { 
-      exGPSAnalysis->SetFileName(newValue);
+      fExGPSAnalysis->SetFileName(newValue);
     }
-  else if ( command == FileTypeCmd )
+  else if ( command == fFileTypeCmd )
     { 
-      exGPSAnalysis->SetFileType(newValue);
+      fExGPSAnalysis->SetFileType(newValue);
     }
-  else if( command == MaxPosCmd)
+  else if( command == fMaxPosCmd)
     { 
-      exGPSAnalysis->SetPosMax(MaxPosCmd->GetNewDoubleValue(newValue)); 
+      fExGPSAnalysis->SetPosMax(fMaxPosCmd->GetNewDoubleValue(newValue)); 
     }
-  else if( command == MinPosCmd)
+  else if( command == fMinPosCmd)
     { 
-      exGPSAnalysis->SetPosMin(MinPosCmd->GetNewDoubleValue(newValue)); 
+      fExGPSAnalysis->SetPosMin(fMinPosCmd->GetNewDoubleValue(newValue)); 
     }
-  else if( command == MaxEngCmd)
+  else if( command == fMaxEngCmd)
     { 
-      exGPSAnalysis->SetEngMax(MaxEngCmd->GetNewDoubleValue(newValue)); 
+      fExGPSAnalysis->SetEngMax(fMaxEngCmd->GetNewDoubleValue(newValue)); 
     }
-  else if( command == MinEngCmd)
+  else if( command == fMinEngCmd)
     { 
-      exGPSAnalysis->SetEngMin(MinEngCmd->GetNewDoubleValue(newValue)); 
+      fExGPSAnalysis->SetEngMin(fMinEngCmd->GetNewDoubleValue(newValue)); 
     }
 }
 
@@ -126,9 +130,3 @@ void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
 
 #endif // G4ANALYSIS_USE
-
-
-
-
-
-

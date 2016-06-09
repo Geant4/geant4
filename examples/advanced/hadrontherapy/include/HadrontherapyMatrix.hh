@@ -49,7 +49,7 @@ struct ion
   G4int PDGencoding;  // Particle data group id for the particle
   //G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
   G4String name;   	 // simple name without excitation energy: He3, He4, Li7, ...
-  G4int len; 	 // name length
+  std::string::size_type len; 	 // name length
   G4int Z; 		 // atomic number
   G4int A; 		 // mass number
   G4double *dose; 	 // pointer to dose matrix

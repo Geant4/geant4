@@ -1,0 +1,29 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Geometry Examples History file
+                    -------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26/11/2012 I. Hrivnacova (exGeometry-V09-05-02)
+- Fixed .README files (the transforms example page name) 
+
+17/11/2012 I. Hrivnacova (exGeometry-V09-05-01)
+  - Removed obsolete instructions (how to compile & link)
+  - Fixed .README file in olap
+
+06/09/2012 I. Hrivnacova (exGeometry-V09-05-00)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Replaced tabulators with space characters  

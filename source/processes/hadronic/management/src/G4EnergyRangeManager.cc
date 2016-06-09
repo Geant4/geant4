@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.16 2010-11-22 07:45:45 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -110,7 +109,7 @@ G4HadronicInteraction*
         memory = i;
       }
     }
-    G4int m=-1;
+    G4int mem=-1;
     G4double rand;
     switch ( cou )
     {
@@ -128,7 +127,7 @@ G4HadronicInteraction*
           "GetHadronicInteraction: No Model found");
        return 0;
      case 1:
-       m = memory;
+       mem = memory;
        break;
      case 2:
        if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
@@ -149,21 +148,21 @@ G4HadronicInteraction*
        if( emi1 < emi2 )
        {
          if( (ema1-kineticEnergy)/(ema1-emi2)<rand )
-           m = memor2;
+           mem = memor2;
          else
-           m = memory;
+           mem = memory;
        } else {
          if( (ema2-kineticEnergy)/(ema2-emi1)<rand )
-           m = memory;
+           mem = memory;
          else
-           m = memor2;
+           mem = memor2;
        }
        break;
      default:
       throw G4HadronicException(__FILE__, __LINE__,
         "GetHadronicInteraction: More than two competing models in this energy range");
     }
-    return theHadronicInteraction[m];
+    return theHadronicInteraction[mem];
   } 
  
  /* end of file */

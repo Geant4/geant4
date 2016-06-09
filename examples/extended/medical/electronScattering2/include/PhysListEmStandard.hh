@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.hh,v 1.1 2011-01-05 18:48:54 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering2/include/PhysListEmStandard.hh
+/// \brief Definition of the PhysListEmStandard class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,14 +45,13 @@ public:
   PhysListEmStandard(const G4String& name = "standard");
   virtual ~PhysListEmStandard();
 
-public: 
   // This method is dummy for physics
-  void ConstructParticle() {};
+  virtual void ConstructParticle() {};
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  void ConstructProcess();
+  virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4KDTree.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -68,7 +69,7 @@
 #include "globals.hh"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include "G4KDTree.hh"
 #include "G4KDNode.hh"
 #include "G4KDTreeResult.hh"

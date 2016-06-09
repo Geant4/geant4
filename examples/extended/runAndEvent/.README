@@ -1,0 +1,38 @@
+//$Id$
+
+///\file "runAndEvent/.README"
+///\brief Examples runAndEvent README page
+
+/*! \page Examples_runAndEvent Category "runAndEvent"
+
+ Examples in this directory demonstrate the use of some features in
+Run and Event categories. Since these categories are on the top of
+hierarchy of Geant4 structure to control the full functionarities of
+Geant4, some examples contain features in other categories such as
+Tracking, Track, Particles, Detector responces, and even some cases
+Geometry and Processes.
+
+\link ExampleRE01 RE01 \endlink
+
+ This example demonstrates how to connect the information between
+primary particles and hits. It also utilizes some user-information 
+classes.
+
+\link ExampleRE02 RE02 \endlink
+
+ This example demonstrates how to accumulate the physics quantities
+such as energy deposition and dose for a run. It also demonstrates
+the use of primitive scorers.
+
+\link ExampleRE03 RE03 \endlink
+
+ This example demonstrates how to use UI-command base scoring.
+It create parallel world(s) for defining scoring mesh(es).
+
+\link ExampleRE04 RE04 \endlink
+
+ This example demonstrates how to define layered mass geometry in
+a parallel world and use it in a simulation.
+
+*/
+

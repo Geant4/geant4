@@ -31,6 +31,8 @@
 //
 
 #include "G4LivermorePolarizedGammaConversionModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -40,7 +42,8 @@ using namespace std;
 
 G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(
    const G4ParticleDefinition*, const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),crossSectionHandler(0)
+  :G4VEmModel(nam),fParticleChange(0),
+   isInitialised(false),meanFreePathTable(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 2*electron_mass_c2;
   highEnergyLimit = 100 * GeV;
@@ -209,13 +212,13 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
 
   G4double epsilon ;
-  G4double epsilon0 = electron_mass_c2 / photonEnergy ;
+  G4double epsilon0Local = electron_mass_c2 / photonEnergy ;
 
   // Do it fast if photon energy < 2. MeV
 
   if (photonEnergy < smallEnergy )
     {
-      epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand();
+      epsilon = epsilon0Local + (0.5 - epsilon0Local) * G4UniformRand();
     }
   else
     {
@@ -251,13 +254,13 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
       if (photonEnergy > 50. * MeV) fZ += 8. * (element->GetfCoulomb());
 
       // Limits of the screening variable
-      G4double screenFactor = 136. * epsilon0 / (element->GetIonisation()->GetZ3()) ;
+      G4double screenFactor = 136. * epsilon0Local / (element->GetIonisation()->GetZ3()) ;
       G4double screenMax = exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
       G4double epsilon1 = 0.5 - 0.5 * sqrt(1. - screenMin / screenMax) ;
-      G4double epsilonMin = std::max(epsilon0,epsilon1);
+      G4double epsilonMin = std::max(epsilon0Local,epsilon1);
       G4double epsilonRange = 0.5 - epsilonMin ;
 
       // Sample the energy rate of the created electron (or positron)
@@ -575,7 +578,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
   //  G4cout << "PHI = " <<value <<  G4endl;
   return value;
 }
-G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4double Phi)
+G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4double PhiLocal)
 {
 
   G4double value = 0.;
@@ -652,27 +655,27 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
 
   if (Ene>=50.)
     {
-      if (Phi>xepm)
+      if (PhiLocal>xepm)
 	{
-          b = (ppml[0]+2*ppml[1]*ppml[2]*Flor(ppml,Phi));
+          b = (ppml[0]+2*ppml[1]*ppml[2]*Flor(ppml,PhiLocal));
         }
       else
         {
-          b = Ftan(ppmt,Phi);
+          b = Ftan(ppmt,PhiLocal);
         }
-      if (Phi>xe0)
+      if (PhiLocal>xe0)
         {
-          a = (p0l[0]+2*p0l[1]*p0l[2]*Flor(p0l,Phi));
+          a = (p0l[0]+2*p0l[1]*p0l[2]*Flor(p0l,PhiLocal));
         }
       else
         {
-          a = Ftan(p0t,Phi);
+          a = Ftan(p0t,PhiLocal);
         }
     }
   else
     {
-      b = (ppml[0]+2*ppml[1]*ppml[2]*Flor(ppml,Phi));
-      a = (p0l[0]+2*p0l[1]*p0l[2]*Flor(p0l,Phi));
+      b = (ppml[0]+2*ppml[1]*ppml[2]*Flor(ppml,PhiLocal));
+      a = (p0l[0]+2*p0l[1]*p0l[2]*Flor(p0l,PhiLocal));
     }
   G4double nr =0.;
 

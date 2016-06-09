@@ -88,6 +88,11 @@ inline G4PhysicsVectorType G4Physics2DVector::GetType() const
   return type;
 }
 
+inline void G4Physics2DVector::SetBicubicInterpolation(G4bool val)
+{
+  useBicubic = val;
+}
+
 inline G4double G4Physics2DVector::GetLastX() const
 {
   return cache->lastX;
@@ -129,12 +134,47 @@ inline void G4Physics2DVector::FindBinLocationY(G4double y)
   FindBin(y, yVector, cache->lastBinY);
 }
 
-inline void G4Physics2DVector::SetVerboseLevel(G4int value)
+inline void G4Physics2DVector::SetVerboseLevel(G4int val)
 {
-   verboseLevel = value;
+   verboseLevel = val;
 }
 
-inline G4int G4Physics2DVector::GetVerboseLevel(G4int)
+inline G4int G4Physics2DVector::GetVerboseLevel() const
 {
    return verboseLevel;
+}
+
+inline G4double 
+G4Physics2DVector::DerivativeX(size_t idx, size_t idy, G4double fac)
+{
+  size_t i1 = idx;
+  if(i1 > 0) { --i1; }
+  size_t i2 = idx;
+  if(i2+1 < numberOfXNodes) { ++i2; }
+  return fac*(GetValue(i2, idy) - GetValue(i1, idy))/(GetX(i2) - GetX(i1));
+}
+
+inline G4double 
+G4Physics2DVector::DerivativeY(size_t idx, size_t idy, G4double fac)
+{
+  size_t i1 = idy;
+  if(i1 > 0) { --i1; }
+  size_t i2 = idy;
+  if(i2+1 < numberOfYNodes) { ++i2; }
+  return fac*(GetValue(idx, i2) - GetValue(idx, i1))/(GetY(i2) - GetY(i1));
+}
+
+inline G4double 
+G4Physics2DVector::DerivativeXY(size_t idx, size_t idy, G4double fac)
+{
+  size_t i1 = idx;
+  if(i1 > 0) { --i1; }
+  size_t i2 = idx;
+  if(i2+1 < numberOfXNodes) { ++i2; }
+  size_t j1 = idy;
+  if(j1 > 0) { --j1; }
+  size_t j2 = idy;
+  if(j2+1 < numberOfYNodes) { ++j2; }
+  return fac*(GetValue(i2, j2) - GetValue(i1, j2) - GetValue(i2, j1) 
+	+ GetValue(i1, j1))/((GetX(i2) - GetX(i1))*(GetY(j2) - GetY(j1)));
 }

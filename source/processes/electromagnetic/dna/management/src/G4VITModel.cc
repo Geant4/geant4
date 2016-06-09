@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITModel.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -37,9 +38,9 @@
 G4VITModel::G4VITModel(const G4String& aName)
 {
     //ctor
-    fTimeStepper        = 0;
-    fReactionProcess    = 0;
-    fReactionTable      = 0;
+    fpTimeStepper        = 0;
+    fpReactionProcess    = 0;
+    fpReactionTable      = 0;
 
     fType1              = -1;
     fType2              = -1;
@@ -49,36 +50,36 @@ G4VITModel::G4VITModel(const G4String& aName)
 G4VITModel::~G4VITModel()
 {
     //dtor
-    if(fTimeStepper)        delete fTimeStepper;
-    if(fReactionProcess)    delete fReactionProcess;
+    if(fpTimeStepper)        delete fpTimeStepper;
+    if(fpReactionProcess)    delete fpReactionProcess;
     //if(fReactionTable)      delete fReactionTable;
     // Let the concrete class delete the reactionTable
 }
 
-G4VITModel::G4VITModel(const G4VITModel& other)
+G4VITModel::G4VITModel(const G4VITModel& right)
 {
     //copy ctor
-    fName               = other.fName;
-    fType1              = other.fType1;
-    fType2              = other.fType2;
-    fReactionTable      = 0;
-    fTimeStepper     = other.fTimeStepper->Clone();
-    fReactionProcess = other.fReactionProcess->Clone();
+    fName               = right.fName;
+    fType1              = right.fType1;
+    fType2              = right.fType2;
+    fpReactionTable     = 0;
+    fpTimeStepper     = right.fpTimeStepper->Clone();
+    fpReactionProcess = right.fpReactionProcess->Clone();
 }
 
 // should not be used
-G4VITModel& G4VITModel::operator=(const G4VITModel& rhs)
+G4VITModel& G4VITModel::operator=(const G4VITModel& right)
 {
-    if (this == &rhs) return *this; // handle self assignment
+    if (this == &right) return *this; // handle self assignment
 
-    fName               = rhs.fName;
-    fType1              = rhs.fType1;
-    fType2              = rhs.fType2;
-    fReactionTable      = 0;
-    if(fTimeStepper) delete fTimeStepper;
-    fTimeStepper        = rhs.fTimeStepper->Clone();
-    if(fReactionProcess) delete fReactionProcess;
-    fReactionProcess    = rhs.fReactionProcess->Clone();
+    fName               = right.fName;
+    fType1              = right.fType1;
+    fType2              = right.fType2;
+    fpReactionTable      = 0;
+    if(fpTimeStepper) delete fpTimeStepper;
+    fpTimeStepper        = right.fpTimeStepper->Clone();
+    if(fpReactionProcess) delete fpReactionProcess;
+    fpReactionProcess    = right.fpReactionProcess->Clone();
 
     //assignment operator
     return *this;
@@ -93,8 +94,8 @@ void G4VITModel::IsApplicable(G4ITType& type1, G4ITType& type2)
 
 void G4VITModel::Initialize()
 {
-    fReactionProcess->SetReactionTable(fReactionTable);
-    fTimeStepper->SetReactionTable(fReactionTable);
-    fTimeStepper->Initialize();
-    fReactionProcess->Initialize();
+    fpReactionProcess->SetReactionTable(fpReactionTable);
+    fpTimeStepper->SetReactionTable(fpReactionTable);
+    fpTimeStepper->Initialize();
+    fpReactionProcess->Initialize();
 }

@@ -15,10 +15,10 @@
 #
 #          Linux-g++   Linux (Red Hat Enterprise/SCL5), gcc-4.1.2 (default)
 #
-#          Darwin-g++  MacOSX 10.6, gcc-4.2.1
+#          Darwin-g++  MacOSX 10.7, gcc-4.2.1
 #
-#          WIN32-VC    Windows/XP and Microsoft Visual C++ 9.0
-#                      Adding CYGWIN32 tools
+#          WIN32-VC    Windows 7 and Microsoft Visual C++ 10.0
+# 
 # -------------------------------------------------------------------------
 
 MAKEFLAGS= --no-print-directory
@@ -240,7 +240,6 @@ ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   ifndef G4LIB_USE_ZLIB
     LOADLIBS += -lz
   endif
-  LOADLIBS += -lm
 endif
 
 # Graphic variables...
@@ -400,10 +399,3 @@ ifdef CFRONT
   G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP) ] && mkdir -p $(G4TREP) )
   G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP)/exec ] &&mkdir -p $(G4TREP)/exec )
 endif
-
-# If G4SYSTEM is not specified or not valid, issue an ERROR !
-#
-#$(G4INSTALL)/config/sys/$(G4SYSTEM).gmk:
-#	@echo "ERROR - G4SYSTEM is not defined in the environment"
-#	@echo "        or $(G4SYSTEM) architecture is not a valid one !"
-#	exit 1

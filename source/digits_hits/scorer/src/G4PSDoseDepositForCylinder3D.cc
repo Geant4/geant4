@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDepositForCylinder3D.cc,v 1.6 2010/09/16 14:58:34 gcosmo Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSDoseDepositForCylinder3D
 #include "G4PSDoseDepositForCylinder3D.hh"
+#include "G4PhysicalConstants.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)

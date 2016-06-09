@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.cc,v 1.16 2010-07-07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -149,7 +148,7 @@ G4Point3D G4BSplineSurface::FinalIntersection()
 	  bezier_list.GetSurface() != (G4Surface*)0)
   {
     bez_ptr = (G4BezierSurface*)bezier_list.GetSurface();
-    int tmp = 0;
+    G4int tmp = 0;
 
     // L. Broglia
     // Modify G4BezierSurface intersection function name 
@@ -195,37 +194,37 @@ G4Point3D G4BSplineSurface::FinalIntersection()
 	    while (bezier_list.GetNext() != bezier_list.GetLastSurface())
 	      bezier_list.Step();
 	  
-	  G4BezierSurface* tmp = (G4BezierSurface*) bezier_list.GetSurface();
-	  tmp->CalcBBox();
+	  G4BezierSurface* tmpbz = (G4BezierSurface*) bezier_list.GetSurface();
+	  tmpbz->CalcBBox();
 	  
-// L. Broglia		tmp->bbox->Test();
+// L. Broglia		tmpbz->bbox->Test();
 
-	  int result=0;
-	  if(tmp->bbox->GetTestResult())
+	  G4int result=0;
+	  if(tmpbz->bbox->GetTestResult())
 	  {
 	    // Clip
 	    while(!result)
-	      result = tmp->ClipBothDirs();  
+	      result = tmpbz->ClipBothDirs();  
 	  }
 	  else
 	  {
-	    bezier_list.RemoveSurface(tmp);
+	    bezier_list.RemoveSurface(tmpbz);
 	  }
 	  // Second surface
-	  tmp = (G4BezierSurface*) bezier_list.GetLastSurface();
-	  tmp->CalcBBox();
+	  tmpbz = (G4BezierSurface*) bezier_list.GetLastSurface();
+	  tmpbz->CalcBBox();
 
-// L. Broglia		tmp->bbox->Test();
+// L. Broglia		tmpbz->bbox->Test();
 
-	  if(tmp->bbox->GetTestResult())
+	  if(tmpbz->bbox->GetTestResult())
 	  {
 	    result = 0;
 	    while(!result)
-	      result = tmp->ClipBothDirs();
+	      result = tmpbz->ClipBothDirs();
 	  }
 	  else
 	  {
-	    bezier_list.RemoveSurface(tmp);
+	    bezier_list.RemoveSurface(tmpbz);
 	  }
 	  
 	  bezier_list.RemoveSurface(bez_ptr);
@@ -297,7 +296,7 @@ G4ProjectedSurface* G4BSplineSurface::CopyToProjectedSurface
 
   proj_srf->u_knots     =  new G4KnotVector(*u_knots);
   proj_srf->v_knots     =  new G4KnotVector(*v_knots);
-  proj_srf->ctl_points  = new G4ControlPoints
+  proj_srf->ctl_points  =  new G4ControlPoints
     (2, ctl_points->GetRows(), ctl_points->GetCols());
 
   const G4Plane& plane1 = rayref.GetPlane(1);
@@ -419,7 +418,7 @@ void G4BSplineSurface::ProjectNURBSurfaceTo2D
   */
 
   G4PointRat tmp = ctl_points->GetRat(0,0);
-  int rational = tmp.GetType();// Get the type of control point
+  G4int rational = tmp.GetType();// Get the type of control point
   G4Point3D psrfcoords;
   register int rows = ctl_points->GetRows();
   register int cols = ctl_points->GetCols();
@@ -468,9 +467,9 @@ void G4BSplineSurface::ProjectNURBSurfaceTo2D
 
 /* L. Broglia
    Changes for new G4PointRat 
-G4Point& G4BSplineSurface::InternalEvalCrv(int i, G4ControlPoints* crv)*/
+G4Point& G4BSplineSurface::InternalEvalCrv(G4int i, G4ControlPoints* crv)*/
 
-G4PointRat& G4BSplineSurface::InternalEvalCrv(int i, G4ControlPoints* crv)
+G4PointRat& G4BSplineSurface::InternalEvalCrv(G4int i, G4ControlPoints* crv)
 {
   if ( ord <= 1 ) 
     return crv->GetRat(i, k_index);

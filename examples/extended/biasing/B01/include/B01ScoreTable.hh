@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B01ScoreTable.hh,v 1.1 2007-06-05 18:20:09 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/B01/include/B01ScoreTable.hh
+/// \brief Definition of the B01ScoreTable class
+//
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class B01ScoreTable
@@ -60,18 +62,18 @@ public: // with description
   ~B01ScoreTable();
 
   void Print(const G4MapGeometryCellCellScorer &cs, 
-	     std::ostream *out = 0);
+             std::ostream *out = 0);
     // create the table and print it to the ouput stream.
 
   void PrintHeader(std::ostream *out);
     // print the table header, done by the above Print() function
 
   void PrintTable(const G4MapGeometryCellCellScorer &cs,
-		  std::ostream *out);
+                  std::ostream *out);
     // print the table contend, done by the above Print() function
 
   std::string FillString(const std::string &name, 
-			   char c, G4int n, G4bool back = true);
+                           char c, G4int n, G4bool back = true);
     // create a string of length n, by filling up
     // name with the char c.
 
@@ -81,8 +83,8 @@ private:
 
   G4String CreateName(const G4GeometryCell &gCell);
   void PrintLine(const G4String &name,
-		 const G4CellScoreValues &sc_scores,
-		 std::ostream *out);
+                 const G4CellScoreValues &sc_scores,
+                 std::ostream *out);
   const G4VIStore *fIStore;
   G4int FieldName;
   G4int FieldValue;

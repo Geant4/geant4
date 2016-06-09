@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.16 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4AttCheck.hh"
 
@@ -403,7 +402,7 @@ G4bool G4AttCheck::Standard
 	      G4String standardUnit = fStandardUnits[unitCategory];
 	      G4double valueOfStandardUnit =
 		G4UnitDefinition::GetValueOf(standardUnit);
-	      G4String extra = iDef->second.GetExtra();
+//	      G4String exstr = iDef->second.GetExtra();
 	      if (valueType == "G4ThreeVector") {  // Split vector into 3...
 		G4ThreeVector internalValue =
 		  G4UIcommand::ConvertToDimensioned3Vector(valueAndUnit);

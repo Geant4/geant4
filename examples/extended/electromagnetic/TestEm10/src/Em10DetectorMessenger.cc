@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10DetectorMessenger.cc
+/// \brief Implementation of the Em10DetectorMessenger class
 //
-// $Id: Em10DetectorMessenger.cc,v 1.11 2006-06-29 16:38:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 

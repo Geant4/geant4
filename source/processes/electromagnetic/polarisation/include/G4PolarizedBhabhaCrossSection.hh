@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBhabhaCrossSection.hh,v 1.2 2006-11-17 14:14:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 Class file
 //

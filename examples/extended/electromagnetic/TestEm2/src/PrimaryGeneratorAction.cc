@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.6 2006-06-29 16:50:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,28 +37,29 @@
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
-:detector(det)
+:fDetector(det)
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
 
   G4ParticleDefinition* particle
                  = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(5.*GeV);  
-  particleGun->SetParticlePosition(initPos = G4ThreeVector(-1*cm,-1*cm,-1*cm));  
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleEnergy(5.*GeV);  
+  fParticleGun->SetParticlePosition(fInitPos = G4ThreeVector(-1*cm,-1*cm,-1*cm));  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,11 +68,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begin of event
   //
-  if (particleGun->GetParticlePosition() == initPos) {
-    G4double position = -0.5*(detector->GetfullLength());
-    particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+  if (fParticleGun->GetParticlePosition() == fInitPos) {
+    G4double position = -0.5*(fDetector->GetfullLength());
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
   }       
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

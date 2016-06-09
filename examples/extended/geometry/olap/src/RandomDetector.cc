@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/RandomDetector.cc
+/// \brief Implementation of the RandomDetector class
 //
-// $Id: RandomDetector.cc,v 1.5 2006-06-29 17:23:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -41,6 +43,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "RandomDetector.hh"
 

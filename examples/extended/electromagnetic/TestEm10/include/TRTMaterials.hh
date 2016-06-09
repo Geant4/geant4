@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/TRTMaterials.hh
+/// \brief Definition of the TRTMaterials class
 //
-// $Id: TRTMaterials.hh,v 1.3 2006-06-29 16:38:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -53,7 +55,7 @@
 
   density = 1.205*mg/cm3;
   G4Material* Air = new G4Material(name="Air", density, nel=2,
-					kStateGas,293.15*kelvin,1.*atmosphere);
+                                        kStateGas,293.15*kelvin,1.*atmosphere);
   Air->AddElement(elN, .7);
   Air->AddElement(elO, .3);
   
@@ -77,18 +79,18 @@
 
   density = 1.977*mg/cm3;
   G4Material* CO2 = new G4Material(name="CO2", density, nel=2,
-				       kStateGas,273.15*kelvin,1.*atmosphere);
+                                       kStateGas,273.15*kelvin,1.*atmosphere);
   CO2->AddElement(elC,1);
   CO2->AddElement(elO,2);
 
   G4double TRT_Xe_density = 5.485*mg/cm3;
   G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
-				      kStateGas,293.15*kelvin,1.*atmosphere);
+                                      kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_Xe->AddElement(elXe,1);
 
   G4double TRT_CO2_density = 1.842*mg/cm3;
   G4Material* TRT_CO2 = new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
-				       kStateGas,293.15*kelvin,1.*atmosphere);
+                                       kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_CO2->AddElement(elC,1);
   TRT_CO2->AddElement(elO,2);
 
@@ -100,8 +102,8 @@
 
   G4double XeCO2CF4_density = 4.76*mg/cm3;
   G4Material* XeCO2CF4 = new G4Material(name="XeCO2CF4", XeCO2CF4_density,
-					nComponents=3,
-					kStateGas,293.15*kelvin,1.*atmosphere);
+                                        nComponents=3,
+                                        kStateGas,293.15*kelvin,1.*atmosphere);
   XeCO2CF4->AddMaterial(TRT_Xe,0.807);
   XeCO2CF4->AddMaterial(TRT_CO2,0.039);
   XeCO2CF4->AddMaterial(TRT_CF4,0.154);

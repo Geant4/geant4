@@ -38,6 +38,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventActionMessenger::HadrontherapyEventActionMessenger(HadrontherapyEventAction* EvAct)

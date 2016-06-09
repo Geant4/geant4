@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmEventAction.cc
+/// \brief Implementation of the exrdmEventAction class
+//
 // CHANGE HISTORY
 // --------------
 #include "G4ios.hh"
@@ -40,23 +43,23 @@ extern G4bool drawEvent;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmEventAction::exrdmEventAction()
-  : drawFlag("all")
+  : fDrawFlag("all")
 {
-  eventMessenger = new exrdmEventActionMessenger(this);
+  fEventMessenger = new exrdmEventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmEventAction::~exrdmEventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmEventAction::BeginOfEventAction(const G4Event* )
 {
-  exrdmAnalysisManager::getInstance()->BeginOfEvent();
+  exrdmAnalysisManager::GetInstance()->BeginOfEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -64,7 +67,7 @@ void exrdmEventAction::BeginOfEventAction(const G4Event* )
 void exrdmEventAction::EndOfEventAction(const G4Event*)
 {
   //analysis
-  exrdmAnalysisManager::getInstance()->EndOfEvent();
+  exrdmAnalysisManager::GetInstance()->EndOfEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

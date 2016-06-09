@@ -1,8 +1,6 @@
 /tracking/storeTrajectory 1
 
 /microbeam/phys/addPhysics emlivermore
-/microbeam/phys/addPhysics binary
-/microbeam/phys/addPhysics binary_ion
 
 /run/initialize
 

@@ -58,11 +58,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4DiscreteGammaTransition.hh
         G4E1Probability.hh
         G4E1SingleProbability1.hh
+        G4LevelManager.hh
+        G4LevelReader.hh
         G4NeutronRadCapture.hh
         G4NuclearLevel.hh
         G4NuclearLevelManager.hh
         G4NuclearLevelStore.hh
+        G4NucLevel.hh
         G4PhotonEvaporation.hh
+        G4PromptPhotonEvaporation.hh
         G4PtrLevelVector.hh
         G4RandGeneralTmp.hh
         G4VGammaDeexcitation.hh
@@ -75,11 +79,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4DiscreteGammaTransition.cc
         G4E1Probability.cc
         G4E1SingleProbability1.cc
+        G4LevelManager.cc
+        G4LevelReader.cc
         G4NeutronRadCapture.cc
         G4NuclearLevel.cc
         G4NuclearLevelManager.cc
         G4NuclearLevelStore.cc
+        G4NucLevel.cc
         G4PhotonEvaporation.cc
+        G4PromptPhotonEvaporation.cc
         G4VGammaDeexcitation.cc
         G4VGammaTransition.cc
         G4VPhotonEvaporation.cc

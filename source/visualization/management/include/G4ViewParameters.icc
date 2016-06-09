@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.18 2009-01-21 16:59:22 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  20th October 1996
@@ -212,6 +211,11 @@ inline G4bool G4ViewParameters::IsPicking () const {
 inline G4ViewParameters::RotationStyle
 G4ViewParameters::GetRotationStyle() const {return fRotationStyle;}
 
+inline const std::vector<G4ModelingParameters::VisAttributesModifier>&
+G4ViewParameters::GetVisAttributesModifiers() const {
+  return fVisAttributesModifiers;
+}
+
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;
@@ -286,6 +290,14 @@ inline void G4ViewParameters::SetFieldHalfAngle (G4double fieldHalfAngle) {
   fFieldHalfAngle = fieldHalfAngle;
 }
 
+inline void G4ViewParameters::SetOrthogonalProjection () {
+  SetFieldHalfAngle(0.);
+}
+
+inline void G4ViewParameters::SetPerspectiveProjection(G4double fieldHalfAngle) {
+  SetFieldHalfAngle(fieldHalfAngle);
+}
+
 inline void G4ViewParameters::SetZoomFactor (G4double zoomFactor) {
   fZoomFactor = zoomFactor;
 }
@@ -321,9 +333,17 @@ inline void G4ViewParameters::SetDefaultVisAttributes
   fDefaultVisAttributes = defaultVisAttributes;
 }
 
+inline void G4ViewParameters::SetDefaultColour (const G4Colour& colour) {
+  fDefaultVisAttributes.SetColour (colour);
+}
+
 inline void G4ViewParameters::SetDefaultTextVisAttributes
 (const G4VisAttributes& defaultTextVisAttributes) {
   fDefaultTextVisAttributes = defaultTextVisAttributes;
+}
+
+inline void G4ViewParameters::SetDefaultTextColour (const G4Colour& colour) {
+  fDefaultTextVisAttributes.SetColour (colour);
 }
 
 inline void
@@ -374,4 +394,9 @@ inline void G4ViewParameters::SetPicking (G4bool picking) {
 inline void G4ViewParameters::SetRotationStyle
   (G4ViewParameters::RotationStyle style) {
   fRotationStyle = style;
+}
+
+inline void G4ViewParameters::AddVisAttributesModifier
+(const G4ModelingParameters::VisAttributesModifier& vam) {
+  fVisAttributesModifiers.push_back(vam);
 }

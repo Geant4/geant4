@@ -24,6 +24,7 @@
 /testem/phys/addPhysics   emstandard_opt3
 #
 /run/initialize
+/analysis/setActivation false
 #
 /gun/particle proton
 /gun/energy 160 MeV
@@ -66,10 +67,18 @@
 /gun/energy 100 MeV
 /run/beamOn 100
 #
+/testem/det/setMat G4_Si
+/gun/particle ion
+/gun/ion 54 131 35
+/gun/energy 1217 MeV
+/testem/phys/setCuts 0.002 mm
+/run/beamOn 10
+#
 /testem/det/setMat Water_1.05
 /gun/particle proton
 /gun/energy 160 MeV
 /testem/stepMax 1 mm
+/testem/phys/setCuts 1 mm
 /tracking/verbose 0
 /run/beamOn 1000
 #

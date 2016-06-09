@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,25 +48,25 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+  DetectorMessenger(DetectorConstruction* );
+  ~DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    DetectorConstruction*   Detector;
+  DetectorConstruction*   fDetector;
     
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWithADoubleAndUnit* SizeXCmd;
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
-    G4UIcmdWithADoubleAndUnit* StepSizeCmd;
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+  G4UIdirectory*             fDetDir;
+  G4UIcmdWithAString*        fMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fSizeXCmd;
+  G4UIcmdWithADoubleAndUnit* fSizeYZCmd;
+  G4UIcmdWithADoubleAndUnit* fStepSizeCmd;
+  G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
     
-    G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,6 +38,7 @@
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
 #include "G4Electron.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <vector>
 

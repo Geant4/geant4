@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.5 2010-10-13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbMaterialMixtureByWeight
@@ -35,6 +34,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbMaterialMixtureByWeight.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgbMaterial.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgrMessenger.hh"

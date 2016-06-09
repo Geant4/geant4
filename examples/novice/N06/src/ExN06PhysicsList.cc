@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.19 2010-10-23 19:14:03 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -273,9 +272,6 @@ void ExN06PhysicsList::ConstructOp()
 
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   theScintillationProcess->AddSaturation(emSaturation);
-
-  G4OpticalSurfaceModel themodel = unified;
-  theBoundaryProcess->SetModel(themodel);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){

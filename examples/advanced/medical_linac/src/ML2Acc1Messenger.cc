@@ -43,45 +43,46 @@
 
 #include "ML2Acc1Messenger.hh"
 #include "ML2Acc1.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 CML2Acc1Messenger::CML2Acc1Messenger(CML2Acc1 *acc1) : pAcc1(acc1)
 {
-	this->idEnergy=new G4UIcmdWithAnInteger("/accelerator/idEnergy",this);
-	this->idEnergy->SetDefaultValue(6);
-	this->pAcc1->setidEnergy(6);
+	idEnergy=new G4UIcmdWithAnInteger("/accelerator/idEnergy",this);
+	idEnergy->SetDefaultValue(6);
+	pAcc1->setidEnergy(6);
 
-	this->leavesA=new G4UIcmdWithADoubleAndUnit("/accelerator/leavesA", this);
-	this->leavesA->SetDefaultUnit("mm");
-	this->leavesA->SetDefaultValue(300.);
-	this->pAcc1->setLeavesAx(300.*mm);
+	leavesA=new G4UIcmdWithADoubleAndUnit("/accelerator/leavesA", this);
+	leavesA->SetDefaultUnit("mm");
+	leavesA->SetDefaultValue(300.);
+	pAcc1->setLeavesAx(300.*mm);
 
-	this->leavesB=new G4UIcmdWithADoubleAndUnit("/accelerator/leavesB", this);
-	this->leavesB->SetDefaultUnit("mm");
-	this->leavesB->SetDefaultValue(300.);
-	this->pAcc1->setLeavesBx(300.*mm);
+	leavesB=new G4UIcmdWithADoubleAndUnit("/accelerator/leavesB", this);
+	leavesB->SetDefaultUnit("mm");
+	leavesB->SetDefaultValue(300.);
+	pAcc1->setLeavesBx(300.*mm);
 
-	this->aperture1X=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture1X", this);
-	this->aperture1X->SetDefaultUnit("mm");
-	this->aperture1X->SetDefaultValue(100.);
-	this->pAcc1->setJaw1X(100.*mm);
+	aperture1X=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture1X", this);
+	aperture1X->SetDefaultUnit("mm");
+	aperture1X->SetDefaultValue(100.);
+	pAcc1->setJaw1X(100.*mm);
 
-	this->aperture1Y=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture1Y", this);
-	this->aperture1Y->SetDefaultUnit("mm");
-	this->aperture1Y->SetDefaultValue(100.);
-	this->pAcc1->setJaw1Y(100.*mm);
+	aperture1Y=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture1Y", this);
+	aperture1Y->SetDefaultUnit("mm");
+	aperture1Y->SetDefaultValue(100.);
+	pAcc1->setJaw1Y(100.*mm);
 
-	this->aperture2X=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture2X", this);
-	this->aperture2X->SetDefaultUnit("mm");
-	this->aperture2X->SetDefaultValue(-100.);
-	this->pAcc1->setJaw2X(-100.*mm);
+	aperture2X=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture2X", this);
+	aperture2X->SetDefaultUnit("mm");
+	aperture2X->SetDefaultValue(-100.);
+	pAcc1->setJaw2X(-100.*mm);
 
-	this->aperture2Y=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture2Y", this);
-	this->aperture2Y->SetDefaultUnit("mm");
-	this->aperture2Y->SetDefaultValue(-100.);
-	this->pAcc1->setJaw2Y(-100.*mm);
+	aperture2Y=new G4UIcmdWithADoubleAndUnit("/accelerator/aperture2Y", this);
+	aperture2Y->SetDefaultUnit("mm");
+	aperture2Y->SetDefaultValue(-100.);
+	pAcc1->setJaw2Y(-100.*mm);
 }
 
 CML2Acc1Messenger::~CML2Acc1Messenger(void)
@@ -96,37 +97,36 @@ CML2Acc1Messenger::~CML2Acc1Messenger(void)
 }
 void CML2Acc1Messenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
-	if (cmd==this->aperture1X)
+	if (cmd==aperture1X)
 	{
-		this->aperture1X->GetNewUnitValue(newValue);
-		this->pAcc1->setJaw1X(this->aperture1X->GetNewDoubleValue(newValue));
+		aperture1X->GetNewUnitValue(newValue);
+		pAcc1->setJaw1X(aperture1X->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==this->aperture1Y)
+	if (cmd==aperture1Y)
 	{
-		this->aperture1Y->GetNewUnitValue(newValue);
-		this->pAcc1->setJaw1Y(this->aperture1Y->GetNewDoubleValue(newValue));
+		aperture1Y->GetNewUnitValue(newValue);
+		pAcc1->setJaw1Y(aperture1Y->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==this->aperture2X)
+	if (cmd==aperture2X)
 	{
-		this->aperture2X->GetNewUnitValue(newValue);
-		this->pAcc1->setJaw2X(this->aperture2X->GetNewDoubleValue(newValue));
+		aperture2X->GetNewUnitValue(newValue);
+		pAcc1->setJaw2X(aperture2X->GetNewDoubleValue(newValue));
 	}
-	if (cmd==this->aperture2Y)
+	if (cmd==aperture2Y)
 	{
-		this->aperture2Y->GetNewUnitValue(newValue);
-		this->pAcc1->setJaw2Y(this->aperture2Y->GetNewDoubleValue(newValue));
+		aperture2Y->GetNewUnitValue(newValue);
+		pAcc1->setJaw2Y(aperture2Y->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==this->leavesA)
-	{this->pAcc1->setLeavesAx(this->leavesA->GetNewDoubleValue(newValue));}
+	if (cmd==leavesA)
+	{pAcc1->setLeavesAx(leavesA->GetNewDoubleValue(newValue));}
 
-	if (cmd==this->leavesB)
-	{this->pAcc1->setLeavesBx(this->leavesA->GetNewDoubleValue(newValue));}
+	if (cmd==leavesB)
+	{pAcc1->setLeavesBx(leavesA->GetNewDoubleValue(newValue));}
 
 
-	if (cmd==this->idEnergy)
-	{this->pAcc1->setidEnergy(this->idEnergy->GetNewIntValue(newValue));}
-
+	if (cmd==idEnergy)
+	{pAcc1->setidEnergy(idEnergy->GetNewIntValue(newValue));}
 }

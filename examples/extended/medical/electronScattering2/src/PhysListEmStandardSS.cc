@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.1 2011-01-05 18:48:54 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering2/src/PhysListEmStandardSS.cc
+/// \brief Implementation of the PhysListEmStandardSS class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -51,6 +53,8 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4EmProcessOptions.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,34 +87,36 @@ void PhysListEmStandardSS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
       pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
              
     } else if (particleName == "alpha" || particleName == "He3") {
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);          
-      pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->SetBuildTableFlag(false);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);      
+      pmanager->AddDiscreteProcess(cs);
 
     } else if (particleName == "GenericIon" ) { 
       G4CoulombScattering* cs = new G4CoulombScattering();
       cs->SetBuildTableFlag(false);
-      pmanager->AddDiscreteProcess(cs);
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);      
+      pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 

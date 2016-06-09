@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.38 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4ParticleTable
 //
@@ -55,6 +54,7 @@
 #include "G4ParticleMessenger.hh"
 #include "G4IonTable.hh"
 #include "G4ShortLivedTable.hh"
+#include "G4StateManager.hh"
 
 // Static class variable: ptr to single instance of class
 G4ParticleTable* G4ParticleTable::fgParticleTable =0;
@@ -89,7 +89,8 @@ G4ParticleTable::G4ParticleTable()
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
-  
+   readyToUse = false;
+   
    // remove all items from G4ParticleTable
    RemoveAllParticles();
 
@@ -175,6 +176,16 @@ void G4ParticleTable::DeleteMessenger()
 ////////////////////
 void G4ParticleTable::DeleteAllParticles()
 {
+  //set readyToUse false  
+  readyToUse = false;
+
+  //G4StateManager* pStateManager = G4StateManager::GetStateManager();
+  //G4ApplicationState currentState = pStateManager->GetCurrentState();
+  //if (currentState != G4State_Quit) {
+  //  G4Exception("G4ParticleTable::DeleteAllParticle()",
+  //		"PART114", JustWarning,
+  //		"Try to delete particles in state other than State_Quit");    
+  //}
 
 #ifdef G4VERBOSE
   if (verboseLevel>1){
@@ -194,14 +205,19 @@ void G4ParticleTable::DeleteAllParticles()
 #endif
     delete (piter->value());
   }
-
   RemoveAllParticles();
 }
 
 ////////////////////
 void G4ParticleTable::RemoveAllParticles()
 {
-
+  if (readyToUse) {
+    G4Exception("G4ParticleTable::RemoveAllParticle()",
+		"PART115", JustWarning,
+		"No effects because readyToUse is true.");    
+    return;
+  }
+  
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << "G4ParticleTable::RemoveAllParticles() " << G4endl;
@@ -216,7 +232,7 @@ void G4ParticleTable::RemoveAllParticles()
   // remomve all contents in hort Lived table 
   if (fShortLivedTable!=0) {
     fShortLivedTable->clear();
-  }
+ }
 
   // clear dictionary for encoding
   if (fEncodingDictionary) {
@@ -297,6 +313,26 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 {
+  if (readyToUse) {
+    G4StateManager* pStateManager = G4StateManager::GetStateManager();
+    G4ApplicationState currentState = pStateManager->GetCurrentState();
+    if (currentState != G4State_PreInit) {
+      G4String msg = "Request of removing ";
+      msg += particle->GetParticleName();  
+      msg += " has No effects other than Pre_Init";
+      G4Exception("G4ParticleTable::Remove()",
+		"PART117", JustWarning, msg);
+      return 0;
+    } else {
+#ifdef G4VERBOSE
+      if (verboseLevel>0){
+	G4cout << particle->GetParticleName()
+	       << " will be removed from the ParticleTable " << G4endl;
+      }
+#endif
+    }
+  }
+  
   G4PTblDictionary::iterator it =  fDictionary->find(GetKey(particle));
   if (it != fDictionary->end()) {
     fDictionary->erase(it);
@@ -502,10 +538,6 @@ void G4ParticleTable::CheckReadiness()
               "PART002",FatalException,msg);
   }
 }
-
-
-
-
 
 
 

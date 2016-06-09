@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4F18GEMProbability.cc,v 1.6 2009-09-15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
 
 #include "G4F18GEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4F18GEMProbability::G4F18GEMProbability() :
   G4GEMProbability(18,9,1.0) // A,Z,Spin

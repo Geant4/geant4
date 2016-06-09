@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.8 2006-06-29 15:57:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -42,6 +41,7 @@
 #include "GammaRayTelPrimaryGeneratorMessenger.hh"
 
 #include "GammaRayTelPrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"

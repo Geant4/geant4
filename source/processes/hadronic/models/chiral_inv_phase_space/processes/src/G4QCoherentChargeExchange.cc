@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.2 2010-01-14 11:24:36 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -59,6 +58,9 @@
 //#define ppdebug
 
 #include "G4QCoherentChargeExchange.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 //G4int    G4QCoherentChargeExchange::nPartCWorld=152;// #of particles initialized in CHIPS
@@ -73,6 +75,8 @@ std::vector<std::vector<G4double>*>G4QCoherentChargeExchange::IsoProbInEl;//SumP
 G4QCoherentChargeExchange::G4QCoherentChargeExchange(const G4String& processName)
   : G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QCoherentChargeExchange");
+
 #ifdef debug
   G4cout<<"G4QCohChargeEx::Constructor is called processName="<<processName<<G4endl;
 #endif

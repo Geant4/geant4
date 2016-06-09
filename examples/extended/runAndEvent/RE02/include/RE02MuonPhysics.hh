@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02MuonPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
+/// \file runAndEvent/RE02/include/RE02MuonPhysics.hh
+/// \brief Definition of the RE02MuonPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi
-
 
 #ifndef RE02MuonPhysics_h
 #define RE02MuonPhysics_h 1
@@ -43,6 +45,27 @@
 #include "G4MuIonisation.hh"
 #include "G4hIonisation.hh"
 
+//
+/// User muon physics constructor
+///
+///  applys related processes to mu and tau
+///
+/// - void ConstructParticle()
+///     does nothing
+///
+/// - void ConstructProcess()
+///     adds processes to each particle
+///     mu+:
+///       G4MuMultipleScattering, G4MuBremsstrahlung, G4MuPairProduction and
+///       G4MuIonisation
+///     mu-:
+///       G4MuMultipleScattering, G4MuBremsstrahlung, G4MuPairProduction and
+///       G4MuIonisation
+///     tau+:
+///       G4hMultipleScattering and G4hIonisation
+///     tau-:
+///       G4hMultipleScattering and G4hIonisation
+//
 class RE02MuonPhysics : public G4VPhysicsConstructor
 {
   public:
@@ -62,7 +85,6 @@ class RE02MuonPhysics : public G4VPhysicsConstructor
   protected:
 
 };
-
 
 #endif
 

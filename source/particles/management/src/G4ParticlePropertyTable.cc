@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyTable.cc,v 1.4 2007-03-11 07:17:35 kurasige Exp $
+// $Id$
 //
 // class G4ParticlePropertyTable
 //

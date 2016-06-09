@@ -134,15 +134,14 @@ In order to generate histograms, at least one of the AIDA implementations should
   
 The code should be compiled with gmake and run with :
 
-> $G4WORDIR/bin/$G4SYSTEM/Microbeam
+> $G4WORDIR/bin/$G4SYSTEM/microbeam
 
 The macro file microbeam.mac is read by default.
 
 
 ---->5. PHYSICS
 
-Livermore, Binary and Binary_ion physics lists are used by default,
-see microbeam.mac
+Livermore physics list is used by default, see microbeam.mac
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGViewer.cc,v 1.5 2010-10-06 10:12:03 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  10th March 2006
@@ -105,7 +104,7 @@ void G4XXXSGViewer::KernelVisitDecision () {
 
   SceneGraph& sceneGraph =
     static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
-  if (sceneGraph.daughters.size() == 3  // I.e., only the root nodes.
+  if (sceneGraph.fDaughters.size() == 3  // I.e., only the root nodes.
       // (The above needs re-thinking.)
       || CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();  // Sets fNeedKernelVisit.
@@ -133,7 +132,9 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       ) {
     return true;
   }

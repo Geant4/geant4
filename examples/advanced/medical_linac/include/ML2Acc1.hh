@@ -69,16 +69,16 @@ public:
 	static CML2Acc1* GetInstance(void);
 	void Construct(G4VPhysicalVolume *PVWorld, G4double isoCentre);
 	void reset();
-	inline void setJaw1X(G4double val){this->jaw1XAperture=val;};
-	inline void setJaw2X(G4double val){this->jaw2XAperture=val;};
-	inline void setJaw1Y(G4double val){this->jaw1YAperture=val;};
-	inline void setJaw2Y(G4double val){this->jaw2YAperture=val;};
-	inline void setIsoCentre(G4double val){this->isoCentre=val;};
-	inline void setidEnergy(G4int val){this->idEnergy=val;};
-	inline void setLeavesAx(G4double val){this->leavesA.push_back(val);};
-	inline void setLeavesBx(G4double val){this->leavesB.push_back(val);};
-	inline int getidEnergy(){return this->idEnergy;};
-	G4double getBeforeJaws_Z_PhaseSpacePosition(){return 215.;};
+	inline void setJaw1X(G4double val){jaw1XAperture=val;}
+	inline void setJaw2X(G4double val){jaw2XAperture=val;}
+	inline void setJaw1Y(G4double val){jaw1YAperture=val;}
+	inline void setJaw2Y(G4double val){jaw2YAperture=val;}
+	inline void setIsoCentre(G4double val){isoCentre=val;}
+	inline void setidEnergy(G4int val){idEnergy=val;}
+	inline void setLeavesAx(G4double val){leavesA.push_back(val);}
+	inline void setLeavesBx(G4double val){leavesB.push_back(val);}
+	inline int getidEnergy(){return idEnergy;}
+	G4double getBeforeJaws_Z_PhaseSpacePosition(){return 215.;}
 	void writeInfo();
 private:
 	G4double jaw1XAperture, jaw2XAperture, jaw1YAperture, jaw2YAperture, isoCentre; 
@@ -100,7 +100,28 @@ private:
 	bool Jaw1Y();
 	bool Jaw2Y();
 	bool MLC();
+
 	G4VPhysicalVolume * PVWorld;
+        G4VPhysicalVolume *targetA_phys;
+        G4VPhysicalVolume *targetB_phys;
+        G4VPhysicalVolume *UpperCollimator_phys;
+        G4VPhysicalVolume *CylMinusCone_phys;
+        G4VPhysicalVolume *BeWTubePV;
+        G4VPhysicalVolume *FFL1A_1PV;
+        G4VPhysicalVolume *FFL2_1PV;
+        G4VPhysicalVolume *PCUtubeW1PV;
+        G4VPhysicalVolume *PCUtubeP1PV;
+        G4VPhysicalVolume *PCUtubeW2PV;
+        G4VPhysicalVolume *PCUtubeP2PV;
+        G4VPhysicalVolume *PCUtubeW3PV;
+        G4VPhysicalVolume *PCUtubeP3PV;
+        G4VPhysicalVolume *MirrorTubePV;
+        G4VPhysicalVolume *phVol1X;
+        G4VPhysicalVolume *phVol2X;
+        G4VPhysicalVolume *phVol1Y;
+        G4VPhysicalVolume *phVol2Y;
+        G4VPhysicalVolume *leafPhys;
+
 };
 
 #endif

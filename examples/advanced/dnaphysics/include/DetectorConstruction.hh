@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.hh,v 1.3 2010/06/12 09:38:06 vnivanch Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -46,6 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Region;
+class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -56,6 +57,9 @@ public:
   ~DetectorConstruction();
 
   G4VPhysicalVolume* Construct();
+  
+  void SetMaterial (G4String);            
+  void UpdateGeometry();
                          
 private:
    
@@ -72,5 +76,7 @@ private:
   void DefineMaterials();
 
   G4VPhysicalVolume* ConstructDetector();     
+  DetectorMessenger*  fDetectorMessenger;
+
 };
 #endif

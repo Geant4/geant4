@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCrossSurfChecker.cc,v 1.2 2009-11-18 18:04:11 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -34,12 +33,14 @@
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////
 
-#include"G4AdjointCrossSurfChecker.hh"
-#include"G4Step.hh"
-#include"G4StepPoint.hh"
-#include"G4PhysicalVolumeStore.hh" 
-#include"G4VSolid.hh"
-#include"G4AffineTransform.hh"
+#include "G4AdjointCrossSurfChecker.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
+#include "G4PhysicalVolumeStore.hh" 
+#include "G4VSolid.hh"
+#include "G4AffineTransform.hh"
 
 //////////////////////////////////////////////////////////////////////////////
 // 
@@ -283,8 +284,7 @@ G4bool G4AdjointCrossSurfChecker::AddaSphericalSurfaceWithCenterAtTheCenterOfAVo
   	G4VPhysicalVolume* daughter =thePhysicalVolume;
  	G4LogicalVolume* mother = thePhysicalVolume->GetMotherLogical();
  	G4AffineTransform theTransformationFromPhysVolToWorld = G4AffineTransform();
- 	G4PhysicalVolumeStore* thePhysVolStore =G4PhysicalVolumeStore::GetInstance();
-	 while (mother){
+	while (mother){
  		theTransformationFromPhysVolToWorld *=
 		G4AffineTransform(daughter->GetFrameRotation(),daughter->GetObjectTranslation());
  		/*G4cout<<"Mother "<<mother->GetName()<<std::endl;

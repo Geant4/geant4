@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.cc,v 1.5 2009-04-12 17:09:57 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +48,8 @@
 
 #include <CLHEP/Random/RandGamma.h>
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RandomDirection.hh"
 #include "Randomize.hh"
 
@@ -97,10 +98,10 @@ G4double G4HeatedKleinNishinaCompton::ComputeCrossSectionPerAtom(
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
-  G4double CrossSection = 0.0 ;
-  if ( Z < 0.9999 )                 return CrossSection;
-  if ( GammaEnergy < 0.01*keV      ) return CrossSection;
-  //  if ( GammaEnergy > (100.*GeV/Z) ) return CrossSection;
+  G4double xSection = 0.0 ;
+  if ( Z < 0.9999 )                 return xSection;
+  if ( GammaEnergy < 0.01*keV      ) return xSection;
+  //  if ( GammaEnergy > (100.*GeV/Z) ) return xSection;
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
   
@@ -116,7 +117,7 @@ G4double G4HeatedKleinNishinaCompton::ComputeCrossSectionPerAtom(
   if (Z < 1.5) T0 = 40.0*keV; 
 
   G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
-  CrossSection = p1Z*std::log(1.+2.*X)/X
+  xSection = p1Z*std::log(1.+2.*X)/X
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 		
   //  modification for low energy. (special case for Hydrogen)
@@ -125,14 +126,14 @@ G4double G4HeatedKleinNishinaCompton::ComputeCrossSectionPerAtom(
     X = (T0+dT0) / electron_mass_c2 ;
     G4double sigma = p1Z*log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
-    G4double   c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);             
+    G4double   c1 = -T0*(sigma-xSection)/(xSection*dT0);             
     G4double   c2 = 0.150; 
     if (Z > 1.5) c2 = 0.375-0.0556*log(Z);
     G4double    y = log(GammaEnergy/T0);
-    CrossSection *= exp(-y*(c1+c2*y));          
+    xSection *= exp(-y*(c1+c2*y));          
   }
-  //  G4cout << "e= " << GammaEnergy << " Z= " << Z << " cross= " << CrossSection << G4endl;
-  return CrossSection;
+  //  G4cout << "e= " << GammaEnergy << " Z= " << Z << " cross= " << xSection << G4endl;
+  return xSection;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -181,16 +182,16 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
 
   G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
-  G4double epsilon0   = 1./(1. + 2.*E0_m);
-  G4double epsilon0sq = epsilon0*epsilon0;
-  G4double alpha1     = - log(epsilon0);
+  G4double eps0       = 1./(1. + 2.*E0_m);
+  G4double epsilon0sq = eps0*eps0;
+  G4double alpha1     = - log(eps0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
 
   do 
   {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) 
     {
-      epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
+      epsilon   = exp(-alpha1*G4UniformRand());   // eps0**r
       epsilonsq = epsilon*epsilon; 
 
     } 

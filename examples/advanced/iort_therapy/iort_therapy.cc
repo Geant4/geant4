@@ -82,12 +82,18 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include <ctime>
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc ,char ** argv)
 {
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+
+  //imported from eliot_geant4.9.3p01// to create a different seed
+  G4int seed = time(NULL); 
+  CLHEP::HepRandom::setTheSeed(seed);
+  //imported from eliot_geant4.9.3p01
         
    G4RunManager* runManager = new G4RunManager;
   // Geometry controller is responsible for instantiating the
@@ -146,12 +152,12 @@ int main(int argc ,char ** argv)
   IORTInteractionParameters* pInteraction = new IORTInteractionParameters(true);
 	
   // Initialize analysis
-/*
-  IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
+
 #ifdef G4ANALYSIS_USE_ROOT
+  IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
   analysis -> book();
 #endif
-*/
+
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;

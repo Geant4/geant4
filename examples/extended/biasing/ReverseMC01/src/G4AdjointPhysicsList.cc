@@ -23,78 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhysicsList.cc,v 1.3 2010-11-11 14:39:42 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/src/G4AdjointPhysicsList.cc
+/// \brief Implementation of the G4AdjointPhysicsList class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	G4AdjointPhysicsList
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        G4AdjointPhysicsList
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4AdjointPhysicsList.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4AdjointPhysicsMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-G4AdjointPhysicsList::G4AdjointPhysicsList():  G4VUserPhysicsList()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4AdjointPhysicsList::G4AdjointPhysicsList()
+ :G4VUserPhysicsList(),
+  fEminusIonisation(0),fPIonisation(0),
+  fUse_eionisation(true),fUse_pionisation(true),
+  fUse_brem(true),fUse_compton(true),fUse_ms(true),
+  fUse_egain_fluctuation(true),fUse_peeffect(true),
+  fEmin_adj_models(1.*keV), fEmax_adj_models(1.*MeV),
+  fCS_biasing_factor_compton(1.),fCS_biasing_factor_brem(1.),
+  fCS_biasing_factor_ionisation(1.),fCS_biasing_factor_PEeffect(1.)
 {
- defaultCutValue = 1.0*mm;
- SetVerboseLevel(1);
- theeminusIonisation =0;
- thepIonisation =0;
- 
- use_eionisation = true;
- use_pionisation = false;
- use_brem = true;
- use_compton = true; 
- use_ms = true; 
- use_egain_fluctuation = true;
- use_peeffect = true;
- 
- 
- emin_adj_models = 1.*keV;
- emax_adj_models = 1.*MeV;
- 
- CS_biasing_factor_compton =1.;
- CS_biasing_factor_brem =1.;
- CS_biasing_factor_ionisation =1.;
- CS_biasing_factor_PEeffect =1.;
- 
- 
- thePhysicsMessenger = new G4AdjointPhysicsMessenger(this);
- 
- 
+  defaultCutValue = 1.0*mm;
+  SetVerboseLevel(1);
+  fPhysicsMessenger = new G4AdjointPhysicsMessenger(this);
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4AdjointPhysicsList::~G4AdjointPhysicsList()
-{}
+{
+}
 void G4AdjointPhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
   // created in the program. 
-
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
   ConstructAdjointParticles();
-  
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::SetLossFluctuationFlag(bool aBool)
-{if (theeminusIonisation) theeminusIonisation->SetLossFluctuations(aBool);
+{
+ if (fEminusIonisation) fEminusIonisation->SetLossFluctuations(aBool);
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::ConstructBosons()
 {
   // pseudo-particles
@@ -103,15 +97,13 @@ void G4AdjointPhysicsList::ConstructBosons()
 
   // gamma
   G4Gamma::GammaDefinition();
-  
-  
- 
-   
+
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::ConstructLeptons()
 {
   // leptons
@@ -126,11 +118,11 @@ void G4AdjointPhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::ConstructMesons()
 {
- //  mesons
+//  mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -143,8 +135,9 @@ void G4AdjointPhysicsList::ConstructMesons()
   G4KaonZeroLong::KaonZeroLongDefinition();
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::ConstructBaryons()
 {
 //  barions
@@ -152,15 +145,13 @@ void G4AdjointPhysicsList::ConstructBaryons()
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
-  
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include"G4AdjointGamma.hh"
 #include"G4AdjointElectron.hh"
 #include"G4AdjointProton.hh"
-
-
 void G4AdjointPhysicsList::ConstructAdjointParticles()
 {
 // adjoint_gammma
@@ -169,14 +160,12 @@ void G4AdjointPhysicsList::ConstructAdjointParticles()
 // adjoint_electron
   G4AdjointElectron::AdjointElectronDefinition();
   
-  
 // adjoint_proton
   G4AdjointProton::AdjointProtonDefinition();
-  
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::ConstructProcess()
 {
   AddTransportation();
@@ -184,6 +173,7 @@ void G4AdjointPhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4PEEffectModel.hh"
 #include "G4ComptonScattering.hh"
@@ -197,7 +187,6 @@ void G4AdjointPhysicsList::ConstructProcess()
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
-
 
 #include "G4ContinuousGainOfEnergy.hh"
 #include "G4eInverseIonisation.hh"
@@ -218,8 +207,7 @@ void G4AdjointPhysicsList::ConstructProcess()
 
 #include "G4AdjointSimManager.hh"
 #include "G4AdjointProcessEquivalentToDirectProcess.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
+
 void G4AdjointPhysicsList::ConstructEM()
 { G4AdjointCSManager* theCSManager = G4AdjointCSManager::GetAdjointCSManager();
   
@@ -227,83 +215,74 @@ void G4AdjointPhysicsList::ConstructEM()
   
   theCSManager->RegisterAdjointParticle(G4AdjointElectron::AdjointElectron());
   
-  
-  if (use_brem || use_peeffect ||use_compton) theCSManager->RegisterAdjointParticle(G4AdjointGamma::AdjointGamma()); 
-  if (use_eionisation) {
-  	if (!theeminusIonisation) theeminusIonisation  = new G4eIonisation();
-	theeminusIonisation->SetLossFluctuations(use_egain_fluctuation);
+  if (fUse_brem || fUse_peeffect ||fUse_compton)
+              theCSManager->RegisterAdjointParticle(G4AdjointGamma::AdjointGamma());
+
+  if (fUse_eionisation) {
+          if (!fEminusIonisation) fEminusIonisation  = new G4eIonisation();
+        fEminusIonisation->SetLossFluctuations(fUse_egain_fluctuation);
   }
-  if (use_pionisation) {
-  	if (!thepIonisation) thepIonisation  = new G4hIonisation();
-	thepIonisation->SetLossFluctuations(use_egain_fluctuation);
-	theCSManager->RegisterAdjointParticle(G4AdjointProton::AdjointProton());
-  }	
-  
+
+  if (fUse_pionisation) {
+          if (!fPIonisation) fPIonisation  = new G4hIonisation();
+        fPIonisation->SetLossFluctuations(fUse_egain_fluctuation);
+        theCSManager->RegisterAdjointParticle(G4AdjointProton::AdjointProton());
+  }        
   
   G4eBremsstrahlung* theeminusBremsstrahlung = 0;
-  if (use_brem && use_eionisation) {
-  	theeminusBremsstrahlung = new G4eBremsstrahlung();
-	
-  }	
+  if (fUse_brem && fUse_eionisation)
+                  theeminusBremsstrahlung = new G4eBremsstrahlung();
   
   G4ComptonScattering* theComptonScattering =0;
-  if (use_compton) theComptonScattering = new G4ComptonScattering();
+  if (fUse_compton) theComptonScattering = new G4ComptonScattering();
   
   G4PhotoElectricEffect* thePEEffect =0;
-  if (use_peeffect) thePEEffect = new G4PhotoElectricEffect();
-  
+  if (fUse_peeffect) thePEEffect = new G4PhotoElectricEffect();
   
   G4eMultipleScattering* theeminusMS = 0;
   G4hMultipleScattering* thepMS= 0;
-  if (use_ms) {
-   	theeminusMS = new G4eMultipleScattering();
-  	thepMS = new G4hMultipleScattering();
-  }	
-  
-  
-  
-  	
+  if (fUse_ms) {
+           theeminusMS = new G4eMultipleScattering();
+          thepMS = new G4hMultipleScattering();
+  }        
   
   G4VProcess*  theGammaConversion =0;
-  if (use_gamma_conversion) theGammaConversion = new G4GammaConversion();					
-  
-  
-  
-  
+  if (fUse_gamma_conversion) theGammaConversion = new G4GammaConversion();                                        
  
-
   //Define adjoint e- ionisation
   //-------------------
   G4AdjointeIonisationModel* theeInverseIonisationModel = 0;
   G4eInverseIonisation* theeInverseIonisationProjToProjCase = 0 ;
   G4eInverseIonisation* theeInverseIonisationProdToProjCase = 0;
-  if (use_eionisation) {
-  	theeInverseIonisationModel = new G4AdjointeIonisationModel();
-  	theeInverseIonisationModel->SetHighEnergyLimit(emax_adj_models);
-  	theeInverseIonisationModel->SetLowEnergyLimit(emin_adj_models);
-	theeInverseIonisationModel->SetCSBiasingFactor(CS_biasing_factor_ionisation);
-  	theeInverseIonisationProjToProjCase = new G4eInverseIonisation(true,"Inv_eIon",theeInverseIonisationModel);
-  	theeInverseIonisationProdToProjCase = new G4eInverseIonisation(false,"Inv_eIon1",theeInverseIonisationModel);
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
-  }	
-  
-  
+  if (fUse_eionisation) {
+          theeInverseIonisationModel = new G4AdjointeIonisationModel();
+          theeInverseIonisationModel->SetHighEnergyLimit(fEmax_adj_models);
+          theeInverseIonisationModel->SetLowEnergyLimit(fEmin_adj_models);
+        theeInverseIonisationModel->SetCSBiasingFactor(fCS_biasing_factor_ionisation);
+          theeInverseIonisationProjToProjCase =
+                   new G4eInverseIonisation(true,"Inv_eIon",theeInverseIonisationModel);
+          theeInverseIonisationProdToProjCase =
+              new G4eInverseIonisation(false,"Inv_eIon1",theeInverseIonisationModel);
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
+  }        
+
   //Define  adjoint Bremsstrahlung
   //-------------------------------
-  
   G4AdjointBremsstrahlungModel* theeInverseBremsstrahlungModel = 0;
-  
   G4eInverseBremsstrahlung* theeInverseBremsstrahlungProjToProjCase = 0;
   G4eInverseBremsstrahlung* theeInverseBremsstrahlungProdToProjCase = 0; 
-  if (use_brem && use_eionisation) {
-  	theeInverseBremsstrahlungModel = new G4AdjointBremsstrahlungModel();
-  	theeInverseBremsstrahlungModel->SetHighEnergyLimit(emax_adj_models);
-  	theeInverseBremsstrahlungModel->SetLowEnergyLimit(emin_adj_models);
-	theeInverseBremsstrahlungModel->SetCSBiasingFactor( CS_biasing_factor_brem);
-	theeInverseBremsstrahlungProjToProjCase = new G4eInverseBremsstrahlung(true,"Inv_eBrem",theeInverseBremsstrahlungModel);
-  	theeInverseBremsstrahlungProdToProjCase = new G4eInverseBremsstrahlung(false,"Inv_eBrem1",theeInverseBremsstrahlungModel);
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("gamma"));
+
+  if (fUse_brem && fUse_eionisation) {
+          theeInverseBremsstrahlungModel = new G4AdjointBremsstrahlungModel();
+          theeInverseBremsstrahlungModel->SetHighEnergyLimit(fEmax_adj_models);
+          theeInverseBremsstrahlungModel->SetLowEnergyLimit(fEmin_adj_models);
+        theeInverseBremsstrahlungModel->SetCSBiasingFactor( fCS_biasing_factor_brem);
+        theeInverseBremsstrahlungProjToProjCase = new G4eInverseBremsstrahlung(
+                                          true,"Inv_eBrem",theeInverseBremsstrahlungModel);
+          theeInverseBremsstrahlungProdToProjCase = new G4eInverseBremsstrahlung(false,
+                                                 "Inv_eBrem1",theeInverseBremsstrahlungModel);
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("gamma"));
   }
   
   
@@ -313,50 +292,57 @@ void G4AdjointPhysicsList::ConstructEM()
   G4AdjointComptonModel* theeInverseComptonModel = 0;
   G4eInverseCompton* theeInverseComptonProjToProjCase = 0;
   G4eInverseCompton* theeInverseComptonProdToProjCase = 0;
-  if (use_compton) { 
-   	theeInverseComptonModel = new G4AdjointComptonModel();
-	theeInverseComptonModel->SetHighEnergyLimit(emax_adj_models);
-  	theeInverseComptonModel->SetLowEnergyLimit(emin_adj_models);
-	theeInverseComptonModel->SetDirectProcess(theComptonScattering);
-	theeInverseComptonModel->SetUseMatrix(false);
-	theeInverseComptonModel->SetCSBiasingFactor( CS_biasing_factor_compton);
-  	theeInverseComptonProjToProjCase = new G4eInverseCompton(true,"Inv_Compt",theeInverseComptonModel);
-	theeInverseComptonProdToProjCase = new G4eInverseCompton(false,"Inv_Compt1",theeInverseComptonModel);
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("gamma"));
-	
+
+  if (fUse_compton) { 
+           theeInverseComptonModel = new G4AdjointComptonModel();
+        theeInverseComptonModel->SetHighEnergyLimit(fEmax_adj_models);
+          theeInverseComptonModel->SetLowEnergyLimit(fEmin_adj_models);
+        theeInverseComptonModel->SetDirectProcess(theComptonScattering);
+        theeInverseComptonModel->SetUseMatrix(false);
+        theeInverseComptonModel->SetCSBiasingFactor( fCS_biasing_factor_compton);
+          theeInverseComptonProjToProjCase = new G4eInverseCompton(true,"Inv_Compt",
+                                                       theeInverseComptonModel);
+        theeInverseComptonProdToProjCase = new G4eInverseCompton(false,"Inv_Compt1",
+                                                                   theeInverseComptonModel);
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("gamma"));
+        
   }
+
   //Define  adjoint PEEffect
   //---------------------
-  
   G4AdjointPhotoElectricModel* theInversePhotoElectricModel = 0;
   G4InversePEEffect* theInversePhotoElectricProcess = 0;
   
-  if (use_peeffect) { 
-   	theInversePhotoElectricModel = new G4AdjointPhotoElectricModel();
-  	theInversePhotoElectricModel->SetHighEnergyLimit(emax_adj_models);
-  	theInversePhotoElectricModel->SetLowEnergyLimit(emin_adj_models);
-	theInversePhotoElectricModel->SetCSBiasingFactor(CS_biasing_factor_PEeffect);
-	theInversePhotoElectricProcess = new G4InversePEEffect("Inv_PEEffect",theInversePhotoElectricModel);
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("gamma"));
-	
+  if (fUse_peeffect) { 
+           theInversePhotoElectricModel = new G4AdjointPhotoElectricModel();
+          theInversePhotoElectricModel->SetHighEnergyLimit(fEmax_adj_models);
+          theInversePhotoElectricModel->SetLowEnergyLimit(fEmin_adj_models);
+        theInversePhotoElectricModel->SetCSBiasingFactor(fCS_biasing_factor_PEeffect);
+        theInversePhotoElectricProcess = new G4InversePEEffect("Inv_PEEffect",
+                                                              theInversePhotoElectricModel);
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("gamma"));
+        
   }
   
+
   //Define  adjoint ionisation for protons
   //---------------------
    G4AdjointhIonisationModel* thepInverseIonisationModel = 0;
    G4hInverseIonisation* thepInverseIonisationProjToProjCase = 0 ;
    G4hInverseIonisation* thepInverseIonisationProdToProjCase = 0;
-   if (use_pionisation) {
-  	thepInverseIonisationModel = new G4AdjointhIonisationModel(G4Proton::Proton());
-	thepInverseIonisationModel->SetHighEnergyLimit(emax_adj_models);
-  	thepInverseIonisationModel->SetLowEnergyLimit(emin_adj_models);
-	thepInverseIonisationModel->SetUseMatrix(false);
-  	thepInverseIonisationProjToProjCase = new G4hInverseIonisation(true,"Inv_pIon",thepInverseIonisationModel);
-  	thepInverseIonisationProdToProjCase = new G4hInverseIonisation(false,"Inv_pIon1",thepInverseIonisationModel);
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
-	theAdjointSimManager->ConsiderParticleAsPrimary(G4String("proton"));
+   if (fUse_pionisation) {
+          thepInverseIonisationModel = new G4AdjointhIonisationModel(G4Proton::Proton());
+        thepInverseIonisationModel->SetHighEnergyLimit(fEmax_adj_models);
+          thepInverseIonisationModel->SetLowEnergyLimit(fEmin_adj_models);
+        thepInverseIonisationModel->SetUseMatrix(false);
+          thepInverseIonisationProjToProjCase = new G4hInverseIonisation(true,
+                                                       "Inv_pIon",thepInverseIonisationModel);
+          thepInverseIonisationProdToProjCase = new G4hInverseIonisation(false,
+                                                      "Inv_pIon1",thepInverseIonisationModel);
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("e-"));
+        theAdjointSimManager->ConsiderParticleAsPrimary(G4String("proton"));
   }
   ; 
   
@@ -365,311 +351,274 @@ void G4AdjointPhysicsList::ConstructEM()
   //--------------------------------------------------------
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
-    	G4ParticleDefinition* particle = theParticleIterator->value();
-    	G4ProcessManager* pmanager = particle->GetProcessManager();
-	if (!pmanager) {
-		pmanager = new G4ProcessManager(particle);
-		particle->SetProcessManager(pmanager);
-	}	
-	
-	
-    	G4String particleName = particle->GetParticleName();
-	//G4cout<<particleName<<std::endl;
-    	
-    	if (particleName == "e-") {
-       		if (use_ms && use_eionisation) { 
-        		pmanager->AddProcess(theeminusMS);
-		}	
-		if (use_eionisation){
-		 	pmanager->AddProcess(theeminusIonisation); 
-		 	G4AdjointCSManager::GetAdjointCSManager()->RegisterEnergyLossProcess(theeminusIonisation,particle);
-		 
-		}	 
-		if (use_brem && use_eionisation) {
-			pmanager->AddProcess(theeminusBremsstrahlung);
-			G4AdjointCSManager::GetAdjointCSManager()->RegisterEnergyLossProcess(theeminusBremsstrahlung,particle);
-		}	
-	
-	
-		G4int n_order=0;
-		if (use_ms && use_eionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(theeminusMS, idxAlongStep,n_order);
-		}	
-		if (use_eionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(theeminusIonisation,idxAlongStep,n_order);
-		}
-		if (use_brem && use_eionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(theeminusBremsstrahlung,idxAlongStep,n_order);
-		}
-	
-		n_order=0;
-		if (use_ms && use_eionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(theeminusMS,         idxPostStep,n_order);
-		}
-		if (use_eionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(theeminusIonisation,idxPostStep,n_order);
-		}
-		if (use_brem && use_eionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(theeminusBremsstrahlung,idxPostStep,n_order);
-		}
-	
-		
-	
-	
-
-    	}
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+        if (!pmanager) {
+         pmanager = new G4ProcessManager(particle);
+         particle->SetProcessManager(pmanager);
+        }        
+        
+    G4String particleName = particle->GetParticleName();
+        if (particleName == "e-") {
+      if (fUse_ms && fUse_eionisation) pmanager->AddProcess(theeminusMS);
+        
+          if (fUse_eionisation){
+            pmanager->AddProcess(fEminusIonisation);
+                G4AdjointCSManager::GetAdjointCSManager()->
+                                               RegisterEnergyLossProcess(fEminusIonisation,particle);
+          }
+          if (fUse_brem && fUse_eionisation) {
+                pmanager->AddProcess(theeminusBremsstrahlung);
+                G4AdjointCSManager::GetAdjointCSManager()->
+                                        RegisterEnergyLossProcess(theeminusBremsstrahlung,particle);
+          }
+        
+          G4int n_order=0;
+          if (fUse_ms && fUse_eionisation) {
+            n_order++;
+                pmanager->SetProcessOrdering(theeminusMS, idxAlongStep,n_order);
+          }
+          if (fUse_eionisation) {
+                n_order++;
+                pmanager->SetProcessOrdering(fEminusIonisation,idxAlongStep,n_order);
+          }
+          if (fUse_brem && fUse_eionisation) {
+                n_order++;
+                pmanager->SetProcessOrdering(theeminusBremsstrahlung,idxAlongStep,
+                                                                                           n_order);
+          }
+        
+          n_order=0;
+          if (fUse_ms && fUse_eionisation) {
+            n_order++;
+                pmanager->SetProcessOrdering(theeminusMS,idxPostStep,n_order);
+          }
+          if (fUse_eionisation) {
+            n_order++;
+            pmanager->SetProcessOrdering(fEminusIonisation,idxPostStep,n_order);
+          }
+          if (fUse_brem && fUse_eionisation) {
+            n_order++;
+                pmanager->SetProcessOrdering(theeminusBremsstrahlung,idxPostStep,
+                                                                                           n_order);
+          }
+        }
     
-    	if (particleName == "adj_e-") {
-	        G4ContinuousGainOfEnergy* theContinuousGainOfEnergy =0;
-   		if (use_eionisation ) {
-			theContinuousGainOfEnergy= new G4ContinuousGainOfEnergy();
-			theContinuousGainOfEnergy->SetLossFluctuations(use_egain_fluctuation);
-			theContinuousGainOfEnergy->SetDirectEnergyLossProcess(theeminusIonisation);
-			theContinuousGainOfEnergy->SetDirectParticle(G4Electron::Electron());
-			pmanager->AddProcess(theContinuousGainOfEnergy);
-		}	
-		G4int n_order=0;
+        if (particleName == "adj_e-") {
+          G4ContinuousGainOfEnergy* theContinuousGainOfEnergy =0;
+             if (fUse_eionisation ) {
+            theContinuousGainOfEnergy= new G4ContinuousGainOfEnergy();
+                theContinuousGainOfEnergy->SetLossFluctuations(fUse_egain_fluctuation);
+                theContinuousGainOfEnergy->SetDirectEnergyLossProcess(fEminusIonisation);
+                        theContinuousGainOfEnergy->SetDirectParticle(G4Electron::Electron());
+                        pmanager->AddProcess(theContinuousGainOfEnergy);
+          }
+          G4int n_order=0;
+                
+          if (fUse_ms) {
+                n_order++;
+                pmanager->AddProcess(theeminusMS);
+                pmanager->SetProcessOrdering(theeminusMS, idxAlongStep,n_order);
+          }
 
-		//G4AdjointProcessEquivalentToDirectProcess* the_eminus_adjMS=0;
+          n_order++;
+          pmanager->SetProcessOrdering(theContinuousGainOfEnergy,idxAlongStep,
+                                                                                       n_order);
+                
+          n_order++;
+          G4AdjointAlongStepWeightCorrection* theAlongStepWeightCorrection =
+                                                       new G4AdjointAlongStepWeightCorrection();
+          pmanager->AddProcess(theAlongStepWeightCorrection);
+          pmanager->SetProcessOrdering(theAlongStepWeightCorrection,idxAlongStep,
+                                                                                        n_order);
+                
+          n_order=0;
+          if (fUse_eionisation) {
+            pmanager->AddProcess(theeInverseIonisationProjToProjCase);
+                pmanager->AddProcess(theeInverseIonisationProdToProjCase);
+                n_order++;
+                pmanager->SetProcessOrdering(theeInverseIonisationProjToProjCase,
+                                                                               idxPostStep,n_order);
+                n_order++;
+                pmanager->SetProcessOrdering(theeInverseIonisationProdToProjCase,
+                                                                               idxPostStep,n_order);
+          }
+                
+          if (fUse_brem && fUse_eionisation) {
+            pmanager->AddProcess(theeInverseBremsstrahlungProjToProjCase);
+                n_order++;
+                pmanager->SetProcessOrdering(theeInverseBremsstrahlungProjToProjCase,
+                                                                               idxPostStep,n_order);
+          }
 
-		
-		if (use_ms) {
-			n_order++;
-			/*the_eminus_adjMS =  
-			new G4AdjointProcessEquivalentToDirectProcess(G4String("adjoint_e-_MS"),theeminusMS,G4Electron::Electron());
-			pmanager->AddProcess(the_eminus_adjMS);
-			pmanager->SetProcessOrdering(the_eminus_adjMS, idxAlongStep,n_order);*/
-			pmanager->AddProcess(theeminusMS);
-			pmanager->SetProcessOrdering(theeminusMS, idxAlongStep,n_order);
-		}
-		n_order++;
-		pmanager->SetProcessOrdering(theContinuousGainOfEnergy,         idxAlongStep,n_order);
-		
-		n_order++;
-		G4AdjointAlongStepWeightCorrection* theAlongStepWeightCorrection = new G4AdjointAlongStepWeightCorrection();
-		pmanager->AddProcess(theAlongStepWeightCorrection);
-		pmanager->SetProcessOrdering(theAlongStepWeightCorrection,idxAlongStep,n_order);
-		
-		
-		n_order=0;
-		if (use_eionisation) {
-			pmanager->AddProcess(theeInverseIonisationProjToProjCase);
-			pmanager->AddProcess(theeInverseIonisationProdToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(theeInverseIonisationProjToProjCase, idxPostStep,n_order);
-			n_order++;
-			pmanager->SetProcessOrdering(theeInverseIonisationProdToProjCase, idxPostStep,n_order);
-		
-		}
-		if (use_brem && use_eionisation) {
-	
-			pmanager->AddProcess(theeInverseBremsstrahlungProjToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(theeInverseBremsstrahlungProjToProjCase, idxPostStep,n_order);
-		
-	
-		}
-		if (use_compton) {
-	
-			pmanager->AddProcess(theeInverseComptonProdToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(theeInverseComptonProdToProjCase, idxPostStep,n_order);
-		
-	
-		}
-		if (use_peeffect) {
-       			pmanager->AddDiscreteProcess(theInversePhotoElectricProcess);
-			n_order++;
-			pmanager->SetProcessOrdering(theInversePhotoElectricProcess, idxPostStep,n_order);
-		}
-		if (use_pionisation) {
-		
-			pmanager->AddProcess(thepInverseIonisationProdToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(thepInverseIonisationProdToProjCase, idxPostStep,n_order);
-		
-		
-		}
-		/*if (use_ion) {
-		
-			pmanager->AddProcess(theIonInverseIonisationProdToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(theIonInverseIonisationProdToProjCase, idxPostStep,n_order);
-		
-		}
-		*/
-		
-		
-		if (use_ms && use_eionisation) {
-			n_order++;
-			//pmanager->SetProcessOrdering(the_eminus_adjMS,idxPostStep,n_order);
-			pmanager->SetProcessOrdering(theeminusMS,idxPostStep,n_order);
-		}
-		
-		
-		
-		
-		
-			
-	
-	
-	
-	
-   	}
-	
-   	
-	if (particleName == "adj_gamma") {
-		G4int n_order=0;
-		G4AdjointAlongStepWeightCorrection* theAlongStepWeightCorrection = new G4AdjointAlongStepWeightCorrection();
-		pmanager->AddProcess(theAlongStepWeightCorrection);
-		pmanager->SetProcessOrdering(theAlongStepWeightCorrection,idxAlongStep,1);
-		
-		if (use_brem && use_eionisation) {
-			pmanager->AddProcess(theeInverseBremsstrahlungProdToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(theeInverseBremsstrahlungProdToProjCase, idxPostStep,n_order);
-   		}
-		if (use_compton) {
-       			pmanager->AddDiscreteProcess(theeInverseComptonProjToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(theeInverseComptonProjToProjCase, idxPostStep,n_order);
-		}
-	} 
+          if (fUse_compton) {
+            pmanager->AddProcess(theeInverseComptonProdToProjCase);
+                n_order++;
+                pmanager->SetProcessOrdering(theeInverseComptonProdToProjCase,
+                                                                               idxPostStep,n_order);
+          }
+          if (fUse_peeffect) {
+        pmanager->AddDiscreteProcess(theInversePhotoElectricProcess);
+                n_order++;
+                pmanager->SetProcessOrdering(theInversePhotoElectricProcess,
+                                                                               idxPostStep,n_order);
+          }
+          if (fUse_pionisation) {
+            pmanager->AddProcess(thepInverseIonisationProdToProjCase);
+                n_order++;
+                pmanager->SetProcessOrdering(thepInverseIonisationProdToProjCase,
+                                                                              idxPostStep,n_order);
+          }
+          if (fUse_ms && fUse_eionisation) {
+                n_order++;
+                pmanager->SetProcessOrdering(theeminusMS,idxPostStep,n_order);
+          }
+        }
+        
+           
+        if(particleName == "adj_gamma") {
+          G4int n_order=0;
+          G4AdjointAlongStepWeightCorrection* theAlongStepWeightCorrection =
+                                                      new G4AdjointAlongStepWeightCorrection();
+          pmanager->AddProcess(theAlongStepWeightCorrection);
+          pmanager->SetProcessOrdering(theAlongStepWeightCorrection,idxAlongStep,1);
+                
+          if (fUse_brem && fUse_eionisation) {
+            pmanager->AddProcess(theeInverseBremsstrahlungProdToProjCase);
+                n_order++;
+                pmanager->SetProcessOrdering(theeInverseBremsstrahlungProdToProjCase,
+                                                                               idxPostStep,n_order);
+             }
+          if (fUse_compton) {
+               pmanager->AddDiscreteProcess(theeInverseComptonProjToProjCase);
+                n_order++;
+                pmanager->SetProcessOrdering(theeInverseComptonProjToProjCase,
+                                                                               idxPostStep,n_order);
+          }
+        } 
    
-   	if (particleName == "gamma") {
-	
-	
-		if (use_compton) {
-			pmanager->AddDiscreteProcess(theComptonScattering);
-			G4AdjointCSManager::GetAdjointCSManager()->RegisterEmProcess(theComptonScattering,particle); 	
-		}
-		if (use_peeffect) {
-			pmanager->AddDiscreteProcess(thePEEffect);
-			G4AdjointCSManager::GetAdjointCSManager()->RegisterEmProcess(thePEEffect,particle); 	
-		}
-		if (use_gamma_conversion) {
-			pmanager->AddDiscreteProcess(theGammaConversion);
-			//G4AdjointCSManager::GetAdjointCSManager()->RegisterEmProcess(theGammaConversion,particle);
-		}
-		
-		
-    
+        if (particleName == "gamma") {
+          if (fUse_compton) {
+            pmanager->AddDiscreteProcess(theComptonScattering);
+                G4AdjointCSManager::GetAdjointCSManager()->
+                                         RegisterEmProcess(theComptonScattering,particle);
+          }
+          if (fUse_peeffect) {
+                pmanager->AddDiscreteProcess(thePEEffect);
+                G4AdjointCSManager::GetAdjointCSManager()->
+                                                            RegisterEmProcess(thePEEffect,particle);
+          }
+      if (fUse_gamma_conversion) {
+            pmanager->AddDiscreteProcess(theGammaConversion);
+      }
+        }
+        
+        if (particleName == "e+" && fUse_gamma_conversion) {//positron
+          G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
+      G4VProcess* theeplusIonisation         = new G4eIonisation();
+      G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
+      G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
 
-    	}
-	
-	if (particleName == "e+" && use_gamma_conversion) {//positron
-		G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
-      		G4VProcess* theeplusIonisation         = new G4eIonisation();
-      		G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
-      		G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
-      		//
-      		// add processes
-      		pmanager->AddProcess(theeplusMultipleScattering);
-      		pmanager->AddProcess(theeplusIonisation);
-      		pmanager->AddProcess(theeplusBremsstrahlung);
-      		pmanager->AddProcess(theeplusAnnihilation);
-      		//
-      		// set ordering for AtRestDoIt
-      		pmanager->SetProcessOrderingToFirst(theeplusAnnihilation, idxAtRest);
-      		//
-      		// set ordering for AlongStepDoIt
-      		pmanager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,1);
-      		pmanager->SetProcessOrdering(theeplusIonisation,         idxAlongStep,2);
-      		pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxAlongStep,3);      
-      		//
-      		// set ordering for PostStepDoIt
-      		pmanager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep,1);
-      		pmanager->SetProcessOrdering(theeplusIonisation,         idxPostStep,2);
-      		pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxPostStep,3);
-      		pmanager->SetProcessOrdering(theeplusAnnihilation,       idxPostStep,4);
-	}
-	if (particleName == "proton" && use_pionisation) {
-		if (use_ms && use_pionisation) { 
-        		pmanager->AddProcess(thepMS);
-		}	
-		if (use_pionisation){
-		 	pmanager->AddProcess(thepIonisation); 
-		 	G4AdjointCSManager::GetAdjointCSManager()->RegisterEnergyLossProcess(thepIonisation,particle);
-		 
-		}	 
-		
-	
-		G4int n_order=0;
-		if (use_ms && use_pionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(thepMS, idxAlongStep,n_order);
-		}	
-		if (use_pionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(thepIonisation,idxAlongStep,n_order);
-		}
-		n_order=0;
-		if (use_ms && use_pionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(thepMS, idxPostStep,n_order);
-		}
-		if (use_pionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(thepIonisation,idxPostStep,n_order);
-		}
-	
-	}
-	if (particleName == "adj_proton" && use_pionisation) {
-		
-		
-		
-		G4ContinuousGainOfEnergy* theContinuousGainOfEnergy =0;
-   		if (use_pionisation ) {
-			theContinuousGainOfEnergy= new G4ContinuousGainOfEnergy();
-			theContinuousGainOfEnergy->SetLossFluctuations(use_egain_fluctuation);
-			theContinuousGainOfEnergy->SetDirectEnergyLossProcess(thepIonisation);
-			theContinuousGainOfEnergy->SetDirectParticle(G4Proton::Proton());
-			//theContinuousGainOfEnergy->SetCorrectWeightAfterEnergyGain(correct_weight_after_energy_gain);
-			pmanager->AddProcess(theContinuousGainOfEnergy);
-		}	
-		G4int n_order=0;
-		if (use_ms) {
-			n_order++;
-			pmanager->AddProcess(thepMS);
-			pmanager->SetProcessOrdering(thepMS, idxAlongStep,n_order);
-		}
-		n_order++;
-		pmanager->SetProcessOrdering(theContinuousGainOfEnergy,         idxAlongStep,n_order);
-		
-		n_order++;
-		G4AdjointAlongStepWeightCorrection* theAlongStepWeightCorrection = new G4AdjointAlongStepWeightCorrection();
-		pmanager->AddProcess(theAlongStepWeightCorrection);
-		pmanager->SetProcessOrdering(theAlongStepWeightCorrection,idxAlongStep,n_order);
-		
-		
-		n_order=0;
-		if (use_pionisation) {
-			pmanager->AddProcess(thepInverseIonisationProjToProjCase);
-			n_order++;
-			pmanager->SetProcessOrdering(thepInverseIonisationProjToProjCase, idxPostStep,n_order);
-				
-		}
-	
-		if (use_ms && use_pionisation) {
-			n_order++;
-			pmanager->SetProcessOrdering(thepMS,idxPostStep,n_order);
-		}
+      // add processes
+      pmanager->AddProcess(theeplusMultipleScattering);
+      pmanager->AddProcess(theeplusIonisation);
+      pmanager->AddProcess(theeplusBremsstrahlung);
+      pmanager->AddProcess(theeplusAnnihilation);
 
-     
-		
-	
-	}
-    }	
+      // set ordering for AtRestDoIt
+      pmanager->SetProcessOrderingToFirst(theeplusAnnihilation, idxAtRest);
+
+      // set ordering for AlongStepDoIt
+      pmanager->SetProcessOrdering(theeplusMultipleScattering,
+                                                                                  idxAlongStep,1);
+      pmanager->SetProcessOrdering(theeplusIonisation, idxAlongStep,2);
+      pmanager->SetProcessOrdering(theeplusBremsstrahlung,idxAlongStep,3);
+
+      // set ordering for PostStepDoIt
+      pmanager->SetProcessOrdering(theeplusMultipleScattering,
+                                                                                       idxPostStep,1);
+      pmanager->SetProcessOrdering(theeplusIonisation,idxPostStep,2);
+      pmanager->SetProcessOrdering(theeplusBremsstrahlung,idxPostStep,3);
+      pmanager->SetProcessOrdering(theeplusAnnihilation,idxPostStep,4);
+        }
+        if (particleName == "proton" && fUse_pionisation) {
+          if (fUse_ms && fUse_pionisation) pmanager->AddProcess(thepMS);
+
+          if (fUse_pionisation){
+                pmanager->AddProcess(fPIonisation);
+                G4AdjointCSManager::GetAdjointCSManager()->
+                                                    RegisterEnergyLossProcess(fPIonisation,particle);
+          }
+
+          G4int n_order=0;
+          if (fUse_ms && fUse_pionisation) {
+            n_order++;
+                pmanager->SetProcessOrdering(thepMS, idxAlongStep,n_order);
+          }
+
+          if (fUse_pionisation) {
+                n_order++;
+                pmanager->SetProcessOrdering(fPIonisation,idxAlongStep,n_order);
+          }
+                
+          n_order=0;
+          if (fUse_ms && fUse_pionisation) {
+                n_order++;
+                pmanager->SetProcessOrdering(thepMS, idxPostStep,n_order);
+          }
+
+          if (fUse_pionisation) {
+                n_order++;
+                pmanager->SetProcessOrdering(fPIonisation,idxPostStep,n_order);
+          }
+        
+        }
+        
+        if (particleName == "adj_proton" && fUse_pionisation) {
+          G4ContinuousGainOfEnergy* theContinuousGainOfEnergy =0;
+             if (fUse_pionisation ) {
+                        theContinuousGainOfEnergy= new G4ContinuousGainOfEnergy();
+                        theContinuousGainOfEnergy->SetLossFluctuations(fUse_egain_fluctuation);
+                        theContinuousGainOfEnergy->SetDirectEnergyLossProcess(fPIonisation);
+                        theContinuousGainOfEnergy->SetDirectParticle(G4Proton::Proton());
+                        pmanager->AddProcess(theContinuousGainOfEnergy);
+             }
+
+             G4int n_order=0;
+          if (fUse_ms) {
+                n_order++;
+                pmanager->AddProcess(thepMS);
+                pmanager->SetProcessOrdering(thepMS, idxAlongStep,n_order);
+          }
+
+          n_order++;
+          pmanager->SetProcessOrdering(theContinuousGainOfEnergy,idxAlongStep,
+                                                                                       n_order);
+                
+          n_order++;
+          G4AdjointAlongStepWeightCorrection* theAlongStepWeightCorrection =
+                                                      new G4AdjointAlongStepWeightCorrection();
+          pmanager->AddProcess(theAlongStepWeightCorrection);
+          pmanager->SetProcessOrdering(theAlongStepWeightCorrection,idxAlongStep,
+                                                                                       n_order);
+          n_order=0;
+          if (fUse_pionisation) {
+            pmanager->AddProcess(thepInverseIonisationProjToProjCase);
+            n_order++;
+                pmanager->SetProcessOrdering(thepInverseIonisationProjToProjCase,
+                                                                               idxPostStep,n_order);
+          }
+
+          if (fUse_ms && fUse_pionisation) {
+            n_order++;
+                pmanager->SetProcessOrdering(thepMS,idxPostStep,n_order);
+          }
+        }
+  }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4Decay.hh"
 void G4AdjointPhysicsList::ConstructGeneral()
 {
@@ -687,8 +636,9 @@ void G4AdjointPhysicsList::ConstructGeneral()
     }
   }
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4AdjointPhysicsList::SetCuts()
 {
   if (verboseLevel >0){
@@ -705,3 +655,5 @@ void G4AdjointPhysicsList::SetCuts()
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

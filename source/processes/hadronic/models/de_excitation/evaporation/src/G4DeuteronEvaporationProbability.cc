@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeuteronEvaporationProbability.cc,v 1.20 2010-11-17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -37,7 +36,7 @@
 
 
 #include "G4DeuteronEvaporationProbability.hh"
-
+#include "G4SystemOfUnits.hh"
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3,&theCoulombBarrier) // A,Z,Gamma (fixed JMQ)
@@ -133,7 +132,7 @@ G4double G4DeuteronEvaporationProbability::GetOpt12(G4double K)
   G4double    p2 = -2804.;
   G4double    landa0 = -0.0323;
   G4double    landa1 = -5.48;
-  G4double    mu0 = 336.1;
+  G4double    mum0 = 336.1;
   G4double    mu1 = 0.48;
   G4double    nu0 = 524.3;
   G4double    nu1 = -371.8;
@@ -144,7 +143,7 @@ G4double G4DeuteronEvaporationProbability::GetOpt12(G4double K)
   p = p0 + p1/Ec + p2/(Ec*Ec);
   landa = landa0*ResidualA + landa1;
   G4double resmu1 = fG4pow->powZ(ResidualA,mu1); 
-  mu = mu0*resmu1;
+  mu = mum0*resmu1;
   nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
@@ -175,7 +174,7 @@ G4double G4DeuteronEvaporationProbability::GetOpt34(G4double K)
   G4double     p2 = -1651.;
   G4double     landa0 = 0.00619;
   G4double     landa1 = -7.54;
-  G4double     mu0 = 583.5;
+  G4double     mum0 = 583.5;
   G4double     mu1 = 0.337;
   G4double     nu0 = 421.8;
   G4double     nu1 = -474.5;
@@ -190,7 +189,7 @@ G4double G4DeuteronEvaporationProbability::GetOpt34(G4double K)
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
   a = fG4pow->powZ(ResidualA,mu1);
-  mu = mu0 * a;
+  mu = mum0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);  
   xnulam = nu / landa;
   if (xnulam > spill) { xnulam=0.; }

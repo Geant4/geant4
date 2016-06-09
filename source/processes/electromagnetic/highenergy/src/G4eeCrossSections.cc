@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.7 2008-07-10 18:06:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +47,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeCrossSections.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4PionZero.hh"
@@ -195,17 +196,17 @@ G4double G4eeCrossSections::CrossSection2pi(G4double e)
   complex<G4double> xo(cos(PhOm2Pi),sin(PhOm2Pi));
   complex<G4double> xf(cos(PhPhi2Pi),sin(PhPhi2Pi));
 
-  G4double s = e*e;
+  G4double s_inv = e*e;
   complex<G4double> drho = DpRho(e);
   complex<G4double> dom  = DpOm(e);
   complex<G4double> dphi = DpPhi(e);
 
   complex<G4double> amp = 
-      sqrt(Width2p(s,MsRho,GRho,1.0,MsPi)*MsRho3*BrRhoEe*GRho)*xr/drho
-    + sqrt(Width2p(s,MsOm,GOm,BrOm2Pi,MsPi)*MsOm3*BrOmEe*GOm)*xo/dom
-    + sqrt(Width2p(s,MsPhi,GPhi,BrPhi2Pi,MsPi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+      sqrt(Width2p(s_inv,MsRho,GRho,1.0,MsPi)*MsRho3*BrRhoEe*GRho)*xr/drho
+    + sqrt(Width2p(s_inv,MsOm,GOm,BrOm2Pi,MsPi)*MsOm3*BrOmEe*GOm)*xo/dom
+    + sqrt(Width2p(s_inv,MsPhi,GPhi,BrPhi2Pi,MsPi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
 
-  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s_inv);
 
   return cross;
 }
@@ -216,15 +217,15 @@ G4double G4eeCrossSections::CrossSection3pi(G4double e)
 { 
   complex<G4double> xf(cos(PhPhi2Pi),sin(PhPhi));
 
-  G4double s = e*e;
+  G4double s_inv = e*e;
   complex<G4double> dom  = DpOm(e);
   complex<G4double> dphi = DpPhi(e);
 
   complex<G4double> amp = 
-    sqrt(Width3p(s,MsOm,GOm,BrOm3Pi)*MsOm3*BrOmEe*GOm)/dom
-    + sqrt(Width3p(s,MsPhi,GPhi,BrPhi3Pi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+    sqrt(Width3p(s_inv,MsOm,GOm,BrOm3Pi)*MsOm3*BrOmEe*GOm)/dom
+    + sqrt(Width3p(s_inv,MsPhi,GPhi,BrPhi3Pi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
 
-  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s_inv);
 
   return cross;
 }
@@ -235,17 +236,17 @@ G4double G4eeCrossSections::CrossSectionPi0G(G4double e)
 { 
   complex<G4double> xf(cos(PhPhi),sin(PhPhi));
 
-  G4double s = e*e;
+  G4double s_inv = e*e;
   complex<G4double> drho = DpRho(e);
   complex<G4double> dom  = DpOm(e);
   complex<G4double> dphi = DpPhi(e);
 
   complex<G4double> amp = 
-      sqrt(WidthPg(s,MsRho,GRho,BrRhoPi0G,MsPi0)*MsRho3*BrRhoEe*GRho)/drho
-    + sqrt(WidthPg(s,MsOm,GOm,BrOmPi0G,MsPi0)*MsOm3*BrOmEe*GOm)/dom
-    + sqrt(WidthPg(s,MsPhi,GPhi,BrPhiPi0G,MsPi0)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+      sqrt(WidthPg(s_inv,MsRho,GRho,BrRhoPi0G,MsPi0)*MsRho3*BrRhoEe*GRho)/drho
+    + sqrt(WidthPg(s_inv,MsOm,GOm,BrOmPi0G,MsPi0)*MsOm3*BrOmEe*GOm)/dom
+    + sqrt(WidthPg(s_inv,MsPhi,GPhi,BrPhiPi0G,MsPi0)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
 
-  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s_inv);
 
   return cross;
 }
@@ -256,17 +257,17 @@ G4double G4eeCrossSections::CrossSectionEtaG(G4double e)
 { 
   complex<G4double> xf(cos(PhPhi),sin(PhPhi));
 
-  G4double s = e*e;
+  G4double s_inv = e*e;
   complex<G4double> drho = DpRho(e);
   complex<G4double> dom  = DpOm(e);
   complex<G4double> dphi = DpPhi(e);
 
   complex<G4double> amp = 
-      sqrt(WidthPg(s,MsRho,GRho,BrRhoEtaG,MsEta)*MsRho3*BrRhoEe*GRho)/drho
-    + sqrt(WidthPg(s,MsOm,GOm,BrOmEtaG,MsEta)*MsOm3*BrOmEe*GOm)/dom
-    + sqrt(WidthPg(s,MsPhi,GPhi,BrPhiEtaG,MsEta)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+      sqrt(WidthPg(s_inv,MsRho,GRho,BrRhoEtaG,MsEta)*MsRho3*BrRhoEe*GRho)/drho
+    + sqrt(WidthPg(s_inv,MsOm,GOm,BrOmEtaG,MsEta)*MsOm3*BrOmEe*GOm)/dom
+    + sqrt(WidthPg(s_inv,MsPhi,GPhi,BrPhiEtaG,MsEta)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
 
-  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s_inv);
 
   return cross;
 }
@@ -275,13 +276,13 @@ G4double G4eeCrossSections::CrossSectionEtaG(G4double e)
 
 G4double G4eeCrossSections::CrossSection2Kcharged(G4double e) 
 { 
-  G4double s = e*e;
+  G4double s_inv = e*e;
   complex<G4double> dphi = DpPhi(e);
 
   complex<G4double> amp = 
-    sqrt(Width2p(s,MsPhi,GPhi,BrPhi2Kc,MsKc)*MsPhi3*BrPhiEe*GPhi)/dphi;
+    sqrt(Width2p(s_inv,MsPhi,GPhi,BrPhi2Kc,MsKc)*MsPhi3*BrPhiEe*GPhi)/dphi;
 
-  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s_inv);
 
   return cross;
 }
@@ -290,37 +291,37 @@ G4double G4eeCrossSections::CrossSection2Kcharged(G4double e)
 
 G4double G4eeCrossSections::CrossSection2Kneutral(G4double e) 
 { 
-  G4double s = e*e;
+  G4double s_inv = e*e;
   complex<G4double> dphi = DpPhi(e);
 
   complex<G4double> amp = 
-    sqrt(Width2p(s,MsPhi,GPhi,BrPhiKsKl,MsKs)*MsPhi3*BrPhiEe*GPhi)/dphi;
+    sqrt(Width2p(s_inv,MsPhi,GPhi,BrPhiKsKl,MsKs)*MsPhi3*BrPhiEe*GPhi)/dphi;
 
-  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s_inv);
 
   return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeCrossSections::Width2p(G4double s, G4double mres, 
-                                    G4double g, G4double br, G4double m) 
+G4double G4eeCrossSections::Width2p(G4double s_inv, G4double mres, 
+                                    G4double gconst, G4double br, G4double mp) 
 {
-  G4double m2    = 4.0*m*m;
+  G4double mp2   = 4.0*mp*mp;
   G4double s0    = mres*mres;
-  G4double f     = (s - m2)/(s0 - m2);
+  G4double f     = (s_inv - mp2)/(s0 - mp2);
   if(f < 0.0)  f = 0.0;
-  return g*br*sqrt(f)*f*s0/s;
+  return gconst*br*sqrt(f)*f*s0/s_inv;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeCrossSections::Width3p(G4double s, G4double mres, 
-                                    G4double g, G4double br) 
+G4double G4eeCrossSections::Width3p(G4double s_inv, G4double mres, 
+                                    G4double gconst, G4double br) 
 {
-  G4double w = PhaseSpace3p(sqrt(s));
+  G4double w = PhaseSpace3p(sqrt(s_inv));
   G4double w0= PhaseSpace3p(mres);
-  G4double x = g*br*w/w0;
+  G4double x = gconst*br*w/w0;
   return x;
 }
 
@@ -343,14 +344,14 @@ G4double G4eeCrossSections::PhaseSpace3p(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeCrossSections::WidthPg(G4double s, G4double mres, 
-                                    G4double g, G4double br, G4double m)
+G4double G4eeCrossSections::WidthPg(G4double s_inv, G4double mres, 
+                                    G4double gconst, G4double br, G4double mp)
 {
-  G4double m2    = m*m;
+  G4double mp2   = mp*mp;
   G4double s0    = mres*mres;
-  G4double f     = (s - m2)*mres/((s0 - m2)*sqrt(s));
+  G4double f     = (s_inv - mp2)*mres/((s0 - mp2)*sqrt(s_inv));
   if(f < 0.0)  f = 0.0;
-  return g*br*f*f*f;
+  return gconst*br*f*f*f;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -365,11 +366,11 @@ G4double G4eeCrossSections::WidthRho(G4double e)
 
 G4double G4eeCrossSections::WidthOm(G4double e) 
 {
-  G4double s = e*e;
-  G4double w = (Width3p(s, MsOm, GOm, BrOm3Pi) +
-                WidthPg(s, MsOm, GOm, BrOmPi0G, MsPi0) +
-                WidthPg(s, MsOm, GOm, BrOmEtaG, MsEta) +
-                Width2p(s, MsOm, GOm, BrOm2Pi, MsPi)) /
+  G4double s_inv = e*e;
+  G4double w = (Width3p(s_inv, MsOm, GOm, BrOm3Pi) +
+                WidthPg(s_inv, MsOm, GOm, BrOmPi0G, MsPi0) +
+                WidthPg(s_inv, MsOm, GOm, BrOmEtaG, MsEta) +
+                Width2p(s_inv, MsOm, GOm, BrOm2Pi, MsPi)) /
        (BrOm3Pi+BrOmPi0G+BrOmEtaG+BrOm2Pi);
   return w;
 }
@@ -378,12 +379,12 @@ G4double G4eeCrossSections::WidthOm(G4double e)
 
 G4double G4eeCrossSections::WidthPhi(G4double e) 
 {
-  G4double s = e*e;
-  G4double w = (Width3p(s, MsPhi, GPhi, BrPhi3Pi) +
-                WidthPg(s, MsPhi, GPhi, BrPhiPi0G, MsPi0) +
-                WidthPg(s, MsPhi, GPhi, BrPhiEtaG, MsEta) +
-                Width2p(s, MsPhi, GPhi, BrPhi2Kc, MsKc) +
-                Width2p(s, MsPhi, GPhi, BrPhiKsKl, MsKs)) /
+  G4double s_inv = e*e;
+  G4double w = (Width3p(s_inv, MsPhi, GPhi, BrPhi3Pi) +
+                WidthPg(s_inv, MsPhi, GPhi, BrPhiPi0G, MsPi0) +
+                WidthPg(s_inv, MsPhi, GPhi, BrPhiEtaG, MsEta) +
+                Width2p(s_inv, MsPhi, GPhi, BrPhi2Kc, MsKc) +
+                Width2p(s_inv, MsPhi, GPhi, BrPhiKsKl, MsKs)) /
         (BrPhi3Pi+BrPhiPi0G+BrPhiEtaG+BrPhi2Kc+BrPhiKsKl);
   return w;
 }

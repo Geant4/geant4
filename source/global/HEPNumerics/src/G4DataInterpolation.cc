@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.cc,v 1.10 2008-03-13 09:35:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4DataInterpolation.hh"
 
@@ -203,7 +202,8 @@ void
 G4DataInterpolation::PolIntCoefficient( G4double cof[]) const 
 {
    G4int i=0, j=0 ;
-   G4double factor=fNumber, reducedY=0.0, mult=1.0 ;
+   G4double factor;
+   G4double reducedY=0.0, mult=1.0 ;
    G4double* tempArgument = new G4double[fNumber] ;
    
    for(i=0;i<fNumber;i++)

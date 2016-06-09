@@ -28,6 +28,7 @@
 // Niita et al., JAERI-Data/Code 99-042
 
 #include "G4QMDParameters.hh"
+#include "G4PhysicalConstants.hh"
 
 G4QMDParameters* G4QMDParameters::parameters = NULL;
 

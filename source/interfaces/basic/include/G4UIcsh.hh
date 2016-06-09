@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcsh.hh,v 1.4 2006-06-29 19:09:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UIcsh_h
@@ -45,7 +44,7 @@ public:
   G4UIcsh(const G4String& prompt="%s> ");
   ~G4UIcsh();
   
-  virtual G4String GetCommandLine(const char* msg=0);
+  virtual G4String GetCommandLineString(const char* msg=0);
 
 };
 

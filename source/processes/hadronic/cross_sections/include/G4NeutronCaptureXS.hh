@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh,v 1.4 2010-10-15 22:32:40 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -48,7 +47,9 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include "G4ElementData.hh"
 #include <vector>
+#include <iostream>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -74,13 +75,14 @@ public: // With Description
   virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, 
 				  G4int Z, const G4Material* mat=0);
-  /*
+  
   virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                               const G4Isotope* iso,
                               const G4Element* elm,
                               const G4Material* mat);
-  */
+
+  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -91,14 +93,21 @@ private:
 
   void Initialise(G4int Z, const char* = 0);
 
+  G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
+
   G4NeutronCaptureXS & operator=(const G4NeutronCaptureXS &right);
   G4NeutronCaptureXS(const G4NeutronCaptureXS&);
 
   G4double emax;
   G4int    maxZ;
-  std::vector<G4PhysicsVector*> data;
+  G4bool   isInitialized;
 
-  G4bool  isInitialized;
+  G4ElementData data;
+  std::vector<G4PhysicsVector*> work;
+  std::vector<G4double> temp;
+
+  static const G4int amin[93];
+  static const G4int amax[93];
 
 };
 

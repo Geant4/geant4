@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashParticleBounds.cc,v 1.4 2006-06-29 19:14:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // ------------------------------------------------------------
@@ -35,10 +34,12 @@
 // Author: Joanna Weng - 9.11.2004
 // ------------------------------------------------------------
 
+#include "GFlashParticleBounds.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-#include "GFlashParticleBounds.hh"
 
 GFlashParticleBounds::GFlashParticleBounds()
 {    

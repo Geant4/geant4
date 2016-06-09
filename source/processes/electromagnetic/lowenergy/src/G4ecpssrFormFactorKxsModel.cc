@@ -34,17 +34,19 @@
 //  X-Ray Spectrom. 2011, 40, 127-134
 // ---------------------------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
+
+#include "G4ecpssrFormFactorKxsModel.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 
 #include "G4EMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
-
-#include "G4ecpssrFormFactorKxsModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,7 +85,7 @@ G4double G4ecpssrFormFactorKxsModel::CalculateCrossSection(G4int zTarget,G4doubl
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 5) {
+  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 5) {
 
     if (massIncident == aProton->GetPDGMass())
       {      	

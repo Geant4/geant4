@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gspos.cc,v 1.13 2006-06-29 18:14:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -34,6 +33,7 @@
 #include "G3toG4.hh"
 #include "G3Pos.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
               G4double pars[], G4int npar, G4int num,

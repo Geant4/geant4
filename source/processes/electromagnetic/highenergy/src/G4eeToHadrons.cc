@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.9 2009-02-20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeToHadrons.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Gamma.hh"
 

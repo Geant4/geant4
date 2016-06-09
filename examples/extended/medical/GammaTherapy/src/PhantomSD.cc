@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/PhantomSD.cc
+/// \brief Implementation of the PhantomSD class
+//
 // -------------------------------------------------------------
 //
 //
@@ -36,25 +39,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "PhantomSD.hh"
-
-#include "G4RunManager.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Track.hh"
-#include "G4Positron.hh"
-#include "globals.hh"
 #include "Histo.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
-#include "G4Gamma.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PhantomSD::PhantomSD(const G4String& name)
- :G4VSensitiveDetector(name),
-  theHisto(Histo::GetPointer()),
-  evno(0)
+ : G4VSensitiveDetector(name), fHisto(Histo::GetPointer()),
+   fShiftZ(0.0),fCounter(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,10 +61,10 @@ PhantomSD::~PhantomSD()
 
 void PhantomSD::Initialize(G4HCofThisEvent*)
 {
-  evno++;
-  if(0 < theHisto->GetVerbose())
-    G4cout << "PhantomSD: Begin Of Event # " << evno << G4endl;
-
+  ++fCounter;
+  if(0 < fHisto->GetVerbose()) {
+    G4cout << "PhantomSD: Begin Of Event # " << fCounter << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,30 +72,32 @@ void PhantomSD::Initialize(G4HCofThisEvent*)
 G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  theHisto->AddStep();
-  if(0.0 == edep) return true;
 
-  G4ThreeVector p1 = aStep->GetPreStepPoint()->GetPosition();
-  G4ThreeVector p2 = aStep->GetPostStepPoint()->GetPosition();
-  G4double x1 = p1.x();
-  G4double y1 = p1.y();
-  G4double z1 = p1.z() - shiftZ;
-  G4double r1 = std::sqrt(x1*x1 + y1*y1);
-  G4double x2 = p2.x();
-  G4double y2 = p2.y();
-  G4double z2 = p2.z() - shiftZ;
-  G4double r2 = std::sqrt(x2*x2 + y2*y2);
-  G4double x0 = 0.5*(x1 + x2);
-  G4double y0 = 0.5*(y1 + y2);
-  G4double z0 = 0.5*(z1 + z2);
-  G4double r0 = std::sqrt(x0*x0 + y0*y0);
+  // only if there is energy deposition
+  if(0.0 < edep) {
 
-  theHisto->AddStep(edep,r1,z1,r2,z2,r0,z0);
+    G4ThreeVector p1 = aStep->GetPreStepPoint()->GetPosition();
+    G4ThreeVector p2 = aStep->GetPostStepPoint()->GetPosition();
+    G4double x1 = p1.x();
+    G4double y1 = p1.y();
+    G4double z1 = p1.z() - fShiftZ;
+    G4double r1 = std::sqrt(x1*x1 + y1*y1);
+    G4double x2 = p2.x();
+    G4double y2 = p2.y();
+    G4double z2 = p2.z() - fShiftZ;
+    G4double r2 = std::sqrt(x2*x2 + y2*y2);
+    G4double x0 = 0.5*(x1 + x2);
+    G4double y0 = 0.5*(y1 + y2);
+    G4double z0 = 0.5*(z1 + z2);
+    G4double r0 = std::sqrt(x0*x0 + y0*y0);
 
-  if(1 < theHisto->GetVerbose()) {
+    fHisto->AddPhantomStep(edep,r1,z1,r2,z2,r0,z0);
+
+    if(1 < fHisto->GetVerbose()) {
       G4cout << "PhantomSD: energy = " << edep/MeV
              << " MeV is deposited at the step at r1,z1= " << r1 << " " << z1
              << "; r2,z2= " << r2 <<  " " << z2 << G4endl;
+    }
   }
 
   return true;

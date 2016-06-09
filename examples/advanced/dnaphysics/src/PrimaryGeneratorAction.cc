@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.4 2010/06/12 09:48:36 vnivanch Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 #include "PrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

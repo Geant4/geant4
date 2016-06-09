@@ -20,7 +20,6 @@ ifndef PLATFORM
 endif
 
 CPPFLAGS += -I$(ROOTSYS)/include
-#EXTRALIBS := -L$(ROOTSYS)/lib -lCore -lTree -lCint -lReflex -lCintex -ldl
 EXTRALIBS := $(shell $(ROOTSYS)/bin/root-config --libs) -lReflex -lCintex
 
 DICTIONARYPATH := ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/dictionary
@@ -36,19 +35,19 @@ ifndef GCCXMLPATH
 	@echo GCCXMLPATH not defined!
 endif
 	mkdir -p ${DICTIONARYPATH}
-	${ROOTSYS}/bin/genreflex ${LOCALDIR}/include/Classes.hh \
-	-s ${LOCALDIR}/xml/selection.xml -o ${DICTIONARYPATH}/Classes_rflx.cpp \
+	${ROOTSYS}/bin/genreflex ${LOCALDIR}/include/ExP01Classes.hh \
+	-s ${LOCALDIR}/xml/selection.xml -o ${DICTIONARYPATH}/ExP01Classes_rflx.cpp \
 	--gccxmlpath ${GCCXMLPATH} -Iinclude -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR}
 #
-	gcc -o ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/libClassesDict.so -fpic -shared \
-	${DICTIONARYPATH}/Classes_rflx.cpp src/*.cc \
+	$(CXX) -o ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/libExP01ClassesDict.so -fpic -shared \
+	${DICTIONARYPATH}/ExP01Classes_rflx.cpp src/*.cc \
 	-Iinclude -I${ROOTSYS}/include -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR} \
-	${EXTRALIBS} -L${CLHEP_LIB_DIR} -l${CLHEP_LIB} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
+	${EXTRALIBS} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2} ${LOADLIBS}
 #
 	mkdir -p ${G4WORKDIR}/bin/${G4SYSTEM}
-	gcc -o ${G4WORKDIR}/bin/${G4SYSTEM}/readHits readHits.cc \
+	$(CXX) -o ${G4WORKDIR}/bin/${G4SYSTEM}/readHits readHits.cc \
 	-Iinclude -I${ROOTSYS}/include -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR} \
-	${EXTRALIBS} -L${CLHEP_LIB_DIR} -l${CLHEP_LIB} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
+	${EXTRALIBS} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2} ${LDLIBS3} ${LOADLIBS}
 
 clean_all: clean
 	@$(RM) hits.root

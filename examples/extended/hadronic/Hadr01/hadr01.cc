@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/Hadr01.cc
+/// \brief Main program of the hadronic/Hadr01 example
 //
-// $Id: hadr01.cc,v 1.12 2010-05-26 11:53:40 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // -------------------------------------------------------------
-//      GEANT4 hadr01
+//      GEANT4 Hadr01
 //
 //  Application demonstrating Geant4 hadronic physics:
 //  beam interaction with a target
@@ -54,6 +56,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "PhysicsListMessenger.hh"
+#include "G4EmUserPhysics.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -85,16 +88,23 @@ int main(int argc,char** argv) {
   PhysicsListMessenger* mess = 0;
   G4String physName = "";
 
-  // Physics List name defined via 2nd argument
+  // Physics List name defined via 3nd argument
   if (argc==3) { physName = argv[2]; }
 
   // Physics List name defined via environment variable
-  char* path = getenv("PHYSLIST");
-  if (path) { physName = G4String(path); }
+  if("" == physName) {
+    char* path = getenv("PHYSLIST");
+    if (path) { physName = G4String(path); }
+  }
 
   // reference PhysicsList via its name
-  if(factory.IsReferencePhysList(physName)) {
+  if("" != physName && factory.IsReferencePhysList(physName)) {
     phys = factory.GetReferencePhysList(physName);
+
+    // added extra EM options
+    phys->RegisterPhysics(new G4EmUserPhysics(1));
+
+    // instantiated messenger
     mess = new PhysicsListMessenger();
   } 
 

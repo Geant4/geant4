@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGLambdaInelastic.hh,v 1.1 2007-07-18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: D. H. Wright
 // Date:   18 June 2007
@@ -38,7 +37,7 @@
 #ifndef G4RPGLambdaInelastic_h
 #define G4RPGLambdaInelastic_h 1
  
-
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
 
@@ -49,7 +48,7 @@
     G4RPGLambdaInelastic() : G4RPGInelastic("G4RPGLambdaInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGLambdaInelastic() { }

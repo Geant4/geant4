@@ -44,6 +44,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_LE
     HEADERS
+        G4InelasticInteraction.hh
         G4LCapture.hh
         G4LEAlphaInelastic.hh
         G4LEAntiKaonZeroInelastic.hh
@@ -75,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_LE
         G4LElastic.hh
         G4LFission.hh
     SOURCES
+        G4InelasticInteraction.cc
         G4LCapture.cc
         G4LEAlphaInelastic.cc
         G4LEAntiKaonZeroInelastic.cc

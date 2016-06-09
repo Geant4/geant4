@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.cc,v 1.9 2006-06-29 17:47:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "ExN01DetectorConstruction.hh"
@@ -37,6 +36,7 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN01DetectorConstruction::ExN01DetectorConstruction()
  :  experimentalHall_log(0), tracker_log(0),

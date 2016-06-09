@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPrimaryGeneratorAction.cc,v 1.2 2010-11-25 17:32:05 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,11 +32,12 @@
 #include "eRositaPrimaryGeneratorAction.hh"
 #include "eRositaDetectorConstruction.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.cc,v 1.7 2006-06-29 15:56:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -40,6 +39,7 @@
 #include "GammaRayTelCalorimeterHit.hh"
 #include "GammaRayTelDetectorConstruction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"

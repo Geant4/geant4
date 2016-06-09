@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvn2.cc,v 1.8 2006-06-29 18:14:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 

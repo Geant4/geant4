@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProtonElasticCrossSection.cc,v 1.4 2010-06-25 09:45:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QProtonElasticCrossSection for pA elastic cross sections
@@ -44,6 +43,7 @@
 //#define sdebug
 
 #include "G4QProtonElasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static parameters
 const G4int G4QProtonElasticCrossSection::nPoints=128;//#ofPt in the AMDB table(>anyPar)(D)
@@ -1107,8 +1107,8 @@ G4double G4QProtonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam s
-    return dmt*dmt*pP2/s;
+    G4double s_value=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam s
+    return dmt*dmt*pP2/s_value;
   }
   else
   {

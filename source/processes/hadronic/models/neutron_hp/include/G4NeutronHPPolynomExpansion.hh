@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPolynomExpansion.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPPolynomExpansion_h
 #define G4NeutronHPPolynomExpansion_h 1
 
+#include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
 
 class G4NeutronHPPolynomExpansion
 {
@@ -62,7 +63,7 @@ class G4NeutronHPPolynomExpansion
   {
     G4int i;
     G4double result=0;
-    G4double base = anEnergy/eV;
+    G4double base = anEnergy/CLHEP::eV;
     G4double running = 1;
     for(i=0; i<nPoly; i++)
     {

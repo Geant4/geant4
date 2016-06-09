@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.27 2009-11-27 16:34:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4Region Implementation
@@ -39,6 +38,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4VNestedParameterisation.hh"
 #include "G4VUserRegionInformation.hh"
+#include "G4Material.hh"
 
 // *******************************************************************
 // Constructor:
@@ -124,7 +124,12 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   if (region)
   {
     currentRegion = this;
-    if(volMat) { AddMaterial(volMat); }
+    if (volMat)
+    { 
+      AddMaterial(volMat); 
+      G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
+      if (baseMat) { AddMaterial(baseMat); }
+    }
   }
 
   // Set the LV region to be either the current region or NULL,
@@ -161,7 +166,12 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
           G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
                       FatalException, message, "Check your parameterisation.");
         }
-        if(volMat) { AddMaterial(volMat); }
+        if (volMat)
+        { 
+          AddMaterial(volMat); 
+          G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
+          if (baseMat) { AddMaterial(baseMat); }
+        }
       }
     }
     else
@@ -181,7 +191,12 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
           G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
                       FatalException, message, "Check your parameterisation.");
         }
-        if(volMat) { AddMaterial(volMat); }
+        if(volMat)
+        { 
+          AddMaterial(volMat);
+          G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
+          if (baseMat) { AddMaterial(baseMat); }
+        }
       }
     }
     G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();

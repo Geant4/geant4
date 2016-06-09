@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.30 2010-11-04 17:30:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +59,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4BraggIonModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForLoss.hh"
@@ -117,7 +118,9 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" &&
-       pname != "deuteron" && pname != "triton") { isIon = true; }
+       pname != "deuteron" && pname != "triton" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") { isIon = true; }
 
     corr = G4LossTableManager::Instance()->EmCorrections();
 

@@ -30,21 +30,21 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.17 2006-06-29 16:23:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author:Susanna Guatelli, susanna@uow.edu.au 
 //
 #include "RemSimDetectorConstruction.hh"
 #include "RemSimMaterial.hh"
 #include "RemSimDetectorMessenger.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "globals.hh"
 #include "G4RunManager.hh"
 #include "G4Colour.hh"
 #include "RemSimVGeometryComponent.hh"

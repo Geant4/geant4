@@ -32,6 +32,8 @@
 // 080904 Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering by T. Koi
 //
 #include "G4NeutronHPElasticFS.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"
@@ -49,8 +51,9 @@
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
     G4String filename = aFile.GetName();
-    theBaseA = aFile.GetA();
-    theBaseZ = aFile.GetZ();
+    SetAZMs( A, Z, M, aFile ); 
+    //theBaseA = aFile.GetA();
+    //theBaseZ = aFile.GetZ();
     if(!dbool)
     {
       hasAnyData = false;
@@ -117,15 +120,15 @@
        theCoefficients->InitInterpolation( theData );
        G4double temp, energy;
        G4int tempdep, nLegendre;
-       G4int i, ii;
-       for ( i = 0 ; i < nEnergy_Legendre ; i++ )
+       //G4int i, ii;
+       for ( G4int i = 0 ; i < nEnergy_Legendre ; i++ )
        {
           theData >> temp >> energy >> tempdep >> nLegendre;
           energy *=eV;
           theCoefficients->Init( i , energy , nLegendre );
           theCoefficients->SetTemperature( i , temp );
           G4double coeff = 0;
-          for ( ii = 0 ; ii < nLegendre ; ii++ )
+          for (G4int ii = 0 ; ii < nLegendre ; ii++ )
           {
              // load legendre coefficients.
              theData >> coeff;
@@ -290,9 +293,9 @@
       theNeutron.Lorentz(theNeutron, theCMS);
       theTarget.Lorentz(theTarget, theCMS);
       G4double en = theNeutron.GetTotalMomentum(); // already in CMS.
-      G4ThreeVector cmsMom=theNeutron.GetMomentum(); // for neutron direction in CMS
-      G4double cms_theta=cmsMom.theta();
-      G4double cms_phi=cmsMom.phi();
+      G4ThreeVector cmsMom_tmp=theNeutron.GetMomentum(); // for neutron direction in CMS
+      G4double cms_theta=cmsMom_tmp.theta();
+      G4double cms_phi=cmsMom_tmp.phi();
       G4ThreeVector tempVector;
       tempVector.setX(std::cos(theta)*std::sin(cms_theta)*std::cos(cms_phi)
                       +std::sin(theta)*std::cos(phi)*std::cos(cms_theta)*std::cos(cms_phi)

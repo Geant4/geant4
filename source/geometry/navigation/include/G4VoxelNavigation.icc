@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.icc,v 1.7 2010-11-04 17:38:17 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4VoxelNavigation Inline implementation

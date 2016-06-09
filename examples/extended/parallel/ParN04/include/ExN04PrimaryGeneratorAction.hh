@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04PrimaryGeneratorAction.hh
+/// \brief Definition of the ExN04PrimaryGeneratorAction class
+//
 
 #ifndef ExN04PrimaryGeneratorAction_h
 #define ExN04PrimaryGeneratorAction_h 1

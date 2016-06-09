@@ -23,16 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03FieldSetup.hh
+/// \brief Definition of the F03FieldSetup class
 //
-// $Id: F03FieldSetup.hh,v 1.2 2006-06-29 17:18:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-//  A class for setting up the Magnetic Field of the setup, and 
-//   creating the necessary classes to control accuracy of propagation.
-//  In this example
-//    - There is a global field for most of the setup;
-//    - A local  field overides it for some volume(s) and it assumed to be uniform.
-// 
 
 #ifndef F03FieldSetup_H
 #define F03FieldSetup_H
@@ -40,56 +35,64 @@
 #include "G4MagneticField.hh"
 #include "G4UniformMagField.hh"
 
+class F03FieldMessenger;
 class G4FieldManager;
 class G4ChordFinder;
 class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
-class F03FieldMessenger;
+
+///  A class for setting up the Magnetic Field
+///
+///  It also creates the necessary classes to control accuracy of propagation.
+///  In this example
+///    - There is a global field for most of the setup;
+///    - A local  field overides it for some volume(s) and it assumed to be 
+///      uniform.
 
 class F03FieldSetup
 {
 
 public:
 
-  F03FieldSetup() ;               //  A zero field
-  F03FieldSetup(G4ThreeVector) ;  //  The value of the field
- ~F03FieldSetup() ;
+  F03FieldSetup();               //  A zero field
+  F03FieldSetup(G4ThreeVector);  //  The value of the field
+  ~F03FieldSetup();
       
-  void SetStepperType( G4int i) { fStepperType = i ; }
+  void SetStepperType(G4int i) { fStepperType = i; }
 
   void SetStepper();
 
-  void SetMinStep(G4double s) { fMinStep = s ; }
+  void SetMinStep(G4double s) { fMinStep = s; }
 
   void UpdateField();
 
-  void SetFieldValue(G4ThreeVector fieldVector) ;
-  void SetFieldValue(G4double      fieldValue) ;
+  void SetFieldValue(G4ThreeVector fieldVector);
+  void SetFieldValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
-  G4FieldManager*  GetLocalFieldManager() { return fLocalFieldManager ;}
+  G4FieldManager*  GetLocalFieldManager() { return fLocalFieldManager;}
 
 protected:
 
-  G4FieldManager*         GetGlobalFieldManager() ;
+  G4FieldManager*         GetGlobalFieldManager();
     // Returns the global Field Manager
 
-  G4FieldManager*         fFieldManager ;
-  G4FieldManager*         fLocalFieldManager ;
+  G4FieldManager*         fFieldManager;
+  G4FieldManager*         fLocalFieldManager;
 
-  G4ChordFinder*          fChordFinder ;
-  G4ChordFinder*          fLocalChordFinder ;
+  G4ChordFinder*          fChordFinder;
+  G4ChordFinder*          fLocalChordFinder;
 
-  G4Mag_UsualEqRhs*       fEquation ; 
-  G4Mag_UsualEqRhs*       fLocalEquation ; 
+  G4Mag_UsualEqRhs*       fEquation; 
+  G4Mag_UsualEqRhs*       fLocalEquation; 
 
-  G4MagneticField*        fMagneticField ; 
-  G4MagneticField*        fLocalMagneticField ; 
+  G4MagneticField*        fMagneticField; 
+  G4MagneticField*        fLocalMagneticField; 
 
-  G4MagIntegratorStepper* fStepper ;
-  G4MagIntegratorStepper* fLocalStepper ;
-  G4int                   fStepperType ;
+  G4MagIntegratorStepper* fStepper;
+  G4MagIntegratorStepper* fLocalStepper;
+  G4int                   fStepperType;
 
-  G4double                fMinStep ;
+  G4double                fMinStep;
  
   F03FieldMessenger*      fFieldMessenger;
 

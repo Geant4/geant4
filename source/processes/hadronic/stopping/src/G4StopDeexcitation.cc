@@ -40,13 +40,14 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 
 // Constructor
 
 G4StopDeexcitation::G4StopDeexcitation(G4StopDeexcitationAlgorithm* algorithm)
-  
 {
+  G4HadronicDeprecate("G4StopDeexcitation");
   _algorithm = algorithm;
 }
 

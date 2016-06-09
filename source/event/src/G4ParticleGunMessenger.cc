@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.16 2007-10-02 00:45:17 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4ParticleGunMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleGun.hh"
 #include "G4Geantino.hh"
 #include "G4ThreeVector.hh"

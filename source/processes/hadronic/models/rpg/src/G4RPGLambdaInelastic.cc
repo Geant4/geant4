@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGLambdaInelastic.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGLambdaInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4HadFinalState*
@@ -154,9 +155,9 @@ void G4RPGLambdaInelastic::Cascade(
   static G4double protmul[numMul], protnorm[numSec]; // proton constants
   static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
 
-  // np = number of pi+, nm = number of pi-, nz = number of pi0
+  // np = number of pi+, nneg = number of pi-, nz = number of pi0
 
-  G4int counter, nt=0, np=0, nm=0, nz=0;
+  G4int counter, nt=0, np=0, nneg=0, nz=0;
   G4double test;
   const G4double c = 1.25;    
   const G4double b[] = { 0.70, 0.35 };
@@ -167,12 +168,12 @@ void G4RPGLambdaInelastic::Cascade(
       for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
       counter = -1;
       for( np=0; np<(numSec/3); ++np ) {
-        for( nm=std::max(0,np-2); nm<=(np+1); ++nm ) {
+        for( nneg=std::max(0,np-2); nneg<=(np+1); ++nneg ) {
           for( nz=0; nz<numSec/3; ++nz ) {
             if( ++counter < numMul ) {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec ) {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -183,12 +184,12 @@ void G4RPGLambdaInelastic::Cascade(
       for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
       counter = -1;
       for( np=0; np<numSec/3; ++np ) {
-        for( nm=std::max(0,np-1); nm<=(np+2); ++nm ) {
+        for( nneg=std::max(0,np-1); nneg<=(np+2); ++nneg ) {
           for( nz=0; nz<numSec/3; ++nz ) {
             if( ++counter < numMul ) {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec ) {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -219,10 +220,10 @@ void G4RPGLambdaInelastic::Cascade(
     if( targetParticle.GetDefinition() == aProton ) {
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np ) {
-        for( nm=std::max(0,np-2); nm<=(np+1) && ran>=excs; ++nm ) {
+        for( nneg=std::max(0,np-2); nneg<=(np+1) && ran>=excs; ++nneg ) {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz ) {
             if( ++counter < numMul ) {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec ) {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
@@ -241,8 +242,8 @@ void G4RPGLambdaInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
-      G4int ncht = std::max( 1, np-nm );
+      np--; nneg--; nz--;
+      G4int ncht = std::max( 1, np-nneg );
       switch( ncht ) {
        case 1:
          currentParticle.SetDefinitionAndUpdateE( aSigmaPlus );
@@ -286,10 +287,10 @@ void G4RPGLambdaInelastic::Cascade(
     {
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np ) {
-        for( nm=std::max(0,np-1); nm<=(np+2) && ran>=excs; ++nm ) {
+        for( nneg=std::max(0,np-1); nneg<=(np+2) && ran>=excs; ++nneg ) {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz ) {
             if( ++counter < numMul ) {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec ) {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
@@ -308,8 +309,8 @@ void G4RPGLambdaInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
-      G4int ncht = std::max( 1, np-nm+3 );
+      np--; nneg--; nz--;
+      G4int ncht = std::max( 1, np-nneg+3 );
       switch( ncht ) {
        case 1:
          currentParticle.SetDefinitionAndUpdateE( aSigmaPlus );
@@ -349,7 +350,8 @@ void G4RPGLambdaInelastic::Cascade(
          break;
       }
     }
-  SetUpPions( np, nm, nz, vec, vecLen );
+
+  SetUpPions(np, nneg, nz, vec, vecLen);
   return;
 }
 

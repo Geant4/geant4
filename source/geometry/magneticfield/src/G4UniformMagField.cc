@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.12 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class for creation of uniform Magnetic Field
@@ -35,6 +34,7 @@
 // -------------------------------------------------------------------
 
 #include "G4UniformMagField.hh"
+#include "G4PhysicalConstants.hh"
 
 G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
 {

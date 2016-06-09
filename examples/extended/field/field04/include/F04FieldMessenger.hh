@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04FieldMessenger.hh
+/// \brief Definition of the F04FieldMessenger class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04FieldMessenger_h
 #define F04FieldMessenger_h 1
 
@@ -47,16 +44,15 @@ class F04FieldMessenger: public G4UImessenger
 {
   public:
     F04FieldMessenger(F04GlobalField* );
-   ~F04FieldMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    void SetNewValue(G4UIcommand*, G4int);
-    
+    virtual ~F04FieldMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+ 
   private:
 
-    F04GlobalField*               fGlobalField;
-    
-    G4UIdirectory*             detDir;
+    F04GlobalField*            fGlobalField;
+ 
+    G4UIdirectory*             fDetDir;
 
     G4UIcmdWithAnInteger*      fStepperCMD;
     G4UIcmdWithADoubleAndUnit* fMinStepCMD;
@@ -70,4 +66,3 @@ class F04FieldMessenger: public G4UImessenger
 };
 
 #endif
-

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClient.hh,v 1.8 2006-06-29 21:25:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4FRClient.hh
 // Yasuhide Sawada and Satoshi Tanaka

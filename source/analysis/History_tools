@@ -1,0 +1,89 @@
+ 1.4.3 :
+ - histo/b3,h3d : have a print() method. (Few things in it for the moment...)
+ - histo/sliced : for h3 : projection_[xy,yz,xz] methods.
+ - test/cpp/histo.cpp : example of a h3d with some projections.   
+
+ 1.4.2 :
+ - histo/h3::fill : bug correction : line 69 [3] -> [2].
+ - test/cpp/use_cpp : g++ : have the -shadow option.
+ - histo/c[1,2,3]d : set_histogram(), s_class() : methods needed when
+   creating back objects when reading an AIDA xml file.
+   (In fact not used today since reading files is not used in G4).
+ - modifs in typedefs, cids, tos, vmanip : the same, coming from modifs
+   in inlib related to the reading of files.
+
+ 1.4.1 : 21 Aug 2012 : G.Barrand :
+ - wroot/file, free_seg : handle (and save) "free segments".
+   It permits to open the file correctly when opening back
+   from CERN-ROOT with "UPDATE" mode.
+
+ 1.4.0 : 20 Aug 2012 : G.Barrand :
+ - Handle "axis title for plotting" through annotations.
+   See examples/cpp/[wroot,waxml].cpp for examples.
+ - Arrange so that "axis title for plotting" be saved in .root file
+   so that ROOT plotting handle these titles.
+ - Save annotations for the AIDA file format.
+ - NOTE : it does not seem to have an HBOOK API to save
+   per histogram "axis title for plotting" in a HBOOK file.
+
+ 1.3.2 : 17 Aug 2012 : G.Barrand :
+ - base_histo : have annotations.
+
+ 1.3.1 : 24 Jul 2012 : G.Barrand :
+ - hbook/h1,h2,p1 : have a configure() method to rebook.
+ - hbook/h1,h2,p1,base_histo : have title(),reset(),all_entries()
+   on base_histo.
+
+ 1.3.0 : 20 Jul 2012 : G.Barrand :
+ - add file/class ntuple_booking to capture a ntuple booking parameters.
+ - hbook/wntuple, waxml/ntuple, wcsv_ntuple : add a constructor receiving
+   a ntuple_booking object.
+ - tests/cpp/[waxml,whbook,wroot,wcsv_booking].cpp : have an example of usage
+   of the creation of an ntuple by using a ntuple_booking object.
+
+ 1.2.1 : 19 Jul 2012 : G.Barrand :
+ - histo/b1,b2,b3 : have public configure methods to rebook an existing
+   histogram.
+ - histo/b3 constructor : variable ns changed to nbins to remove a
+   "-shadow pinaillage" warning.
+ - change "private" to "protected" in various classes to let things
+   opened via inheritance.
+ - test/cpp/build : g++ : -shadow.
+ - test/cpp/build : CYGWIN : changes to build also with VisualStudio 2009.
+
+ 1.2.0 : 28 May 2012 : G.Barrand :
+ - waxml/ntuple : do not write the default option in the column element.
+   It permits to have XML files with ntuple readable by jas3.
+   The 1.4 release of ioda can also read these files.
+ - sto : remove the "tellg() logic". There is a difference of comportement
+   of tellg() in the g++ 4.6.x versions. We use now fail() to detect
+   if a stream conversion toward numbers is ok or not.
+ - tools/hbook/base_histo : have an hbook_id() method to get the... HBOOK ID!
+ - tools/hbook/h1,h2,base_histo : displace scale() on base_histo.
+ - tools/hbook/h1,h2,base_histo : add(),subtract(),multiply(),divide() methods.
+   (To please Michel).
+ - Slight corrections to remove messages from the -Wshadow "pinaillage" option.
+   (Hell, if a compiler misunderstands the name of a local variable with the
+   name of a method...)
+ - Slight corrections to compile with clang++.
+ - modify test/cpp/build to build the C++ programs from CYGWIN by using
+   the Visual Studio compiler.
+
+ 1.1.0 : 8 Feb 2012 : G.Barrand :
+ - split the fill_infos() function in wroot/infos.
+   It was too long and induces warning with icc and g++.
+
+ 1.0.6 : 8 Feb 2012 : G.Barrand :
+ - build from code of inexlib-1.3.
+ - histo : some "this->" changed to "parent::".
+   "this->" is needed only when invoking virtual methods.
+ - have snpf to avoid too much #ifdef WIN32 for [v]snprintf.
+ - have "typedef cid" in a standalone cid file.
+ - remove some remaining inline keyword within class.
+ - test/cpp/use_clang : to build with clang. Tested with
+   clang-3.0 on MacOSX. To use clang :
+     cd test/cpp
+     ./build -clang
+ - add this history file.
+
+

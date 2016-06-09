@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BN.cc,v 1.9 2010-10-14 14:01:02 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +55,10 @@
 
 #include "G4Generator2BN.hh"
 #include "Randomize.hh"
-//    
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
+//
 
 G4double G4Generator2BN::Atab[320] =
          { 0.0264767, 0.0260006, 0.0257112, 0.0252475, 0.024792, 0.0243443, 0.0240726, 0.0236367,
@@ -152,11 +154,11 @@ G4double G4Generator2BN::ctab[320] =
 
 
 G4Generator2BN::G4Generator2BN(const G4String&)
- : G4VBremAngularDistribution("AngularGen2BN")
+ : G4VEmAngularDistribution("AngularGen2BN")
 {
   b = 1.2;
   index_min = -300;
-  index_max = 20;
+  index_max = 319;
 
   // Set parameters minimum limits Ekelectron = 250 eV and kphoton = 100 eV
   kmin = 100*eV;
@@ -165,6 +167,8 @@ G4Generator2BN::G4Generator2BN(const G4String&)
 
   // Increment Theta value for surface interpolation
   dtheta = 0.1*rad;
+
+  nwarn = 0;
 
   // Construct Majorant Surface to 2BN cross-section
   // (we dont need this. Pre-calculated values are used instead due to performance issues
@@ -176,22 +180,84 @@ G4Generator2BN::G4Generator2BN(const G4String&)
 G4Generator2BN::~G4Generator2BN() 
 {}
 
-//
-
-G4double G4Generator2BN::PolarAngle(const G4double initial_energy,
-				    const G4double final_energy,
-				    const G4int) // Z
+G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
+					       G4double out_energy,
+					       G4int,
+					       const G4Material*)
 {
+  G4double Ek  = dp->GetKineticEnergy();
+  G4double Eel = dp->GetTotalEnergy();
+  if(Eel > 2*MeV) {
+    return fGenerator2BS.SampleDirection(dp, out_energy, 0);
+  }
 
-  G4double theta = 0;
+  G4double k   = Eel - out_energy;
 
-  G4double k = initial_energy - final_energy;
+  G4double t;
+  G4double cte2;
+  G4double y, u;
+  G4double ds;
+  G4double dmax;
 
-  theta = Generate2BN(initial_energy, k);
+  G4int trials = 0;
 
-  return theta;
+  // find table index
+  G4int index = G4int(std::log10(Ek/MeV)*100) - index_min;
+  if(index > index_max) { index = index_max; }
+  else if(index < 0) { index = 0; }
+
+  //kmax = Ek;
+  //kmin2 = kcut;
+
+  G4double c = ctab[index];
+  G4double A = Atab[index];
+  if(index < index_max) { A = std::max(A, Atab[index+1]); }
+
+  do{
+    // generate k accordimg to std::pow(k,-b)
+    trials++;
+
+    // normalization constant 
+    //  cte1 = (1-b)/(std::pow(kmax,(1-b))-std::pow(kmin2,(1-b)));
+    //  y = G4UniformRand();
+    //  k = std::pow(((1-b)/cte1*y+std::pow(kmin2,(1-b))),(1/(1-b)));
+
+    // generate theta accordimg to theta/(1+c*std::pow(theta,2)
+    // Normalization constant
+    cte2 = 2*c/std::log(1+c*pi2);
+
+    y = G4UniformRand();
+    t = std::sqrt((std::exp(2*c*y/cte2)-1)/c);
+    u = G4UniformRand();
+
+    // point acceptance algorithm
+    //fk = std::pow(k,-b);
+    //ft = t/(1+c*t*t);
+    dmax = A*std::pow(k,-b)*t/(1+c*t*t);
+    ds = Calculatedsdkdt(k,t,Eel);
+
+    // violation point
+    if(ds > dmax && nwarn >= 20) {
+      ++nwarn;
+      G4cout << "### WARNING in G4Generator2BN: Ekin(MeV)= " << Ek/MeV 
+	     << "  D(Ekin,k)/Dmax-1= " << (ds/dmax - 1)
+	     << "  results are not reliable!" 
+	     << G4endl;
+      if(20 == nwarn) { 
+	G4cout << "   WARNING in G4Generator2BN is closed" << G4endl; 
+      }
+    }
+
+  } while(u*dmax > ds || t > CLHEP::pi);
+
+  G4double sint = std::sin(t);
+  G4double phi  = twopi*G4UniformRand(); 
+
+  fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi),std::cos(t));
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+
+  return fLocalDirection;
 }
-//
 
 G4double G4Generator2BN::CalculateFkt(G4double k, G4double theta, G4double A, G4double c) const
 {
@@ -326,8 +392,8 @@ void G4Generator2BN::ConstructMajorantSurface()
   vmax = G4int(100.*std::log10(Ek/kmin));
 
   for(G4int v = 0; v < vmax; v++){
-    G4double fraction = (v/100.);
-    k = std::pow(10.,fraction)*kmin;
+    G4double fractionLocal = (v/100.);
+    k = std::pow(10.,fractionLocal)*kmin;
 
     for(theta = 0.; theta < pi; theta = theta + dtheta){
       dk = k - k0;
@@ -355,68 +421,6 @@ void G4Generator2BN::ConstructMajorantSurface()
 //  G4cout << Ek << " " << i << " " << index << " " << Atab[i] << " " << ctab[i] << " " << G4endl;
   i++;
   }
-
-}
-
-G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const 
-{
-
-  G4double Eel;
-  //G4double kmin2; 
-  //G4double kmax; 
-  G4double t;
-  G4double cte2;
-  G4double y, u;
-  G4double fk, ft;
-  G4double ds;
-  G4double A2;
-  G4double A, c;
-
-  G4int trials = 0;
-  G4int index;
-
-  // find table index
-  index = G4int(std::log10(Ek)*100) - index_min;
-  Eel = Ek + electron_mass_c2;
-
-  //kmax = Ek;
-  //kmin2 = kcut;
-
-  c = ctab[index];
-  A = Atab[index];
-  if(index < index_max){
-    A2 = Atab[index+1];
-    if(A2 > A) A = A2;
-  }
-
-  do{
-  // generate k accordimg to std::pow(k,-b)
-  trials++;
-
-  // normalization constant 
-//  cte1 = (1-b)/(std::pow(kmax,(1-b))-std::pow(kmin2,(1-b)));
-//  y = G4UniformRand();
-//  k = std::pow(((1-b)/cte1*y+std::pow(kmin2,(1-b))),(1/(1-b)));
-
-  // generate theta accordimg to theta/(1+c*std::pow(theta,2)
-  // Normalization constant
-  cte2 = 2*c/std::log(1+c*pi2);
-
-  y = G4UniformRand();
-  t = std::sqrt((std::exp(2*c*y/cte2)-1)/c);
-  u = G4UniformRand();
-
-  // point acceptance algorithm
-  fk = std::pow(k,-b);
-  ft = t/(1+c*t*t);
-  ds = Calculatedsdkdt(k,t,Eel);
-
-  // violation point
-  if(ds > (A*fk*ft)) G4cout << "WARNING IN G4Generator2BN !!!" << Ek << " " <<  (ds-A*fk*ft)/ds << G4endl;
-
-  }while(u*A*fk*ft > ds);
-
-  return t;
 
 }
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.cc,v 1.10 2010-09-06 10:02:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4GRSSolid Implementation

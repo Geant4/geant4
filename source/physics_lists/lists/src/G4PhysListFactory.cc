@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.16 2010-11-19 19:50:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -41,6 +40,8 @@
 #include "CHIPS.hh"
 #include "FTFP_BERT.hh"
 #include "FTFP_BERT_TRV.hh"
+#include "FTFP_BERT_HP.hh"
+//#include "FTFP_BERT_DE.hh"
 #include "FTF_BIC.hh"
 #include "LBE.hh"
 #include "LHEP.hh"
@@ -54,13 +55,14 @@
 #include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_INCLXX.hh"
-#include "QGSP_INCL_ABLA.hh"
+//#include "QGSP_INCL_ABLA.hh"
 #include "Shielding.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -68,20 +70,20 @@ G4PhysListFactory::G4PhysListFactory()
   : defName("FTFP_BERT"),verbose(1)
 {
   nlists_hadr = 19;
-  G4String s[19] = {
+  G4String ss[19] = {
     "CHIPS",
-    "FTFP_BERT","FTFP_BERT_TRV","FTF_BIC",
+    "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_HP","FTF_BIC", 
     "LBE","LHEP","QBBC",
     "QGSC_BERT","QGSP","QGSP_BERT","QGSP_BERT_CHIPS","QGSP_BERT_HP",
     "QGSP_BIC","QGSP_BIC_HP",
-    "QGSP_FTFP_BERT","QGS_BIC","QGSP_INCLXX","QGSP_INCL_ABLA",
+    "QGSP_FTFP_BERT","QGS_BIC","QGSP_INCLXX",
     "Shielding"};
   for(size_t i=0; i<nlists_hadr; ++i) {
-    listnames_hadr.push_back(s[i]);
+    listnames_hadr.push_back(ss[i]);
   }
 
-  nlists_em = 6;
-  G4String s1[6] = {"","_EMV","_EMX","_EMY","_LIV","_PEN"};
+  nlists_em = 7;
+  G4String s1[7] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN"};
   for(size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }
@@ -144,6 +146,8 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   if(had_name == "CHIPS")               {p = new CHIPS(verbose);}
   else if(had_name == "FTFP_BERT")      {p = new FTFP_BERT(verbose);}
   else if(had_name == "FTFP_BERT_TRV")  {p = new FTFP_BERT_TRV(verbose);}
+  else if(had_name == "FTFP_BERT_HP")   {p = new FTFP_BERT_HP(verbose);}
+  //  else if(had_name == "FTFP_BERT_DE")   {p = new FTFP_BERT_DE(verbose);}
   else if(had_name == "FTF_BIC")        {p = new FTF_BIC(verbose);}
   else if(had_name == "LBE")            {p = new LBE();}
   else if(had_name == "LHEP")           {p = new LHEP(verbose);}
@@ -157,7 +161,6 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT(verbose);}
   else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
   else if(had_name == "QGSP_INCLXX")    {p = new QGSP_INCLXX(verbose);}
-  else if(had_name == "QGSP_INCL_ABLA") {p = new QGSP_INCL_ABLA(verbose);}
   else if(had_name == "Shielding")      {p = new Shielding(verbose);}
   else if(had_name == "ShieldingLEND")  {p = new Shielding(verbose,"LEND");}
   else {
@@ -178,8 +181,10 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
       } else if(3 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysics_option3(verbose)); 
       } else if(4 == em_opt) {
-	p->ReplacePhysics(new G4EmLivermorePhysics(verbose)); 
+	p->ReplacePhysics(new G4EmStandardPhysics_option4(verbose)); 
       } else if(5 == em_opt) {
+	p->ReplacePhysics(new G4EmLivermorePhysics(verbose)); 
+      } else if(6 == em_opt) {
 	p->ReplacePhysics(new G4EmPenelopePhysics(verbose)); 
       }
     }

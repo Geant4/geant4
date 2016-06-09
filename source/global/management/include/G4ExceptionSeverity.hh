@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionSeverity.hh,v 1.3 2006-06-29 19:01:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class Description:
 //

@@ -30,12 +30,16 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
+/** \file G4INCLCascade.cc
+ *
+ * INCL Cascade
+ */
 #include "G4INCLCascade.hh"
 #include "G4INCLRandom.hh"
 #include "G4INCLRanecu.hh"
@@ -65,14 +69,26 @@
 #include "G4INCLClusteringModelIntercomparison.hh"
 #include "G4INCLClusteringModelNone.hh"
 
+#include "G4INCLIntersection.hh"
+
+#include "G4INCLCrossSections.hh"
+
 #include <cstring>
 #include <cstdlib>
+#include <numeric>
 
 namespace G4INCL {
 
   INCL::INCL(G4INCL::Config const * const config)
-    :propagationModel(0), theA(208), theZ(82), maxImpactParameter(0.),
-    theConfig(config)
+    :propagationModel(0), theA(208), theZ(82),
+    targetInitSuccess(false),
+    maxImpactParameter(0.),
+    maxUniverseRadius(0.),
+    maxInteractionDistance(0.),
+    fixedImpactParameter(0.),
+    theConfig(config),
+    nucleus(NULL),
+    minRemnantSize(4)
   {
     // Set the logger object.
     G4INCL::Logger::setLoggerSlave(new G4INCL::LoggerSlave(theConfig->getLogFileName()));
@@ -114,20 +130,17 @@ namespace G4INCL {
 
     // Select the clustering algorithm:
     G4INCL::ClusterAlgorithmType clusterAlgorithm = theConfig->getClusterAlgorithm();
-    if(clusterAlgorithm == G4INCL::IntercomparisonClusterAlgorithm) {
-      G4INCL::Clustering::setClusteringModel(new G4INCL::ClusteringModelIntercomparison);
-      // Set the maximum mass for the clustering algorithm
-      G4INCL::IClusteringModel::maxClusterAlgorithmMass = theConfig->getClusterMaxMass();
-    }
+    if(clusterAlgorithm == G4INCL::IntercomparisonClusterAlgorithm)
+      G4INCL::Clustering::setClusteringModel(new G4INCL::ClusteringModelIntercomparison(theConfig));
     else // if(clusterAlgorithm == G4INCL::NoClusterAlgorithm)
       G4INCL::Clustering::setClusteringModel(new G4INCL::ClusteringModelNone);
 
     // Initialize the INCL particle table:
-    G4INCL::ParticleTable::initialize();
+    G4INCL::ParticleTable::initialize(theConfig);
 
     // Propagation model is responsible for finding avatars and
     // transporting the particles. In principle this step is "hidden"
-    // behind an abstract G4interface and the rest of the system does not
+    // behind an abstract interface and the rest of the system does not
     // care how the transportation and avatar finding is done. This
     // should allow us to "easily" experiment with different avatar
     // finding schemes and even to support things like curved
@@ -137,119 +150,108 @@ namespace G4INCL {
     propagationAction = new PropagationAction();
     avatarAction = new AvatarAction();
 
-    std::strcpy(theGlobalInfo.cascadeModel, theConfig->getVersionID().c_str());
-    std::strcpy(theGlobalInfo.deexcitationModel, "none");
-
-    // Set the target
-    if(!theConfig->isNaturalTarget()) {
-      setTarget(theConfig->getTargetA(), theConfig->getTargetZ());
-      // Fill in the global information
-      theGlobalInfo.At = theConfig->getTargetA();
-      theGlobalInfo.Zt = theConfig->getTargetZ();
-    } else {
-      // TODO: support for natural targets
-      FATAL("Fatal: natural targets are not supported yet." << std::endl);
-      std::exit(EXIT_FAILURE);
-    }
+    theGlobalInfo.cascadeModel = theConfig->getVersionID().c_str();
+    theGlobalInfo.deexcitationModel = "none";
 
 #ifndef INCLXX_IN_GEANT4_MODE
+    // Fill in the global information
+    theGlobalInfo.At = theConfig->getTargetA();
+    theGlobalInfo.Zt = theConfig->getTargetZ();
+    const ParticleSpecies theSpecies = theConfig->getProjectileSpecies();
+    theGlobalInfo.Ap = theSpecies.theA;
+    theGlobalInfo.Zp = theSpecies.theZ;
+    theGlobalInfo.Ep = theConfig->getProjectileKineticEnergy();
     // Echo the input parameters to the log file
     INFO(theConfig->echo() << std::endl);
 #endif
-  }
 
-  INCL::INCL(IPropagationModel *aPropagationModel)
-    :propagationModel(aPropagationModel), theA(208), theZ(82), maxImpactParameter(0.), theConfig(NULL)
-  {
-    // Set the random number generator algorithm. The system can support
-    // multiple different generator algorithms in a completely
-    // transparent way.
-    G4INCL::Random::setGenerator(new G4INCL::Ranecu());
+    fixedImpactParameter = theConfig->getImpactParameter();
   }
 
   INCL::~INCL() {
     G4INCL::Pauli::deleteBlockers();
     G4INCL::CoulombDistortion::deleteCoulomb();
     G4INCL::Random::deleteGenerator();
-    G4INCL::ParticleTable::deletePDS();
     G4INCL::Clustering::deleteClusteringModel();
     G4INCL::Logger::deleteLoggerSlave();
+    G4INCL::NuclearDensityFactory::clearCache();
     delete avatarAction;
     delete propagationAction;
     delete eventAction;
     delete propagationModel;
+    delete theConfig;
   }
 
-  void INCL::setTarget(G4int A, G4int Z) {
-    if(A > 0 && A < 300 && Z > 0 && Z < 200) {
-      theA = A;
-      theZ = Z;
-    } else {
+  G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z) {
+    if(A < 0 || A > 300 || Z < 1 || Z > 200) {
       ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
       ERROR("Target configuration rejected." << std::endl);
+      return false;
     }
 
+    // Initialise the maximum universe radius
+    initUniverseRadius(projectileSpecies, kineticEnergy, A, Z);
+
+    // Initialise the nucleus
+    theZ = Z;
+    if(theConfig->isNaturalTarget())
+      theA = ParticleTable::drawRandomNaturalIsotope(Z);
+    else
+      theA = A;
+    initializeTarget(theA, theZ);
+
     // Set the maximum impact parameter
-    // TODO: for natural target abundances, make this the largest impact
-    // parameter for all the isotopes.
-    // TODO: reduce the maximum impact parameter for Coulomb-distorted
-    // trajectories. Make this dependent on the configuration choice for
-    // Coulomb distortion.
-    NuclearDensity const * const density = NuclearDensityFactory::createDensity(A,Z);
-    maxImpactParameter = density->getMaximumRadius();
-    delete density;
+    maxImpactParameter = CoulombDistortion::maxImpactParameter(projectileSpecies, kineticEnergy, nucleus);
+    initMaxInteractionDistance(projectileSpecies, kineticEnergy); // for forced CN events
 
     // Set the geometric cross section
     theGlobalInfo.geometricCrossSection =
       Math::tenPi*std::pow(maxImpactParameter,2);
 
-  }
+    // Set the minimum remnant size
+    if(projectileSpecies.theA > 0)
+      minRemnantSize = std::min(theA, 4);
+    else
+      minRemnantSize = std::min(theA-1, 4);
 
-  G4bool INCL::initializeTarget(G4int A, G4int Z) {
-    Nucleus *previousNucleus = propagationModel->getNucleus();
-    delete previousNucleus;
-
-    Nucleus *aNucleus = new Nucleus(A, Z, theConfig);
-    aNucleus->getStore()->getBook()->reset();
-    aNucleus->initializeParticles();
-
-    propagationModel->setNucleus(aNucleus);
     return true;
   }
 
-  const EventInfo &INCL::processEvent(Particle *projectile) {
-    initializeTarget(theA, theZ);
-    // Usage of the projectile API:
+  G4bool INCL::initializeTarget(const G4int A, const G4int Z) {
+    delete nucleus;
 
-    // Test projectile:
-    // G4INCL::ThreeVector position(0.0, 0.0, 0.0);
-    // G4INCL::ThreeVector momentum(0.0, 0.0, 2000.0);
-    // G4double energy = std::sqrt(momentum.mag2() + G4INCL::ProtonMass * G4INCL::ProtonMass);
-    // G4INCL::Particle *projectile = new G4INCL::Particle(G4INCL::Proton, energy,
-    // 							momentum, position);
+    nucleus = new Nucleus(A, Z, theConfig, maxUniverseRadius);
+    nucleus->getStore()->getBook()->reset();
+    nucleus->initializeParticles();
 
-    // composite
-    // G4INCL::Nucleus *projectileNucleus = new G4INCL::Nucleus(6, 12);
-    //projectileNucleus->initializeParticles();
+    propagationModel->setNucleus(nucleus);
+    return true;
+  }
 
-    // Create a nucleus of Z = 82 and A = 208
-    //    G4INCL::Nucleus *theNucleus = new G4INCL::Nucleus(6, 12);
+  const EventInfo &INCL::processEvent(
+      ParticleSpecies const &projectileSpecies,
+      const G4double kineticEnergy,
+      const G4int targetA,
+      const G4int targetZ
+      ) {
+    // Set the target and the projectile
+    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
-    // Generate the initial distribution of particles
-    //    theNucleus->initializeParticles();
+    if(!targetInitSuccess) {
+      WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
+      theEventInfo.transparent=true;
+      return theEventInfo;
+    }
 
-    //  theNucleus->shootMe(projectile);
-    //  theNucleus->shootMe(projectileNucleus);
+    const G4bool canRunCascade = preCascade(projectileSpecies, kineticEnergy);
+    if(canRunCascade) {
+      cascade();
+      postCascade();
+    }
+    return theEventInfo;
+  }
 
-    // Manually set the stopping time of the simulation.
-    //    propagationModel->setStoppingTime(70.0);
-
-    // Assign the nucleus to the propagation model
-    //    propagationModel->setNucleus(theNucleus);
-
-    // Shortcut poG4inter
-    Nucleus *nucleus = propagationModel->getNucleus();
-
+  G4bool INCL::preCascade(ParticleSpecies const projectileSpecies, const G4double kineticEnergy) {
     // Reset theEventInfo
     theEventInfo.reset();
 
@@ -258,50 +260,64 @@ namespace G4INCL {
     // Increment the global counter for the number of shots
     theGlobalInfo.nShots++;
 
-    // Fill in the global information
-    // TODO: should be moved to the input processing
-    theGlobalInfo.Ap = projectile->getA();
-    theGlobalInfo.Zp = projectile->getZ();
-    theGlobalInfo.Ep = projectile->getKineticEnergy();
-
     // Fill in the event information
-    theEventInfo.projectileType = projectile->getType();
-    theEventInfo.Ap = projectile->getA();
-    theEventInfo.Zp = projectile->getZ();
-    theEventInfo.Ep = projectile->getKineticEnergy();
+    theEventInfo.projectileType = projectileSpecies.theType;
+    theEventInfo.Ap = projectileSpecies.theA;
+    theEventInfo.Zp = projectileSpecies.theZ;
+    theEventInfo.Ep = kineticEnergy;
     theEventInfo.At = nucleus->getA();
     theEventInfo.Zt = nucleus->getZ();
 
-    // Randomly draw an impact parameter
-    G4double impactParameter = maxImpactParameter * std::sqrt(Random::shoot());
-    // Fill in the event information
-    theEventInfo.impactParameter = impactParameter;
-
-    G4bool projectileHitsTarget = propagationModel->shootProjectile(projectile, impactParameter);
-    if(projectileHitsTarget == false) {
+    // Do nothing below the Coulomb barrier
+    if(maxImpactParameter<=0.) {
       // Increment the global counter for the number of transparents
       theGlobalInfo.nTransparents++;
 
       // Fill in the event information
       theEventInfo.transparent = true;
 
-      // Delete the projectile!
-      delete projectile;
+      return false;
+    }
 
-      return theEventInfo;
+    // Randomly draw an impact parameter or use a fixed value, depending on the
+    // Config option
+    G4double impactParameter, phi;
+    if(fixedImpactParameter<0.) {
+      impactParameter = maxImpactParameter * std::sqrt(Random::shoot0());
+      phi = Random::shoot() * Math::twoPi;
+    } else {
+      impactParameter = fixedImpactParameter;
+      phi = 0.;
     }
 
     // Fill in the event information
-    const G4double effectiveImpactParameter =
-      projectile->getTransversePosition().mag();
+    theEventInfo.impactParameter = impactParameter;
+
+    const G4double effectiveImpactParameter = propagationModel->shoot(projectileSpecies, kineticEnergy, impactParameter, phi);
+    if(effectiveImpactParameter < 0.) {
+      // Increment the global counter for the number of transparents
+      theGlobalInfo.nTransparents++;
+
+      // Fill in the event information
+      theEventInfo.transparent = true;
+
+      return false;
+    }
+
+    // Fill in the event information
+    theEventInfo.transparent = false;
     theEventInfo.effectiveImpactParameter = effectiveImpactParameter;
 
+    return true;
+  }
+
+  void INCL::cascade() {
     do {
       // Run book keeping actions that should take place before propagation:
       propagationAction->beforePropagationAction(propagationModel);
 
       // Get the avatar with the smallest time and propagate particles
-      // to that poG4int in time.
+      // to that point in time.
       G4INCL::IAvatar *avatar = propagationModel->propagate();
 
       // Run book keeping actions that should take place after propagation:
@@ -314,8 +330,8 @@ namespace G4INCL {
 
       // Channel is responsible for calculating the outcome of the
       // selected avatar. There are different kinds of channels. The
-      // class IChannel is, again, an abstract G4interface that defines
-      // the externally observable behavior of all G4interaction
+      // class IChannel is, again, an abstract interface that defines
+      // the externally observable behavior of all interaction
       // channels.
       // The handling of the channel is transparent to the API.
       // Final state tells what changed...
@@ -332,12 +348,40 @@ namespace G4INCL {
       delete finalState;
     } while(continueCascade());
 
+  }
+
+  void INCL::postCascade() {
     // Fill in the event information
+    theEventInfo.stoppingTime = propagationModel->getCurrentTime();
+
+    // Forced CN?
+    if(nucleus->getTryCompoundNucleus()) {
+      DEBUG("Trying compound nucleus" << std::endl);
+      makeCompoundNucleus();
+      // Global checks of conservation laws
+#ifndef INCLXX_IN_GEANT4_MODE
+      if(!theEventInfo.transparent) globalConservationChecks(true);
+#endif
+      return;
+    }
+
     theEventInfo.transparent = nucleus->isEventTransparent();
 
     if(theEventInfo.transparent) {
       // Increment the global counter for the number of transparents
       theGlobalInfo.nTransparents++;
+      if(nucleus->isForcedTransparent())
+        theGlobalInfo.nForcedTransparents++;
+      ProjectileRemnant * const projectileRemnant = nucleus->getProjectileRemnant();
+      if(projectileRemnant) {
+        // Delete the projectile remnant and the particles it contains
+        projectileRemnant->deleteParticles();
+        nucleus->deleteProjectileRemnant();
+        nucleus->getStore()->clearIncoming();
+      } else {
+        // Clean up the incoming list and force a transparent gracefully
+        nucleus->getStore()->deleteIncoming();
+      }
     } else {
       // Check if the nucleus contains deltas
       theEventInfo.deltasInside = nucleus->containsDeltas();
@@ -346,9 +390,6 @@ namespace G4INCL {
       theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
       theEventInfo.forcedDeltasInside = nucleus->decayInsideDeltas();
 
-      // Cluster decay
-      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters();
-
       // Apply Coulomb distortion, if appropriate
       // Note that this will apply Coulomb distortion also on pions emitted by
       // unphysical remnants (see decayInsideDeltas). This is at variance with
@@ -356,158 +397,416 @@ namespace G4INCL {
       // whatever we do doesn't (shouldn't!) make any noticeable difference.
       G4INCL::CoulombDistortion::distortOut(nucleus->getStore()->getOutgoingParticles(), nucleus);
 
-      // Compute recoil momentum, energy and spin of the nucleus
-      nucleus->computeRecoilKinematics();
+      // If the normal cascade predicted complete fusion, use the tabulated
+      // masses to compute the excitation energy, the recoil, etc.
+      if(nucleus->getStore()->getOutgoingParticles().size()==0
+          && nucleus->getProjectileRemnant()
+          && nucleus->getProjectileRemnant()->getParticles().size()==0) {
 
-      // Make room for the remnant recoil by rescaling the energies of the
-      // outgoing particles.
-      if(nucleus->hasRemnant()) rescaleOutgoingForRecoil();
+        DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
 
+        nucleus->useFusionKinematics();
+        nucleus->deleteProjectileRemnant();
+
+        if(nucleus->getExcitationEnergy()<0.) {
+          // Complete fusion is energetically impossible, return a transparent
+          WARN("Complete-fusion kinematics yields negative excitation energy, returning a transparent!" << std::endl);
+          theEventInfo.transparent = true;
+          return;
+        }
+
+      } else { // Normal cascade here
+
+        // Set the excitation energy
+        nucleus->setExcitationEnergy(nucleus->computeExcitationEnergy());
+
+        // Make a projectile pre-fragment out of the geometrical and dynamical
+        // spectators
+        theEventInfo.nUnmergedSpectators = makeProjectileRemnant();
+
+        // Compute recoil momentum, energy and spin of the nucleus
+        nucleus->computeRecoilKinematics();
+
+#ifndef INCLXX_IN_GEANT4_MODE
+        // Global checks of conservation laws
+        globalConservationChecks(false);
+#endif
+
+        // Make room for the remnant recoil by rescaling the energies of the
+        // outgoing particles.
+        if(nucleus->hasRemnant()) rescaleOutgoingForRecoil();
+
+      }
+
+      // Cluster decay
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
+
+#ifndef INCLXX_IN_GEANT4_MODE
       // Global checks of conservation laws
-      globalConservationChecks();
+      globalConservationChecks(true);
+#endif
 
       // Fill the EventInfo structure
       nucleus->fillEventInfo(&theEventInfo);
-      //      theEventInfo.fillFromNucleus(nucleus);
-      theEventInfo.stoppingTime = propagationModel->getCurrentTime();
+
+      // Check if we have an absorption:
+      if(theEventInfo.nucleonAbsorption) theGlobalInfo.nNucleonAbsorptions++;
+      if(theEventInfo.pionAbsorption) theGlobalInfo.nPionAbsorptions++;
+    }
+  }
+
+  void INCL::makeCompoundNucleus() {
+    // Reset the internal Nucleus variables
+    nucleus->getStore()->clearIncoming();
+    nucleus->getStore()->clearOutgoing();
+    nucleus->getProjectileRemnant()->reset();
+    nucleus->setA(theEventInfo.At);
+    nucleus->setZ(theEventInfo.Zt);
+
+    // CN kinematical variables
+    // Note: the CN orbital angular momentum is neglected in what follows. We
+    // should actually take it into account!
+    ThreeVector theCNMomentum = nucleus->getIncomingMomentum();
+    ThreeVector theCNSpin = nucleus->getIncomingAngularMomentum();
+    const G4double theTargetMass = ParticleTable::getTableMass(theEventInfo.At, theEventInfo.Zt);
+    G4int theCNA=theEventInfo.At, theCNZ=theEventInfo.Zt;
+    Cluster * const theProjectileRemnant = nucleus->getProjectileRemnant();
+    G4double theCNEnergy = theTargetMass + theProjectileRemnant->getEnergy();
+
+    // Loop over the potential participants
+    ParticleList initialProjectileComponents = theProjectileRemnant->getParticles();
+    std::vector<Particle *> shuffledComponents(initialProjectileComponents.begin(), initialProjectileComponents.end());
+    // Shuffle the list of potential participants
+    std::random_shuffle(shuffledComponents.begin(), shuffledComponents.end(), shuffleComponentsHelper);
+
+    G4bool success = true;
+    G4bool atLeastOneNucleonEntering = false;
+    for(std::vector<Particle*>::const_iterator p=shuffledComponents.begin(); p!=shuffledComponents.end(); ++p) {
+      // Skip geometrical spectators
+      Intersection intersectionUniverse(IntersectionFactory::getEarlierTrajectoryIntersection(
+            (*p)->getPosition(),
+            (*p)->getPropagationVelocity(),
+            maxUniverseRadius));
+      if(!intersectionUniverse.exists)
+        continue;
+
+      // At least one nucleon must enter the interaction distance
+      Intersection intersectionInteraction(IntersectionFactory::getEarlierTrajectoryIntersection(
+            (*p)->getPosition(),
+            (*p)->getPropagationVelocity(),
+            maxInteractionDistance));
+      if(intersectionInteraction.exists)
+        atLeastOneNucleonEntering = true;
+
+      // Build an entry avatar for this nucleon
+      ParticleEntryAvatar theAvatar(0.0, nucleus, *p);
+      FinalState *fs = theAvatar.getFinalState();
+      nucleus->applyFinalState(fs);
+      FinalStateValidity validity = fs->getValidity();
+      delete fs;
+      switch(validity) {
+        case ValidFS:
+        case ParticleBelowFermiFS:
+          // Add the particle to the CN
+          theCNA++;
+          theCNZ += (*p)->getZ();
+          break;
+        case ParticleBelowZeroFS:
+        case PauliBlockedFS:
+        case NoEnergyConservationFS:
+        default:
+          success = false;
+          break;
+      }
     }
 
-    return theEventInfo;
+    if(!success || !atLeastOneNucleonEntering) {
+      DEBUG("No nucleon entering in forced CN, or some nucleons entering below zero, forcing a transparent" << std::endl);
+      theEventInfo.transparent = true;
+      theGlobalInfo.nTransparents++;
+      theGlobalInfo.nForcedTransparents++;
+      nucleus->getProjectileRemnant()->deleteParticles();
+      nucleus->deleteProjectileRemnant();
+      return;
+    }
+
+// assert(theCNA==nucleus->getA());
+// assert(theCNA>theEventInfo.At);
+
+    // Update the kinematics of the CN
+    theCNEnergy -= theProjectileRemnant->getEnergy();
+    theCNMomentum -= theProjectileRemnant->getMomentum();
+
+    // Deal with the projectile remnant
+    nucleus->finalizeProjectileRemnant(propagationModel->getCurrentTime());
+
+    // Subtract the angular momentum of the projectile remnant
+    ParticleList const &outgoing = nucleus->getStore()->getOutgoingParticles();
+// assert(outgoing.size()==0 || outgoing.size()==1);
+    for(ParticleIter i=outgoing.begin(); i!=outgoing.end(); ++i) {
+      theCNSpin -= (*i)->getAngularMomentum();
+    }
+
+    // Compute the excitation energy of the CN
+    const G4double theCNMass = ParticleTable::getTableMass(theCNA,theCNZ);
+    const G4double theCNInvariantMassSquared = theCNEnergy*theCNEnergy-theCNMomentum.mag2();
+    if(theCNInvariantMassSquared<0.) {
+      // Negative invariant mass squared, return a transparent
+      theGlobalInfo.nTransparents++;
+      theGlobalInfo.nForcedTransparents++;
+      theEventInfo.transparent = true;
+      return;
+    }
+    const G4double theCNExcitationEnergy = std::sqrt(theCNInvariantMassSquared) - theCNMass;
+    if(theCNExcitationEnergy<0.) {
+      // Negative excitation energy, return a transparent
+      theGlobalInfo.nTransparents++;
+      theGlobalInfo.nForcedTransparents++;
+      theEventInfo.transparent = true;
+      return;
+    } else {
+      // Positive excitation energy, can make a CN
+      nucleus->setA(theCNA);
+      nucleus->setZ(theCNZ);
+      nucleus->setMomentum(theCNMomentum);
+      nucleus->setEnergy(theCNEnergy);
+      nucleus->setExcitationEnergy(theCNExcitationEnergy);
+      nucleus->setMass(theCNMass+theCNExcitationEnergy);
+      nucleus->setSpin(theCNSpin); // neglects any orbital angular momentum of the CN
+
+      // Take care of any remaining deltas
+      theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
+
+      // Cluster decay
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
+
+      // Fill the EventInfo structure
+      nucleus->fillEventInfo(&theEventInfo);
+      theGlobalInfo.nForcedCompoundNucleus++;
+    }
   }
 
   void INCL::rescaleOutgoingForRecoil() {
-    Nucleus *nucleus = propagationModel->getNucleus();
+    RecoilCMFunctor theRecoilFunctor(nucleus, theEventInfo);
 
-    G4double sumKineticEnergies = 0.0;
-    // Sum up the kinetic energies of the outgoing particles
-    ParticleList outgoingParticles = nucleus->getStore()->getOutgoingParticles();
-    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i )
-      sumKineticEnergies += (*i)->getKineticEnergy();
-
-    // If there is too little outgoing energy, we stop here.
-    if(sumKineticEnergies <= 0.001) return;
-    // The rescaling factor
-    G4double rescale = 1. - nucleus->getRecoilEnergy()/sumKineticEnergies;
-    if(rescale < 0.0) {
-      WARN("Cannot accommodate remnant recoil by scaling outgoing energies. rescale = " << rescale << std::endl);
-      rescale = 0.0;
+    // Apply the root-finding algorithm
+    const G4bool success = RootFinder::solve(&theRecoilFunctor, 1.0);
+    if(success) {
+      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
+      theRecoilFunctor(theSolution.first); // Apply the solution
+    } else {
+      WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
     }
 
-    // Rescale the energies (and the momenta) of the outgoing particles.
-    ThreeVector pBalance = nucleus->getIncomingMomentum();
-    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i )
-    {
-      const G4double mass = (*i)->getMass();
-      const G4double newKineticEnergy = (*i)->getKineticEnergy() * rescale;
-
-      (*i)->setEnergy(mass + newKineticEnergy);
-      (*i)->adjustMomentumFromEnergy();
-      //nucleus->updatePotentialEnergy(*i);
-
-      pBalance -= (*i)->getMomentum();
-    }
-
-    nucleus->setRecoilMomentum(pBalance);
-    const G4double remnantMass = ParticleTable::getMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
-    const G4double pRem2 = pBalance.mag2();
-    const G4double recoilEnergy = pRem2/
-      (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
-    nucleus->setRecoilEnergy(recoilEnergy);
   }
 
-  void INCL::globalConservationChecks() {
-    const Nucleus *nucleus = propagationModel->getNucleus();
-
-    /* FIXME: This version of the energy-conservation check only uses kinetic
-       energies, to mimic what INCL4.5 does. This is unsatisfactory because it
-       does not take G4into account the particle masses. At some poG4int, it would
-       be nice to have real energy conservation, with real masses. When ready
-       to do so, have a look at the status of the code at commit
-       aad75d09b8a52d28b8eb1bd38bdf347e63b802db (or possibly simply revert the
-       following commit). */
-
-    // Initialise balance variables with the incoming values
-    G4int ZBalance = theEventInfo.Zp + theEventInfo.Zt;
-    G4int ABalance = theEventInfo.Ap + theEventInfo.At;
-
-    G4double projectileMass = 0.0;
-    // FIXME: since we are not using total energies, we must set the projectile
-    // mass to zero if the projectile is a pion.
-    if(theEventInfo.projectileType != PiPlus &&
-       theEventInfo.projectileType != PiZero &&
-       theEventInfo.projectileType != PiMinus)
-      projectileMass = ParticleTable::getMass(theEventInfo.projectileType);
-
-    G4double EBalance = nucleus->getInitialEnergy() - ParticleTable::getMass(theEventInfo.At, theEventInfo.Zt) - projectileMass;
-    ThreeVector pBalance = nucleus->getIncomingMomentum();
-
-    // Process outgoing particles
-    ParticleList outgoingParticles = nucleus->getStore()->getOutgoingParticles();
-    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i ) {
-      ZBalance -= (*i)->getZ();
-      ABalance -= (*i)->getA();
-      if((*i)->isPion()) // Ugly: we should calculate everything using total energies! (FIXME)
-        EBalance -= (*i)->getEnergy();
-      else
-        EBalance -= (*i)->getKineticEnergy();
-      pBalance -= (*i)->getMomentum();
-    }
-
-    EBalance -= nucleus->computeSeparationEnergyBalance();
-
-    // Remnant contribution, if present
-    if(nucleus->hasRemnant()) {
-      ZBalance -= nucleus->getZ();
-      ABalance -= nucleus->getA();
-      EBalance -= //ParticleTable::getMass(nucleus->getA(),nucleus->getZ()) +
-        nucleus->getExcitationEnergy() + nucleus->getRecoilEnergy();
-      pBalance -= nucleus->getRecoilMomentum();
-    }
+#ifndef INCLXX_IN_GEANT4_MODE
+  void INCL::globalConservationChecks(G4bool afterRecoil) {
+    Nucleus::ConservationBalance theBalance = nucleus->getConservationBalance(theEventInfo,afterRecoil);
 
     // Global conservation checks
-    const G4double pLongBalance = pBalance.getZ();
-    const G4double pTransBalance = pBalance.perp();
-    if(ZBalance != 0) {
-      ERROR("Violation of charge conservation! ZBalance = " << ZBalance << std::endl);
+    const G4double pLongBalance = theBalance.momentum.getZ();
+    const G4double pTransBalance = theBalance.momentum.perp();
+    if(theBalance.Z != 0) {
+      ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << std::endl);
     }
-    if(ABalance != 0) {
-      ERROR("Violation of baryon-number conservation! ABalance = " << ABalance << std::endl);
+    if(theBalance.A != 0) {
+      ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << std::endl);
     }
-    if(std::abs(EBalance)>10.0) {
-      WARN("Violation of energy conservation > 10 MeV. EBalance = " << EBalance << std::endl);
+    G4double EThreshold, pLongThreshold, pTransThreshold;
+    if(afterRecoil) {
+      // Less stringent checks after accommodating recoil
+      EThreshold = 10.; // MeV
+      pLongThreshold = 1.; // MeV/c
+      pTransThreshold = 1.; // MeV/c
+    } else {
+      // More stringent checks before accommodating recoil
+      EThreshold = 0.1; // MeV
+      pLongThreshold = 0.1; // MeV/c
+      pTransThreshold = 0.1; // MeV/c
     }
-    if(std::abs(pLongBalance)>5.0) {
-      WARN("Violation of longitudinal momentum conservation > 5.0 MeV. pLongBalance = " << pLongBalance << std::endl);
+    if(std::abs(theBalance.energy)>EThreshold) {
+      WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
-    if(std::abs(pTransBalance)>5.0) {
-      WARN("Violation of transverse momentum conservation > 5.0 MeV. pTransBalance = " << pTransBalance << std::endl);
+    if(std::abs(pLongBalance)>pLongThreshold) {
+      WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+    }
+    if(std::abs(pTransBalance)>pTransThreshold) {
+      WARN("Violation of transverse momentum conservation > " << pTransThreshold << " MeV/c. pTransBalance = " << pTransBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
 
     // Feed the EventInfo variables
-    theEventInfo.EBalance = EBalance;
+    theEventInfo.EBalance = theBalance.energy;
     theEventInfo.pLongBalance = pLongBalance;
     theEventInfo.pTransBalance = pTransBalance;
   }
+#endif
 
   G4bool INCL::continueCascade() {
-    Nucleus *nucleus = propagationModel->getNucleus();
     // Stop if we have passed the stopping time
-    if(propagationModel->getCurrentTime() > propagationModel->getStoppingTime()) return false;
+    if(propagationModel->getCurrentTime() > propagationModel->getStoppingTime()) {
+      DEBUG("Cascade time (" << propagationModel->getCurrentTime()
+          << ") exceeded stopping time (" << propagationModel->getStoppingTime()
+          << "), stopping cascade" << std::endl);
+      return false;
+    }
     // Stop if there are no participants and no pions inside the nucleus
-    if(nucleus->getStore()->getBook()->getParticipants()==0 &&
-        nucleus->getStore()->getIncomingParticles().empty()) return false;
-    // Stop if the remnant has only one nucleon
-    if(nucleus->getA() <= 1) return false;
+    if(nucleus->getStore()->getBook()->getCascading()==0 &&
+        nucleus->getStore()->getIncomingParticles().empty()) {
+      DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
+      return false;
+    }
+    // Stop if the remnant is smaller than minRemnantSize
+    if(nucleus->getA() <= minRemnantSize) {
+      DEBUG("Remnant size (" << nucleus->getA()
+          << ") smaller than or equal to minimum (" << minRemnantSize
+          << "), stopping cascade" << std::endl);
+      return false;
+    }
+    // Stop if we have to try and make a compound nucleus or if we have to
+    // force a transparent
+    if(nucleus->getTryCompoundNucleus()) {
+      DEBUG("Trying to make a compound nucleus, stopping cascade" << std::endl);
+      return false;
+    }
+    if(nucleus->isForcedTransparent()) {
+      DEBUG("Forcing a transparent, stopping cascade" << std::endl);
+      return false;
+    }
+
     return true;
   }
 
-  void INCL::finaliseGlobalInfo() {
+  void INCL::finalizeGlobalInfo() {
+    theGlobalInfo.nucleonAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
+      ((G4double) theGlobalInfo.nNucleonAbsorptions) / ((G4double) theGlobalInfo.nShots);
+    theGlobalInfo.pionAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
+      ((G4double) theGlobalInfo.nPionAbsorptions) / ((G4double) theGlobalInfo.nShots);
     theGlobalInfo.reactionCrossSection = theGlobalInfo.geometricCrossSection *
       ((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents)) /
       ((G4double) theGlobalInfo.nShots);
     theGlobalInfo.errorReactionCrossSection = theGlobalInfo.geometricCrossSection *
       std::sqrt((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents)) /
       ((G4double) theGlobalInfo.nShots);
+  }
+
+  G4int INCL::makeProjectileRemnant() {
+    G4int nUnmergedSpectators = 0;
+
+    // Do nothing if this is not a nucleus-nucleus reaction
+    if(!nucleus->getProjectileRemnant())
+      return 0;
+
+    // Get the spectators (geometrical+dynamical) from the Store
+    ParticleList geomSpectators(nucleus->getProjectileRemnant()->getParticles());
+    ParticleList dynSpectators(nucleus->getStore()->extractDynamicalSpectators());
+
+    // If there are no spectators, do nothing
+    if(dynSpectators.empty() && geomSpectators.empty()) {
+      nucleus->deleteProjectileRemnant();
+      return 0;
+    } else if(geomSpectators.size()+dynSpectators.size()==1) {
+      if(dynSpectators.empty()) {
+        // No dynamical spectators, one geometrical spectator
+        // It should already be on shell.
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+        Particle *theSpectator = geomSpectators.front();
+#endif
+// assert(std::abs(theSpectator->getTableMass()-theSpectator->getInvariantMass())<1.e-3);
+        nucleus->moveProjectileRemnantComponentsToOutgoing();
+      } else {
+        // No geometrical spectators, one dynamical spectator
+        // Just put it back in the outgoing list
+        nucleus->getStore()->addToOutgoing(dynSpectators.front());
+      }
+      nucleus->deleteProjectileRemnant();
+    } else {
+      // Make a cluster out of the geometrical spectators
+      ProjectileRemnant *theProjectileRemnant = nucleus->getProjectileRemnant();
+
+      // Add the dynamical spectators to the bunch
+      ParticleList rejected = theProjectileRemnant->addMostDynamicalSpectators(dynSpectators);
+      // Put back the rejected spectators into the outgoing list
+      nUnmergedSpectators = rejected.size();
+      nucleus->getStore()->addToOutgoing(rejected);
+
+      // Deal with the projectile remnant
+      nucleus->finalizeProjectileRemnant(propagationModel->getCurrentTime());
+
+    }
+
+    return nUnmergedSpectators;
+  }
+
+  void INCL::initMaxInteractionDistance(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
+    if(projectileSpecies.theType != Composite) {
+      maxInteractionDistance = 0.;
+      return;
+    }
+
+    const G4double projectileKineticEnergyPerNucleon = kineticEnergy/projectileSpecies.theA;
+    const G4double r0 = NuclearDensityFactory::createDensity(theA, theZ)->getNuclearRadius();
+
+    maxInteractionDistance = r0 + CrossSections::interactionDistanceNN(projectileKineticEnergyPerNucleon);
+  }
+
+  void INCL::initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z) {
+    G4double rMax = 0.0;
+    if(A==0) {
+      IsotopicDistribution const &anIsotopicDistribution =
+        ParticleTable::getNaturalIsotopicDistribution(Z);
+      IsotopeVector theIsotopes = anIsotopicDistribution.getIsotopes();
+      for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
+        NuclearDensity *theDensity = NuclearDensityFactory::createDensity(i->theA,Z);
+        if(!theDensity) {
+          FATAL("NULL density in initUniverseRadius. "
+                << "Projectile type=" << p.theType
+                << ", A=" << p.theA
+                << ", Z=" << p.theZ
+                << ", kinE=" << kineticEnergy
+                << ", target A=" << A
+                << ", Z=" << Z
+                << std::endl);
+          std::abort();
+        }
+        rMax = std::max(theDensity->getMaximumRadius(), rMax);
+      }
+    } else {
+      NuclearDensity *theDensity = NuclearDensityFactory::createDensity(A,Z);
+      if(!theDensity) {
+        FATAL("NULL density in initUniverseRadius. "
+              << "Projectile type=" << p.theType
+              << ", A=" << p.theA
+              << ", Z=" << p.theZ
+              << ", kinE=" << kineticEnergy
+              << ", target A=" << A
+              << ", Z=" << Z
+              << std::endl);
+        std::abort();
+      }
+      rMax = theDensity->getMaximumRadius();
+    }
+    if(p.theType==Composite) {
+      maxUniverseRadius = rMax;
+    } else if(p.theType==Proton || p.theType==Neutron) {
+      const G4double interactionDistanceNN = CrossSections::interactionDistanceNN(kineticEnergy);
+      if(interactionDistanceNN>CrossSections::interactionDistanceNN1GeV()) {
+        maxUniverseRadius = rMax
+          - CrossSections::interactionDistanceNN1GeV()
+          + interactionDistanceNN;
+      } else
+        maxUniverseRadius = rMax;
+    } else if(p.theType==PiPlus
+        || p.theType==PiZero
+        || p.theType==PiMinus) {
+      const G4double interactionDistancePiN = CrossSections::interactionDistancePiN(kineticEnergy);
+      if(interactionDistancePiN>CrossSections::interactionDistancePiN1GeV()) {
+        maxUniverseRadius = rMax
+          - CrossSections::interactionDistancePiN1GeV()
+          + interactionDistancePiN;
+      } else
+        maxUniverseRadius = rMax;
+    }
   }
 
 }

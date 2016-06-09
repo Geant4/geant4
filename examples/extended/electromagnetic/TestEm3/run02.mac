@@ -23,10 +23,9 @@
 /gun/particle e-
 /gun/energy 1 GeV
 #
-/testem/histo/setFileName run02
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 1 100 900. 1000. MeV
-/testem/histo/setHisto 2 100   0.   50. MeV
+/analysis/setFileName run02
+/analysis/h1/set 1 100 900. 1000. MeV
+/analysis/h1/set 2 100   0.   50. MeV
 #
 /testem/event/printModulo 50
 #

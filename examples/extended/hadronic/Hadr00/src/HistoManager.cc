@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.7 2010-10-11 11:02:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr00/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -55,6 +57,7 @@
 #include "G4NucleiProperties.hh"
 #include "G4NistManager.hh"
 #include "G4StableIsotopes.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Histo.hh"
 
@@ -77,99 +80,103 @@ HistoManager* HistoManager::GetPointer()
 
 HistoManager::HistoManager()
 {
-  histo     = new Histo(verbose);
-  neutron   = G4Neutron::Neutron();
-  verbose   = 1;
+  fHisto     = new Histo();
+  fNeutron   = G4Neutron::Neutron();
+  fVerbose   = 1;
 
-  particleName  = "proton";
-  elementName   = "Al";
+  fParticleName  = "proton";
+  fElementName   = "Al";
 
-  minKinEnergy  = 0.1*MeV;
-  maxKinEnergy  = 10*TeV;
-  minMomentum   = 1*MeV;
-  maxMomentum   = 10*TeV;
+  fMinKinEnergy  = 0.1*MeV;
+  fMaxKinEnergy  = 10*TeV;
+  fMinMomentum   = 1*MeV;
+  fMaxMomentum   = 10*TeV;
 
-  nBinsE    = 800;
-  nBinsP    = 700;
+  fBinsE    = 800;
+  fBinsP    = 700;
 
-  isInitialised = false;
+  fHisto->SetVerbose(fVerbose);
+
+  fIsInitialised = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::~HistoManager()
 {
-  delete histo;
+  delete fHisto;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::BeginOfRun()
 {
-  G4double p1 = std::log10(minMomentum/GeV);
-  G4double p2 = std::log10(maxMomentum/GeV);
-  G4double e1 = std::log10(minKinEnergy/MeV);
-  G4double e2 = std::log10(maxKinEnergy/MeV);
+  G4double p1 = std::log10(fMinMomentum/GeV);
+  G4double p2 = std::log10(fMaxMomentum/GeV);
+  G4double e1 = std::log10(fMinKinEnergy/MeV);
+  G4double e2 = std::log10(fMaxKinEnergy/MeV);
 
   //G4cout<<"e1= "<<e1<<" e2= "<<e2<<" p1= "<<p1<<" p2= "<<p2<<G4endl;
 
-  if(isInitialised) {
-    histo->setHisto1D(0,nBinsP,p1,p2);
-    histo->setHisto1D(1,nBinsE,e1,e2);
-    histo->setHisto1D(2,nBinsP,p1,p2);
-    histo->setHisto1D(3,nBinsE,e1,e2);
-    histo->setHisto1D(4,nBinsE,e1,e2);
-    histo->setHisto1D(5,nBinsE,e1,e2);
-    histo->setHisto1D(6,nBinsE,e1,e2);
-    histo->setHisto1D(7,nBinsE,e1,e2);
+  if(fIsInitialised) {
+    fHisto->SetHisto1D(0,fBinsP,p1,p2,1.0);
+    fHisto->SetHisto1D(1,fBinsE,e1,e2,1.0);
+    fHisto->SetHisto1D(2,fBinsP,p1,p2,1.0);
+    fHisto->SetHisto1D(3,fBinsE,e1,e2,1.0);
+    fHisto->SetHisto1D(4,fBinsE,e1,e2,1.0);
+    fHisto->SetHisto1D(5,fBinsE,e1,e2,1.0);
+    fHisto->SetHisto1D(6,fBinsE,e1,e2,1.0);
+    fHisto->SetHisto1D(7,fBinsE,e1,e2,1.0);
 
   } else {
-    histo->add1D("h1","Elastic cross section (barn) as a functions of log10(p/GeV)",
-		 nBinsP,p1,p2);
-    histo->add1D("h2","Elastic cross section (barn) as a functions of log10(E/MeV)",
-		 nBinsE,e1,e2);
-    histo->add1D("h3","Inelastic cross section (barn) as a functions of log10(p/GeV)",
-		 nBinsP,p1,p2);
-    histo->add1D("h4","Inelastic cross section (barn) as a functions of log10(E/MeV)",
-		 nBinsE,e1,e2);
-    histo->add1D("h5","Capture cross section (barn) as a functions of log10(E/MeV)",
-		 nBinsE,e1,e2);
-    histo->add1D("h6","Fission cross section (barn) as a functions of log10(E/MeV)",
-		 nBinsE,e1,e2);
-    histo->add1D("h7","Charge exchange cross section (barn) as a functions of log10(E/MeV)",
-		 nBinsE,e1,e2);
-    histo->add1D("h8","Total cross section (barn) as a functions of log10(E/MeV)",
-		 nBinsE,e1,e2);
+    fHisto->Add1D("h1","Elastic cross section (barn,1.0) as a functions of log10(p/GeV)",
+                 fBinsP,p1,p2,1.0);
+    fHisto->Add1D("h2","Elastic cross section (barn) as a functions of log10(E/MeV)",
+                 fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h3","Inelastic cross section (barn) as a functions of log10(p/GeV)",
+                 fBinsP,p1,p2,1.0);
+    fHisto->Add1D("h4","Inelastic cross section (barn) as a functions of log10(E/MeV)",
+                 fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h5","Capture cross section (barn) as a functions of log10(E/MeV)",
+                 fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h6","Fission cross section (barn) as a functions of log10(E/MeV)",
+                 fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h7","Charge exchange cross section (barn) as a functions of log10(E/MeV)",
+                 fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h8","Total cross section (barn) as a functions of log10(E/MeV)",
+                 fBinsE,e1,e2,1.0);
   }
 
-  isInitialised = true;
-  histo->book();  
+  fIsInitialised = true;
+  fHisto->Book();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::EndOfRun()
 {
-  if(verbose > 0) {
+  if(fVerbose > 0) {
     G4cout << "HistoManager: End of run actions are started" << G4endl;
   }
 
   const G4Element* elm = 
-    G4NistManager::Instance()->FindOrBuildElement(elementName);
+    G4NistManager::Instance()->FindOrBuildElement(fElementName);
+  const G4Material* mat = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_"+fElementName);
   const G4ParticleDefinition* particle = 
-    G4ParticleTable::GetParticleTable()->FindParticle(particleName);
+    G4ParticleTable::GetParticleTable()->FindParticle(fParticleName);
 
-  G4cout << "### Fill Cross Sections for " << particleName 
-	 << " off " << elementName
-	 << G4endl;
-  if(verbose > 0) {
+  G4cout << "### Fill Cross Sections for " << fParticleName 
+         << " off " << fElementName
+         << G4endl;
+  if(fVerbose > 0) {
     G4cout << "------------------------------------------------------------------------" 
-	   << G4endl;
+           << G4endl;
     G4cout << "    N     E(MeV)   Elastic(b)   Inelastic(b)";
-    if(particle == neutron) { G4cout << " Capture(b)   Fission(b)"; }
+    if(particle == fNeutron) { G4cout << " Capture(b)   Fission(b)"; }
     G4cout << "   Total(b)" << G4endl;     
     G4cout << "------------------------------------------------------------------------" 
-	   << G4endl;
+           << G4endl;
   }
   if(!particle || !elm) {
     G4cout << "HistoManager WARNING Particle or element undefined" << G4endl;
@@ -184,69 +191,68 @@ void HistoManager::EndOfRun()
 
   // Build histograms
 
-  G4double p1 = std::log10(minMomentum/GeV);
-  G4double p2 = std::log10(maxMomentum/GeV);
-  G4double e1 = std::log10(minKinEnergy/MeV);
-  G4double e2 = std::log10(maxKinEnergy/MeV);
-  G4double de = (e2 - e1)/G4double(nBinsE);
-  G4double dp = (p2 - p1)/G4double(nBinsP);
+  G4double p1 = std::log10(fMinMomentum/GeV);
+  G4double p2 = std::log10(fMaxMomentum/GeV);
+  G4double e1 = std::log10(fMinKinEnergy/MeV);
+  G4double e2 = std::log10(fMaxKinEnergy/MeV);
+  G4double de = (e2 - e1)/G4double(fBinsE);
+  G4double dp = (p2 - p1)/G4double(fBinsP);
 
   G4double x  = e1 - de*0.5; 
   G4double e, p, xs, xtot;
   G4int i;
-  for(i=0; i<nBinsE; i++) {
+  for(i=0; i<fBinsE; i++) {
     x += de;
     e  = std::pow(10.,x)*MeV;
-    if(verbose>0) G4cout << std::setw(5) << i << std::setw(12) << e;  
-    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm);
+    if(fVerbose>0) G4cout << std::setw(5) << i << std::setw(12) << e;  
+    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot = xs;
-    if(verbose>0) G4cout << std::setw(12) << xs/barn;  
-    histo->fill(1, x, xs/barn);    
-    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
+    if(fVerbose>0) G4cout << std::setw(12) << xs/barn;  
+    fHisto->Fill(1, x, xs/barn);    
+    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot += xs;
-    if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-    histo->fill(3, x, xs/barn);    
-    if(particle == neutron) {
-      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
+    if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
+    fHisto->Fill(3, x, xs/barn);    
+    if(particle == fNeutron) {
+      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
-      if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-      histo->fill(4, x, xs/barn);    
-      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
+      if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
+      fHisto->Fill(4, x, xs/barn);    
+      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
-      if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-      histo->fill(5, x, xs/barn);    
+      if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
+      fHisto->Fill(5, x, xs/barn);    
     }
-    xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm);
-    if(verbose>0) G4cout << " " << std::setw(12) << xtot/barn << G4endl;   
-    histo->fill(6, x, xs/barn);    
-    histo->fill(7, x, xtot/barn);    
+    xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm,mat);
+    if(fVerbose>0) G4cout << " " << std::setw(12) << xtot/barn << G4endl;   
+    fHisto->Fill(6, x, xs/barn);    
+    fHisto->Fill(7, x, xtot/barn);    
   }
 
   x = p1 - dp*0.5; 
-  for(i=0; i<nBinsP; i++) {
+  for(i=0; i<fBinsP; i++) {
     x += dp;
     p  = std::pow(10.,x)*GeV;
     e  = std::sqrt(p*p + mass*mass) - mass;
-    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm);
-    histo->fill(0, x, xs/barn);    
-    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
-    histo->fill(2, x, xs/barn); 
+    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm,mat);
+    fHisto->Fill(0, x, xs/barn);    
+    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
+    fHisto->Fill(2, x, xs/barn); 
   }
-  if(verbose > 0) {
+  if(fVerbose > 0) {
     G4cout << "-----------------------------------------------------------------" 
-	   << G4endl;
+           << G4endl;
   }
   G4cout.precision(prec);
-  if(verbose > 1) { histo->print(0); }
-  histo->save();
+  fHisto->Save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::SetVerbose(G4int val)        
 {
-  verbose = val; 
-  histo->setVerbose(val);
+  fVerbose = val; 
+  fHisto->SetVerbose(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,4 +1,4 @@
-// $Id: Doxymain.h 55087 2011-11-16 10:11:00Z gcosmo $
+// $Id: Doxymain.h 65679 2012-11-26 13:41:53Z gcosmo $
 
 /// \file Doxymain.h
 /// \brief The main page for Geant4 Examples code documenation
@@ -35,7 +35,14 @@ See more on each examples category pages:
 - \ref README_basic
 - \ref README_extended
 - <a href="http://geant4advancedexampleswg.wikispaces.com/ExamplesDocumentation">
-  Geant4 Advanced Examples </a>
+  Advanced Examples </a>
+
+And more on what is common for all examples:
+- \ref README_HowToRun 
+- \ref README_HowToNavigate
+
+
+
 */
 
 

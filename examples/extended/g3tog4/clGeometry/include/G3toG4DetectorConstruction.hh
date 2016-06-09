@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file g3tog4/clGeometry/include/G3toG4DetectorConstruction.hh
+/// \brief Definition of the G3toG4DetectorConstruction class
 //
-// $Id: G3toG4DetectorConstruction.hh,v 1.4 2006-06-29 17:20:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1
-
-//--------------------------------------------------------------------------
-// G3toG4DetectorConstruction. Most the work is Done in
-// G4BuildGeom, which returns a G4LogicalVolume*, a pointer to the
-// top-level logiical volume in the detector defined by the call List file
-// inFile
-//--------------------------------------------------------------------------
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4PVPlacement.hh"
@@ -43,20 +38,23 @@
 #include "G3G4Interface.hh"
 #include "globals.hh"
 
+/// Detector construction class. 
+///
+/// Most the work is done in G4BuildGeom(), which returns a pointer to 
+/// the top-level logical volume in the detector defined by 
+/// the call list file inFile.
+
 class G3toG4DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   G3toG4DetectorConstruction(G4String inFile="svt.dat");
+  virtual ~G3toG4DetectorConstruction();
 
-  ~G3toG4DetectorConstruction();
-
-  G4VPhysicalVolume* Construct();
-  G4LogicalVolume* SimpleConstruct();
-
+  virtual G4VPhysicalVolume* Construct();
+ 
 private:
-  G4String _inFile;
-  G4VPhysicalVolume* _pv;
-  G4LogicalVolume* _lv;
+  G4LogicalVolume* SimpleConstruct();
+  G4String fInFile;
 };
 
 #endif

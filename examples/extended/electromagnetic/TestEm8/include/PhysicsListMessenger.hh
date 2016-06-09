@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm8/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2010-09-08 09:12:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -61,16 +63,16 @@ public:
   PhysicsListMessenger(PhysicsList* );
   virtual ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   
-  PhysicsList* pPhysicsList;
+  PhysicsList* fPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* eCmd;
-  G4UIcmdWithAnInteger*      ebCmd;
-  G4UIcmdWithAnInteger*      cbCmd;
-  G4UIcmdWithAString*        pListCmd;
+  G4UIcmdWithADoubleAndUnit* fECmd;
+  G4UIcmdWithAnInteger*      fEBCmd;
+  G4UIcmdWithAnInteger*      fCBCmd;
+  G4UIcmdWithAString*        fListCmd;
     
 };
 

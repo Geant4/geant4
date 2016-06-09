@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.2 2007-03-02 11:08:41 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,24 +45,24 @@
 
 StackingAction::StackingAction(DetectorConstruction* det, RunAction* run,
                                HistoManager* histo)
-:detector(det),runAction(run),histoManager(histo)
+:fDetector(det),fRunAction(run),fHistoManager(histo)
 {
-  matWall = 0;
-  Zcav = 0.; 
-  emCal = 0;
+  fMatWall = 0;
+  fZcav = 0.; 
+  fEmCal = 0;
   first = true;
-  killTrack  = true;
+  fKillTrack  = true;
   
   //create a messenger for this class  
-  stackMessenger = new StackingMessenger(this);
+  fStackMessenger = new StackingMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::~StackingAction()
 {
-  delete emCal;
-  delete stackMessenger;
+  delete fEmCal;
+  delete fStackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,11 +70,11 @@ StackingAction::~StackingAction()
 G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* track)
 {
- //get detector informations
+ //get fDetector informations
  if (first) {
-   matWall = detector->GetWallMaterial();
-   Zcav    = 0.5*(detector->GetCavityThickness());
-   emCal   = new G4EmCalculator();
+   fMatWall = fDetector->GetWallMaterial();
+   fZcav    = 0.5*(fDetector->GetCavityThickness());
+   fEmCal   = new G4EmCalculator();
    first   = false;
  }
  
@@ -87,23 +89,23 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
  //energy spectrum of charged secondaries
  //
   G4double energy = track->GetKineticEnergy();  
-  runAction->sumEsecond(energy);
+  fRunAction->sumEsecond(energy);
   
  // kill e- which cannot reach Cavity
  //
  G4double position = (track->GetPosition()).z();
- G4double safe = std::abs(position) - Zcav;
- G4double range = emCal->GetRangeFromRestricteDEDX(energy,particle,matWall);
- if (killTrack) {
+ G4double safe = std::abs(position) - fZcav;
+ G4double range = fEmCal->GetRangeFromRestricteDEDX(energy,particle,fMatWall);
+ if (fKillTrack) {
    if (range < 0.8*safe) status = fKill;
  }
 
  //histograms
  //
- histoManager->FillHisto(1,position);
- histoManager->FillHisto(2,energy);
+ fHistoManager->FillHisto(1,position);
+ fHistoManager->FillHisto(2,energy);
  G4ThreeVector direction = track->GetMomentumDirection();
- histoManager->FillHisto(3,std::acos(direction.z()));      
+ fHistoManager->FillHisto(3,std::acos(direction.z()));      
     
  return status;
 }

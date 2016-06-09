@@ -33,13 +33,13 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.cc,v 1.6 2010-11-18 13:10:08 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "PurgMagPhysicsList.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"

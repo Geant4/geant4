@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.7 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -54,12 +53,13 @@
 // MiscQGSC class (QGS with the Energy Flow interface to CHIPS), covering all
 // particles, which are not N, pi, or K, defined by the separate builders. 
 //---------------------------------------------------------------------------
+#include <iomanip>   
 
 #include "HadronPhysicsQGSC_CHIPS.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
@@ -68,12 +68,27 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsQGSC_CHIPS::HadronPhysicsQGSC_CHIPS(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSC_CHIPS")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSC_CHIPS")
+    , theNeut(0)
+    , theQGSCNeut(0)
+    , thePiK(0)
+    , theQGSCPiK(0)
+    , theProt(0)
+    , theQGSCProt(0)
+    , theMiscQGSC(0)
+    , QuasiElastic(true)
 {}
 
 HadronPhysicsQGSC_CHIPS::HadronPhysicsQGSC_CHIPS(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name), QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name)
+    , theNeut(0)
+    , theQGSCNeut(0)
+    , thePiK(0)
+    , theQGSCPiK(0)
+    , theProt(0)
+    , theQGSCProt(0)
+    , theMiscQGSC(0)
+    , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSC_CHIPS::CreateModels()

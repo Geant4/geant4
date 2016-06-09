@@ -29,6 +29,9 @@ provided; may require additional third party products to be built.
 
 Most of the examples can be run both in interactive and batch mode, and 
 input macro files (*.in) and reference output files (*.out) are provided.
+See the detailed instructions how to build and how to run an example
+in README.HowToRun and README.HowToRunTestEm1.
+
 Basic, novice and most of the extended examples are considered part of the
 system testing suite for validation of the official releases of the
 GEANT4 toolkit. Basic, novice and some of the extended and advanced
@@ -45,7 +48,7 @@ Basic examples
    - Started from novice/N02 example
    
  ExampleB3
-   - Simplified calorimeter crystals 
+   - Schematic Positron Emitted Tomography system 
    - Radioactive source 
    - Scoring within Crystals via G4 scorers
 

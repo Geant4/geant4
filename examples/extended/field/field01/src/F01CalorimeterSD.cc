@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01CalorimeterSD.cc
+/// \brief Implementation of the F01CalorimeterSD class
 //
-// $Id: F01CalorimeterSD.cc,v 1.6 2006-06-29 17:16:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -49,57 +51,59 @@
 
 F01CalorimeterSD::F01CalorimeterSD(G4String name,
                                    F01DetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+: G4VSensitiveDetector(name),
+  fCalCollection(0),
+  fDetector(det),
+  fHitID(new G4int[500])
 {
   collectionName.insert("CalCollection");
-  HitID = new G4int[500];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01CalorimeterSD::~F01CalorimeterSD()
 {
-  delete [] HitID;
+  delete [] fHitID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  CalCollection = new F01CalorHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for (G4int j=0;j<1; j++) {HitID[j] = -1;};
+  fCalCollection = new F01CalorHitsCollection
+                       (SensitiveDetectorName,collectionName[0]); 
+  for (G4int j=0;j<1; j++) {fHitID[j] = -1;};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool F01CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+G4bool F01CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double edep = step->GetTotalEnergyDeposit();
   G4double stepl = 0.;
 
-  stepl = aStep->GetStepLength();
+  stepl = step->GetStepLength();
 
   if ((edep == 0.) && (stepl == 0.) ) return false;      
 
   G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+    = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 
   G4int F01Number = 0 ;
-  if (HitID[F01Number]==-1)
+  if (fHitID[F01Number]==-1)
     { 
       F01CalorHit* calHit = new F01CalorHit();
-      if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
-      HitID[F01Number] = CalCollection->insert(calHit) - 1;
+      if (physVol == fDetector->GetAbsorber()) calHit->AddAbs(edep,stepl);
+      fHitID[F01Number] = fCalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
         G4cout << " New Calorimeter Hit on F01: " << F01Number << G4endl;
     }
   else
     { 
-      if (physVol == Detector->GetAbsorber())
-         (*CalCollection)[HitID[F01Number]]->AddAbs(edep,stepl);
+      if (physVol == fDetector->GetAbsorber())
+         (*fCalCollection)[fHitID[F01Number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
         G4cout << " Energy added to F01: " << F01Number << G4endl; 
     }
@@ -108,12 +112,12 @@ G4bool F01CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void F01CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
+void F01CalorimeterSD::EndOfEvent(G4HCofThisEvent* hce)
 {
-  static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection(HCID,CalCollection);
+  static G4int hcID = -1;
+  if (hcID<0)
+  { hcID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  hce->AddHitsCollection(hcID,fCalCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

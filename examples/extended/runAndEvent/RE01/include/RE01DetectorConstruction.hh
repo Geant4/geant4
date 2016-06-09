@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01DetectorConstruction.hh,v 1.2 2006-06-29 17:42:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01DetectorConstruction.hh
+/// \brief Definition of the RE01DetectorConstruction class
 //
-
+// $Id$
+//
 
 #ifndef RE01DetectorConstruction_h
 #define RE01DetectorConstruction_h 1
@@ -38,15 +39,14 @@ class G4VPhysicalVolume;
 
 class RE01DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-    RE01DetectorConstruction();
-    ~RE01DetectorConstruction();
-
-  public:
-     G4VPhysicalVolume* Construct();
-
-  private:
-
+public:
+  RE01DetectorConstruction();
+  virtual ~RE01DetectorConstruction();
+  
+public:
+  virtual G4VPhysicalVolume* Construct();
+  
+private:
 #include "RE01DetectorParameterDef.hh"
 
 };

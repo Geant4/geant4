@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04CalorimeterParametrisation.hh
+/// \brief Definition of the ExN04CalorimeterParametrisation class
+//
 
 #ifndef ExN04CalorimeterParametrisation_H
 #define ExN04CalorimeterParametrisation_H 1

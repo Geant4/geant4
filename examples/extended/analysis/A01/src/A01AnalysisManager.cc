@@ -23,26 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// **********************************************************************
-// *                                                                    *
-// *                    GEANT 4 tutorial 1                              *
-// *                                                                    *
-// * MODULE:            A01AnalysisManager.cc                           *
-// * -------                                                            *
-// *                                                                    *
-// * Version:           0.1                                             *
-// * Date:              January 28 2002                                 *
-// * Author:            T.Johnson                                       *
-// * Organisation:      SLAC                                            *
-// *                                                                    *
-// **********************************************************************
-//
-// CHANGE HISTORY
-// --------------
-//
-// Nov 4 2002 -- Upgrade to AIDA 3.0
-// **********************************************************************
+/// \file analysis/A01/src/A01AnalysisManager.cc
+/// \brief Implementation of the A01AnalysisManager class
+
 #ifdef G4ANALYSIS_USE
 
 #include <fstream>
@@ -59,22 +42,22 @@
 
 #include "A01AnalysisManager.hh"
 
-A01AnalysisManager* A01AnalysisManager::instance = 0;
+A01AnalysisManager* A01AnalysisManager::fInstance = 0;
 
 A01AnalysisManager::A01AnalysisManager()
-:analysisFactory(0), hFactory(0), tFactory(0), plotter(0)
+:fAnalysisFactory(0), fFactory(0), tFactory(0), fPlotter(0)
 {
   // Hooking an AIDA compliant analysis system.
-  analysisFactory = AIDA_createAnalysisFactory();
-  if(analysisFactory)
+  fAnalysisFactory = AIDA_createAnalysisFactory();
+  if(fAnalysisFactory)
   {
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    tree = treeFactory->create("A01.aida","xml",false,true,"compress=yes");
-    hFactory = analysisFactory->createHistogramFactory(*tree);
-    tFactory = analysisFactory->createTupleFactory(*tree);
-    IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
+    ITreeFactory* treeFactory = fAnalysisFactory->createTreeFactory();
+    fTree = treeFactory->create("A01.aida","xml",false,true,"compress=yes");
+    fFactory = fAnalysisFactory->createHistogramFactory(*fTree);
+    tFactory = fAnalysisFactory->createTupleFactory(*fTree);
+    IPlotterFactory* pf = fAnalysisFactory->createPlotterFactory(0,0);
     if (pf) {
-      plotter = pf->create("Plotter");
+      fPlotter = pf->create("Plotter");
       delete pf;
     }
     delete treeFactory; // Will not delete the ITree.
@@ -83,20 +66,20 @@ A01AnalysisManager::A01AnalysisManager()
 
 A01AnalysisManager::~A01AnalysisManager()
 {
-  if (analysisFactory)
+  if (fAnalysisFactory)
   {
-    if (!tree->commit()) G4cout << "Commit failed: no AIDA file produced!" << G4endl;
-    delete tree;
+    if (!fTree->commit()) G4cout << "Commit failed: no AIDA file produced!" << G4endl;
+    delete fTree;
     delete tFactory;
-    delete hFactory;
-    delete plotter;
+    delete fFactory;
+    delete fPlotter;
     G4cout << "Warning: In case of working with JAS-AIDA, Geant4 will NOT exit unless you close the JAS-AIDA window." << G4endl;
-    delete analysisFactory;
+    delete fAnalysisFactory;
   }
 }
 IHistogramFactory* A01AnalysisManager::getHistogramFactory()
 {
-  return hFactory;
+  return fFactory;
 }
 ITupleFactory* A01AnalysisManager::getTupleFactory()
 {
@@ -104,21 +87,21 @@ ITupleFactory* A01AnalysisManager::getTupleFactory()
 }
 IPlotter* A01AnalysisManager::getPlotter()
 {
-  return plotter;
+  return fPlotter;
 }
 
 A01AnalysisManager* A01AnalysisManager::getInstance()
 {
-  if (instance == 0) instance = new A01AnalysisManager();
-  return instance;
+  if (fInstance == 0) fInstance = new A01AnalysisManager();
+  return fInstance;
 }
 
 void A01AnalysisManager::dispose()
 {
-  if (instance != 0)
+  if (fInstance != 0)
   {
-    delete instance;
-    instance = 0;
+    delete fInstance;
+    fInstance = 0;
   }
 }
 

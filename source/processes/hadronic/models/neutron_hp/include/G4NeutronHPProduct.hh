@@ -24,19 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPProduct.hh,v 1.12 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1
 
-#include "G4HadronicException.hh"
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4HadronicException.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4ReactionProductVector.hh"
 
@@ -57,14 +57,20 @@ class G4NeutronHPProduct
   {
     if(theDist != 0) delete theDist;
   }
+
+
+      //TK120515 For migration of frameFlag (MF6 LCT) = 3 in
+      //G4NeutronHPEnAngCorrelation
+      G4double GetMassCode(){return theMassCode;};
+      G4double GetMass(){return theMass;};
   
   inline void Init(std::ifstream & aDataFile)
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;
-    theGroundStateQValue*= eV;
-    theActualStateQValue*= eV;
-    theYield.Init(aDataFile, eV);
+    theGroundStateQValue*= CLHEP::eV;
+    theActualStateQValue*= CLHEP::eV;
+    theYield.Init(aDataFile, CLHEP::eV);
     if(theDistLaw==0)
     {
       // distribution not known, use E-independent, isotropic angular distribution

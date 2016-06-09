@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.hh,v 1.11 2009-11-06 11:10:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4TouchableHistory

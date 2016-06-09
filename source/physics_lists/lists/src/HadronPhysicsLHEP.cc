@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP.cc,v 1.2 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +33,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 16.10.2012 A.Ribon: renamed stopping builder
 //
 //----------------------------------------------------------------------------
 //
@@ -49,12 +49,33 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsLHEP);
+
 HadronPhysicsLHEP::HadronPhysicsLHEP(G4int)
-                    :  G4VPhysicsConstructor("hInelastic LHEP") 
+    :  G4VPhysicsConstructor("hInelastic LHEP") 
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
+    , theStoppingHadron(0)
 {}
 
 HadronPhysicsLHEP::HadronPhysicsLHEP(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
+    , theStoppingHadron(0)
 {}
 
 void HadronPhysicsLHEP::CreateModels()
@@ -69,7 +90,7 @@ void HadronPhysicsLHEP::CreateModels()
   thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
 
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;  
+  theStoppingHadron=new G4LHEPStoppingHadronBuilder;  
 }
 
 HadronPhysicsLHEP::~HadronPhysicsLHEP()

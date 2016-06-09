@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.22 2010-08-11 17:14:02 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -49,9 +48,10 @@
 #ifndef G4DynamicParticle_h
 #define G4DynamicParticle_h 1
 
+#include <cmath>
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
-#include <cmath>
 #include "G4ios.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -64,8 +64,9 @@
 //  and you are recommended to use G4ThreeVector instead
 
 #include "G4ElectronOccupancy.hh"
-#include "G4PrimaryParticle.hh"
 
+
+class G4PrimaryParticle;
 class  G4VProcess;
 class  G4DecayProducts;
 

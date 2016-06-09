@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelProxy.icc,v 1.4 2006-06-29 18:32:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4SmartVoxelProxy Inline implementation
@@ -59,7 +58,7 @@ G4SmartVoxelHeader* G4SmartVoxelProxy::GetHeader() const
 }
 
 inline
-G4bool G4SmartVoxelProxy::operator == (const G4SmartVoxelProxy& v) const
+G4bool G4SmartVoxelProxy::operator == (const G4SmartVoxelProxy& right) const
 {
-  return (this==&v) ? true : false;
+  return (this==&right) ? true : false;
 }

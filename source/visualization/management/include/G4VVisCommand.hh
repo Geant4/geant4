@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.18 2006-06-29 21:28:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -36,6 +35,10 @@
 #include "G4VisManager.hh"
 #include "G4UImessenger.hh"
 #include "G4ThreeVector.hh"
+#include "G4Text.hh"
+#include "G4VisAttributes.hh"
+#include "G4VMarker.hh"
+#include "G4ModelingParameters.hh"
 #include <vector>
 
 class G4UIcommand;
@@ -62,6 +65,16 @@ protected:
 
   // Data members.
   static G4VisManager* fpVisManager;
+
+  // Current quantities for use in appropriate commands
+  static G4Colour                   fCurrentColour;
+  static G4Colour                   fCurrentTextColour;
+  static G4Text::Layout             fCurrentTextLayout;
+  static G4double                   fCurrentLineWidth;
+  //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
+  //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
+  //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
+  static G4ModelingParameters::PVNameCopyNoPath fCurrentTouchablePath;
 };
 
 #include "G4VVisCommand.icc"

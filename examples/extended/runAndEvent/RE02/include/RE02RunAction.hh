@@ -23,10 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02RunAction.hh
+/// \brief Definition of the RE02RunAction class
 //
-// $Id: RE02RunAction.hh,v 1.3 2006-11-18 01:37:23 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
+//  
+//
 
 #ifndef RE02RunAction_h
 #define RE02RunAction_h 1
@@ -46,6 +50,22 @@ class G4Run;
 //
 //=======================================================================
 //
+/// User run action class
+///
+/// - G4Run* GenerateRun()
+///     instanciates a run of RE02Run with a sensitive detector name
+///
+/// - void BeginOfRunAction(const G4Run*)
+///     shows the run number 
+///
+/// - void EndOfRunAction(const G4Run*)
+///     shows accumulated information of primitive scorers and
+///     outputs total energy deposit into "totED.txt" file
+///
+/// - G4int CopyNo(G4int ix, G4int iy, G4int iz)
+///     returns a copy number of the segment number of the water phantom
+///     indicated by three dimentional indexes
+//
 class RE02RunAction : public G4UserRunAction
 {
 public:
@@ -63,13 +83,12 @@ public:
   // Utility method for converting segment number of
   // water phantom to copyNo of HitsMap.
   G4int CopyNo(G4int ix, G4int iy, G4int iz)
-  {  return (iy*(fNx*fNy)+ix*fNz+iz); }
-
+  {  return (iy*(fNx*fNz)+ix*fNz+iz); }
 
 private:
   // Data member 
   // - vector of MultiFunctionalDetecor names.
-  std::vector<G4String> theSDName;  
+  std::vector<G4String> fSDName;  
 
   // for conversion of sengment number to copyNo.
   G4int fNx, fNy, fNz;

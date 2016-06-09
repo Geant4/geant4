@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITTrackingManager.hh 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -39,64 +40,30 @@
 #define G4ITTRACKINGMANAGER_HH
 
 #include "G4TrackList.hh"
-/***
-#include "G4VTrajectory.hh"
-***/
 
 class G4ITTrackingManager;
 class G4UserTrackingAction;
+class G4UserSteppingAction;
 class G4Step;
 class G4Track;
-
-class G4Trajectory_Lock
-{
-    friend class G4ITTrackingManager;
-
-    G4Trajectory_Lock()
-    /*** : fpTrajectory(0)***/
-    {;}
-    ~G4Trajectory_Lock()
-    {;}
-
-    /***G4VTrajectory* fpTrajectory;***/
-};
+class G4ITTrackingInteractivity;
 
 class G4ITTrackingManager
 {
-    int fStoreTrajectory;
-    int fVerboseLevel;
-/***    G4UserTrackingAction* fpUserTrackingAction; ***/
-    bool fSetNewUserTrackingAction;
+protected:
+    G4ITTrackingInteractivity* fpTrackingInteractivity;
 
 public:
     G4ITTrackingManager();
-    ~G4ITTrackingManager();
+    virtual ~G4ITTrackingManager();
 
-    void Initialize();
+    //void Initialize();
 
-    void StartTracking(G4Track*);
-    void TrackBanner(G4Track* track, const G4String& message = "");
-    void AppendTrajectory(G4Track* track, G4Step* step);
-    void EndTracking(G4Track*);
-    inline void SetVerbose(int);
+    virtual void StartTracking(G4Track*);
+    virtual void AppendStep(G4Track* track, G4Step* step);
+    virtual void EndTracking(G4Track*);
 
-    // if not set, will use tracking action of standard G4TrackingManager
-/***
-    void SetUserTrackingAction(G4UserTrackingAction*);
-    inline G4UserTrackingAction* GetUserTrackingAction();
-***/
+    void SetInteractivity(G4ITTrackingInteractivity*);
 };
-
-/***
-  inline G4UserTrackingAction* G4ITTrackingManager::GetUserTrackingAction()
-  {
-      return fpUserTrackingAction;
-  }
-***/
-
-inline void G4ITTrackingManager::SetVerbose(int flag)
-{
-    fVerboseLevel = flag;
-}
 
 #endif // G4ITTRACKINGMANAGER_HH

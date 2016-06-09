@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01ChamberParameterisation.hh
+/// \brief Definition of the ExP01ChamberParameterisation class
 //
-// $Id: ExP01ChamberParameterisation.hh,v 1.2 2006-06-29 17:38:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 //  A parameterisation that describes a series of boxes along Z
@@ -59,6 +61,8 @@ class G4Polyhedra;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Chamber parameterisation for the persistency example 
+
 class ExP01ChamberParameterisation : public G4VPVParameterisation
 { 
   public:
@@ -70,7 +74,7 @@ class ExP01ChamberParameterisation : public G4VPVParameterisation
                                  G4double lengthInitial,
                                  G4double lengthFinal );
 
-    virtual				 
+    virtual                                 
    ~ExP01ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeTo3PiModel.cc,v 1.3 2009-11-11 17:13:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +48,7 @@
 
 #include "G4eeTo3PiModel.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4PionZero.hh"
@@ -131,7 +131,7 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
 
   G4LorentzVector w0, w1, w2;
   G4ThreeVector dir0, dir1;
-  G4double e0, p0, e2, p, g, m01, m02, m12;
+  G4double e0, p0, e2, p, gg, m01, m02, m12;
 
   // max pi0 energy
   G4double edel  = 0.5*e*(1.0 + x0*x0 - 4.0*x1*x1) - massPi0;
@@ -171,16 +171,16 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
     G4double py = pz1*px2 - pz2*px1;
     G4double pz = px1*py2 - px2*py1;
 
-    g = (px*px + py*py + pz*pz)*
+    gg = (px*px + py*py + pz*pz)*
       norm( 1.0/cross->DpRho(m01) +  1.0/cross->DpRho(m02)
 	    + 1.0/cross->DpRho(m12) );
-    if(g > gmax) {
+    if(gg > gmax) {
       G4cout << "G4eeTo3PiModel::SampleSecondaries WARNING matrix element g= "
-	     << g << " > " << gmax << " (majoranta)" << G4endl;
+	     << gg << " > " << gmax << " (majoranta)" << G4endl;
     }
-    if(g > gcash) gcash = g;
+    if(gg > gcash) gcash = gg;
     
-  } while( gmax*G4UniformRand() > g );
+  } while( gmax*G4UniformRand() > gg );
 
   w0.rotateUz(direction);
   w1.rotateUz(direction);

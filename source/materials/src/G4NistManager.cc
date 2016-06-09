@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.20 2010-11-01 18:43:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -91,7 +90,7 @@ G4NistManager::G4NistManager()
 
   // compute frequently used values for mean atomic numbers
   for(G4int j=1; j<101; ++j) {
-    G4double A = elmBuilder->GetA(j);
+    G4double A = elmBuilder->GetAtomicMassAmu(j);
     POWERA27[j] = std::pow(A,0.27);
     LOGAZ[j]    = std::log(A);
   }

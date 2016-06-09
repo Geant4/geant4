@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file polarisation/Pol01/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

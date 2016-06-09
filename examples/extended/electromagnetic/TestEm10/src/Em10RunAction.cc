@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10RunAction.cc
+/// \brief Implementation of the Em10RunAction class
 //
-// $Id: Em10RunAction.cc,v 1.9 2006-06-29 16:38:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -39,6 +41,8 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -50,6 +54,17 @@ Em10RunAction::Em10RunAction()
 {
   runMessenger = new Em10RunMessenger(this);
   saveRndm = 1;  
+
+  EnergySumAbs = EnergySquareSumAbs = tlSumAbs = tlsquareSumAbs = 
+    nStepSumCharged = nStepSum2Charged= nStepSumNeutral = nStepSum2Neutral=
+    TotNbofEvents = SumCharged= SumNeutral=Sum2Charged=Sum2Neutral=Selectron=
+    Spositron=Transmitted=Reflected  =dStep=entryStep=underStep=overStep=
+    dEn = entryEn= underEn=overEn=dTt = entryTt=underTt=overTt=Ttmean=
+    Tt2mean=dTb = entryTb=underTb=overTb=Tbmean=Tb2mean=dTsec =entryTsec=
+    underTsec=overTsec=dTh = entryTh=underTh=overTh=dThback =entryThback=
+    underThback=overThback=dR  =entryR =underR =overR =Rmean=R2mean=dEGamma= 
+    entryGamma = underGamma=overGamma=dz=entryvertexz=undervertexz=
+    oververtexz=0.;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -63,76 +78,6 @@ Em10RunAction::~Em10RunAction()
 
 void Em10RunAction::bookHisto()
 {
-  /*
-  // init hbook
-
-  hbookManager = new HBookFile(histName, 68);
-  assert (hbookManager != 0);
-
-  // book histograms
-
-  if(nbinStep>0)
-  {
-    histo1 = hbookManager->histogram("number of steps/event"
-                                   ,nbinStep,Steplow,Stephigh) ;
-    assert (histo1 != 0);
-  }
-  if(nbinEn>0)
-  {
-    histo2 = hbookManager->histogram("Energy Loss (keV)"
-                                     ,nbinEn,Enlow/keV,Enhigh/keV) ;
-    assert (histo2 != 0);
-  }
-  if(nbinTh>0)
-  {
-    histo3 = hbookManager->histogram("angle distribution at exit(deg)"
-                                     ,nbinTh,Thlow/deg,Thhigh/deg) ;
-    assert (histo3 != 0);
-  }
-  if(nbinR>0)
-  {
-    histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
-                                     ,nbinR ,Rlow,Rhigh)  ;
-    assert (histo4 != 0);
-  }
-  if(nbinTt>0)
-  {
-    histo5 = hbookManager->histogram("kinetic energy of the primary at exit(MeV)"
-                                     ,nbinTt,Ttlow,Tthigh)  ;
-    assert (histo5 != 0);
-  }
-  if(nbinThback>0)
-  {
-    histo6 = hbookManager->histogram("angle distribution of backscattered primaries(deg)"
-                                     ,nbinThback,Thlowback/deg,Thhighback/deg) ;
-    assert (histo6 != 0);
-  }
-  if(nbinTb>0)
-  {
-    histo7 = hbookManager->histogram("kinetic energy of the backscattered primaries (MeV)"
-                                     ,nbinTb,Tblow,Tbhigh)  ;
-    assert (histo7 != 0);
-  }
-  if(nbinTsec>0)
-  {
-    histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
-                                     ,nbinTsec,Tseclow,Tsechigh)  ;
-    assert (histo8 != 0);
-  }
-  if(nbinvertexz>0)
-  {
-    histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
-                                     ,nbinvertexz ,zlow,zhigh)  ;
-    assert (histo9 != 0);
-  }
-  if(nbinGamma>0)
-  {
-    histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
-                                //     ,nbinGamma,ElowGamma,EhighGamma)  ;
-                                ,nbinGamma,std::log10(ElowGamma),std::log10(EhighGamma))  ;
-    assert (histo10 != 0);
-  }
-  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -173,7 +118,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
   Transmitted=0.;
   Reflected  =0.;
 
-//  plot definitions 
+  //  plot definitions 
    
   if(nbinStep>0)
   {
@@ -181,7 +126,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryStep=0.;
     underStep=0.;
     overStep=0.;
-    for(G4int ist=0; ist<nbinStep; ist++)
+    for(G4int ist=0; ist<200; ist++)
     {
       distStep[ist]=0.;
     }
@@ -193,7 +138,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     underEn=0.;
     overEn=0.;
 
-    for (G4int ien=0; ien<nbinEn; ien++)   distEn[ien]=0.;
+    for (G4int ien=0; ien<200; ien++)   distEn[ien]=0.;
   }
   if(nbinTt>0)
   {
@@ -202,7 +147,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     underTt=0.;
     overTt=0.;
 
-    for (G4int itt=0; itt<nbinTt; itt++)  distTt[itt]=0.;
+    for (G4int itt=0; itt<200; itt++)  distTt[itt]=0.;
 
     Ttmean=0.;
     Tt2mean=0.;
@@ -213,7 +158,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryTb=0.;
     underTb=0.;
     overTb=0.;
-    for (G4int itt=0; itt<nbinTb; itt++)
+    for (G4int itt=0; itt<200; itt++)
     {
       distTb[itt]=0.;
     }
@@ -226,7 +171,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryTsec=0.;
     underTsec=0.;
     overTsec=0.;
-    for (G4int its=0; its<nbinTsec; its++)
+    for (G4int its=0; its<200; its++)
     {
       distTsec[its]=0.;
     }
@@ -237,7 +182,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryTh=0.;
     underTh=0.;
     overTh=0.;
-    for (G4int ith=0; ith<nbinTh; ith++)
+    for (G4int ith=0; ith<200; ith++)
     {
       distTh[ith]=0.;
     }
@@ -249,7 +194,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryThback=0.;
     underThback=0.;
     overThback=0.;
-    for (G4int ithback=0; ithback<nbinThback; ithback++)
+    for (G4int ithback=0; ithback<200; ithback++)
     {
       distThback[ithback]=0.;
     }
@@ -262,7 +207,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryR =0.;
     underR =0.;
     overR =0.;
-    for (G4int ir =0; ir <nbinR ; ir++)
+    for (G4int ir =0; ir<200; ir++)
     {
       distR[ir]=0.;
     }
@@ -276,7 +221,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryGamma = 0.;
     underGamma=0.;
     overGamma=0.;
-    for (G4int ig=0; ig<nbinGamma; ig++)
+    for (G4int ig=0; ig<200; ig++)
     {
       distGamma[ig]=0.;
     }
@@ -287,7 +232,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
     entryvertexz=0.;
     undervertexz=0.;
     oververtexz=0.;
-    for(G4int iz=0; iz<nbinvertexz; iz++)
+    for(G4int iz=0; iz<200; iz++)
     {
       distvertexz[iz]=0.;
     }
@@ -301,6 +246,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
 void Em10RunAction::EndOfRunAction(const G4Run*)
 {
   G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
+  if(0.0 >= TotNbofEvents) { return; }
 
   tlSumAbs /= TotNbofEvents ;
   sAbs = tlsquareSumAbs/TotNbofEvents-tlSumAbs*tlSumAbs ;
@@ -351,8 +297,8 @@ void Em10RunAction::EndOfRunAction(const G4Run*)
 
   Transmitted /=TotNbofEvents ;
   Reflected   /=TotNbofEvents ;
- G4cout << " ================== run summary =====================" << G4endl;
- G4int prec = G4cout.precision(6);
+  G4cout << " ================== run summary =====================" << G4endl;
+  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  
            TotNbofEvents << G4endl ;
   G4cout << "    mean charged track length   in absorber=" <<
@@ -725,7 +671,7 @@ void Em10RunAction::EndOfRunAction(const G4Run*)
    }
   }
   
- G4cout.precision(prec);
+  G4cout.precision(prec);
   
   if (G4VVisManager::GetConcreteInstance())
   {
@@ -750,18 +696,18 @@ void Em10RunAction::CountEvent()
 
 /////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::AddnStepsCharged(G4double ns)
+void Em10RunAction::AddnStepsCharged(G4double nstp)
 {
-  nStepSumCharged += ns;
-  nStepSum2Charged += ns*ns;
+  nStepSumCharged += nstp;
+  nStepSum2Charged += nstp*nstp;
 }
 
 ////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::AddnStepsNeutral(G4double ns)
+void Em10RunAction::AddnStepsNeutral(G4double nstp)
 {
-  nStepSumNeutral += ns;
-  nStepSum2Neutral += ns*ns;
+  nStepSumNeutral += nstp;
+  nStepSum2Neutral += nstp*nstp;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -792,313 +738,77 @@ void Em10RunAction::AddTrRef(G4double tr,G4double ref)
 
 void Em10RunAction::FillNbOfSteps(G4double)// ns)
 {
-  /*
-  const G4double eps = 1.e-10 ;
-  G4double n,bin ;
-  G4int ibin;
-
-  if(histo1)
-  {
-    entryStep += 1. ;
- 
-    if(ns<Steplow)
-      underStep += 1. ;
-    else if(ns>=Stephigh)
-      overStep  += 1. ;
-    else
-    {
-      n = ns+eps ;
-      bin = (n-Steplow)/dStep ;
-      ibin= (G4int)bin ;
-      distStep[ibin] += 1. ;
-    }
-   histo1->accumulate(ns) ;
-  }
-  */
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillEn(G4double En)
 {
-
-  // #ifndef G4NOHIST
-
-  
-
   G4double bin ;
   G4int ibin;
 
-  //  if(histo2)
-  {
-    entryEn += 1. ;
- 
+  entryEn += 1. ;
+  if(Enlow < Enhigh) {
+
     if(En < Enlow)          underEn += 1. ;
     else if( En >= Enhigh)  overEn  += 1. ;
     else
     {
-      bin = (En-Enlow)/dEn ;
-      ibin= (G4int)bin ;
-      distEn[ibin] += 1. ;
+      bin = (En-Enlow)/dEn;
+      ibin= (G4int)bin;
+      if(ibin < 0) { ibin = 0; }
+      if(ibin > 199) { ibin = 199; }
+      distEn[ibin] += 1.;
     }
-    //    histo2->accumulate(En/keV) ; // was /MeV
   }
-
-  // #endif
-
-  
-
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillTt(G4double) // En)
 {
-  /*
-  G4double bin ;
-  G4int ibin;
-
-  if(histo5)
-  {
-    entryTt += 1. ;
-    Ttmean += En ;
-    Tt2mean += En*En ;
-
-    if(En<Ttlow)
-      underTt += 1. ;
-    else if(En>=Tthigh)
-      overTt  += 1. ;
-    else
-    {
-      bin = (En-Ttlow)/dTt ;
-      ibin= (G4int)bin ;
-      distTt[ibin] += 1. ;
-    }
-  histo5->accumulate(En/MeV) ;
-  }
-  */
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillTb(G4double) // En)
 {
-  /*
-  G4double bin ;
-  G4int ibin;
-  
-  if(histo7)
-  {
-    entryTb += 1. ;
-    Tbmean += En ;
-    Tb2mean += En*En ;
-
-    if(En<Tblow)
-      underTb += 1. ;
-    else if(En>=Tbhigh)
-      overTb  += 1. ;
-    else
-    {
-      bin = (En-Tblow)/dTb ;
-      ibin= (G4int)bin ;
-      distTb[ibin] += 1. ;
-    }
-  histo7->accumulate(En/MeV) ;
-  }
-  */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillTsec(G4double) // En)
 {
-  /*
-  G4double bin ;
-  G4int ibin;
-
-  if(histo8)
-  {
-    entryTsec += 1. ;
-
-    if(En<Tseclow)
-      underTsec += 1. ;
-    else if(En>=Tsechigh)
-      overTsec  += 1. ;
-    else
-    {
-      bin = (En-Tseclow)/dTsec ;
-      ibin= (G4int)bin ;
-      distTsec[ibin] += 1. ;
-    }
-  histo8->accumulate(En/MeV) ;
-  }
-  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillGammaSpectrum(G4double) // En)
 {
-  /*
-  G4double bin ;
-  G4int ibin;
-
-  if(histo10)
-  {
-    entryGamma += 1. ;
-
-    if(En<ElowGamma)
-      underGamma += 1. ;
-    else if(En>=EhighGamma)
-      overGamma  += 1. ;
-    else
-    {
-      bin = std::log(En/ElowGamma)/dEGamma;
-      ibin= (G4int)bin ;
-      distGamma[ibin] += 1. ;
-    }
-  histo10->accumulate(std::log10(En/MeV)) ;
-  }
-  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillTh(G4double) // Th)
 {
-  /*
-  static const G4double cn=pi/(64800.*dTh) ;
-  static const G4double cs=pi/
-        (64800.*(std::cos(Thlow)-std::cos(Thlow+dTh)));      
-  G4double bin,Thbin ,wg;
-  G4int ibin;
-
-  if(histo3)
-  {
-    entryTh += 1. ;
-
-    wg = 0.;
-
-    if(Th<Thlow)
-      underTh += 1. ;
-    else if(Th>=Thhigh)
-      overTh  += 1. ;
-    else
-    {
-      bin = (Th-Thlow)/dTh ;
-      ibin= (G4int)bin ;
-      Thbin = Thlow+ibin*dTh ;
-      if(Th > 0.001*dTh)
-        wg=cn/std::sin(Th) ;
-      else
-      {  
-        G4double thdeg=Th*180./pi;
-        G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << std::setw(12) << std::setprecision(4) << thdeg << G4endl;
-        wg=0. ; 
-      }
-      distTh[ibin] += wg  ;
-    }
-
-  histo3->accumulate(Th/deg, wg) ;
-  }
-  */
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillThBack(G4double) // Th)
 {
-  /*
-  static const G4double cn=pi/(64800.*dThback) ;
-  static const G4double cs=pi/
-        (64800.*(std::cos(Thlowback)-std::cos(Thlowback+dThback)));      
-  G4double bin,Thbin,wg ;
-  G4int ibin;
-
-  if(histo6)
-  {
-    entryThback += 1. ;
-
-    if(Th<Thlowback)
-      underThback += 1. ;
-    else if(Th>=Thhighback)
-      overThback  += 1. ;
-    else
-    {
-      bin = (Th-Thlowback)/dThback ;
-      ibin= (G4int)bin ;
-      Thbin = Thlowback+ibin*dThback ;
-      if(Th > 0.001*dThback)
-        wg=cn/std::sin(Th) ;
-      else
-      {  
-        G4double thdeg=Th*180./pi;
-        G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << std::setw(12) << std::setprecision(4) << thdeg << G4endl;
-        wg=0. ; 
-      }
-      distThback[ibin] += wg  ;
-    }
-  histo6->accumulate(Th/deg, wg) ;
-  }
-  */
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::FillR(G4double) // R )
 {
-  /*
-  G4double bin ;
-  G4int ibin;
-
-  if(histo4)
-  {
-    entryR  += 1. ;
-    Rmean += R ;
-    R2mean += R*R ;
-
-    if(R <Rlow)
-      underR  += 1. ;
-    else if(R >=Rhigh)
-      overR   += 1. ;
-    else
-    {
-      bin = (R -Rlow)/dR  ;
-      ibin= (G4int)bin ;
-      distR[ibin] += 1. ;
-    }
-  histo4->accumulate(R/mm) ;
-  }
-  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::Fillvertexz(G4double) // z )
 {
-  /*
-  G4double bin ;
-  G4int ibin;
-  
-  if(histo9)
-  {
-    entryvertexz  += 1. ;
-
-    if(z <zlow)
-      undervertexz  += 1. ;
-    else if(z >=zhigh)
-      oververtexz   += 1. ;
-    else
-    {
-      bin = (z -zlow)/dz  ;
-      ibin = (G4int)bin ;
-      distvertexz[ibin] += 1. ;
-    }
-  histo9->accumulate(z/mm) ;
-  }
-  */
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1111,213 +821,221 @@ void Em10RunAction::SethistName(G4String name)
 
 void Em10RunAction::SetnbinStep(G4int nbin)
 {
-  nbinStep = nbin ;
-  if(nbinStep>0)
-  G4cout << " Nb of bins in #step plot = " << nbinStep << G4endl ;
+  if(nbin> 0 && nbin<= 200) {
+    nbinStep = nbin;
+    G4cout << " Nb of bins in #step plot = " << nbinStep << G4endl ;
+  }
 }
 
 void Em10RunAction::SetSteplow(G4double low)
 {
-  Steplow = low ;
-  if(nbinStep>0)
-  G4cout << " low  in the #step plot = " << Steplow << G4endl ;
+  if(low >= 0.0){ 
+    Steplow = low ;
+    G4cout << " low  in the #step plot = " << Steplow << G4endl ;
+  }
 }
 void Em10RunAction::SetStephigh(G4double high)
 {
-  Stephigh = high ;
-  if(nbinStep>0)
-  G4cout << " high in the #step plot = " << Stephigh << G4endl ;
+  if(high > 0.0) {
+    Stephigh = high;
+    G4cout << " high in the #step plot = " << Stephigh << G4endl ;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::SetnbinEn(G4int nbin)
 {
-  nbinEn = nbin ;
-
-  if(nbinEn > 0) G4cout << " Nb of bins in Edep plot = " << nbinEn << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinEn = nbin;
+    G4cout << " Nb of bins in Edep plot = " << nbinEn << G4endl ;
+  }
 }
 
 void Em10RunAction::SetEnlow(G4double Elow)
 {
-  Enlow = Elow ;
-  if(nbinEn>0) G4cout << " Elow  in the  Edep plot = " << Enlow << G4endl ;
+  if(Elow >= 0.0) {
+    Enlow = Elow ;
+    G4cout << " Elow  in the  Edep plot = " << Enlow << G4endl ;
+  }
 }
 
 void Em10RunAction::SetEnhigh(G4double Ehigh)
 {
-  Enhigh = Ehigh ;
-
-  if(nbinEn>0) G4cout << " Ehigh in the  Edep plot = " << Enhigh << G4endl ;
+  if(Ehigh > 0.0) {
+    Enhigh = Ehigh ;
+    G4cout << " Ehigh in the  Edep plot = " << Enhigh << G4endl ;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::SetnbinGamma(G4int nbin)
 {
-  nbinGamma = nbin ;
-  if(nbinGamma>0)
-  G4cout << " Nb of bins in gamma spectrum plot = " << nbinGamma << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinGamma = nbin;
+    G4cout << " Nb of bins in gamma spectrum plot = " << nbinGamma << G4endl ;
+  }
 }
 
 void Em10RunAction::SetElowGamma(G4double Elow)
 {
-  ElowGamma = Elow ;
-  if(nbinGamma>0)
-  G4cout << " Elow  in the gamma spectrum plot = " << ElowGamma << G4endl ;
+  if(Elow >= 0.0) {
+    ElowGamma = Elow;
+    G4cout << " Elow  in the gamma spectrum plot = " << ElowGamma << G4endl ;
+  }
 }
 
 void Em10RunAction::SetEhighGamma(G4double Ehigh)
 {
-  EhighGamma = Ehigh ;
-  if(nbinGamma>0)
-  G4cout << " Ehigh in the gamma spectrum plot = " << EhighGamma << G4endl ;
+  if(Ehigh > 0.0) {
+    EhighGamma = Ehigh;
+    G4cout << " Ehigh in the gamma spectrum plot = " << EhighGamma << G4endl ;
+  }
 }
 
 void Em10RunAction::SetnbinTt(G4int nbin)
 {
-  nbinTt = nbin ;
-  if(nbinTt>0)
-  G4cout << " Nb of bins in Etransmisssion plot = " << nbinTt << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinTt = nbin;
+    G4cout << " Nb of bins in Etransmisssion plot = " << nbinTt << G4endl ;
+  }
 }
 
 void Em10RunAction::SetTtlow(G4double Elow)
 {
-  Ttlow = Elow ;
-  if(nbinTt>0)
-  G4cout << " Elow  in the  Etransmission plot = " << Ttlow << G4endl ;
+  if(Elow >= 0.0) {
+    Ttlow = Elow;
+    G4cout << " Elow  in the  Etransmission plot = " << Ttlow << G4endl ;
+  }
 }
 
 void Em10RunAction::SetTthigh(G4double Ehigh)
 {
-  Tthigh = Ehigh ;
-  if(nbinTt>0)
-  G4cout << " Ehigh in the  Etransmission plot = " << Tthigh << G4endl ;
+  if(Ehigh > 0.0) {
+    Tthigh = Ehigh;
+    G4cout << " Ehigh in the  Etransmission plot = " << Tthigh << G4endl ;
+  }
 }
 
 void Em10RunAction::SetnbinTb(G4int nbin)
 {
-  nbinTb = nbin ;
-  if(nbinTb>0)
-  G4cout << " Nb of bins in Ebackscattered plot = " << nbinTb << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinTb = nbin;
+    G4cout << " Nb of bins in Ebackscattered plot = " << nbinTb << G4endl ;
+  }
 }
 
 void Em10RunAction::SetTblow(G4double Elow)
 {
+
   Tblow = Elow ;
-  if(nbinTb>0)
   G4cout << " Elow  in the  Ebackscattered plot = " << Tblow << G4endl ;
 }
 
 void Em10RunAction::SetTbhigh(G4double Ehigh)
 {
   Tbhigh = Ehigh ;
-  if(nbinTb>0)
   G4cout << " Ehigh in the  Ebackscattered plot = " << Tbhigh << G4endl ;
 }
 
 void Em10RunAction::SetnbinTsec(G4int nbin)
 {
-  nbinTsec = nbin ;
-  if(nbinTsec>0)
-  G4cout << " Nb of bins in Tsecondary  plot = " << nbinTsec << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinTsec = nbin;
+    G4cout << " Nb of bins in Tsecondary  plot = " << nbinTsec << G4endl ;
+  }
 }
 
 void Em10RunAction::SetTseclow(G4double Elow)
 {
   Tseclow = Elow ;
-  if(nbinTsec>0)
   G4cout << " Elow  in the  Tsecondary plot = " << Tseclow << G4endl ;
 }
 
 void Em10RunAction::SetTsechigh(G4double Ehigh)
 {
   Tsechigh = Ehigh ;
-  if(nbinTsec>0)
   G4cout << " Ehigh in the  Tsecondary plot = " << Tsechigh << G4endl ;
 }
  
 void Em10RunAction::SetnbinR(G4int nbin)
 {
-  nbinR  = nbin ;
-  if(nbinR>0)
-  G4cout << " Nb of bins in R plot = " << nbinR << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinR  = nbin;
+    G4cout << " Nb of bins in R plot = " << nbinR << G4endl ;
+  }
 }
 
 void Em10RunAction::SetRlow(G4double rlow)
 {
   Rlow = rlow ;
-  if(nbinR>0)
   G4cout << " Rlow  in the  R plot = " << Rlow << G4endl ;
 }
 
 void Em10RunAction::SetRhigh(G4double rhigh)
 {
   Rhigh = rhigh ;
-  if(nbinR>0)
   G4cout << " Rhigh in the R plot = " << Rhigh << G4endl ;
 }
 
 void Em10RunAction::Setnbinzvertex(G4int nbin)
 {
-  nbinvertexz  = nbin ;
-  if(nbinvertexz>0)
-  G4cout << " Nb of bins in Z plot = " << nbinvertexz << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinvertexz  = nbin;
+    G4cout << " Nb of bins in Z plot = " << nbinvertexz << G4endl ;
+  }
 }
 
 void Em10RunAction::Setzlow(G4double z)
 {
   zlow = z ;
-  if(nbinvertexz>0)
   G4cout << " zlow  in the  Z plot = " << zlow << G4endl ;
 }
 
 void Em10RunAction::Setzhigh(G4double z)
 {
   zhigh = z ;
-  if(nbinvertexz>0)
   G4cout << " zhigh in the Z plot = " << zhigh << G4endl ;
 }
 
 void Em10RunAction::SetnbinTh(G4int nbin)
 {
-  nbinTh = nbin ;
-  if(nbinTh>0)
-  G4cout << " Nb of bins in Theta plot = " << nbinTh << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinTh = nbin;
+    G4cout << " Nb of bins in Theta plot = " << nbinTh << G4endl ;
+  }
 }
 
 void Em10RunAction::SetThlow(G4double Tlow)
 {
   Thlow = Tlow ;
-  if(nbinTh>0)
   G4cout << " Tlow  in the  Theta plot = " << Thlow << G4endl ;
 }
 
 void Em10RunAction::SetThhigh(G4double Thigh)
 {
   Thhigh = Thigh ;
-  if(nbinTh>0)
   G4cout << " Thigh in the Theta plot = " << Thhigh << G4endl ;
 }
 
 void Em10RunAction::SetnbinThBack(G4int nbin)
 {
-  nbinThback = nbin ;
-  if(nbinThback>0)
-  G4cout << " Nb of bins in Theta plot = " << nbinThback << G4endl ;
+  if(nbin > 0 && nbin <= 200) {
+    nbinThback = nbin;
+    G4cout << " Nb of bins in Theta plot = " << nbinThback << G4endl ;
+  }
 }
 
 void Em10RunAction::SetThlowBack(G4double Tlow)
 {
   Thlowback = Tlow ;
-  if(nbinThback>0)
   G4cout << " Tlow  in the  Theta plot = " << Thlowback << G4endl ;
 }
 
 void Em10RunAction::SetThhighBack(G4double Thigh)
 {
   Thhighback = Thigh ;
-  if(nbinThback>0)
   G4cout << " Thigh in the Theta plot = " << Thhighback << G4endl ;
 }
 

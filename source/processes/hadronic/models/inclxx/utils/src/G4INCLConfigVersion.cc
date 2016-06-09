@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,8 +42,8 @@
  * This method is split out from G4INCLConfig.cc in order to avoid having to
  * recompile the whole file every time the G4INCLVersion.hh header is updated.
  *
- * Created on: 18 March 2011
- *     Author: Davide Mancusi
+ * \date 18 March 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLConfig.hh"

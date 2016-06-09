@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.cc,v 1.5 2010-04-27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modifications:
+//
+// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
 #include "G4EvaporationFactory.hh"
 
@@ -43,19 +46,23 @@
 #include "G4PhotonEvaporation.hh"
 
 G4EvaporationFactory::G4EvaporationFactory()
+  : G4VEvaporationFactory(new G4PhotonEvaporation())
+{}
+
+G4EvaporationFactory::G4EvaporationFactory(G4VEvaporationChannel* ptr)
+  : G4VEvaporationFactory(ptr)
 {}
 
 G4EvaporationFactory::~G4EvaporationFactory()
 {}
 
-std::vector<G4VEvaporationChannel*> * 
-G4EvaporationFactory::CreateChannel()
+std::vector<G4VEvaporationChannel*>* G4EvaporationFactory::GetChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(8);
 
-  theChannel->push_back( new G4PhotonEvaporation() );          // Photon Channel
+  theChannel->push_back( thePhotonEvaporation );          // Photon Channel
   theChannel->push_back( new G4CompetitiveFission() );         // Fission Channel
 
   theChannel->push_back( new G4NeutronEvaporationChannel() );  // n

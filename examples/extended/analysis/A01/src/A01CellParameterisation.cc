@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01CellParameterisation.cc,v 1.4 2006-06-29 16:31:45 gunter Exp $
+/// \file analysis/A01/src/A01CellParameterisation.cc
+/// \brief Implementation of the A01CellParameterisation class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -31,6 +34,7 @@
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 A01CellParameterisation::A01CellParameterisation()
 {
@@ -38,8 +42,8 @@ A01CellParameterisation::A01CellParameterisation()
   {
     G4int column = copyNo / 4;
     G4int row = copyNo % 4;
-    xCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
-    yCell[copyNo] = (row-1)*15*cm - 7.5*cm;
+    fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
+    fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
   }
 }
 
@@ -49,6 +53,6 @@ A01CellParameterisation::~A01CellParameterisation()
 void A01CellParameterisation::ComputeTransformation
 (const G4int copyNo,G4VPhysicalVolume *physVol) const
 {
-  physVol->SetTranslation(G4ThreeVector(xCell[copyNo],yCell[copyNo],0.));
+  physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
 }
 

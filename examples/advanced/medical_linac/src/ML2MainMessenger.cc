@@ -40,109 +40,109 @@
 //
 //*******************************************************//
 
-
 #include "ML2MainMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
-CML2MainMessenger::CML2MainMessenger(CML2CInputData *CInputData)  
+CML2MainMessenger::CML2MainMessenger(CML2CInputData *InData)  
 {
 
-	this->CInputData=CInputData;
-	this->phaseSpaceCentre=new G4UIcmdWith3VectorAndUnit("/general/centrePhaseSpace", this);
-	this->phaseSpaceCentre->SetDefaultUnit("mm");
-	this->phaseSpaceCentre->SetDefaultValue(G4ThreeVector(0.,0.,164.));
-	this->phaseSpaceCentre->SetGuidance("position of the centre of the plane phase space");
-	this->CInputData->setPhaseSpaceCentre(G4ThreeVector(0.*mm,0.*mm,164.*mm));
+	CInputData=InData;
+	phaseSpaceCentre=new G4UIcmdWith3VectorAndUnit("/general/centrePhaseSpace", this);
+	phaseSpaceCentre->SetDefaultUnit("mm");
+	phaseSpaceCentre->SetDefaultValue(G4ThreeVector(0.,0.,164.));
+	phaseSpaceCentre->SetGuidance("position of the centre of the plane phase space");
+	CInputData->setPhaseSpaceCentre(G4ThreeVector(0.*mm,0.*mm,164.*mm));
 
-	this->phaseSpaceHalfSize=new G4UIcmdWith3VectorAndUnit("/general/halfSizePhaseSpace", this);
-	this->phaseSpaceHalfSize->SetDefaultUnit("mm");
-	this->phaseSpaceHalfSize->SetDefaultValue(G4ThreeVector(100.,100.,1.));
-	this->phaseSpaceHalfSize->SetGuidance("half size of the plane phase space");
-	this->CInputData->setPhaseSpaceHalfSize(G4ThreeVector(100.*mm,100.*mm,1.*mm));
+	phaseSpaceHalfSize=new G4UIcmdWith3VectorAndUnit("/general/halfSizePhaseSpace", this);
+	phaseSpaceHalfSize->SetDefaultUnit("mm");
+	phaseSpaceHalfSize->SetDefaultValue(G4ThreeVector(100.,100.,1.));
+	phaseSpaceHalfSize->SetGuidance("half size of the plane phase space");
+	CInputData->setPhaseSpaceHalfSize(G4ThreeVector(100.*mm,100.*mm,1.*mm));
 
-	this->bSavePhaseSpace=new G4UIcmdWithABool("/general/bSavePhaseSpace",this);
-	this->bSavePhaseSpace->SetDefaultValue(false);
-	this->bSavePhaseSpace->SetGuidance("true if to save the phase space");
-	this->CInputData->setbSavePhaseSPace(false);
+	bSavePhaseSpace=new G4UIcmdWithABool("/general/bSavePhaseSpace",this);
+	bSavePhaseSpace->SetDefaultValue(false);
+	bSavePhaseSpace->SetGuidance("true if to save the phase space");
+	CInputData->setbSavePhaseSPace(false);
 
-	this->bForcePhaseSpaceBeforeJaws=new G4UIcmdWithABool("/general/bForcePhaseSpaceBeforeJaws",this);
-	this->bForcePhaseSpaceBeforeJaws->SetDefaultValue(false);
-	this->bForcePhaseSpaceBeforeJaws->SetGuidance("to automatically put the phase plane before the jaws");
-	this->CInputData->setbForcePhaseSpaceBeforeJaws(false);
+	bForcePhaseSpaceBeforeJaws=new G4UIcmdWithABool("/general/bForcePhaseSpaceBeforeJaws",this);
+	bForcePhaseSpaceBeforeJaws->SetDefaultValue(false);
+	bForcePhaseSpaceBeforeJaws->SetGuidance("to automatically put the phase plane before the jaws");
+	CInputData->setbForcePhaseSpaceBeforeJaws(false);
 
-	this->bStopAtPhaseSpace=new G4UIcmdWithABool("/general/bStopAtPhaseSpace",this);
-	this->bStopAtPhaseSpace->SetDefaultValue(false);
-	this->bStopAtPhaseSpace->SetGuidance("true if to kill the particle at the phase space");
-	this->CInputData->setbStopAtPhaseSpace(false);
+	bStopAtPhaseSpace=new G4UIcmdWithABool("/general/bStopAtPhaseSpace",this);
+	bStopAtPhaseSpace->SetDefaultValue(false);
+	bStopAtPhaseSpace->SetGuidance("true if to kill the particle at the phase space");
+	CInputData->setbStopAtPhaseSpace(false);
 
-	this->bSaveROG=new G4UIcmdWithABool("/general/bSaveROG",this);
-	this->bSaveROG->SetDefaultValue(true);
-	this->bSaveROG->SetGuidance("true if save the ROG volume");
-	this->CInputData->setbSaveROG(true);
+	bSaveROG=new G4UIcmdWithABool("/general/bSaveROG",this);
+	bSaveROG->SetDefaultValue(true);
+	bSaveROG->SetGuidance("true if save the ROG volume");
+	CInputData->setbSaveROG(true);
 
-	this->bOnlyVisio=new G4UIcmdWithABool("/OnlyVisio",this);
-	this->bOnlyVisio->SetDefaultValue(false);
-	this->bOnlyVisio->SetGuidance("switch the visualization mode");
-	this->CInputData->setbOnlyVisio(false);
+	bOnlyVisio=new G4UIcmdWithABool("/OnlyVisio",this);
+	bOnlyVisio->SetDefaultValue(false);
+	bOnlyVisio->SetGuidance("switch the visualization mode");
+	CInputData->setbOnlyVisio(false);
 
-	this->ROGOutFile=new G4UIcmdWithAString("/general/ROGOutFile",this);
-	this->ROGOutFile->SetDefaultValue("");
-	this->ROGOutFile->SetGuidance("full path of the ROG file name");
-	this->CInputData->setROGOutFile("defaultROGFile.txt");
+	ROGOutFile=new G4UIcmdWithAString("/general/ROGOutFile",this);
+	ROGOutFile->SetDefaultValue("");
+	ROGOutFile->SetGuidance("full path of the ROG file name");
+	CInputData->setROGOutFile("defaultROGFile.txt");
 
-	this->phaseSPaceOutFile=new G4UIcmdWithAString("/general/PhaseSpaceOutFile",this);
-	this->phaseSPaceOutFile->SetDefaultValue("");
-	this->phaseSPaceOutFile->SetGuidance("full file name of the phase space");
-	this->CInputData->setPhaseSpaceOutFile("");
+	phaseSPaceOutFile=new G4UIcmdWithAString("/general/PhaseSpaceOutFile",this);
+	phaseSPaceOutFile->SetDefaultValue("");
+	phaseSPaceOutFile->SetGuidance("full file name of the phase space");
+	CInputData->setPhaseSpaceOutFile("");
 
-	this->maxNumberOfEvents=new G4UIcmdWithAnInteger("/convergence/maxNumberOfEvents", this);
-	this->maxNumberOfEvents->SetDefaultValue(10);
-	this->maxNumberOfEvents->SetGuidance(" maximum number of events at least in one experimental voxel");
-	this->CInputData->setMaxNumberOfEvents(10);
+	maxNumberOfEvents=new G4UIcmdWithAnInteger("/convergence/maxNumberOfEvents", this);
+	maxNumberOfEvents->SetDefaultValue(10);
+	maxNumberOfEvents->SetGuidance(" maximum number of events at least in one experimental voxel");
+	CInputData->setMaxNumberOfEvents(10);
 
-	this->nMaxLoop=new G4UIcmdWithAnInteger("/convergence/nMaxLoop", this);
-	this->nMaxLoop->SetDefaultValue(1);
-	this->nMaxLoop->SetGuidance("it is used if /convergence/bCompareExp is false");
-	this->CInputData->setNmaxLoop(1);
+	nMaxLoop=new G4UIcmdWithAnInteger("/convergence/nMaxLoop", this);
+	nMaxLoop->SetDefaultValue(1);
+	nMaxLoop->SetGuidance("it is used if /convergence/bCompareExp is false");
+	CInputData->setNmaxLoop(1);
 
-	this->bCompareExp=new G4UIcmdWithABool("/convergence/bCompareExp",this);
-	this->bCompareExp->SetDefaultValue(false);
-	this->bCompareExp->SetGuidance("to compare the data with an experimental  file data");
-	this->CInputData->setBCompareExp(false);
+	bCompareExp=new G4UIcmdWithABool("/convergence/bCompareExp",this);
+	bCompareExp->SetDefaultValue(false);
+	bCompareExp->SetGuidance("to compare the data with an experimental  file data");
+	CInputData->setBCompareExp(false);
 
-	this->fileExperimentalData=new G4UIcmdWithAString("/convergence/fileExperimentalData",this);
-	this->fileExperimentalData->SetDefaultValue("");
-	this->fileExperimentalData->SetGuidance("full path and name of the experimental file results");
-	this->CInputData->setFileExperimentalData("");
+	fileExperimentalData=new G4UIcmdWithAString("/convergence/fileExperimentalData",this);
+	fileExperimentalData->SetDefaultValue("");
+	fileExperimentalData->SetGuidance("full path and name of the experimental file results");
+	CInputData->setFileExperimentalData("");
 
-	this->fileExperimentalDataOut=new G4UIcmdWithAString("/convergence/fileExperimentalDataOut",this);
-	this->fileExperimentalDataOut->SetDefaultValue("");
-	this->fileExperimentalDataOut->SetGuidance("full path and name of the experimental file results");
-	this->CInputData->setFileExperimentalDataOut("");
+	fileExperimentalDataOut=new G4UIcmdWithAString("/convergence/fileExperimentalDataOut",this);
+	fileExperimentalDataOut->SetDefaultValue("");
+	fileExperimentalDataOut->SetGuidance("full path and name of the experimental file results");
+	CInputData->setFileExperimentalDataOut("");
 
-	this->nBeam=new G4UIcmdWithAnInteger("/general/nBeam",this);
-	this->nBeam->SetDefaultValue(100);
-	this->nBeam->SetGuidance("number of events to run");
-	this->CInputData->setNBeams(100);
+	nBeam=new G4UIcmdWithAnInteger("/general/nBeam",this);
+	nBeam->SetDefaultValue(100);
+	nBeam->SetGuidance("number of events to run");
+	CInputData->setNBeams(100);
 
-	this->nMaxParticlesInRamPlanePhaseSpace=new G4UIcmdWithAnInteger("/general/nMaxParticlesInRamPlanePhaseSpace",this);
-	this->nMaxParticlesInRamPlanePhaseSpace->SetDefaultValue(10000);
-	this->nMaxParticlesInRamPlanePhaseSpace->SetGuidance("maximum particle number stored in RAM before saving - for phase space");
-	this->CInputData->setNMaxParticlesInRamPlanePhaseSpace(10000);
+	nMaxParticlesInRamPlanePhaseSpace=new G4UIcmdWithAnInteger("/general/nMaxParticlesInRamPlanePhaseSpace",this);
+	nMaxParticlesInRamPlanePhaseSpace->SetDefaultValue(10000);
+	nMaxParticlesInRamPlanePhaseSpace->SetGuidance("maximum particle number stored in RAM before saving - for phase space");
+	CInputData->setNMaxParticlesInRamPlanePhaseSpace(10000);
 
-	this->saving_in_Selected_Voxels_every_events=new G4UIcmdWithAnInteger("/general/saving_in_Selected_Voxels_every_events",this);
-	this->saving_in_Selected_Voxels_every_events->SetDefaultValue(10000);
-	this->saving_in_Selected_Voxels_every_events->SetGuidance("maximum particle number stored before saving - for experiemntal data comparison");
-	this->CInputData->setSaving_in_Selected_Voxels_every_events(10000);
+	saving_in_Selected_Voxels_every_events=new G4UIcmdWithAnInteger("/general/saving_in_Selected_Voxels_every_events",this);
+	saving_in_Selected_Voxels_every_events->SetDefaultValue(10000);
+	saving_in_Selected_Voxels_every_events->SetGuidance("maximum particle number stored before saving - for experiemntal data comparison");
+	CInputData->setSaving_in_Selected_Voxels_every_events(10000);
 
-	this->saving_in_ROG_Voxels_every_events=new G4UIcmdWithAnInteger("/general/saving_in_ROG_Voxels_every_events",this);
-	this->saving_in_ROG_Voxels_every_events->SetDefaultValue(1000);
-	this->saving_in_ROG_Voxels_every_events->SetGuidance("maximum particle number stored before saving - for ROG");
-	this->CInputData->setSaving_in_ROG_Voxels_every_events(1000);
+	saving_in_ROG_Voxels_every_events=new G4UIcmdWithAnInteger("/general/saving_in_ROG_Voxels_every_events",this);
+	saving_in_ROG_Voxels_every_events->SetDefaultValue(1000);
+	saving_in_ROG_Voxels_every_events->SetGuidance("maximum particle number stored before saving - for ROG");
+	CInputData->setSaving_in_ROG_Voxels_every_events(1000);
 
-	this->max_N_particles_in_PhSp_File=new G4UIcmdWithAnInteger("/general/max_N_particles_in_PhSp_File",this);
-	this->max_N_particles_in_PhSp_File->SetDefaultValue(1000);
-	this->max_N_particles_in_PhSp_File->SetGuidance("maximum particle number stored in the phase space file");
-	this->CInputData->setMax_N_particles_in_PhSp_File(1000);
+	max_N_particles_in_PhSp_File=new G4UIcmdWithAnInteger("/general/max_N_particles_in_PhSp_File",this);
+	max_N_particles_in_PhSp_File->SetDefaultValue(1000);
+	max_N_particles_in_PhSp_File->SetGuidance("maximum particle number stored in the phase space file");
+	CInputData->setMax_N_particles_in_PhSp_File(1000);
 }
 
 CML2MainMessenger::~CML2MainMessenger(void)
@@ -172,64 +172,62 @@ CML2MainMessenger::~CML2MainMessenger(void)
 
 void CML2MainMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
-	if (cmd==this->nBeam)
-	{this->CInputData->setNBeams(this->nBeam->GetNewIntValue(newValue));}
+	if (cmd==nBeam)
+	{CInputData->setNBeams(nBeam->GetNewIntValue(newValue));}
 
-	if (cmd==this->nMaxParticlesInRamPlanePhaseSpace)
-	{this->CInputData->setNMaxParticlesInRamPlanePhaseSpace(this->nMaxParticlesInRamPlanePhaseSpace->GetNewIntValue(newValue));}
+	if (cmd==nMaxParticlesInRamPlanePhaseSpace)
+	{CInputData->setNMaxParticlesInRamPlanePhaseSpace(nMaxParticlesInRamPlanePhaseSpace->GetNewIntValue(newValue));}
 
-	if (cmd==this->saving_in_Selected_Voxels_every_events)
-	{this->CInputData->setSaving_in_Selected_Voxels_every_events(this->saving_in_Selected_Voxels_every_events->GetNewIntValue(newValue));}
+	if (cmd==saving_in_Selected_Voxels_every_events)
+	{CInputData->setSaving_in_Selected_Voxels_every_events(saving_in_Selected_Voxels_every_events->GetNewIntValue(newValue));}
 
-	if (cmd==this->saving_in_ROG_Voxels_every_events)
-	{this->CInputData->setSaving_in_ROG_Voxels_every_events(this->saving_in_ROG_Voxels_every_events->GetNewIntValue(newValue));}
+	if (cmd==saving_in_ROG_Voxels_every_events)
+	{CInputData->setSaving_in_ROG_Voxels_every_events(saving_in_ROG_Voxels_every_events->GetNewIntValue(newValue));}
 
-	if (cmd==this->max_N_particles_in_PhSp_File)
-	{this->CInputData->setMax_N_particles_in_PhSp_File(this->max_N_particles_in_PhSp_File->GetNewIntValue(newValue));}
+	if (cmd==max_N_particles_in_PhSp_File)
+	{CInputData->setMax_N_particles_in_PhSp_File(max_N_particles_in_PhSp_File->GetNewIntValue(newValue));}
 
-	if (cmd==this->phaseSpaceCentre)
-	{this->CInputData->setPhaseSpaceCentre(this->phaseSpaceCentre->GetNew3VectorRawValue(newValue));}
+	if (cmd==phaseSpaceCentre)
+	{CInputData->setPhaseSpaceCentre(phaseSpaceCentre->GetNew3VectorRawValue(newValue));}
 
-	if (cmd==this->phaseSpaceHalfSize)
+	if (cmd==phaseSpaceHalfSize)
 	{
-		this->CInputData->setPhaseSpaceHalfSize(this->phaseSpaceHalfSize->GetNew3VectorRawValue(newValue));
+		CInputData->setPhaseSpaceHalfSize(phaseSpaceHalfSize->GetNew3VectorRawValue(newValue));
 	}
 
-	if (cmd==this->bOnlyVisio)
-	{this->CInputData->setbOnlyVisio(this->bOnlyVisio->GetNewBoolValue(newValue));}
+	if (cmd==bOnlyVisio)
+	{CInputData->setbOnlyVisio(bOnlyVisio->GetNewBoolValue(newValue));}
 
-	if (cmd==this->bForcePhaseSpaceBeforeJaws)
-	{this->CInputData->setbForcePhaseSpaceBeforeJaws(this->bForcePhaseSpaceBeforeJaws->GetNewBoolValue(newValue));}
+	if (cmd==bForcePhaseSpaceBeforeJaws)
+	{CInputData->setbForcePhaseSpaceBeforeJaws(bForcePhaseSpaceBeforeJaws->GetNewBoolValue(newValue));}
 
-	if (cmd==this->bSavePhaseSpace)
-	{this->CInputData->setbSavePhaseSPace(this->bSavePhaseSpace->GetNewBoolValue(newValue));}
+	if (cmd==bSavePhaseSpace)
+	{CInputData->setbSavePhaseSPace(bSavePhaseSpace->GetNewBoolValue(newValue));}
 
-	if (cmd==this->bSaveROG)
-	{this->CInputData->setbSaveROG(this->bSaveROG->GetNewBoolValue(newValue));}
+	if (cmd==bSaveROG)
+	{CInputData->setbSaveROG(bSaveROG->GetNewBoolValue(newValue));}
 
-	if (cmd==this->bStopAtPhaseSpace)
-	{this->CInputData->setbStopAtPhaseSpace(this->bStopAtPhaseSpace->GetNewBoolValue(newValue));}
+	if (cmd==bStopAtPhaseSpace)
+	{CInputData->setbStopAtPhaseSpace(bStopAtPhaseSpace->GetNewBoolValue(newValue));}
 
-	if (cmd==this->phaseSPaceOutFile)
-	{this->CInputData->setPhaseSpaceOutFile(newValue);}
+	if (cmd==phaseSPaceOutFile)
+	{CInputData->setPhaseSpaceOutFile(newValue);}
 
-	if (cmd==this->ROGOutFile)
-	{this->CInputData->setROGOutFile(newValue);}
+	if (cmd==ROGOutFile)
+	{CInputData->setROGOutFile(newValue);}
 
-	if (cmd==this->maxNumberOfEvents)
-	{this->CInputData->setMaxNumberOfEvents(this->maxNumberOfEvents->GetNewIntValue(newValue));}
+	if (cmd==maxNumberOfEvents)
+	{CInputData->setMaxNumberOfEvents(maxNumberOfEvents->GetNewIntValue(newValue));}
 
-	if (cmd==this->nMaxLoop)
-	{this->CInputData->setNmaxLoop(this->nMaxLoop->GetNewIntValue(newValue));}
+	if (cmd==nMaxLoop)
+	{CInputData->setNmaxLoop(nMaxLoop->GetNewIntValue(newValue));}
 
-	if (cmd==this->bCompareExp)
-	{this->CInputData->setBCompareExp(this->bCompareExp->GetNewBoolValue(newValue));}
+	if (cmd==bCompareExp)
+	{CInputData->setBCompareExp(bCompareExp->GetNewBoolValue(newValue));}
 
-	if (cmd==this->fileExperimentalData)
-	{this->CInputData->setFileExperimentalData(newValue);}
+	if (cmd==fileExperimentalData)
+	{CInputData->setFileExperimentalData(newValue);}
 
-	if (cmd==this->fileExperimentalDataOut)
-	{this->CInputData->setFileExperimentalDataOut(newValue);}
-
+	if (cmd==fileExperimentalDataOut)
+	{CInputData->setFileExperimentalDataOut(newValue);}
 }
-

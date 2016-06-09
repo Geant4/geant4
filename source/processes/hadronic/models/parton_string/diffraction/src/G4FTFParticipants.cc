@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.18 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // ------------------------------------------------------------
@@ -39,23 +39,26 @@
 //                    (February 2011)
 // ------------------------------------------------------------
 
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
-#include "G4FTFParticipants.hh"
-#include "G4DiffractiveSplitableHadron.hh"
-#include "G4VSplitableHadron.hh"
-#include "Randomize.hh"
-#include <utility>                                        // Uzhi 29.03.08
-#include "G4ios.hh"
+#include <utility>
 #include <vector>
 #include <algorithm>
-// Class G4FTFParticipants 
 
-G4FTFParticipants::G4FTFParticipants() 
+#include "G4FTFParticipants.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4DiffractiveSplitableHadron.hh"
+#include "G4VSplitableHadron.hh"
+
+G4FTFParticipants::G4FTFParticipants() :
+  theProjectileNucleus(0),
+  currentInteraction(-1)
 {
- theProjectileNucleus=0;
 }
 
 G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants()
+  , theProjectileNucleus(0), currentInteraction(-1)   //A.R. 14-Aug-2012 Coverity fix.
 {
 	G4Exception("G4FTFParticipants::G4FTFParticipants()","HAD_FTF_001",
 	        FatalException," Must not use copy ctor()");
@@ -110,10 +113,10 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 //G4cout<<"Prim in Part "<<primarySplitable->Get4Momentum()<<G4endl;
      G4double xyradius;                          
      xyradius =theNucleus->GetOuterRadius() + deltaxy; // Impact parameter sampling
-                                                      
+                                                    
 //    G4bool nucleusNeedsShift = true;                // Uzhi 20 July 2009
     
-     while ( theInteractions.size() == 0 )
+     do 
      {
 	 std::pair<G4double, G4double> theImpactParameter;
 	 theImpactParameter = theNucleus->ChooseImpactXandY(xyradius);
@@ -155,8 +158,10 @@ G4int TrN(0);
 		theInteractions.push_back(aInteraction);
 	   }
 TrN++;
-	 }    
-     }      // end of while ( theInteractions.size() == 0 )
+	 } 
+     } while ( theInteractions.size() == 0 );
+
+     //if ( theInteractions.size() == 0 ) delete primarySplitable; //A.R. 14-Aug-2012 Coverity fix
 
 //	G4cout << "Number of Hit nucleons " << theInteractions.size()
 //		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
@@ -181,7 +186,7 @@ TrN++;
 
     G4double impactX(0.), impactY(0.);
 
-    while ( theInteractions.size() == 0 )
+    do
     {
 //G4cout<<"New interaction list"<<G4endl;
 	 std::pair<G4double, G4double> theImpactParameter;
@@ -259,7 +264,7 @@ TrNuclN++;
            } // End of while ( (TargetNucleon=theNucleus->GetNextNucleon()) )
 PrNuclN++;
 	 } // End of   while ( (ProjectileNucleon=theProjectileNucleus->GetNextNucleon()) )
-    }      // end of while ( theInteractions.size() == 0 )
+    }  while ( theInteractions.size() == 0 );  // end of while ( theInteractions.size() == 0 )
 
 //std::sort(theInteractions.begin(),theInteractions.end()); // ????
 

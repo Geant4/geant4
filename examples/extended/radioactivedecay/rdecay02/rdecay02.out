@@ -4,54 +4,47 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-New histogram will be booked: #H10  <Energy deposit (MeV) in the traget  100  0  15  1
-New histogram will be booked: #H11  <Energy deposit (MeV) in the detector  100  0  15  1
-New histogram will be booked: #H12  <Total energy spectrum (MeV) of the traget and detector  100  0  15  1
-New histogram will be booked: #H13  <Coincidence spectrum (MeV) between the traget and detector  100  0  15  1
-New histogram will be booked: #H14  <Anti-coincidence spectrum (MeV) in the traget  100  0  15  1
-New histogram will be booked: #H15  <Anti-coincidence spectrum (MeV) in the detector  100  0  15  1
-New histogram will be booked: #H16  <Decay emission spectrum (MeV)  100  0  15  1
 Vacuum H 1e-25 2.73 1.87245e-14
- Material:Vacuum with formula: H added! 
-     Nb of Material = 1
-     Nb of Isotope =  0
-     Nb of Element =  1
+ fMaterial:Vacuum with formula: H added! 
+     Nb of fMaterial = 1
+     Nb of fIsotope =  0
+     Nb of fElement =  1
 Air N0.78-O0.22 0.00129 273.15 6.32421e+08
- Material:Air with formula: N0.78-O0.22 added! 
-     Nb of Material = 2
-     Nb of Isotope =  0
-     Nb of Element =  3
+ fMaterial:Air with formula: N0.78-O0.22 added! 
+     Nb of fMaterial = 2
+     Nb of fIsotope =  0
+     Nb of fElement =  3
 Aluminium Al 2.7 273.15 6.32421e+08
- Material:Aluminium with formula: Al added! 
-     Nb of Material = 3
-     Nb of Isotope =  0
-     Nb of Element =  4
+ fMaterial:Aluminium with formula: Al added! 
+     Nb of fMaterial = 3
+     Nb of fIsotope =  0
+     Nb of fElement =  4
 Silicon Si 2.329 273.15 6.32421e+08
- Material:Silicon with formula: Si added! 
-     Nb of Material = 4
-     Nb of Isotope =  0
-     Nb of Element =  5
+ fMaterial:Silicon with formula: Si added! 
+     Nb of fMaterial = 4
+     Nb of fIsotope =  0
+     Nb of fElement =  5
 Lead Pb 11.3 273.15 6.32421e+08
- Material:Lead with formula: Pb added! 
-     Nb of Material = 5
-     Nb of Isotope =  0
-     Nb of Element =  6
+ fMaterial:Lead with formula: Pb added! 
+     Nb of fMaterial = 5
+     Nb of fIsotope =  0
+     Nb of fElement =  6
 Germanium Ge 5.323 273.15 6.32421e+08
- Material:Germanium with formula: Ge added! 
-     Nb of Material = 6
-     Nb of Isotope =  0
-     Nb of Element =  7
+ fMaterial:Germanium with formula: Ge added! 
+     Nb of fMaterial = 6
+     Nb of fIsotope =  0
+     Nb of fElement =  7
 CsI Cs-I 4.51 273.15 6.32421e+08
- Material:CsI with formula: Cs-I added! 
-     Nb of Material = 7
-     Nb of Isotope =  0
-     Nb of Element =  9
+ fMaterial:CsI with formula: Cs-I added! 
+     Nb of fMaterial = 7
+     Nb of fIsotope =  0
+     Nb of fElement =  9
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -62,15 +55,17 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -88,34 +83,126 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
-  black, blue, cyan, gray, green, grey, magenta, red, white, yellow
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
 
 ----> The target has been changed to 3 cm of Lead
-/afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Capture/CrossSection/8_17_Oxygen
+WARNING: model G4LEDeuteronInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LETritonInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAlphaInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LENeutronInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+/build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Capture/CrossSection/8_17_Oxygen
+WARNING: model G4LEProtonInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEPionPlusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEPionMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEKaonPlusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEKaonMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEKaonZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiKaonZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEKaonZeroLInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEKaonZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiKaonZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEKaonZeroSInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiProtonInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiProtonInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiNeutronInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiNeutronInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LELambdaInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HELambdaInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiLambdaInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiLambdaInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LESigmaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HESigmaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiSigmaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiSigmaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LESigmaPlusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HESigmaPlusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiSigmaPlusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiSigmaPlusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEXiMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEXiMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiXiMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiXiMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEXiZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEXiZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiXiZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiXiZeroInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEOmegaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEOmegaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4LEAntiOmegaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+WARNING: model G4HEAntiOmegaMinusInelastic is being deprecated and will
+disappear in Geant4 version 10.0
 ### exrdmPhysicsList::ConstructProcess is done
 world cuts are set
 Target cuts are set
 Detector cuts are set
 
-### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
                                   Hadronic Processes for <GenericIon>
                                   -----------------------------------
-        ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 20
+        ionInelastic  Models:     Binary Light Ion Cascade: Emin(GeV)=    0  Emax(GeV)= 20
 
         ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
@@ -129,7 +216,8 @@ Detector cuts are set
 AntiNeutronInelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                   G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
-AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_proton>
@@ -143,12 +231,22 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
  AntiProtonInelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                    G4HEAntiProtonInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
- AntiProtonInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+ AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+          hFritiofCaptureAtRest
+
+                                  Hadronic Processes for <e+>
+                                  -----------------------------------
+     PositronNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
+
+     PositronNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -156,7 +254,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <gamma>
                                   -----------------------------------
-     PhotonInelastic  Models:            CHIPSGammaNuclear: Emin(GeV)=    0  Emax(GeV)= 3.5
+     PhotonInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3.5
                                            TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
 
      PhotonInelastic  Crs sctns:            PhotoNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -172,7 +270,8 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
    KaonPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                      G4LEKaonPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
 
-   KaonPlusInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+   KaonPlusInelastic  Crs sctns:  ChipsKaonPlusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <kaon->
@@ -184,8 +283,10 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
   KaonMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                     G4LEKaonMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
 
-  KaonMinusInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  KaonMinusInelastic  Crs sctns: ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
@@ -196,7 +297,8 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
      LambdaInelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                        G4HELambdaInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
-     LambdaInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+     LambdaInelastic  Crs sctns:   ChipsHyperonInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                      Hadronic Processes for <mu->
@@ -206,7 +308,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
                                   -----------------------------------
           hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:     ChipsNeutronElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
     NeutronInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
@@ -215,9 +317,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
                                         NeutronHPInelastic: Emin(GeV)=    0  Emax(GeV)= 0.02
 
     NeutronInelastic  Crs sctns:      NeutronHPInelasticXS: Emin(GeV)=    0  Emax(GeV)= 0.02
-                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
-                           below 91 GeV, Glauber-Gribov above 
+                                       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
             nCapture  Models:                   G4LCapture: Emin(GeV)= 0.0199  Emax(GeV)= 20000
@@ -266,21 +366,20 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
                            below 91 GeV, Glauber-Gribov above 
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <proton>
                                   -----------------------------------
           hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:      ChipsProtonElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
      ProtonInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                        G4LEProtonInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
                                             Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 9.9
 
-     ProtonInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: Axen-Wellisch cross sections 
-                           below 91 GeV, Glauber-Gribov above 
+     ProtonInelastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
@@ -310,9 +409,26 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
+Root file: proton.root
+ROOT Histo H10 Energy deposit (MeV) in the traget booked 
+ROOT Histo H11 Energy deposit (MeV) in the detector booked 
+ROOT Histo H12 Total energy spectrum (MeV) of the traget and detector booked 
+ROOT Histo H13 Coincidence spectrum (MeV) between the traget and detector booked 
+ROOT Histo H14 Anti-coincidence spectrum (MeV) in the traget booked 
+ROOT Histo H15 Anti-coincidence spectrum (MeV) in the detector booked 
+ROOT Histo H16 Decay emission spectrum (MeV) booked 
+Creating Ntuple T1 in ROOT file: Emitted Particles
+ROOT Ntuple tT1 Emitted Particles PID:Energy:Time:Weight booked 
+Creating Ntuple T2 in ROOT file: RadioIsotopes
+ROOT Ntuple tT2 RadioIsotopes PID:Time:Weight booked 
+Creating Ntuple T3 in ROOT file: Energy Depositions
+ROOT Ntuple tT3 Energy Depositions Energy:Time:Weight booked 
+Creating Ntuple RDecayProducts in ROOT file: All Products of RDecay
+ROOT Ntuple tRDecayProducts All Products of RDecay PID:Z:A:Energy:Time:Weight booked 
 exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
+ROOT: files writing...
+ROOT: files closing...
 exrdmAnalysisManager: Histograms have been saved!
 Graphics systems deleted.
 Visualization Manager deleting...
-

@@ -63,6 +63,7 @@
 //    2. the QGSP_BIC_EMY Reference Physics Lists (define the PHYSLIST eviroment variable):
 //       export PHYSLIST=QGSP_BIC_EMY
  
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh" 
 #include "G4Region.hh"     
 #include "G4RegionStore.hh"   
@@ -205,7 +206,7 @@ void IORTPhysicsList::AddPhysicsList(const G4String& name)
 	delete emPhysicsList;
 	emPhysicsList = new G4EmPenelopePhysics();
 	G4RunManager::GetRunManager()-> PhysicsHasBeenModified();
-	G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+	G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmPenelopePhysics" << G4endl;
 
 	/////////////////////////////////////////////////////////////////////////////
 	//   HADRONIC MODELS

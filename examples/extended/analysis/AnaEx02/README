@@ -1,4 +1,4 @@
-$Id: README 49035 2011-03-31 10:21:28Z gcosmo $
+$Id: README 61398 2012-09-04 09:55:39Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -9,7 +9,10 @@ $Id: README 49035 2011-03-31 10:21:28Z gcosmo $
                             -------
  This example shows the usage of histogram and tuple manipulations using 
  ROOT system. All analysis manipulations (histo booking, filling, saving 
- histos in a file, etc...) are located in one class : HistoManager.
+ histos in a file, etc...) are located in one class : HistoManager. 
+ Please install ROOT before building this example: 
+ http://root.cern.ch
+
  
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
@@ -73,7 +76,7 @@ $Id: README 49035 2011-03-31 10:21:28Z gcosmo $
   histo 4 : total track length of charged particles in gap per event 
  
  And 1 Ntuple :
-  one raw per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
+  one row per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
   
  These histos are booked in HistoManager and filled from EventAction.
  
@@ -83,9 +86,4 @@ $Id: README 49035 2011-03-31 10:21:28Z gcosmo $
  
  See HistoManager constructor
     
- Note that, by default, histograms are disabled. To activate them, uncomment
- the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
-   
- Please install ROOT before enable histograming. 
- http://root.cern.ch
   

@@ -44,8 +44,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -66,16 +64,27 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
     HEADERS
         G4AntiNeutronAnnihilationAtRest.hh
+        G4AntiProtonAbsorptionFritiof.hh
         G4AntiProtonAnnihilationAtRest.hh
+        G4AntiSigmaPlusAbsorptionFritiof.hh
         G4DistributionGenerator.hh
-        G4FTFCaptureAtRest.hh
+        G4ElementSelector.hh
+        G4EmCaptureCascade.hh
+        G4HadronicAbsorptionFritiof.hh
+        G4HadronStoppingProcess.hh
         G4KaonMinusAbsorption.hh
         G4KaonMinusAbsorptionAtRest.hh
         G4MuMinusCaptureCascade.hh
+        G4MuMinusCapturePrecompound.hh
+        G4MuonMinusBoundDecay.hh
+        G4MuonMinusCapture.hh
         G4MuonMinusCaptureAtRest.hh
         G4NeutronCaptureAtRest.hh
         G4PiMinusAbsorptionAtRest.hh
+        G4HadronicAbsorptionBertini.hh
         G4PiMinusAbsorptionBertini.hh
+        G4KaonMinusAbsorptionBertini.hh
+        G4SigmaMinusAbsorptionBertini.hh
         G4PiMinusStopAbsorption.hh
         G4PiMinusStopAl.hh
         G4PiMinusStopC.hh
@@ -97,14 +106,20 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4AntiNeutronAnnihilationAtRest.cc
         G4AntiProtonAnnihilationAtRest.cc
         G4DistributionGenerator.cc
-        G4FTFCaptureAtRest.cc
+        G4ElementSelector.cc
+        G4EmCaptureCascade.cc
+        G4HadronicAbsorptionFritiof.cc
+        G4HadronStoppingProcess.cc
         G4KaonMinusAbsorption.cc
         G4KaonMinusAbsorptionAtRest.cc
         G4MuMinusCaptureCascade.cc
+        G4MuMinusCapturePrecompound.cc
+        G4MuonMinusBoundDecay.cc
+        G4MuonMinusCapture.cc
         G4MuonMinusCaptureAtRest.cc
         G4NeutronCaptureAtRest.cc
         G4PiMinusAbsorptionAtRest.cc
-        G4PiMinusAbsorptionBertini.cc
+        G4HadronicAbsorptionBertini.cc
         G4PiMinusStopAbsorption.cc
         G4PiMinusStopAl.cc
         G4PiMinusStopC.cc

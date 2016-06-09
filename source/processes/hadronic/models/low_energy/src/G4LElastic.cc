@@ -34,13 +34,15 @@
 // 14-DEC-05 V.Ivanchenko: restore 1.19 version (7.0)
 // 23-JAN-07 V.Ivanchenko: add protection inside sqrt
 
-#include "globals.hh"
+#include <iostream>
+
 #include "G4LElastic.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-#include <iostream>
-
 
 G4LElastic::G4LElastic(const G4String& name)
  :G4HadronicInteraction(name)
@@ -199,32 +201,36 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double sint = std::sqrt(std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
    // G4cout << "Entering elastic scattering 3"<<G4endl;
-   if (verboseLevel > 1) G4cout << "cos(t)=" << cost << "  std::sin(t)=" << sint << G4endl;
-// Scattered particle referred to axis of incident particle
-   G4double m1=aParticle->GetDefinition()->GetPDGMass();
+   if (verboseLevel > 1)
+     G4cout << "cos(t)=" << cost << "  std::sin(t)=" << sint << G4endl;
+
+   // Scattered particle referred to axis of incident particle
+   G4double mass1 = aParticle->GetDefinition()->GetPDGMass();
    G4int Z=static_cast<G4int>(zTarget+.5);
    G4int A=static_cast<G4int>(atno2);
    if(G4UniformRand()<atno2-A) A++;
    //G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
-   G4double m2=G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
-// non relativistic approximation
-   G4double a=1+m2/m1;
-   G4double b=-2.*p*cost;
-   G4double c=p*p*(1-m2/m1);
+   G4double mass2 =
+     G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
+
+   // non relativistic approximation
+   G4double a = 1 + mass2/mass1;
+   G4double b = -2.*p*cost;
+   G4double c = p*p*(1 - mass2/mass1);
    G4double p1 = (-b+std::sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
    G4double px = p1*sint*std::sin(phi);
    G4double py = p1*sint*std::cos(phi);
    G4double pz = p1*cost;
 
 // relativistic calculation
-   G4double etot = std::sqrt(m1*m1+p*p)+m2;
+   G4double etot = std::sqrt(mass1*mass1+p*p)+mass2;
    a = etot*etot-p*p*cost*cost;
-   b = 2*p*p*(m1*cost*cost-etot);
+   b = 2*p*p*(mass1*cost*cost-etot);
    c = p*p*p*p*sint*sint;
    
    G4double de = (-b-std::sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
-   G4double e1 = std::sqrt(p*p+m1*m1)-de;
-   G4double p12=e1*e1-m1*m1;
+   G4double e1 = std::sqrt(p*p+mass1*mass1)-de;
+   G4double p12=e1*e1-mass1*mass1;
    p1 = std::sqrt(std::max(1.*eV*eV,p12));
    px = p1*sint*std::sin(phi);
    py = p1*sint*std::cos(phi);
@@ -233,9 +239,9 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    if (verboseLevel > 1) 
    {
      G4cout << "Relevant test "<<p<<" "<<p1<<" "<<cost<<" "<<de<<G4endl;
-     G4cout << "p1/p = "<<p1/p<<" "<<m1<<" "<<m2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
+     G4cout << "p1/p = "<<p1/p<<" "<<mass1<<" "<<mass2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
      G4cout << "rest = "<< b*b<<" "<<4.*a*c<<" "<<G4endl;
-     G4cout << "make p1 = "<< p12<<" "<<e1*e1<<" "<<m1*m1<<" "<<G4endl;
+     G4cout << "make p1 = "<< p12<<" "<<e1*e1<<" "<<mass1*mass1<<" "<<G4endl;
    }
 // Incident particle
    G4double pxinc = p*aParticle->Get4Momentum().vect().unit().x();
@@ -274,27 +280,24 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
       G4cout << "DoIt: "<<pxnew << " " << pynew << " " << pznew <<" "<<p<< G4endl;
    }
 
-   if (aSecondary)
-   {
-      aSecondary->SetMomentumDirection(pxnew, pynew, pznew);
-   }
-   else
-   {
-      try
-      {
-        theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
-        theParticleChange.SetEnergyChange(std::sqrt(m1*m1+it0.mag2())-m1);
-      }
-      catch(G4HadronicException)
-      {
-        std::cerr << "GHADException originating from components of G4LElastic"<<std::cout;
-        throw;
-      }
-      G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
-      G4ThreeVector it(pxre*GeV, pyre*GeV, pzre*GeV);
-      G4DynamicParticle * aSec = 
-	  new G4DynamicParticle(theDef, it.unit(), it.mag2()/(2.*m2));
-      theParticleChange.AddSecondary(aSec);
+   if (aSecondary) {
+     aSecondary->SetMomentumDirection(pxnew, pynew, pznew);
+   } else {
+     try
+     {
+       theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
+       theParticleChange.SetEnergyChange(std::sqrt(mass1*mass1+it0.mag2())-mass1);
+     }
+     catch(G4HadronicException)
+     {
+       std::cerr << "GHADException originating from components of G4LElastic"<<std::cout;
+       throw;
+     }
+     G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+     G4ThreeVector it(pxre*GeV, pyre*GeV, pzre*GeV);
+     G4DynamicParticle * aSec = 
+       new G4DynamicParticle(theDef, it.unit(), it.mag2()/(2.*mass2));
+     theParticleChange.AddSecondary(aSec);
      // G4cout << "Final check ###### "<<p<<" "<<it.mag()<<" "<<p1<<G4endl;
    }
    return &theParticleChange;
@@ -468,4 +471,9 @@ G4LElastic::Defs1(G4double p, G4double px, G4double py, G4double pz,
        *pynew = py;
        *pznew = cost*pz;
    }
+}
+
+const std::pair<G4double, G4double> G4LElastic::GetFatalEnergyCheckLevels() const
+{
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);  // max energy non-conservation is mass of heavy nucleus
 }

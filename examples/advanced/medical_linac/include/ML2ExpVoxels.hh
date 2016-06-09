@@ -56,20 +56,22 @@ public:
 	void add(G4ThreeVector pos, G4double depEnergy, G4double density);
 	void add(const G4Step* aStep);
 
-	inline std::vector <Svoxel> getVoxels(){return this->voxels;}
+	inline std::vector <Svoxel> getVoxels(){return voxels;}
 
 	G4int getMinNumberOfEvents();
 	G4int getMaxNumberOfEvents();
 
 	G4bool loadData();
 
-	inline void setRecycling(int recycling){this->nRecycling=recycling;};
+	inline void setRecycling(int recycling){nRecycling=recycling;}
 	void saveResults(void);
+        void resetNEventsInVoxels();
 private:
 	void saveHeader();
 	void calculateNormalizedEd(std::vector <Svoxel> &voxels);
-	std::vector <Svoxel> voxels;
-	G4ThreeVector minZone, maxZone;
+        std::vector <Svoxel> voxels;
+        G4int *nVoxelsgeometry;
+        G4ThreeVector minZone, maxZone;
 	G4int nCurves;
 	G4int *startCurve, *stopCurve;
 	G4double *chi2Factor;

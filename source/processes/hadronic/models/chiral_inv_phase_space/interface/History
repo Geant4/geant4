@@ -12,6 +12,40 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-Oct-2012 Alberto Ribon                     (hadr-chips-inter-V09-05-07)
+--------------------------------------------------------------------------
+Added deprecate warning message (to be ready to drop CHIPS in G4 10) to
+G4PionMinusNuclearAtRestChips and G4ProtonAntiProtonAtRestChips.
+
+28-Sep-2012 Gabriele Cosmo                     (hadr-chips-inter-V09-05-06)
+--------------------------------------------------------------------------
+Missing correction in file G4ElectroNuclearReaction.hh...
+
+25-Sep-2012 Gabriele Cosmo                     (hadr-chips-inter-V09-05-05)
+--------------------------------------------------------------------------
+Explicitly use inclusion of headers for system of units and physical
+constants, in plan to remove implicit inclusion from globals.hh.
+
+21-Sep-2012 Andrea Dotti		       (hadr-chips-inter-V09-05-04)
+---------------------------------------------------------------------------
+Bug fixing in ElectroNuclearReaction to correct for bug #1354
+
+06-Jul-2012 Alberto Ribon                      (hadr-chips-inter-V09-05-03)
+---------------------------------------------------------------------------
+- Fixed warning of shadowed variable in the class G4QHadronInelasticDataSet.
+
+13-Jun-2012 Alberto Ribon                      (hadr-chips-inter-V09-05-02)
+---------------------------------------------------------------------------
+- Fixed warnings of shadowed variables.
+
+24-Apr-2012 Mikhail Kosov                      (hadr-chips-inter-V09-05-01)
+---------------------------------------------------------------------------
+- More changes for the redesigned (12.08.11) G4VCrossSectionDataSet interface
+
+23-Apr-2012 Mikhail Kosov                      (hadr-chips-inter-V09-05-00)
+---------------------------------------------------------------------------
+- Changes to follow the redesigned (12.08.11) G4VCrossSectionDataSet interface
+
 04-Oct-2011 Dennis Wright                      (hadr-chips-inter-V09-04-04)
 ---------------------------------------------------------------------------
 - integer Z and A migration:  change GetZ to GetZ_asInt and GetN to

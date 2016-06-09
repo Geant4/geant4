@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.17 2009-09-04 14:38:00 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -52,8 +51,12 @@
 //#define pdebug
 //#define edebug
 
-#include "G4QString.hh"
 #include <algorithm>
+
+#include "G4QString.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 // Static parameters definition
 G4double G4QString::MassCut=350.*MeV;     // minimum mass cut for the string
 G4double G4QString::SigmaQT=0.5*GeV;      // quarkTransverseMomentum distribution parameter
@@ -418,8 +421,8 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
   while (!success && attempt++ < StringLoopInterrupt) // Try fragment String till success
   {
     // Recover the CMS String
-    G4QParton* LeftParton = new G4QParton(theStringInCMS->GetLeftParton());
-    G4QParton* RightParton= new G4QParton(theStringInCMS->GetRightParton());
+    LeftParton = new G4QParton(theStringInCMS->GetLeftParton());
+    RightParton= new G4QParton(theStringInCMS->GetRightParton());
     ExciteString(LeftParton, RightParton, theStringInCMS->GetDirection());
 #ifdef edebug
     G4LorentzVector cm4M=cmS4M;    // Copy the full momentum for the reduction and check

@@ -33,6 +33,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

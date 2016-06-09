@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/ElectronBenchmarkDetector.cc
+/// \brief Implementation of the ElectronBenchmarkDetector class
+//
 
 #include "ElectronBenchmarkDetector.hh"
 
@@ -48,17 +51,18 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4PSCellFlux.hh"
 #include "G4PSPopulation.hh"
+#include "G4SystemOfUnits.hh"
 
 ElectronBenchmarkDetector::ElectronBenchmarkDetector()
 :fLogWorld(NULL),
-worldVisAtt(0),
-windowVisAtt(0),
-primFoilVisAtt(0), 
-monVisAtt(0),
-bagVisAtt(0),
-heliumVisAtt(0),
-ringVisAtt(0),
-scorerVisAtt(0)
+fWorldVisAtt(0),
+fWindowVisAtt(0),
+fPrimFoilVisAtt(0), 
+fMonVisAtt(0),
+fBagVisAtt(0),
+fHeliumVisAtt(0),
+fRingVisAtt(0),
+fScorerVisAtt(0)
 {
 	// Exit Window
 	fPosWindow0		=   0.000000*cm;
@@ -99,14 +103,14 @@ ElectronBenchmarkDetector::~ElectronBenchmarkDetector()
 {
 	delete fMessenger;
 	
-	delete worldVisAtt;
-	delete windowVisAtt;
-	delete primFoilVisAtt;
-	delete monVisAtt;
-	delete bagVisAtt;
-	delete heliumVisAtt;
-	delete ringVisAtt;
-	delete scorerVisAtt;
+	delete fWorldVisAtt;
+	delete fWindowVisAtt;
+	delete fPrimFoilVisAtt;
+	delete fMonVisAtt;
+	delete fBagVisAtt;
+	delete fHeliumVisAtt;
+	delete fRingVisAtt;
+	delete fScorerVisAtt;
 }
 
 
@@ -204,8 +208,8 @@ G4VPhysicalVolume* ElectronBenchmarkDetector::CreateWorld(){
 	G4VSolid* worldSolid = new G4Tubs("WorldSolid", 0.*cm, radWorld, halfLengthWorld, 0.*deg, 360.*deg);
 	G4LogicalVolume* worldLog = new G4LogicalVolume(worldSolid, G4Material::GetMaterial("G4_AIR"), "WorldLog");
 	
-	worldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-	worldLog->SetVisAttributes(worldVisAtt);
+	fWorldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+	worldLog->SetVisAttributes(fWorldVisAtt);
 	
 	G4VPhysicalVolume* worldPhys = 
 		new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), worldLog,"World", 0, false, 0);
@@ -220,8 +224,8 @@ void ElectronBenchmarkDetector::CreateExitWindow(G4LogicalVolume* worldLog){
 	G4VSolid* windowSolid = new G4Tubs("windowSolid", 0.*cm, fRadOverall, halfThicknessWindow, 0.*deg, 360.*deg);
 	G4LogicalVolume* windowLog = new G4LogicalVolume(windowSolid, G4Material::GetMaterial("TiAlloy"), "windowLog");
 	
-	windowVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	windowLog->SetVisAttributes(windowVisAtt);
+	fWindowVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	windowLog->SetVisAttributes(fWindowVisAtt);
 	
 	new G4PVPlacement(0, 
 		G4ThreeVector(0.,0., halfThicknessWindow - halfLengthWorld),
@@ -239,8 +243,8 @@ void ElectronBenchmarkDetector::CreatePrimaryFoil(G4LogicalVolume* worldLog){
 		0.*cm, fRadOverall, fHalfThicknessPrimFoil, 0.*deg, 360.*deg);
 	G4LogicalVolume* primFoilLog = new G4LogicalVolume(primFoilSolid, fMaterialPrimFoil, "PrimFoilLog");
 	
-	primFoilVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	primFoilLog->SetVisAttributes(primFoilVisAtt);
+	fPrimFoilVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	primFoilLog->SetVisAttributes(fPrimFoilVisAtt);
 	
 	new G4PVPlacement(0, 
 		G4ThreeVector(0.,0.,fPosPrimFoil + fHalfThicknessPrimFoil - halfLengthWorld),
@@ -254,8 +258,8 @@ void ElectronBenchmarkDetector::CreateMonitor(G4LogicalVolume* worldLog){
 	G4VSolid* monSolid = new G4Tubs("monSolid", 0.*cm, fRadOverall, halfThicknessMon, 0.*deg, 360.*deg);
 	G4LogicalVolume* monLog = new G4LogicalVolume(monSolid, G4Material::GetMaterial("G4_MYLAR"), "monLog");
 	
-	monVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	monLog->SetVisAttributes(monVisAtt);
+	fMonVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	monLog->SetVisAttributes(fMonVisAtt);
 	
 	new G4PVPlacement(0, 
 		G4ThreeVector(0.,0., fPosMon0 + halfThicknessMon - halfLengthWorld),
@@ -270,8 +274,8 @@ void ElectronBenchmarkDetector::CreateHeliumBag(G4LogicalVolume* worldLog){
 	G4VSolid* bagSolid = new G4Tubs("bagSolid", 0.*cm, fRadOverall, halfThicknessBag, 0.*deg, 360.*deg);
 	G4LogicalVolume* bagLog = new G4LogicalVolume(bagSolid, G4Material::GetMaterial("G4_MYLAR"), "bagLog");
 	
-	bagVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	bagLog->SetVisAttributes(bagVisAtt);
+	fBagVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	bagLog->SetVisAttributes(fBagVisAtt);
 	
 	new G4PVPlacement(0, 
 		G4ThreeVector(0.,0., fPosBag0 + halfThicknessBag - halfLengthWorld),
@@ -282,8 +286,8 @@ void ElectronBenchmarkDetector::CreateHeliumBag(G4LogicalVolume* worldLog){
 	G4VSolid* heliumSolid = new G4Tubs("heliumSolid", 0.*cm, fRadOverall, halfThicknessHelium, 0.*deg, 360.*deg);
 	G4LogicalVolume* heliumLog = new G4LogicalVolume(heliumSolid, G4Material::GetMaterial("G4_He"), "heliumLog");
 	
-	heliumVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	heliumLog->SetVisAttributes(heliumVisAtt);
+	fHeliumVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	heliumLog->SetVisAttributes(fHeliumVisAtt);
 	
 	new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),heliumLog,"Helium",bagLog,false,0);	
 
@@ -293,9 +297,9 @@ void ElectronBenchmarkDetector::CreateHeliumBag(G4LogicalVolume* worldLog){
 	G4LogicalVolume* ring0Log = new G4LogicalVolume(ringSolid, G4Material::GetMaterial("G4_Al"), "ring0Log");
 	G4LogicalVolume* ring1Log = new G4LogicalVolume(ringSolid, G4Material::GetMaterial("G4_Al"), "ring1Log");
 	
-	ringVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	ring0Log->SetVisAttributes(ringVisAtt);
-	ring1Log->SetVisAttributes(ringVisAtt);
+	fRingVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	ring0Log->SetVisAttributes(fRingVisAtt);
+	ring1Log->SetVisAttributes(fRingVisAtt);
 	
 	new G4PVPlacement(0, 
 		G4ThreeVector(0.,0., -halfThicknessHelium + halfThicknessRing),
@@ -314,8 +318,8 @@ void ElectronBenchmarkDetector::CreateScorer(G4LogicalVolume* worldLog){
 	G4VSolid* scorerSolid = new G4Tubs("scorerSolid", 0.*cm, fRadOverall, halfThicknessScorer, 0.*deg, 360.*deg);
 	G4LogicalVolume* scorerLog = new G4LogicalVolume(scorerSolid, G4Material::GetMaterial("G4_AIR"), "scorerLog");
 
-	scorerVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-	scorerLog->SetVisAttributes(scorerVisAtt);
+	fScorerVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
+	scorerLog->SetVisAttributes(fScorerVisAtt);
 	new G4PVPlacement(0,
 		G4ThreeVector(0.,0., halfLengthWorld - halfThicknessScorer),
 		scorerLog,"Scorer",worldLog,false,0);	

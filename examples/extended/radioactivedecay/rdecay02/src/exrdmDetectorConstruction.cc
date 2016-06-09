@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmDetectorConstruction.cc
+/// \brief Implementation of the exrdmDetectorConstruction class
+//
 #include "exrdmDetectorConstruction.hh"
 #include "exrdmDetectorMessenger.hh"
 //#include "exrdmDetectorSD.hh"
@@ -38,6 +41,8 @@
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ios.hh"
 #include <sstream>
@@ -45,28 +50,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 exrdmDetectorConstruction::exrdmDetectorConstruction()
-:solidWorld(0),  logicWorld(0),  physiWorld(0),
- solidTarget(0), logicTarget(0), physiTarget(0), 
- solidDetector(0),logicDetector(0),physiDetector(0), 
- TargetMater(0), DetectorMater(0),
- fWorldLength(0.)
+:fSolidWorld(0),  fLogicWorld(0),  fPhysiWorld(0),
+ fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0), 
+ fSolidDetector(0),fLogicDetector(0),fPhysiDetector(0),
+ fMaterialsManager(0),
+ fDefaultMater(0),fTargetMater(0),fDetectorMater(0),
+ fTargetLength (1.*cm), fTargetRadius(0.5*cm),
+ fDetectorLength(5.0 * cm), fDetectorThickness(2.0 * cm),
+ fWorldLength (std::max(fTargetLength,fDetectorLength)),
+ fWorldRadius (fTargetRadius + fDetectorThickness),
+ fTargetRegion(0), fDetectorRegion(0)
 {
-  detectorMessenger = new exrdmDetectorMessenger(this);
+  fDetectorMessenger = new exrdmDetectorMessenger(this);
   DefineMaterials();
-  fDetectorThickness = 2.* cm;
-  fTargetRadius = 0.5 * cm;
-  fDetectorLength = 5.0 * cm;      
-  fTargetLength  = 1.0 * cm;         
-//--------- Sizes of the principal geometrical components (solids)  ---------
-  fWorldLength = std::max(fTargetLength,fDetectorLength);
-  fWorldRadius = fTargetRadius + fDetectorThickness;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 exrdmDetectorConstruction::~exrdmDetectorConstruction()
 {
-  delete detectorMessenger;             
+  delete fDetectorMessenger;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,20 +78,20 @@ void exrdmDetectorConstruction::DefineMaterials()
 {
 //--------- Material definition ---------
 
-  materialsManager = new exrdmMaterial();
+  fMaterialsManager = new exrdmMaterial();
   // Lead
-  materialsManager->AddMaterial("Lead","Pb",11.3*g/cm3,"");
+  fMaterialsManager->AddMaterial("Lead","Pb",11.3*g/cm3,"");
   //Germanium detector
-  materialsManager->AddMaterial("Germanium","Ge",5.323*g/cm3,""); 
+  fMaterialsManager->AddMaterial("Germanium","Ge",5.323*g/cm3,""); 
   //CsI
-  materialsManager->AddMaterial("CsI","Cs-I",4.51*g/cm3,"");
+  fMaterialsManager->AddMaterial("CsI","Cs-I",4.51*g/cm3,"");
 
   // G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
   // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
     
-  DefaultMater = materialsManager->GetMaterial("Air");
-  TargetMater  = materialsManager->GetMaterial("CsI");
-  DetectorMater = materialsManager->GetMaterial("Germanium");
+  fDefaultMater = fMaterialsManager->GetMaterial("Air");
+  fTargetMater  = fMaterialsManager->GetMaterial("CsI");
+  fDetectorMater = fMaterialsManager->GetMaterial("Germanium");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,37 +108,37 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   // World
   //------------------------------ 
 
- solidWorld= new G4Tubs("world",0.,fWorldRadius,fWorldLength/2.,0.,twopi);
- logicWorld= new G4LogicalVolume( solidWorld, DefaultMater, "World", 0, 0, 0);
+ fSolidWorld= new G4Tubs("world",0.,fWorldRadius,fWorldLength/2.,0.,twopi);
+ fLogicWorld= new G4LogicalVolume( fSolidWorld, fDefaultMater, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 
-  physiWorld = new G4PVPlacement(0,               // no rotation
+  fPhysiWorld = new G4PVPlacement(0,              // no rotation
                                  G4ThreeVector(), // at (0,0,0)
-                                 logicWorld,      // its logical volume
-				 "World",         // its name
+                                 fLogicWorld,     // its logical volume
+                                 "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
                                  0);              // no field specific to volume
-				 
+                                 
   //------------------------------ 
   // Target
   //------------------------------
   
   G4ThreeVector positionTarget = G4ThreeVector(0,0,0);
    
-  solidTarget = new G4Tubs("target",0.,fTargetRadius,fTargetLength/2.,0.,twopi);
-  logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
-  physiTarget = new G4PVPlacement(0,               // no rotation
-				  positionTarget,  // at (x,y,z)
-				  logicTarget,     // its logical volume				  
-				  "Target",        // its name
-				  logicWorld,      // its mother  volume
-				  false,           // no boolean operations
-				  0);              // no particular field 
+  fSolidTarget = new G4Tubs("target",0.,fTargetRadius,fTargetLength/2.,0.,twopi);
+  fLogicTarget = new G4LogicalVolume(fSolidTarget,fTargetMater,"Target",0,0,0);
+  fPhysiTarget = new G4PVPlacement(0,              // no rotation
+                                  positionTarget,  // at (x,y,z)
+                                  fLogicTarget,    // its logical volume                                  
+                                  "Target",        // its name
+                                  fLogicWorld,     // its mother  volume
+                                  false,           // no boolean operations
+                                  0);              // no particular field 
 
   //  G4cout << "Target is a cylinder with rdius of " << targetradius/cm << " cm of " 
-  //       << TargetMater->GetName() << G4endl;
+  //       << fTargetMater->GetName() << G4endl;
 
   //------------------------------ 
   // Detector
@@ -143,15 +146,17 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   
   G4ThreeVector positionDetector = G4ThreeVector(0,0,0);
   
-  solidDetector = new G4Tubs("detector",fTargetRadius,fWorldRadius,fDetectorLength/2.,0.,twopi);
-  logicDetector = new G4LogicalVolume(solidDetector ,DetectorMater, "Detector",0,0,0);  
-  physiDetector = new G4PVPlacement(0,              // no rotation
-				  positionDetector, // at (x,y,z)
-				  logicDetector,    // its logical volume				  
-				  "Detector",       // its name
-				  logicWorld,      // its mother  volume
-				  false,           // no boolean operations
-				  0);              // no particular field 
+  fSolidDetector = new G4Tubs("detector",fTargetRadius,fWorldRadius,
+                                                          fDetectorLength/2.,0.,twopi);
+  fLogicDetector = new G4LogicalVolume(fSolidDetector ,fDetectorMater,
+                                                                      "Detector",0,0,0);
+  fPhysiDetector = new G4PVPlacement(0,             // no rotation
+                                  positionDetector, // at (x,y,z)
+                                  fLogicDetector,   // its logical volume                                  
+                                  "Detector",       // its name
+                                  fLogicWorld,      // its mother  volume
+                                  false,            // no boolean operations
+                                  0);               // no particular field 
 
   //------------------------------------------------ 
   // Sensitive detectors
@@ -162,25 +167,25 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   // G4String detectortargetSDname = "exrdm/DetectorTargetSD";
   // exrdmDetectorSD* aDetectorSD = new exrdmDetectorSD( detectorTargetSDname );
   // SDman->AddNewDetector( aDetectorSD );
-  //logicTarget->SetSensitiveDetector( aDetectorSD );
-  // logicDetector->SetSensitiveDetector( aDetectorSD );
+  //fLogicTarget->SetSensitiveDetector( aDetectorSD );
+  // fLogicDetector->SetSensitiveDetector( aDetectorSD );
   //
   //-------------------------------------------------
   // regions
   //
-  //  if(targetRegion) delete targetRegion;
-  // if(detectorRegion) delete detectorRegion;
-  targetRegion = new G4Region("Target");
-  detectorRegion   = new G4Region("Detector");
-  targetRegion->AddRootLogicalVolume(logicTarget);
-  detectorRegion->AddRootLogicalVolume(logicDetector);
+  //  if(fTargetRegion) delete fTargetRegion;
+  // if(fDetectorRegion) delete fDetectorRegion;
+  fTargetRegion = new G4Region("Target");
+  fDetectorRegion   = new G4Region("Detector");
+  fTargetRegion->AddRootLogicalVolume(fLogicTarget);
+  fDetectorRegion->AddRootLogicalVolume(fLogicDetector);
 
   //--------- Visualization attributes -------------------------------
-  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  fLogicWorld->SetVisAttributes(G4VisAttributes::Invisible);
   G4VisAttributes* TargetVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  logicTarget ->SetVisAttributes(TargetVisAtt);
+  fLogicTarget ->SetVisAttributes(TargetVisAtt);
   G4VisAttributes* DetectorVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,.0));
-  logicDetector->SetVisAttributes(DetectorVisAtt);
+  fLogicDetector->SetVisAttributes(DetectorVisAtt);
 
 
   //------------ set the incident position ------
@@ -206,33 +211,35 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   UI->ApplyCommand("/gps/energy 100 MeV");
   //       
   
-  return physiWorld;
+  return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void exrdmDetectorConstruction::setTargetMaterial(G4String materialName)
+void exrdmDetectorConstruction::SetTargetMaterial(G4String materialName)
 {
   // search the material by its name 
   G4Material* pttoMaterial = G4Material::GetMaterial(materialName);  
   if (pttoMaterial)
-     {TargetMater = pttoMaterial;
-      if (logicTarget) logicTarget->SetMaterial(pttoMaterial); 
-      G4cout << "\n----> The target has been changed to " << fTargetLength/cm << " cm of "
+     {fTargetMater = pttoMaterial;
+      if (fLogicTarget) fLogicTarget->SetMaterial(pttoMaterial); 
+      G4cout << "\n----> The target has been changed to " << fTargetLength/cm
+                     << " cm of "
              << materialName << G4endl;
      }             
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void exrdmDetectorConstruction::setDetectorMaterial(G4String materialName)
+void exrdmDetectorConstruction::SetDetectorMaterial(G4String materialName)
 {
   // search the material by its name 
   G4Material* pttoMaterial = G4Material::GetMaterial(materialName);  
   if (pttoMaterial)
-     {DetectorMater = pttoMaterial;
-      if (logicDetector) logicDetector->SetMaterial(pttoMaterial); 
-      G4cout << "\n----> The Deetctor has been changed to" << fDetectorLength/cm << " cm of "
+     {fDetectorMater = pttoMaterial;
+      if (fLogicDetector) fLogicDetector->SetMaterial(pttoMaterial); 
+      G4cout << "\n----> The Deetctor has been changed to" << fDetectorLength/cm
+                     << " cm of "
              << materialName << G4endl;
      }             
 }

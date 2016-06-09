@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 7th, 2012 Gabriele Cosmo (procbiasing-V09-05-00)
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 Oct 21st, 2011 Alex Howard (procbiasing-V09-04-01)
 - G4ProcessPlacer: Migrated to new G4Exception
 

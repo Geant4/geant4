@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationWithDeltaModel.cc,v 1.1 2010-10-26 15:40:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +55,8 @@
 
 #include "G4mplIonisationWithDeltaModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Electron.hh"
@@ -65,7 +66,8 @@
 
 using namespace std;
 
-G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge, const G4String& nam)
+G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
+							     const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   magCharge(mCharge),
   twoln10(log(100.0)),
@@ -84,8 +86,8 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge, c
   theElectron = G4Electron::Electron();
   G4cout << "### Monopole ionisation model with d-electron production, Gmag= " 
 	 << magCharge/eplus << G4endl;
-  mass = 0.0;
   monopole = 0;
+  mass = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,12 +97,25 @@ G4mplIonisationWithDeltaModel::~G4mplIonisationWithDeltaModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4mplIonisationWithDeltaModel::SetParticle(const G4ParticleDefinition* p)
+{
+  monopole = p;
+  mass     = monopole->GetPDGMass();
+  G4double emin = 
+    std::min(LowEnergyLimit(),0.1*mass*(1/sqrt(1 - betalow*betalow) - 1)); 
+  G4double emax = 
+    std::max(HighEnergyLimit(),10*mass*(1/sqrt(1 - beta2lim) - 1)); 
+  SetLowEnergyLimit(emin);
+  SetHighEnergyLimit(emax);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void 
 G4mplIonisationWithDeltaModel::Initialise(const G4ParticleDefinition* p,
 					  const G4DataVector&)
 {
-  monopole = p;
-  mass     = monopole->GetPDGMass();
+  if(!monopole) { SetParticle(p); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
@@ -112,6 +127,7 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
 						    G4double kineticEnergy,
 						    G4double maxEnergy)
 {
+  if(!monopole) { SetParticle(p); }
   G4double tmax = MaxSecondaryEnergy(p,kineticEnergy);
   G4double cutEnergy = std::min(tmax, maxEnergy);
   G4double tau   = kineticEnergy / mass;
@@ -187,6 +203,7 @@ G4mplIonisationWithDeltaModel::ComputeCrossSectionPerElectron(
 					   G4double cutEnergy,
 					   G4double maxKinEnergy)
 {
+  if(!monopole) { SetParticle(p); }
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
   G4double maxEnergy = min(tmax,maxKinEnergy);

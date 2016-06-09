@@ -32,8 +32,7 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc,v 1.6 2010-11-18 13:10:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Comments: Main program for the Purgin Magnet example. 
 //

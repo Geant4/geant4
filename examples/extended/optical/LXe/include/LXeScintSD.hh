@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeScintSD.hh
+/// \brief Definition of the LXeScintSD class
+//
+//
 #ifndef LXeScintSD_h
 #define LXeScintSD_h 1
 
@@ -35,21 +39,22 @@ class G4HCofThisEvent;
 
 class LXeScintSD : public G4VSensitiveDetector
 {
-public:
-  LXeScintSD(G4String name);
-  ~LXeScintSD();
-  
-  void Initialize(G4HCofThisEvent* HCE);
-  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
-  void EndOfEvent(G4HCofThisEvent* HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-  
-private:
-  LXeScintHitsCollection* scintCollection;
-  
+  public:
+
+    LXeScintSD(G4String name);
+    virtual ~LXeScintSD();
+
+    virtual void Initialize(G4HCofThisEvent* );
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* );
+    virtual void EndOfEvent(G4HCofThisEvent* );
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
+ 
+  private:
+
+    LXeScintHitsCollection* fScintCollection;
+ 
 };
 
 #endif
-

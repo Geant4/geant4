@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.hh,v 1.1 2010-09-03 14:11:58 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -100,7 +99,6 @@ private:
 
   G4VAtomDeexcitation*      fAtomDeexcitation;
   G4double                  limitFactor;
-  G4bool                    isInitialized;
   std::vector<G4double>     fProbabilities;
 };
 

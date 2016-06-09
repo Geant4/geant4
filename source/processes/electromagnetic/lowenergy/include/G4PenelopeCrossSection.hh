@@ -23,14 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCrossSection.hh,v 1.1 2010-07-26 09:56:42 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
 // 18 Mar 2010   L. Pandola   1st implementation. 
+// 09 Mar 2012   L. Pandola   Add public method (and machinery) to return 
+//                            the absolute and the normalized shell cross 
+//                            sections independently.
 //
 // -------------------------------------------------------------------
 //
@@ -43,7 +45,8 @@
 // b) the "soft quantities" (below threshold), 0-th order (cross section) 
 //     1-st order (= stopping XS), 2-nd order (= straggling XS)
 // c) total hard cross sections for individual oscillators
-// vs. energy.
+// vs. energy. Two versions are available, one with normalized values 
+// (good for sampling) and one with absolute values.
 // 
 // The interface *always* uses energy and cross sections, while internally 
 // log(energy) and log(XS) are used.
@@ -53,10 +56,6 @@
 //
 // Public method to retrieve hard cross section, soft stopping power, 
 // total cross section and hard shell cross sections.
-//
-// The method NormalizeShellCrossSections() normalizes the 
-// shell cross sections by retrieving the total hard cross section. 
-// Used for sampling.
 //
 // Notice: all quantities stored here are *per molecule*
 //
@@ -81,10 +80,16 @@ public:
   //
   ~G4PenelopeCrossSection();
 
+  //! Returns total cross section at the given energy
   G4double GetTotalCrossSection(G4double energy);
+  //! Returns hard cross section at the given energy
   G4double GetHardCrossSection(G4double energy);
+  //! Returns the total stopping power due to soft collisions
   G4double GetSoftStoppingPower(G4double energy);
+  //! Returns the hard cross section for the given shell (per molecule)
   G4double GetShellCrossSection(size_t shellID,G4double energy);
+  //! Returns the hard cross section for the given shell (normalized to 1)
+  G4double GetNormalizedShellCrossSection(size_t shellID,G4double energy);
 
   size_t GetNumberOfShells(){return numberOfShells;};
 
@@ -96,11 +101,10 @@ public:
   void AddShellCrossSectionPoint(size_t binNumber,
 			         size_t shellID,G4double energy,G4double xs);
 
-  void NormalizeShellCrossSections();
-
 private:
   G4PenelopeCrossSection & operator=(const G4PenelopeCrossSection &right);
   G4PenelopeCrossSection(const G4PenelopeCrossSection&);
+  void NormalizeShellCrossSections();
 
   G4bool isNormalized;
 
@@ -117,6 +121,7 @@ private:
   
   //XS for individual shells
   G4PhysicsTable* shellCrossSections;
+  G4PhysicsTable* shellNormalizedCrossSections;
 
 };
 

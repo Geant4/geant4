@@ -44,61 +44,61 @@ double HepRotation::operator() (int i, int j) const {
   return 0.0;
 } 
 
-HepRotation & HepRotation::rotate(double a, const Hep3Vector& axis) {
+HepRotation & HepRotation::rotate(double a, const Hep3Vector& aaxis) {
   if (a != 0.0) {
-    double ll = axis.mag();
+    double ll = aaxis.mag();
     if (ll == 0.0) {
       std::cerr << "HepRotation::rotate() - "
                 << "HepRotation: zero axis" << std::endl;
     }else{
       double sa = std::sin(a), ca = std::cos(a);
-      double dx = axis.x()/ll, dy = axis.y()/ll, dz = axis.z()/ll;   
-      HepRotation m(
+      double dx = aaxis.x()/ll, dy = aaxis.y()/ll, dz = aaxis.z()/ll;   
+      HepRotation m1(
 	ca+(1-ca)*dx*dx,          (1-ca)*dx*dy-sa*dz,    (1-ca)*dx*dz+sa*dy,
 	   (1-ca)*dy*dx+sa*dz, ca+(1-ca)*dy*dy,          (1-ca)*dy*dz-sa*dx,
 	   (1-ca)*dz*dx-sa*dy,    (1-ca)*dz*dy+sa*dx, ca+(1-ca)*dz*dz );
-      transform(m);
+      transform(m1);
     }
   }
   return *this;
 }
 
 HepRotation & HepRotation::rotateX(double a) {
-  double c = std::cos(a);
-  double s = std::sin(a);
-  double x = ryx, y = ryy, z = ryz; 
-  ryx = c*x - s*rzx;
-  ryy = c*y - s*rzy;
-  ryz = c*z - s*rzz;
-  rzx = s*x + c*rzx;
-  rzy = s*y + c*rzy;
-  rzz = s*z + c*rzz;
+  double c1 = std::cos(a);
+  double s1 = std::sin(a);
+  double x1 = ryx, y1 = ryy, z1 = ryz; 
+  ryx = c1*x1 - s1*rzx;
+  ryy = c1*y1 - s1*rzy;
+  ryz = c1*z1 - s1*rzz;
+  rzx = s1*x1 + c1*rzx;
+  rzy = s1*y1 + c1*rzy;
+  rzz = s1*z1 + c1*rzz;
   return *this;
 }
 
 HepRotation & HepRotation::rotateY(double a){
-  double c = std::cos(a);
-  double s = std::sin(a);
-  double x = rzx, y = rzy, z = rzz; 
-  rzx = c*x - s*rxx;
-  rzy = c*y - s*rxy;
-  rzz = c*z - s*rxz;
-  rxx = s*x + c*rxx;
-  rxy = s*y + c*rxy;
-  rxz = s*z + c*rxz;
+  double c1 = std::cos(a);
+  double s1 = std::sin(a);
+  double x1 = rzx, y1 = rzy, z1 = rzz; 
+  rzx = c1*x1 - s1*rxx;
+  rzy = c1*y1 - s1*rxy;
+  rzz = c1*z1 - s1*rxz;
+  rxx = s1*x1 + c1*rxx;
+  rxy = s1*y1 + c1*rxy;
+  rxz = s1*z1 + c1*rxz;
   return *this;
 }
 
 HepRotation & HepRotation::rotateZ(double a) {
-  double c = std::cos(a);
-  double s = std::sin(a);
-  double x = rxx, y = rxy, z = rxz; 
-  rxx = c*x - s*ryx;
-  rxy = c*y - s*ryy;
-  rxz = c*z - s*ryz;
-  ryx = s*x + c*ryx;
-  ryy = s*y + c*ryy;
-  ryz = s*z + c*ryz;
+  double c1 = std::cos(a);
+  double s1 = std::sin(a);
+  double x1 = rxx, y1 = rxy, z1 = rxz; 
+  rxx = c1*x1 - s1*ryx;
+  rxy = c1*y1 - s1*ryy;
+  rxz = c1*z1 - s1*ryz;
+  ryx = s1*x1 + c1*ryx;
+  ryy = s1*y1 + c1*ryy;
+  ryz = s1*z1 + c1*ryz;
   return *this;
 }
 
@@ -150,12 +150,12 @@ double HepRotation::thetaZ() const {
   return safe_acos(zz());
 }
 
-void HepRotation::getAngleAxis(double &angle, Hep3Vector &axis) const {
+void HepRotation::getAngleAxis(double &angle, Hep3Vector &aaxis) const {
   double cosa  = 0.5*(xx()+yy()+zz()-1);
   double cosa1 = 1-cosa;
   if (cosa1 <= 0) {
     angle = 0;
-    axis  = Hep3Vector(0,0,1);
+    aaxis  = Hep3Vector(0,0,1);
   }else{
     double x=0, y=0, z=0;
     if (xx() > cosa) x = std::sqrt((xx()-cosa)/cosa1);
@@ -165,7 +165,7 @@ void HepRotation::getAngleAxis(double &angle, Hep3Vector &axis) const {
     if (xz() < zx()) y = -y;
     if (yx() < xy()) z = -z;
     angle = (cosa < -1.) ? std::acos(-1.) : std::acos(cosa);
-    axis  = Hep3Vector(x,y,z);
+    aaxis  = Hep3Vector(x,y,z);
   }
 }
 

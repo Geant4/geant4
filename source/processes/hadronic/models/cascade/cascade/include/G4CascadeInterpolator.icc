@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_INTERPOLATOR_ICC
 #define G4CASCADE_INTERPOLATOR_ICC
-// $Id: G4CascadeInterpolator.icc,v 1.9 2010-12-15 07:39:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
 //

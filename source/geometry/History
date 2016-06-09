@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 19, 2011 Ben Morgan                     geometry-V09-04-00
+Jun 14, 2012   Gabriele Cosmo               geometry-V09-05-00
+-----------------------------
+- Include tags on top of geant4-09-05-ref-05: geomdiv-V09-05-01,
+  field-V09-05-05, geommng-V09-05-02, geomnav-V09-05-04, geom-solids-V09-05-00.
+- Grouping updates to unit tests for compilation errors and warnings.
+
+May 19, 2011       Ben Morgan               geometry-V09-04-00
 -----------------------------
 - CMakeLists.txt : Added G4GEOM_ALLOC_EXPORT compiler definition via 
   add_definitions so all submodules pick it up.

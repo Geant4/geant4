@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc,v 1.17 2010-08-28 15:16:55 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +41,7 @@
 //
 
 #include "G4PreCompoundIon.hh"
+#include "G4PhysicalConstants.hh"
 
 G4PreCompoundIon::
 G4PreCompoundIon(const G4ParticleDefinition* part,

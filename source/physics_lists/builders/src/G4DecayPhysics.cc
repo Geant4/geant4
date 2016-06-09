@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.cc,v 1.2 2010-06-03 14:37:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -53,6 +52,10 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4DecayPhysics);
 
 G4DecayPhysics::G4DecayPhysics(G4int ver)
   :  G4VPhysicsConstructor("Decay"), verbose(ver), wasActivated(false)

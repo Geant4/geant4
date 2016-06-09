@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4DetailedBalancePhaseSpaceIntegral.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ResonanceID.hh"
 
   G4double G4DetailedBalancePhaseSpaceIntegral::sqrts[120] = 
@@ -112,6 +113,7 @@ G4DetailedBalancePhaseSpaceIntegral(G4ParticleDefinition * aR) : theR(aR)
 {
   G4ResonanceID theID;
   G4int pdg=theR->GetPDGEncoding();
+  data=0;
        if(theID.IsDelta1232(pdg)) data = delta;
   else if(theID.IsDelta1600(pdg)) data = delta1600;
   else if(theID.IsDelta1620(pdg)) data = delta1620;

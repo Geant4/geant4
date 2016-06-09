@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ExErrorDetectorMessenger.cc
+/// \brief Implementation of the ExErrorDetectorMessenger class
 
 #include "ExErrorDetectorMessenger.hh"
 
@@ -32,38 +34,36 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorDetectorMessenger::ExErrorDetectorMessenger(ExErrorDetectorConstruction* myDet)
-:myDetector(myDet)
+:fMyDetector(myDet)
 { 
 
-  mydetDir = new G4UIdirectory("/exerror/");
-  mydetDir->SetGuidance("ExError control.");
+  fMydetDir = new G4UIdirectory("/exerror/");
+  fMydetDir->SetGuidance("ExError control.");
   
-  FieldCmd = new G4UIcmdWithADoubleAndUnit("/exerror/setField",this);  
-  FieldCmd->SetGuidance("Define magnetic field.");
-  FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  FieldCmd->SetParameterName("Bz",false);
-  FieldCmd->SetDefaultUnit("tesla");
-  FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);  
+  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/exerror/setField",this);  
+  fFieldCmd->SetGuidance("Define magnetic field.");
+  fFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fFieldCmd->SetParameterName("Bz",false);
+  fFieldCmd->SetDefaultUnit("tesla");
+  fFieldCmd->SetUnitCategory("Magnetic flux density");
+  fFieldCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);  
 
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorDetectorMessenger::~ExErrorDetectorMessenger()
 {
-  delete FieldCmd;
-  delete mydetDir;
+  delete fFieldCmd;
+  delete fMydetDir;
 }
 
-
-//-------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExErrorDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {   
-  if( command == FieldCmd ) { 
-    myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));
+  if( command == fFieldCmd ) { 
+    fMyDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));
   }
 
 }

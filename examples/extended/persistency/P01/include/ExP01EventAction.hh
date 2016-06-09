@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01EventAction.hh
+/// \brief Definition of the ExP01EventAction class
 //
-// $Id: ExP01EventAction.hh,v 1.2 2006-06-29 17:38:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +40,8 @@
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Event action for the persistency example
 
 class ExP01EventAction : public G4UserEventAction
 {

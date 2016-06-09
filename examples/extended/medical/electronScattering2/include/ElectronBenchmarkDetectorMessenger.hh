@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/include/ElectronBenchmarkDetectorMessenger.hh
+/// \brief Definition of the ElectronBenchmarkDetectorMessenger class
+//
 
 #ifndef ELECTRONBENCHMARKDETECTORMESSENGER_HH
 #define ELECTRONBENCHMARKDETECTORMESSENGER_HH 1
@@ -38,19 +41,17 @@ class G4UIcmdWithADoubleAndUnit;
 class ElectronBenchmarkDetectorMessenger: public G4UImessenger {
 
 public:
-  
   ElectronBenchmarkDetectorMessenger(ElectronBenchmarkDetector* det);
   
-  ~ElectronBenchmarkDetectorMessenger();
+  virtual ~ElectronBenchmarkDetectorMessenger();
   
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  
-  ElectronBenchmarkDetector* detector;   
-  G4UIdirectory* listDir;
-  G4UIcmdWithAString* primFoilMatCmd;
-  G4UIcmdWithADoubleAndUnit* primFoilThickCmd;
+  ElectronBenchmarkDetector* fDetector;   
+  G4UIdirectory* fListDir;
+  G4UIcmdWithAString* fPrimFoilMatCmd;
+  G4UIcmdWithADoubleAndUnit* fPrimFoilThickCmd;
 };
 
 #endif

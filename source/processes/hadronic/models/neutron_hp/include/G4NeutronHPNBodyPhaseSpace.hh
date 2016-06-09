@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.12 2006-06-29 20:48:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1
 
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4Neutron.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4ReactionProduct.hh"
@@ -72,9 +73,9 @@ class G4NeutronHPNBodyPhaseSpace : public G4VNeutronHPEnergyAngular
   inline G4double C(G4double anEnergy, G4double mass)
   {
     G4double result(0);
-    if(theTotalCount==3) result = 4./pi/std::pow(GetEmax(anEnergy, mass),2);
+    if(theTotalCount==3) result = 4./CLHEP::pi/std::pow(GetEmax(anEnergy, mass),2);
     if(theTotalCount==4) result = 105./32./std::pow(GetEmax(anEnergy, mass), 3.5);
-    if(theTotalCount==5) result = 256./14./pi/std::pow(GetEmax(anEnergy, mass), 5.);
+    if(theTotalCount==5) result = 256./14./CLHEP::pi/std::pow(GetEmax(anEnergy, mass), 5.);
     return result;
   }
   

@@ -15,6 +15,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27-Sep-2012, G.Cosmo
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+- Corrected compilation warnings for order of initialization of data members
+  in G4PomeronCrossSection.
+
+17-Jul-2012, G.Folger       (had-partonstring-mgt-V09-05-03)
+- fixes for coverity, G4InteractionContent and G4PomeronCrossSection
+
+12-Jun-2012, G.Folger       (had-partonstring-mgt-V09-05-02)
+- G4PomeronCrossSection.cc: fix shadowing warnings
+
+25-May-2012, G.Folger       (had-partonstring-mgt-V09-05-01)
+- G4VPartonStringModel: 
+  - add ModelDescription() interface
+  - make copy ctor, =,  ==, and  != operators private, not implemented
+
+12-Apr-2012, G.Folger       (had-partonstring-mgt-V09-05-00)
+- Changes in debugging information
+
 5-Aug-2011, M. Kelsey       (had-partonstring-mgt-V09-04-01)
   G4VParticipants:  Remove external dependences on G4Fancy3DNucleus by
     moving #include, Init(), and SetNucleus() to .cc file.

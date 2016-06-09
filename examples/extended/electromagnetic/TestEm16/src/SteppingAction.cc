@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2010-10-13 13:50:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,11 +39,12 @@
 #include "G4UnitsTable.hh"
 #include "HistoManager.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* histo)
-:runAction(RuAct), histoManager(histo)
+SteppingAction::SteppingAction(RunAction* RuAct)
+:fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,42 +72,44 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       //   
       size_t lp=(*secondary).size();
       if (lp)
-	{
-	  G4double  Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
-	  runAction->n_gam_sync++;
-	  runAction->e_gam_sync += Egamma;
-	  runAction->e_gam_sync2 += Egamma*Egamma;
-	  if (Egamma > runAction->e_gam_sync_max) 
-	    { 
-	      runAction->e_gam_sync_max = Egamma;
-	    }
-	  runAction->lam_gam_sync += aStep->GetStepLength();
-	  if (iCalled<nprint)
-	    {
-	      G4double      Eelec  = PrePoint->GetTotalEnergy();
-	      G4ThreeVector Pelec  = PrePoint->GetMomentum();
-	      G4ThreeVector PGamma = (*secondary)[lp-1]->GetMomentum();
-	      G4bool IsGamma = 
-		((*secondary)[lp-1]->GetDefinition() == G4Gamma::Gamma());
+        {
+          G4double  Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
+          fRunAction->n_gam_sync++;
+          fRunAction->e_gam_sync += Egamma;
+          fRunAction->e_gam_sync2 += Egamma*Egamma;
+          if (Egamma > fRunAction->e_gam_sync_max) 
+            { 
+              fRunAction->e_gam_sync_max = Egamma;
+            }
+          fRunAction->lam_gam_sync += aStep->GetStepLength();
+          if (iCalled<nprint)
+            {
+              G4double      Eelec  = PrePoint->GetTotalEnergy();
+              G4ThreeVector Pelec  = PrePoint->GetMomentum();
+              G4ThreeVector PGamma = (*secondary)[lp-1]->GetMomentum();
+              G4bool IsGamma = 
+                ((*secondary)[lp-1]->GetDefinition() == G4Gamma::Gamma());
+            
+              G4cout << "UserSteppingAction processName=" << process->GetProcessName()
+                     << " Step Length=" << std::setw(6) 
+                     << G4BestUnit(aStep->GetStepLength(),"Length")
+                     << " Eelec=" << G4BestUnit(Eelec,"Energy")
+                     << " Pelec=" << G4BestUnit(Pelec,"Energy")
+                     << " IsGamma=" << IsGamma
+                     << " Egamma=" << G4BestUnit(Egamma,"Energy")
+                     << " PGamma=" << G4BestUnit(PGamma,"Energy")
+                     << " #secondaries lp=" << lp
+                     << '\n';
+            }
 	    
-	      G4cout << "UserSteppingAction processName=" << process->GetProcessName()
-		     << " Step Length=" << std::setw(6) 
-		     << G4BestUnit(aStep->GetStepLength(),"Length")
-		     << " Eelec=" << G4BestUnit(Eelec,"Energy")
-		     << " Pelec=" << G4BestUnit(Pelec,"Energy")
-		     << " IsGamma=" << IsGamma
-		     << " Egamma=" << G4BestUnit(Egamma,"Energy")
-		     << " PGamma=" << G4BestUnit(PGamma,"Energy")
-		     << " #secondaries lp=" << lp
-		     << '\n';
-	    }
-	  histoManager->FillHisto(1,Egamma);
+	  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+          analysisManager->FillH1(1,Egamma);
 
-	  // power spectrum : gamma weighted with its energy
-	  histoManager->FillHisto(2,Egamma,Egamma/keV); 
+          // power spectrum : gamma weighted with its energy
+          analysisManager->FillH1(2,Egamma,Egamma/keV); 
 
-	  histoManager->FillHisto(3,aStep->GetStepLength());
-	}
+          analysisManager->FillH1(3,aStep->GetStepLength());
+        }
     }
 }
 

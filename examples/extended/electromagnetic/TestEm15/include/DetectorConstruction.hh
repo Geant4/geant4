@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:46:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm15/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +52,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      
      void SetSize     (G4double);              
      void SetMaterial (G4String);            
@@ -60,27 +62,27 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      const
-     G4VPhysicalVolume* GetWorld()      {return pWorld;};
+     G4VPhysicalVolume* GetWorld()      {return fWorld;};
      const
-     G4VPhysicalVolume* GetBox()        {return pBox;};
+     G4VPhysicalVolume* GetBox()        {return fBox;};
                      
-     G4double           GetWorldSize()  {return worldSize;};                          
-     G4double           GetBoxSize()    {return boxSize;};
-     G4Material*        GetMaterial()   {return aMaterial;};
+     G4double           GetWorldSize()  {return fWorldSize;};                          
+     G4double           GetBoxSize()    {return fBoxSize;};
+     G4Material*        GetMaterial()   {return fMaterial;};
      
      void               PrintParameters();
                        
   private:
   
-     G4VPhysicalVolume*    pWorld;  
-     G4VPhysicalVolume*    pBox;
+     G4VPhysicalVolume*    fWorld;  
+     G4VPhysicalVolume*    fBox;
      
-     G4double              boxSize;
-     G4double              worldSize;
-     G4Material*           aMaterial;
-     G4Material*           wMaterial;     
+     G4double              fBoxSize;
+     G4double              fWorldSize;
+     G4Material*           fMaterial;
+     G4Material*           fWMaterial;     
      
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger* fDetectorMessenger;
 
   private:
     

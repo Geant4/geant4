@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc,v 1.11 2006-06-29 18:34:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4VoxelLimits
 // 

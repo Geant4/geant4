@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/src/G4BlineTracer.cc
+/// \brief Implementation of the G4BlineTracer class
 //
-// $Id: G4BlineTracer.cc,v 1.3 2006-06-29 17:15:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -51,6 +53,7 @@
 #include "G4CashKarpRKF45.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4ChordFinder.hh"
+#include "G4SystemOfUnits.hh"
 
 //////////////////////////////////////////////////////////////////
 
@@ -60,8 +63,8 @@ G4BlineTracer::G4BlineTracer()
   fSteppingAction = new G4BlineSteppingAction(this) ;
   fEventAction = new G4BlineEventAction(this);
   fPrimaryGeneratorAction = new G4BlinePrimaryGeneratorAction();
-  MaxTrackingStep =1000.*m;
-  was_ResetChordFinders_already_called=false;
+  fMaxTrackingStep =1000.*m;
+  fWas_ResetChordFinders_already_called=false;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -72,10 +75,10 @@ G4BlineTracer::~G4BlineTracer()
   delete fSteppingAction;
   delete fEventAction; 
   delete fPrimaryGeneratorAction;
-  for (size_t i=0; i< vecEquationOfMotion.size();i++)
+  for (size_t i=0; i< fVecEquationOfMotion.size();i++)
   {
-    if (vecEquationOfMotion[i]) delete vecEquationOfMotion[i];
-    if (vecChordFinders[i]) delete vecChordFinders[i];
+    if (fVecEquationOfMotion[i]) delete fVecEquationOfMotion[i];
+    if (fVecChordFinders[i]) delete fVecChordFinders[i];
   }
 }  
 
@@ -97,10 +100,10 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
 {
   //the first time ResetChordFinders should be called
   //
-  if (!was_ResetChordFinders_already_called)
+  if (!fWas_ResetChordFinders_already_called)
   {
     ResetChordFinders();
-    was_ResetChordFinders_already_called=true;
+    fWas_ResetChordFinders_already_called=true;
   }
 
   // Replace the user action by the ad-hoc actions for Blines
@@ -134,18 +137,18 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
   G4UserStackingAction* aNullStackingAction = 0;
   theRunManager->SetUserAction(aNullStackingAction);
 
-  // replace the user defined chordfinder by the element of vecChordFinders  
+  // replace the user defined chordfinder by the element of fVecChordFinders  
   
   std::vector<G4ChordFinder*> user_chord_finders;
   std::vector<G4double> user_largest_acceptable_step;
-  for (size_t i=0;i<vecChordFinders.size();i++)
+  for (size_t i=0;i<fVecChordFinders.size();i++)
   {
     user_largest_acceptable_step.push_back(-1.);
-    if (vecChordFinders[i])
+    if (fVecChordFinders[i])
     {
-      user_chord_finders.push_back(vecFieldManagers[i]->GetChordFinder());
-      vecChordFinders[i]->SetDeltaChord(user_chord_finders[i]->GetDeltaChord());
-      vecFieldManagers[i]->SetChordFinder(vecChordFinders[i]);
+      user_chord_finders.push_back(fVecFieldManagers[i]->GetChordFinder());
+      fVecChordFinders[i]->SetDeltaChord(user_chord_finders[i]->GetDeltaChord());
+      fVecFieldManagers[i]->SetChordFinder(fVecChordFinders[i]);
     }
     else user_chord_finders.push_back(0); 
   }
@@ -169,7 +172,7 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
     tmanager->GetPropagatorInField()->GetLargestAcceptableStep();
 
   tmanager->GetPropagatorInField()
-          ->SetLargestAcceptableStep(MaxTrackingStep);
+          ->SetLargestAcceptableStep(fMaxTrackingStep);
 
   // Start the integration of n_of_lines different magnetic field lines
 
@@ -180,19 +183,19 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
 
     // backward integration
 
-    for (size_t i=0; i< vecEquationOfMotion.size();i++)
+    for (size_t i=0; i< fVecEquationOfMotion.size();i++)
     {
-      if (vecEquationOfMotion[i]) 
-        vecEquationOfMotion[i]->SetBackwardDirectionOfIntegration(true);
+      if (fVecEquationOfMotion[i]) 
+        fVecEquationOfMotion[i]->SetBackwardDirectionOfIntegration(true);
     }
     theRunManager->BeamOn(1);
 
     // forward integration
 
-    for (size_t i=0; i < vecEquationOfMotion.size();i++)
+    for (size_t i=0; i < fVecEquationOfMotion.size();i++)
     {
-      if (vecEquationOfMotion[i]) 
-        vecEquationOfMotion[i]->SetBackwardDirectionOfIntegration(false);
+      if (fVecEquationOfMotion[i]) 
+        fVecEquationOfMotion[i]->SetBackwardDirectionOfIntegration(false);
     }
     theRunManager->BeamOn(1);
   }
@@ -219,10 +222,10 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
 
   // set user defined chord finders and largest acceptable step
 
-  for (size_t i=0;i<vecFieldManagers.size();i++)
+  for (size_t i=0;i<fVecFieldManagers.size();i++)
   {
     if (user_chord_finders[i])
-      vecFieldManagers[i]->SetChordFinder(user_chord_finders[i]);
+      fVecFieldManagers[i]->SetChordFinder(user_chord_finders[i]);
   } 
 }
 
@@ -236,9 +239,9 @@ G4bool G4BlineTracer::CheckMagneticFields()
   G4TransportationManager* tmanager =
     G4TransportationManager::GetTransportationManager();
 
-  if (vecFieldManagers[0] != tmanager->GetFieldManager())
+  if (fVecFieldManagers[0] != tmanager->GetFieldManager())
     return false;
-  if (vecMagneticFields[0] != tmanager->GetFieldManager()->GetDetectorField())
+  if (fVecMagneticFields[0] != tmanager->GetFieldManager()->GetDetectorField())
     return false;
   G4LogicalVolumeStore* theVolumeStore = G4LogicalVolumeStore::GetInstance();  
    
@@ -249,15 +252,15 @@ G4bool G4BlineTracer::CheckMagneticFields()
     if (theVolumeStore[i]->GetFieldManager())
     {
       j++;
-      if (j >= vecFieldManagers.size()) return false;
-      if (vecFieldManagers[j] != theVolumeStore[i]->GetFieldManager())
+      if (j >= fVecFieldManagers.size()) return false;
+      if (fVecFieldManagers[j] != theVolumeStore[i]->GetFieldManager())
         return false;
-      if (vecMagneticFields[j] !=
+      if (fVecMagneticFields[j] !=
           theVolumeStore[i]->GetFieldManager()->GetDetectorField())
         return false;
     }
   }
-  if (j<vecFieldManagers.size()) return false;
+  if (j<fVecFieldManagers.size()) return false;
 
  return true;
 }
@@ -267,35 +270,35 @@ G4bool G4BlineTracer::CheckMagneticFields()
 
 void G4BlineTracer::ResetChordFinders()
 {
-  for (size_t i=0; i<vecEquationOfMotion.size();i++)
+  for (size_t i=0; i<fVecEquationOfMotion.size();i++)
   {
-    delete vecEquationOfMotion[i];
-    delete vecChordFinders[i];
+    delete fVecEquationOfMotion[i];
+    delete fVecChordFinders[i];
   } 
 
-  vecChordFinders.clear();
-  vecFieldManagers.clear();
-  vecMagneticFields.clear();
-  vecEquationOfMotion.clear();
+  fVecChordFinders.clear();
+  fVecFieldManagers.clear();
+  fVecMagneticFields.clear();
+  fVecEquationOfMotion.clear();
 
   // global field
 
-  vecChordFinders.push_back(0);
-  vecMagneticFields.push_back(0);
-  vecEquationOfMotion.push_back(0);
-  vecFieldManagers.push_back(G4TransportationManager::GetTransportationManager()
+  fVecChordFinders.push_back(0);
+  fVecMagneticFields.push_back(0);
+  fVecEquationOfMotion.push_back(0);
+  fVecFieldManagers.push_back(G4TransportationManager::GetTransportationManager()
                              ->GetFieldManager());
-  if (vecFieldManagers[0])
+  if (fVecFieldManagers[0])
   {
-    vecMagneticFields[0] =
-      (G4MagneticField*) vecFieldManagers[0]->GetDetectorField();
-    if (vecMagneticFields[0])
+    fVecMagneticFields[0] =
+      (G4MagneticField*) fVecFieldManagers[0]->GetDetectorField();
+    if (fVecMagneticFields[0])
     {
-      vecEquationOfMotion[0] = new G4BlineEquation(vecMagneticFields[0]);
-      G4CashKarpRKF45* pStepper = new G4CashKarpRKF45(vecEquationOfMotion[0]);
+      fVecEquationOfMotion[0] = new G4BlineEquation(fVecMagneticFields[0]);
+      G4CashKarpRKF45* pStepper = new G4CashKarpRKF45(fVecEquationOfMotion[0]);
       G4MagInt_Driver* pIntgrDriver =
         new G4MagInt_Driver(0.01*mm,pStepper,pStepper->GetNumberOfVariables());
-      vecChordFinders[0] = new G4ChordFinder(pIntgrDriver);
+      fVecChordFinders[0] = new G4ChordFinder(pIntgrDriver);
     }
   } 
 
@@ -309,18 +312,18 @@ void G4BlineTracer::ResetChordFinders()
     if ((*theVolumeStore)[i]->GetFieldManager())
     {
       j++;
-      vecFieldManagers.push_back(((*theVolumeStore)[i])->GetFieldManager());
-      vecMagneticFields.push_back((G4MagneticField*)
-                                   vecFieldManagers[j]->GetDetectorField());
-      vecEquationOfMotion.push_back(0);
-      vecChordFinders.push_back(0);
-      if (vecMagneticFields[j])
+      fVecFieldManagers.push_back(((*theVolumeStore)[i])->GetFieldManager());
+      fVecMagneticFields.push_back((G4MagneticField*)
+                                   fVecFieldManagers[j]->GetDetectorField());
+      fVecEquationOfMotion.push_back(0);
+      fVecChordFinders.push_back(0);
+      if (fVecMagneticFields[j])
       {
-        vecEquationOfMotion[j]= new G4BlineEquation(vecMagneticFields[j]);
-        G4CashKarpRKF45* pStepper = new G4CashKarpRKF45(vecEquationOfMotion[j]);
+        fVecEquationOfMotion[j]= new G4BlineEquation(fVecMagneticFields[j]);
+        G4CashKarpRKF45* pStepper = new G4CashKarpRKF45(fVecEquationOfMotion[j]);
         G4MagInt_Driver* pIntgrDriver =
           new G4MagInt_Driver(.01*mm,pStepper,pStepper->GetNumberOfVariables());
-        vecChordFinders[j] = new G4ChordFinder(pIntgrDriver);
+        fVecChordFinders[j] = new G4ChordFinder(pIntgrDriver);
       } 
     }
   }             

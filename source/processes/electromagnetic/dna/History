@@ -12,8 +12,167 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-25.11.2011  M.K                 tag emdna-V09-04-51
+     ----------------------------------------------------------*
+
+12-11-2012  M.K             tag emdna-V09-05-35
+            Remove unnecessary abort() and exit(-1) previously introduced to avoid
+            coverity warnings (rev 64993)
+
+06-11-2012  G.Cosmo             tag emdna-V09-05-34
+            Minor fixes for porting on AIX; mainly on use of const signature
+            for objects in maps...
+
+04-11-2012  M.K.		tag emdna-V09-05-33
+            G4IT : transform G4ITTrackingInformation pointer to object (rev 64715)
+            G4ITTrackingManager : get rid of attribute "fVerboseLevel" (rev 64716)
+            G4ITStepProcessor.cc : correct coverity warnings in copy constructor (not used) (rev 64717)
+            G4ITTransportationManager.hh : put default constructor as private (rev 64718)
+            G4VITModel.cc : rename variables in copy constructor and assignment operator (------)
+            G4MolecularDecayChannel.cc : adapt copy constructor to avoid coverity warnings (rev 64719)
+            G4MoleculeCounter.cc : get rid of duplicated layout (------)
+            G4DNAMolecularStepByStepModel : add an exception in the assignment operator (rev 64720)
+            G4ITTrackingManager.hh : remove remainders of fVerboseLevel (rev 64722)
+            Ionisation Models (Born, Rudd, RuddExtended) :
+                set fAtomDeexcitation = 0 (rev 64723)
+                add "else" before "if" statements and
+                    add variables to avoid many checks on particleDefinition. (rev 64724)
+            dna.files : update files (rev 64725)
+
+03-11-2012  S.I.		tag emdna-V09-05-32
+            Switched to usage of SetEmModel and EmModel in all dna/processes
+	    classes
+
+24-10-2012  M.K                 tag emdna-V09-05-31
+            G4ITNavigator is updated to new interface of ReplicaNavigation::ComputeStep
+            (previously commented)
+
+23-10-2012  M.K                 tag emdna-V09-05-30
+            Add exception in G4DNASecondOrderReaction
+            Add carriage return in G4DNASmoluchowskiReaction cc and hh
+
+18-10-2012  M.K                 tag emdna-V09-05-29
+            Previous tag did not include history changes
+
+18-10-2012  M.K                 tag emdna-V09-05-28
+            Remove warning
+
+17-10-2012  M.K                 tag emdna-V09-05-27
+            Correct a typo from previous tag
+
+17-10-2012  M.K                 tag emdna-V09-05-26
+            Correct information in headers
+            Rename G4DNADiffustionControlledModel to G4DNASmoluchowskiReactionModel
+            G4ITNavigator updated to new interface of ReplicaNavigation::ComputeStep.
+
+01-10-2012  SI, P.Pater         tag emdna-V09-05-25
+            Force kinetic energy to zero for real killings in models.
+
+12-07-2012  G.Cosmo             tag emdna-V09-05-24
+            Explicitly use inclusion of headers for system of units and physical
+            constants, in plan to remove implicit inclusion from globals.hh.
+
+11.07.2012  M.K                 tag emdna-V09-05-23
+	    Correct warnings introduce in previous tag
+
+11.07.2012  M.K                 tag emdna-V09-05-22
+            Tag to be proposed
+
+25.06.2012  M.K			tag emdna-V09-05-21
+            Fix semantic warning related to forward declaration of G4ITNavigator_Lock
+	    Modify molecule's name
+	    
+21.06.2012  S.I			tag emdna-V09-05-20
+            Update of electron elastic scattering low limit 
+
+09.06.2012  M.K			tag emdna-V09-05-19
+            Fixed shadowing
+
+04.06.2012  M.K			tag emdna-V09-05-18
+            Add G4ITTrackingInteractivity + correct coverity warnings
+
+24.05.2012  M.K			tag emdna-V09-05-17
+            Remove unnecessary call of pow in G4DNASecondOrderReaction
+
+23.05.2012  M.K			tag emdna-V09-05-16
+            Add initialisation of G4ITTrackHolder in copy constructor of
+            G4ITStepManager
+            Prevent call of destructor of G4ITStepManager and
+            G4DNAChemistryManager
+
+23.05.2012  M.K			tag emdna-V09-05-15
+            Display warning (only once) from G4DNAMolecularMaterial
+            when one of its methods is called using a material that is
+            not defined as a molecule
+
+21.05.2012  M.K			tag emdna-V09-05-14
+            Modify G4DNAMolecularMaterial
+            Modify G4DNADamages
+            Add G4DNASecondOrderReaction prototype
+            Modify all models to use G4DNAMolecularMaterial
+
+14.05.2012  M.K			tag emdna-V09-05-13
+            Add G4DNAMolecularMaterial
+            Add G4DNADamages
+
+10.05.2012  M.K			tag emdna-V09-05-12
+            Add the possibility of calling G4ITStepManager::EndTracking()
+            from UserReactionAction::EndProcessing()
+
+08.05.2012  M.K			tag emdna-V09-05-11
+            Use inverseErf from CLHEP
+
+03.05.2012  M.K			tag emdna-V09-05-10
+            Add erfc function for windows compilator (VC++)
+
+03.05.2012  M.K			tag emdna-V09-05-09
+            Add an exception in molecular decay, in case no decay channel was proposed in input
+
+03.05.2012  M.K			tag emdna-V09-05-08
+            Add products of dissociative attachments (as a molecular decay)
+            Add new methods in G4ChemistryManager :
+            - PushMolecule
+            - PushMoleculeAtParentTimeAndPlace
+            Reset() at the end of G4ITStepManager::Process()
+
+30.03.2012  M.K			tag emdna-V09-05-07
+            Same as emdna-V09-05-06
+
+30.03.2012  M.K			tag emdna-V09-05-06
+            1) Add separate navigator for synchronous tracking
+            New classes :
+            * G4ITTransportationManager
+            * G4ITNavigator (just a small change from G4Navigator)
+            2) A messenger for G4ITStepManager :
+            * G4ITSteppingMessenger
+            3) Solve bugs with normal and brownian ITTransportation
+
+14.03.2012  M.K			tag emdna-V09-05-05
+            *   int G4VITProcess::fProcessID
+                int G4VITProcess::fNbProcess
+            -> become size_t + related changes
+            *   when a poststep process proposes an IL < 0
+            => considered as a time, and transportation::computestep
+            is used
+
+14.03.2012  M.K			tag emdna-V09-05-04
+            Fix compilation warning
+
+14.03.2012  M.K			tag emdna-V09-05-03
+	    Improve the management of information in G4ITStepProcessor
+	    Fix coverity warnings
+
+18.01.2012  S.I.                tag emdna-V09-05-02
+            Removal of G4Water* classes in utils
+
+11.01.2012  M.K                 tag emdna-V09-05-01
+            Bug fix in G4DNAChemistryManager::CreateSolvatedElectron
+            concerning the final position of the solvated electron
+            using Sanche thermalization
+
+16.12.2011  S.I                 tag emdna-V09-05-00
+            Updated source of cross section file for elastic scattering
+
+25.11.2011  M.K                 tag emdna-V09-04-52
             Correct a typo in previous tag
 
 25.11.2011  M.K                 tag emdna-V09-04-51

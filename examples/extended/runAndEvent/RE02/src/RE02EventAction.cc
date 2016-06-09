@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02EventAction.cc
+/// \brief Implementation of the RE02EventAction class
 //
-// $Id: RE02EventAction.cc,v 1.3 2006-11-18 01:37:24 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
  
 #include "RE02EventAction.hh"
@@ -35,19 +37,19 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EventAction::RE02EventAction()
 {}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EventAction::~RE02EventAction()
 {}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02EventAction::BeginOfEventAction(const G4Event*)
 {}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();

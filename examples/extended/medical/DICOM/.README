@@ -1,0 +1,200 @@
+//$Id$
+
+///\file "medical/DICOM/.README"
+///\brief ExampleDICOM README page
+
+/*! \page ExampleDICOM Example DICOM
+
+
+The DICOM application has been originally developed by the Geant4 users: \n
+Louis Archambault,(1)Luc Beaulieu, (2)Vincent Hubert-Tremblay.
+
+- (1) Centre Hospitalier Universitaire de Quebec (CHUQ),   \n
+Hotel-Dieu de Quebec, departement de Radio-oncologie  \n
+11 cote du palais. Quebec, QC, Canada, G1R 2J6        \n
+tel (418) 525-4444 #6720                              \n
+fax (418) 691 5268                                    \n
+web : thomson.phy.ulaval.ca/phys_med                  \n
+
+- (2) Universite Laval, Quebec (QC) Canada
+
+And it has been deeply reviewed by Pedro Arce in December 2007. \n
+Very small changes by Stephane Chauvie in January 2008. \n
+Stephane Chauvie, Oct 2009: changed Physics list; changes in DICOM read.  \n
+Stephane Chauvie and Andrea Armando; June 2010 adapted for reading  whatever DICOM file \n
+
+
+\section DICOM_s1 Introduction
+
+This example serves first to convert a DICOM file to a simple ASCII file, where the Hounsfield numbers are converted to materials and densities so that it can be used by GEANT4. It serves also to create a GEANT4 geometry based on the DICOM file information using the G4PhantomParameterisation. 
+
+You can find the phantom reproduced in the image PhantomCT.jpg.
+In the application the phantom is placed on a table.
+ 
+\section DICOM_s2 Installation:
+
+ - A standard Geant4 example GNUmakefile is provided            
+ - Compile it with 'make'/'gmake' 
+
+\section DICOM_s3 Run the example:
+
+ - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
+
+ - batch mode:
+\verbatim
+DICOM run.mac 
+\endverbatim
+
+ - interactive mode:
+\verbatim
+DICOM
+\endverbatim
+   the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
+
+\section DICOM_s4 Metadata:
+
+ The file Data.dat has the following information
+  - A line with the compression value (used only to create the .g4dcm and .g4dcmb, not to read it)
+  - A line with the number of files 
+  - A line for each file name (to these names it will be added the suffix .dcm to read the DICOM files in their original format, and the suffix .g4dcm to read the text files that contain the DICOM information where the Hounsfield numbers have been converted to material and densities)
+
+In case you want to convert DICOM files to text files, it must have the following lines:
+  - The number of materials you want to use
+  - A line for each material describing its name and the upper bound of the density interval. The materials should be described in increasing order of density. The voxels with a density between 0. and the first upper bound will be assigned to the first material, those with a density between the first upper bound and the second upper bound will be assigned to the second material, etc.
+
+\section DICOM_s5 Conversion of Hounsfield numbers to materials:
+
+After reading the name of files from Data.dat, if a file .dcm is found, then it looks for the corresponding .g4dcm file and if not found creates it. 
+Each file corresponds to a Z slice. The Z slices will be merged at runtime to form a unique patient volume; therefore the different slices have to be contiguous in Z.
+
+The DICOM images pixel values represent CT (Hounsfield) numbers and they should be converted, first, to a given density and then to a material type.  The relation between CT number and density is more or less linear. 
+The file CT2Density.dat contains the calibration curve to convert CT (Hounsfield) number to physical density
+The assignment of material densities to materials is done following the information from the file Data.dat (see below). In this case we have used:
+
+<pre>
+           #####################################################
+           #     Density Range                   Material      #
+           #---------------------------------------------------#
+           #       mg/cm3                            -         #
+           #---------------------------------------------------#
+           #  [ 0.    , 0.207 )                 Air            #
+           #  [ 0.207 , 0.481 )                 Lungs (inhale) #
+           #  [ 0.481 , 0.919 )                 Lungs (exhale) #
+           #  [ 0.919 , 0.979 )                 Adipose        #
+           #  [ 0.979 , 1.004 )                 Breast         #
+           #  [ 1.004 , 1.043 )                 Phantom        #
+           #  [ 1.043 , 1.109 )                 Liver          #
+           #  [ 1.109 , 1.113 )                 Muscle         #
+           #  [ 1.113 , 1.496 )                 Trabecular Bone#
+           #  [ 1.496 , 1.654 ]                 Dense Bone     #
+           #####################################################
+</pre>
+
+Data taken from the International Commission on Radiation Units and measurements (ICRU) report 46 was used to build the materials (lung, liver, breast, bones, ...)
+
+\section DICOM_s6 Splitting materials in density intervals:
+
+In the class DicomDetectorConstruction, it is defined a density interval
+
+\verbatim
+G4double densityDiff = 0.1;
+\endverbatim
+
+This means that the voxels of each material will be grouped in density intervals of 0.1 g/cm3 and a new material will be created for each group of voxels.
+
+\section DICOM_s7 Voxel colouring:
+
+The file Colormap.dat defines the colour that will be assigned to the voxels of each material.
+
+\section DICOM_s8 DICOM file formats:
+
+The DICOM files are converted to a simple text format. You may create your own file with the following format (see e.g. 14196616.g4dcm):
+
+- A line with the number of materials
+- A line for each material with its index and name (the same name of materials that you construct as G4Material's)
+- A line with the number of voxels in X, Y and Z
+- A line with the minimum and maximum extension in X (mm)
+- A line with the minimum and maximum extension in Y (mm)
+- A line with the minimum and maximum extension in Z (mm)
+- A number of lines containing the nVoxelX*nVoxelY*nVoxelZ material indices (one per voxel)
+- A number of lines containing the nVoxelX*nVoxelY*nVoxelZ material densities (one per voxel)
+
+As commented before the DICOM files (.dcm) are assumed to describe one Z slice per file, and therefore the GEANT4 text files (.g4dcm) created from them have also one unique Z slice per file. Nevertheless if you create your own .g4dcm file you may include as many Z slices as desired. In any case you have to respect the rule that the Z slices must be contiguous.
+
+The same information is also used to fill a file in binary format, that contains the same information as the text format. Its name ends in .g4dcmb, instead of .g4dcm .
+
+\section DICOM_s9 Choosing different parameterisation/navigation options:
+
+There are four possible ways in GEANT4 to treat the navigation in regular voxelised volumes:
+
+-# The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
+-# The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
+-# Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
+-# Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below)
+
+You can select amont the four options in the following way:
+
+- By default the example will run with G4RegularNavigation
+
+- To use the first option at RegularDicomDetectorConstruction.cc you just have to set
+\verbatim
+patient_phys->SetRegularStructureId(0);
+\endverbatim
+
+- To use the second option apart from the change above at RegularDicomDetectorConstruction.cc you have to replace (i.e. use kUndefined)
+\verbatim
+G4PVParameterised* patient_phys 
+  = new G4PVParameterised("Patient",voxel_logic,container_logic,
+	 		  kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
+\endverbatim
+by 
+\verbatim
+G4PVParameterised * patient_phys 
+  = new G4PVParameterised("Patient",voxel_logic,container_logic,
+			  kUndefined, nVoxelX*nVoxelY*nVoxelZ, param);
+\endverbatim
+
+- To use the third option you have to set the enviromental variable
+\verbatim
+DICOM_NESTED_PARAM to 1
+\endverbatim
+
+
+\section DICOM_s10 Calculating dose in phantom voxels for regular navigation
+
+As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.
+
+It takes into account the fact that,  when the particle travels through the voxels it looses energy and therefore the energy lost per length (dEdx) is bigger and also the effect of the multiple scattering is bigger. 
+The algorithm to make this correction is an iterative one, as the step length increase due multiple scattering (that converts the geometrical step length in what we will call the true step length) and the energy loss are correlated.
+It works in the folloing way: first the total true step length is distributed among the voxels proportionally to their geometrical step length; with these values it is calculated one voxel after another the value of dEdx and then the value of the kinetic energy at the entrance of each voxel; with these values it is calculated the geometrical to true step corrections due to multiple scattering for each voxel; finally these new values are used to recalculate the energy lost in each voxel. It has been demonstrated for dose in a water phantom and in a real phantom that the two-step iteration described is enough to reproduce the dose calcualted when no skipping of voxel frontiers is done.
+
+This scorer is implemented in this examples if the regular navigation option is 
+chosen. It is triggered at the method RegularDicomDetectorConstruction::ConstructPhantom() by the call
+\verbatim
+SetScorer(voxel_logic);
+\endverbatim
+
+\section DICOM_s11 Output
+dicom.out is produced running the macro file run.mac. It has 2 columns: the first is the number of 
+voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
+It is produced, as an example, with a compression value of 32
+
+
+\section DICOM_s12 Partial phantom 
+It is possible to create a partial phantom, that is the intersection of a phantom with a volume. You may define the volume with the command 
+
+\verbatim
+/dicom/intersectWithUserVolume 0. 0. 0. 45.*deg 0. 0. TUBE 0. 150. 100.
+\endverbatim
+
+where the first three arguments are its position, its second three arguments are the rotation around the global X, Y and Z axis and the rest of the parameters are the same that you use to build a solid using the ASCII geometry format
+
+Alternatively you can intersect the phantom with an existing Geant4 volume with the command
+
+\verbatim
+/dicom/intersectWithG4Volume VOLUME_NAME
+\endverbatim
+
+The job will create an ASCII file names "phantom.g4pdcm" containing the partial phantom. To read this file all what is needed is to set the enviromental variable DICOM_PARTIAL_PARAM to 1
+
+*/

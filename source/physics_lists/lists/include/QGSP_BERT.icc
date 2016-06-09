@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT.icc,v 1.8 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -43,11 +42,15 @@
 // 16.05.2007 V.Ivanchenko: rename EM builders
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Renamed the physics classes used
 //
 //----------------------------------------------------------------------------
 //
 
+#include <iomanip>   
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -55,14 +58,12 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -73,10 +74,10 @@ template<class T> TQGSP_BERT<T>::TQGSP_BERT(G4int ver):  T()
 {
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT 3.4"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT 4.0"<<G4endl;
   G4cout <<G4endl;
 
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
   // EM Physics
@@ -95,7 +96,7 @@ template<class T> TQGSP_BERT<T>::TQGSP_BERT(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

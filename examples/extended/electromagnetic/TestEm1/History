@@ -15,6 +15,62 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+19-10-12 mma (testem1-V09-05-12)
+- PhysListEmStandard: use G4UrbanMsc96 
+
+12-10-12 V.Ivant (testem1-V09-05-11)
+- Migration to the updated analysis tool and inplicit units
+- do not save random number per event
+     
+10-10-12 mma (testem1-V09-05-10)
+- PhysicsList: add G4EmstandardPhysics_option4
+- coding conventions: virtual
+    
+06-09-12 V.Ivant (testem1-V09-05-09)
+- Ivana Hrivnacova updated CMakeLists.txt
+     
+25-08-12 mma (testem1-V09-05-08)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - Need analysis-V09-05-09
+    - all userAction classes and all macros affected
+     
+10-07-12 mma (testem1-V09-05-07)
+- PhysicsList : add G4RadioactiveDecay
+- associated macro radioactive.mac  
+    
+05-04-12 mma (testem1-V09-05-06)
+- simplify macro TestEm1.in
+        
+29-03-12 mma (testem1-V09-05-05)
+- all classes : apply G4 coding conventions     
+- DetectorConstruction::SetMaterial() : nist materials 
+    
+02-03-12 mma (testem1-V09-05-04)   
+- HistoManager.cc : fileName[0] = "testem1"
+     
+22-02-12 mma (testem1-V09-05-03)   
+- file G4HbookAnalysisManager renamed ExG4HbookAnalysisManager
+     
+18-02-12 mma (testem1-V09-05-02)     
+- HistoManager.hh : add hbook option.
+  New files :  GNUmakefile.tools_hbook and G4HbookAnalysisManager.hh .cc
+       
+17-02-12 mma (testem1-V09-05-01)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+       
+05-02-12 mma (testem1-V09-05-00)     
+- new histograms :
+	4	"total energy deposit"
+	5	"energy of charged secondaries at creation"
+	6	"energy of neutral secondaries at creation"
+- add class StackingAction	
+		     
+25-01-12 mma
+- add PhysListEmStandardSS
+     
 08-11-11 mma (testem1-V09-04-05)
 - modify SteppingVerbose for OutOfWorld
      

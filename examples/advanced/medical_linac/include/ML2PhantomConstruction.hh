@@ -54,11 +54,6 @@
 #include "ML2Ph_BoxInBox.hh"
 
 
-
-// DICOM
-#include "DicomHandler.hh"
-#include "RegularDicomDetectorConstruction.hh"
-
 class CML2PhantomConstructionMessenger;
 
 
@@ -70,22 +65,22 @@ public:
 	static CML2PhantomConstruction* GetInstance(void);
 	bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG, G4bool bOnlyVisio);
 	G4int getTotalNumberOfEvents();
-	inline G4String getPhantomName(){return this->phantomName;};
-	inline void setPhantomName(G4String val){this->phantomName=val;};
-	inline void setPhantomFileName (G4String val){this->PhantomFileName =val;};
-	inline void setNewName(){this->sensDet->setFullOutFileDataSingle("");};
-	inline void setNewName(G4String val){this->sensDet->setFullOutFileDataSingle(val);};
+	inline G4String getPhantomName(){return phantomName;}
+	inline void setPhantomName(G4String val){phantomName=val;}
+	inline void setPhantomFileName (G4String val){PhantomFileName =val;}
+	inline void setNewName(){sensDet->setFullOutFileDataSingle("");}
+	inline void setNewName(G4String val){sensDet->setFullOutFileDataSingle(val);}
 
 	void applyNewCentre(G4ThreeVector val); 
 	bool applyNewCentre(); // it opens the geometry changes the phantom centre and closes the geometry : used also by CML2PhantomConstructionMessenger
 
-	inline void saveData(){this->sensDet->save();};
+	inline void saveData(){sensDet->save();}
 
-	inline void addNewCentre(G4ThreeVector val){this->centre.push_back(val);};
+	inline void addNewCentre(G4ThreeVector val){centre.push_back(val);}
 
 	void writeInfo();
 	G4String getCurrentTranslationString();
-	inline void resetSensDet(){this->sensDet->resetVoxelsSingle();};
+	inline void resetSensDet(){sensDet->resetVoxelsSingle();}
 private:
 	bool design(void);
 	void createPhysicalVolumeNamesList(G4String  *matNames, G4int nMatNames);
@@ -108,7 +103,6 @@ private:
 
 	CML2Ph_FullWater *Ph_fullWater;
 	CML2Ph_BoxInBox *Ph_BoxInBox;
-	DicomDetectorConstruction  *Ph_Dicom;
 	G4bool bOnlyVisio;
 };
 #endif

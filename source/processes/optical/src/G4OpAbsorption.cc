@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc,v 1.9 2008-10-24 19:52:28 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation

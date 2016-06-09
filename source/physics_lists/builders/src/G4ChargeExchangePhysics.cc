@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.cc,v 1.2 2010-06-03 14:37:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -48,6 +47,12 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4Neutron.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
+
 
 G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver, G4bool glauber)
   : G4VPhysicsConstructor("chargeExchange"), verbose(ver), glFlag(glauber),

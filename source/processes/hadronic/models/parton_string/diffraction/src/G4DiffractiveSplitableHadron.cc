@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.10 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 
@@ -76,11 +76,6 @@ G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron()
 //        if(Parton[0] != NULL){delete Parton[0]; delete Parton[1];}
 }
 
-const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(const G4DiffractiveSplitableHadron &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveSplitableHadron::operator= meant to not be accessable");
-  return *this;
-}
 
 void G4DiffractiveSplitableHadron::SplitUp()
 {

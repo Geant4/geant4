@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.36 2010-12-23 17:04:54 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998
@@ -43,6 +42,7 @@
 // -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4RegionStore.hh"
 #include "G4LossTableManager.hh"
@@ -1029,11 +1029,12 @@ void G4EnergyLossTables::CPRWarning()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, 
-					    const G4String& q)
+void 
+G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition*, 
+				       const G4String& /*q*/)
 {
-  G4String s = " " + q + " table not found for "
-             + aParticle->GetParticleName() + " !";
+  //G4String s = " " + q + " table not found for "
+  //           + aParticle->GetParticleName() + " !";
   //G4Exception("G4EnergyLossTables::ParticleHaveNoLoss", "EM01",
   //	      FatalException, s);
 }

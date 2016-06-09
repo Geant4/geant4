@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXm.cc,v 1.12 2009-01-19 16:53:42 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -35,7 +34,7 @@
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredXm.hh"
 #include "G4OpenGLStoredXmViewer.hh"

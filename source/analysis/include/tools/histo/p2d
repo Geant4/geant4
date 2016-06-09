@@ -18,29 +18,29 @@ public:
   }
 public:
   p2d(const std::string& a_title,
-                   int aXnumber,double aXmin,double aXmax,
-                   int aYnumber,double aYmin,double aYmax)
+      unsigned int aXnumber,double aXmin,double aXmax,
+      unsigned int aYnumber,double aYmin,double aYmax)
   : parent(a_title,aXnumber,aXmin,aXmax,
                    aYnumber,aYmin,aYmax)
   {}
 
   p2d(const std::string& a_title,
-                   int aXnumber,double aXmin,double aXmax,
-                   int aYnumber,double aYmin,double aYmax,
-                   double aVmin,double aVmax)
+      unsigned int aXnumber,double aXmin,double aXmax,
+      unsigned int aYnumber,double aYmin,double aYmax,
+      double aVmin,double aVmax)
   : parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax,aVmin,aVmax)
   {}
 
   p2d(const std::string& a_title,
-                   const std::vector<double>& aEdgesX,
-                   const std::vector<double>& aEdgesY)
+      const std::vector<double>& aEdgesX,
+      const std::vector<double>& aEdgesY)
   : parent(a_title,aEdgesX,aEdgesY)
   {}
 
   p2d(const std::string& a_title,
-                   const std::vector<double>& aEdgesX,
-                   const std::vector<double>& aEdgesY,
-                   double aVmin,double aVmax)
+      const std::vector<double>& aEdgesX,
+      const std::vector<double>& aEdgesY,
+      double aVmin,double aVmax)
   : parent(a_title,aEdgesX,aEdgesY,aVmin,aVmax)
   {}
 
@@ -51,9 +51,9 @@ public:
     parent::operator=(a_from);
     return *this;
   }
-};
 
-inline void p2d_check_instantiation() {p2d dummy("",10,0,1,10,0,1);}
+private: static void check_instantiation() {p2d dummy("",10,0,1,10,0,1);}
+};
 
 }}
 

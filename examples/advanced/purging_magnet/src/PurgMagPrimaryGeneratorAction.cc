@@ -32,8 +32,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: PurgMagPrimaryGeneratorAction.cc,v 1.3 2006-06-29 16:06:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,12 +41,13 @@
 
 #include "PurgMagDetectorConstruction.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-#include "G4UnitsTable.hh"
 
 //Print position of primaries.
 #define POSITION 0

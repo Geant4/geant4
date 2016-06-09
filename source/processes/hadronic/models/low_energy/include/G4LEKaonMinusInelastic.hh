@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEKaonMinusInelastic.hh,v 1.11 2007-02-26 18:21:07 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy KaonMinus Inelastic Process
 // J.L. Chuma, TRIUMF, 12-Feb-1997

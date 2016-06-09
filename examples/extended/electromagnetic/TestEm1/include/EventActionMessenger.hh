@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.3 2006-06-29 16:36:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm1/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,14 +50,14 @@ class EventActionMessenger: public G4UImessenger
     EventActionMessenger(EventAction*);
    ~EventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction*          eventAction;
+    EventAction*          fEventAction;
     
-    G4UIdirectory*        eventDir;   
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+    G4UIdirectory*        fEventDir;   
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

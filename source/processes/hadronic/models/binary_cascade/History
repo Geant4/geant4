@@ -13,6 +13,76 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 Oct 2012 Gunter Folger        had-binary-V09-05-13
+- send a warning message to G4cout, not G4cerr.
+
+26 Oct 2012 Gunter Folger        had-binary-V09-05-12
+- more places corrected to explicitely convert in G4BinaryCascade 
+   and G4BinaryLightIonReaction; unused variable removed.
+
+25 Oct 2012 Vladimir Ivanchenko  had-binary-V09-05-11
+- G4BinaryCascade - use G4lrint to increment lateZ 
+- G4BinaryLightIonReaction - comment out unused variable
+
+25 Oct 2012 Vladimir Ivanchenko  had-binary-V09-05-10
+-  G4GeneratorPrecompoundInterface - fixed variable shadowing introduced
+     in tag 07
+
+24 Oct 2012 Gunter Folger        had-binary-V09-05-09
+-  Attempt to fix warning in G4BinaryLightIonCascade when target is very light:
+   - split very long ApplyYourSelf() into smaller bits.
+   - fixed problem: do not try to correct spectators momentum, when there are no spectators
+   
+04 Oct 2012 Gunter Folger        had-binary-V09-05-08
+-  Fix left-over bug for Propagate() interface introduced in had-binary-V09-05-04
+   Fix charge/baryon number violation for Propagate() interface ( G4RKPropagtion)
+   Add method to optionally check baryon/charge conservation 
+   
+21 Sep 2012 Vladimir Ivanchenko  had-binary-V09-05-07
+- G4BinaryCasacade, G4BinaryLightIonReaction and
+  G4GeneratorPrecompoundInterface - reuse already instantiated
+    pre-compound model (if exist)
+
+20 Sep 2012 Gabriele Cosmo       had-binary-V09-05-06
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+31 Aug 2012 Gunter Folger        had-binary-V09-05-05
+- fix bug introduced in G4BianryCasacde & G4BianryLightIonCascade by
+   previous changes. 
+
+31 Aug 2012 Gunter Folger        had-binary-V09-05-04
+-  Binary Cascade: code cleanup & splitting of long methods.
+-  add model descriptions also for Propagate()
+-  fixes for coverity warnings
+
+17 Jul 2012 Gunter Folger
+-  fix coverity warnings
+
+13 Jun 2012 Gunter Folger        had-binary-V09-05-03
+-  fix warnings from shadowed variables
+
+29 May 2012 Gunter Folger        had-binary-V09-05-02
+-  Address coverity issues. Most were not needed implementaion of 
+    copy ctor thowing exception; i.e. suppressed implementation of 
+    private copy ctor, == and != operators
+    
+13 Apr 2012 Gunter Folger        had-binary-V09-05-01
+-  Add description in G4BinaryLightIonReaction
+-  G4BinaryCascade; when propagating secondaries from HE model, do not 
+     modify initial energy for fermi level. 
+
+18 Jan 2011 Vladimir Ivanchenko  had-binary-V09-05-00
+- G4BinaryCascade, G4BinaryLightIonReaction,
+  G4GeneratorPrecompoundInterface - added pointer to G4VPreCompoundModel 
+    in the constructor; if this pointer NULL then instantiate new 
+    G4PreCompoundModel; get pointer of G4ExcitationHandler from 
+    this object; do not delete G4VPreCompoundModel object 
+
+22 Nov 2011 Gunter Folger        had-binary-V09-04-15
+- more plumbing: fix leak in G4GeneratorPrecompoundInterface.cc:
+      delete theDeExcitation and its handler in dtor.
+
 21 Nov 2011 Gunter Folger        had-binary-V09-04-14
 - correct G4GeneratorPrecompoundInterface.cc to delete correct object, 
     i.e. the kinetic track,

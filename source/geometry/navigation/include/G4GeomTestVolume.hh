@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.hh,v 1.3 2006-06-29 18:35:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -58,7 +57,7 @@ class G4GeomTestVolume
 
     G4GeomTestVolume( const G4VPhysicalVolume *theTarget,
                             G4GeomTestLogger *theLogger,
-                            G4double theTolerance=1E-4*mm );
+                            G4double theTolerance=1E-4 );  // mm
     ~G4GeomTestVolume();
       // Constructor and destructor
 

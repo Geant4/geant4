@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.16 2008-10-24 14:00:03 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -42,6 +42,7 @@
 G4SafetyHelper::G4SafetyHelper()
  : fUseParallelGeometries(false),     // By default, one geometry only
    fFirstCall(true),
+   fVerbose(0), 
    fLastSafetyPosition(0.0,0.0,0.0),
    fLastSafety(0.0),
    fRecomputeFactor(0.0)
@@ -110,7 +111,7 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector &position,
   return linstep;
 }
 
-G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position ) 
+G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double maxLength )
 {
   G4double newSafety;
 
@@ -127,7 +128,7 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
     if( !fUseParallelGeometries )
     {
       // Safety for mass geometry
-      fLastSafety = fpMassNavigator->ComputeSafety(position,true); 
+      fLastSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
     }
     else
     {
@@ -152,6 +153,24 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
 
 void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
 {
+#ifdef G4VERBOSE
+  if( fVerbose > 0 ) { 
+    // There is an opportunity - and need - to check whether the proposed move is safe
+    G4ThreeVector moveVec= newPosition - fLastSafetyPosition;
+    if( moveVec.mag2() > sqr(fLastSafety) )
+    {
+      // A problem exists - we are proposing to move outside 'Safety Sphere'
+      G4ExceptionDescription ed;
+      ed << " Safety Sphere:  Radius = " << fLastSafety;
+      ed << " Center   = " << fLastSafetyPosition << G4endl;
+      ed << " New Location :  Move   = " << moveVec.mag2();
+      ed << " Position = " << newPosition << G4endl;
+      G4Exception("G4SafetyHelper::ReLocateWithinVolume", "GeomNav999", JustWarning,
+                 "Unsafe Move> Asked to relocate beyond 'Safety sphere'.");
+    }
+  }
+#endif
+   
   if( !fUseParallelGeometries )
   {
     fpMassNavigator->LocateGlobalPointWithinVolume( newPosition ); 

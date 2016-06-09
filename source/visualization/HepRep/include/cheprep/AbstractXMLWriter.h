@@ -15,7 +15,7 @@ namespace cheprep {
     class AbstractXMLWriter {
     
         public:
-            AbstractXMLWriter(std::string defaultNameSpace) : defaultNameSpace(defaultNameSpace) {
+            AbstractXMLWriter(std::string aDefaultNameSpace) : defaultNameSpace(aDefaultNameSpace) {
             }
             virtual ~AbstractXMLWriter() {
             }

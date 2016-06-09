@@ -106,8 +106,8 @@ protected:
 
   static  double* getPStatus() {return status_st;}
 
-  static void setPStatus(double sq, double alxm, double g) {
-    status_st[0] = sq; status_st[1] = alxm; status_st[2] = g;
+  static void setPStatus(double sq, double alxm, double g1) {
+    status_st[0] = sq; status_st[1] = alxm; status_st[2] = g1;
   }
 
   inline HepRandomEngine* getLocalEngine();

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.46 2010-10-26 13:52:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +70,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuPairProductionModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonMinus.hh"
@@ -420,7 +421,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
       G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
       // G4cout << "Z= " << currentZ << " z13= " << z13 
       //<< " mE= " << maxPairEnergy << G4endl;
-      G4double CrossSection = 0.0 ;
+      G4double xSec = 0.0 ;
 
       if(maxPairEnergy > minPairEnergy) {
 
@@ -438,21 +439,21 @@ void G4MuPairProductionModel::MakeSamplingTables()
 	    x *= fac;
 	    dx*= fac;
 	    G4double ep = minPairEnergy*exp(c*x) ;
-	    CrossSection += 
+	    xSec += 
 	      ep*dx*ComputeDMicroscopicCrossSection(kineticEnergy, Z, ep);
 	  }
 	  ya[i] = y;
-	  proba[iz][it][i] = CrossSection;
+	  proba[iz][it][i] = xSec;
 	}
        
       } else {
 	for (G4int i=0 ; i<nbiny; ++i) {
-	  proba[iz][it][i] = CrossSection;
+	  proba[iz][it][i] = xSec;
 	}
       }
 
       ya[nbiny]=ymax;
-      proba[iz][it][nbiny] = CrossSection;
+      proba[iz][it][nbiny] = xSec;
 
     }
   }
@@ -495,16 +496,18 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
   //       << " ymin= " << ymin << " dy= " << dy << G4endl;
 
+  G4double logmaxmin = log(maxPairEnergy/minPairEnergy);
+
   // select bins
   G4int iymin = 0;
   G4int iymax = nbiny-1;
   if( minEnergy > minPairEnergy)
   {
-    G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+    G4double xc = log(minEnergy/minPairEnergy)/logmaxmin;
     iymin = (G4int)((log(xc) - ymin)/dy);
     if(iymin >= nbiny) iymin = nbiny-1;
     else if(iymin < 0) iymin = 0;
-    xc = log(maxEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+    xc = log(maxEnergy/minPairEnergy)/logmaxmin;
     iymax = (G4int)((log(xc) - ymin)/dy) + 1;
     if(iymax >= nbiny) iymax = nbiny-1;
     else if(iymax < 0) iymax = 0;
@@ -535,8 +538,7 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   //        << iymax << " Z= " << currentZ << G4endl;
   G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);
 
-  G4double PairEnergy = minPairEnergy*exp(exp(y)
-                       *log(maxPairEnergy/minPairEnergy));
+  G4double PairEnergy = minPairEnergy*exp( exp(y)*logmaxmin );
 		       
   if(PairEnergy < minEnergy) { PairEnergy = minEnergy; }
   if(PairEnergy > maxEnergy) { PairEnergy = maxEnergy; }

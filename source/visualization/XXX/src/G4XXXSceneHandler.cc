@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.32 2006-07-03 16:52:49 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  5th April 2001
@@ -35,6 +34,7 @@
 #include "G4XXXSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Polyline.hh"
@@ -73,6 +73,7 @@ void G4XXXSceneHandler::PrintThings() {
       "\n  current physical volume: "
            << pPVModel->GetCurrentPV()->GetName() <<
       "\n  current logical volume: "
+// There might be a problem with the LV pointer if this is a G4LogicalVolumeModel
            << pPVModel->GetCurrentLV()->GetName() <<
       "\n  current depth of geometry tree: "
            << pPVModel->GetCurrentDepth();

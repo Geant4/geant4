@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.4 2006-06-29 19:55:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -83,7 +82,8 @@ public:
   G4double GetRandomEnergySR( G4double, G4double );
 
   G4double InvSynFracInt(G4double x);
-  G4double Chebyshev(G4double a,G4double b,const G4double c[],G4int m,G4double x);
+  G4double Chebyshev(G4double a,G4double b,const G4double c[],
+		     G4int n, G4double x);
   G4bool IsApplicable(const G4ParticleDefinition&);
   void BuildPhysicsTable(const G4ParticleDefinition& );
   void PrintInfoDefinition();
@@ -111,16 +111,16 @@ G4SynchrotronRadiation::IsApplicable( const G4ParticleDefinition& particle )
 
   return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
            ( &particle == (const G4ParticleDefinition *)thePositron )    );
-
-  // return ( particle.GetPDGCharge() != 0.0 );
 }
 
-inline G4double G4SynchrotronRadiation::Chebyshev(G4double a,G4double b,const G4double c[],G4int m,G4double x)
+inline G4double 
+G4SynchrotronRadiation::Chebyshev(G4double a, G4double b, const G4double c[],
+				  G4int n, G4double x)
 {
   G4double y;
   G4double y2=2.0*(y=(2.0*x-a-b)/(b-a)); // Change of variable.
   G4double d=0,dd=0;
-  for (G4int j=m-1;j>=1;j--) // Clenshaw's recurrence.
+  for (G4int j=n-1;j>=1;--j) // Clenshaw's recurrence.
   { G4double sv=d;
 	d=y2*d-dd+c[j];
 	dd=sv;

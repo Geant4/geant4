@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_SAMPLER_ICC
 #define G4CASCADE_SAMPLER_ICC
-// $Id: G4CascadeSampler.icc,v 1.6 2010-12-15 07:39:46 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.
@@ -36,6 +35,7 @@
 // 20110728 M. Kelsey -- Fix Coverity #20231, recursive #include
 // 20110923 M. Kelsey -- Add optional ostream& argument to print(), pass
 //		to interpolator.
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "Randomize.hh"
 #include <iostream>
@@ -79,8 +79,8 @@ fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
 
   // NOTE:  push_back() must be used to ensure that size() gets set!
   sigmaBuf.reserve(stopBin-startBin);
-  for(G4int m = startBin; m < stopBin; m++)
-    sigmaBuf.push_back(interpolator.interpolate(ke, x[m]));
+  for(G4int i = startBin; i < stopBin; i++)
+    sigmaBuf.push_back(interpolator.interpolate(ke, x[i]));
 }
 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -42,12 +41,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()					 
+SteppingAction::SteppingAction()                                         
 {
   detector = (DetectorConstruction*)
              G4RunManager::GetRunManager()->GetUserDetectorConstruction();
   eventaction = (EventAction*)
-                G4RunManager::GetRunManager()->GetUserEventAction();	       
+                G4RunManager::GetRunManager()->GetUserEventAction();               
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

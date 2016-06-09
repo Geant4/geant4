@@ -331,6 +331,10 @@ public:
     a_nbytes = nbytes;
     return true;
   }
+
+  void clear_dirs() {clear<directory>(m_dirs);}
+  void clear_objs() {clear<iobject>(m_objs);}
+
 protected:
   void clear_keys() {
     std::list<key*>::iterator it;
@@ -383,9 +387,6 @@ protected:
     return 0;
   }
   seek seek_keys() const {return m_seek_keys;}
-
-  void clear_dirs() {clear<directory>(m_dirs);}
-  void clear_objs() {clear<iobject>(m_objs);}
 
   uint16 append_key(key* a_key){ //take ownership of a_key
     std::list<key*>::iterator itk;

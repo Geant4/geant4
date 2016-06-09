@@ -39,12 +39,14 @@
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
 // 070625 implement clearCurrentXSData to fix memory leaking by T. Koi
 
+#include <list>
+#include <algorithm>
+
 #include "G4NeutronHPThermalScatteringData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 //#include "G4NeutronHPData.hh"
-#include <list>
-#include <algorithm>
 
 G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
 :G4VCrossSectionDataSet("NeutronHPThermalScatteringData")
@@ -308,7 +310,7 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
    dirName = baseName + "/ThermalScattering";
 
    G4String ndl_filename;
-   G4String name;
+   G4String full_name;
 
    for ( std::map < G4String , G4int >::iterator it = co_dic.begin() ; it != co_dic.end() ; it++ )  
    {
@@ -316,18 +318,18 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
       G4int ts_ID = it->second;
 
       // Coherent
-      name = dirName + "/Coherent/CrossSection/" + ndl_filename; 
-      std::map< G4double , G4NeutronHPVector* >*  coh_amapTemp_EnergyCross = readData( name );
+      full_name = dirName + "/Coherent/CrossSection/" + ndl_filename; 
+      std::map< G4double , G4NeutronHPVector* >*  coh_amapTemp_EnergyCross = readData( full_name );
       coherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , coh_amapTemp_EnergyCross ) );
 
       // Incoherent
-      name = dirName + "/Incoherent/CrossSection/" + ndl_filename; 
-      std::map< G4double , G4NeutronHPVector* >*  incoh_amapTemp_EnergyCross = readData( name );
+      full_name = dirName + "/Incoherent/CrossSection/" + ndl_filename; 
+      std::map< G4double , G4NeutronHPVector* >*  incoh_amapTemp_EnergyCross = readData( full_name );
       incoherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , incoh_amapTemp_EnergyCross ) );
 
       // Inelastic
-      name = dirName + "/Inelastic/CrossSection/" + ndl_filename; 
-      std::map< G4double , G4NeutronHPVector* >*  inela_amapTemp_EnergyCross = readData( name );
+      full_name = dirName + "/Inelastic/CrossSection/" + ndl_filename; 
+      std::map< G4double , G4NeutronHPVector* >*  inela_amapTemp_EnergyCross = readData( full_name );
       inelastic.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , inela_amapTemp_EnergyCross ) );
 
    }
@@ -336,12 +338,12 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
 
 
 
-std::map< G4double , G4NeutronHPVector* >* G4NeutronHPThermalScatteringData::readData ( G4String name ) 
+std::map< G4double , G4NeutronHPVector* >* G4NeutronHPThermalScatteringData::readData ( G4String full_name ) 
 {
 
    std::map< G4double , G4NeutronHPVector* >*  aData = new std::map< G4double , G4NeutronHPVector* >; 
    
-   std::ifstream theChannel( name.c_str() );
+   std::ifstream theChannel( full_name.c_str() );
 
    //G4cout << "G4NeutronHPThermalScatteringData " << name << G4endl;
 

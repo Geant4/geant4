@@ -192,17 +192,14 @@ void G4ConvergenceTester::calStat()
 
    mean_1 = ( sum + largest ) / ( n + 1 );
 
-   sum_x2 = 0.0;
    for ( it = nonzero_histories.begin() ; it != nonzero_histories.end() ; it++ )
    {
       xi = it->second;
-      sum_x2 += xi * xi;
       var_1 += ( xi - mean_1 ) * ( xi - mean_1 );
       shift_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
       vov_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
    }
    xi = largest;
-   sum_x2 += xi * xi;
    var_1 += ( xi - mean_1 ) * ( xi - mean_1 );
    shift_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
    vov_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
@@ -561,9 +558,9 @@ G4double G4ConvergenceTester::calc_Pearson_r ( G4int N , std::vector<G4double> f
       b2 += ( second_ally [ i ] - second_mean ) * ( second_ally [ i ] - second_mean );
    }
    
-   G4double r = a / std::sqrt ( b1 * b2 );  
+   G4double rds = a / std::sqrt ( b1 * b2 );  
 
-   return r; 
+   return rds; 
 }
 
 

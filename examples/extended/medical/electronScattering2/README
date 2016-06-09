@@ -44,12 +44,9 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  1- GEOMETRY DEFINITION
  
  The geometry is described in the enclosed documument: NRCC_electron_scat.pdf
-    
- A "World" volume contains an Exit Window, Primary Foil, Monitor Chamber and Helium Bag.
-
- The Helium Bag contains a Gas volume, which in turn contains 2 aluminium Rings
-
- A scoring cylinder is defined near the end of the World.
+ - A "World" volume contains an Exit Window, Primary Foil, Monitor Chamber and Helium Bag.
+ - The Helium Bag contains a Gas volume, which in turn contains 2 aluminium Rings
+ - A scoring cylinder is defined near the end of the World.
  	
  The default geometry is constructed in the DetectorConstruction class.
  The parameters of the Primary Foil (material and thickness) are defined from macro commands.
@@ -106,16 +103,11 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  	
  7- HOW TO START
  
- - compile and link to generate an executable
- 	% cd electronScattering2
- 	% make or gmake depending on your platform
-
- 		
  - execute electornScattering2 in 'batch' mode from macro files:
- 	% $G4WORKDIR/bin/$(G4SYSTEM)/electronScattering2 <macro_file> <starting_seed> <output_file>
+ 	% electronScattering2 <macro_file> <starting_seed> <output_file>
 
  - for example, to run the Al1_13MeV case with physics option 2 and a starting random seed of 1:
- 	% $G4WORKDIR/bin/$G4SYSTEM/electronScattering2 macros/Opt2/Al1_13MeV.mac 1  output/Opt2/Al1_13MeV_1
+ 	% electronScattering2 macros/Opt2/Al1_13MeV.mac 1  output/Opt2/Al1_13MeV_1
 
  - if macro_file is not specfied, the job starts and then just waits for interactive commands
  
@@ -131,7 +123,7 @@ This present example, electronScattering2, was the Geant4 code used for this pub
 	run.csh Opt2/Al1_13MeV 1
 
  - to run a basic visualization job, producing output to a HepRep file, use vis.mac, as in:
- 	% $G4WORKDIR/bin/$G4SYSTEM/electronScattering2 macros/vis.mac
+ 	% electronScattering2 macros/vis.mac
 
 
  8- OUTPUT
@@ -140,4 +132,4 @@ This present example, electronScattering2, was the Geant4 code used for this pub
   The first column gives the CellFlux for all particles.
   The second column gives the CellFlux counting only electrons.
   The third column gives the population for all particles.
-  the fourth column gives the populatin counting only electrons.
+  The fourth column gives the populatin counting only electrons.

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteraction.cc,v 1.8 2010-09-27 17:12:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Interaction  base class
 // original by H.P. Wellisch
@@ -33,11 +32,12 @@
 // reimplemented 1.11.2003 JPW.
 // 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
 
-#include "G4HadronicInteraction.hh"
-#include "G4HadronicInteractionRegistry.hh"
-#include "G4HadronicException.hh"
 #include <iostream>
 
+#include "G4HadronicInteraction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicInteractionRegistry.hh"
+#include "G4HadronicException.hh"
 
 G4HadronicInteraction::G4HadronicInteraction(const G4String& modelName) :
   verboseLevel(0), theMinEnergy(0.0), theMaxEnergy(25.0*GeV), 
@@ -229,6 +229,11 @@ G4bool G4HadronicInteraction::IsBlocked(const G4Element* anElement) const
   return false;
 }
 
+const std::pair<G4double, G4double> G4HadronicInteraction::GetFatalEnergyCheckLevels() const
+{
+	// default level of Check
+	return std::pair<G4double, G4double>(10.*perCent, 5 * GeV);
+}
 
 std::pair<G4double, G4double>
 G4HadronicInteraction::GetEnergyMomentumCheckLevels() const

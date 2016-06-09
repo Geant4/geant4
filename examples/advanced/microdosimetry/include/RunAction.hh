@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.hh,v 1.2 2010-10-06 14:39:41 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #ifndef RunAction_h
@@ -40,12 +40,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
+class TrackingAction;
 
 class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*, HistoManager *);
+  RunAction(DetectorConstruction*, HistoManager *, TrackingAction* trackingAction);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -55,6 +56,7 @@ private:
 
   DetectorConstruction* Detector;    
   HistoManager* Histo;
+  TrackingAction* TrackingAct;
   
 };
 #endif

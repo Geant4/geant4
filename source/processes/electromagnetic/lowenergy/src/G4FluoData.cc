@@ -33,11 +33,13 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4FluoData.hh"
-#include "G4DataVector.hh"
-#include "G4FluoTransition.hh"
 #include <fstream>
 #include <sstream>
+
+#include "G4FluoData.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4DataVector.hh"
+#include "G4FluoTransition.hh"
 
 G4FluoData::G4FluoData()
 {
@@ -220,7 +222,7 @@ void G4FluoData::LoadData(G4int Z)
   
   G4double a = 0;
   G4int k = 1;
-  G4int s = 0;
+  G4int sLocal = 0;
   
   G4int vacIndex = 0;
   G4DataVector* initIds = new G4DataVector;
@@ -232,7 +234,7 @@ void G4FluoData::LoadData(G4int Z)
     G4int nColumns = 3;
     if (a == -1)
       {
-	if (s == 0)
+	if (sLocal == 0)
 	  {
 	    // End of a shell data set
 	    idMap[vacIndex] = initIds;
@@ -249,10 +251,10 @@ void G4FluoData::LoadData(G4int Z)
 	    transProbabilities = new G4DataVector;
             vacIndex++;	
 	  }      
-	s++;
-	if (s == nColumns)
+	sLocal++;
+	if (sLocal == nColumns)
 	  {
-	    s = 0;
+	    sLocal = 0;
 	  }
       }
     // moved to the end in order to avoid possible leak

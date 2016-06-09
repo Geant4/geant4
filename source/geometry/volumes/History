@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 6th, 2012 G.Cosmo - geomvol-V09-05-02
+- Fix in G4EnhancedVecAllocator for porting on AIX.
+
+May 14th, 2012 G.Cosmo - geomvol-V09-05-01
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
+April 2nd, 2012 G.Cosmo - geomvol-V09-05-00
+- Corrected GNUMakefile for spurious inclusion path.
+
 August 24th, 2011 G.Cosmo - geomvol-V09-04-01
 - Migrated to new G4Exception scheme for warnings and errors.
 - Defined scheme for warnings/errors coding:

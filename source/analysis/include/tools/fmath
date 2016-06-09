@@ -23,6 +23,7 @@ inline float fatan(float x) {return (float)::atan(double(x));}
 inline float fatan2(float x,float y) {return (float)::atan2(double(x),double(y));}
 inline float fsqrt(float x) {return (float)::sqrt(double(x));}
 inline float fpow(float x,float y) {return (float)::pow(double(x),(double)(y));}
+inline float fexp(float x) {return (float)::exp(double(x));}
 inline float flog(float x) {return (float)::log(double(x));}
 inline float flog10(float x) {return (float)::log10(double(x));}
 inline float ffloor(float x) {return (float)::floor(double(x));}
@@ -30,6 +31,13 @@ inline float ffabs(float x) {return (float)::fabs(double(x));}
 inline float fceil(float x) {return (float)::ceil(double(x));}
   
 inline float fdeg2rad() {return fpi()/180.0f;}
+inline float frad2deg() {return 180.0f/fpi();}
+
+inline int fround(float a_x) {
+  // From CoinGL/src/base/SbViewportRegion.cpp.
+  if (a_x == (float) (int(a_x))) return int(a_x);
+  else return (a_x>0.0f) ? int(a_x+0.5f) : -int(0.5f-a_x);
+}
 
 }
 

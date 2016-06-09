@@ -20,6 +20,109 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+17th November 2012  John Allison (openinventor-V09-05-17)
+- G4OpenInventorXtExaminerViewer:
+  o Reverted to openinventor-V09-05-14 (except small fix for compiler
+    warning about uninitialised quantity).
+- wheelmouse.cc:
+  o Fixed compiler warning about un-used parameter.
+- Note: The fix in sources.cmake (openinventor-V09-05-16) is kept for
+  possible future development.
+
+5th November 2012  John Allison (openinventor-V09-05-16)
+- sources.cmake: Added ${X11_Xpm_LIB} for createPixmapFromXpm on Mac.
+
+02nd November 2012  Frederick Jones (openinventor-V09-05-15)
+- G4OpenInventorXtExaminerViewer:
+  o Removed dependency on SoXtCursor.h
+    This is a Coin3d extension which is incompatible with
+    SGI Open Inventor and with old versions of Coin3d.
+  o Removed dependency on SoXtInternal.h
+    Moved code for createPixmapFromXpm() into the class.
+  o Fixed compiler warnings for unused/uninitialized variables.
+
+31st October 2012  John Allison  (openinventor-V09-05-14)
+- History:
+  o Corrected date!!!
+
+31st October 2012  John Allison  (openinventor-V09-05-13)
+- G4OpenInventorXtExaminerViewer.cc/hh:
+  o Added License and Disclaimer.
+
+30th October 2012  Frederick Jones
+- G4OpenInventorXtExaminerViewer:
+  o Fixed shadowed variables (compiler warnings)
+  o Corrected unrecoverable zoom-out when switching
+    to Perspective camera.
+  o Fixed incomplete mouse-over position readout.
+
+18th October 2012  Frederick Jones
+- G4OpenInventorXtExtendedViewer:
+  o Removed inheritance from G4OpenInventorXtViewer.
+  o Now inherits from G4OpenInventorViewer.
+
+17th October 2012  John Allison  (openinventor-V09-05-12)
+- G4OpenInventorXtExaminerViewer.cc:
+  o Disabled initial auto setting to first viewpoint (FWJ).
+- G4OpenInventorXtExtendedViewer
+  o Bug fix.  Inherit all except G4OpenInventorXtExaminerViewer* fViewer.
+- G4OpenInventorXtViewer:
+  o Bug fix.  Was not fully reverted.  None of Fred's stuff remains;
+    it's now only in G4OpenInventorXtExtendedViewer.
+
+17th October 2012  John Allison  (openinventor-V09-05-11)
+- Encapsulated Fred's code in a new driver, G4OpenInventorXtExtended
+  (OIXE).
+
+16 October 2012  Frederick Jones  (openinventor-V09-05-10)
+- G4OpenInventorXtExaminerViewer
+  o New class implements functional extensions to the 
+    Xt-based viewer.  A plug-in replacement for
+    SoXtExaminerViewer (the standard viewer provided
+    with Coin3d).
+- G4OpenInventorXtViewer
+  o Instantiates G4OpenInventorXtExaminerViewer instead
+    of SoXtExaminerViewer.  Added some additional menu items.
+
+7th October 2012  John Allison  (openinventor-V09-05-09)
+- G4OpenInventorViewer::CompareForKernelVisit:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
+25th September 2012  John Allison (openinventor-V09-05-08)
+- G4OpenInventorSceneHandler:
+  o Pick up default vis attributes if primitive has none.
+
+13th September 2012  John Allison (openinventor-V09-05-07)
+- G4OpenInventorSceneHandler: Fixed text positioning.
+
+8th August 2012  John Allison  (openinventor-V09-05-06)
+- G4OpenInventorSceneHandler.cc:
+  o Intercepted 2D primitives - JustWarning printed.
+
+3rd July 2012  John Allison  (openinventor-V09-05-05)
+- Fixed some Coverity warnings.
+
+8th June 2012  John Allison  (openinventor-V09-05-04)
+- Shadow clean.
+
+23rd May 2012  John Allison  (openinventor-V09-05-03)
+- Health Check 2012: Migrated (see management/History):
+  o G4OpenInventorSceneHandler::ClearStore/ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearStore/ClearTransientStore.
+
+10th April 2012  Pere Mato  (openinventor-V09-05-02)
+- G4OOpenInventorWinViewer.cc: Make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA
+
+28th March 2012  John Alliso  (openinventor-V09-05-01)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
+3rd January 2012  John Allison  (openinventor-V09-05-00)
+- G4OpeninventorX//Xt/Win/Win32:
+  o Removed #ifdef G4VIS... protection from header files so that they
+    can be used for a possible dynamic library.  Of course, the
+    protection remains on the implementation files.
+
 30th November 2011 Ben Morgan (openinventor-V09-04-04)
 - sources.cmake : Added explicit inclusion and linking of X11 and Motif
   libraries. Appears needed so that OpenGL X11/XM and OpenInventor can

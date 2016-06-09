@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomPhysicsList.hh,v 1.8 2010-06-03 23:42:16 cirrone Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
 //

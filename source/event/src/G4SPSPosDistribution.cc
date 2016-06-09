@@ -44,12 +44,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
+
+#include "G4SPSPosDistribution.hh"
+
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
-
-#include "G4SPSPosDistribution.hh"
 
 G4SPSPosDistribution::G4SPSPosDistribution()
   : posRndm(0)
@@ -142,20 +144,20 @@ void G4SPSPosDistribution::SetHalfZ(G4double zhalf)
   halfz = zhalf;
 }
 
-void G4SPSPosDistribution::SetRadius(G4double rad)
+void G4SPSPosDistribution::SetRadius(G4double rds)
 {
-  Radius = rad;
+  Radius = rds;
 }
 
-void G4SPSPosDistribution::SetRadius0(G4double rad)
+void G4SPSPosDistribution::SetRadius0(G4double rds)
 {
-  Radius0 = rad;
+  Radius0 = rds;
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInR(G4double r)
 {
+  SX = SY = r;
   SR = r;
-  SX = SY = r/std::sqrt(2.);
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInX(G4double r)
@@ -192,7 +194,9 @@ void G4SPSPosDistribution::GenerateRotationMatrices()
   Rotx = Rotx.unit(); // x'
   Roty = Roty.unit(); // vector in x'y' plane
   Rotz = Rotx.cross(Roty); // z'
+  Rotz = Rotz.unit();
   Roty = Rotz.cross(Rotx); // y'
+  Roty = Roty.unit();
   if(verbosityLevel == 2)
     {
       G4cout << "The new axes, x', y', z' " << Rotx << " " << Roty << " " << Rotz << G4endl;
@@ -464,7 +468,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
     }
   else if(Shape == "Ellipsoid")
     {
-      G4double theta, phi, minphi, maxphi, middlephi;
+      G4double minphi, maxphi, middlephi;
       G4double answer, constant;
 
       constant = pi/(halfx*halfx) + pi/(halfy*halfy) + 

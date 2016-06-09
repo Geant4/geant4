@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.16 2010-07-12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -866,19 +865,19 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
     //
     // Check to see if normal intersects edge within the edge's boundary
     //
-    G4double s = dr*edge->tr + dz*edge->tz;
+    G4double q = dr*edge->tr + dz*edge->tz;
 
     //
     // If it doesn't, penalize distance2 appropriately
     //
-    if (s < 0)
+    if (q < 0)
     {
-      distance2 += s*s;
+      distance2 += q*q;
       testMe = edge->v0;
     }
-    else if (s > edge->length)
+    else if (q > edge->length)
     {
-      G4double s2 = s-edge->length;
+      G4double s2 = q-edge->length;
       distance2 += s2*s2;
       testMe = edge->v1;
     }

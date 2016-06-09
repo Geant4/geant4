@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.18 2010-11-19 18:50:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -34,9 +33,12 @@
 // Modified:
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
+// 12-Jun-12 A.Ribon fix warnings of shadowed variables
 //
 
 #include "G4ChargeExchange.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
@@ -122,9 +124,9 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   G4ParticleDefinition * theDef = 0;
 
-  G4double m2 = G4NucleiProperties::GetNuclearMass((G4double)A, (G4double)Z);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass((G4double)A, (G4double)Z);
   G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv0(0.0,0.0,0.0,m2);
+  G4LorentzVector lv0(0.0,0.0,0.0,mass2);
 
   G4LorentzVector lv  = lv0 + lv1;
   G4ThreeVector bst = lv.boostVector();

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/ExP01DetectorConstruction.cc
+/// \brief Implementation of the ExP01DetectorConstruction class
 //
-// $Id: ExP01DetectorConstruction.cc,v 1.2 2006-06-29 17:39:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,6 +50,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,11 +141,11 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   physiWorld = new G4PVPlacement(0,               // no rotation
                                  G4ThreeVector(), // at (0,0,0)
                                  logicWorld,      // its logical volume
-				 "World",         // its name
+                                 "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
                                  0);              // copy number
-				 
+                                 
   //------------------------------ 
   // Target
   //------------------------------
@@ -152,12 +155,12 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   solidTarget = new G4Box("target",targetSize,targetSize,targetSize);
   logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
   physiTarget = new G4PVPlacement(0,               // no rotation
-				  positionTarget,  // at (x,y,z)
-				  logicTarget,     // its logical volume				  
-				  "Target",        // its name
-				  logicWorld,      // its mother  volume
-				  false,           // no boolean operations
-				  0);              // copy number 
+                                  positionTarget,  // at (x,y,z)
+                                  logicTarget,     // its logical volume                                  
+                                  "Target",        // its name
+                                  logicWorld,      // its mother  volume
+                                  false,           // no boolean operations
+                                  0);              // copy number 
 
   G4cout << "Target is " << fTargetLength/cm << " cm of " 
          << TargetMater->GetName() << G4endl;
@@ -171,12 +174,12 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   solidTracker = new G4Box("tracker",trackerSize,trackerSize,trackerSize);
   logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
   physiTracker = new G4PVPlacement(0,              // no rotation
-				  positionTracker, // at (x,y,z)
-				  logicTracker,    // its logical volume				  
-				  "Tracker",       // its name
-				  logicWorld,      // its mother  volume
-				  false,           // no boolean operations
-				  0);              // copy number 
+                                  positionTracker, // at (x,y,z)
+                                  logicTracker,    // its logical volume                                  
+                                  "Tracker",       // its name
+                                  logicWorld,      // its mother  volume
+                                  false,           // no boolean operations
+                                  0);              // copy number 
 
   //------------------------------ 
   // Tracker segments
@@ -193,28 +196,28 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   G4double lastLength  = fTrackerLength;
    
   G4VPVParameterisation* chamberParam = new ExP01ChamberParameterisation(  
-			   NbOfChambers,          // NoChambers 
-			   firstPosition,         // Z of center of first 
-			   ChamberSpacing,        // Z spacing of centers
-			   ChamberWidth,          // Width Chamber 
-			   firstLength,           // lengthInitial 
-			   lastLength);           // lengthFinal
-			   
+                           NbOfChambers,          // NoChambers 
+                           firstPosition,         // Z of center of first 
+                           ChamberSpacing,        // Z spacing of centers
+                           ChamberWidth,          // Width Chamber 
+                           firstLength,           // lengthInitial 
+                           lastLength);           // lengthFinal
+                           
   // dummy value : kZAxis -- modified by parameterised volume
   //
   physiChamber = new G4PVParameterised(
                             "Chamber",       // their name
                             logicChamber,    // their logical volume
                             logicTracker,    // Mother logical volume
-			    kZAxis,          // Are placed along this axis 
+                            kZAxis,          // Are placed along this axis 
                             NbOfChambers,    // Number of chambers
                             chamberParam);   // The parametrisation
 
   G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
          << "The chambers are " << ChamberWidth/mm << " mm of " 
          << ChamberMater->GetName() << "\n The distance between chamber is "
-	 << ChamberSpacing/cm << " cm" << G4endl;
-	 
+         << ChamberSpacing/cm << " cm" << G4endl;
+         
   //------------------------------------------------ 
   // Sensitive detectors
   //------------------------------------------------ 

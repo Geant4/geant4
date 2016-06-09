@@ -31,6 +31,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4Deuteron.hh"

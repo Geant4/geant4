@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/MCTruth/include/MCTruthTrackInformation.hh
+/// \brief Definition of the MCTruthTrackInformation class
 //
-// $Id: MCTruthTrackInformation.hh,v 1.1 2006-11-22 14:51:28 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------

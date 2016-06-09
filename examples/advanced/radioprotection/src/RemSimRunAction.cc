@@ -31,8 +31,7 @@
 //    *******************************
 //
 // Code developed by: S.Guatelli, susanna@uow.edu.au
-// $Id: RemSimRunAction.cc,v 1.14 2006-06-29 16:24:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "RemSimRunAction.hh"

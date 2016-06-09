@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.cc,v 1.8 2007-12-10 16:29:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  Helix Explicit Euler: x_1 = x_0 + helix(h)
@@ -37,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4HelixExplicitEuler.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 
 

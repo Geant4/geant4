@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.hh,v 1.7 2006-06-29 19:10:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VBasicShell_H
@@ -40,7 +39,7 @@ class G4UIcommand;
 // Class description :
 //
 //  G4VBasicShell : a base class to extract common things to various
-// sessions. 
+// sessions.
 //
 //  It handles "seek" completion logic, help logic.
 //  VBasicShell handles also commands like "cd, ls, pwd"
@@ -59,50 +58,50 @@ class G4VBasicShell : public G4UIsession
     virtual G4UIsession* SessionStart() = 0;
     // null should be returned for interactive session
 
-    virtual void PauseSessionStart(G4String Prompt) = 0;
+    virtual void PauseSessionStart(const G4String& Prompt) = 0;
     // Prompt string can be ignored
 
   protected:
-    G4String ModifyToFullPathCommand(const char* aCommandLine);
+    G4String ModifyToFullPathCommand(const char* aCommandLine) const;
     // convert "BeamOn 10" to "/run/BeamOn 10" if the
     // current working directory is "/run/"
 
-    G4String GetCurrentWorkingDirectory();
+    G4String GetCurrentWorkingDirectory() const;
     // directory string starts with '/' and ends with '/'
 
     G4bool ChangeDirectory(const char* newDir);
     // change directory to newDir
     // false will be returned if the target directory doesn't exist
 
-    G4UIcommandTree* FindDirectory(const char* dirName);
+    G4UIcommandTree* FindDirectory(const char* dirName) const;
     // find G4UIcommandTree object
     // null returned if the taregt does not exist
 
-    G4UIcommand* FindCommand(const char* commandName);
+    G4UIcommand* FindCommand(const char* commandName) const;
     // find G4UIcommand object
     // null returned if the target does not exist
 
-    G4String Complete(G4String);
+    G4String Complete(const G4String&);
     // command completion
-    G4String FindMatchingPath(G4UIcommandTree*,G4String);
+
+    G4String FindMatchingPath(G4UIcommandTree*, const G4String&);
 
     /////////////////////////////////////////////
     // Methods involving an interactive G4cout //
     /////////////////////////////////////////////
-    virtual void ExecuteCommand(G4String);
+    virtual void ExecuteCommand(const G4String&);
     virtual G4bool GetHelpChoice(G4int&) = 0;
-    virtual void ExitHelp() = 0;
-    void ApplyShellCommand(G4String,G4bool&,G4bool&);
-    void ShowCurrent(G4String);
-    void ChangeDirectoryCommand(G4String);
-    void ListDirectory(G4String);
-    void TerminalHelp(G4String);
+    virtual void ExitHelp() const = 0;
+    void ApplyShellCommand(const G4String&, G4bool&, G4bool&);
+    void ShowCurrent(const G4String&) const;
+    void ChangeDirectoryCommand(const G4String&);
+    void ListDirectory(const G4String&) const;
+    void TerminalHelp(const G4String&);
 
   private:
     G4String currentDirectory;
 
-    G4String ModifyPath(G4String tempPath);
+    G4String ModifyPath(const G4String& tempPath) const;
 };
 
 #endif
-

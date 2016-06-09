@@ -44,6 +44,8 @@
 
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
@@ -514,7 +516,7 @@ G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,
       G4double term = delta+2.0*(me*me)/((mu*mu)*(x*x));
       term = 1.0/term;
 
-      G4double ns = term*f_1s+f0s+delta*f1s+(delta*delta)*f2s;
+      G4double nss = term*f_1s+f0s+delta*f1s+(delta*delta)*f2s;
       G4double nv = term*f_1v+f0v+delta*f1v+(delta*delta)*f2v;
       G4double nt = term*f_1t+f0t+delta*f1t+(delta*delta)*f2t;
 
@@ -527,8 +529,8 @@ G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,
       G4double ntg = term*f_1tg+f0tg+delta*f1tg+(delta*delta)*f2tg;
 
       G4double term1 = nv;
-      G4double term2 = 2.0*ns+nv-nt;
-      G4double term3 = 2.0*ns-2.0*nv+nt;
+      G4double term2 = 2.0*nss+nv-nt;
+      G4double term3 = 2.0*nss-2.0*nv+nt;
 
       G4double term1e = 1.0/3.0*(1.0-4.0/3.0*del);
       G4double term2e = 2.0*nse+5.0*nve-nte;

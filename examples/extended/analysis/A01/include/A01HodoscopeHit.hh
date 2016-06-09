@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.hh,v 1.5 2006-06-29 16:31:19 gunter Exp $
+/// \file analysis/A01/include/A01HodoscopeHit.hh
+/// \brief Definition of the A01HodoscopeHit class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01HodoscopeHit_h
@@ -43,7 +46,6 @@ class G4AttValue;
 class A01HodoscopeHit : public G4VHit
 {
   public:
-
       A01HodoscopeHit(G4int i,G4double t);
       virtual ~A01HodoscopeHit();
       A01HodoscopeHit(const A01HodoscopeHit &right);
@@ -60,23 +62,22 @@ class A01HodoscopeHit : public G4VHit
       void Print();
 
   private:
-      G4int id;
-      G4double time;
-      G4ThreeVector pos;
-      G4RotationMatrix rot;
-      const G4LogicalVolume* pLogV;
+      G4int fId;
+      G4double fTime;
+      G4ThreeVector fPos;
+      G4RotationMatrix fRot;
+      const G4LogicalVolume* fPLogV;
 
   public:
-      inline G4int GetID() const { return id; }
-      inline G4double GetTime() const { return time; }
-      inline void SetTime(G4double val) { time = val; }
-      inline void SetPos(G4ThreeVector xyz) { pos = xyz; }
-      inline G4ThreeVector GetPos() const { return pos; }
-      inline void SetRot(G4RotationMatrix rmat) { rot = rmat; }
-      inline G4RotationMatrix GetRot() const { return rot; }
-      inline void SetLogV(G4LogicalVolume* val) { pLogV = val; }
-      inline const G4LogicalVolume* GetLogV() const { return pLogV; }
-
+      inline G4int GetID() const { return fId; }
+      inline G4double GetTime() const { return fTime; }
+      inline void SetTime(G4double val) { fTime = val; }
+      inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+      inline G4ThreeVector GetPos() const { return fPos; }
+      inline void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
+      inline G4RotationMatrix GetRot() const { return fRot; }
+      inline void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
+      inline const G4LogicalVolume* GetLogV() const { return fPLogV; }
 };
 
 typedef G4THitsCollection<A01HodoscopeHit> A01HodoscopeHitsCollection;

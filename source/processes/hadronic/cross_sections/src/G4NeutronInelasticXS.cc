@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +49,7 @@
 #include "G4HadronNucleonXsc.hh"
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
+#include "Randomize.hh"
 
 #include <iostream>
 #include <fstream>
@@ -75,6 +75,7 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
 
 G4NeutronInelasticXS::~G4NeutronInelasticXS()
 {
+  delete fNucleon;
   for(G4int i=0; i<=maxZ; ++i) {
     delete data[i];
   }
@@ -145,6 +146,85 @@ G4NeutronInelasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   return xs;
 }
 
+/*
+G4double 
+G4NeutronInelasticXS::GetIsoCrossSection(const G4DynamicParticle* aParticle, 
+					 G4int Z, G4int A,
+					 const G4Isotope*, const G4Element*,
+					 const G4Material*)
+{
+  G4double xs = 0.0;
+  G4double ekin = aParticle->GetKineticEnergy();
+  if(ekin > emax || Z < 1 || Z > maxZ) { return xs; }
+  const G4double elimit = 1.0e-10*eV;
+  if(ekin < elimit) { ekin = elimit; }
+
+  //  G4PhysicsVector* pv = data[Z];
+  G4PhysicsVector* pv = data.GetElementData(Z);
+
+  // element was not initialised
+  if(!pv) {
+    Initialise(Z);
+    //    pv = data[Z];
+    pv = data.GetElementData(Z);
+    if(!pv) { return xs; }
+  }
+  pv = data.GetComponentDataByID(Z, A);
+  if(!pv) { return xs; }
+
+  xs = pv->Value(ekin); 
+
+  if(verboseLevel > 0){
+    G4cout  << "ekin= " << ekin << ",  xs= " << xs << G4endl;
+  }
+  return xs;
+}
+
+G4Isotope* G4NeutronInelasticXS::SelectIsotope(const G4Element* anElement,
+					       G4double kinEnergy)
+{
+  G4int nIso = anElement->GetNumberOfIsotopes();
+  G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+  G4Isotope* iso = (*isoVector)[0];
+
+  // more than 1 isotope
+  if(1 < nIso) {
+    G4int Z = G4lrint(anElement->GetZ());
+    if(Z > maxZ) { Z = maxZ; }
+    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    G4double q = G4UniformRand();
+    G4double sum = 0.0;
+
+    // is there isotope wise cross section?
+    if(0 == amin[Z]) {
+      for (G4int j = 0; j<nIso; ++j) {
+	sum += abundVector[j];
+	if(q <= sum) {
+	  iso = (*isoVector)[j];
+	  break;
+	}
+      }
+    } else {
+      size_t nmax = data.GetNumberOfComponents(Z);
+      if(temp.size() < nmax) { temp.resize(nmax,0.0); }
+      for (size_t i=0; i<nmax; ++i) {
+	G4int A = (*isoVector)[i]->GetN();
+	G4PhysicsVector* v = data.GetComponentDataByID(Z, A);
+        if(v) { sum += abundVector[i]*v->Value(kinEnergy); }
+        temp[i] = sum;
+      }
+      sum *= q;
+      for (size_t j = 0; j<nmax; ++j) {
+        if(temp[j] >= sum) {
+          iso = (*isoVector)[j];
+          break;
+	}
+      }
+    }
+  }
+  return iso;
+}
+*/
 void 
 G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {

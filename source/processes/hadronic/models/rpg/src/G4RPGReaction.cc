@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
-#include "G4RPGReaction.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4RPGReaction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4bool G4RPGReaction::
 ReactionStage(const G4HadProjectile* /*originalIncident*/,
@@ -435,7 +436,8 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
     G4double weight = 0.0;           // weight is returned by GenerateNBodyEvent
     if( lzero )weight = std::exp( std::max(std::min(wtmax,expxu),expxl) );
     
-    G4double bang, cb, sb, s0, s1, s2, c, s, esys, a, b, gama, beta;
+    G4double bang, cb, sb, s0, s1, s2, c, esys, a, b, gama, beta;
+    G4double ss;
     pcm[0][0] = 0.0;
     pcm[1][0] = pd[0];
     pcm[2][0] = 0.0;
@@ -448,7 +450,7 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
       cb = std::cos(bang);
       sb = std::sin(bang);
       c = 2.0*G4UniformRand() - 1.0;
-      s = std::sqrt( std::fabs( 1.0-c*c ) );
+      ss = std::sqrt( std::fabs( 1.0-c*c ) );
       if( i < vecLen-1 )
       {
         esys = std::sqrt(pd[i]*pd[i] + emm[i]*emm[i]);
@@ -460,8 +462,8 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
           s1 = pcm[1][j];
           s2 = pcm[2][j];
           energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
-          a = s0*c - s1*s;                           //  rotation
-          pcm[1][j] = s0*s + s1*c;
+          a = s0*c - s1*ss;                           //  rotation
+          pcm[1][j] = s0*ss + s1*c;
           b = pcm[2][j];
           pcm[0][j] = a*cb - b*sb;
           pcm[2][j] = a*sb + b*cb;
@@ -477,7 +479,7 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
           s2 = pcm[2][j];
           energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
           a = s0*c - s1*s;                           //  rotation
-          pcm[1][j] = s0*s + s1*c;
+          pcm[1][j] = s0*ss + s1*c;
           b = pcm[2][j];
           pcm[0][j] = a*cb - b*sb;
           pcm[2][j] = a*sb + b*cb;
@@ -620,7 +622,8 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
     G4double weight = 0.0;           // weight is returned by GenerateNBodyEvent
     if( lzero )weight = std::exp( std::max(std::min(wtmax,expxu),expxl) );
     
-    G4double bang, cb, sb, s0, s1, s2, c, s, esys, a, b, gama, beta;
+    G4double bang, cb, sb, s0, s1, s2, c, esys, a, b, gama, beta;
+    G4double ss;
     pcm[0][0] = 0.0;
     pcm[1][0] = pd[0];
     pcm[2][0] = 0.0;
@@ -633,7 +636,7 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
       cb = std::cos(bang);
       sb = std::sin(bang);
       c = 2.0*G4UniformRand() - 1.0;
-      s = std::sqrt( std::fabs( 1.0-c*c ) );
+      ss = std::sqrt( std::fabs( 1.0-c*c ) );
       if( i < listLen-1 )
       {
         esys = std::sqrt(pd[i]*pd[i] + emm[i]*emm[i]);
@@ -645,8 +648,8 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
           s1 = pcm[1][j];
           s2 = pcm[2][j];
           energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
-          a = s0*c - s1*s;                           //  rotation
-          pcm[1][j] = s0*s + s1*c;
+          a = s0*c - s1*ss;                           //  rotation
+          pcm[1][j] = s0*ss + s1*c;
           b = pcm[2][j];
           pcm[0][j] = a*cb - b*sb;
           pcm[2][j] = a*sb + b*cb;
@@ -661,8 +664,8 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
           s1 = pcm[1][j];
           s2 = pcm[2][j];
           energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
-          a = s0*c - s1*s;                           //  rotation
-          pcm[1][j] = s0*s + s1*c;
+          a = s0*c - s1*ss;                           //  rotation
+          pcm[1][j] = s0*ss + s1*c;
           b = pcm[2][j];
           pcm[0][j] = a*cb - b*sb;
           pcm[2][j] = a*sb + b*cb;
@@ -785,9 +788,9 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
     a1 = std::sqrt(-2.0*std::log(r2));
     ran1 = a1*std::sin(r1)*0.020*numberofFinalStateNucleons*GeV;
     ran2 = a1*std::cos(r1)*0.020*numberofFinalStateNucleons*GeV;
-    G4ThreeVector fermi(ran1, ran2, 0);
+    G4ThreeVector fermir(ran1, ran2, 0);
 
-    pseudoParticle[0] = pseudoParticle[0]+fermi; // all particles + fermi
+    pseudoParticle[0] = pseudoParticle[0]+fermir; // all particles + fermir
     pseudoParticle[2] = temp; // original in cms system
     pseudoParticle[3] = pseudoParticle[0];
     

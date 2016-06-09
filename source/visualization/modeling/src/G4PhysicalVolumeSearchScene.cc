@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.14 2008-07-27 10:49:24 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  10th August 1998.
@@ -55,6 +54,9 @@ G4PhysicalVolumeSearchScene::~G4PhysicalVolumeSearchScene () {}
 
 void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
 
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+  const PVPath& fullPVPath = fpPVModel->GetFullPVPath();
   G4int currentDepth = fpPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = fpPVModel->GetCurrentPV();
   G4LogicalVolume* pCurrentLV = fpPVModel->GetCurrentLV();
@@ -73,6 +75,7 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
        fRequiredCopyNo             == pCurrentPV -> GetCopyNo ())) {
     // Current policy - take first one found!!
     if (!fpFoundPV) {  // i.e., if not already found.
+      fFoundFullPVPath           = fullPVPath;
       fFoundDepth                = currentDepth;
       fpFoundPV                  = pCurrentPV;
       fpFoundLV                  = pCurrentLV;

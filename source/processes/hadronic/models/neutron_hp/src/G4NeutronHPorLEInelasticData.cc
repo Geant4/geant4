@@ -32,6 +32,7 @@
 //
 
 #include "G4NeutronHPorLEInelasticData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
@@ -146,9 +147,9 @@ void G4NeutronHPorLEInelasticData::BuildPhysicsTable( const G4ParticleDefinition
             G4double emax = theHPVector->GetX(len-1);
 
             G4LPhysicsFreeVector* aPhysVector= new G4LPhysicsFreeVector ( len , emin , emax );
-            for ( G4int i=0; i<len; i++ )
+            for ( G4int ii=0; ii<len; ii++ )
             {
-               aPhysVector->PutValues( i , theHPVector->GetX(i) , theHPVector->GetY(i) );
+               aPhysVector->PutValues( ii , theHPVector->GetX(ii) , theHPVector->GetY(ii) );
             }
             delete thePhysVec;
             thePhysVec = aPhysVector;

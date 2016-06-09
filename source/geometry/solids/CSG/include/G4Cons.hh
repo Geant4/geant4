@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.24 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -67,6 +66,8 @@
 
 #ifndef G4Cons_HH
 #define G4Cons_HH
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
 

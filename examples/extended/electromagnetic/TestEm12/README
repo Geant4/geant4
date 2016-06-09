@@ -85,10 +85,6 @@ $Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
  	
  5- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm1
- 		% gmake
- 		
  	- execute TestEm12 in 'batch' mode from macro files
  		% TestEm12   run01.mac
  		
@@ -118,7 +114,8 @@ $Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
      In RunAction::BeginOfRun() the stepMax value is passed from the 
      HistoManager to the StepMax process. 
      A boolean UI command allows to desactivate this mechanism.
-     	
+     Another UI command allows to define directly a stepMax value.
+      	
  7- HISTOGRAMS
  
    Testem12 has several predefined 1D histograms : 
@@ -140,19 +137,10 @@ $Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
    
    One can control the name of the histograms file with the command:
    /testem/histo/setFileName  name  (default testem12)
-   
-   It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (root by default)
+    
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh      
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id
    All selected histos will be written on a file name.ascii  (default testem12) 
-        
-   Note that, by default, histograms are disabled. To activate them, uncomment
-   the flag G4ANALYSIS_USE in GNUmakefile.
-   
- 
- 8- USING HISTOGRAMS
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt

@@ -1,0 +1,21 @@
+//$Id$
+
+///\file "radioactivedecay/.README"
+///\brief Examples radioactivedecay README page
+
+/*! \page Examples_radioactivedecay Category "radioactivedecay"
+
+ Examples in this directory demonstrate the use of some features of the
+ Radioactive-Decay hadronic model in Geant4.
+
+ \link Examplerdecay01 rdecay01 \endlink 
+
+ This example allows to display basic features of the radioactive decay
+ of a nuclei: energy spectrum of emitted particles, time of life, activity.
+
+ \link Examplerdecay02 rdecay02 \endlink 
+
+ This example illustrates more advanced features of the package:
+ selected decay channels, time window, bias and variance reduction technique.
+
+*/

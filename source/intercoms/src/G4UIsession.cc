@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIsession.cc,v 1.7 2006-06-29 19:09:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ---------------------------------------------------------------------
@@ -38,15 +37,15 @@ G4UIsession::~G4UIsession() {;}
 
 G4UIsession * G4UIsession::SessionStart() { return NULL; }
 
-void G4UIsession::PauseSessionStart(G4String) {;}
+void G4UIsession::PauseSessionStart(const G4String&) {;}
 
-G4int G4UIsession::ReceiveG4cout(G4String coutString)
+G4int G4UIsession::ReceiveG4cout(const G4String& coutString)
 {
   std::cout <<  coutString << std::flush;
   return 0;
 }
 
-G4int G4UIsession::ReceiveG4cerr(G4String cerrString)
+G4int G4UIsession::ReceiveG4cerr(const G4String& cerrString)
 {
   std::cerr <<  cerrString << std::flush;
   return 0;

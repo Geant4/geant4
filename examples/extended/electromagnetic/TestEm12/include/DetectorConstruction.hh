@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:42:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,27 +58,27 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetNbOfLayers (G4int nb);                    
      void SetMagField   (G4double);
           
-     G4VPhysicalVolume* Construct();
-     void               UpdateGeometry();
+     virtual G4VPhysicalVolume* Construct();
+     void UpdateGeometry();
      
   public:  
                     
-     G4double     GetAbsorRadius()   {return absorRadius;};           
-     G4Material*  GetAbsorMaterial() {return absorMaterial;};
-     G4int        GetNbOfLayers()    {return nbOfLayers;};   
+     G4double     GetAbsorRadius()   {return fAbsorRadius;};           
+     G4Material*  GetAbsorMaterial() {return fAbsorMaterial;};
+     G4int        GetNbOfLayers()    {return fNbOfLayers;};   
      
      void         PrintParameters();
                        
   private:
 
-     G4double            absorRadius;     
-     G4Material*         absorMaterial;
-     G4int               nbOfLayers;
-     G4double            layerThickness;
-     G4UniformMagField*  magField;
-     G4VPhysicalVolume*  pAbsor;
+     G4double            fAbsorRadius;     
+     G4Material*         fAbsorMaterial;
+     G4int               fNbOfLayers;
+     G4double            fLayerThickness;
+     G4UniformMagField*  fMagField;
+     G4VPhysicalVolume*  fAbsor;
 
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger*  fDetectorMessenger;
 
   private:
     

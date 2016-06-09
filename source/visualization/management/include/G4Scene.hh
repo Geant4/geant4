@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.19 2009-11-04 12:49:16 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -71,15 +70,21 @@ public: // With description
 
   G4bool IsEmpty () const;
 
-  const std::vector<G4VModel*>& GetRunDurationModelList () const;
+  struct Model {
+    Model(G4VModel* pModel): fActive(true), fpModel(pModel) {}
+    G4bool fActive;
+    G4VModel* fpModel;
+  };
+
+  const std::vector<Model>& GetRunDurationModelList () const;
   // Contains models which are expected to last for the duration of
   // the run, for example geometry volumes.
 
-  const std::vector<G4VModel*>& GetEndOfEventModelList () const;
+  const std::vector<Model>& GetEndOfEventModelList () const;
   // Contains models which are described at the end of event when the
   // scene is current.
 
-  const std::vector<G4VModel*>& GetEndOfRunModelList () const;
+  const std::vector<Model>& GetEndOfRunModelList () const;
   // Contains models which are described at the end of event when the
   // scene is current.
 
@@ -137,13 +142,13 @@ public: // With description
   void SetName (const G4String&);
   // Use with care.  User normally sets scene name by vis commands.
 
-  std::vector<G4VModel*>& SetRunDurationModelList ();
+  std::vector<Model>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!
 
-  std::vector<G4VModel*>& SetEndOfEventModelList ();
+  std::vector<Model>& SetEndOfEventModelList ();
   // Allows you to change the model list - do with care!
 
-  std::vector<G4VModel*>& SetEndOfRunModelList ();
+  std::vector<Model>& SetEndOfRunModelList ();
   // Allows you to change the model list - do with care!
 
   void SetRefreshAtEndOfEvent(G4bool);
@@ -171,9 +176,9 @@ public: // With description
 
 private:
   G4String fName;
-  std::vector<G4VModel*> fRunDurationModelList;
-  std::vector<G4VModel*> fEndOfEventModelList;
-  std::vector<G4VModel*> fEndOfRunModelList;
+  std::vector<Model> fRunDurationModelList;
+  std::vector<Model> fEndOfEventModelList;
+  std::vector<Model> fEndOfRunModelList;
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
   G4bool      fRefreshAtEndOfEvent;

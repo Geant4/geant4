@@ -23,40 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"
 #include "G4AdjointElectron.hh"
 #include "G4AdjointGamma.hh"
 #include "G4Electron.hh"
-
 #include "G4Timer.hh"
-//#include "G4PenelopeBremsstrahlungModel.hh"
+#include "G4SeltzerBergerModel.hh"
 
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
- G4VEmAdjointModel("AdjointeBremModel"),
-  MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi)
+G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel(G4VEmModel* aModel):
+ G4VEmAdjointModel("AdjointeBremModel")
 { 
   SetUseMatrix(false);
   SetUseMatrixPerElement(false);
   
-  theDirectStdBremModel = new G4eBremsstrahlungModel(G4Electron::Electron(),"TheDirecteBremModel");
+  theDirectStdBremModel = aModel;
   theDirectEMModel=theDirectStdBremModel;
   theEmModelManagerForFwdModels = new G4EmModelManager();
   isDirectModelInitialised = false;
   G4VEmFluctuationModel* f=0;
   G4Region* r=0;
   theEmModelManagerForFwdModels->AddEmModel(1, theDirectStdBremModel, f, r);
- // theDirectPenelopeBremModel =0;
- 	
+
   SetApplyCutInRange(true);
   highKinEnergy= 100.*TeV;
   lowKinEnergy = 1.0*keV;
@@ -83,6 +83,32 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   
 
   
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
+ G4VEmAdjointModel("AdjointeBremModel")
+{
+  SetUseMatrix(false);
+  SetUseMatrixPerElement(false);
+
+  theDirectStdBremModel = new G4SeltzerBergerModel();
+  theDirectEMModel=theDirectStdBremModel;
+  theEmModelManagerForFwdModels = new G4EmModelManager();
+  isDirectModelInitialised = false;
+  G4VEmFluctuationModel* f=0;
+  G4Region* r=0;
+  theEmModelManagerForFwdModels->AddEmModel(1, theDirectStdBremModel, f, r);
+ // theDirectPenelopeBremModel =0;
+  SetApplyCutInRange(true);
+  highKinEnergy= 1.*GeV;
+  lowKinEnergy = 1.0*keV;
+  lastCZ =0.;
+  theAdjEquivOfDirectPrimPartDef =G4AdjointElectron::AdjointElectron();
+  theAdjEquivOfDirectSecondPartDef=G4AdjointGamma::AdjointGamma();
+  theDirectPrimaryPartDef=G4Electron::Electron();
+  second_part_of_same_type=false;
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -353,7 +379,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondAppr
  }
  
  //Now the Migdal correction
- 
+/*
  G4double totalEnergy = kinEnergyProj+electron_mass_c2 ;
  G4double kp2 = MigdalConstant*totalEnergy*totalEnergy
                                              *(material->GetElectronDensity());
@@ -364,6 +390,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondAppr
 								    //factor (1.+kp2) To be checked!
  
  dCrossEprod*=MigdalFactor;
+ */
  return dCrossEprod;
   
 }

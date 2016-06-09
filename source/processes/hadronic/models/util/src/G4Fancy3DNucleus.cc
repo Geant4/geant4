@@ -35,15 +35,17 @@
 //		to .hh.  Move testSums, places, momentum and fermiM to
 //		class data members for reuse.
 
+#include <algorithm>
+
 #include "G4Fancy3DNucleus.hh"
 #include "G4Fancy3DNucleusHelper.hh"
 #include "G4NuclearFermiDensity.hh"
 #include "G4NuclearShellModelDensity.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Nucleon.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <algorithm>
 #include "G4HadronicException.hh"
 
 
@@ -395,6 +397,9 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
        theNucleons[i].SetMomentum(tempV);
+       // GF 11-05-2011: set BindingEnergy to be T of Nucleon with p , ~ p**2/2m
+       //theNucleons[i].SetBindingEnergy(
+       //     0.5*sqr(fermiM[i])/theNucleons[i].GetParticleType()->GetPDGMass());
     }
 }
 

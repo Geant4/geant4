@@ -51,29 +51,26 @@
 #include "G4PhotoElectricAngularGeneratorSimple.hh"
 #include "Randomize.hh"
 
-//    
-
-G4PhotoElectricAngularGeneratorSimple::G4PhotoElectricAngularGeneratorSimple(const G4String& name):G4VPhotoElectricAngularDistribution(name)
-{;}
-
-//    
+G4PhotoElectricAngularGeneratorSimple::G4PhotoElectricAngularGeneratorSimple()
+  : G4VEmAngularDistribution("AngularGenSimple")
+{}
 
 G4PhotoElectricAngularGeneratorSimple::~G4PhotoElectricAngularGeneratorSimple() 
-{;}
+{}
 
-//
-
-G4ThreeVector G4PhotoElectricAngularGeneratorSimple::GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double, const G4ThreeVector&, const G4int) const
-{
-  return direction;
+G4ThreeVector& 
+G4PhotoElectricAngularGeneratorSimple::SampleDirection(
+                          const G4DynamicParticle* dp,
+                          G4double, G4int, const G4Material*)
+{ 
+  fLocalDirection = dp->GetMomentumDirection(); 
+  return fLocalDirection;
 }
-
-//
 
 void G4PhotoElectricAngularGeneratorSimple::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
   G4cout << "Simple Photoelectric Angular Generator" << G4endl;
   G4cout << "Photoelectron is emmited with the same direction " << G4endl;
-  G4cout << "than the incident photon (see Physics Reference Manual) \n" << G4endl;
+  G4cout << "as the incident photon \n" << G4endl;
 } 

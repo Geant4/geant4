@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.27 2009-11-15 14:27:30 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +34,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -209,7 +209,7 @@ void ExN02PhysicsList::ConstructEM()
       ph->RegisterProcess(new G4hPairProduction,     particle);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" )     {
+               particleName == "He3" )     {
       //alpha 
       ph->RegisterProcess(new G4hMultipleScattering, particle);
       ph->RegisterProcess(new G4ionIonisation,       particle);
@@ -220,8 +220,8 @@ void ExN02PhysicsList::ConstructEM()
       ph->RegisterProcess(new G4ionIonisation,       particle);     
       
       } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       ph->RegisterProcess(new G4hMultipleScattering, particle);
       ph->RegisterProcess(new G4hIonisation,         particle);        
@@ -266,8 +266,8 @@ void ExN02PhysicsList::AddStepMax()
 
       if (particle->GetPDGCharge() != 0.0)
         {
-	  pmanager ->AddDiscreteProcess(stepLimiter);
-	  ////pmanager ->AddDiscreteProcess(userCuts);
+          pmanager ->AddDiscreteProcess(stepLimiter);
+          ////pmanager ->AddDiscreteProcess(userCuts);
         }
   }
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.30 2009-11-04 11:01:59 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -279,7 +278,7 @@ inline G4QPDGCode G4QPDGCode::operator/=(const G4int& rhs)
   return *this;
 }
  
-inline G4double G4QPDGCode::GetMass2() {G4double m=GetMass(); return m*m;}
+inline G4double G4QPDGCode::GetMass2() {G4double mass=GetMass(); return mass*mass;}
 inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
 {
   if(PDG>80000000)
@@ -290,9 +289,9 @@ inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
     G4int dn=0;
     if(szn<-100000)
     {
-      G4int ns=(-szn)/1000000+1;
-      szn+=ns*1000000;
-      ds+=ns;
+      G4int ns_value=(-szn)/1000000+1;
+      szn+=ns_value*1000000;
+      ds+=ns_value;
     }
     else if(szn<-100)
     {
@@ -319,8 +318,8 @@ inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
       z-=1000;
       ds--;
     }
-    G4int s  =sz/1000-ds;
-    return GetNuclMass(z,n,s);
+    G4int s_value  =sz/1000-ds;
+    return GetNuclMass(z,n,s_value);
   }
   return 0.;
 }

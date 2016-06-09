@@ -112,7 +112,6 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4SmartTrackStack.cc
         G4StackChecker.cc
         G4StackManager.cc
-        G4StackedTrack.cc
         G4StackingMessenger.cc
         G4TrackStack.cc
         G4TrajectoryContainer.cc

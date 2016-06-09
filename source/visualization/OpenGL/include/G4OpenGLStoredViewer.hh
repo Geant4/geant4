@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh,v 1.10 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -38,14 +37,10 @@
 #ifndef G4OPENGLSTOREDVIEWER_HH
 #define G4OPENGLSTOREDVIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLStoredSceneHandler.hh"
-#include "G4OpenGLTransform3D.hh"
-#include "globals.hh"
 
 class G4OpenGLStoredSceneHandler;
+class G4Colour;
 
 class G4OpenGLStoredViewer: virtual public G4OpenGLViewer {
   
@@ -55,8 +50,10 @@ public:
   
 protected:
   void KernelVisitDecision ();
-  G4bool CompareForKernelVisit(G4ViewParameters&);
+  virtual G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDisplayLists ();
+  virtual void DisplayTimePOColourModification
+  (G4Colour&, size_t /*currentPOListIndex*/) {}
   G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 

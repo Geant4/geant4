@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh,v 1.10 2010-06-04 15:42:23 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -51,41 +53,40 @@ class PhysicsList: public G4VModularPhysicsList
 public:
 
   PhysicsList();
-  virtual ~PhysicsList();
+ ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
     
-  void SetCuts();
+  virtual void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
         
   void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+  virtual void ConstructProcess();
     
   void AddStepMax();       
-  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
 
 private:
 
   void AddIonGasModels();
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
+  G4bool   fHelIsRegisted;
+  G4bool   fBicIsRegisted;
+  G4bool   fBiciIsRegisted;
     
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4String                             fEmName;
+  G4VPhysicsConstructor*               fEmPhysicsList;
+  G4VPhysicsConstructor*               fDecPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  fHadronPhys;    
+  StepMax*                             fStepMaxProcess;
     
-  StepMax* stepMaxProcess;
-    
-  PhysicsListMessenger* pMessenger;
+  PhysicsListMessenger*  fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

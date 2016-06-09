@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNASancheSolvatationModel.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -71,9 +72,11 @@ public :
     inline void SetVerbose(int);
 
 protected:
+    // Water density table
+    const std::vector<G4double>* fpWaterDensity;
+
     G4ThreeVector RadialDistributionOfProducts(G4double Rrms) const ;
     G4ParticleChangeForGamma* fParticleChangeForGamma;
-    G4Material* fNistWater ;
 
     G4bool fIsInitialised;
     G4int fVerboseLevel;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.9 2010-12-23 16:57:28 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -205,7 +204,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 { 
   //Benedito's procedure
   G4double A[11],ThisPDF[320],ThisCPDF[320];
-  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,m,F;
+  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,mmm,F;
   G4int Ind0,KIndex=0,JIndex=0,IIndex=0;
 
 
@@ -239,15 +238,16 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
   b=uvalues[IIndex+1];
   
   do{
-    m=0.5*(a+b);
-    F=(ThisCPDF[IIndex]+(m-uvalues[IIndex])*ThisPDF[IIndex]
-       +((m-uvalues[IIndex])*(m-uvalues[IIndex])*(ThisPDF[IIndex+1]-ThisPDF[IIndex]))
+    mmm=0.5*(a+b);
+    F=(ThisCPDF[IIndex]+(mmm-uvalues[IIndex])*ThisPDF[IIndex]
+       +((mmm-uvalues[IIndex])*(mmm-uvalues[IIndex])
+	 *(ThisPDF[IIndex+1]-ThisPDF[IIndex]))
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
-    if(F>0.)b=m;
-    else a=m;
+    if(F>0.)b=mmm;
+    else a=mmm;
   } while(std::fabs(b-a)>1.0e-9);
 
-  return m;
+  return mmm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -272,6 +272,7 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
 
     G4String pathString(path);
     G4String dirFile = pathString + "/msc_GS/" + filename;
+    
     FILE *infile = fopen(dirFile,"r"); 
     if (infile == 0)
       {
@@ -286,15 +287,23 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
     G4float aRead;
     for(G4int k=0 ; k<76 ;k++){
       for(G4int j=0 ; j<11 ;j++){
-        for(G4int i=0 ; i<320 ;i++){
-	  fscanf(infile,"%f\t",&aRead);
-	  G4int idx = 320*(11*k+j)+i;
-	  if(level == 0)       { PDF[idx]  = aRead; }
-	  else if (level == 1) { CPDF[idx] = aRead; }
+        for(G4int i=0 ; i<320 ;i++) {
+	  if(1 == fscanf(infile,"%f\t",&aRead)) {
+	    G4int idx = 320*(11*k+j)+i;
+	    if(level == 0)       { PDF[idx]  = aRead; }
+	    else if (level == 1) { CPDF[idx] = aRead; }
+	  } else {
+	    G4ExceptionDescription ed;
+	    ed << "Error reading <" + dirFile + "> k= " << k 
+	       << "; j= " << j << "; i= " << i << G4endl;
+	    G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
+			"em0003",FatalException,ed);
+	    return;
+	  }
         }
       }
     }
-      
+    
     fclose(infile);
   } //End loading PDF and CPDF parameters
 }

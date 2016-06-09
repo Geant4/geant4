@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -47,8 +47,8 @@ namespace G4INCL {
   G4bool CDPP::isBlocked(ParticleList const created, Nucleus const * const nucleus) const {
     G4double S = nucleus->computeSeparationEnergyBalance();
 
-    const G4double Sp = ParticleTable::getSeparationEnergy(Proton);
-    const G4double Sn = ParticleTable::getSeparationEnergy(Neutron);
+    const G4double Sp = nucleus->getPotential()->getSeparationEnergy(Proton);
+    const G4double Sn = nucleus->getPotential()->getSeparationEnergy(Neutron);
 
     ParticleList remnantParticles = nucleus->getStore()->getParticles();
     remnantParticles.insert(remnantParticles.end(), created.begin(), created.end());
@@ -63,7 +63,7 @@ namespace G4INCL {
         const G4double T = (*i)->getKineticEnergy();
 
         if(T > Tf) {
-          const G4double sep = ParticleTable::getSeparationEnergy((*i)->getType());
+          const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
           Sk += sep;
         } else {
           TbelowTf += T - (*i)->getPotentialEnergy();
@@ -73,15 +73,15 @@ namespace G4INCL {
         const G4double T = (*i)->getKineticEnergy();
 
         if(T > Tf) {
-          const G4double sep = ParticleTable::getSeparationEnergy((*i)->getType());
+          const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
           Sk += sep;
-        } else { // Ugly! We should use total energies everywhere! FIXME
-          TbelowTf += (*i)->getEnergy() - ParticleTable::getMass(Proton) - (*i)->getPotentialEnergy();
+        } else { // Ugly! We should use total energies everywhere!
+          TbelowTf += (*i)->getEnergy() - ParticleTable::getINCLMass(Proton) - (*i)->getPotentialEnergy();
         }
       } else if((*i)->getType() == PiPlus)
-        Sk += Sn - Sp;
-      else if((*i)->getType() == PiMinus)
         Sk += Sp - Sn;
+      else if((*i)->getType() == PiMinus)
+        Sk += Sn - Sp;
 
     }
     G4double Tinitial = nucleus->getInitialInternalEnergy();

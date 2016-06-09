@@ -1,5 +1,5 @@
 #
-#  This file permits to customize, with commands,
+# This file permits to customize, with commands,
 # the menu bar of the G4UIXm, G4UIWin32 sessions.
 # It has no effect with G4UIterminal.
 #
@@ -14,12 +14,12 @@
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
 /gui/addButton run run1 "/control/execute defaultMacro.mac"
 #
-# Gun menu :
-/gui/addMenu gun Particle
-/gui/addButton gun "Proton"  "/gun/particle proton"
+# Gps menu :
+/gui/addMenu gps Particle
+/gui/addButton gps "Proton"  "/gps/particle proton"
 
-/gui/addMenu gun Energy
-/gui/addButton gun "60 MeV" "/gun/energy 60 MeV"
+/gui/addMenu gps Energy
+/gui/addButton gps "60 MeV" "/gps/energy 60 MeV"
 #
 
 # Macro menu

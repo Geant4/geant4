@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.17 2010-07-05 13:29:12 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4PVPlacement Implementation
@@ -342,9 +341,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
         // and finally to current volume's coordinate system
         //
         G4ThreeVector mp2 = Td.TransformPoint(dPoint);
-        G4ThreeVector ms = Tm.Inverse().TransformPoint(mp2);
+        G4ThreeVector msi = Tm.Inverse().TransformPoint(mp2);
 
-        if (solid->Inside(ms)==kInside)
+        if (solid->Inside(msi)==kInside)
         {
           std::ostringstream message;
           message << "Overlap with volume already placed !" << G4endl

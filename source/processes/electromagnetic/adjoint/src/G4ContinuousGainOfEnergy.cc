@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuousGainOfEnergy.cc,v 1.5 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
+
 #include "G4ContinuousGainOfEnergy.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmModel.hh"
@@ -227,12 +230,19 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
  
   
   aParticleChange.ProposeEnergy(Tkin);
-  
-  //we still need to register in the particleChange the modification of the weight of the particle 
-  G4double new_weight=weight_correction*track.GetWeight();
+
+
+  //Caution!!!
+  // It is important  to select the weight of the post_step_point
+  // as the current weight and not the weight of the track, as t
+  // the  weight of the track is changed after having applied all
+  // the along_step_do_it.
+
+  // G4double new_weight=weight_correction*track.GetWeight(); //old
+  G4double new_weight=weight_correction*step.GetPostStepPoint()->GetWeight();
   aParticleChange.SetParentWeightByProcess(false);
   aParticleChange.ProposeParentWeight(new_weight);
-  
+
 
   return &aParticleChange;
 

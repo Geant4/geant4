@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2010-01-05 15:35:32 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +40,8 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <iomanip>
 
@@ -45,7 +49,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
                      HistoManager* histo)
-:detector(det), primary(kin), histoManager(histo)
+:fDetector(det), fPrimary(kin), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +63,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  histoManager->book();
+  fHistoManager->book();
   
   InitFluence();  
 
@@ -77,14 +81,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       
   //Scatter foil
   //
-  G4Material* material = detector->GetMaterialScatter();
-  G4double length  = detector->GetThicknessScatter();
+  G4Material* material = fDetector->GetMaterialScatter();
+  G4double length  = fDetector->GetThicknessScatter();
   G4double density = material->GetDensity();
    
-  G4ParticleDefinition* particle = primary->GetParticleGun()
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
 
   G4cout << "\n ======================== run summary ======================\n";
 
@@ -92,24 +96,24 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(length,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(length,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
 
   G4cout.precision(prec);
 
   // normalize histograms
   //
   G4double fac = 1./(double(TotNbofEvents));
-  histoManager->Scale(1,fac);
-  histoManager->Scale(2,fac);
-  histoManager->Scale(3,fac);
+  fHistoManager->Normalize(1,fac);
+  fHistoManager->Normalize(2,fac);
+  fHistoManager->Normalize(3,fac);
   
   ComputeFluenceError();
   PrintFluence(TotNbofEvents);
 
   // save histograms
-  histoManager->save();
+  fHistoManager->save();
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -122,26 +126,26 @@ void RunAction::InitFluence()
   // create Fluence histo in any case
   //
   G4int ih = 4;
-  if (!histoManager->HistoExist(ih))
-    histoManager->SetHisto(ih, 120, 0*mm, 240*mm, "mm");
+  if (!fHistoManager->HistoExist(ih))
+    fHistoManager->SetHisto(ih, 120, 0*mm, 240*mm, "mm");
     
   //construct vectors for fluence distribution
   //
-  nbBins = histoManager->GetNbins(ih);
-  dr = histoManager->GetBinWidth(ih);
-  fluence.resize(nbBins, 0.); 
-  fluence1.resize(nbBins, 0.);   
-  fluence2.resize(nbBins, 0.);
-  nbEntries.resize(nbBins, 0);
+  fNbBins = fHistoManager->GetNbins(ih);
+  fDr = fHistoManager->GetBinWidth(ih);
+  fluence.resize(fNbBins, 0.); 
+  fluence1.resize(fNbBins, 0.);   
+  fluence2.resize(fNbBins, 0.);
+  fNbEntries.resize(fNbBins, 0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::SumFluence(G4double r, G4double fl)
 {
-  G4int ibin = (int)(r/dr);
-  if (ibin >= nbBins) return;
-  nbEntries[ibin]++;
+  G4int ibin = (int)(r/fDr);
+  if (ibin >= fNbBins) return;
+  fNbEntries[ibin]++;
   fluence[ibin]  += fl;
   fluence2[ibin] += fl*fl;
 }
@@ -153,16 +157,16 @@ void RunAction::ComputeFluenceError()
   //compute rms
   //
   G4double ds,variance,rms;
-  G4double rmean = -0.5*dr;
+  G4double rmean = -0.5*fDr;
 
-  for (G4int bin=0; bin<nbBins; bin++) {
-     rmean += dr;  
-     ds = twopi*rmean*dr;
+  for (G4int bin=0; bin<fNbBins; bin++) {
+     rmean += fDr;  
+     ds = twopi*rmean*fDr;
      fluence[bin] /= ds;
      fluence2[bin] /= (ds*ds);
      variance = 0.;
-     if (nbEntries[bin] > 0)     
-       variance = fluence2[bin] - (fluence[bin]*fluence[bin])/nbEntries[bin];
+     if (fNbEntries[bin] > 0)     
+       variance = fluence2[bin] - (fluence[bin]*fluence[bin])/fNbEntries[bin];
      rms = 0.;
      if(variance > 0.) rms = std::sqrt(variance);
      fluence2[bin] = rms;
@@ -173,7 +177,7 @@ void RunAction::ComputeFluenceError()
   G4double rnorm(4*mm), radius(0.), fnorm(0.), fnorm2(0.);
   G4int inorm = -1;
   do {
-   inorm++; radius += dr; fnorm += fluence[inorm]; fnorm2 += fluence2[inorm];
+   inorm++; radius += fDr; fnorm += fluence[inorm]; fnorm2 += fluence2[inorm];
   } while (radius < rnorm);
   fnorm  /= (inorm+1);
   fnorm2 /= (inorm+1);  
@@ -182,9 +186,9 @@ void RunAction::ComputeFluenceError()
   G4double scale = 1./fnorm;
   G4double err0 = fnorm2/fnorm, err1 = 0.;
   //
-  rmean = -0.5*dr;
+  rmean = -0.5*fDr;
     
-  for (G4int bin=0; bin<nbBins; bin++) {
+  for (G4int bin=0; bin<fNbBins; bin++) {
      ratio = fluence[bin]*scale;
      error = 0.;
      if (ratio > 0.) {
@@ -193,8 +197,8 @@ void RunAction::ComputeFluenceError()
      }
      fluence1[bin] = ratio;
      fluence2[bin] = error;
-     rmean += dr;
-     histoManager->FillHisto(4,rmean,ratio);
+     rmean += fDr;
+     fHistoManager->FillHisto(4,rmean,ratio);
   }
 }
 
@@ -204,7 +208,7 @@ void RunAction::ComputeFluenceError()
 
 void RunAction::PrintFluence(G4int TotEvents)
 {
-  G4String name = histoManager->GetFileName(); 
+  G4String name = fHistoManager->GetFileName(); 
   G4String fileName = name + ".ascii";
   std::ofstream File(fileName, std::ios::out);
   
@@ -216,15 +220,15 @@ void RunAction::PrintFluence(G4int TotEvents)
        << "\n  ibin \t radius (mm) \t Nb \t fluence\t norma fl\t rms/nfl (%) \n"
        << G4endl;
 
-  G4double rmean = -0.5*dr;    
-  for (G4int bin=0; bin<nbBins; bin++) {
-     rmean +=dr;
+  G4double rmean = -0.5*fDr;    
+  for (G4int bin=0; bin<fNbBins; bin++) {
+     rmean +=fDr;
      G4double error = 0.;
      if (fluence1[bin] > 0.) error =  100*fluence2[bin]/fluence1[bin];
-     File << "  " << bin << "\t " << rmean/mm << "\t " << nbEntries[bin]
+     File << "  " << bin << "\t " << rmean/mm << "\t " << fNbEntries[bin]
           << "\t " << fluence[bin]/double(TotEvents) << "\t " << fluence1[bin] 
-	  << "\t " << error
-	  << G4endl;	  
+          << "\t " << error
+          << G4endl;          
   }
     
   // restaure default formats

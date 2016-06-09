@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02PSPassageCellFlux.cc
+/// \brief Implementation of the RE02PSPassageCellFlux class
 //
-// $Id: RE02PSPassageCellFlux.cc,v 1.3 2007-05-18 18:16:28 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // RE02PSPassageCellFlux
 #include "RE02PSPassageCellFlux.hh"
@@ -55,13 +57,17 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-RE02PSPassageCellFlux::RE02PSPassageCellFlux(G4String name,G4int nx, G4int ny, G4int nz)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE02PSPassageCellFlux::RE02PSPassageCellFlux(G4String name,
+                                             G4int nx, G4int ny, G4int nz)
   :G4PSPassageCellFlux(name),fNx(nx),fNy(ny),fNz(nz)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSPassageCellFlux::~RE02PSPassageCellFlux()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int RE02PSPassageCellFlux::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();

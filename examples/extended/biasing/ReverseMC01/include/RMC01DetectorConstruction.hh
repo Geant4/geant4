@@ -23,22 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DetectorConstruction.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/include/RMC01DetectorConstruction.hh
+/// \brief Definition of the RMC01DetectorConstruction class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01DetectorConstruction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01DetectorConstruction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef RMC01DetectorConstruction_h
 #define RMC01DetectorConstruction_h 1
 
@@ -54,10 +60,10 @@ class RMC01DetectorConstruction : public G4VUserDetectorConstruction
   public:
 
     RMC01DetectorConstruction();       
-   ~RMC01DetectorConstruction();
+    virtual ~RMC01DetectorConstruction();
 
   public:
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
     void UpdateGeometry();
     
     void SetSensitiveVolumeHeight(G4double h);
@@ -67,30 +73,21 @@ class RMC01DetectorConstruction : public G4VUserDetectorConstruction
     
   private:
      
-    RMC01DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+    RMC01DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
     
     //Geometrical parameters
     //---------------------- 
-     G4double shield_Thickness;
-     G4double sensitive_cylinder_H;
-     G4double sensitive_cylinder_Rout;
-   
-    
-     
-     
-     
-     
-     
-     
+     G4double fShield_Thickness;
+     G4double fSensitive_cylinder_H;
+     G4double fSensitive_cylinder_Rout;
       
 private:
-    
+
      void DefineMaterials();
-     
      G4VPhysicalVolume* ConstructSimpleGeometry(); 
      
 };
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

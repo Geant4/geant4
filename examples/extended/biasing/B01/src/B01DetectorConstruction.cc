@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/src/B01DetectorConstruction.cc
+/// \brief Implementation of the B01DetectorConstruction class
 //
-// $Id: B01DetectorConstruction.cc,v 1.20 2007-06-22 13:15:29 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "G4Types.hh"
@@ -43,6 +45,8 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // For Primitive Scorers
 #include "G4SDManager.hh"
@@ -158,7 +162,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   name = "shieldWorld";
   pWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		  name, 0, false, 0);
+                  name, 0, false, 0);
 
 
   fPhysicalVolumeVector.push_back(pWorldVolume);
@@ -195,17 +199,17 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   for (i=1; i<=18; i++)
   {
     name = GetCellName(i);
-    G4double pos_x = 0*cm;
-    G4double pos_y = 0*cm;
-    G4double pos_z = startz + (i-1) * (2*hightShield);
+    pos_x = 0*cm;
+    pos_y = 0*cm;
+    pos_z = startz + (i-1) * (2*hightShield);
     G4VPhysicalVolume *pvol = 
       new G4PVPlacement(0, 
-			G4ThreeVector(pos_x, pos_y, pos_z),
-			aShield_log, 
-			name, 
-			worldCylinder_log, 
-			false, 
-			i); 
+                        G4ThreeVector(pos_x, pos_y, pos_z),
+                        aShield_log, 
+                        name, 
+                        worldCylinder_log, 
+                        false, 
+                        i); 
     fPhysicalVolumeVector.push_back(pvol);
   }
 
@@ -220,11 +224,11 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   spanningAngleShield    = 360*deg;
 
   G4Tubs *aRest = new G4Tubs("Rest",
-			     innerRadiusShield,
-			     outerRadiusShield,
-			     hightShield,
-			     startAngleShield,
-			     spanningAngleShield);
+                             innerRadiusShield,
+                             outerRadiusShield,
+                             hightShield,
+                             startAngleShield,
+                             spanningAngleShield);
   
   G4LogicalVolume *aRest_log =
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
@@ -236,12 +240,12 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   pos_z = 95*cm;
   G4VPhysicalVolume *pvol_rest = 
     new G4PVPlacement(0, 
-		      G4ThreeVector(pos_x, pos_y, pos_z),
-		      aRest_log, 
-		      name, 
-		      worldCylinder_log, 
-		      false, 
-		      19); // i=19
+                      G4ThreeVector(pos_x, pos_y, pos_z),
+                      aRest_log, 
+                      name, 
+                      worldCylinder_log, 
+                      false, 
+                      19); // i=19
 
   fPhysicalVolumeVector.push_back(pvol_rest);
 
@@ -274,7 +278,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
     {
       imp = std::pow(2., n++);
       G4cout << "Going to assign importance: " << imp << ", to volume: " 
-	     << (*it)->GetName() << G4endl;
+             << (*it)->GetName() << G4endl;
       istore->AddImportanceGeometryCell(imp, *(*it),n);
     }
   }
@@ -283,7 +287,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
   // importance as the last conrete cell
   //
   istore->AddImportanceGeometryCell(imp, 
-				    *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]),++n);
+                                    *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]),++n);
   
   return istore;
 }
@@ -323,8 +327,8 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
     {
       lowerWeight = 1./std::pow(2., n++);
       G4cout << "Going to assign lower weight: " << lowerWeight 
-	     << ", to volume: " 
-	     << (*it)->GetName() << G4endl;
+             << ", to volume: " 
+             << (*it)->GetName() << G4endl;
       G4GeometryCell gCell(*(*it),n);
       lowerWeights.clear();
       lowerWeights.push_back(lowerWeight);

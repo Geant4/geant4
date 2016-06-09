@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.2 2006-06-29 16:35:48 gunter Exp $
+/// \file electromagnetic/TestEm0/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id: fDetectorMessenger.cc,v 1.2 2006-06-29 16:35:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,35 +41,35 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det),fTestemDir(0),fDetDir(0),fMaterCmd(0)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance("commands specific to this example");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance("commands specific to this example");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction commands");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction commands");
         
-  MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  MaterCmd->SetGuidance("Select material of the box.");
-  MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the box.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete detDir;
-  delete testemDir;
+  delete fMaterCmd;
+  delete fDetDir;
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == MaterCmd )
-   { Detector->SetMaterial(newValue);}
+  if( command == fMaterCmd )
+   { fDetector->SetMaterial(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -68,7 +68,7 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetCerenkovMaxBetaChangeCmd(0),
     fSetScintillationYieldFactorCmd(0),
     fSetScintillationByParticleTypeCmd(0),
-    fSetOpticalSurfaceModelCmd(0),
+//    fSetOpticalSurfaceModelCmd(0),
     fSetWLSTimeProfileCmd(0),
     fSetTrackSecondariesFirstCmd(0),
     fSetFiniteRiseTimeCmd(0)
@@ -130,13 +130,13 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
   fSetScintillationByParticleTypeCmd->SetParameterName("ScintillationByParticleTypeActivation", false);
   fSetScintillationByParticleTypeCmd->AvailableForStates(G4State_PreInit, G4State_Idle, G4State_GeomClosed, G4State_EventProc);
 
-  fSetOpticalSurfaceModelCmd 
-    = new G4UIcmdWithAString("/optics_engine/setOpticalSurfaceModel", this);  
-  fSetOpticalSurfaceModelCmd
-    ->SetGuidance("Set optical surface model (glisur or unified)");
-  fSetOpticalSurfaceModelCmd->SetParameterName("OpticalSurfaceModel", false);
-  fSetOpticalSurfaceModelCmd->SetCandidates("glisur unified");
-  fSetOpticalSurfaceModelCmd->AvailableForStates(G4State_PreInit, G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+//  fSetOpticalSurfaceModelCmd 
+//    = new G4UIcmdWithAString("/optics_engine/setOpticalSurfaceModel", this);  
+//  fSetOpticalSurfaceModelCmd
+//    ->SetGuidance("Set optical surface model (glisur or unified)");
+//  fSetOpticalSurfaceModelCmd->SetParameterName("OpticalSurfaceModel", false);
+//  fSetOpticalSurfaceModelCmd->SetCandidates("glisur unified");
+//  fSetOpticalSurfaceModelCmd->AvailableForStates(G4State_PreInit, G4State_Idle, G4State_GeomClosed, G4State_EventProc);
 
   fSetWLSTimeProfileCmd
     = new G4UIcmdWithAString("/optics_engine/setWLSTimeProfile", this);
@@ -173,7 +173,7 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
   delete fSetCerenkovMaxBetaChangeCmd;
   delete fSetScintillationYieldFactorCmd;
   delete fSetScintillationByParticleTypeCmd;
-  delete fSetOpticalSurfaceModelCmd;
+//  delete fSetOpticalSurfaceModelCmd;
   delete fSetWLSTimeProfileCmd;
   delete fSetTrackSecondariesFirstCmd;
   delete fSetFiniteRiseTimeCmd;
@@ -242,16 +242,16 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
       ->SetFiniteRiseTime(
          fSetFiniteRiseTimeCmd->GetNewBoolValue(newValue));
   }
-  else if (command == fSetOpticalSurfaceModelCmd) {
-    if ( newValue == "glisur" ) {
-      fOpticalPhysics
-        ->SetOpticalSurfaceModel(glisur);
-    }    
-    if ( newValue == "unified" ) {
-      fOpticalPhysics
-        ->SetOpticalSurfaceModel(unified);
-    } 
-  }
+//  else if (command == fSetOpticalSurfaceModelCmd) {
+//    if ( newValue == "glisur" ) {
+//      fOpticalPhysics
+//        ->SetOpticalSurfaceModel(glisur);
+//    }    
+//    if ( newValue == "unified" ) {
+//      fOpticalPhysics
+//        ->SetOpticalSurfaceModel(unified);
+//    } 
+//  }
   else if (command == fSetWLSTimeProfileCmd) {
     if ( newValue == "delta" ) {
       fOpticalPhysics

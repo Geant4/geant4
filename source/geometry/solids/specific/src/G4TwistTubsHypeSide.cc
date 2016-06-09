@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.cc,v 1.8 2010-07-12 15:33:49 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -43,6 +42,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistTubsHypeSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4GeometryTolerance.hh"
 
 //=====================================================================
@@ -926,7 +926,7 @@ void G4TwistTubsHypeSide::SetBoundaries()
 //=====================================================================
 //* GetFacets() -------------------------------------------------------
 
-void G4TwistTubsHypeSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
+void G4TwistTubsHypeSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
                                      G4int faces[][4], G4int iside ) 
 {
 
@@ -938,7 +938,7 @@ void G4TwistTubsHypeSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
   G4int nnode ;
   G4int nface ;
 
-  // calculate the (n-1)*(m-1) vertices
+  // calculate the (n-1)*(k-1) vertices
 
   G4int i,j ;
 
@@ -946,17 +946,17 @@ void G4TwistTubsHypeSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
 
     z = fAxisMin[1] + i*(fAxisMax[1]-fAxisMin[1])/(n-1) ;
 
-    for ( j = 0 ; j<m ; j++ )
+    for ( j = 0 ; j<k ; j++ )
     {
-      nnode = GetNode(i,j,m,n,iside) ;
+      nnode = GetNode(i,j,k,n,iside) ;
 
       xmin = GetBoundaryMin(z) ; 
       xmax = GetBoundaryMax(z) ;
 
       if (fHandedness < 0) { // inner hyperbolic surface
-        x = xmin + j*(xmax-xmin)/(m-1) ;
+        x = xmin + j*(xmax-xmin)/(k-1) ;
       } else {               // outer hyperbolic surface
-        x = xmax - j*(xmax-xmin)/(m-1) ;
+        x = xmax - j*(xmax-xmin)/(k-1) ;
       }
 
       p = SurfacePoint(x,z,true) ;  // surface point in global coord.system
@@ -965,14 +965,14 @@ void G4TwistTubsHypeSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
       xyz[nnode][1] = p.y() ;
       xyz[nnode][2] = p.z() ;
 
-      if ( i<n-1 && j<m-1 ) {   // clock wise filling
+      if ( i<n-1 && j<k-1 ) {   // clock wise filling
         
-        nface = GetFace(i,j,m,n,iside) ;
+        nface = GetFace(i,j,k,n,iside) ;
 
-	faces[nface][0] = GetEdgeVisibility(i,j,m,n,0,1) * ( GetNode(i  ,j  ,m,n,iside)+1) ;  
-	faces[nface][1] = GetEdgeVisibility(i,j,m,n,1,1) * ( GetNode(i+1,j  ,m,n,iside)+1) ;
-	faces[nface][2] = GetEdgeVisibility(i,j,m,n,2,1) * ( GetNode(i+1,j+1,m,n,iside)+1) ;
-	faces[nface][3] = GetEdgeVisibility(i,j,m,n,3,1) * ( GetNode(i  ,j+1,m,n,iside)+1) ;
+	faces[nface][0] = GetEdgeVisibility(i,j,k,n,0,1) * ( GetNode(i  ,j  ,k,n,iside)+1) ;  
+	faces[nface][1] = GetEdgeVisibility(i,j,k,n,1,1) * ( GetNode(i+1,j  ,k,n,iside)+1) ;
+	faces[nface][2] = GetEdgeVisibility(i,j,k,n,2,1) * ( GetNode(i+1,j+1,k,n,iside)+1) ;
+	faces[nface][3] = GetEdgeVisibility(i,j,k,n,3,1) * ( GetNode(i  ,j+1,k,n,iside)+1) ;
 
       }
     }

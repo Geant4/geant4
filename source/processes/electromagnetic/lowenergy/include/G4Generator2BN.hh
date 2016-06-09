@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BN.hh,v 1.4 2010-10-14 14:00:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -57,9 +56,10 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VBremAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
+#include "G4Generator2BS.hh"
 
-class G4Generator2BN : public G4VBremAngularDistribution
+class G4Generator2BN : public G4VEmAngularDistribution
 {
 
 public:
@@ -68,9 +68,10 @@ public:
 
   virtual ~G4Generator2BN();
 
-  G4double PolarAngle(const G4double initial_energy,
-		      const G4double final_energy,
-		      const G4int Z);
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double out_energy,
+                                         G4int Z,
+                                         const G4Material* mat = 0);
 
   void PrintGeneratorInformation() const;
 
@@ -88,10 +89,14 @@ protected:
 
   G4double CalculateFkt(G4double k, G4double theta, G4double A, G4double c) const;
   G4double Calculatedsdkdt(G4double kout, G4double theta, G4double Eel) const;
-  G4double Generate2BN(G4double Ek, G4double k) const;
-
 
 private:
+
+  // hide assignment operator 
+  G4Generator2BN & operator=(const  G4Generator2BN &right);
+  G4Generator2BN(const  G4Generator2BN&);
+
+  G4Generator2BS fGenerator2BS; 
 
   G4double b;
   G4int index_min, index_max;
@@ -101,9 +106,7 @@ private:
   static G4double Atab[320];
   static G4double ctab[320];
 
-  // hide assignment operator 
-  G4Generator2BN & operator=(const  G4Generator2BN &right);
-  G4Generator2BN(const  G4Generator2BN&);
+  G4int nwarn;
 
 };
 

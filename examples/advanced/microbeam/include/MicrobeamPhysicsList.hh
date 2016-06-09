@@ -23,15 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: MicrobeamPhysicsList.hh,v 1.7 2010-06-10 09:54:05 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef MicrobeamPhysicsList_h
@@ -68,20 +59,13 @@ public:
 
 private:
 
-  void AddIonGasModels();
-
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-    
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;
   G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   G4StepLimiter* stepMaxProcess;
 

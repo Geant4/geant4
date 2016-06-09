@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.13 2010-07-13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -178,8 +177,6 @@ G4double G4ParameterisedNavigation::
   {
     if (localDirection.dot(exitNormal)>=kMinExitingNormalCosine)
     {
-      assert( (0 <= blockedReplicaNo)&&(blockedReplicaNo<nReplicas) );
-
       // Block exited daughter replica; Must be on boundary => zero safety
       //
       fBList.BlockVolume(blockedReplicaNo);

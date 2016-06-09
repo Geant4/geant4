@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CylindricalSurface.cc,v 1.9 2010-07-07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -169,9 +168,9 @@ G4int G4CylindricalSurface::Intersect(const G4Ray& ry)
   
   //  Array of solutions in distance along the Ray.
   //
-  G4double s[2];
-  s[0] = -1.0; 
-  s[1] = -1.0 ;
+  G4double sol[2];
+  sol[0] = -1.0; 
+  sol[1] = -1.0 ;
 
   //  Calculate the two solutions (quadratic equation)
   //
@@ -195,12 +194,12 @@ G4int G4CylindricalSurface::Intersect(const G4Ray& ry)
   if ( radical < 0.0 )  { return 0; }
 
   G4double root = std::sqrt( radical );
-  s[0] = ( - b + root ) / ( 2. * a );
-  s[1] = ( - b - root ) / ( 2. * a );
+  sol[0] = ( - b + root ) / ( 2. * a );
+  sol[1] = ( - b - root ) / ( 2. * a );
 
   //  Order the possible solutions by increasing distance along the Ray
   //
-  sort_double( s, isoln, maxsoln-1 );
+  sort_double( sol, isoln, maxsoln-1 );
 
   //  Now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
@@ -209,12 +208,12 @@ G4int G4CylindricalSurface::Intersect(const G4Ray& ry)
   //
   for ( isoln = 0; isoln < maxsoln; isoln++ ) 
   {
-    if ( s[isoln] >= kCarTolerance*0.5 ) 
+    if ( sol[isoln] >= kCarTolerance*0.5 ) 
     {
-      if ( s[isoln] >= kInfinity )  // quit if too large
+      if ( sol[isoln] >= kInfinity )  // quit if too large
         { return 0; }
 
-      distance = s[isoln];
+      distance = sol[isoln];
       closest_hit = ry.GetPoint( distance );
       G4double  tmp =  dhat * (Normal( closest_hit ));
       
@@ -249,8 +248,8 @@ G4double G4CylindricalSurface::HowNear( const G4Vector3D& x ) const
 
   G4Vector3D d = x - origin;
   G4double dA = d * axis;
-  G4double rad = std::sqrt( d.mag2() - dA*dA );
-  G4double hownear = std::fabs( radius - rad );
+  G4double rds = std::sqrt( d.mag2() - dA*dA );
+  G4double hownear = std::fabs( radius - rds );
  
   return hownear;
 }

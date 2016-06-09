@@ -23,17 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
+
+#include <iostream>
+#include <signal.h>
 
 #include "G4RPGTwoBody.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Poisson.hh"
-#include <iostream>
 #include "G4HadReentrentException.hh"
-#include <signal.h>
-
 
 G4RPGTwoBody::G4RPGTwoBody()
   : G4RPGReaction() {}

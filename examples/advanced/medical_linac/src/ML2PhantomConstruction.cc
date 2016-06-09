@@ -40,29 +40,25 @@
 //
 //*******************************************************//
 
-
 #include "ML2PhantomConstruction.hh"
 #include "ML2PhantomConstructionMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 CML2PhantomConstruction::CML2PhantomConstruction(void): PVPhmWorld(0), sensDet(0)
 {
-	this->phantomContstructionMessenger=new CML2PhantomConstructionMessenger(this);
-	this->idCurrentCentre=0;
+	phantomContstructionMessenger=new CML2PhantomConstructionMessenger(this);
+	idCurrentCentre=0;
 }
 
 CML2PhantomConstruction::~CML2PhantomConstruction(void)
 {
-	if (this->phantomName=="fullWater")
+	if (phantomName=="fullWater")
 	{
 		delete Ph_fullWater;
 	}
-	else if (this->phantomName=="boxInBox")
+	else if (phantomName=="boxInBox")
 	{
 		delete Ph_BoxInBox;
-	}
-	else  if (this->phantomName=="Dicom1")
-	{
-		delete Ph_Dicom;
 	}
 }
 
@@ -82,59 +78,45 @@ bool CML2PhantomConstruction::design(void)
 // switch between two different phantoms according to the main macro selection
 	bool bPhanExists=false;
 
-	std::cout << "I'm building "<< this->phantomName<<"  phantom"<< G4endl;
+	std::cout << "I'm building "<< phantomName<<"  phantom"<< G4endl;
 
-	if (this->phantomName=="fullWater")
+	if (phantomName=="fullWater")
 	{
-		this->Ph_fullWater=new CML2Ph_FullWater();bPhanExists=true;
-		this->halfPhantomInsideSize=this->Ph_fullWater->getHalfContainerSize();
+		Ph_fullWater=new CML2Ph_FullWater();bPhanExists=true;
+		halfPhantomInsideSize=Ph_fullWater->getHalfContainerSize();
 	}
-	else if (this->phantomName=="boxInBox")
+	else if (phantomName=="boxInBox")
 	{
-		this->Ph_BoxInBox=new CML2Ph_BoxInBox();bPhanExists=true;
-		this->halfPhantomInsideSize=this->Ph_BoxInBox->getHalfContainerSize();
-	}
-	else  if (this->phantomName=="Dicom1")
-	{
-		this->Ph_Dicom=new RegularDicomDetectorConstruction();bPhanExists=true;
-
-	// read the messenger data related to the phantom selected 
-		G4UImanager* UI = G4UImanager::GetUIpointer();
-		G4String command = "/control/execute ";
-		UI->ApplyCommand(command+this->PhantomFileName ); 
-
-		DicomHandler *dcmHandler=new DicomHandler();
-		dcmHandler->CheckFileFormat(this->Ph_Dicom->getDicomDirectory(), this->Ph_Dicom->getDataFileName(), this->Ph_Dicom->getCalibrationDensityFileName());
-
-		this->halfPhantomInsideSize=this->Ph_Dicom->getHalfContainerSize();
+		Ph_BoxInBox=new CML2Ph_BoxInBox();bPhanExists=true;
+		halfPhantomInsideSize=Ph_BoxInBox->getHalfContainerSize();
 	}
 
- 	if (this->centre.size()<1)
- 	{this->addNewCentre(G4ThreeVector(0.,0.,0.));}
+ 	if (centre.size()<1)
+ 	{addNewCentre(G4ThreeVector(0.,0.,0.));}
 	return bPhanExists;
 }
 G4int CML2PhantomConstruction::getTotalNumberOfEvents()
 {
-	if (this->phantomName="fullWater")
-	{return this->Ph_fullWater->getTotalNumberOfEvents();}
-	else if (this->phantomName="boxInBox")
-	{return this->Ph_BoxInBox->getTotalNumberOfEvents();}
-	else if (this->phantomName="Dicom1")
-	{return this->Ph_Dicom->getTotalNumberOfEvents();}
+	if (phantomName=="fullWater")
+	{return Ph_fullWater->getTotalNumberOfEvents();}
+	else if (phantomName=="boxInBox")
+	{return Ph_BoxInBox->getTotalNumberOfEvents();}
 	return 0;
 }
 
-bool CML2PhantomConstruction::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG, G4bool bOnlyVisio)
+bool CML2PhantomConstruction::Construct(G4VPhysicalVolume *PVWorld,
+        G4int saving_in_ROG_Voxels_every_events, G4int seed,
+        G4String ROGOutFile, G4bool bSaveROG, G4bool bOV)
 {
-	this->idVolumeName=0;
-	this->bOnlyVisio=bOnlyVisio;
+	idVolumeName=0;
+	bOnlyVisio=bOV;
 // a call to select the right phantom
-	if(this->design())
+	if(design())
 	{
-		this->phantomContstructionMessenger->SetReferenceWorld(bOnlyVisio);	// create the phantom-world box
+		phantomContstructionMessenger->SetReferenceWorld(bOV);	// create the phantom-world box
 		G4Material *Vacuum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 
-		G4Box *phmWorldB = new G4Box("phmWorldG", this->halfPhantomInsideSize.getX(), this->halfPhantomInsideSize.getY(), this->halfPhantomInsideSize.getZ());
+		G4Box *phmWorldB = new G4Box("phmWorldG", halfPhantomInsideSize.getX(), halfPhantomInsideSize.getY(), halfPhantomInsideSize.getZ());
 		G4LogicalVolume *phmWorldLV = new G4LogicalVolume(phmWorldB, Vacuum, "phmWorldL", 0, 0, 0);
 		G4VisAttributes* simpleAlSVisAtt= new G4VisAttributes(G4Colour::White());
 		simpleAlSVisAtt->SetVisibility(false);
@@ -142,35 +124,26 @@ bool CML2PhantomConstruction::Construct(G4VPhysicalVolume *PVWorld, G4int saving
 		phmWorldLV->SetVisAttributes(simpleAlSVisAtt);
 	
 
-		this->PVPhmWorld= new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "phmWorldPV", phmWorldLV, PVWorld, false, 0);
+		PVPhmWorld= new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "phmWorldPV", phmWorldLV, PVWorld, false, 0);
 	
 	// create the actual phantom
-		if (this->phantomName=="fullWater")
+		if (phantomName=="fullWater")
 		{
-			this->Ph_fullWater->Construct(this->PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
-			this->sensDet=this->Ph_fullWater->getSensDet();
-			this->createPhysicalVolumeNamesList(this->Ph_fullWater->getPhysicalVolume());
-			this->Ph_fullWater->writeInfo();
+			Ph_fullWater->Construct(PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
+			sensDet=Ph_fullWater->getSensDet();
+			createPhysicalVolumeNamesList(Ph_fullWater->getPhysicalVolume());
+			Ph_fullWater->writeInfo();
 		}
-		else if (this->phantomName=="boxInBox")
+		else if (phantomName=="boxInBox")
 		{
-			this->Ph_BoxInBox->Construct(this->PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
-			this->sensDet=this->Ph_BoxInBox->getSensDet();
-			this->createPhysicalVolumeNamesList(this->Ph_BoxInBox->getPhysicalVolume());
-			this->Ph_BoxInBox->writeInfo();
-		}
-		else  if (this->phantomName=="Dicom1")
-		{
-			std::cout << this->Ph_Dicom->getDicomDirectory()<<" "<< this->Ph_Dicom->getDataFileName()<<" "<< this->Ph_Dicom->getCalibrationDensityFileName()<<" "<< this->Ph_Dicom->getDicomColorMap() << G4endl;
-
-			this->Ph_Dicom->Construct(this->PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
-			this->sensDet=this->Ph_Dicom->getSensDet();
-			this->createPhysicalVolumeNamesList(this->Ph_Dicom->getMatNames(), this->Ph_Dicom->getNmatNames());
-			this->Ph_Dicom->writeInfo();
+			Ph_BoxInBox->Construct(PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
+			sensDet=Ph_BoxInBox->getSensDet();
+			createPhysicalVolumeNamesList(Ph_BoxInBox->getPhysicalVolume());
+			Ph_BoxInBox->writeInfo();
 		}
 		// I create the data base volumeName-volumeID in the sensitive detector 
 
-		this->sensDet->setVolumeNameIdLink(this->volumeNameIdLink);
+		sensDet->setVolumeNameIdLink(volumeNameIdLink);
 	}
 	else
 	{
@@ -185,7 +158,7 @@ void CML2PhantomConstruction::createPhysicalVolumeNamesList(G4String  *matNames,
 	{
 		svnid.volumeId=i;
 		svnid.volumeName=matNames[i];
-		this->volumeNameIdLink.push_back(svnid);
+		volumeNameIdLink.push_back(svnid);
 	}
 }
 void CML2PhantomConstruction::createPhysicalVolumeNamesList(G4VPhysicalVolume  *PV)
@@ -198,49 +171,49 @@ void CML2PhantomConstruction::createPhysicalVolumeNamesList(G4VPhysicalVolume  *
 	{
 		for (int i=0; i <nLVD1; i++)
 		{
-			this->createPhysicalVolumeNamesList(PV->GetLogicalVolume()->GetDaughter(i));
+			createPhysicalVolumeNamesList(PV->GetLogicalVolume()->GetDaughter(i));
 		}
-		this->idVolumeName++;
-		svnid.volumeId=this->idVolumeName;
+		idVolumeName++;
+		svnid.volumeId=idVolumeName;
 		svnid.volumeName=PV->GetLogicalVolume()->GetMaterial()->GetName();
-		this->volumeNameIdLink.push_back(svnid);
+		volumeNameIdLink.push_back(svnid);
 		std::cout << "physical volume name: " <<svnid.volumeName << G4endl;
 	}
 	else
 	{
-		this->idVolumeName++;
-		svnid.volumeId=this->idVolumeName;
+		idVolumeName++;
+		svnid.volumeId=idVolumeName;
 		svnid.volumeName=PV->GetLogicalVolume()->GetMaterial()->GetName();
-		this->volumeNameIdLink.push_back(svnid);
+		volumeNameIdLink.push_back(svnid);
 		std::cout << "physical volume name: " <<svnid.volumeName << G4endl;
 	}
 }
 bool  CML2PhantomConstruction::applyNewCentre()
 {
-	if (this->idCurrentCentre <(int) this->centre.size())
+	if (idCurrentCentre <(int) centre.size())
 	{
-		this->currentCentre=this->centre[this->idCurrentCentre];
-		this->applyNewCentre(this->currentCentre);
-		this->idCurrentCentre++;
+		currentCentre=centre[idCurrentCentre];
+		applyNewCentre(currentCentre);
+		idCurrentCentre++;
 		return true;
 	}
 	return false;
 }
 void CML2PhantomConstruction::writeInfo()
 {
-	if (!this->bOnlyVisio)
-	{std::cout <<"Actual centre: "<<this->idCurrentCentre<<"/"<<this->centre.size() <<"  "<< G4endl;}
-	std::cout <<"Phantom and its ROG centre: " << this->currentCentre<< G4endl;
+	if (!bOnlyVisio)
+	{std::cout <<"Actual centre: "<<idCurrentCentre<<"/"<<centre.size() <<"  "<< G4endl;}
+	std::cout <<"Phantom and its ROG centre: " << currentCentre<< G4endl;
 }
-void CML2PhantomConstruction::applyNewCentre(G4ThreeVector centre)
+void CML2PhantomConstruction::applyNewCentre(G4ThreeVector ctr)
 {
-	if (this->sensDet!=0)
+	if (sensDet!=0)
 	{	
-		this->currentCentre=centre;
+		currentCentre=ctr;
 		G4GeometryManager::GetInstance()->OpenGeometry();
-		this->PVPhmWorld->SetTranslation(centre);
-		this->sensDet->GetROgeometry()->GetROWorld()->GetLogicalVolume()->GetDaughter(0)->SetTranslation(centre);
-		this->sensDet->resetVoxelsSingle();
+		PVPhmWorld->SetTranslation(ctr);
+		sensDet->GetROgeometry()->GetROWorld()->GetLogicalVolume()->GetDaughter(0)->SetTranslation(ctr);
+		sensDet->resetVoxelsSingle();
 		G4GeometryManager::GetInstance()->CloseGeometry();
 		G4RunManager::GetRunManager()->GeometryHasBeenModified();
 	}
@@ -250,13 +223,13 @@ G4String CML2PhantomConstruction::getCurrentTranslationString()
 	char cT[5];
 	G4int cTI;
 	G4String translationName;
-	cTI=(G4int)((this->currentCentre.getX()/mm));
+	cTI=(G4int)((currentCentre.getX()/mm));
 	sprintf(cT,"%d",cTI);
 	translationName="_TrX"+G4String(cT)+"_";
-	cTI=(G4int)((this->currentCentre.getY()/mm));
+	cTI=(G4int)((currentCentre.getY()/mm));
 	sprintf(cT,"%d",cTI);
 	translationName+="Y"+G4String(cT)+"_";
-	cTI=(G4int)((this->currentCentre.getZ()/mm));
+	cTI=(G4int)((currentCentre.getZ()/mm));
 	sprintf(cT,"%d",cTI);
 	translationName+="Z"+G4String(cT);
 	return translationName;

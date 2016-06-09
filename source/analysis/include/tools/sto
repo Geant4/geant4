@@ -39,13 +39,11 @@ namespace tools {
 
 template <class T>
 inline bool to(const std::string& a_s,T& a_v) {
+  if(a_s.empty()) {a_v = T();return false;} //for TOOLS_STL istringstream.
   std::istringstream strm(a_s.c_str());
-  std::streampos pb = strm.tellg();
   strm >> a_v;
-  std::streampos pe = strm.tellg();
-  std::string::size_type sz = pe-pb;
-  if(sz!=a_s.size()) {a_v = T();return false;}
-  return true;
+  if(strm.fail()) {a_v = T();return false;}
+  return strm.eof();
 }
 
 template <class T>
@@ -70,6 +68,14 @@ inline std::string soutd(double a_value) {
 template <class T>
 inline std::string sout(const T& a_value) {
   return std::string("\"")+to<T>(a_value)+"\"";
+}
+
+template <class T>
+inline bool to(T& a_field,const std::string& a_s,bool& a_changed){
+  T old = a_field;
+  if(!tools::to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
+  a_changed = a_field==old?false:true;
+  return true;
 }
 
 }

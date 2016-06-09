@@ -42,12 +42,14 @@
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
+#include <numeric>
+
 #include "G4NeutronHPPhotonDist.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Electron.hh"
 #include "G4Poisson.hh"
-
-#include <numeric>
 
 G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 {
@@ -543,7 +545,7 @@ G4int maxEnergyIndex = 0;
   {
     G4double * running = new G4double[nGammaEnergies];
     running[0]=theTransitionProbabilities[0];
-    G4int i;
+    //G4int i; //declaration at 284th
     for(i=1; i<nGammaEnergies; i++)
     {
       running[i]=running[i-1]+theTransitionProbabilities[i];
@@ -608,24 +610,24 @@ G4int maxEnergyIndex = 0;
       else if(tabulationType==1)
       {
         // legendre polynomials
-        G4int it(0);
+        G4int itt(0);
         for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
         {
-          it = iii;
+          itt = iii;
 	  if(theLegendre[ii-nIso][iii].GetEnergy()>anEnergy)
             break;
         }
         G4NeutronHPLegendreStore aStore(2);
-        aStore.SetCoeff(1, &(theLegendre[ii-nIso][it]));  
+        aStore.SetCoeff(1, &(theLegendre[ii-nIso][itt]));  
         //aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
         //TKDB 110512
-        if ( it > 0 ) 
+        if ( itt > 0 ) 
         {
-           aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+           aStore.SetCoeff(0, &(theLegendre[ii-nIso][itt-1])); 
         }
         else
         {
-           aStore.SetCoeff(0, &(theLegendre[ii-nIso][it])); 
+           aStore.SetCoeff(0, &(theLegendre[ii-nIso][itt])); 
         }
         G4double cosTh = aStore.SampleMax(anEnergy);
         G4double theta = std::acos(cosTh);
@@ -641,14 +643,14 @@ G4int maxEnergyIndex = 0;
       else
       {
         // tabulation of probabilities.
-        G4int it(0);
+        G4int itt(0);
         for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
         {
-          it = iii;
+          itt = iii;
 	  if(theAngular[ii-nIso][iii].GetEnergy()>anEnergy)
             break;
         }
-        G4double costh = theAngular[ii-nIso][it].GetCosTh(); // no interpolation yet @@
+        G4double costh = theAngular[ii-nIso][itt].GetCosTh(); // no interpolation yet @@
         G4double theta = std::acos(costh);
         G4double phi = twopi*G4UniformRand();
         G4double sinth = std::sin(theta);
@@ -684,26 +686,26 @@ G4int maxEnergyIndex = 0;
       //G4cout << "Partial Case nDiscrete " << nDiscrete << G4endl;
       G4double sum = 0.0; 
       std::vector < G4double > dif( nDiscrete , 0.0 ); 
-      for ( G4int i = 0 ; i < nDiscrete ; i++ ) 
+      for ( G4int j = 0 ; j < nDiscrete ; j++ ) 
       {
-         G4double x = thePartialXsec[ i ].GetXsec( anEnergy );  // x in barn 
+         G4double x = thePartialXsec[ j ].GetXsec( anEnergy );  // x in barn 
          if ( x > 0 ) 
          {
             sum += x;   
          } 
-         dif [ i ] = sum; 
-         //G4cout << "i " << i << ", x " << x << ", dif " << dif [ i ] << G4endl;
+         dif [ j ] = sum; 
+         //G4cout << "j " << j << ", x " << x << ", dif " << dif [ j ] << G4endl;
       }
       
       G4double rand = G4UniformRand();
 
       G4int iphoton = 0; 
-      for ( G4int i = 0 ; i < nDiscrete ; i++ ) 
+      for ( G4int j = 0 ; j < nDiscrete ; j++ ) 
       {
          G4double y = rand*sum; 
-         if ( dif [ i ] > y ) 
+         if ( dif [ j ] > y ) 
          {
-            iphoton = i; 
+            iphoton = j; 
             break;  
          } 
       }

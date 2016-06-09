@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionFS.hh,v 1.9 2006-06-29 20:47:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPFissionFS_h
 #define G4NeutronHPFissionFS_h 1
@@ -42,11 +41,13 @@
 #include "G4NeutronHPLCFissionFS.hh"
 #include "G4NeutronHPFSFissionFS.hh"
 
+#include "G4NeutronHPFFFissionFS.hh"
+
 class G4NeutronHPFissionFS : public G4NeutronHPFinalState
 {
   public:
   
-  G4NeutronHPFissionFS(){ hasXsec = false; }
+  G4NeutronHPFissionFS(){ hasXsec = false; produceFissionFragments = false; }
   ~G4NeutronHPFissionFS(){}
   void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
@@ -64,5 +65,7 @@ class G4NeutronHPFissionFS : public G4NeutronHPFinalState
   G4NeutronHPTCFissionFS theTC;
   G4NeutronHPLCFissionFS theLC;
     
+  G4NeutronHPFFFissionFS theFF;
+  G4bool produceFissionFragments;
 };
 #endif

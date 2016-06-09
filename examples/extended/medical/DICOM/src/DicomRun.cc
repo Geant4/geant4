@@ -23,36 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/src/DicomRun.cc
+/// \brief Implementation of the DicomRun class
 //
-// $Id: DicomRun.cc,v 1.1 2008-11-27 21:55:27 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 //=====================================================================
-//
-//  (Description)
-//    DicomRun Class is for accumulating scored quantities which is 
-//  scored using G4MutiFunctionalDetector and G4VPrimitiveScorer.
-//  Accumulation is done using G4THitsMap object.
-//
-//    The constructor DicomRun(const std::vector<G4String> mfdName)
-//  needs a vector filled with MultiFunctionalDetector names which
-//  was assigned at instantiation of MultiFunctionalDetector(MFD).
-//  Then DicomRun constructor automatically scans primitive scorers
-//  in the MFD, and obtains collectionIDs of all collections associated
-//  to those primitive scorers. Futhermore, the G4THitsMap objects 
-//  for accumulating during a RUN are automatically created too.
-//  (*) Collection Name is same as primitive scorer name.
-// 
-//    The resultant information is kept inside DicomRun objects as
-//  data members.
-//  std::vector<G4String> theCollName;            // Collection Name,
-//  std::vector<G4int> theCollID;                 // Collection ID,
-//  std::vector<G4THitsMap<G4double>*> theRunMap; // HitsMap for RUN.
-//
-//  The resualtant HitsMap objects are obtain using access method,
-//  GetHitsMap(..).
-//
+///
+///  (Description)
+///    DicomRun Class is for accumulating scored quantities which is 
+///  scored using G4MutiFunctionalDetector and G4VPrimitiveScorer.
+///  Accumulation is done using G4THitsMap object.
+///
+///    The constructor DicomRun(const std::vector<G4String> mfdName)
+///  needs a vector filled with MultiFunctionalDetector names which
+///  was assigned at instantiation of MultiFunctionalDetector(MFD).
+///  Then DicomRun constructor automatically scans primitive scorers
+///  in the MFD, and obtains collectionIDs of all collections associated
+///  to those primitive scorers. Futhermore, the G4THitsMap objects 
+///  for accumulating during a RUN are automatically created too.
+///  (*) Collection Name is same as primitive scorer name.
+/// 
+///    The resultant information is kept inside DicomRun objects as
+///  data members.
+///  std::vector<G4String> fCollName;            // Collection Name,
+///  std::vector<G4int> fCollID;                 // Collection ID,
+///  std::vector<G4THitsMap<G4double>*> fRunMap; // HitsMap for RUN.
+///
+///  The resualtant HitsMap objects are obtain using access method,
+///  GetHitsMap(..).
+///
 //=====================================================================
 
 #include "DicomRun.hh"
@@ -61,6 +63,7 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //  Constructor. 
 //   (The vector of MultiFunctionalDetector name has to given.)
@@ -79,47 +82,49 @@ DicomRun::DicomRun(const std::vector<G4String> mfdName): G4Run()
       (G4MultiFunctionalDetector*)(SDman->FindSensitiveDetector(detName));
     //
     if ( mfd ){
-	//--- Loop over the registered primitive scorers.
-	for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++){
-	    // Get Primitive Scorer object.
-	    G4VPrimitiveScorer* scorer=mfd->GetPrimitive(icol);
-	    // collection name and collectionID for HitsCollection,
+        //--- Loop over the registered primitive scorers.
+        for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++){
+            // Get Primitive Scorer object.
+            G4VPrimitiveScorer* scorer=mfd->GetPrimitive(icol);
+            // collection name and collectionID for HitsCollection,
             // where type of HitsCollection is G4THitsMap in case of primitive scorer.
             // The collection name is given by <MFD name>/<Primitive Scorer name>.
-	    G4String collectionName = scorer->GetName();
-	    G4String fullCollectionName = detName+"/"+collectionName;
-	    G4int    collectionID = SDman->GetCollectionID(fullCollectionName);
-	    //
-	    if ( collectionID >= 0 ){
-		G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
-		// Store obtained HitsCollection information into data members.
-		// And, creates new G4THitsMap for accumulating quantities during RUN.
-		theCollName.push_back(fullCollectionName);
-		theCollID.push_back(collectionID);
-		theRunMap.push_back(new G4THitsMap<G4double>(detName,collectionName));
-	    }else{
-		G4cout << "** collection " << fullCollectionName << " not found. "<<G4endl;
-	    }
-	}
+            G4String collectionName = scorer->GetName();
+            G4String fullCollectionName = detName+"/"+collectionName;
+            G4int    collectionID = SDman->GetCollectionID(fullCollectionName);
+            //
+            if ( collectionID >= 0 ){
+                G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
+                // Store obtained HitsCollection information into data members.
+                // And, creates new G4THitsMap for accumulating quantities during RUN.
+                fCollName.push_back(fullCollectionName);
+                fCollID.push_back(collectionID);
+                fRunMap.push_back(new G4THitsMap<G4double>(detName,collectionName));
+            }else{
+                G4cout << "** collection " << fullCollectionName << " not found. "<<G4endl;
+            }
+        }
     }
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Destructor
 //    clear all data members.
 DicomRun::~DicomRun()
 {
   //--- Clear HitsMap for RUN
-  G4int Nmap = theRunMap.size();
+  G4int Nmap = fRunMap.size();
   for ( G4int i = 0; i < Nmap; i++){
-    if(theRunMap[i] ) theRunMap[i]->clear();
+    if(fRunMap[i] ) fRunMap[i]->clear();
   }
-  theCollName.clear();
-  theCollID.clear();
-  theRunMap.clear();
+  fCollName.clear();
+  fCollID.clear();
+  fRunMap.clear();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //  RecordEvent is called at end of event.
 //  For scoring purpose, the resultant quantity in a event,
@@ -137,17 +142,17 @@ void DicomRun::RecordEvent(const G4Event* aEvent)
   //=======================================================
   // Sum up HitsMap of this Event  into HitsMap of this RUN
   //=======================================================
-  G4int Ncol = theCollID.size();
+  G4int Ncol = fCollID.size();
   for ( G4int i = 0; i < Ncol ; i++ ){  // Loop over HitsCollection
     G4THitsMap<G4double>* EvtMap=0;
-    if ( theCollID[i] >= 0 ){           // Collection is attached to HCE
-      EvtMap = (G4THitsMap<G4double>*)(HCE->GetHC(theCollID[i]));
+    if ( fCollID[i] >= 0 ){           // Collection is attached to HCE
+      EvtMap = (G4THitsMap<G4double>*)(HCE->GetHC(fCollID[i]));
     }else{
       G4cout <<" Error EvtMap Not Found "<< i << G4endl;
     }
     if ( EvtMap )  {
       //=== Sum up HitsMap of this event to HitsMap of RUN.===
-      *theRunMap[i] += *EvtMap;
+      *fRunMap[i] += *EvtMap;
       //======================================================
     }
   }
@@ -155,6 +160,7 @@ void DicomRun::RecordEvent(const G4Event* aEvent)
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //=================================================================
 //  Access method for HitsMap of the RUN
 //
@@ -162,21 +168,21 @@ void DicomRun::RecordEvent(const G4Event* aEvent)
 // Access HitsMap.
 //  By  MultiFunctionalDetector name and Collection Name.
 G4THitsMap<G4double>* DicomRun::GetHitsMap(const G4String& detName,
-					 const G4String& colName){
+                                         const G4String& colName){
     G4String fullName = detName+"/"+colName;
     return GetHitsMap(fullName);
 }
 
-//-----
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Access HitsMap.
 //  By full description of collection name, that is
 //    <MultiFunctional Detector Name>/<Primitive Scorer Name>
 G4THitsMap<G4double>* DicomRun::GetHitsMap(const G4String& fullName){
-    G4int Ncol = theCollName.size();
+    G4int Ncol = fCollName.size();
     for ( G4int i = 0; i < Ncol; i++){
-	if ( theCollName[i] == fullName ){
-	    return theRunMap[i];
-	}
+        if ( fCollName[i] == fullName ){
+            return fRunMap[i];
+        }
     }
     return NULL;
 }

@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/H02PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the H02PrimaryGeneratorMessenger class
+//
 // ====================================================================
 //
 //   H02PrimaryGeneratorMessenger.cc
-//   $Id: H02PrimaryGeneratorMessenger.cc,v 1.3 2006-06-29 17:11:51 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #include "G4UIcommand.hh"
@@ -74,13 +77,13 @@ H02PrimaryGeneratorMessenger::~H02PrimaryGeneratorMessenger()
 
 ///////////////////////////////////////////////////////////////////
 void H02PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, 
-					      G4String newValues)
+                                              G4String newValues)
 ///////////////////////////////////////////////////////////////////
 {
   if ( command==select) {
     primaryAction-> SetGenerator(newValues);
     G4cout << "current generator type: " 
-	    << primaryAction-> GetGeneratorName() << G4endl;
+            << primaryAction-> GetGeneratorName() << G4endl;
   } else {
   }
 }

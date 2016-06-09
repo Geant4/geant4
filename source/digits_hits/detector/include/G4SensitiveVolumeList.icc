@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SensitiveVolumeList.icc,v 1.2 2006-06-29 18:05:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------
 //      Inline functions of GEANT 4 class header file.

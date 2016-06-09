@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.7 2010-10-13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbMaterialMixtureByNoAtoms
@@ -35,6 +34,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbMaterialMixtureByNoAtoms.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgbMaterial.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgrMessenger.hh"

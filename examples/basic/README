@@ -16,7 +16,7 @@ $Id: README,v 1.16 2010-11-29 10:34:36 gcosmo Exp $
    - Simple geometry with a few solids 
    - Geometry with simple placements (G4PVPlacement)
    - Scoring total dose in a selected volume user action classes
-   - Geant4 physics list (QGSP_BIC_EMY)
+   - Geant4 physics list (QBBC)
    
  ExampleB2
    - Simplified tracker geometry with global constant magnetic field
@@ -39,4 +39,5 @@ $Id: README,v 1.16 2010-11-29 10:34:36 gcosmo Exp $
    - Scoring within layers in four ways: via user actions (a), via user own 
      object (b), via G4 sensitive detector and hits (c) and via scorers (d)
    - Geant4 physics list (FTFP_BERT)
+   - UI commans defined using G4GenericMessenger
    - Started from novice/N03 example

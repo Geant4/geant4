@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.35 2006/06/29 19:42:06 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //  
 // -----------------------------------------------------------
@@ -66,6 +66,7 @@
 // --------------------------------------------------------------
 
 #include "G4eLowEnergyLoss.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
 #include "G4ProductionCutsTable.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.18 2010-05-30 11:15:36 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -184,6 +183,23 @@ public: // With description
 
   virtual void Draw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  //////////////////////////////////////////////////////////////////////
+  // Optional methods that you may use to bracket a series of Draw
+  // messages that have identical objectTransformation to improve
+  // drawing speed.  Use Begin/EndDraw for a series of Draw messages,
+  // Begin/EndDraw2D for a series of Draw2D messages.  Do not mix Draw
+  // and Draw2D messages.
+
+  virtual void BeginDraw
+  (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void EndDraw () = 0;
+
+  virtual void BeginDraw2D
+  (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void EndDraw2D () = 0;
 
   //////////////////////////////////////////////////////////////////////
   // Other methods...

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04DetectorParameterDef.hh
+/// \brief Definition of the ExN04DetectorParameterDef class
+//
 
      G4double expHall_x;
      G4double expHall_y;

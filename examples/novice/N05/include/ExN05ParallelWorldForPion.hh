@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05ParallelWorldForPion.hh,v 1.1 2006-11-03 17:58:49 mverderi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef ExN05ParallelWorldForPion_hh
 #define ExN05ParallelWorldForPion_hh

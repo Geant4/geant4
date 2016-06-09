@@ -53,11 +53,12 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpIsoDir.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
+// $Id$
 //
 
 #include <cmath>
 #include "G4fissionEvent.hh"
+#include "G4PhysicalConstants.hh"
 
 void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double* cosdirw) {
 

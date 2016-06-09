@@ -9,6 +9,7 @@ G4PY_INCFLAGS := -I$(Q_G4_INCDIR)
 G4PY_LOPT := -L$(Q_G4_LIBDIR) \
              -lG4persistency \
              -lG4readout \
+             -lG4physicslists \
              -lG4run \
              -lG4event \
              -lG4tracking \
@@ -22,17 +23,12 @@ G4PY_LOPT := -L$(Q_G4_LIBDIR) \
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4interfaces \
-             -lG4global
-
-ifeq ($(Q_ENABLE_PHYSICSLIST), 1)
-G4PY_LOPT += -lG4physicslists
-endif
+             -lG4global \
+             -lG4clhep
 
 include $(G4PY_INSTALL)/config/g4vis.gmk
 G4PY_LOPT += $(G4PY_VISLIBS)
 
-G4PY_INCFLAGS += -I$(Q_CLHEP_INCDIR)
-G4PY_LOPT += -L$(Q_CLHEP_LIBDIR) -l$(Q_CLHEP_LIB)
 G4PY_LOPT += -lm -lz -lexpat
 
 # geant4 version

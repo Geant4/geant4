@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10CalorHit.cc
+/// \brief Implementation of the Em10CalorHit class
 //
-// $Id: Em10CalorHit.cc,v 1.4 2006-06-29 16:38:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 

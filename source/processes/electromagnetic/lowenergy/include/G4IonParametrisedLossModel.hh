@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonParametrisedLossModel.hh,v 1.8 2010-11-04 12:21:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ===========================================================================
 // GEANT4 class header file
@@ -68,13 +67,15 @@
 #ifndef G4IONPARAMETRISEDLOSSMODEL_HH
 #define G4IONPARAMETRISEDLOSSMODEL_HH
 
-#include "G4VEmModel.hh"
-#include "G4EmCorrections.hh"
-#include "G4IonDEDXHandler.hh"
 #include <iomanip>
 #include <list>
 #include <map>
 #include <utility>
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "G4VEmModel.hh"
+#include "G4EmCorrections.hh"
+#include "G4IonDEDXHandler.hh"
 
 class G4BraggIonModel;
 class G4BetheBlochModel;

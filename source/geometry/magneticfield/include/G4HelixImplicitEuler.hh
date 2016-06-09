@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixImplicitEuler.hh,v 1.8 2006-06-29 18:22:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4HelixImplicitEuler

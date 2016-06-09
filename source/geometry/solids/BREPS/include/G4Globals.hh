@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Globals.hh,v 1.5 2006-06-29 18:39:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: A.Breakstone
 // Adaptation: J.Sulkimo, P.Urban.

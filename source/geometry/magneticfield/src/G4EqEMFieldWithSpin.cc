@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.9 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -40,6 +39,8 @@
 #include "G4ElectroMagneticField.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
   : G4EquationOfMotion( emField ), fElectroMagCof(0.), fMassCof(0.),

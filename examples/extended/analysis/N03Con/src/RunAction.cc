@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/src/RunAction.cc
+/// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,32 +60,32 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //initialize cumulative quantities
   //
-  sumEAbs = sum2EAbs =sumEGap = sum2EGap = 0.;
-  sumLAbs = sum2LAbs =sumLGap = sum2LGap = 0.;
+  fSumEAbs = fSum2EAbs = fSumEGap = fSum2EGap = 0.;
+  fSumLAbs = fSum2LAbs = fSumLGap = fSum2LGap = 0.;
 
-  Eabs_tally = new G4ConvergenceTester();
-  Egap_tally = new G4ConvergenceTester();
-  Labs_tally = new G4ConvergenceTester();
-  Lgap_tally = new G4ConvergenceTester();   
+  fEabs_tally = new G4ConvergenceTester();
+  fEgap_tally = new G4ConvergenceTester();
+  fLabs_tally = new G4ConvergenceTester();
+  fLgap_tally = new G4ConvergenceTester();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
-                                  G4double LAbs, G4double LGap)
+void RunAction::FillPerEvent(G4double eAbs, G4double eGap,
+                                  G4double lAbs, G4double lGap)
 {
   //accumulate statistic
   //
-  sumEAbs += EAbs;  sum2EAbs += EAbs*EAbs;
-  sumEGap += EGap;  sum2EGap += EGap*EGap;
+  fSumEAbs += eAbs;  fSum2EAbs += eAbs*eAbs;
+  fSumEGap += eGap;  fSum2EGap += eGap*eGap;
   
-  sumLAbs += LAbs;  sum2LAbs += LAbs*LAbs;
-  sumLGap += LGap;  sum2LGap += LGap*LGap;
+  fSumLAbs += lAbs;  fSum2LAbs += lAbs*lAbs;
+  fSumLGap += lGap;  fSum2LGap += lGap*lGap;
 
-  Eabs_tally->AddScore( EAbs ); 
-  Egap_tally->AddScore( EGap ); 
-  Labs_tally->AddScore( LAbs ); 
-  Lgap_tally->AddScore( LGap );     
+  fEabs_tally->AddScore( eAbs ); 
+  fEgap_tally->AddScore( eGap ); 
+  fLabs_tally->AddScore( lAbs ); 
+  fLgap_tally->AddScore( lGap );     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,49 +97,49 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //compute statistics: mean and rms
   //
-  sumEAbs /= NbOfEvents; sum2EAbs /= NbOfEvents;
-  G4double rmsEAbs = sum2EAbs - sumEAbs*sumEAbs;
+  fSumEAbs /= NbOfEvents; fSum2EAbs /= NbOfEvents;
+  G4double rmsEAbs = fSum2EAbs - fSumEAbs*fSumEAbs;
   if (rmsEAbs >0.) rmsEAbs = std::sqrt(rmsEAbs); else rmsEAbs = 0.;
   
-  sumEGap /= NbOfEvents; sum2EGap /= NbOfEvents;
-  G4double rmsEGap = sum2EGap - sumEGap*sumEGap;
+  fSumEGap /= NbOfEvents; fSum2EGap /= NbOfEvents;
+  G4double rmsEGap = fSum2EGap - fSumEGap*fSumEGap;
   if (rmsEGap >0.) rmsEGap = std::sqrt(rmsEGap); else rmsEGap = 0.;
   
-  sumLAbs /= NbOfEvents; sum2LAbs /= NbOfEvents;
-  G4double rmsLAbs = sum2LAbs - sumLAbs*sumLAbs;
+  fSumLAbs /= NbOfEvents; fSum2LAbs /= NbOfEvents;
+  G4double rmsLAbs = fSum2LAbs - fSumLAbs*fSumLAbs;
   if (rmsLAbs >0.) rmsLAbs = std::sqrt(rmsLAbs); else rmsLAbs = 0.;
   
-  sumLGap /= NbOfEvents; sum2LGap /= NbOfEvents;
-  G4double rmsLGap = sum2LGap - sumLGap*sumLGap;
+  fSumLGap /= NbOfEvents; fSum2LGap /= NbOfEvents;
+  G4double rmsLGap = fSum2LGap - fSumLGap*fSumLGap;
   if (rmsLGap >0.) rmsLGap = std::sqrt(rmsLGap); else rmsLGap = 0.;
   
   //print
   //
   G4cout
      << "\n--------------------End of Run------------------------------\n"
-     << "\n mean Energy in Absorber : " << G4BestUnit(sumEAbs,"Energy")
+     << "\n mean Energy in Absorber : " << G4BestUnit(fSumEAbs,"Energy")
      << " +- "                          << G4BestUnit(rmsEAbs,"Energy")  
-     << "\n mean Energy in Gap      : " << G4BestUnit(sumEGap,"Energy")
+     << "\n mean Energy in Gap      : " << G4BestUnit(fSumEGap,"Energy")
      << " +- "                          << G4BestUnit(rmsEGap,"Energy")
      << G4endl;
      
   G4cout
-     << "\n mean trackLength in Absorber : " << G4BestUnit(sumLAbs,"Length")
+     << "\n mean trackLength in Absorber : " << G4BestUnit(fSumLAbs,"Length")
      << " +- "                               << G4BestUnit(rmsLAbs,"Length")  
-     << "\n mean trackLength in Gap      : " << G4BestUnit(sumLGap,"Length")
+     << "\n mean trackLength in Gap      : " << G4BestUnit(fSumLGap,"Length")
      << " +- "                               << G4BestUnit(rmsLGap,"Length")
      << "\n------------------------------------------------------------\n"
      << G4endl;
 
-  Eabs_tally->ShowResult();
-  Eabs_tally->ShowHistory();
-  Egap_tally->ShowResult();
-  Egap_tally->ShowHistory();
+  fEabs_tally->ShowResult();
+  fEabs_tally->ShowHistory();
+  fEgap_tally->ShowResult();
+  fEgap_tally->ShowHistory();
 
-  Labs_tally->ShowResult();
-  Labs_tally->ShowHistory();
-  Lgap_tally->ShowResult();
-  Lgap_tally->ShowHistory();     
+  fLabs_tally->ShowResult();
+  fLabs_tally->ShowHistory();
+  fLgap_tally->ShowResult();
+  fLgap_tally->ShowHistory();     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

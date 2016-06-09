@@ -29,12 +29,13 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAstronautDecorator.cc,v 1.7 2006-06-29 16:23:33 gunter Exp $
+// $Id$
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimMaterial.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "RemSimAstronautDecorator.hh"

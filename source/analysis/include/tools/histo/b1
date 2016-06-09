@@ -29,12 +29,12 @@ public:
   }
   TC mean() const {
     TC value;
-    this->get_ith_axis_mean(AxisX,value); //can return false.
+    parent::get_ith_axis_mean(AxisX,value); //can return false.
     return value;
   }
   TC rms() const {
     TC value;
-    this->get_ith_axis_rms(AxisX,value); //can return false.
+    parent::get_ith_axis_rms(AxisX,value); //can return false.
     return value;
   }
 
@@ -50,14 +50,14 @@ public:
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
-    return parent::m_bin_Sw(offset);
+    return parent::m_bin_Sw[offset];
   }
 
   TW bin_Sw2(int aI) const {
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
-    return parent::m_bin_Sw2(offset);
+    return parent::m_bin_Sw2[offset];
   }
   TC bin_Sxw(int aI) const {
     if(parent::m_bin_number==0) return 0;
@@ -98,8 +98,8 @@ public:
     if(sw==0) return 0;
     TC sxw = parent::m_bin_Sxw[offset][AxisX];
     TC sx2w = parent::m_bin_Sx2w[offset][AxisX];
-    TC mean = sxw/sw;
-    return ::sqrt(::fabs((sx2w / sw) - mean * mean));
+    TC _mean = sxw/sw;
+    return ::sqrt(::fabs((sx2w / sw) - _mean * _mean));
   }
 
   // Axis :
@@ -151,15 +151,15 @@ public:
   }
 protected:
   b1(const std::string& a_title,
-             bn_t aXnumber,TC aXmin,TC aXmax){
+     bn_t aXnumber,TC aXmin,TC aXmax){
     parent::m_title = a_title;
-    std::vector<bn_t> ns;
-    ns.push_back(aXnumber);
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
     std::vector<TC> mins;
     mins.push_back(aXmin);
     std::vector<TC> maxs;
     maxs.push_back(aXmax);
-    parent::configure(1,ns,mins,maxs);
+    parent::configure(1,nbins,mins,maxs);
   }
   b1(const std::string& a_title,const std::vector<TC>& aEdges) {
     parent::m_title = a_title;
@@ -178,6 +178,23 @@ protected:
     update_fast_getters();
     return *this;
   }
+
+public:
+  bool configure(bn_t aXnumber,TC aXmin,TC aXmax){
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
+    std::vector<TC> mins;
+    mins.push_back(aXmin);
+    std::vector<TC> maxs;
+    maxs.push_back(aXmax);
+    return parent::configure(1,nbins,mins,maxs);
+  }
+  bool configure(const std::vector<TC>& aEdges) {
+    std::vector< std::vector<TC> > edges(1);
+    edges[0] = aEdges;
+    return parent::configure(1,edges);
+  }
+
 };
 
 }}

@@ -14,6 +14,26 @@ modifications introduced in the code and keep track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24/08/2012 - I.Hrivnacova (p6decayer-V09-05-02)
+- Fixed documentation files
+
+05/06/2012 - I.Hrivnacova (p6decayer-V09-05-01)
+-------------------------
+- Updated pythia6_decayer.in macro:
+  - added initialization (now required)
+  - added call to /pythia6Decayer/verbose
+- Fixed SharedFilesList.txt
+- Limited G4Pythia6Decayer verbose levels to 0, 1
+- Updated reference output
+- Updated Pythia6 version in README file
+
+11/04/2012 - I.Hrivnacova (p6decayer-V09-05-00)
+-------------------------
+- Introduced use of classes from common
+- Introduced a physics builder for adding the external decayer to
+  an existing physics list 
+- Applied coding guidelines
+
 02/12/2010 - I.Hrivnacova (p6decayer-V09-03-02)
 -------------------------
 - Migrated to use particle-based multiple-scattering.

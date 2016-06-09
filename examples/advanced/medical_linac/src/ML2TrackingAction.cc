@@ -58,7 +58,7 @@ void CML2TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
  {
    if(aTrack->GetParentID()!=0)
    {
-	   this->fpTrackingManager->SetStoreTrajectory(true); 
+	   fpTrackingManager->SetStoreTrajectory(true); 
    }
 }
 

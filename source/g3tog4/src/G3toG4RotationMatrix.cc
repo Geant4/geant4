@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4RotationMatrix.cc,v 1.4 2006-06-29 18:13:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G3toG4RotationMatrix.hh"
 
@@ -48,40 +47,40 @@ G3toG4RotationMatrix::~G3toG4RotationMatrix()
 }
 
 void 
-G3toG4RotationMatrix::SetRotationMatrixByCol(const G4ThreeVector& col1,
-                                             const G4ThreeVector& col2,
-                                             const G4ThreeVector& col3)
+G3toG4RotationMatrix::SetRotationMatrixByCol(const G4ThreeVector& cl1,
+                                             const G4ThreeVector& cl2,
+                                             const G4ThreeVector& cl3)
 {
-  rxx = col1.x();
-  ryx = col1.y();
-  rzx = col1.z();
+  rxx = cl1.x();
+  ryx = cl1.y();
+  rzx = cl1.z();
   
-  rxy = col2.x();
-  ryy = col2.y();
-  rzy = col2.z();
+  rxy = cl2.x();
+  ryy = cl2.y();
+  rzy = cl2.z();
   
-  rxz = col3.x();
-  ryz = col3.y();
-  rzz = col3.z();
+  rxz = cl3.x();
+  ryz = cl3.y();
+  rzz = cl3.z();
   
 }
 
 void 
-G3toG4RotationMatrix::SetRotationMatrixByRow(const G4ThreeVector& row1,
-                                             const G4ThreeVector& row2,
-                                             const G4ThreeVector& row3)
+G3toG4RotationMatrix::SetRotationMatrixByRow(const G4ThreeVector& rw1,
+                                             const G4ThreeVector& rw2,
+                                             const G4ThreeVector& rw3)
 {
-  rxx = row1.x();
-  rxy = row1.y();
-  rxz = row1.z();
+  rxx = rw1.x();
+  rxy = rw1.y();
+  rxz = rw1.z();
   
-  ryx = row2.x();
-  ryy = row2.y();
-  ryz = row2.z();
+  ryx = rw2.x();
+  ryy = rw2.y();
+  ryz = rw2.z();
   
-  rzx = row3.x();
-  rzy = row3.y();
-  rzz = row3.z();
+  rzx = rw3.x();
+  rzy = rw3.y();
+  rzz = rw3.z();
   
 }
 

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.6 2010-06-06 04:53:49 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/monopole.cc
+/// \brief Main program of the exoticphysics/monopole example
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +38,8 @@
 
 #include "DetectorConstruction.hh"
 #include "G4MonopolePhysics.hh"
-#include "QGSP_BERT.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -57,22 +60,27 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  //CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  //CLHEP::HepRandom::setTheEngine(new CLHEP::Ranlux64Engine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine);
 
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   //create physicsList
-  QGSP_BERT* phys = new QGSP_BERT();
+  // Physics List is defined via environment variable PHYSLIST
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys = factory.ReferencePhysList(); 
+ 
+  // monopole physics is added
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
   phys->RegisterPhysics(theMonopole);
     
-	// visualization manager
+  // visualization manager
 #ifdef G4VIS_USE
-	G4VisManager* visManager = new G4VisExecutive;
-	visManager->Initialize();
+  G4VisManager* visManager = 0;
 #endif
-	
+        
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
@@ -97,7 +105,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(run = new RunAction(det, kin));
   runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new TrackingAction(run));
-  runManager->SetUserAction(new SteppingAction(det, run));
+  runManager->SetUserAction(new SteppingAction(run));
 
   if (argc!=1)   // batch mode
     {
@@ -107,6 +115,11 @@ int main(int argc,char** argv) {
     }
   else
     {  // interactive mode : define UI session
+#ifdef G4VIS_USE
+      //visualization manager
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       ui->SessionStart();

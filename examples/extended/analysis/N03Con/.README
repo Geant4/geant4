@@ -1,0 +1,100 @@
+//$Id$
+
+///\file "analysis/N03Con/.README"
+///\brief Example N03Con README page
+
+/*! \page ExampleN03Con Example N03Con
+
+
+Example of Convergence Tester 
+
+          Koi, Tatsumi \n
+          SLAC / SCCS  \n
+          tkoi@slac.stanford.eedu \n
+
+This example shows how to use convergece tester in Geant4.
+The aim of Convergence Tester
+- After a Monte Carlo simulation, we get an answer. However how to estimate quality of the answer.
+
+What we must remember is
+- Large number of history does not valid result of simulation.
+- Small Relative Error does not valid result of simulation
+To provide statistical information to assist establishing valid confidence intervals for Monte Carlo results for users.
+
+Geometry and Physics are same to exampleN03. Please see README.N03
+
+<pre>
+***********************************************************************************************************************
+Output example
+
+// Part I.A
+// Basic statistics values 
+
+EFFICIENCY = 0.99438477
+MEAN = 78.477718
+VAR = 225.50178
+SD = 15.016717
+R = 0.0029898448
+SHIFT = -13.902917
+VOV = 0.0019924127
+FOM = 909.19362
+
+// Part I.B
+// If the largeset scored events happen at next to the last event, 
+// then how much the event effects the statistics values of the calculation
+
+THE LARGEST SCORE = 117.3797 and it happend at 510th event
+Affected Mean = 78.487213 and its ratio to orignal is 1.000121
+Affected VAR = 225.81611 and its ratio to orignal is 1.0013939
+Affected R = 0.0029912008 and its ratio to orignal is 1.0004535
+Affected SHIFT = -13.862598 and its ratio to orignal is 0.99709995
+Affected FOM = 908.89814 and its ratio to orignal is 0.99967501
+
+// Part I.C
+// Convergence tests results
+
+MEAN distribution is not RANDOM
+r follows 1/sqrt(N)
+r is monotonically decrease 1
+r is less than 0.1. r = 0.0029898448
+VOV follows 1/sqrt(N)
+VOV is monotonically decrease 1
+FOM distribution is RANDOM
+SLOPE is large enough
+This result passes 7 / 8 Convergence Test.
+
+// Part II
+// Profile of statistics values in the history 
+
+i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
+1 255 76.935633 252.45045 15.888689 0.012907453 0.038596366 787.70557 -17.661167 0.984375 6.2003968e-05 0.00010394759
+2 511 77.389232 257.4632 16.04566 0.0091630923 0.017298474 773.88648 -16.441348 0.98632812 2.707302e-05 5.6725251e-05
+3 767 77.665817 248.62651 15.767895 0.0073259372 0.012144321 826.64625 -16.585523 0.98828125 1.5439723e-05 3.8159751e-05
+4 1023 77.969112 245.54395 15.669842 0.0062804686 0.0086792682 841.98653 -16.027547 0.99023438 9.6307939e-06 2.9774973e-05
+5 1279 78.061919 228.9236 15.130221 0.0054175269 0.0067481801 897.34046 -14.687306 0.9921875 6.1515748e-06 2.3175093e-05
+6 1535 77.870133 231.84589 15.226486 0.004989226 0.0054405699 879.44272 -14.43874 0.99283854 4.6960383e-06 2.0180132e-05
+7 1791 78.045703 224.72573 14.990855 0.004537414 0.0046643478 908.22153 -14.045519 0.99386161 3.446599e-06 1.7130038e-05
+8 2047 78.107287 226.09338 15.036402 0.0042539011 0.0041397452 902.08658 -14.202387 0.99365234 3.1192414e-06 1.4967598e-05
+9 2303 78.129941 222.08125 14.902391 0.0039737195 0.0036662056 916.62223 -13.945849 0.99392361 2.6534449e-06 1.3130148e-05
+10 2559 78.225505 223.59764 14.953181 0.0037780287 0.0032772248 910.22344 -13.934949 0.99414062 2.3023084e-06 1.1965617e-05
+11 2815 78.250797 222.51845 14.917052 0.003592344 0.0029353727 915.19704 -13.768958 0.99431818 2.0292208e-06 1.0871132e-05
+12 3071 78.377339 220.83103 14.860385 0.0034208098 0.002628038 928.36413 -13.3624 0.99479167 1.7042976e-06 9.9938329e-06
+13 3327 78.364284 221.49591 14.882739 0.0032921001 0.0024634602 923.51719 -13.660307 0.99489183 1.5427886e-06 9.2918778e-06
+14 3583 78.464175 220.63749 14.853871 0.0031621629 0.0022668889 928.57248 -13.539324 0.99497768 1.4083908e-06 8.5880937e-06
+15 3839 78.420541 224.71581 14.990524 0.0030847599 0.002080651 911.9934 -13.68267 0.99479167 1.363438e-06 8.1498278e-06
+16 4095 78.477718 225.50178 15.016717 0.0029898448 0.0019924127 909.4893 -13.902917 0.99438477 1.3786483e-06 7.5583414e-06
+
+
+**************************************************************************************************************************
+</pre>
+
+Reference of this Convergence tests: \n
+MCNP(TM) -A General Monte Carlo N-Particle Transport Code \n
+Version 4B \n
+Judith F. Briesmeister, Editor \n
+LA-12625-M, Issued: March 1997, UC 705 and UC 700 \n
+CHAPTER 2. GEOMETRY, DATA, PHYSICS, AND MATHEMATICS \n
+       VI. ESTIMATION OF THE MONTE CARLO PRECISION  \n
+       
+*/       
+

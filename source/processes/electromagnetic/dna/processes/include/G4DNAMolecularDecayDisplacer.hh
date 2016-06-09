@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMolecularDecayDisplacer.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -56,11 +57,13 @@ public :
     G4DLLEXPORT static const DisplacementType A1B1_DissociationDecay;
     G4DLLEXPORT static const DisplacementType B1A1_DissociationDecay;
     G4DLLEXPORT static const DisplacementType AutoIonisation;
+    G4DLLEXPORT static const DisplacementType DissociativeAttachment;
 #else
     G4DLLIMPORT static const DisplacementType Ionisation_DissociationDecay;
     G4DLLIMPORT static const DisplacementType A1B1_DissociationDecay;
     G4DLLIMPORT static const DisplacementType B1A1_DissociationDecay;
     G4DLLIMPORT static const DisplacementType AutoIonisation;
+    G4DLLEXPORT static const DisplacementType DissociativeAttachment;
 #endif
 
 private :

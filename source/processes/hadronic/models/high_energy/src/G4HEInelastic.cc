@@ -25,9 +25,6 @@
 //
 //
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 //
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
@@ -43,6 +40,10 @@
 // Fesefeldt, fixed next bug in TuningOfHighEnergyCascading, 14 August 2000
 //
 #include "G4HEInelastic.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HEVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
@@ -149,8 +150,8 @@ G4HEInelastic::NuclearInelasticity(G4double incidentKineticEnergy,
                                    G4double atomicWeight,
                                    G4double /* atomicNumber*/)
   {
-    G4double expu   = std::log(MAXFLOAT);
-    G4double expl   = -expu;
+    G4double expu = 82.;
+    G4double expl = -expu;
     G4double ala    = std::log(atomicWeight);
     G4double ale    = std::log(incidentKineticEnergy);
     G4double sig1   = 0.5;
@@ -229,17 +230,18 @@ G4HEInelastic::NuclearExcitation(G4double  incidentKineticEnergy,
   }     
      
 G4double 
-G4HEInelastic::pmltpc(G4int np, G4int nm, G4int nz, G4int n, 
+G4HEInelastic::pmltpc(G4int npos, G4int nneg, G4int nzero, G4int n, 
                       G4double b, G4double c)
  { 
-   G4double expxu = std::log(MAXFLOAT);
+   G4double expxu = 82.;
    G4double expxl = -expxu;
    G4int i;
    G4double npf = 0.0, nmf = 0.0, nzf = 0.0;
-   for(i=2;i<=np;i++) npf += std::log((G4double)i);
-   for(i=2;i<=nm;i++) nmf += std::log((G4double)i);
-   for(i=2;i<=nz;i++) nzf += std::log((G4double)i);
-   G4double r = Amin(expxu,Amax(expxl,-(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf));
+   for(i=2;i<=npos;i++) npf += std::log((G4double)i);
+   for(i=2;i<=nneg;i++) nmf += std::log((G4double)i);
+   for(i=2;i<=nzero;i++) nzf += std::log((G4double)i);
+   G4double r = Amin(expxu,Amax(expxl,
+                               -(npos-nneg+nzero+b)*(npos-nneg+nzero+b)/(2*c*c*n*n)-npf-nmf-nzf));
    return std::exp(r);
  }
 
@@ -261,47 +263,43 @@ G4double G4HEInelastic::normal()
    return ran;
  }
 
-G4int G4HEInelastic::Poisson( G4double x )
- {
-   G4int i, iran = 0;
-   G4double ran;
-   if ( x > 9.9 )
-      {
-        iran = G4int( Amax( 0.0, x + normal() * std::sqrt( x ) ) );
-      }
-   else
-      {
-        G4int mm = G4int( 5.0 * x );
-        if ( mm <= 0 )
-	   {
-             G4double p1 = x * std::exp( -x );
-             G4double p2 = x * p1/2.;
-             G4double p3 = x * p2/3.;
-             ran = G4UniformRand();
-             if      ( ran < p3 ) iran = 3;
-             else if ( ran < p2 ) iran = 2;
-             else if ( ran < p1 ) iran = 1;
-           }
-        else
-	   { G4double r = std::exp( -x );
-             ran = G4UniformRand();
-             if (ran > r)
-	        {
-                  G4double rrr;
-                  G4double rr = r;
-                  for (i=1; i <= mm; i++)
-		      {
-                        iran++;
-                        if ( i > 5 ) rrr = std::exp(i*std::log(x)-(i+0.5)*std::log((G4double)i)+i-0.9189385);
-                        else     rrr = std::pow(x,i)*Factorial(i);
-                        rr += r * rrr;
-                        if (ran <= rr) break;
-		      }
-		}         
-	   }
-      }
-   return iran;
- }
+
+G4int G4HEInelastic::Poisson(G4double x)
+{
+  G4int i, iran = 0;
+  G4double ran;
+  if (x > 9.9) {
+    iran = G4int( Amax( 0.0, x + normal() * std::sqrt( x ) ) );
+  } else {
+    G4int fivex = G4int(5.0 * x);
+    if (fivex <= 0) {
+      G4double p1 = x * std::exp( -x );
+      G4double p2 = x * p1/2.;
+      G4double p3 = x * p2/3.;
+      ran = G4UniformRand();
+      if (ran < p3) iran = 3;
+      else if ( ran < p2 ) iran = 2;
+      else if ( ran < p1 ) iran = 1;
+    } else {
+      G4double r = std::exp(-x);
+      ran = G4UniformRand();
+      if (ran > r) {
+        G4double rrr;
+        G4double rr = r;
+        for (i = 1; i <= fivex; i++) {
+          iran++;
+          if (i > 5) rrr = std::exp(i*std::log(x)-(i+0.5)*std::log((G4double)i)+i-0.9189385);
+          else rrr = std::pow(x,i)*Factorial(i);
+          rr += r * rrr;
+          if (ran <= rr) break;
+        }
+      }         
+    }
+  }
+  return iran;
+}
+
+
 G4double 
 G4HEInelastic::GammaRand( G4double avalue )
  {
@@ -708,46 +706,41 @@ G4HEInelastic::HighEnergyCascading(G4bool& successful,
   // for kaon induced reactions only 
   // (need from experimental data)
 
-   if(   (incidentCode==kaonPlusCode  || incidentCode==kaonMinusCode    ||
-          incidentCode==kaonZeroCode  || incidentCode==antiKaonZeroCode ||
-          incidentCode==kaonZeroSCode || incidentCode==kaonZeroLCode)   
-      && (G4UniformRand() > 0.9) ) 
-     {
-         pTemp = pv[1];
-         pv[1] = pv[0];
-         pv[0] = pTemp;
-     }
-         // mark leading particles for incident strange particles 
-         // and antibaryons, for all other we assume that the first 
-         // and second particle are the leading particles. 
-         // We need this later for kinematic aspects of strangeness
-         // conservation.
+  if ((incidentCode==kaonPlusCode  || incidentCode==kaonMinusCode    ||
+       incidentCode==kaonZeroCode  || incidentCode==antiKaonZeroCode ||
+       incidentCode==kaonZeroSCode || incidentCode==kaonZeroLCode)   
+      && (G4UniformRand() > 0.9) ) {
+    pTemp = pv[1];
+    pv[1] = pv[0];
+    pv[0] = pTemp;
+  }
+
+  // mark leading particles for incident strange particles 
+  // and antibaryons, for all other we assume that the first 
+  // and second particle are the leading particles. 
+  // We need this later for kinematic aspects of strangeness
+  // conservation.
                           
-   G4int lead = 0;                   
-   G4HEVector leadParticle;
-   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode) 
-                                           && (incidentCode != neutronCode) ) 
-         {       
-           G4double pMass = pv[0].getMass();
-           G4int    pCode = pv[0].getCode();
-           if( (pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
-                                            && (pCode != neutronCode) ) 
-                  {       
-                    lead = pCode; 
-                    leadParticle = pv[0];                           
-                  } 
-           else   
-                  {
-                    pMass = pv[1].getMass();
-                    pCode = pv[1].getCode();
-                    if( (pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
-                                                     && (pCode != neutronCode) ) 
-                        {       
-                          lead = pCode;
-                          leadParticle = pv[1];
-                        }
-                  }
-         }
+  G4int lead = 0;                   
+  G4HEVector leadParticle;
+  if ((incidentMass >= kaonPlusMass-0.05) &&
+      (incidentCode != protonCode) && (incidentCode != neutronCode) ) {
+    G4double pMass = pv[0].getMass();
+    G4int pCode = pv[0].getCode();
+    if ((pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
+                                     && (pCode != neutronCode) ) {       
+      lead = pCode; 
+      leadParticle = pv[0];                           
+    } else {
+      pMass = pv[1].getMass();
+      pCode = pv[1].getCode();
+      if ((pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
+                                       && (pCode != neutronCode) ) {       
+        lead = pCode;
+        leadParticle = pv[1];
+      }
+    }
+  }
 
   // Distribute particles in forward and backward hemispheres in center 
   // of mass system.  Incident particle goes in forward hemisphere.
@@ -762,7 +755,6 @@ G4HEInelastic::HighEnergyCascading(G4bool& successful,
 
   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass)+sqr(targetMass)
                                       +2.0*targetMass*incidentEnergy );
-//  G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
 
   G4double tavai1 = centerOfMassEnergy/2.0 - incidentMass;
   G4double tavai2 = centerOfMassEnergy/2.0 - targetMass;           
@@ -801,35 +793,34 @@ G4HEInelastic::HighEnergyCascading(G4bool& successful,
   // cascading.
   // extraCount = number of nucleons within these new secondaries
 
-   G4double s, xtarg, ran;
-   s = centerOfMassEnergy*centerOfMassEnergy;
-   G4double afc;
-   afc = Amin(0.5, 0.312 + 0.200 * std::log(std::log(s))+ std::pow(s,1.5)/6000.0); 
-   xtarg = Amax(0.01, afc * (std::pow(atomicWeight, 0.33) - 1.0) * tb);
-   G4int nstran = Poisson( 0.03*xtarg);
-   G4int momentumBin = 0;
-   G4double nucsup[] = { 1.00, 0.7, 0.5, 0.4, 0.5, 0.5 };
-   G4double psup[]   = {   3.,  6., 20., 50., 100., 1000. };
-   while( (momentumBin < 6) && (incidentTotalMomentum > psup[momentumBin])) momentumBin++;
-   momentumBin = Imin(5, momentumBin);
-   G4double xpnhmf = Amax(0.01,xtarg*nucsup[momentumBin]);
-   G4double xshhmf = Amax(0.01,xtarg - xpnhmf);
-   G4double rshhmf = 0.25*xshhmf;
-   G4double rpnhmf = 0.81*xpnhmf;
-   G4double xhmf=0;
-   if(verboseLevel > 1)
-     G4cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << G4endl;
+  G4double ss, xtarg, ran;
+  ss = centerOfMassEnergy*centerOfMassEnergy;
+  G4double afc;
+  afc = Amin(0.5, 0.312 + 0.200 * std::log(std::log(ss))+ std::pow(ss,1.5)/6000.0); 
+  xtarg = Amax(0.01, afc * (std::pow(atomicWeight, 0.33) - 1.0) * tb);
+  G4int nstran = Poisson( 0.03*xtarg);
+  G4int momentumBin = 0;
+  G4double nucsup[] = { 1.00, 0.7, 0.5, 0.4, 0.5, 0.5 };
+  G4double psup[]   = {   3.,  6., 20., 50., 100., 1000. };
+  while( (momentumBin < 6) && (incidentTotalMomentum > psup[momentumBin])) momentumBin++;
+  momentumBin = Imin(5, momentumBin);
+  G4double xpnhmf = Amax(0.01,xtarg*nucsup[momentumBin]);
+  G4double xshhmf = Amax(0.01,xtarg - xpnhmf);
+  G4double rshhmf = 0.25*xshhmf;
+  G4double rpnhmf = 0.81*xpnhmf;
+  G4double xhmf=0;
+  if (verboseLevel > 1)
+    G4cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << G4endl;
 
-   G4int nshhmf, npnhmf;
-   if (rshhmf > 1.1)
-     {
+  G4int nshhmf, npnhmf;
+  if (rshhmf > 1.1) {
         rshhmf = xshhmf/(rshhmf-1.);
         if (rshhmf <= 20.) 
             xhmf = GammaRand( rshhmf );
         else
             xhmf = Erlang( G4int(rshhmf+0.5) );
         xshhmf *= xhmf/rshhmf;
-     }
+  }
    nshhmf = Poisson( xshhmf );   
    if(verboseLevel > 1)
      G4cout << "xshhmf = " << xshhmf << " xhmf = " << xhmf 
@@ -1311,10 +1302,10 @@ G4HEInelastic::HighEnergyCascading(G4bool& successful,
         G4double ekit = std::pow(G4UniformRand()*(1.-ga)/avalue + std::pow(ekit1,1.-ga), 1./(1.-ga) );
         G4double cost = Amax(-1., Amin(1., std::log(2.23*G4UniformRand()+0.383)/0.96));
         G4double sint = std::sqrt(1. - cost*cost);
-        G4double phi  = twopi*G4UniformRand();
+        G4double pphi  = twopi*G4UniformRand();
         G4double pp   = std::sqrt(ekit*(ekit+2*pv[i].getMass()));
-        pv[i].setMomentum(pp*sint*std::sin(phi),
-                          pp*sint*std::cos(phi),
+        pv[i].setMomentum(pp*sint*std::sin(pphi),
+                          pp*sint*std::cos(pphi),
                           pp*cost);
         pv[i].Lor( pv[i], pvmx[2] );
         pvmx[5].Add( pvmx[5], pv[i] );
@@ -2213,9 +2204,9 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool& successful,
    
   G4double nucsup[] = {1.0, 0.7, 0.5, 0.4, 0.35, 0.3};
   G4double psup[] = {3. , 6. , 20., 50., 100.,1000.};   
-  G4double s = centerOfMassEnergy*centerOfMassEnergy;
+  G4double ss = centerOfMassEnergy*centerOfMassEnergy;
 
-  G4double xtarg = Amax(0.01, Amin(0.50, 0.312+0.2*std::log(std::log(s))+std::pow(s,1.5)/6000.) 
+  G4double xtarg = Amax(0.01, Amin(0.50, 0.312+0.2*std::log(std::log(ss))+std::pow(ss,1.5)/6000.) 
                              * (std::pow(atomicWeight,0.33)-1.) * tb);
   G4int momentumBin = 0;
    while( (momentumBin < 6) && (incidentTotalMomentum > psup[momentumBin])) momentumBin++;
@@ -2439,7 +2430,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool& successful,
    pvmx[3].setEnergy( std::sqrt(pf*pf + rmc*rmc) );
    pvmx[4].setEnergy( std::sqrt(pf*pf + rmd*rmd) );
    
-   G4double tvalue = -MAXFLOAT;
+   G4double tvalue = -DBL_MAX;
    G4double bvalue = Amax(0.01, 4.0 + 1.6*std::log(incidentTotalMomentum));
    if (bvalue != 0.0) tvalue = std::log(G4UniformRand())/bvalue;
    G4double pin = pvmx[1].Length();
@@ -3081,114 +3072,104 @@ G4HEInelastic::MediumEnergyCascading(G4bool& successful,
        pv[i] = pTemp;
      }
 
-   // randomize the first two leading particles
-   // for kaon induced reactions only 
-   // (need from experimental data)
+  // randomize the first two leading particles
+  // for kaon induced reactions only 
+  // (need from experimental data)
 
-   if(   (incidentCode==kaonPlusCode  || incidentCode==kaonMinusCode    ||
-          incidentCode==kaonZeroCode  || incidentCode==antiKaonZeroCode ||
-          incidentCode==kaonZeroSCode || incidentCode==kaonZeroLCode)   
-      && (G4UniformRand()>0.7) ) 
-     {
-       pTemp = pv[1];
-       pv[1] = pv[0];
-       pv[0] = pTemp;
-     }
+  if ((incidentCode==kaonPlusCode  || incidentCode==kaonMinusCode    ||
+       incidentCode==kaonZeroCode  || incidentCode==antiKaonZeroCode ||
+       incidentCode==kaonZeroSCode || incidentCode==kaonZeroLCode)   
+      && (G4UniformRand()>0.7) ) {
+    pTemp = pv[1];
+    pv[1] = pv[0];
+    pv[0] = pTemp;
+  }
 
-   // mark leading particles for incident strange particles 
-   // and antibaryons, for all other we assume that the first 
-   // and second particle are the leading particles. 
-   // We need this later for kinematic aspects of strangeness
-   // conservation.
+  // mark leading particles for incident strange particles 
+  // and antibaryons, for all other we assume that the first 
+  // and second particle are the leading particles. 
+  // We need this later for kinematic aspects of strangeness
+  // conservation.
                           
-   G4int lead = 0;                   
-   G4HEVector leadParticle;
-   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)  
-                                           && (incidentCode != neutronCode) ) 
-         {       
-           G4double pMass = pv[0].getMass();
-           G4int    pCode = pv[0].getCode();
-           if( (pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
-                                            && (pCode != neutronCode) ) 
-                  {       
-                    lead = pCode; 
-                    leadParticle = pv[0];                           
-                  } 
-           else   
-                  {
-                    pMass = pv[1].getMass();
-                    pCode = pv[1].getCode();
-                    if( (pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
-                                                   && (pCode != neutronCode) ) 
-                        {       
-                          lead = pCode;
-                          leadParticle = pv[1];
-                        }
-                  }
-         }
-
-   // Distribute particles in forward and backward hemispheres in center of 
-   // mass system.  Incident particle goes in forward hemisphere.
-   
-   G4HEVector pvI = incidentParticle;  // for the incident particle
-   pvI.setSide( 1 );
-
-   G4HEVector pvT = targetParticle;   // for the target particle
-   pvT.setMomentumAndUpdate( 0.0, 0.0, 0.0 );
-   pvT.setSide( -1 );
-   pvT.setTOF( -1.);  
-
-
-   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass)+sqr(targetMass)
-                                      +2.0*targetMass*incidentEnergy );
-//   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
-
-   G4double tavai1      = centerOfMassEnergy/2.0 - incidentMass;
-   G4double tavai2      = centerOfMassEnergy/2.0 - targetMass;           
-   
-   G4int ntb = 1;
-   for( i=0; i < vecLen; i++ ) 
-      {
-        if      (i == 0) pv[i].setSide(  1 );
-        else if (i == 1) pv[i].setSide( -1 );
-        else  
-           { if( G4UniformRand() < 0.5 ) 
-               {
-                 pv[i].setSide( -1 );
-                 ntb++;
-                } 
-             else 
-                 pv[i].setSide( 1 );
-           }
-        pv[i].setTOF(    incidentTOF);
+  G4int lead = 0;                   
+  G4HEVector leadParticle;
+  if ((incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)  
+                                          && (incidentCode != neutronCode) ) {       
+    G4double pMass = pv[0].getMass();
+    G4int    pCode = pv[0].getCode();
+    if ((pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
+                                     && (pCode != neutronCode) ) {       
+      lead = pCode; 
+      leadParticle = pv[0];                           
+    } else {
+      pMass = pv[1].getMass();
+      pCode = pv[1].getCode();
+      if ((pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
+                                       && (pCode != neutronCode) ) {       
+        lead = pCode;
+        leadParticle = pv[1];
       }
-   G4double tb = 2. * ntb;
-   if (centerOfMassEnergy < (2. + G4UniformRand())) 
+    }
+  }
+
+  // Distribute particles in forward and backward hemispheres in center of 
+  // mass system.  Incident particle goes in forward hemisphere.
+   
+  G4HEVector pvI = incidentParticle;  // for the incident particle
+  pvI.setSide( 1 );
+
+  G4HEVector pvT = targetParticle;   // for the target particle
+  pvT.setMomentumAndUpdate( 0.0, 0.0, 0.0 );
+  pvT.setSide( -1 );
+  pvT.setTOF( -1.);  
+
+  G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass)+sqr(targetMass)
+                                      +2.0*targetMass*incidentEnergy );
+
+  G4double tavai1 = centerOfMassEnergy/2.0 - incidentMass;
+  G4double tavai2 = centerOfMassEnergy/2.0 - targetMass;           
+   
+  G4int ntb = 1;
+  for (i = 0; i < vecLen; i++) {
+    if (i == 0) {
+      pv[i].setSide(1);
+    } else if (i == 1) {
+      pv[i].setSide(-1);
+    } else {
+      if (G4UniformRand() < 0.5) {
+        pv[i].setSide(-1);
+        ntb++;
+      } else pv[i].setSide(1);
+    }
+    pv[i].setTOF(incidentTOF);
+  }
+
+  G4double tb = 2. * ntb;
+  if (centerOfMassEnergy < (2. + G4UniformRand())) 
        tb = (2. * ntb + vecLen)/2.;     
 
-   if (verboseLevel > 1)
-      { G4cout << " pv Vector after Randomization " << vecLen << G4endl;
-        pvI.Print(-1);
-        pvT.Print(-1);
-        for (i=0; i < vecLen ; i++) pv[i].Print(i);
-      } 
+  if (verboseLevel > 1) {
+    G4cout << " pv Vector after Randomization " << vecLen << G4endl;
+    pvI.Print(-1);
+    pvT.Print(-1);
+    for (i=0; i < vecLen ; i++) pv[i].Print(i);
+  } 
 
-   // Add particles from intranuclear cascade
-   // nuclearCascadeCount = number of new secondaries 
-   // produced by nuclear cascading.
-   //  extraCount = number of nucleons within these new secondaries
+  // Add particles from intranuclear cascade
+  // nuclearCascadeCount = number of new secondaries 
+  // produced by nuclear cascading.
+  //  extraCount = number of nucleons within these new secondaries
    
-   G4double s, xtarg, ran;
-   s = centerOfMassEnergy*centerOfMassEnergy;
-   xtarg = Amax( 0.01, Amin( 0.75, 0.312 + 0.200 * std::log(std::log(s)) 
-                                       + std::pow(s,1.5)/6000.0 ) 
-                     *(std::pow(atomicWeight, 0.33) - 1.0) * tb);
+  G4double ss, xtarg, ran;
+  ss = centerOfMassEnergy*centerOfMassEnergy;
+  xtarg = Amax( 0.01, Amin( 0.75, 0.312 + 0.200 * std::log(std::log(ss)) 
+                                 + std::pow(ss,1.5)/6000.0 ) 
+                *(std::pow(atomicWeight, 0.33) - 1.0) * tb);
 
-   G4int ntarg = Poisson( xtarg );
-   G4int targ = 0;
+  G4int ntarg = Poisson(xtarg);
+  G4int targ = 0;
    
-   if( ntarg > 0 ) 
-     {
+  if (ntarg > 0) {
        G4double nucsup[] = { 1.00, 0.7, 0.5, 0.4, 0.35,   0.3 };
        G4double psup[]   = {   3.,  6., 20., 50., 100., 1000. };
        G4int momentumBin = 0;
@@ -4369,7 +4350,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool& successful,
    pvmx[3].setEnergy( std::sqrt(pf*pf + rmc*rmc) );
    pvmx[4].setEnergy( std::sqrt(pf*pf + rmd*rmd) );
    
-   G4double tvalue = -MAXFLOAT;
+   G4double tvalue = -DBL_MAX;
    G4double bvalue = Amax(0.01, 4.0 + 1.6*std::log(incidentTotalMomentum));
    if (bvalue != 0.0) tvalue = std::log(G4UniformRand())/bvalue;
    G4double pin = pvmx[1].Length();
@@ -5438,38 +5419,37 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
    return aa*std::exp(test1) + cc*std::exp(test2) - rr;
  }
 
- G4double G4HEInelastic::NBodyPhaseSpace
-                               ( const G4double totalEnergy,        // MeV
-                                 const G4bool constantCrossSection,
-                                 G4HEVector  vec[],
-                                 G4int& vecLen )
-  {
-    // derived from original FORTRAN code PHASP by H. Fesefeldt (02-Dec-1986)
-    // Returns the weight of the event
-
-    G4int i;
+G4double
+G4HEInelastic::NBodyPhaseSpace(const G4double totalEnergy,     // MeV
+                               const G4bool constantCrossSection,
+                               G4HEVector vec[],
+                               G4int& vecLen )
+{
+  // derived from original FORTRAN code PHASP by H. Fesefeldt (02-Dec-1986)
+  // Returns the weight of the event
+  G4int i;
     
-    const G4double expxu =  std::log(FLT_MAX);  // upper bound for arg. of exp
-    const G4double expxl = -expxu;         // lower bound for arg. of exp
+  const G4double expxu =  std::log(FLT_MAX);  // upper bound for arg. of exp
+  const G4double expxl = -expxu;         // lower bound for arg. of exp
     
-    if( vecLen < 2 ) {
+  if( vecLen < 2 ) {
       G4cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
       G4cerr << "    number of particles < 2" << G4endl;
       G4cerr << "totalEnergy = " << totalEnergy << ", vecLen = " 
              << vecLen << G4endl;
       return -1.0;
-    }
+  }
     
-    G4double* mass = new G4double [vecLen];    // mass of each particle
-    G4double* energy = new G4double [vecLen];  // total energy of each particle
-    G4double** pcm;           // pcm is an array with 3 rows and vecLen columns
-    pcm = new G4double* [3];
-    for( i=0; i<3; ++i )pcm[i] = new G4double [vecLen];
+  G4double* mass = new G4double [vecLen];    // mass of each particle
+  G4double* energy = new G4double [vecLen];  // total energy of each particle
+  G4double** pcm;           // pcm is an array with 3 rows and vecLen columns
+  pcm = new G4double* [3];
+  for( i=0; i<3; ++i )pcm[i] = new G4double [vecLen];
     
-    G4double totalMass = 0.0;
-    G4double* sm = new G4double [vecLen];
+  G4double totalMass = 0.0;
+  G4double* sm = new G4double [vecLen];
     
-    for( i=0; i<vecLen; ++i ) {
+  for( i=0; i<vecLen; ++i ) {
       mass[i] = vec[i].getMass();
       vec[i].setMomentum( 0.0, 0.0, 0.0 );
       pcm[0][i] = 0.0;      // x-momentum of i-th particle
@@ -5478,9 +5458,9 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       energy[i] = mass[i];  // total energy of i-th particle
       totalMass += mass[i];
       sm[i] = totalMass;
-    }
+  }
 
-    if( totalMass >= totalEnergy ) {
+  if (totalMass >= totalEnergy ) {
       if (verboseLevel > 1) {
         G4cout << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
         G4cout << "    total mass (" << totalMass << ") >= total energy ("
@@ -5492,12 +5472,12 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       delete [] pcm;
       delete [] sm;
       return -1.0;
-    }
+  }
 
-    G4double kineticEnergy = totalEnergy - totalMass;
-    G4double* emm = new G4double [vecLen];
-    emm[0] = mass[0];
-    if( vecLen > 3 ) {          // the random numbers are sorted
+  G4double kineticEnergy = totalEnergy - totalMass;
+  G4double* emm = new G4double [vecLen];
+  emm[0] = mass[0];
+  if (vecLen > 3) {          // the random numbers are sorted
       G4double* ran = new G4double [vecLen];
       for( i=0; i<vecLen; ++i )ran[i] = G4UniformRand();
       for( i=0; i<vecLen-1; ++i ) {
@@ -5511,16 +5491,17 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       }
       for( i=1; i<vecLen; ++i )emm[i] = ran[i-1]*kineticEnergy + sm[i];
       delete [] ran;
-    } else {
-      emm[1] = G4UniformRand()*kineticEnergy + sm[1];
-    }
-    emm[vecLen-1] = totalEnergy;
+  } else {
+    emm[1] = G4UniformRand()*kineticEnergy + sm[1];
+  }
+
+  emm[vecLen-1] = totalEnergy;
     
-    // Weight is the sum of logarithms of terms instead of the product of terms
+  // Weight is the sum of logarithms of terms instead of the product of terms
     
-    G4bool lzero = true;    
-    G4double wtmax = 0.0;
-    if( constantCrossSection ) {     // this is KGENEV=1 in PHASP
+  G4bool lzero = true;    
+  G4double wtmax = 0.0;
+  if (constantCrossSection) {     // this is KGENEV=1 in PHASP
       G4double emmax = kineticEnergy + mass[0];
       G4double emmin = 0.0;
       for( i=1; i<vecLen; ++i ) {
@@ -5566,7 +5547,8 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
     G4double weight = 0.0;        // weight is returned by GenerateNBodyEvent
     if( lzero )weight = std::exp( Amax(Amin(wtmax,expxu),expxl) );
     
-    G4double bang, cb, sb, s0, s1, s2, c, s, esys, a, b, gama, beta;
+    G4double bang, cb, sb, s0, s1, s2, c, esys, a, b, gama, beta;
+    G4double ss;
     pcm[0][0] = 0.0;
     pcm[1][0] = pd[0];
     pcm[2][0] = 0.0;
@@ -5578,7 +5560,7 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       cb = std::cos(bang);
       sb = std::sin(bang);
       c = 2.0*G4UniformRand() - 1.0;
-      s = std::sqrt( std::fabs( 1.0-c*c ) );
+      ss = std::sqrt( std::fabs( 1.0-c*c ) );
       if( i < vecLen-1 ) {
         esys = std::sqrt(pd[i]*pd[i] + emm[i]*emm[i]);
         beta = pd[i]/esys;
@@ -5588,8 +5570,8 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
           s1 = pcm[1][j];
           s2 = pcm[2][j];
           energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
-          a = s0*c - s1*s;                           //  rotation
-          pcm[1][j] = s0*s + s1*c;
+          a = s0*c - s1*ss;                           //  rotation
+          pcm[1][j] = s0*ss + s1*c;
           b = pcm[2][j];
           pcm[0][j] = a*cb - b*sb;
           pcm[2][j] = a*sb + b*cb;
@@ -5601,32 +5583,35 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
           s1 = pcm[1][j];
           s2 = pcm[2][j];
           energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
-          a = s0*c - s1*s;                           //  rotation
-          pcm[1][j] = s0*s + s1*c;
+          a = s0*c - s1*ss;                           //  rotation
+          pcm[1][j] = s0*ss + s1*c;
           b = pcm[2][j];
           pcm[0][j] = a*cb - b*sb;
           pcm[2][j] = a*sb + b*cb;
         }
       }
-    }
-    G4double pModule; 
-    for( i=0; i<vecLen; ++i ) {
-      kineticEnergy = energy[i] - mass[i];
-      pModule = std::sqrt( sqr(kineticEnergy) + 2*kineticEnergy*mass[i] );    
-      vec[i].setMomentum( pcm[0][i]/pModule, 
-                          pcm[1][i]/pModule, 
-                          pcm[2][i]/pModule );
-      vec[i].setKineticEnergyAndUpdate( kineticEnergy );
-    }
-    delete [] mass;
-    delete [] energy;
-    for( i=0; i<3; ++i )delete [] pcm[i];
-    delete [] pcm;
-    delete [] emm;
-    delete [] sm;
-    delete [] pd;
-    return weight;
   }
+
+  G4double pModule; 
+  for (i = 0; i < vecLen; ++i) {
+    kineticEnergy = energy[i] - mass[i];
+    pModule = std::sqrt( sqr(kineticEnergy) + 2*kineticEnergy*mass[i] );    
+    vec[i].setMomentum(pcm[0][i]/pModule, 
+                       pcm[1][i]/pModule, 
+                       pcm[2][i]/pModule);
+    vec[i].setKineticEnergyAndUpdate( kineticEnergy );
+  }
+
+  delete [] mass;
+  delete [] energy;
+  for( i=0; i<3; ++i )delete [] pcm[i];
+  delete [] pcm;
+  delete [] emm;
+  delete [] sm;
+  delete [] pd;
+  return weight;
+}
+
  
 G4double
 G4HEInelastic::gpdk( G4double a, G4double b, G4double c )
@@ -5757,6 +5742,11 @@ G4HEInelastic::CalculatePhaseSpaceWeight( G4int /* npart */)
    return wfcn;
  }      
 
+const std::pair<G4double, G4double> G4HEInelastic::GetFatalEnergyCheckLevels() const
+{
+	// max energy non-conservation is mass of heavy nucleus
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);
+}
 
 
 

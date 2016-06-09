@@ -37,8 +37,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorAction.cc,v 1.19 2009-02-23 17:34:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "globals.hh"
 #include "BrachyPrimaryGeneratorAction.hh"

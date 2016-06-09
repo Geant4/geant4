@@ -24,20 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.cc,v 1.5 2006-06-29 20:46:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
 #include "G4HadronicException.hh"
 
-G4VHighEnergyGenerator::G4VHighEnergyGenerator()
-  :   epCheckLevels(DBL_MAX,DBL_MAX)
+G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4String& modelName)
+:   epCheckLevels(DBL_MAX,DBL_MAX)
 {
-}
-
-G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4VHighEnergyGenerator &)
-{
+	theGeneratorModelName=modelName;
 }
 
 
@@ -45,29 +41,11 @@ G4VHighEnergyGenerator::~G4VHighEnergyGenerator()
 {
 }
 
-
-const G4VHighEnergyGenerator & G4VHighEnergyGenerator::operator=(const G4VHighEnergyGenerator &)
-{
-  G4String text = "G4VHighEnergyGenerator::operator= meant to not be accessable";
-  throw G4HadronicException(__FILE__, __LINE__, text); 
-  return *this;
-}
-
-
-int G4VHighEnergyGenerator::operator==(const G4VHighEnergyGenerator &) const
-{
-  return 0;
-}
-
-int G4VHighEnergyGenerator::operator!=(const G4VHighEnergyGenerator &) const
-{
-  return 1;
-}
-
 std::pair<G4double, G4double> G4VHighEnergyGenerator::GetEnergyMomentumCheckLevels() const
 {
    return epCheckLevels;
 }
+
 void G4VHighEnergyGenerator::SetEnergyMomentumCheckLevels(
 									G4double relativeLevel, G4double absoluteLevel)
 {
@@ -75,4 +53,12 @@ void G4VHighEnergyGenerator::SetEnergyMomentumCheckLevels(
 	epCheckLevels.second=absoluteLevel;
 }
 
+void G4VHighEnergyGenerator::ModelDescription(std::ostream& outFile) const
+{
+  outFile << " Parton-string models description not written yet \n";
+}
 
+G4String G4VHighEnergyGenerator::GetModelName() const
+{
+	return theGeneratorModelName;
+}

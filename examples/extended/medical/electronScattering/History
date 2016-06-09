@@ -14,6 +14,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13-10-12 A. Dotti (electronScattering-V09-05-08)
+- Removing double include of system of units
+
+13-10-12 A. Dotti (electronScattering-V09-05-07)
+- Adding explicit use of system of units
+
+04-09-12 I. Hrivnacova (electronScattering-V09-05-06)
+ - Updated CMakeLists.txt:
+   adding visualization, copying macros, install target and comment lines 
+ - Added .README  
+     
+19-04-12 mma (electronScattering-V09-05-05)
+- all classes : apply G4 coding conventions
+     
+23-02-12 mma (electronScattering-V09-05-04)
+- HistoManager : GetFileType()
+     
+14-02-12 mma (electronScattering-V09-05-03)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+      
+09-02-12 V.Ivanchenko (electronScattering-V09-05-02)
+- PhysListEmStandardSS, PhysListEmStandardWVI - more correct order
+    and fixed initialisation        
+     
+19-01-12 mma (electronScattering-V09-05-01)        
+- electronScattering.in : correct fileName for histograms
+     
+16-01-12 mma (electronScattering-V09-05-00)        
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)  
+- HistoMessenger.hh and .cc : suppress fileType command
+- HistoManager and HistoMessenger : coding conventions
+- Update Readme and all macros accordingly
      
 08-11-11 mma (electronScattering-V09-04-07)
 - modify SteppingVerbose for OutOfWorld

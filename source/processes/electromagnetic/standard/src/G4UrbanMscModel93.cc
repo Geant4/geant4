@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.11 2010-12-23 18:31:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //   
@@ -103,6 +102,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4UrbanMscModel93.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
@@ -116,13 +117,11 @@
 using namespace std;
 
 G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
-  : G4VMscModel(nam),
-    isInitialized(false)
+  : G4VMscModel(nam)
 {
   masslimite    = 0.6*MeV;
   lambdalimit   = 1.*mm;
   fr            = 0.02;
-  //facsafety     = 0.3;
   taubig        = 8.0;
   tausmall      = 1.e-16;
   taulim        = 1.e-6;
@@ -162,6 +161,7 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   third         = 1./3.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
+  firstStep     = true; 
   inside        = false;  
   insideskin    = false;
 
@@ -174,7 +174,6 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
 
   currentMaterialIndex = -1;
   fParticleChange = 0;
-  theLambdaTable = 0;
   couple = 0;
 }
 
@@ -190,7 +189,6 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
 {
   skindepth = skin*stepmin;
 
-  if(isInitialized) { return; }
   // set values of some data members
   SetParticle(p);
 
@@ -201,9 +199,7 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
 	   << G4endl;
   }
 
-  fParticleChange = GetParticleChangeForMSC();
-
-  isInitialized = true;
+  fParticleChange = GetParticleChangeForMSC(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -343,7 +339,7 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   G4double sigma;
   SetParticle(part);
 
-  G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
+  Z23 = pow(AtomicNumber,2./3.); 
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -383,10 +379,10 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   if (iZ==14)                               iZ = 13;
   if (iZ==-1)                               iZ = 0 ;
 
-  G4double Z1 = Zdat[iZ];
-  G4double Z2 = Zdat[iZ+1];
-  G4double ratZ = (AtomicNumber-Z1)*(AtomicNumber+Z1)/
-                  ((Z2-Z1)*(Z2+Z1));
+  G4double ZZ1 = Zdat[iZ];
+  G4double ZZ2 = Zdat[iZ+1];
+  G4double ratZ = (AtomicNumber-ZZ1)*(AtomicNumber+ZZ1)/
+                  ((ZZ2-ZZ1)*(ZZ2+ZZ1));
 
   if(eKineticEnergy <= Tlim) 
   {
@@ -437,12 +433,12 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   {
     c1 = bg2lim*sig0[iZ]*(1.+hecorr[iZ]*(beta2-beta2lim))/bg2;
     c2 = bg2lim*sig0[iZ+1]*(1.+hecorr[iZ+1]*(beta2-beta2lim))/bg2;
-    if((AtomicNumber >= Z1) && (AtomicNumber <= Z2))
+    if((AtomicNumber >= ZZ1) && (AtomicNumber <= ZZ2))
       sigma = c1+ratZ*(c2-c1) ;
-    else if(AtomicNumber < Z1)
-      sigma = AtomicNumber*AtomicNumber*c1/(Z1*Z1);
-    else if(AtomicNumber > Z2)
-      sigma = AtomicNumber*AtomicNumber*c2/(Z2*Z2);
+    else if(AtomicNumber < ZZ1)
+      sigma = AtomicNumber*AtomicNumber*c1/(ZZ1*ZZ1);
+    else if(AtomicNumber > ZZ2)
+      sigma = AtomicNumber*AtomicNumber*c2/(ZZ2*ZZ2);
   }
   return sigma;
 
@@ -450,33 +446,36 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4UrbanMscModel93::StartTracking(G4Track* track)
+{
+  SetParticle(track->GetDynamicParticle()->GetDefinition());
+  firstStep = true; 
+  inside = false;
+  insideskin = false;
+  tlimit = geombig;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
                              const G4Track& track,
-			     G4PhysicsTable* theTable,
-			     G4double currentMinimalStep)
+			     G4double& currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
+  const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-
-  const G4DynamicParticle* dp = track.GetDynamicParticle();
-
-  if(stepStatus == fUndefined) {
-    inside = false;
-    insideskin = false;
-    tlimit = geombig;
-    SetParticle( dp->GetDefinition() );
-  }
-
-  theLambdaTable = theTable;
   couple = track.GetMaterialCutsCouple();
+  SetCurrentCouple(couple); 
   currentMaterialIndex = couple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = GetRange(particle,currentKinEnergy,couple);
-  lambda0 = GetLambda(currentKinEnergy);
+  lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) { return tPathLength; }            
+  if(inside || tPathLength < tlimitminfix) { 
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  } 
   
   if(tPathLength > currentRange) { tPathLength = currentRange; }
 
@@ -491,7 +490,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
   if(currentRange < presafety)
     {
       inside = true;
-      return tPathLength;  
+      return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
     }
 
   // standard  version
@@ -499,22 +498,22 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+      geomlimit = ComputeGeomLimit(track, presafety, currentRange);
 
       // is it far from boundary ?
       if(currentRange < presafety)
 	{
 	  inside = true;
-	  return tPathLength;   
+	  return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 	}
 
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
         {
           rangeinit = currentRange;
-          if(stepStatus == fUndefined) smallstep = 1.e10;
+          if(firstStep) smallstep = 1.e10;
           else  smallstep = 1.;
 
           //define stepmin here (it depends on lambda!)
@@ -563,7 +562,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
          (smallstep >= skin) && (tPathLength < geomlimit-0.999*skindepth))
-	return tPathLength;   
+	return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 
       // step reduction near to boundary
       if(smallstep < skin)
@@ -588,8 +587,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
       if(tlimit < stepmin) tlimit = stepmin;
 
       // randomize 1st step or 1st 'normal' step in volume
-      if((stepStatus == fUndefined) ||
-         ((smallstep == skin) && !insideskin)) 
+      if(firstStep || ((smallstep == skin) && !insideskin)) 
         { 
           G4double temptlimit = tlimit;
           if(temptlimit > tlimitmin)
@@ -622,10 +620,10 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
       if(currentRange < presafety)
         {
           inside = true;
-          return tPathLength;  
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
       {
         rangeinit = currentRange;
         fr = facrange;
@@ -671,13 +669,14 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
     }
   //G4cout << "tPathLength= " << tPathLength 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
-  return tPathLength ;
+  return ConvertTrueToGeom(tPathLength, currentMinimalStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4UrbanMscModel93::ComputeGeomPathLength(G4double)
 {
+  firstStep = false; 
   lambdaeff = lambda0;
   par1 = -1. ;  
   par2 = par3 = 0. ;  
@@ -715,7 +714,7 @@ G4double G4UrbanMscModel93::ComputeGeomPathLength(G4double)
       zmean = 1./(par1*par3) ;
   } else {
     G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
-    G4double lambda1 = GetLambda(T1);
+    G4double lambda1 = GetTransportMeanFreePath(particle,T1);
 
     par1 = (lambda0-lambda1)/(lambda0*tPathLength) ;
     par2 = 1./(par1*lambda0) ;
@@ -786,6 +785,7 @@ G4double G4UrbanMscModel93::ComputeTrueStepLength(G4double geomStepLength)
     }  
   }
   if(tPathLength < geomStepLength) tPathLength = geomStepLength;
+
   //G4cout << "tPathLength= " << tPathLength << " step= " << geomStepLength << G4endl;
 
   return tPathLength;
@@ -816,31 +816,45 @@ G4double G4UrbanMscModel93::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel93::SampleScattering(const G4DynamicParticle* dynParticle,
-					 G4double safety)
+G4ThreeVector& 
+G4UrbanMscModel93::SampleScattering(const G4DynamicParticle* dynParticle,
+				    G4double safety)
 {
-  G4double kineticEnergy = dynParticle->GetKineticEnergy();
-
-  if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0)) return;
+  fDisplacement.set(0.0,0.0,0.0);
+  G4double kineticEnergy = currentKinEnergy;
+  if (tPathLength > currentRange*dtrl) {
+    kineticEnergy = GetEnergy(particle,currentRange-tPathLength,couple);
+  } else {
+    kineticEnergy -= tPathLength*GetDEDX(particle,currentKinEnergy,couple);
+  }
+  if((kineticEnergy <= eV) || (tPathLength <= tlimitminfix) ||
+     (tPathLength/tausmall < lambda0)) { return  fDisplacement; }
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::abs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) { return  fDisplacement; }
 
-  const G4double checkEnergy = GeV;
-  if(kineticEnergy > checkEnergy && cth < 0.0 
-     && tPathLength < taulim*lambda0) {
-    G4ExceptionDescription ed;
-    ed << dynParticle->GetDefinition()->GetParticleName()
-       << " E(MeV)= " << kineticEnergy/MeV
-       << " Step(mm)= " << tPathLength/mm
-       << " in " << CurrentCouple()->GetMaterial()->GetName()
-       << " scattering angle is set to zero" << G4endl;
-    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
-                ed,"Please, send bug report in the case of this message");
-    return;
+  // extra protection agaist high energy particles backscattered 
+  if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
+    //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
+    //	   << " s(mm)= " << tPathLength/mm
+    //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
+    // do Gaussian central scattering
+    if(kineticEnergy > GeV && cth < 0.0) {
+      G4ExceptionDescription ed;
+      ed << dynParticle->GetDefinition()->GetParticleName()
+	 << " E(MeV)= " << kineticEnergy/MeV
+	 << " Step(mm)= " << tPathLength/mm
+	 << " in " << CurrentCouple()->GetMaterial()->GetName()
+	 << " CosTheta= " << cth 
+	 << " is too big - the angle is resampled" << G4endl;
+      G4Exception("G4UrbanMscModel93::SampleScattering","em0004",
+		  JustWarning, ed,"");
+    }
+    do {
+      cth = 1.0 + 2*log(G4UniformRand())*tPathLength/lambda0;
+    } while(cth < -1.0);
   }
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -882,15 +896,14 @@ void G4UrbanMscModel93::SampleScattering(const G4DynamicParticle* dynParticle,
             Phi = phi-psi;
         }
 
-        dirx = std::cos(Phi);
-        diry = std::sin(Phi);
+        dirx = r*std::cos(Phi);
+        diry = r*std::sin(Phi);
 
-        G4ThreeVector latDirection(dirx,diry,0.0);
-        latDirection.rotateUz(oldDirection);
-
-	ComputeDisplacement(fParticleChange, latDirection, r, safety);
+	fDisplacement.set(dirx,diry,0.0);
+	fDisplacement.rotateUz(oldDirection);
       }
   }
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

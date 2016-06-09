@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.4 2007-05-23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -50,6 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4PolarizedMollerBhabhaModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForLoss.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.hh,v 1.6 2010-05-30 10:04:16 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  

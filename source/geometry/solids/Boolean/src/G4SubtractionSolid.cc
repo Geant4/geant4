@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.35 2010-10-20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -40,8 +39,11 @@
 //
 // --------------------------------------------------------------------
 
+#include <sstream>
+
 #include "G4SubtractionSolid.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4GeometryTolerance.hh"
@@ -51,8 +53,6 @@
 #include "HepPolyhedronProcessor.h"
 #include "G4NURBS.hh"
 // #include "G4NURBSbox.hh"
-
-#include <sstream>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -309,13 +309,16 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               message << "Illegal condition caused by solids: "
                       << fPtrSolidA->GetName() << " and " << nameB << G4endl;
               message.precision(16);
-              message << "Looping detected in point " << p
+              message << "Looping detected in point " << p+dist*v
+                      << ", from original point " << p
                       << " and direction " << v << G4endl
-                      << "Returning zero distance.";
+                      << "Computed candidate distance: " << dist << "*mm.";
               message.precision(6);
+              DumpInfo();
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
-                          "GeomSolids1001", JustWarning, message);
-              return 0.0;
+                          "GeomSolids1001", JustWarning, message,
+                          "Returning candidate distance.");
+              return dist;
             }
           }    
         }
@@ -360,13 +363,15 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               message << "Illegal condition caused by solids: "
                       << fPtrSolidA->GetName() << " and " << nameB << G4endl;
               message.precision(16);
-              message << "Looping detected in point " << p
+              message << "Looping detected in point " << p+dist*v
+                      << ", from original point " << p
                       << " and direction " << v << G4endl
-                      << "Returning zero distance.";
+                      << "Computed candidate distance: " << dist << "*mm.";
               message.precision(6);
+              DumpInfo();
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
                           "GeomSolids1001", JustWarning, message);
-              return 0.0;         
+              return dist;         
 
             }
           }

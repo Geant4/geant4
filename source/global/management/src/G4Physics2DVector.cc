@@ -47,7 +47,7 @@
 G4Physics2DVector::G4Physics2DVector()
  : type(T_G4PhysicsFreeVector),
    numberOfXNodes(0), numberOfYNodes(0),
-   verboseLevel(0)
+   verboseLevel(0), useBicubic(false)
 {
   cache = new G4Physics2DVectorCache();
 }
@@ -57,7 +57,7 @@ G4Physics2DVector::G4Physics2DVector()
 G4Physics2DVector::G4Physics2DVector(size_t nx, size_t ny)
  : type(T_G4PhysicsFreeVector),
    numberOfXNodes(nx), numberOfYNodes(ny),
-   verboseLevel(0)
+   verboseLevel(0), useBicubic(false)
 {
   cache = new G4Physics2DVectorCache();
   PrepareVectors();
@@ -81,6 +81,7 @@ G4Physics2DVector::G4Physics2DVector(const G4Physics2DVector& right)
   numberOfYNodes = right.numberOfYNodes;
 
   verboseLevel = right.verboseLevel;
+  useBicubic   = right.useBicubic;
 
   xVector      = right.xVector;
   yVector      = right.yVector;
@@ -103,6 +104,7 @@ G4Physics2DVector& G4Physics2DVector::operator=(const G4Physics2DVector& right)
   numberOfYNodes = right.numberOfYNodes;
 
   verboseLevel = right.verboseLevel;
+  useBicubic   = right.useBicubic;
 
   cache->Clear();
   PrepareVectors();
@@ -180,19 +182,90 @@ void G4Physics2DVector::ComputeValue(G4double xx, G4double yy)
   }
   size_t idx  = cache->lastBinX;
   size_t idy  = cache->lastBinY;
-  G4double x1 = xVector[idx];
-  G4double x2 = xVector[idx+1];
-  G4double y1 = yVector[idy];
-  G4double y2 = yVector[idy+1];
-  G4double x  = cache->lastX;
-  G4double y  = cache->lastY;
-  G4double v11= GetValue(idx,   idy);
-  G4double v12= GetValue(idx+1, idy);
-  G4double v21= GetValue(idx,   idy+1);
-  G4double v22= GetValue(idx+1, idy+1);
-  cache->lastValue = 
-    ((y2 - y)*(v11*(x2 - x) + v12*(x - x1)) + 
-     ((y - y1)*(v21*(x2 - x) + v22*(x - x1))))/((x2 - x1)*(y2 - y1)); 
+  if(useBicubic) {
+    BicubicInterpolation(idx, idy);
+  } else {
+    G4double x1 = xVector[idx];
+    G4double x2 = xVector[idx+1];
+    G4double y1 = yVector[idy];
+    G4double y2 = yVector[idy+1];
+    G4double x  = cache->lastX;
+    G4double y  = cache->lastY;
+    G4double v11= GetValue(idx,   idy);
+    G4double v12= GetValue(idx+1, idy);
+    G4double v21= GetValue(idx,   idy+1);
+    G4double v22= GetValue(idx+1, idy+1);
+    cache->lastValue = 
+      ((y2 - y)*(v11*(x2 - x) + v12*(x - x1)) + 
+       ((y - y1)*(v21*(x2 - x) + v22*(x - x1))))/((x2 - x1)*(y2 - y1)); 
+  }
+}
+
+// --------------------------------------------------------------
+
+void G4Physics2DVector::BicubicInterpolation(size_t idx, size_t idy)
+{
+    // Bicubic interpolation according to 
+    // 1. H.M. Antia, "Numerical Methods for Scientists and Engineers",
+    //    MGH, 1991. 
+    // 2. W.H. Press et al., "Numerical recipes. The Art of Scientific 
+    //    Computing", Cambridge University Press, 2007. 
+    G4double x1 = xVector[idx];
+    G4double x2 = xVector[idx+1];
+    G4double y1 = yVector[idy];
+    G4double y2 = yVector[idy+1];
+    G4double x  = cache->lastX;
+    G4double y  = cache->lastY;
+    G4double f1 = GetValue(idx,   idy);
+    G4double f2 = GetValue(idx+1, idy);
+    G4double f3 = GetValue(idx+1, idy+1);
+    G4double f4 = GetValue(idx,   idy+1);
+
+    G4double dx = x2 - x1;
+    G4double dy = y2 - y1;
+
+    G4double h1 = (x - x1)/dx;
+    G4double h2 = (y - y1)/dy;   
+
+    G4double h12 = h1*h1;
+    G4double h13 = h12*h1;
+    G4double h22 = h2*h2;
+    G4double h23 = h22*h2;
+
+    // Three derivatives at each of four points (1-4) defining the 
+    // subregion are computed by numerical centered differencing from 
+    // the functional values already tabulated on the grid. 
+
+    G4double f1x = DerivativeX(idx, idy, dx);
+    G4double f2x = DerivativeX(idx+1, idy, dx);
+    G4double f3x = DerivativeX(idx+1, idy+1, dx);
+    G4double f4x = DerivativeX(idx, idy+1, dx);
+
+    G4double f1y = DerivativeY(idx, idy, dy);
+    G4double f2y = DerivativeY(idx+1, idy, dy);
+    G4double f3y = DerivativeY(idx+1, idy+1, dy);
+    G4double f4y = DerivativeY(idx, idy+1, dy);
+
+    G4double dxy = dx*dy;
+    G4double f1xy = DerivativeXY(idx, idy, dxy);
+    G4double f2xy = DerivativeXY(idx+1, idy, dxy);
+    G4double f3xy = DerivativeXY(idx+1, idy+1, dxy);
+    G4double f4xy = DerivativeXY(idx, idy+1, dxy);
+
+    cache->lastValue = 
+      f1 + f1y*h2 + (3*(f4-f1) - 2*f1y - f4y)*h22 + (2*(f1 - f4) + f1y + f4y)*h23
+      + f1x*h1 + f1xy*h1*h2 +(3*(f4x - f1x) - 2*f1xy - f4xy)*h1*h22
+      + (2*(f1x - f4x) + f1xy + f4xy)*h1*h23
+      + (3*(f2 - f1) - 2*f1x - f2x)*h12 + (3*f2y - 3*f1y - 2*f1xy - f2xy)*h12*h2
+      + (9*(f1 - f2 + f3 - f4) + 6*f1x + 3*f2x - 3*f3x - 6*f4x + 6*f1y - 6*f2y
+	 - 3*f3y + 3*f4y + 4*f1xy + 2*f2xy + f3xy + 2*f4xy)*h12*h22
+      + (6*(-f1 + f2 - f3 + f4) - 4*f1x - 2*f2x + 2*f3x + 4*f4x - 3*f1y
+	 + 3*f2y + 3*f3y - 3*f4y - 2*f1xy - f2xy - f3xy - 2*f4xy)*h12*h23
+      + (2*(f1 - f2) + f1x + f2x)*h13 + (2*(f1y - f2y) + f1xy + f2xy)*h13*h2
+      + (6*(-f1 + f2 -f3 + f4) + 3*(-f1x - f2x + f3x + f4x) - 4*f1y
+	 + 4*f2y + 2*f3y - 2*f4y - 2*f1xy - 2*f2xy - f3xy - f4xy)*h13*h22
+      + (4*(f1 - f2 + f3 - f4) + 2*(f1x + f2x - f3x - f4x) 
+	 + 2*(f1y - f2y - f3y + f4y) + f1xy + f2xy + f3xy + f4xy)*h13*h23;
 }
 
 // --------------------------------------------------------------

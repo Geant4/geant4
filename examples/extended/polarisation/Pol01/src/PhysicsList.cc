@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file polarisation/Pol01/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // 
-// $Id: PhysicsList.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +40,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -157,7 +160,7 @@ void PhysicsList::AddStepMax()
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (stepMaxProcess->IsApplicable(*particle) && pmanager)
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
   }
 }
 

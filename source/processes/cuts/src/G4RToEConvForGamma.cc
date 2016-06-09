@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.6 2009-09-12 12:09:42 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -40,6 +39,7 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 G4RToEConvForGamma::G4RToEConvForGamma() : G4VRangeToEnergyConverter()
 {    
@@ -131,23 +131,23 @@ G4double G4RToEConvForGamma::ComputeCrossSection(G4double AtomicNumber,
   }
 
   //  calculate the cross section (using an approximate empirical formula)
-  G4double s;
+  G4double xs;
   if ( KineticEnergy<tlow ) {
-    if(KineticEnergy<t1keV) s = slow*std::exp(clow*std::log(tlow/t1keV));
-    else                    s = slow*std::exp(clow*std::log(tlow/KineticEnergy));
+    if(KineticEnergy<t1keV) xs = slow*std::exp(clow*std::log(tlow/t1keV));
+    else                    xs = slow*std::exp(clow*std::log(tlow/KineticEnergy));
 
   } else if ( KineticEnergy<t200keV ) {
-    s = s200keV
+    xs = s200keV
          * std::exp(0.042*Z*std::log(t200keV/KineticEnergy)*std::log(t200keV/KineticEnergy));
 
   } else if( KineticEnergy<tmin ){
-    s = smin
+    xs = smin
          * std::exp(cmin*std::log(tmin/KineticEnergy)*std::log(tmin/KineticEnergy));
 
   } else {
-    s = smin + chigh*std::log(KineticEnergy/tmin);
+    xs = smin + chigh*std::log(KineticEnergy/tmin);
 
   }
-  return s * barn;
+  return xs * barn;
 }
 

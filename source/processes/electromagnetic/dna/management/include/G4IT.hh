@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4IT.hh 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -130,29 +131,29 @@ public :
     inline G4double                GetPreStepGlobalTime() const;
     inline G4KDNode*               GetNode() const;
 
-    inline G4TrackingInformation* GetTrackingInfo(){return fTrackingInformation;}
+    inline G4TrackingInformation* GetTrackingInfo(){return &fTrackingInformation;}
 
-    inline G4TrackListNode* GetTrackListNode(){return fTrackNode;}
-    inline void SetTrackListNode(G4TrackListNode* node){ fTrackNode = node;}
+    inline G4TrackListNode* GetTrackListNode(){return fpTrackNode;}
+    inline void SetTrackListNode(G4TrackListNode* node){ fpTrackNode = node;}
 
     virtual const G4ITType GetITType() const = 0 ;
 
 protected :
     G4IT(const G4IT&);
     G4IT& operator=(const G4IT&);
-    G4Track* fTrack ;
+    G4Track* fpTrack ;
 
 private :
-    G4ITBox *   fITBox;
-    G4IT*       fPreviousIT;
-    G4IT*       fNextIT;
-    G4KDNode*   fKDNode ;
+    G4ITBox *   fpITBox;
+    G4IT*       fpPreviousIT;
+    G4IT*       fpNextIT;
+    G4KDNode*   fpKDNode ;
 
     int fParentID_A;
     int fParentID_B;
 
-    G4TrackingInformation* fTrackingInformation ;
-    G4TrackListNode* fTrackNode;
+    G4TrackingInformation fTrackingInformation ;
+    G4TrackListNode* fpTrackNode;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 ///
@@ -170,47 +171,47 @@ inline void G4IT::operator delete(void *aIT)
 
 inline const G4ITBox* G4IT::GetITBox() const
 {
-    return fITBox ;
+    return fpITBox ;
 }
 
 inline void G4IT::SetITBox(G4ITBox * aITBox)
 {
-    fITBox = aITBox;
+    fpITBox = aITBox;
 }
 
 inline void G4IT::SetPrevious(G4IT* aIT)
 {
-    fPreviousIT = aIT;
+    fpPreviousIT = aIT;
 }
 
 inline void G4IT::SetNext(G4IT* aIT)
 {
-    fNextIT = aIT;
+    fpNextIT = aIT;
 }
 
 inline G4IT* G4IT::GetPrevious()
 {
-    return fPreviousIT;
+    return fpPreviousIT;
 }
 
 inline G4IT* G4IT::GetNext()
 {
-    return fNextIT;
+    return fpNextIT;
 }
 
 inline void G4IT::SetTrack(G4Track* track)
 {
-    fTrack = track;
+    fpTrack = track;
 }
 
 inline G4Track* G4IT::GetTrack()
 {
-    return fTrack;
+    return fpTrack;
 }
 
 inline const G4Track* G4IT::GetTrack() const
 {
-    return fTrack;
+    return fpTrack;
 }
 
 inline void G4IT::SetParentID(int p_a, int p_b)
@@ -227,37 +228,37 @@ inline void G4IT::GetParentID(int& p_a,int&p_b)
 
 inline G4double G4IT::GetPreStepGlobalTime() const
 {
-    return fTrackingInformation->GetPreStepGlobalTime();
+    return fTrackingInformation.GetPreStepGlobalTime();
 }
 
 inline G4double G4IT::GetPreStepLocalTime() const
 {
-    return fTrackingInformation->GetPreStepLocalTime();
+    return fTrackingInformation.GetPreStepLocalTime();
 }
 
 inline const G4ThreeVector& G4IT::GetPreStepPosition() const
 {
-    return fTrackingInformation->GetPreStepPosition();
+    return fTrackingInformation.GetPreStepPosition();
 }
 
 inline const G4IT* G4IT::GetPrevious() const
 {
-    return fPreviousIT ;
+    return fpPreviousIT ;
 }
 
 inline const G4IT* G4IT::GetNext() const
 {
-    return fNextIT ;
+    return fpNextIT ;
 }
 
 inline void G4IT::SetNode(G4KDNode* aNode)
 {
-    fKDNode = aNode ;
+    fpKDNode = aNode ;
 }
 
 inline G4KDNode* G4IT::GetNode() const
 {
-    return fKDNode ;
+    return fpKDNode ;
 }
 #endif
 

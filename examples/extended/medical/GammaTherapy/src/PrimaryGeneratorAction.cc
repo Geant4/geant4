@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
 
 //---------------------------------------------------------------------------
 //
@@ -44,6 +47,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,130 +64,126 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* pDet):
 
 void PrimaryGeneratorAction::InitializeMe()
 {
-  theMessenger = new PrimaryGeneratorMessenger(this);
-  particleGun = new G4ParticleGun();
-  counter = 0;
-  verbose = 0;
-  x0 = 0.0;
-  y0 = 0.0;
-  z0 = 0.0;
-  sigmaX = 1.5*mm;
-  sigmaY = 1.5*mm;
-  sigmaZ = 0.0;
-  sigmaE = 0.0;
-  rMax2  = 2.5*2.5*mm*mm;
-  sigmaTheta = 0.0;
-//  sigmaTheta = 0.17*degree;
-  minCosTheta = 2.0;
+  fMessenger = new PrimaryGeneratorMessenger(this);
+  fParticleGun = new G4ParticleGun();
+  fCounter = 0;
+  fVerbose = 0;
+  fX0 = 0.0;
+  fY0 = 0.0;
+  fZ0 = 0.0;
+  fSigmaX = 1.5*mm;
+  fSigmaY = 1.5*mm;
+  fSigmaZ = 0.0;
+  fSigmaE = 0.0;
+  fRMax2  = 2.5*2.5*mm*mm;
+  fSigmaTheta = 0.0;
+  //  fSigmaTheta = 0.17*degree;
+  fMinCosTheta = 2.0;
   SetBeamEnergy(50.0*MeV);
-  position  = G4ThreeVector(x0,y0,z0);
-  direction = G4ThreeVector(0.0,0.0,1.0);
-  m_gauss = true;
-  if(energy < (Histo::GetPointer())->GetMaxEnergy())
-              (Histo::GetPointer())->SetMaxEnergy(energy);
+  fPosition  = G4ThreeVector(fX0,fY0,fZ0);
+  fDirection = G4ThreeVector(0.0,0.0,1.0);
+  fGauss = true;
+  if(fEnergy < (Histo::GetPointer())->GetMaxEnergy()) {
+    (Histo::GetPointer())->SetMaxEnergy(fEnergy);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete theMessenger;
+  delete fParticleGun;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  counter++ ;
-  verbose = (Histo::GetPointer())->GetVerbose();
+  fCounter++ ;
+  fVerbose = (Histo::GetPointer())->GetVerbose();
 
   // Simulation of beam position
-  G4double x = x0;
-  G4double y = y0;
+  G4double x = fX0;
+  G4double y = fY0;
   G4double z = fDetector->GetGeneratorPosZ();
   do {
-    if(0.0 < sigmaX) x = G4RandGauss::shoot(x0,sigmaX);
-    if(0.0 < sigmaY) y = G4RandGauss::shoot(y0,sigmaY);
-  } while (x*x + y*y > rMax2);
+    if(0.0 < fSigmaX) { x = G4RandGauss::shoot(fX0,fSigmaX); }
+    if(0.0 < fSigmaY) { y = G4RandGauss::shoot(fY0,fSigmaY); }
+  } while (x*x + y*y > fRMax2);
 
-  position  = G4ThreeVector(x,y,z);
-  particleGun->SetParticlePosition(position);
+  fPosition = G4ThreeVector(x,y,z);
+  fParticleGun->SetParticlePosition(fPosition);
 
   // Simulation of beam direction
-  G4double ux = direction.x();
-  G4double uy = direction.y();
-  G4double uz = direction.z();
+  G4double ux = fDirection.x();
+  G4double uy = fDirection.y();
+  G4double uz = fDirection.z();
 
   // Beam particles are uniformly distributed over phi, cosTheta
-  if(1.0 > minCosTheta) {
-    uz = minCosTheta + (1.0 - minCosTheta)*G4UniformRand() ;
-    ux = std::sqrt(1.0 - uz*uz) ;
-  } else if (sigmaTheta > 0.0) {
-    ux = G4RandGauss::shoot(0.0,sigmaTheta);
-    uz = std::sqrt(1.0 - ux*ux);
+  if(1.0 > fMinCosTheta) {
+    uz = fMinCosTheta + (1.0 - fMinCosTheta)*G4UniformRand() ;
+    ux = std::sqrt((1.0 - uz)*(1.0 + uz)) ;
+  } else if (fSigmaTheta > 0.0) {
+    ux = G4RandGauss::shoot(0.0,fSigmaTheta);
+    uz = std::sqrt((1.0 - ux)*(1.0 + ux));
   }
 
   G4double phi = twopi*G4UniformRand() ;
-  uy = ux ;
+  uy = ux;
   ux *= std::cos(phi) ;
   uy *= std::sin(phi) ;
-  direction = G4ThreeVector(ux,uy,uz) ;
+  fDirection = G4ThreeVector(ux,uy,uz) ;
 
-  direction = direction.unit();
-  particleGun->SetParticleMomentumDirection(direction);
-  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
+  fParticleGun->SetParticleMomentumDirection(fDirection);
 
   // Simulation of beam kinetic energy
-  G4double kinEnergy = energy;
+  G4double kinEnergy = fEnergy;
 
-  if(m_gauss == "flatE") kinEnergy  = energy - sigmaE + 2.*sigmaE*G4UniformRand();
-  else if(0.0 < sigmaE)  kinEnergy  = energy + G4RandGauss::shoot(0.0,sigmaE);
+  if(fGauss == "flatE") {
+    kinEnergy  = fEnergy - fSigmaE + 2.*fSigmaE*G4UniformRand();
+  } else if(0.0 < fSigmaE) {
+    kinEnergy  = fEnergy + G4RandGauss::shoot(0.0,fSigmaE);
+  }
+  fParticleGun->SetParticleEnergy(kinEnergy);
 
-  particleGun->SetParticleEnergy(kinEnergy);
-
-  G4String particleName = particle->GetParticleName() ;
-
-  if(verbose > 0) {
-    G4cout << "Event#  " << counter
+  if(fVerbose > 0) {
+    G4ParticleDefinition* particle = fParticleGun->GetParticleDefinition();
+    G4String particleName = particle->GetParticleName() ;
+    G4cout << "Event#  " << fCounter
            << "  Beam particle is generated by PrimaryGeneratorAction "
            << G4endl;
     G4cout << "ParticleName= " << particleName
            << "  PDGcode= " << particle->GetPDGEncoding()
            << std::setprecision(5)
-	   << "   KinEnergy(GeV)= "
-	   << energy/GeV
-	   << "   x(mm)= "
-	   << x/mm
-	   << " y(mm)= "
-	   << y/mm
-	   << " z(mm)= "
-	   << z/mm
+           << "   KinEnergy(GeV)= "
+           << fEnergy/GeV
+           << "   x(mm)= "
+           << x/mm
+           << " y(mm)= "
+           << y/mm
+           << " z(mm)= "
+           << z/mm
            << "   ux= "
-	   << ux
-	   << " uy= "
-	   << uy
-	   << " uz= "
-	   << uz
-	   << G4endl;
+           << ux
+           << " uy= "
+           << uy
+           << " uz= "
+           << uz
+           << G4endl;
     }
 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PrimaryGeneratorAction::SetBeamSigmaE(G4double val)
-{
-  sigmaE = val;
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PrimaryGeneratorAction::SetBeamEnergy(G4double val)
 {
-  energy = val;
-  if(energy < (Histo::GetPointer())->GetMaxEnergy())
-              (Histo::GetPointer())->SetMaxEnergy(energy);
+  fEnergy = val;
+  if(fEnergy < (Histo::GetPointer())->GetMaxEnergy()) {
+    (Histo::GetPointer())->SetMaxEnergy(fEnergy);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

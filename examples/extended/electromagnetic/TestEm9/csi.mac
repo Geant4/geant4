@@ -23,14 +23,9 @@
 /testem/phys/MuonCuts   10.0 mm
 /testem/stepMax         100  mm
 #
-#/process/eLoss/preciseRange  true
-#/process/eLoss/integral      true
 /run/initialize
 #
-/testem/histo/fileName  csi_ma2.paw
-#/testem/histo/fileName  csi_st2.paw
-#/testem/histo/fileName  csi.xml
-#/testem/histo/fileType  XML
+/testem/histo/fileName  csi
 #
 /gun/particle e-
 /gun/energy   1 GeV

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.23 2010-10-25 09:20:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,9 +41,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <iomanip>
+
 #include "G4Isotope.hh"
 #include "G4NistManager.hh"
-#include <iomanip>
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,18 +56,20 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 
 // Create an isotope
 //
-G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int m)
-: fName(Name), fZ(Z), fN(N), fA(A), fm(m), fCountUse(0)
+G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
+: fName(Name), fZ(Z), fN(N), fA(A), fm(il), fCountUse(0)
 {
   if (Z<1) { 
-    G4Exception ("G4Isotope::G4Isotope()", "mat001", FatalException,
-      "G4Isotope: ERROR! It is not allowed to create an Isotope with Z < 1" );
+    G4ExceptionDescription ed;
+    ed << "Wrong Isotope " << Name << " Z= " << Z << G4endl;
+    G4Exception ("G4Isotope::G4Isotope()", "mat001", FatalException, ed);
   }
   if (N<Z) {
-    G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, 
-      "G4Isotope: ERROR! Attempt to create an Isotope with N < Z !!!" );
+    G4ExceptionDescription ed;
+    ed << "Wrong Isotope " << Name << " Z= " << Z << " > N= " << N << G4endl;
+    G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, ed);
   }
-  if (A<=DBL_MIN) {
+  if (A<=0.0) {
     fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))*g/(mole*amu_c2);  
   }
   theIsotopeTable.push_back(this);
@@ -86,13 +90,6 @@ G4Isotope::G4Isotope(__void__&)
 
 G4Isotope::~G4Isotope()
 {
-  /*
-  if (fCountUse != 0)
-    G4cout << "--> warning from ~G4Isotope(): the isotope " << fName
-           << " is still referenced by " << fCountUse << " G4Elements \n" 
-	   << G4endl;
-  */     
-  //remove this isotope from theIsotopeTable
   theIsotopeTable[fIndexInTable] = 0;
 }  
 
@@ -196,20 +193,20 @@ size_t G4Isotope::GetNumberOfIsotopes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Isotope* G4Isotope::GetIsotope(G4String isotopeName, G4bool warning)
+G4Isotope* G4Isotope::GetIsotope(const G4String& isotopeName, G4bool warning)
 {  
   // search the isotope by its name 
   for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
    {
-    if (theIsotopeTable[J]->GetName() == isotopeName)
-      return theIsotopeTable[J];
+     if (theIsotopeTable[J]->GetName() == isotopeName)
+       { return theIsotopeTable[J]; }
    }
    
   // the isotope does not exist in the table
   if (warning) {
-  G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
-         << isotopeName << " does not exist in the table. Return NULL pointer."
-	 << G4endl;
+    G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
+	   << isotopeName << " does not exist in the table. Return NULL pointer."
+	   << G4endl;
   }     
   return 0;          
 }

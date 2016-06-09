@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.cc,v 1.4 2010-07-21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -41,6 +40,7 @@
 // ------------------------------------------------------------
 //
 #include "G4ParticleChangeForGamma.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4DynamicParticle.hh"
@@ -101,10 +101,12 @@ G4ParticleChangeForGamma & G4ParticleChangeForGamma::operator=(
        }
      }
      delete theListOfSecondaries; 
- 
-    theListOfSecondaries = right.theListOfSecondaries;
-    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theListOfSecondaries =  new G4TrackFastVector();
     theNumberOfSecondaries = right.theNumberOfSecondaries;
+    for (G4int index = 0; index<theNumberOfSecondaries; index++){
+      G4Track* newTrack =  new G4Track(*((*right.theListOfSecondaries)[index] ));
+      theListOfSecondaries->SetElement(index, newTrack);			    }
+ 
     theStatusChange = right.theStatusChange;
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
     theSteppingControlFlag = right.theSteppingControlFlag;
@@ -126,21 +128,11 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
 {
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetStepLength( 0.0 );
-  if (isParentWeightProposed) {
-    if (isParentWeightSetByProcess) {
-      // update weight
-      G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-      pPostStepPoint->SetWeight( theParentWeight );
-    }
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-	}
-      }
-    }
+
+  if (isParentWeightProposed ){
+    pStep->GetPostStepPoint()->SetWeight( theParentWeight );
   }
+
   return pStep;
 }
 
@@ -152,18 +144,9 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetPolarization( proposedPolarization );
 
   if (isParentWeightProposed ){
-    // update weight
-    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-	}
-      }
-    }
+    pPostStepPoint->SetWeight( theParentWeight );
   }
-  
+   
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
   return pStep;
@@ -214,21 +197,24 @@ G4bool G4ParticleChangeForGamma::CheckIt(const G4Track& aTrack)
   // Energy should not be lager than initial value
   accuracy = ( proposedKinEnergy - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > accuracyForWarning) {
+    itsOK = false;
+    exitWithError = (accuracy > accuracyForException);
 #ifdef G4VERBOSE
     G4cout << "G4ParticleChangeForGamma::CheckIt: ";
-    G4cout << "KinEnergy become larger than the initial value!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+    G4cout << "KinEnergy become larger than the initial value!" 
+	   << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+    G4cout << aTrack.GetDefinition()->GetParticleName()
+	   << " E=" << aTrack.GetKineticEnergy()/MeV
+	   << " pos=" << aTrack.GetPosition().x()/m
+	   << ", " << aTrack.GetPosition().y()/m
+	   << ", " << aTrack.GetPosition().z()/m
+	   << G4endl;
 #endif
-    itsOK = false;
-    if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
 #ifdef G4VERBOSE
-  if (!itsOK) {
-    G4cout << "G4ParticleChangeForGamma::CheckIt " << G4endl;
-    DumpInfo();
-  }
+  if (!itsOK) DumpInfo();
 #endif
 
   // Exit with error

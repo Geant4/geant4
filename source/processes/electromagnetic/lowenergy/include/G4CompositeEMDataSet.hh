@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.13 2009-09-25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -49,9 +48,11 @@
 #ifndef G4COMPOSITEEMDATASET_HH
 #define G4COMPOSITEEMDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4VEMDataSet.hh"
-#include <vector>
 
 class G4VDataSetAlgorithm;
 
@@ -59,8 +60,8 @@ class G4CompositeEMDataSet : public G4VEMDataSet
 {
 public:
   G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm, 
-		       G4double eUnit=MeV, 
-		       G4double dataUnit=barn, 
+		       G4double eUnit=CLHEP::MeV, 
+		       G4double dataUnit=CLHEP::barn, 
 		       G4int zMin=1, 
 		       G4int zMax=99); 
 

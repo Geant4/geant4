@@ -43,10 +43,11 @@
 
 #include "ML2Acc1.hh"
 #include "ML2Acc1Messenger.hh"
+#include "G4SystemOfUnits.hh"
 
 CML2Acc1::CML2Acc1()
 {
-	this->acc1Messenger=new CML2Acc1Messenger(this);
+	acc1Messenger=new CML2Acc1Messenger(this);
 }
 
 CML2Acc1::~CML2Acc1(void)
@@ -64,9 +65,9 @@ CML2Acc1* CML2Acc1::GetInstance(void)
 }
 void CML2Acc1::writeInfo()
 {
-	std::cout <<"\n\n\tnominal beam energy: "<<this->idEnergy << G4endl;
-	std::cout <<"\tJaw X aperture: 1) "<< this->jaw1XAperture/mm<<"[mm]\t2) " << this->jaw2XAperture/mm<< " [mm]"<< G4endl;
-	std::cout <<"\tJaw Y aperture: 1) "<< this->jaw1YAperture/mm<<"[mm]\t2) " << this->jaw2YAperture/mm<< " [mm]\n"<< G4endl;
+	std::cout <<"\n\n\tnominal beam energy: "<<idEnergy << G4endl;
+	std::cout <<"\tJaw X aperture: 1) "<< jaw1XAperture/mm<<"[mm]\t2) " << jaw2XAperture/mm<< " [mm]"<< G4endl;
+	std::cout <<"\tJaw Y aperture: 1) "<< jaw1YAperture/mm<<"[mm]\t2) " << jaw2YAperture/mm<< " [mm]\n"<< G4endl;
 }
 G4Material * CML2Acc1::otherMaterials(const G4String materialName)
 {
@@ -152,31 +153,31 @@ G4Material * CML2Acc1::otherMaterials(const G4String materialName)
 	}
 	return material;
 }
-void CML2Acc1::Construct(G4VPhysicalVolume *PVWorld, G4double isoCentre)
+void CML2Acc1::Construct(G4VPhysicalVolume *PWorld, G4double iso)
 {
-	this->PVWorld=PVWorld;
-	this->setIsoCentre(isoCentre);
-	this->target();
-	this->BeWindow();
-	this->ionizationChamber();
-	this->flatteningFilter();
-	this->mirror();
-	this->primaryCollimator();
-	this->MLC();
-	this->Jaw1X();
-	this->Jaw2X();
-	this->Jaw1Y();
-	this->Jaw2Y();
+	PVWorld=PWorld;
+	setIsoCentre(iso);
+	target();
+	BeWindow();
+	ionizationChamber();
+	flatteningFilter();
+	mirror();
+	primaryCollimator();
+	MLC();
+	Jaw1X();
+	Jaw2X();
+	Jaw1Y();
+	Jaw2Y();
 }
 void CML2Acc1::reset()
 {
-	this->leavesA.clear();
-	this->leavesB.clear();
+	leavesA.clear();
+	leavesB.clear();
 }
 
 bool CML2Acc1::target()
 {
-	switch (this->idEnergy)
+	switch (idEnergy)
 	{
 		case 6:
   //    materials  
@@ -200,10 +201,9 @@ bool CML2Acc1::target()
   G4double targetAPos_x = 0.0*m;
   G4double targetAPos_y = 0.0*m;
   G4double targetAPos_z = 0.20055*cm;
-  G4VPhysicalVolume *targetA_phys=0;	
   targetA_phys = new G4PVPlacement(0,
             G4ThreeVector(targetAPos_x,targetAPos_y,targetAPos_z),
-            "targetA",targetA_log,this->PVWorld,false,0);
+            "targetA",targetA_log,PVWorld,false,0);
 
   G4double targetBDim_x = 0.6*cm;
   G4double targetBDim_y = 0.6*cm;
@@ -213,10 +213,9 @@ bool CML2Acc1::target()
   G4double targetBPos_x = 0.0*m;
   G4double targetBPos_y = 0.0*m;
   G4double targetBPos_z = 0.07736*cm;
-  G4VPhysicalVolume *targetB_phys=0;
   targetB_phys = new G4PVPlacement(0,
             G4ThreeVector(targetBPos_x,targetBPos_y,targetBPos_z),
-            "targetB",targetB_log,this->PVWorld,false,0);
+            "targetB",targetB_log,PVWorld,false,0);
 
 
 	// ***********  REGIONS for CUTS
@@ -282,11 +281,10 @@ bool CML2Acc1::primaryCollimator()
   G4double UpperCollimatorPosX = 0.*cm;
   G4double UpperCollimatorPosY = 0.*cm;
   G4double UpperCollimatorPosZ = -1.*cm;
-  G4VPhysicalVolume *UpperCollimator_phys=0;
   UpperCollimator_phys = new G4PVPlacement(0,
 					   G4ThreeVector(UpperCollimatorPosX,UpperCollimatorPosY,
 							 UpperCollimatorPosZ),"UpperCollimator",
-					   UpperCollimator_log,this->PVWorld,false,0);
+					   UpperCollimator_log,PVWorld,false,0);
 
  
   //-------------------- the first collimator lower----------------
@@ -314,8 +312,7 @@ bool CML2Acc1::primaryCollimator()
   G4Tubs* tracker_tube = new G4Tubs("tracker_tube",innerRadiusOfTheTube,
                                     outerRadiusOfTheTube,hightOfTheTube,
 				    startAngleOfTheTube,spanningAngleOfTheTube);
-  G4LogicalVolume *tracker_log = 0;
-  tracker_log = new G4LogicalVolume(tracker_tube,W,"tracker_log",0,0,0);
+//  G4LogicalVolume *tracker_log = new G4LogicalVolume(tracker_tube,W,"tracker_log",0,0,0);
 
 
   G4SubtractionSolid* CylMinusCone = new G4SubtractionSolid("Cyl-Cone",
@@ -324,10 +321,9 @@ bool CML2Acc1::primaryCollimator()
   G4double CminusCPos_x = 0.*cm;
   G4double CminusCPos_y = 0.*cm;
   G4double CminusCPos_z = +6.2*cm;
-  G4VPhysicalVolume *CylMinusCone_phys =0;
   CylMinusCone_phys = new G4PVPlacement(rotateMatrix,
 					G4ThreeVector(CminusCPos_x,CminusCPos_y,CminusCPos_z),
-					"CylMinusCone",CylMinusCone_log,this->PVWorld,false,0);
+					"CylMinusCone",CylMinusCone_log,PVWorld,false,0);
   
 //--------- Visualization attributes -------------------------------
    G4VisAttributes* simpleTungstenWVisAtt= new G4VisAttributes(magenta);
@@ -372,8 +368,8 @@ bool CML2Acc1::BeWindow()
 
 	G4Tubs* BeWTube = new G4Tubs("BeWindowTube", 0., 36.*mm, 0.2*mm, 0.*deg, 360.*deg);
 	G4LogicalVolume *BeWTubeLV = new G4LogicalVolume(BeWTube, Be, "BeWTubeLV", 0, 0, 0);
-	G4VPhysicalVolume *BeWTubePV=0;
-	BeWTubePV=new G4PVPlacement(0, G4ThreeVector(0.,0.,100.*mm), "BeWTubePV", BeWTubeLV, this->PVWorld, false, 0);
+        BeWTubePV=new G4PVPlacement(0, G4ThreeVector(0.,0.,100.*mm), "BeWTubePV", BeWTubeLV,
+                                    PVWorld, false, 0);
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
@@ -383,11 +379,11 @@ bool CML2Acc1::BeWindow()
 	regVol->AddRootLogicalVolume(BeWTubeLV);
 
 	bCreated=true;
-	return true;
+        return bCreated;
 }
 bool CML2Acc1::flatteningFilter()
 {
-	switch (this->idEnergy)
+	switch (idEnergy)
 	{
 		case 6:
 	G4double z0, h0;
@@ -408,8 +404,7 @@ bool CML2Acc1::flatteningFilter()
 	centre.set(0.,0.,z0);
 	G4Cons *FFL1A_1Cone = new G4Cons("FFL1A_1", 0.*cm, 0.3*cm, 0.*cm, 5.*cm, h0, 0.*deg, 360.*deg);
 	G4LogicalVolume *FFL1A_1LV = new G4LogicalVolume(FFL1A_1Cone, Cu, "FFL1A_1LV", 0, 0, 0);
-	G4VPhysicalVolume *FFL1A_1PV=0;
-	FFL1A_1PV=new G4PVPlacement(0, centre, "FFL1A_1PV", FFL1A_1LV, this->PVWorld, false, 0);
+	FFL1A_1PV=new G4PVPlacement(0, centre, "FFL1A_1PV", FFL1A_1LV, PVWorld, false, 0);
 
 	// two
 	z0+=h0;
@@ -419,8 +414,7 @@ bool CML2Acc1::flatteningFilter()
 	z0+=h0;
 	G4Tubs *FFL2_1Tube = new G4Tubs("FFL6_1", 0.*cm, 2.5*cm, h0, 0.*deg, 360.*deg);
 	G4LogicalVolume *FFL2_1LV = new G4LogicalVolume(FFL2_1Tube, Cu, "FFL2_1LV", 0, 0, 0);
-	G4VPhysicalVolume *FFL2_1PV=0;
-	FFL2_1PV=new G4PVPlacement(0, centre, "FFL2_1PV", FFL2_1LV, this->PVWorld, false, 0);
+	FFL2_1PV=new G4PVPlacement(0, centre, "FFL2_1PV", FFL2_1LV, PVWorld, false, 0);
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Red());
 	simpleAlSVisAtt->SetVisibility(true);
@@ -458,8 +452,7 @@ bool CML2Acc1::ionizationChamber()
 	// W1
 	centre.set(0.,0.,157.*mm);
 	G4LogicalVolume *PCUTubeW1LV = new G4LogicalVolume(ICTubeW, material, "ionizationChamberTubeW1LV", 0, 0, 0);
-	G4VPhysicalVolume *PCUtubeW1PV=0;
-	PCUtubeW1PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW1PV", PCUTubeW1LV, this->PVWorld, false, 0);
+	PCUtubeW1PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW1PV", PCUTubeW1LV, PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
 // 	simpleAlSVisAtt->SetForceSolid(true);
@@ -470,8 +463,7 @@ bool CML2Acc1::ionizationChamber()
 	// P1
 	centre.set(0.,0.,158.*mm);
 	G4LogicalVolume *PCUTubeP1LV = new G4LogicalVolume(ICTubeP, material, "ionizationChamberTubeP1LV", 0, 0, 0);
-	G4VPhysicalVolume *PCUtubeP1PV=0;
-	PCUtubeP1PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP1PV", PCUTubeP1LV, this->PVWorld, false, 0);
+	PCUtubeP1PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP1PV", PCUTubeP1LV, PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
 // 	simpleAlSVisAtt->SetForceSolid(true);
@@ -482,8 +474,7 @@ bool CML2Acc1::ionizationChamber()
 	// W2
 	centre.set(0.,0.,159.*mm);
 	G4LogicalVolume *PCUTubeW2LV = new G4LogicalVolume(ICTubeW, material, "ionizationChamberTubeW2LV", 0, 0, 0);
-	G4VPhysicalVolume *PCUtubeW2PV=0;
-	PCUtubeW2PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW2PV", PCUTubeW2LV, this->PVWorld, false, 0);
+	PCUtubeW2PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW2PV", PCUTubeW2LV, PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
 // 	simpleAlSVisAtt->SetForceSolid(true);
@@ -494,8 +485,7 @@ bool CML2Acc1::ionizationChamber()
 	// P2
 	centre.set(0.,0.,160.*mm);
 	G4LogicalVolume *PCUTubeP2LV = new G4LogicalVolume(ICTubeP, material, "ionizationChamberTubeP2LV", 0, 0, 0);
-	G4VPhysicalVolume *PCUtubeP2PV=0;
-	PCUtubeP2PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP2PV", PCUTubeP2LV, this->PVWorld, false, 0);
+	PCUtubeP2PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP2PV", PCUTubeP2LV, PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
 // 	simpleAlSVisAtt->SetForceSolid(true);
@@ -506,8 +496,7 @@ bool CML2Acc1::ionizationChamber()
 	// W3
 	centre.set(0.,0.,161.*mm);
 	G4LogicalVolume *PCUTubeW3LV = new G4LogicalVolume(ICTubeW, material, "ionizationChamberTubeW3LV", 0, 0, 0);
-	G4VPhysicalVolume *PCUtubeW3PV=0;
-	PCUtubeW3PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW3PV", PCUTubeW3LV, this->PVWorld, false, 0);
+	PCUtubeW3PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW3PV", PCUTubeW3LV, PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
 // 	simpleAlSVisAtt->SetForceSolid(true);
@@ -518,8 +507,7 @@ bool CML2Acc1::ionizationChamber()
 	// P3
 	centre.set(0.,0.,162.*mm);
 	G4LogicalVolume *PCUTubeP3LV = new G4LogicalVolume(ICTubeP, material, "ionizationChamberTubeP3LV", 0, 0, 0);
-	G4VPhysicalVolume *PCUtubeP3PV=0;
-	PCUtubeP3PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP3PV", PCUTubeP3LV, this->PVWorld, false, 0);
+	PCUtubeP3PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP3PV", PCUTubeP3LV, PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
 // 	simpleAlSVisAtt->SetForceSolid(true);
@@ -528,7 +516,7 @@ bool CML2Acc1::ionizationChamber()
 	regVol->AddRootLogicalVolume(PCUTubeP3LV);
 
 	bCreated=true;
-	return true;
+        return bCreated;
 }
 bool CML2Acc1::mirror()
 {
@@ -546,8 +534,7 @@ bool CML2Acc1::mirror()
 	G4LogicalVolume *MirrorTubeLV = new G4LogicalVolume(MirrorTube, MYLAR, "MirrorTubeLV", 0, 0, 0);
 	G4RotationMatrix *cRotation=new G4RotationMatrix();
 	cRotation->rotateY(12.0*deg);
-	G4VPhysicalVolume *MirrorTubePV=0;
-	MirrorTubePV=new G4PVPlacement(cRotation, G4ThreeVector(0., 0., 175.*mm), "MirrorTubePV", MirrorTubeLV,this->PVWorld, false, 0);
+        MirrorTubePV=new G4PVPlacement(cRotation, G4ThreeVector(0., 0., 175.*mm), "MirrorTubePV", MirrorTubeLV,PVWorld, false, 0);
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Green());
 	simpleAlSVisAtt->SetVisibility(true);
@@ -556,73 +543,69 @@ bool CML2Acc1::mirror()
 	MirrorTubeLV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(MirrorTubeLV);
 	bCreated=true;
-	return true;
+        return bCreated;
 }
 
 void CML2Acc1::SetJawAperture(G4int idJaw, G4ThreeVector &centre, G4ThreeVector halfSize, G4double aperture, G4RotationMatrix *cRotation)
 {
 	using namespace std;
-	G4double theta, x, y, z, dx, dy, dz, beta, R, top;
+        G4double theta, x, y, z, dx, dy, dz;
 	x=centre.getX();
 	y=centre.getY();
 	z=centre.getZ();
-	top=z-78./2.;
-	theta=fabs(atan(aperture/this->isoCentre));
+	theta=fabs(atan(aperture/isoCentre));
 	dx=halfSize.getX();
 	dy=halfSize.getY();
 	dz=halfSize.getZ();
 	
-	G4double p1x, p1y, p2x, p2y, dist;
+//        G4double p1x, p1y, p2x, p2y;
 	
 	switch (idJaw)
 	{
 	case 1: //idJaw1XV2100:
 		centre.set(z*sin(theta)+dx*cos(theta), y, z*cos(theta)-dx*sin(theta));
-		beta=fabs(atan(dx/dz));
-		R=std::sqrt(dx*dx+dz*dz);
-		p1x=centre.getX()-R*sin(theta+beta);
-		p1y=centre.getZ()-R*cos(theta+beta);
-		p2x=centre.getX()+R*sin(theta-beta);
-		p2y=centre.getZ()+R*cos(theta-beta);
-		dist=std::sqrt((p1x-p2x)*(p1x-p2x)+(p1y-p2y)*(p1y-p2y));
+//		beta=fabs(atan(dx/dz));
+//		R=std::sqrt(dx*dx+dz*dz);
+//		p1x=centre.getX()-R*sin(theta+beta);
+//		p1y=centre.getZ()-R*cos(theta+beta);
+//		p2x=centre.getX()+R*sin(theta-beta);
+//		p2y=centre.getZ()+R*cos(theta-beta);
 		
 		cRotation->rotateY(-theta);
 		halfSize.set(fabs(dx*cos(theta)+dz*sin(theta)), fabs(dy), fabs(dz*cos(theta)+dx*sin(theta)));
 		break;
 	case 2: //idJaw2XV2100:
 		centre.set(-(z*sin(theta)+dx*cos(theta)), y, z*cos(theta)-dx*sin(theta));
-		beta=fabs(atan(dx/dz));
-		R=std::sqrt(dx*dx+dz*dz);
-		p1x=centre.getX()+R*sin(theta+beta);
-		p1y=centre.getZ()-R*cos(theta+beta);
-		p2x=centre.getX()-R*sin(theta-beta);
-		p2y=centre.getZ()+R*cos(theta-beta);
-		dist=std::sqrt((p1x-p2x)*(p1x-p2x)+(p1y-p2y)*(p1y-p2y));
+//		beta=fabs(atan(dx/dz));
+//		R=std::sqrt(dx*dx+dz*dz);
+//		p1x=centre.getX()+R*sin(theta+beta);
+//		p1y=centre.getZ()-R*cos(theta+beta);
+//		p2x=centre.getX()-R*sin(theta-beta);
+//		p2y=centre.getZ()+R*cos(theta-beta);
 		
 		cRotation->rotateY(theta);
 		halfSize.set(fabs(dx*cos(theta)+dz*sin(theta)), fabs(dy), fabs(dz*cos(theta)+dx*sin(theta)));
 		break;
 	case 3: //idJaw1YV2100:
 		centre.set(x, z*sin(theta)+dy*cos(theta), z*cos(theta)-dy*sin(theta));
-		beta=fabs(atan(dy/dz));
-		R=std::sqrt(dy*dy+dz*dz);
-		p1x=centre.getY()-R*sin(theta+beta);
-		p1y=centre.getZ()-R*cos(theta+beta);
-		p2x=centre.getY()+R*sin(theta-beta);
-		p2y=centre.getZ()+R*cos(theta-beta);
+//		beta=fabs(atan(dy/dz));
+//		R=std::sqrt(dy*dy+dz*dz);
+//		p1x=centre.getY()-R*sin(theta+beta);
+//		p1y=centre.getZ()-R*cos(theta+beta);
+//		p2x=centre.getY()+R*sin(theta-beta);
+//		p2y=centre.getZ()+R*cos(theta-beta);
 		
 		cRotation->rotateX(theta);
 		halfSize.set(fabs(dx), fabs(dy*cos(theta)+dz*sin(theta)), fabs(dz*cos(theta)+dy*sin(theta)));
 		break;
 	case 4: //idJaw2YV2100:
 		centre.set(x, -(z*sin(theta)+dy*cos(theta)), z*cos(theta)-dy*sin(theta));
-		beta=fabs(atan(dy/dz));
-		R=std::sqrt(dy*dy+dz*dz);
-		p1x=centre.getY()+R*sin(theta+beta);
-		p1y=centre.getZ()-R*cos(theta+beta);
-		p2x=centre.getY()-R*sin(theta-beta);
-		p2y=centre.getZ()+R*cos(theta-beta);
-		dist=std::sqrt((p1x-p2x)*(p1x-p2x)+(p1y-p2y)*(p1y-p2y));
+//		beta=fabs(atan(dy/dz));
+//		R=std::sqrt(dy*dy+dz*dz);
+//		p1x=centre.getY()+R*sin(theta+beta);
+//		p1y=centre.getZ()-R*cos(theta+beta);
+//		p2x=centre.getY()-R*sin(theta-beta);
+//		p2y=centre.getZ()+R*cos(theta-beta);
 		
 		cRotation->rotateX(-theta);
 		halfSize.set(fabs(dx), fabs(dy*cos(theta)+dz*sin(theta)), fabs(dz*cos(theta)+dy*sin(theta)));
@@ -635,11 +618,10 @@ void CML2Acc1::SetJawAperture(G4int idJaw, G4ThreeVector &centre, G4ThreeVector 
 bool CML2Acc1::Jaw1X()
 {
 	bool bCreated=false;
-	G4Material *steel1=this->otherMaterials("steel1");
+	G4Material *steel1=otherMaterials("steel1");
 	G4String name="Jaws1X";
 	G4Box *box;
 	G4LogicalVolume *logVol;
-	G4VPhysicalVolume *phVol;
 	G4VisAttributes* simpleAlSVisAtt;
 
 	G4ThreeVector centre, halfSize;
@@ -648,8 +630,8 @@ bool CML2Acc1::Jaw1X()
 	halfSize.set(45.*mm, 93.*mm, 78./2.*mm);
 	box = new G4Box(name+"Box", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, steel1, name+"LV", 0, 0, 0);
-	this->SetJawAperture(1, centre, halfSize, this->jaw1XAperture, cRotation);
-	phVol= new G4PVPlacement(cRotation, centre, name+"PV", logVol, this->PVWorld, false, 0);
+	SetJawAperture(1, centre, halfSize, jaw1XAperture, cRotation);
+        phVol1X= new G4PVPlacement(cRotation, centre, name+"PV", logVol, PVWorld, false, 0);
 
 	// Region for cuts
 	G4Region *regVol;
@@ -672,11 +654,10 @@ bool CML2Acc1::Jaw1X()
 bool CML2Acc1::Jaw2X()
 {
 	bool bCreated=false;
-	G4Material *steel1=this->otherMaterials("steel1");
+	G4Material *steel1=otherMaterials("steel1");
 	G4String name="Jaws2X";
 	G4Box *box;
 	G4LogicalVolume *logVol;
-	G4VPhysicalVolume *phVol;
 	G4VisAttributes* simpleAlSVisAtt;
 
 	G4ThreeVector centre, halfSize;
@@ -685,8 +666,8 @@ bool CML2Acc1::Jaw2X()
 	halfSize.set(45.*mm, 93.*mm, 78./2.*mm);
 	box = new G4Box(name+"Box", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, steel1, name+"LV", 0, 0, 0);
-	this->SetJawAperture(2, centre, halfSize, this->jaw2XAperture, cRotation);
-	phVol= new G4PVPlacement(cRotation, centre, name+"PV", logVol, this->PVWorld, false, 0);
+	SetJawAperture(2, centre, halfSize, jaw2XAperture, cRotation);
+        phVol2X= new G4PVPlacement(cRotation, centre, name+"PV", logVol, PVWorld, false, 0);
 
 	// Region for cuts
 	G4Region *regVol;
@@ -709,11 +690,10 @@ bool CML2Acc1::Jaw2X()
 bool CML2Acc1::Jaw1Y()
 {
 	bool bCreated=false;
-	G4Material *steel1=this->otherMaterials("steel1");
+	G4Material *steel1=otherMaterials("steel1");
 	G4String name="Jaws1Y";
 	G4Box *box;
 	G4LogicalVolume *logVol;
-	G4VPhysicalVolume *phVol;
 	G4VisAttributes* simpleAlSVisAtt;
 
 	G4ThreeVector centre, halfSize;
@@ -722,8 +702,8 @@ bool CML2Acc1::Jaw1Y()
 	halfSize.set(93.*mm, 35.*mm, 78./2.*mm);
 	box = new G4Box(name+"Box", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, steel1, name+"LV", 0, 0, 0);
-	this->SetJawAperture(3, centre, halfSize, this->jaw1YAperture, cRotation);
-	phVol= new G4PVPlacement(cRotation, centre, name+"PV", logVol, this->PVWorld, false, 0);
+	SetJawAperture(3, centre, halfSize, jaw1YAperture, cRotation);
+        phVol1Y= new G4PVPlacement(cRotation, centre, name+"PV", logVol, PVWorld, false, 0);
 
 	// Region for cuts
 	G4Region *regVol;
@@ -746,11 +726,10 @@ bool CML2Acc1::Jaw1Y()
 bool CML2Acc1::Jaw2Y()
 {
 	bool bCreated=false;
-	G4Material *steel1=this->otherMaterials("steel1");
+	G4Material *steel1=otherMaterials("steel1");
 	G4String name="Jaws2Y";
 	G4Box *box;
 	G4LogicalVolume *logVol;
-	G4VPhysicalVolume *phVol;
 	G4VisAttributes* simpleAlSVisAtt;
 
 	G4ThreeVector centre, halfSize;
@@ -759,8 +738,8 @@ bool CML2Acc1::Jaw2Y()
 	halfSize.set(93.*mm, 35.*mm, 78./2.*mm);
 	box = new G4Box(name+"Box", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, steel1, name+"LV", 0, 0, 0);
-	this->SetJawAperture(4, centre, halfSize, this->jaw2YAperture, cRotation);
-	phVol= new G4PVPlacement(cRotation, centre, name+"PV", logVol, this->PVWorld, false, 0);
+	SetJawAperture(4, centre, halfSize, jaw2YAperture, cRotation);
+        phVol2Y= new G4PVPlacement(cRotation, centre, name+"PV", logVol, PVWorld, false, 0);
 
 	// Region for cuts
 
@@ -823,36 +802,35 @@ bool CML2Acc1::MLC()
 
 	int i;
 	G4String PVname;
-	G4VPhysicalVolume *leafPhys; 
 	int j=0;
 
 	G4ThreeVector centre;
-	int nhalfLeaves=(int)(this->leavesA.size()/2.);
+	int nhalfLeaves=(int)(leavesA.size()/2.);
 	centre= centreStart + G4ThreeVector(-nhalfLeaves*boxSize.getX(), 0.,0.);
-	for (i=1;i<(int)this->leavesA.size(); i++)
+	for (i=1;i<(int)leavesA.size(); i++)
 	{
-		G4String s;
+		G4String str;
 		char appo[10];
 		sprintf(appo,"%d",i);
-		s=appo;
-		PVname="leafA"+s;
+		str=appo;
+		PVname="leafA"+str;
 		centre.setX(centre.getX()+boxSize.getX()*2.);
-		centre.setY(-boxSize.getY()-this->leavesA[i]);
-		leafPhys=new G4PVPlacement(0, centre, PVname, leafLVA, this->PVWorld, false, i);
+		centre.setY(-boxSize.getY()-leavesA[i]);
+		leafPhys=new G4PVPlacement(0, centre, PVname, leafLVA, PVWorld, false, i);
 		j++;
 	}
-	nhalfLeaves=(int)(this->leavesB.size()/2.);
+	nhalfLeaves=(int)(leavesB.size()/2.);
 	centre=centreStart+G4ThreeVector(-nhalfLeaves*boxSize.getX(), 0.,0.);
-	for (i=1;i<(int)this->leavesB.size(); i++)
+	for (i=1;i<(int)leavesB.size(); i++)
 	{
-		G4String s;
+		G4String str;
 		char appo[10];
 		sprintf(appo,"%d",i);
-		s=appo;
-		PVname="leafB"+s;
+		str=appo;
+		PVname="leafB"+str;
 		centre.setX(centre.getX()+boxSize.getX()*2.);
-		centre.setY(+boxSize.getY()+this->leavesB[i]);
-		leafPhys=new G4PVPlacement(0, centre, PVname, leafLVB, this->PVWorld, false, i);
+		centre.setY(+boxSize.getY()+leavesB[i]);
+		leafPhys=new G4PVPlacement(0, centre, PVname, leafLVB, PVWorld, false, i);
 		j++;
 	}
 	bCreated=true;

@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITProcess.cc 64057 2012-10-30 15:04:49Z gcosmo $
+//
 #include "G4VITProcess.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4IT.hh"
 
-G4int G4VITProcess::fNbProcess = 0;
+size_t G4VITProcess::fNbProcess = 0;
 
 G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
     G4VProcess( name, type ),
-    fState (0),
+    fpState (0),
     fProcessID(fNbProcess)
 {
         fNbProcess++;
@@ -38,6 +41,7 @@ G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
         currentInteractionLength            = 0;
         theInteractionTimeLeft              = 0;
         theNumberOfInteractionLengthLeft    = 0;
+        fProposesTimeStep = false;
 }
 
 G4VITProcess::G4ProcessState::G4ProcessState()
@@ -59,10 +63,12 @@ G4VITProcess::~G4VITProcess()
 G4VITProcess::G4VITProcess(const G4VITProcess& other)  : G4VProcess(other), fProcessID(other.fProcessID)
 {
 	//copy ctor
-        fState                              = 0 ;
+        fpState                             = 0 ;
         currentInteractionLength            = 0;
         theInteractionTimeLeft              = 0;
         theNumberOfInteractionLengthLeft    = 0;
+        fInstantiateProcessState            = other.fInstantiateProcessState;
+        fProposesTimeStep                   = other.fProposesTimeStep;
 }
 
 G4VITProcess& G4VITProcess::operator=(const G4VITProcess& rhs)
@@ -77,23 +83,23 @@ void G4VITProcess::StartTracking(G4Track* track)
     G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
     if(InstantiateProcessState())
     {
-        fState = new G4ProcessState();
+        fpState = new G4ProcessState();
     }
 
-    theNumberOfInteractionLengthLeft    = &(fState->theNumberOfInteractionLengthLeft );
-    theInteractionTimeLeft              = &(fState->theInteractionTimeLeft           );
-    currentInteractionLength            = &(fState->currentInteractionLength         );
-    trackingInfo->RecordProcessState(fState,fProcessID);
-    fState = 0;
+    theNumberOfInteractionLengthLeft    = &(fpState->theNumberOfInteractionLengthLeft );
+    theInteractionTimeLeft              = &(fpState->theInteractionTimeLeft           );
+    currentInteractionLength            = &(fpState->currentInteractionLength         );
+    trackingInfo->RecordProcessState(fpState,fProcessID);
+    fpState = 0;
 }
 
 void G4VITProcess::SubtractNumberOfInteractionLengthLeft(
                                   G4double previousStepSize )
 {
-  if (fState->currentInteractionLength>0.0) {
-    fState->theNumberOfInteractionLengthLeft -= previousStepSize/(fState->currentInteractionLength);
-    if(fState->theNumberOfInteractionLengthLeft<0.) {
-       fState->theNumberOfInteractionLengthLeft=perMillion;
+  if (fpState->currentInteractionLength>0.0) {
+    fpState->theNumberOfInteractionLengthLeft -= previousStepSize/(fpState->currentInteractionLength);
+    if(fpState->theNumberOfInteractionLengthLeft<0.) {
+       fpState->theNumberOfInteractionLengthLeft=perMillion;
     }
 
   } else {

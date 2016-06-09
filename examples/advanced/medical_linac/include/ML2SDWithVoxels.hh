@@ -58,13 +58,13 @@ public:
 	CML2SDWithVoxels(G4String name, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG, G4ThreeVector centre, G4ThreeVector halfSize, G4int NumberOfVoxelsAlongX, G4int NumberOfVoxelsAlongY, G4int NumberOfVoxelsAlongZ);
 	~CML2SDWithVoxels(void);
 	G4bool ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist);
-	inline void Initialize(G4HCofThisEvent *){};
-	inline void EndOfEvent(G4HCofThisEvent*){};
-	G4int getTotalNumberOfEvents(){return this->nTotalEvents;};
-	inline void setActive(G4bool bActive){this->bActive=bActive;};
+	inline void Initialize(G4HCofThisEvent *){}
+	inline void EndOfEvent(G4HCofThisEvent*){}
+	G4int getTotalNumberOfEvents(){return nTotalEvents;}
+	inline void setActive(G4bool act){bActive=act;}
 	void save();
-	inline void setRecycling(int recycling){this->nRecycling=recycling;};
-	inline void setVolumeNameIdLink(std::vector <SvolumeNameId> volumeNameIdLink){this->volumeNameIdLink=volumeNameIdLink;};
+	inline void setRecycling(int recycling){nRecycling=recycling;}
+	inline void setVolumeNameIdLink(std::vector <SvolumeNameId> volNameIdLink){volumeNameIdLink=volNameIdLink;}
 	void resetVoxelsSingle();
 	void setFullOutFileDataSingle(G4String val);
 private:

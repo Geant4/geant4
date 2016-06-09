@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MagneticFieldMessenger.hh,v 1.4 2006-06-29 16:31:29 gunter Exp $
+/// \file analysis/A01/include/A01MagneticFieldMessenger.hh
+/// \brief Definition of the A01MagneticFieldMessenger class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01MagneticFieldMessenger_h
@@ -39,17 +42,15 @@ class A01MagneticFieldMessenger: public G4UImessenger
 {
   public:
     A01MagneticFieldMessenger(A01MagneticField* mpga);
-    ~A01MagneticFieldMessenger();
+    virtual ~A01MagneticFieldMessenger();
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    A01MagneticField * target;
+    A01MagneticField * fTarget;
 
-    G4UIcmdWithADoubleAndUnit*  fieldCmd;
-
+    G4UIcmdWithADoubleAndUnit* fFieldCmd;
 };
 
 #endif

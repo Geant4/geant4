@@ -9,6 +9,30 @@ $Id: History,v 1.3 2010-11-08 11:31:23 maire Exp $
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th October 2012 Ivana Hrivnacova (analysisExample-V09-05-05)
+- Removed FindAIDA.cmake modules (now available in geant4/cmake)
+- Added support for HBOOK in AnaEx01 CMake build
+- Fixed setting directories names in AnaEx01/HistoManager
+  (they have to be defined before openning a file)
+
+18th September 2012 Ivana Hrivnacova (analysisExample-V09-05-04)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Replaced tabulators with space characters  
+     
+08th June 2012 mma (analysisExample-V09-05-03)
+- apply coding conventions in shared
+
+22th May 2012 Ivana Hrivnacova (analysisExample-V09-05-02)
+- Fixed compiler warning (variable set but not used) in N03Con
+
+18th May 2012 Ivana Hrivnacova (analysisExample-V09-05-01)
+- Adding CMakeList.txt files to restructured examples.
+
+17th April 2012 Ivana Hrivnacova (analysisExample-V09-05-00)
+- Restoring the examples with use of AIDA as AnaEx03
+- Restructuring AnaEx01, AnaEx02, AnaEx03 examples for use of shared classes;
+  the shared classes are now in a new directory (shared)
 
 8rd November 2010  Michel Maire
 - add README

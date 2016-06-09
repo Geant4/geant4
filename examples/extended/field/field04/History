@@ -1,4 +1,4 @@
-// $Id: History,v 1.19 2010-10-25 00:49:34 gum Exp $
+// $Id:$
 // ------------------------------------------------------------------
 
      =========================================================
@@ -15,19 +15,35 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 28th, 2012 Gabriele Cosmo - fieldex04-V09-05-04
+- Fixed cases of variable shadowing.
+
+Nov 14th, 2012 Ivana Hrivnacova - fieldex04-V09-05-03
+- In vis.mac: replaced OGLIX with OGL
+
+Nov 6th, 2012 Peter Gumplinger - fieldex04-V09-05-02
+- reverse the order of checking thePostLV and thePreLV in the if-statement
+
+Jun 20th, 2012 Peter Gumplinger    - fieldex04-V09-05-01
+- remove SetModel from F04OpticalPhysics.cc co-work with op-V09-05-04
+
+Jun 18th, 2012 Gabriele Cosmo      - fieldex04-V09-05-00
+- Renamed global allocator for F04Trajectory to not clash with one defined
+  in the kernel.
+
 Oct 24th, 2010 Peter Gumplinger    - fieldex04-V09-03-02
-   include Mie scattering process and update usage of G4PhysListFactory
+- Include Mie scattering process and update usage of G4PhysListFactory
 
 Jun 3rd, 2010, Peter Gumplinger    - fieldex04-V09-03-01
-   modify F04Trajectory class to compile without warnings against
-   tracking-V09-03-03 by implementing a DrawTrajectory() method.
+- Modify F04Trajectory class to compile without warnings against
+  tracking-V09-03-03 by implementing a DrawTrajectory() method.
 
 March 23rd, 2010, Gunter Folger     - fieldex04-V09-03-00
-- add <ctime> header in src/F04RunAction.cc to fix a compile 
-   error on windows.
+- Add <ctime> header in src/F04RunAction.cc to fix a compile 
+  error on windows.
 
 November 6th, 2009 Peter Gumplinger - fieldex04-V09-02-03
-- rewrite F04PhysicsList and F04PhysicsListMessenger and
+- Rewrite F04PhysicsList and F04PhysicsListMessenger and
   use the newly available G4PhysListFactory
 
 October 30th, 2009 John Allison - fieldex04-V09-02-02

@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/include/F02EventAction.hh
+/// \brief Definition of the F02EventAction class
 //
-// $Id: F02EventAction.hh,v 1.4 2006-06-29 17:17:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,25 +47,21 @@ class F02EventAction : public G4UserEventAction
 {
   public:
     F02EventAction(F02RunAction* F02RA);
-   ~F02EventAction();
+    ~F02EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+    void SetEventVerbose(G4int level) {fVerboseLevel = level;}
+    void SetPrintModulo(G4int val)    {fPrintModulo = val;};
         
   private:
-    G4int    calorimeterCollID;
-    F02EventActionMessenger*  eventMessenger;
-    F02RunAction* runaction;
-    G4int verboselevel;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
+    G4int    fCalorimeterCollID;
+    F02EventActionMessenger*  fEventMessenger;
+    F02RunAction* fRunAction;
+    G4int fVerboseLevel;
+    G4int fPrintModulo;             
 };
 
 #endif

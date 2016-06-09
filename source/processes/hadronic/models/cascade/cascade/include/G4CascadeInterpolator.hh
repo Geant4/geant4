@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterpolator.hh,v 1.3 2010-08-03 23:09:36 mkelsey Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
 //

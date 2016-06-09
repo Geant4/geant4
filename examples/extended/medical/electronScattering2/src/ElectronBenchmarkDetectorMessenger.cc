@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/ElectronBenchmarkDetectorMessenger.cc
+/// \brief Implementation of the ElectronBenchmarkDetectorMessenger class
+//
 
 #include "ElectronBenchmarkDetectorMessenger.hh"
 #include "ElectronBenchmarkDetector.hh"
@@ -36,38 +39,38 @@
 #include "G4UIcmdWithAString.hh"
 
 ElectronBenchmarkDetectorMessenger::ElectronBenchmarkDetectorMessenger(ElectronBenchmarkDetector* det)
-:detector(det)
+:fDetector(det)
 {  
- listDir = new G4UIdirectory("/primFoil/");
- listDir->SetGuidance("Primary foil commands");
+ fListDir = new G4UIdirectory("/primFoil/");
+ fListDir->SetGuidance("Primary foil commands");
 
  // Foil Material
- primFoilMatCmd = new G4UIcmdWithAString("/primFoil/material",this);
- primFoilMatCmd->SetGuidance("Material of primary foil");
- primFoilMatCmd->SetParameterName("primFoilMat",false);
- primFoilMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+ fPrimFoilMatCmd = new G4UIcmdWithAString("/primFoil/material",this);
+ fPrimFoilMatCmd->SetGuidance("Material of primary foil");
+ fPrimFoilMatCmd->SetParameterName("primFoilMat",false);
+ fPrimFoilMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
  // Foil Thickness
- primFoilThickCmd = new G4UIcmdWithADoubleAndUnit("/primFoil/thickness",this);
- primFoilThickCmd->SetGuidance("Thickness of primary foil");
- primFoilThickCmd->SetParameterName("thickness",false);
- primFoilThickCmd->SetDefaultUnit("cm");
- primFoilThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+ fPrimFoilThickCmd = new G4UIcmdWithADoubleAndUnit("/primFoil/thickness",this);
+ fPrimFoilThickCmd->SetGuidance("Thickness of primary foil");
+ fPrimFoilThickCmd->SetParameterName("thickness",false);
+ fPrimFoilThickCmd->SetDefaultUnit("cm");
+ fPrimFoilThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 ElectronBenchmarkDetectorMessenger::~ElectronBenchmarkDetectorMessenger()
 {
-  delete listDir;
-  delete primFoilMatCmd;
-  delete primFoilThickCmd;
+  delete fListDir;
+  delete fPrimFoilMatCmd;
+  delete fPrimFoilThickCmd;
 }
 
 void ElectronBenchmarkDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
- if ( command == primFoilMatCmd  ){
-   detector->SetPrimFoilMaterial(newValue);
- } else if ( command == primFoilThickCmd  ){
-   detector->SetPrimFoilThickness(primFoilThickCmd->GetNewDoubleValue(newValue));
+ if ( command == fPrimFoilMatCmd  ){
+   fDetector->SetPrimFoilMaterial(newValue);
+ } else if ( command == fPrimFoilThickCmd  ){
+   fDetector->SetPrimFoilThickness(fPrimFoilThickCmd->GetNewDoubleValue(newValue));
  } else {
    G4cerr << "***** Command is not found !!! " << newValue << G4endl;
  }

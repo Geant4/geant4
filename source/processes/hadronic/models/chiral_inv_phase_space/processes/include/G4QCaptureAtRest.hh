@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.2 2010-06-25 09:46:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QCaptureAtRest header ----------------
 //                 by Mikhail Kossov, December 2003.

@@ -13,6 +13,7 @@ namespace histo {
 template <class TC,class TN,class TW,class TH,class TV>
 class p2 : public b2<TC,TN,TW,TH> {
   typedef b2<TC,TN,TW,TH> parent;
+public:
   typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
 protected:
   virtual TH get_bin_height(int a_offset) const {
@@ -57,7 +58,7 @@ public:
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] *= aFactor;
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool scale(TW aFactor) {return multiply(aFactor);}
@@ -87,7 +88,7 @@ public:
       m_bin_Svw[ibin] = 0;
       m_bin_Sv2w[ibin] = 0;
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -185,21 +186,21 @@ public:
   }
 
   bool add(const p2& a_histo){
-    base_add(a_histo);
+    parent::base_add(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool subtract(const p2& a_histo){
-    base_subtract(a_histo);
+    parent::base_subtract(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 

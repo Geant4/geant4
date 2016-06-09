@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.9 2006-06-29 16:49:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,44 +63,44 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetRBining (G4ThreeVector);
      void SetMagField(G4double);
 
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
 
      const
-     G4VPhysicalVolume* GetEcal() {return physiEcal;};
-     G4Material*    GetMaterial() {return myMaterial;};
+     G4VPhysicalVolume* GetEcal() {return fPhysiEcal;};
+     G4Material*    GetMaterial() {return fMaterial;};
 
      // Subdivision of absorber
-     G4int    GetnLtot()          {return nLtot;};
-     G4int    GetnRtot()          {return nRtot;};
-     G4double GetdLradl()         {return dLradl;};
-     G4double GetdRradl()         {return dRradl;};
-     G4double GetdLlength()       {return dLlength;};
-     G4double GetdRlength()       {return dRlength;};     
-     G4double GetfullLength()     {return EcalLength;};
-     G4double GetfullRadius()     {return EcalRadius;};
+     G4int    GetnLtot()          {return fNLtot;};
+     G4int    GetnRtot()          {return fNRtot;};
+     G4double GetdLradl()         {return fDLradl;};
+     G4double GetdRradl()         {return fDRradl;};
+     G4double GetdLlength()       {return fDLlength;};
+     G4double GetdRlength()       {return fDRlength;};     
+     G4double GetfullLength()     {return fEcalLength;};
+     G4double GetfullRadius()     {return fEcalRadius;};
 
   private:
 
      void DefineMaterials();
      G4VPhysicalVolume* ConstructVolumes();
 
-     G4int    nLtot,    nRtot;        // nb of bins: longitudinal and radial
-     G4double dLradl,   dRradl;       // bin thickness (in radl unit)
-     G4double dLlength, dRlength;     // bin thickness (in length unit)
+     G4int    fNLtot,    fNRtot;       // nb of bins: longitudinal and radial
+     G4double fDLradl,   fDRradl;      // bin thickness (in radl unit)
+     G4double fDLlength, fDRlength;    // bin thickness (in length unit)
 
-     G4Material* myMaterial;          //pointer to the material
-     G4UniformMagField* magField;     //pointer to the mag field
+     G4Material* fMaterial;            //pointer to the material
+     G4UniformMagField* fMagField;     //pointer to the mag field
 
-     G4double EcalLength;             //full length of the Calorimeter
-     G4double EcalRadius;             //radius  of the Calorimeter
+     G4double fEcalLength;             //full length of the Calorimeter
+     G4double fEcalRadius;             //radius  of the Calorimeter
 
-     G4Tubs*            solidEcal;    //pointer to the solid calorimeter
-     G4LogicalVolume*   logicEcal;    //pointer to the logical calorimeter
-     G4VPhysicalVolume* physiEcal;    //pointer to the physical calorimeter
+     G4Tubs*            fSolidEcal;    //pointer to the solid calorimeter
+     G4LogicalVolume*   fLogicEcal;    //pointer to the logical calorimeter
+     G4VPhysicalVolume* fPhysiEcal;    //pointer to the physical calorimeter
 
-     DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+     DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
 
 };
 

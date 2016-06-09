@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.cc,v 1.4 2010-03-09 02:49:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -45,6 +44,24 @@ G4VUserTrackInformation::~G4VUserTrackInformation()
 {
   if (pType!=0) delete pType;
 }
+
+G4VUserTrackInformation::G4VUserTrackInformation(const  G4VUserTrackInformation& right) 
+  :pType(0)
+{
+  if (right.pType!=0)  pType = new G4String(*(right.pType));
+}
+
+
+G4VUserTrackInformation& G4VUserTrackInformation::operator=(const G4VUserTrackInformation& right)
+{
+  if (this != &right) {
+    if (pType !=0) delete pType;
+    if (right.pType) pType = new G4String(*(right.pType));
+    else pType=0;
+  }
+  return *this;
+}
+  
 
 const G4String& G4VUserTrackInformation::GetType() const
 {

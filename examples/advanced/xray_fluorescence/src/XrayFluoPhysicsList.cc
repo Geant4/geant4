@@ -34,6 +34,7 @@
 #include "XrayFluoPhysicsList.hh"
 #include "XrayFluoPhysicsListMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
 #include "G4ProcessManager.hh"

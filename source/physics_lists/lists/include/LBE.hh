@@ -46,8 +46,10 @@
 #ifndef TLBE_h
 #define TLBE_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VUserPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 #include "G4VModularPhysicsList.hh"
 

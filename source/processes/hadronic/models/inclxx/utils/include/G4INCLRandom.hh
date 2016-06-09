@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * G4INCLRandom.hh
  *
- *  Created on: 7 June 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 7 June 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef G4INCLRANDOM_HH_
@@ -50,14 +50,15 @@
 #include <cmath>
 #include "G4INCLIRandomGenerator.hh"
 #include "G4INCLThreeVector.hh"
+#include "G4INCLGlobals.hh"
 #include "G4INCLLogger.hh"
 
 namespace G4INCL {
 
   class Random {
   private:
-    Random();
-    virtual ~Random();
+    Random() {}
+    virtual ~Random() {}
 
   private:
     static IRandomGenerator *theGenerator;
@@ -98,11 +99,21 @@ namespace G4INCL {
     static G4double shoot() {return theGenerator->flat(); };
 
     /**
-     * Return a random number in the ]0,1] G4interval
+     * Return a random number in the ]0,1] interval
      */
     static G4double shoot0() {
       G4double r;
       while( (r=shoot()) <= 0. )
+        ;
+      return r;
+    }
+
+    /**
+     * Return a random number in the [0,1[ interval
+     */
+    static G4double shoot1() {
+      G4double r;
+      while( (r=shoot()) >= 1. )
         ;
       return r;
     }
@@ -116,12 +127,23 @@ namespace G4INCL {
      * Generate isotropically-distributed ThreeVectors of given norm.
      */
     static ThreeVector normVector(G4double norm=1.);
+
     /**
      * Generate ThreeVectors that are uniformly distributed in a sphere of
      * radius rmax.
      */
     static ThreeVector sphereVector(G4double rmax=1.) {
-      return normVector( rmax*std::pow(shoot0(), 1./3.) );
+      return normVector( rmax*Math::pow13(shoot0()) );
+    }
+
+    /** \brief Generate Gaussianly-distributed ThreeVectors
+     *
+     * Generate ThreeVectors that are distributed as a three-dimensional
+     * Gaussian of the given sigma.
+     */
+    static ThreeVector gaussVector(G4double sigma=1.) {
+      const G4double sigmax = sigma * Math::oneOverSqrtThree;
+      return ThreeVector(gauss(sigmax), gauss(sigmax), gauss(sigmax));
     }
 
     /**

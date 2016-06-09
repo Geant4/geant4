@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataSetRegistry.hh,v 1.3 2009-08-08 16:21:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -47,9 +46,12 @@
 #define G4CrossSectionDataSetRegistry_h 1
 
 #include <vector>
+#include <map>
 #include "globals.hh"
 
+
 class G4VCrossSectionDataSet;
+class G4VBaseXSFactory;
 
 class G4CrossSectionDataSetRegistry
 {
@@ -68,6 +70,10 @@ public:
 
   void Clean();
   //clean the store
+  
+  void AddFactory(G4String, G4VBaseXSFactory*);
+
+  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, G4bool warning=true);
     
 private:
 
@@ -76,6 +82,8 @@ private:
   static G4CrossSectionDataSetRegistry* theInstance;
   
   std::vector <G4VCrossSectionDataSet*> xSections;
+
+  std::map <G4String, G4VBaseXSFactory*> factories;
 
 };
 

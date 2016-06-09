@@ -25,9 +25,6 @@
 /gun/particle e-
 /gun/energy 50 GeV
 #
-#/process/eLoss/StepFunction 0.2 1 mm
-#/process/eLoss/preciseRange true
-#
 #/testem/tracking/stepMax 1 mum
 #
 #/random/setSavingFlag true
@@ -35,7 +32,6 @@
 /testem/event/printModulo 1000
 #
 /testem/histo/fileName cms50gev
-/testem/histo/fileType root
 /testem/histo/setHisto 0  250 0.60 0.85 
 /testem/histo/setHisto 1  200 0.80 1.00 
 /testem/histo/setHisto 2  100 0.90 1.00 

@@ -37,6 +37,9 @@
 #include "XrayFluoMercuryDetectorConstruction.hh"
 #include "XrayFluoMercuryDetectorMessenger.hh"
 #include "XrayFluoSD.hh"
+#include "XrayFluoNistMaterials.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
@@ -52,8 +55,6 @@
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
 #include "G4UserLimits.hh"
-#include "XrayFluoNistMaterials.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -444,7 +445,7 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
   G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
-  G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
+  G4VisAttributes * grayc= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
   G4VisAttributes * darkGray= new G4VisAttributes( G4Colour(95/255. , 95/255. ,  95/255. ));
   //G4VisAttributes * green= new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
   yellow->SetVisibility(true);
@@ -452,8 +453,8 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
   red->SetVisibility(true);
   red->SetForceSolid(true);
   blue->SetVisibility(true);
-  gray->SetVisibility(true);
-  gray->SetForceSolid(true);
+  grayc->SetVisibility(true);
+  grayc->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
 
   //logicWorld->SetVisAttributes (simpleBoxVisAtt);
@@ -467,10 +468,10 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
   logicScreen->SetVisAttributes(red);
   logicOhmicNeg->SetVisAttributes(yellow);
   logicOhmicPos->SetVisAttributes(yellow);
-  logicOptic->SetVisAttributes(gray);
+  logicOptic->SetVisAttributes(grayc);
 
 
-  if (mercuryGranularity)  logicGrain->SetVisAttributes(gray);
+  if (mercuryGranularity)  logicGrain->SetVisAttributes(grayc);
 
   //always return the physical World
     

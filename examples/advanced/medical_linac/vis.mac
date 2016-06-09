@@ -1,7 +1,7 @@
 /control/verbose 2
 /run/initialize
 # Use this open statement to create an OpenGL view:
-/vis/open OGLIX
+/vis/open OGL
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -17,7 +17,7 @@
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
-/vis/viewer/set/autoRefresh false
+#/vis/viewer/set/autoRefresh false
 /vis/verbose errors
 #
 # Draw geometry:
@@ -44,7 +44,7 @@
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:
-#/vis/scene/add/hits
+/vis/scene/add/hits
 #
 # To draw only gammas:
 #/vis/filtering/trajectories/create/particleFilter
@@ -60,7 +60,7 @@
 #/vis/modeling/trajectories/drawByParticleID-0/set e- blue
 #
 # To superimpose all of the events from a given run:
-/vis/scene/endOfEventAction accumulate 100
+/vis/scene/endOfEventAction accumulate 1000
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
@@ -73,41 +73,25 @@
 /phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
 
 /accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
+/run/beamOn 1000
 
-/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/phantom/centre 0 0 200 # phantom centre coordinates in the world [mm]
 /accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
-
-/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
-/accelerator/rotationX 90 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
-
-/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
-/accelerator/rotationX 135 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
+/run/beamOn 1000
 
 
 /accelerator/rotation90Y true
 /phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
 
 /accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
+/run/beamOn 1000
 
 /phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
 /accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
+/run/beamOn 1000
 
-/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
-/accelerator/rotationX 90 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
 
-/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
-/accelerator/rotationX 135 deg  # angles of rotation along X  [deg]
-/run/beamOn 800
-
-/vis/open OGL
-
+# all the physical volumes names:
 # acceleratorBox
 # targetA
 # targetB

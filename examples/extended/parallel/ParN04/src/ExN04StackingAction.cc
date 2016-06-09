@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/src/ExN04StackingAction.cc
+/// \brief Implementation of the ExN04StackingAction class
+//
 
 #include "ExN04StackingAction.hh"
 #include "G4SDManager.hh"

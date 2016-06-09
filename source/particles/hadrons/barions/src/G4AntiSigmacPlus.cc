@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlus.cc,v 1.13 2009-10-08 14:55:19 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +37,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiSigmacPlus.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

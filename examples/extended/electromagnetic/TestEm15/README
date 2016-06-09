@@ -53,10 +53,10 @@ $Id: README,v 1.6 2008-09-26 19:47:51 maire Exp $
 
  5- HISTOGRAMS
          
-	The test contains 9 built-in 1D histograms, which are managed by the
-	HistoManager class and its Messenger. The histos can be individually 
+	The test contains 9 built-in 1D histograms, which are managed by 
+	G4AnalysisManager and its Messenger. The histos can be individually 
 	activated with the command :
-	/testem/histo/setHisto id nbBins  valMin valMax unit 
+	/analysis/h1/set id nbBins  valMin valMax unit 
 	where unit is the desired unit for the histo (MeV or keV, etc..)
 	(see the macros xxxx.mac).
  		
@@ -69,21 +69,21 @@ $Id: README,v 1.6 2008-09-26 19:47:51 maire Exp $
 	7	Multiple Scattering. Phi-position angle
 	8	Multiple Scattering. Phi-direction angle
 	9	Multiple Scattering. Correlation: cos(phiPos-phiDir)
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default testem15)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh 	
 	
-	See below the note on histogram tools.
-	
- 	One can control the name and the type of the histograms file with 
-	the commands:
- 	/testem/histo/setFileName  name  (default testem15)
-   	/testem/histo/setFileType  name  (default root)
-	
-        It is also possible to print selected histograms on an ascii file:
-        /testem/histo/printHisto id
-        All selected histos will be written on a file name.ascii  
-        (default testem15)
-    	
-	Note that, by default, histograms are disabled. To activate them, 
-	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default testem15)
  	 				
  6- VISUALIZATION
  
@@ -99,10 +99,6 @@ $Id: README,v 1.6 2008-09-26 19:47:51 maire Exp $
 	
  7- HOW TO START ?
  
-	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm15
- 		% gmake
- 		
 	execute TestEm15 in 'batch' mode from macro files :
  		% TestEm15   compt.mac
  		
@@ -114,16 +110,3 @@ $Id: README,v 1.6 2008-09-26 19:47:51 maire Exp $
  		....
  		Idle> exit
  
-
- 8- USING HISTOGRAMS
- 
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-  
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake
-	 
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt

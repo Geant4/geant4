@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbIsotope.hh,v 1.3 2010-10-13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbIsotope

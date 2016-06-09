@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/PrimaryGeneratorAction1.hh
+/// \brief Definition of the PrimaryGeneratorAction1 class
 //
-// $Id: PrimaryGeneratorAction1.hh,v 1.2 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -51,7 +53,7 @@ class PrimaryGeneratorAction1
     void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*  particleGun;
+    G4ParticleGun*  fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

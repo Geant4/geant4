@@ -23,24 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04PhysicsListMessenger.hh
+/// \brief Definition of the F04PhysicsListMessenger class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04PhysicsListMessenger_h
 #define F04PhysicsListMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
-
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-
-#include "G4DecayTable.hh"
-#include "G4VDecayChannel.hh"
 
 class F04PhysicsList;
 
@@ -54,16 +45,16 @@ class G4UIcmdWithoutParameter;
 class F04PhysicsListMessenger : public G4UImessenger
 {
 public:
-  
+
     F04PhysicsListMessenger(F04PhysicsList* );
     virtual ~F04PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+ 
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
 private:
-  
+
     F04PhysicsList* fPhysicsList;
-    
+ 
     G4UIdirectory* fDirectory;
     G4UIdirectory* fDecayDirectory;
 
@@ -78,12 +69,5 @@ private:
 */
     G4UIcmdWithoutParameter* fPienuCMD;
     G4UIcmdWithoutParameter* fPimunuCMD;
-
-    G4ParticleTable* particleTable;
-    G4ParticleDefinition* particleDef;
-
-    G4DecayTable* table;
-    G4VDecayChannel* mode;
-
 };
 #endif

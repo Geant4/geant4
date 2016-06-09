@@ -34,11 +34,13 @@
 // 23.04.2011 V.Ivanchenko: make this class to be responsible for
 //            selection of decay channel and decay
 
+#include <set>
+
 #include "G4FermiConfigurationList.hh"
 #include "G4FermiFragmentsPool.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
-#include <set>
 
 const G4double G4FermiConfigurationList::Kappa = 6.0;
 const G4double G4FermiConfigurationList::r0 = 1.3*CLHEP::fermi;
@@ -158,9 +160,10 @@ G4FermiConfigurationList::DecayProbability(G4int A, G4double TotalE,
   
   // Permutation Factor G_n
   G4double G_n = 1.0;
-  for (std::set<G4int>::iterator s = combSet.begin(); s != combSet.end(); ++s)
+  for (std::set<G4int>::iterator itr = combSet.begin(); 
+       itr != combSet.end(); ++itr)
     {
-      for (G4int ni = combmSet.count(*s); ni > 1; ni--) { G_n *= ni; }
+      for (G4int ni = combmSet.count(*itr); ni > 1; ni--) { G_n *= ni; }
     }
 
   G4double Weight = Coeff * MassFactor * (S_n / G_n) / Gamma;

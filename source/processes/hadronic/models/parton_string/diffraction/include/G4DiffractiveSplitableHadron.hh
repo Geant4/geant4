@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh,v 1.7 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 
@@ -48,16 +48,19 @@ class G4DiffractiveSplitableHadron : public G4VSplitableHadron
 
 public:
 
+	G4DiffractiveSplitableHadron();
 	G4DiffractiveSplitableHadron(const G4ReactionProduct & aPrimary);
 	G4DiffractiveSplitableHadron(const G4Nucleon & aNucleon);
 	G4DiffractiveSplitableHadron(const G4VKineticNucleon * aNucleon);
 	~G4DiffractiveSplitableHadron();
 
-
+private:
+   G4DiffractiveSplitableHadron(const G4DiffractiveSplitableHadron &);
+   G4DiffractiveSplitableHadron& operator=(const G4DiffractiveSplitableHadron &);
 	int operator==(const G4DiffractiveSplitableHadron &right) const;
 	int operator!=(const G4DiffractiveSplitableHadron &right) const;
 
-
+public:
 	void SplitUp();
 	G4Parton * GetNextParton() ;
 	G4Parton * GetNextAntiParton();
@@ -65,10 +68,7 @@ public:
         void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
         void SetSecondParton(G4int PDGcode); // Uzhi 24.11.10
 
-//private:    // Uzhi 29.11.2010
-	G4DiffractiveSplitableHadron();
-	G4DiffractiveSplitableHadron(const G4DiffractiveSplitableHadron &right);
-	const G4DiffractiveSplitableHadron & operator=(const G4DiffractiveSplitableHadron &right);
+private:
 
 //implementation
 	G4int Diquark(G4int aquark,G4int bquark,G4int Spin) const; // to splitable hadron

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.hh,v 1.8 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -49,7 +48,6 @@ public:
   G4OpenGLStoredXmViewer (G4OpenGLStoredSceneHandler& scene, const G4String& name = "");
   virtual ~G4OpenGLStoredXmViewer ();
   void Initialise ();
-  void ShowView ();
   void DrawView ();
   void FinishView ();
 

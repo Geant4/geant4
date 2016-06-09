@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/PrimaryGeneratorMessenger.hh
+/// \brief Definition of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,10 +52,10 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
+    PrimaryGeneratorAction*    fAction;
     
-    G4UIdirectory*             gunDir;      
-    G4UIcmdWithADoubleAndUnit* RndmCmd;    
+    G4UIdirectory*             fGunDir;      
+    G4UIcmdWithADoubleAndUnit* fRndmCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,8 +25,8 @@ $Id$
  	- the number of layers, and
  	- the transverse size of the calorimeter (the entrance face is a square). 
  	
-   In addition a transverse uniform magnetic field can be applied (see
-   B4DetectorMessenger class) and set via the interactive command.
+   In addition a transverse uniform magnetic field can be applied and set 
+   via the interactive command defined using the G4GenericMessenger class.
    For example:
 
      /B4/det/setMagField 0.2 tesla
@@ -51,9 +51,13 @@ $Id$
  2- PHYSICS LIST
  
    The particle's type and the physic processes which will be available
-   in this example are set in the FTFP_BERT physics list. This physics
-   list requires data files for low energy electromagnetic processes which
-   path is defined via the G4LEDATA envirnoment variable.
+   in this example are set in the FTFP_BERT physics list. This physics list 
+   requires data files for electromagnetic and hadronic processes.
+   See more on installation of the datasets in Geant4 Installation Guide, 
+   Chapter 3.3: Note On Geant4 Datasets:
+   http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html
+   The following datasets: G4LEDATA, G4LEVELGAMMADATA and G4SAIDXSDATA are
+   mandatory for this example.
  
    In addition the build-in interactive command:
                /process/(in)activate processName
@@ -64,7 +68,7 @@ $Id$
    The primary beam consists of a single particle which hits the
    calorimeter perpendicular to the input face. The type of the particle
    and its energy are set in the B4PrimaryGeneratorAction class, and can
-   be changed via the G4 build-in commands of the G4ParticleGun class (see
+   be changed via the G4 built-in commands of the G4ParticleGun class (see
    the macros provided with this example).
  	
  4- RUNS and EVENTS
@@ -72,9 +76,8 @@ $Id$
    A run is a set of events. 
    
    The user can choose the frequency of printing from B4aEventAction (or event 
-   action classes in other options) via the interactive command defined in
-   B4aEventActionMessenger (or messengers classes in other options), for 
-   example:
+   action classes in other options) via the interactive command defined
+   using the G4GenericMessenger class, for example:
     
      /B4/event/setPrintModulo 100
    
@@ -148,11 +151,11 @@ $Id$
    - Track length in gap
    The same values are also saved in an ntuple.
 
-   The accumulated statistic and computed dispersion is printed at the end of 
-   run, in B4RunAction::EndOfRunAction().
-
    The histograms and ntuple are saved in the output file in a format
    according to a technology selected in B4Analysis.hh.
+
+   The accumulated statistic and computed dispersion is printed at the end of 
+   run, in B4RunAction::EndOfRunAction().
    
   7- VISUALIZATION TUTORIAL
   
@@ -170,51 +173,55 @@ $Id$
  A- VISUALIZATION
  
    The visualization manager is set via the G4VisExecutive class
-   in the main() function in exampleB4a.cc (or in b, c, d variants).   
+   in the main() function in exampleB4a.cc.    
    The initialisation of the drawing is done via a set of /vis/ commands
-   in the macro vis.mac. This macro is automatically read from 
+   in the macro vis.mac. This macro is automatically read from
    the main function when the example is used in interactive running mode.
 
-   By default, vis.mac opens an OpenGL viewer.
-   The user can switch to other graphics systems by commenting out this line
+   By default, vis.mac opens an OpenGL viewer (/vis/open OGL).
+   The user can change the initial viewer by commenting out this line
    and instead uncommenting one of the other /vis/open statements, such as
    HepRepFile or DAWNFILE (which produce files that can be viewed with the
-   HepRApp and DAWN viewers, respectively).
- 	
-   The DAWNFILE, HepRepFile drivers are always available 
-   (since they require no external libraries), but the OGL driver requires:
-     1- the visualisation & interfaces categories have been compiled
-	with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
-     2- exampleB4a.cc has been compiled with G4VIS_USE_OPENGLX.
-   (This is best done through Configure or CMake.)
+   HepRApp and DAWN viewers, respectively).  Note that one can always
+   open new viewers at any time from the command line.  For example, if
+   you already have a view in, say, an OpenGL window with a name
+   "viewer-0", then
+      /vis/open DAWNFILE
+   then to get the same view
+      /vis/viewer/copyView viewer-0
+   or to get the same view *plus* scene-modifications
+      /vis/viewer/set/all viewer-0
+   then to see the result
+      /vis/viewer/flush
+
+   The DAWNFILE, HepRepFile drivers are always available
+   (since they require no external libraries), but the OGL driver requires
+   that the Geant4 libraries have been built with the OpenGL option.
 
    For more information on visualization, including information on how to
    install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
    for example,
    http://geant4.slac.stanford.edu/Presentations/vis/G4[VIS]Tutorial/G4[VIS]Tutorial.html
    (where [VIS] can be replaced by DAWN, OpenGL and HepRApp)
- 	
+
    The tracks are automatically drawn at the end of each event, accumulated
    for all events and erased at the beginning of the next run.
  
  B- USER INTERFACES
    
    The user command interface is set via the G4UIExecutive class
-   in the the main() function in exampleB4a.cc 
+   in the main() function in exampleB4a.cc 
    The selection of the user command interface is then done automatically 
-   according to the Geant4 configuration. The default command interface, 
-   called G4UIterminal, is done via a standard G4cin/G4cout.
-   On Linux and Sun-cc one can use a smarter command interface G4UItcsh. 
-   It is enough to set the environment variable G4UI_USE_TCSH before compiling 
-   exampleB4a.cc
+   according to the Geant4 configuration or it can be done explicitly via 
+   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
  
  C- HOW TO RUN
  
-    - compile and link to generate an executable
-        % cd B4/B4a
-        % make
- 		
-    - execute exampleB4a in the 'interactive mode' with visualization
+    This example handles the program arguments in a new way.
+    It can be run with the following optional arguments:
+    % exampleB4a [-m macro ] [-u UIsession]
+ 
+    - Execute exampleB4a in the 'interactive mode' with visualization
         % exampleB4a
       and type in the commands from run1.mac line by line:  
         Idle> /tracking/verbose 1 
@@ -226,10 +233,14 @@ $Id$
         ....
         Idle> exit
 
-    - execute exampleB4a in the 'batch' mode from macro files
+    - Execute exampleB4a in the 'batch' mode from macro files
       (without visualization)
-        % exampleB4a run2.mac
-        % exampleB4a exampleB4.in > exampleB4.out
+        % exampleB4a -m run2.mac
+        % exampleB4a -m exampleB4.in > exampleB4.out
  		
+    - Execute exampleB4a in the 'interactive mode' with a selected UI session,
+      e.g. tcsh
+        % exampleB4a -u tcsh 
+
  
   

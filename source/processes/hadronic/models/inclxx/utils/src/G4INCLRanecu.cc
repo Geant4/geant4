@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * G4INCLRanecu.cc
  *
- *  Created on: 7 juin 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 7 juin 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLRanecu.hh"
@@ -56,9 +56,7 @@ namespace G4INCL {
     setSeeds(sv);
   }
 
-  Ranecu::~Ranecu() {
-    // TODO Auto-generated destructor stub
-  }
+  Ranecu::~Ranecu() {}
 
   G4double Ranecu::flat()
   {

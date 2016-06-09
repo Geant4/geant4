@@ -39,13 +39,15 @@
 #ifndef G4KaonPlusField_h
 #define  G4KaonPlusField_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VNuclearField.hh"
 #include "G4V3DNucleus.hh"
 
 class G4KaonPlusField: public G4VNuclearField
 {
 public:
-  G4KaonPlusField(G4V3DNucleus * nucleus, G4double coeff = 0.35*fermi);
+  G4KaonPlusField(G4V3DNucleus * nucleus, G4double coeff = 0.35*CLHEP::fermi);
   virtual ~G4KaonPlusField();
 
 private:

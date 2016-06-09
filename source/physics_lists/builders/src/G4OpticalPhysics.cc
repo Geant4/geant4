@@ -41,6 +41,13 @@
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
 
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
@@ -59,7 +66,6 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fMaxBetaChange(10.0),
     fYieldFactor(1.),
     fExcitationRatio(0.0),
-    fSurfaceModel(unified),
     fProfile("delta"),
     fFiniteRiseTime(false),
     fScintillationByParticleType(false)
@@ -120,11 +126,6 @@ void G4OpticalPhysics::PrintStatistics() const
         G4cout << "    ExcitationRatio: " << fExcitationRatio << G4endl;
         if ( fProcessTrackSecondariesFirst[kScintillation] ) G4cout << "  Track secondaries first:  activated" << G4endl;
       }
-      if ( i == kBoundary ) {
-        G4cout << "    OpticalSurfaceModel:  ";
-        if ( fSurfaceModel == glisur )  G4cout << "glisur" << G4endl;
-        if ( fSurfaceModel == unified ) G4cout << "unified" << G4endl;
-      }
       if ( i == kWLS ) {
         G4cout << "     WLS process time profile: " << fProfile << G4endl;
       }
@@ -165,7 +166,6 @@ void G4OpticalPhysics::ConstructProcess()
   fProcesses[kMieHG] = fOpMieHGScatteringProcess = new G4OpMieHG();
 
   fProcesses[kBoundary] = fOpBoundaryProcess = new G4OpBoundaryProcess();
-  fOpBoundaryProcess->SetModel(fSurfaceModel);
 
   fProcesses[kWLS] = fOpWLSProcess = new G4OpWLS();
   fOpWLSProcess->UseTimeProfile(fProfile);
@@ -289,16 +289,6 @@ void G4OpticalPhysics::SetMaxBetaChangePerStep(G4double maxBetaChange)
     fCerenkovProcess->SetMaxBetaChangePerStep(maxBetaChange);
 }
 
-void G4OpticalPhysics::SetOpticalSurfaceModel(G4OpticalSurfaceModel model)
-{
-/// Set optical surface model (glisur or unified)
-
-  fSurfaceModel = model;
-
-  if(fOpBoundaryProcess)
-    fOpBoundaryProcess->SetModel(model); 
-}
-
 void G4OpticalPhysics::SetWLSTimeProfile(G4String profile)
 {
 /// Set the WLS time profile (delta or exponential)
@@ -360,16 +350,16 @@ void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
 }
 
 void G4OpticalPhysics::SetProcessVerbose(G4int index,
-                                         G4int verboseLevel)
+                                         G4int inputVerboseLevel)
 {
   // Set new verbose level to a selected process
 
   if ( index >= kNoProcess ) return;
-  if ( fProcessVerbose[index] == verboseLevel ) return;
+  if ( fProcessVerbose[index] == inputVerboseLevel ) return;
 
-  fProcessVerbose[index] = verboseLevel;
+  fProcessVerbose[index] = inputVerboseLevel;
 
-  if ( fProcesses[index] ) fProcesses[index]->SetVerboseLevel(verboseLevel);
+  if ( fProcesses[index] ) fProcesses[index]->SetVerboseLevel(inputVerboseLevel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2007-10-31 16:16:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,38 +61,38 @@ class RunAction : public G4UserRunAction
     
     void SurveyConvergence(G4int);
     
-    void FlowInCavity(G4int k, G4double e) { EnerFlowCavity[k] += e;  
-                                             PartFlowCavity[k]++;};
-					     
-    void AddEdepCavity(G4double de) { EdepCavity += de; EdepCavity2 += de*de;
-                                      nbEventCavity++;};
-    void AddTrakCavity(G4double dt) { trkSegmCavity += dt;};
+    void FlowInCavity(G4int k, G4double e) { fEnerFlowCavity[k] += e;  
+                                             fPartFlowCavity[k]++;};
+                                             
+    void AddEdepCavity(G4double de) { fEdepCavity += de; fEdepCavity2 += de*de;
+                                      fNbEventCavity++;};
+    void AddTrakCavity(G4double dt) { fTrkSegmCavity += dt;};
         
-    void StepInWall   (G4double s)  { stepWall += s; stepWall2 += s*s; 
-                                      nbStepWall++;};
-    void StepInCavity (G4double s)  { stepCavity += s; stepCavity2 += s*s; 
-                                      nbStepCavity++;};
+    void StepInWall   (G4double s)  { fStepWall += s; fStepWall2 += s*s; 
+                                      fNbStepWall++;};
+    void StepInCavity (G4double s)  { fStepCavity += s; fStepCavity2 += s*s; 
+                                      fNbStepCavity++;};
     
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* kinematic;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fKinematic;
+    ProcessesCount*         fProcCounter;
+    HistoManager*           fHistoManager;
     
-    G4long                  PartFlowCavity[2];
-    G4double                EnerFlowCavity[2];        
-    G4double                EdepCavity, EdepCavity2;
-    G4double                trkSegmCavity;
-    G4long                  nbEventCavity;
+    G4long                  fPartFlowCavity[2];
+    G4double                fEnerFlowCavity[2];        
+    G4double                fEdepCavity, fEdepCavity2;
+    G4double                fTrkSegmCavity;
+    G4long                  fNbEventCavity;
                 
-    G4double                stepWall,   stepWall2;
-    G4double                stepCavity, stepCavity2;    
-    G4long                  nbStepWall, nbStepCavity;
+    G4double                fStepWall,   fStepWall2;
+    G4double                fStepCavity, fStepCavity2;    
+    G4long                  fNbStepWall, fNbStepCavity;
     
   private:
-    G4double                energyGun;  
-    G4double                massWall;
-    G4double                massCavity;  
+    G4double                fEnergyGun;  
+    G4double                fMassWall;
+    G4double                fMassCavity;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

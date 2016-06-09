@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.6 2010-12-15 10:26:41 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -40,6 +39,8 @@
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
@@ -58,7 +59,8 @@
 
 G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefinition*,
 							   const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),logAtomicShellXS(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),fAtomDeexcitation(0),
+   logAtomicShellXS(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -83,7 +85,7 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
 
 G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 {  
-  std::map <const G4int,G4PhysicsTable*>::iterator i;
+  std::map <G4int,G4PhysicsTable*>::iterator i;
   if (logAtomicShellXS)
     {
       for (i=logAtomicShellXS->begin();i != logAtomicShellXS->end();i++)
@@ -106,10 +108,20 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
 
   // logAtomicShellXS is created only once, since it is  never cleared
   if (!logAtomicShellXS)
-    logAtomicShellXS = new std::map<const G4int,G4PhysicsTable*>;
+    logAtomicShellXS = new std::map<G4int,G4PhysicsTable*>;
 
   InitialiseElementSelectors(particle,cuts);
+
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopePhotoElectricModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
 
   if (verboseLevel > 0) { 
     G4cout << "Penelope Photo-Electric model v2008 is initialized " << G4endl
@@ -568,8 +580,8 @@ size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
   for (size_t k=1;k<theTable->entries();k++)
     {
       G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];
-      G4double logXS = partialXSLog->Value(logEnergy);
-      G4double partialXS = std::exp(logXS);
+      G4double logXSLocal = partialXSLog->Value(logEnergy);
+      G4double partialXS = std::exp(logXSLocal);
       sum += partialXS;
       tempVector->push_back(sum);     
     }

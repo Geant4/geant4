@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.56 2010-11-12 06:52:01 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   G4MuonMinusCaptureAtRest physics process
 //   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)
@@ -44,6 +43,8 @@
 #include "G4MuonMinusCaptureAtRest.hh"
 #include "G4DynamicParticle.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4He3.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4Fragment.hh"

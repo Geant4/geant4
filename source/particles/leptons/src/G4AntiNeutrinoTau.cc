@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoTau.cc,v 1.15 2006-06-29 19:20:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -39,6 +38,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiNeutrinoTau.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 

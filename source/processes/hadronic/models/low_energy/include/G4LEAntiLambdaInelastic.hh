@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiLambdaInelastic.hh,v 1.11 2007-02-24 06:11:24 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: Low Energy AntiLambda Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -41,6 +40,8 @@
 // the corresponding process.
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InelasticInteraction.hh"
  
  class G4LEAntiLambdaInelastic : public G4InelasticInteraction
@@ -50,7 +51,9 @@
     G4LEAntiLambdaInelastic() : G4InelasticInteraction("G4LEAntiLambdaInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
+      G4cout << "WARNING: model G4LEAntiLambdaInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
     
     ~G4LEAntiLambdaInelastic() { }

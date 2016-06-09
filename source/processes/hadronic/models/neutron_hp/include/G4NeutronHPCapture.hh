@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPCapture.hh,v 1.10 2006-06-29 20:46:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -56,15 +55,19 @@ class G4NeutronHPCapture : public G4HadronicInteraction
 
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+  
   private:
   
   G4double * xSec;
-  G4NeutronHPChannel * theCapture;
+  //G4NeutronHPChannel * theCapture;
+      std::vector<G4NeutronHPChannel*> theCapture;
   G4String dirName;
   G4int numEle;
   G4int it;
   
   G4HadFinalState theResult;
+      void addChannelForNewElement();
 };
 
 #endif

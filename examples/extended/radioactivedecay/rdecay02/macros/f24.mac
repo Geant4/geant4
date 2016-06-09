@@ -22,15 +22,15 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-/grdm/verbose 0
+/grdm/verbose 1
 /grdm/noVolumes
 /grdm/selectVolume Target
 
 #
 #Next lines needed to have  atomic relaxation working 
 #
-/process/em/fluo true
-/process/em/auger true
+/process/em/fluo false
+/process/em/auger false
 
 
 
@@ -39,23 +39,25 @@
 /gps/energy 0 keV
 /gps/particle ion 
 /gps/ion 9 24 0  0
+#/grdm/nucleusLimits 24 24 9 9
 #
 # complete chain decays
 /histo/fileName f24c
+/tracking/verbose 0
 /run/beamOn 10000
 #
 # complete chain decays in VR mode
 /grdm/analogueMC 0
 /histo/fileName f24c-b
-/run/beamOn 10000
+#/run/beamOn 10000
 #
 # No daughter decays in analogue MC mode
 /histo/fileName f24
 /grdm/analogueMC 1
 /grdm/nucleusLimits 24 24 9 9
-/run/beamOn 10000
+#/run/beamOn 10000
 # No daughter decays in VR MC mode
 /histo/fileName f24-b
 /grdm/analogueMC 0
 /grdm/BRbias 0
-/run/beamOn 10000
+#/run/beamOn 10000

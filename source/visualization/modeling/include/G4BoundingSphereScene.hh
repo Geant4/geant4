@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.20 2010-05-30 11:23:25 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  7th June 1997
@@ -57,17 +56,17 @@ public:
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
   void PostAddSolid () {}
-  void AddSolid (const G4Box& s) {Accrue (s);}
-  void AddSolid (const G4Cons& s) {Accrue (s);}
-  void AddSolid (const G4Tubs& s) {Accrue (s);}
-  void AddSolid (const G4Trd& s) {Accrue (s);}
-  void AddSolid (const G4Trap& s) {Accrue (s);}
-  void AddSolid (const G4Sphere& s) {Accrue (s);}
-  void AddSolid (const G4Para& s) {Accrue (s);}
-  void AddSolid (const G4Torus& s) {Accrue (s);}
-  void AddSolid (const G4Polycone& s) {Accrue (s);}
-  void AddSolid (const G4Polyhedra& s) {Accrue (s);}
-  void AddSolid (const G4VSolid& s) {Accrue (s);}
+  void AddSolid (const G4Box& solid) {Accrue (solid);}
+  void AddSolid (const G4Cons& solid) {Accrue (solid);}
+  void AddSolid (const G4Tubs& solid) {Accrue (solid);}
+  void AddSolid (const G4Trd& solid) {Accrue (solid);}
+  void AddSolid (const G4Trap& solid) {Accrue (solid);}
+  void AddSolid (const G4Sphere& solid) {Accrue (solid);}
+  void AddSolid (const G4Para& solid) {Accrue (solid);}
+  void AddSolid (const G4Torus& solid) {Accrue (solid);}
+  void AddSolid (const G4Polycone& solid) {Accrue (solid);}
+  void AddSolid (const G4Polyhedra& solid) {Accrue (solid);}
+  void AddSolid (const G4VSolid& solid) {Accrue (solid);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
   void AddCompound (const G4VDigi&) {}

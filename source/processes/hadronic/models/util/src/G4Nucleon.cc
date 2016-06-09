@@ -55,12 +55,12 @@ void G4Nucleon::Boost(const G4LorentzVector & aMomentum)
 }
 
 #include <iostream>
-std::ostream & operator << (std::ostream &s, const G4Nucleon& nucleon)
+std::ostream & operator << (std::ostream &stream, const G4Nucleon& nucleon)
 {
-//	s<< nucleon.GetDefinition()->GetParticleName() 
+//	stream<< nucleon.GetDefinition()->GetParticleName()
 //	 << "  is " << nucleon.AreYouHit() ? " " : "not" 
 //	 << " hit. Momentum/position:" << G4endl;
-	s<< "  momentum : " << nucleon.Get4Momentum() << G4endl;
-	s<< "  position : " << nucleon.GetPosition() ;
-	return s;
+	stream<< "  momentum : " << nucleon.Get4Momentum() << G4endl;
+	stream<< "  position : " << nucleon.GetPosition() ;
+	return stream;
 }	  

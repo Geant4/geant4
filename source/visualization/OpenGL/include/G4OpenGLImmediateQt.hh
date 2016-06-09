@@ -24,26 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.hh,v 1.2 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // OpenGLImmediateQt graphics system factory.
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLIMMEDIATEQT_HH
 #define G4OPENGLIMMEDIATEQT_HH
 
-#include "G4VGraphicsSystem.hh"
+#include "G4OpenGLQt.hh"
 
-class G4OpenGLImmediateQt: public G4VGraphicsSystem {
+class G4OpenGLImmediateQt: public G4OpenGLQt {
 public:
   G4OpenGLImmediateQt ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

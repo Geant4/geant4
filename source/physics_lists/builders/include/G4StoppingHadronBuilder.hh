@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StoppingHadronBuilder.hh,v 1.1 2006-10-31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -34,7 +33,6 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
-//
 //----------------------------------------------------------------------------
 //
 
@@ -43,11 +41,11 @@
 
 #include "globals.hh"
 
-#include "G4MuonMinusCaptureAtRest.hh"
-#include "G4AntiProtonAnnihilationAtRest.hh"
-#include "G4AntiNeutronAnnihilationAtRest.hh"
-#include "G4PionMinusAbsorptionAtRest.hh"
-#include "G4KaonMinusAbsorption.hh"
+class G4MuonMinusCaptureAtRest;
+class G4AntiProtonAnnihilationAtRest;
+class G4AntiNeutronAnnihilationAtRest;
+class G4PionMinusAbsorptionAtRest;
+class G4KaonMinusAbsorption;
 
 
 class G4StoppingHadronBuilder

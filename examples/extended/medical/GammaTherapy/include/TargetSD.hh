@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/TargetSD.hh
+/// \brief Definition of the TargetSD class
+//
 #ifndef TargetSD_h
 #define TargetSD_h 1
 
@@ -49,21 +52,24 @@ class Histo;
 
 class TargetSD : public G4VSensitiveDetector
 {
-public: // Without description
+public: 
 
-      TargetSD(const G4String&);
-     ~TargetSD();
+  TargetSD(const G4String&);
+  virtual ~TargetSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-      void clear();
-      void PrintAll();
+  void Initialize(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*);
+  void clear();
+  void PrintAll();
 
-  private:
+private:
 
-      Histo* theHisto;
-      G4int evno;
+  TargetSD(const TargetSD & right);
+  const TargetSD & operator = (const TargetSD & right);
+
+  Histo* fHisto;
+  G4int  fEvno;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -25,13 +25,13 @@
 //
 #ifndef G4BCLateParticle_h
 #define G4BCLateParticle_h 1
+
+#include <vector>
+
 #include "G4BCAction.hh"
 #include "G4CollisionInitialState.hh"
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
-#include <vector>
-
-//#define debug_BCLateParticle 1
 
 class G4BCLateParticle : public G4BCAction
 {
@@ -51,17 +51,7 @@ class G4BCLateParticle : public G4BCAction
     G4CollisionInitialState * aLate = 
             new G4CollisionInitialState(ctime,
 	    				 aProjectile, noTarget, this);
-    theColl.push_back(aLate);
-
-#ifdef debug_BCLateParticle
-  G4cout << "Particle starting late " << aProjectile << " "  
-         <<  aProjectile->GetDefinition()->GetParticleName() << " "
-	 <<  1/MeV*aProjectile->Get4Momentum() << " " 
-	 <<  1/fermi*aProjectile->GetPosition() << " " 
-	 <<  aProjectile->GetFormationTime() 
-	 << G4endl;
-#endif	 
-    
+    theColl.push_back(aLate);    
     return theColl;
   }
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.37 2010-10-14 16:27:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -61,11 +60,12 @@
 
 G4VEmModel::G4VEmModel(const G4String& nam):
   flucModel(0),anglModel(0), name(nam), lowLimit(0.1*CLHEP::keV), 
-  highLimit(100.0*CLHEP::TeV), 
-  eMinActive(0.0),eMaxActive(DBL_MAX),
-  polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),theLPMflag(false),
-  pParticleChange(0),fCurrentCouple(0),fCurrentElement(0),
-  nsec(5),flagDeexcitation(false) 
+  highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
+  polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
+  theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
+  pParticleChange(0),xSectionTable(0),theDensityFactor(0),theDensityIdx(0),
+  fCurrentCouple(0),fCurrentElement(0),
+  nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;
@@ -84,6 +84,10 @@ G4VEmModel::~G4VEmModel()
     }
   }
   delete anglModel;
+  if(xSectionTable) { 
+    xSectionTable->clearAndDestroy(); 
+    delete xSectionTable;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -204,6 +208,11 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4VEmModel::StartTracking(G4Track*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
 					      const G4ParticleDefinition* pd,
 					      G4double kinEnergy,
@@ -274,6 +283,23 @@ void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4VEmModel::Value(const G4MaterialCutsCouple* couple,
+			   const G4ParticleDefinition* p, G4double e)
+{
+  fCurrentCouple = couple;
+  return e*e*CrossSectionPerVolume(couple->GetMaterial(),p,e,0.0,DBL_MAX);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::MinPrimaryEnergy(const G4Material*,
+				      const G4ParticleDefinition*)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 					G4double kineticEnergy)
 {
@@ -293,6 +319,19 @@ G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 {
   if(p && pParticleChange != p) { pParticleChange = p; }
   flucModel = f;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p)
+{
+  if(p != xSectionTable) {
+    if(xSectionTable) { 
+      xSectionTable->clearAndDestroy(); 
+      delete xSectionTable;
+    }
+    xSectionTable = p;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

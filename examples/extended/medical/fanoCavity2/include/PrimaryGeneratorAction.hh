@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2007-10-15 16:20:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,19 +54,19 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void RunInitialisation(G4double, G4double);   
     void GeneratePrimaries(G4Event*);
          
-    G4ParticleGun* GetParticleGun() {return particleGun;}
+    G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
-    G4int GetWallCount()            {return Nwall;}         
-    G4int GetCavityCount()          {return Ncavity;}
+    G4int GetWallCount()            {return fNwall;}         
+    G4int GetCavityCount()          {return fNcavity;}
          
   private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      detector;
-    G4double                   effWallThick;
-    G4double                   cavityThickness;
-    G4double                   massWallRatio;
-    G4int                      Nwall, Ncavity;
-    HistoManager*              histoManager;     
+    G4ParticleGun*             fParticleGun;
+    DetectorConstruction*      fDetector;
+    G4double                   fEffWallThick;
+    G4double                   fCavityThickness;
+    G4double                   fMassWallRatio;
+    G4int                      fNwall, fNcavity;
+    HistoManager*              fHistoManager;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

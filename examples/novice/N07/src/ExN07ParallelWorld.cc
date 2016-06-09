@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07ParallelWorld.cc,v 1.1 2007-05-04 01:49:28 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -47,6 +46,7 @@
 #include "G4VSDFilter.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN07ParallelWorld::ExN07ParallelWorld(G4String worldName)
 :G4VUserParallelWorld(worldName),constructed(false),serial(false)

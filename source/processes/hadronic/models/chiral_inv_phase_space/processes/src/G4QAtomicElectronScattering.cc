@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.cc,v 1.1 2009-11-17 10:36:54 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QAtomicElectronScattering class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -49,10 +48,16 @@
 //#define pdebug
 
 #include "G4QAtomicElectronScattering.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QAtomicElectronScattering::G4QAtomicElectronScattering(const G4String& processName):
  G4VDiscreteProcess(processName, fElectromagnetic)
 {
+
+ G4HadronicDeprecate("G4QAtomicElectronScattering");
+
 #ifdef debug
   G4cout<<"G4QAtomicElectronScattering::Constructor is called"<<G4endl;
 #endif
@@ -342,8 +347,8 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   G4double dd=0.025;
   G4double am=Z+N;
-  G4double sr=std::sqrt(am);
-  G4double dsr=0.01*(sr+sr);
+  G4double value_sr=std::sqrt(am);
+  G4double dsr=0.01*(value_sr+value_sr);
   if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
   else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars

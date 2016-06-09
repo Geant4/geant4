@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.hh,v 1.3 2010-07-21 14:21:19 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction

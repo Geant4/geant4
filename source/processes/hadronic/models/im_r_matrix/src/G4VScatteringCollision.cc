@@ -27,7 +27,9 @@
 // @hpw@ to be usefull for resonance resonance scattering.
 
 #include <typeinfo>
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VScatteringCollision.hh"
 #include "G4KineticTrack.hh"
 #include "G4VCrossSectionSource.hh"
@@ -60,10 +62,7 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   const G4VAngularDistribution* angDistribution = GetAngularDistribution();
   G4LorentzVector p = trk1.Get4Momentum() + trk2.Get4Momentum();
   G4double sqrtS = p.m();
-  G4double s = sqrtS * sqrtS;
-
-  G4double m1 = trk1.GetActualMass();
-  G4double m2 = trk2.GetActualMass();
+  G4double S = sqrtS * sqrtS;
 
   std::vector<const G4ParticleDefinition*> OutputDefinitions = GetOutgoingParticles();
   if (OutputDefinitions.size() != 2)
@@ -94,7 +93,7 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   }
   
   // Angles of outgoing particles
-  G4double cosTheta = angDistribution->CosTheta(s,m1,m2);
+  G4double cosTheta = angDistribution->CosTheta(S, trk1.GetActualMass(), trk2.GetActualMass());
   G4double phi = angDistribution->Phi();
 
   // Unit vector of three-momentum
@@ -109,7 +108,7 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   G4ThreeVector pFinal1(std::sin(std::acos(cosTheta))*std::cos(phi), std::sin(std::acos(cosTheta))*std::sin(phi), cosTheta);
 
   // Three momentum in cm system
-  G4double pCM = std::sqrt( (s-(outm1+outm2)*(outm1+outm2)) * (s-(outm1-outm2)*(outm1-outm2)) /(4.*s));
+  G4double pCM = std::sqrt( (S-(outm1+outm2)*(outm1+outm2)) * (S-(outm1-outm2)*(outm1-outm2)) /(4.*S));
   pFinal1 = pFinal1 * pCM;
   G4ThreeVector pFinal2 = -pFinal1;
 

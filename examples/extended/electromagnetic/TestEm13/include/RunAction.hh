@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.4 2010-04-05 13:45:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm13/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,15 +53,15 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
-    void CountProcesses(G4String procName) { procCounter[procName]++;};
+    void CountProcesses(G4String procName) { fProcCounter[procName]++;};
                     
   private:
-    DetectorConstruction*      detector;
-    PrimaryGeneratorAction*    primary;
-    std::map<G4String,G4int>   procCounter;
+    DetectorConstruction*      fDetector;
+    PrimaryGeneratorAction*    fPrimary;
+    std::map<G4String,G4int>   fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

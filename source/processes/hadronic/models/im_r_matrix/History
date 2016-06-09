@@ -14,6 +14,42 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+12-Oct-2012 Gabriele Cosmo               hadr-im_r-V09-05-08
+- Explicitly inclusion of headers for system of units and physical
+  constants... fixed cases introduced again in last tags...
+
+05-Oct-2012 Gunter Folger 		 hadr-im_r-V09-05-07
+-  add Print() to G4CollisionInitialState
+
+28-Sep-2012 Alberto Ribon                hadr-im_r-V09-05-06
+- Fixed reproducibility violation in G4CollisionComposite.cc.
+
+20-Sep-2012 Gabriele Cosmo               hadr-im_r-V09-05-05
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+12-Jun-2012 Gunter Folger		 hadr-im_r-V09-05-04
+-  fixes to avoid shadowing of variables
+
+29-May-2012 Gunter Folger		 hadr-im_r-V09-05-03
+-  Fix coverity warnings, part 2; fixed ~20 more warnings, mostly not
+     initialized data members, or dead code. 
+     Affected 25 source and 18 header files
+
+29-May-2012 Gunter Folger		 hadr-im_r-V09-05-02
+-  Ignore: incomplete tag
+
+18-May-2012 Gunter Folger		 hadr-im_r-V09-05-01
+-  Fix coverity warnings, part 1: includes done, src started.
+ 
+03-Feb-2012 Gunter Folger		 hadr-im_r-V09-05-00
+-  Incorporate new data from extended nucleon-nucleon elastic scattering data,
+    i.e. SAID evaluation.
+    These double differential elastic cross sections now cover energies up to 5 GeV.
+	Data copied from G4LE{np,pp}..., affects
+	G4AngularDistribution{NP,PP}{,Data}.hh
+	 
 11-Nov-2011Gunter Folger		 hadr-im_r-V09-04-01
 -  Move to new style G4Exception
 

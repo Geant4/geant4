@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/RootIO.cc
+/// \brief Implementation of the RootIO class
+//
 #include <sstream>
 
 #include "RootIO.hh"
@@ -40,11 +43,11 @@ RootIO::RootIO():Nevents(0)
 {
   // initialize ROOT
   TSystem ts;
-  gSystem->Load("libClassesDict");
+  gSystem->Load("libExP01ClassesDict");
 
-  ROOT::Cintex::Cintex::SetDebug(2);
+  ROOT::Cintex::Cintex::SetDebug(0);
   ROOT::Cintex::Cintex::Enable();
-  gDebug = 1;
+  //gDebug = 1;
 
   fo = new TFile("hits.root","RECREATE");
 }

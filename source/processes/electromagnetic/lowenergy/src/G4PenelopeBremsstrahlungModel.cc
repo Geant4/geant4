@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.1 2010-12-20 14:11:37 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -32,9 +31,14 @@
 // --------
 // 23 Nov 2010   L Pandola    First complete implementation, Penelope v2008
 // 24 May 2011   L. Pandola   Renamed (make default Penelope)
+// 13 Mar 2012   L. Pandola   Updated the interface for the angular generator
+// 18 Jul 2012   L. Pandola   Migrate to the new interface of the angular generator, which 
+//                            now provides the G4ThreeVector and takes care of rotation
 //
 
 #include "G4PenelopeBremsstrahlungModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PenelopeBremsstrahlungFS.hh"
 #include "G4PenelopeBremsstrahlungAngular.hh"
 #include "G4ParticleDefinition.hh"
@@ -54,7 +58,7 @@
  
 G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDefinition*,
 							     const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),energyGrid(0),  
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),energyGrid(0),  
    XSTableElectron(0),XSTablePositron(0)
   
 {
@@ -104,6 +108,11 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
  
   //Clear and re-build the tables 
   ClearTables();
+  
+  //forces the cleaning of tables, in this specific case
+  if (fPenelopeAngular)
+    fPenelopeAngular->Initialize();
+    
 
   //Set the number of bins for the tables. 20 points per decade
   nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
@@ -270,20 +279,14 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
 
   if (verboseLevel > 3)
     G4cout << "Sampled gamma energy: " << gammaEnergy/keV << " keV" << G4endl;
-
-  G4double Zeff = std::sqrt(fPenelopeFSHelper->GetEffectiveZSquared(material));
-  if (verboseLevel > 3)
-    {
-      G4cout << "Sampling in " << material->GetName() << " with Zeff= " << 
-	Zeff << G4endl;
-    }
   
-  //Now sample cosTheta for the Gamma
-  G4double cosThetaPrimary = 
-    fPenelopeAngular->SampleCosTheta(Zeff,kineticEnergy,gammaEnergy);
-   
+  //Now sample the direction for the Gamma. Notice that the rotation is already done
+  //Z is unused here, I plug 0. The information is in the material pointer
+   G4ThreeVector gammaDirection1 = 
+     fPenelopeAngular->SampleDirection(aDynamicParticle,gammaEnergy,0,material);
+  
   if (verboseLevel > 3)
-    G4cout << "Sampled cosTheta for e-: " << cosThetaPrimary << G4endl;
+    G4cout << "Sampled cosTheta for e-: " << gammaDirection1.cosTheta() << G4endl;
 
   G4double residualPrimaryEnergy = kineticEnergy-gammaEnergy;
   if (residualPrimaryEnergy < 0)
@@ -292,15 +295,6 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
       gammaEnergy += residualPrimaryEnergy;
       residualPrimaryEnergy = 0.0;
     }
-  
-  //Get primary kinematics
-  G4double sinTheta = std::sqrt(1. - cosThetaPrimary*cosThetaPrimary);
-  G4double phi  = twopi * G4UniformRand(); 
-  G4ThreeVector gammaDirection1(sinTheta* std::cos(phi),
-				sinTheta* std::sin(phi),
-				cosThetaPrimary);
-  
-  gammaDirection1.rotateUz(particleDirection0);
   
   //Produce final state according to momentum conservation
   G4ThreeVector particleDirection1 = initialMomentum - gammaEnergy*gammaDirection1;
@@ -379,13 +373,11 @@ void G4PenelopeBremsstrahlungModel::ClearTables()
     delete energyGrid;
 
   if (fPenelopeFSHelper)
-    fPenelopeFSHelper->ClearTables();
-  
-  if (fPenelopeAngular)
-    fPenelopeAngular->ClearTables();
+    fPenelopeFSHelper->ClearTables(); 
 
   if (verboseLevel > 2)
     G4cout << "G4PenelopeBremsstrahlungModel: cleared tables" << G4endl;
+
  return;
 }
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VelocityTable.cc,v 1.11 2010-10-30 07:49:08 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //---------------------------------------------------------------
@@ -41,6 +40,7 @@
 //
 
 #include "G4VelocityTable.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
 
@@ -132,7 +132,7 @@ G4double G4VelocityTable::Value(G4double theEnergy)
   } else if( theEnergy < lastEnergy
         &&   theEnergy >= binVector[lastBin]) {
      lastEnergy = theEnergy;
-     lastValue = Interpolation(lastBin);
+     lastValue = Interpolation();
 
   } else if( theEnergy <= edgeMin ) {
      lastBin = 0;
@@ -147,7 +147,7 @@ G4double G4VelocityTable::Value(G4double theEnergy)
   } else {
      lastBin = FindBinLocation(theEnergy); 
      lastEnergy = theEnergy;
-     lastValue = Interpolation(lastBin);
+     lastValue = Interpolation();
      
   }
   return lastValue;        

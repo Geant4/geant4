@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.17 2007-11-09 15:39:20 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -185,7 +184,7 @@ class G4Transportation : public G4VProcess
      G4ParticleChangeForTransport fParticleChange;
        // New ParticleChange
 
-     G4double endpointDistance;
+     G4double fEndPointDistance;
 
   // Thresholds for looping particles: 
   // 

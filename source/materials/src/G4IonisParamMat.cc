@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.cc,v 1.40 2010-11-01 18:18:57 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -47,6 +46,8 @@
 #include "G4DensityEffectData.hh"
 #include "G4NistManager.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
@@ -181,9 +182,10 @@ void G4IonisParamMat::ComputeDensityEffect()
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
-  if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
-    idx = fDensityData->GetElementIndex(G4int(fMaterial->GetZ()),
-					fMaterial->GetState());
+  G4int nelm= fMaterial->GetNumberOfElements();
+  G4int Z0  = G4int((*(fMaterial->GetElementVector()))[0]->GetZ()+0.5);
+  if(idx < 0 && 1 == nelm) {
+    idx = fDensityData->GetElementIndex(Z0, fMaterial->GetState());
   }
 
   //G4cout<<"DensityEffect for "<<fMaterial->GetName()<<"  "<< idx << G4endl; 
@@ -242,7 +244,7 @@ void G4IonisParamMat::ComputeDensityEffect()
       fX1density = X1valS[icase]; fMdensity = 3.0;
       
       //special: Hydrogen
-      if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==1.)) {
+      if (1 == nelm && 1 == Z0) {
          fX0density = 0.425; fX1density = 2.0; fMdensity = 5.949;
       }
     }
@@ -261,12 +263,12 @@ void G4IonisParamMat::ComputeDensityEffect()
       fX0density = X0valG[icase]; fX1density = X1valG[icase];
       
       //special: Hydrogen
-      if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==1.)) {
+      if (1 == nelm && 1 == Z0) {
          fX0density = 1.837; fX1density = 3.0; fMdensity = 4.754;
       }
       
       //special: Helium
-      if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==2.)) {
+      if (1 == nelm && 2 == Z0) {
          fX0density = 2.191; fX1density = 3.0; fMdensity = 3.297;
       }
     }

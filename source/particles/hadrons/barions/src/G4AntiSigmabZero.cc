@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmabZero.cc,v 1.13 2006-10-12 10:59:45 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -39,6 +38,7 @@
 //
 
 #include "G4AntiSigmabZero.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

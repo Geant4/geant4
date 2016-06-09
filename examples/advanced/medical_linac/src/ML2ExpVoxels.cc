@@ -40,75 +40,75 @@
 //
 //*******************************************************//
 
-
-#include "ML2ExpVoxels.hh"
-
 #include <fstream>
 
-CML2ExpVoxels::CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Selected_Voxels_every_events, G4int seed, G4String FileExperimentalData, G4String FileExperimentalDataOut):startCurve(0), stopCurve(0),chi2Factor(0)
+#include "ML2ExpVoxels.hh"
+#include "G4SystemOfUnits.hh"
+
+CML2ExpVoxels::CML2ExpVoxels(G4bool bData, G4int saveEvents, G4int seed,
+          G4String FileExperimentalData, G4String FileExperimentalDataOut):startCurve(0),
+          stopCurve(0),chi2Factor(0)
 {
 	char a[10];
 	sprintf(a,"%d", seed);
-	this->seedName=(G4String)a;
-	this->saving_in_Selected_Voxels_every_events=saving_in_Selected_Voxels_every_events;
-	this->nRecycling=1;
+	seedName=(G4String)a;
+	saving_in_Selected_Voxels_every_events=saveEvents;
+	nRecycling=1;
 
 	
-	this->fullFileOut=FileExperimentalDataOut+this->seedName+".m";
-	this->fullFileIn=FileExperimentalData;
-	this->nParticle=this->nTotalEvents=0;
+	fullFileOut=FileExperimentalDataOut+seedName+".m";
+	fullFileIn=FileExperimentalData;
+	nParticle=nTotalEvents=0;
 
 // define the extremes of global-volume containing all experimental voxels
 	G4double extr=100000000000.;
-	this->minZone.set(extr, extr, extr);
-	this->maxZone.set(-extr, -extr, -extr);
-	this->bHasExperimentalData=bHasExperimentalData;
+	minZone.set(extr, extr, extr);
+	maxZone.set(-extr, -extr, -extr);
+	bHasExperimentalData=bData;
 }
 
 CML2ExpVoxels::~CML2ExpVoxels(void)
 {
-	delete [] this->startCurve;
-	delete [] this->stopCurve;
-	delete [] this->chi2Factor;
-	delete this->startCurve;
-	delete this->stopCurve;
-	delete this->chi2Factor;
+	delete [] startCurve;
+	delete [] stopCurve;
+	delete [] chi2Factor;
+        delete [] nVoxelsgeometry;
 }
 G4bool CML2ExpVoxels::loadData(void)
 {
-	this->bHasExperimentalData=true;
+	bHasExperimentalData=true;
 	std::ifstream in;
 
-	Svoxel voxel;
+	Svoxel voxel; voxel.volumeId=0;
 	G4ThreeVector pos, halfSize;
 	G4double expDose;
 
-	in.open(this->fullFileIn, std::ios::in);
+	in.open(fullFileIn, std::ios::in);
 	if (in !=0)
 	{
 		G4String appo;
 		char a[1000];
-		in.getline(a,1000,'\n'); this->headerText1=(G4String)a;
+		in.getline(a,1000,'\n'); headerText1=(G4String)a;
 		in.getline(a,1000,'\n');
-		in >> this->nCurves;
-		this->startCurve=new G4int[this->nCurves];
-		this->stopCurve=new G4int[this->nCurves]; 
-		this->chi2Factor=new G4double[this->nCurves];
-		for (int i=0; i< this->nCurves; i++)
+		in >> nCurves;
+		startCurve=new G4int[nCurves];
+		stopCurve=new G4int[nCurves]; 
+		chi2Factor=new G4double[nCurves];
+		for (int i=0; i< nCurves; i++)
 		{
-			this->chi2Factor[i]=0.;
-			in >> this->startCurve[i]; 
-			in >> this->stopCurve[i]; 
-			in >> this->chi2Factor[i];
+			chi2Factor[i]=0.;
+			in >> startCurve[i]; 
+			in >> stopCurve[i]; 
+			in >> chi2Factor[i];
 		}
 		in.getline(a,1000,'\n');
-		in.getline(a,1000,'\n'); this->headerText2=(G4String)a;
+		in.getline(a,1000,'\n'); headerText2=(G4String)a;
 
 		while (!in.eof())
 		{
 			in >> pos;
 			in >> halfSize; 
-			if (this->bHasExperimentalData)
+			if (bHasExperimentalData)
 			{
 				in >> expDose;
 				voxel.expDose=expDose/100.*(joule/kg); // input data in cGy
@@ -124,23 +124,23 @@ G4bool CML2ExpVoxels::loadData(void)
 			voxel.nEvents=0;
 			voxel.depEnergyNorm=0.;
 			voxel.depEnergyNormError=0.;
-			this->voxels.push_back(voxel);
+			voxels.push_back(voxel);
 
 // calculate the actual extremes of the global-volume containing all the experimental data
-			if (this->minZone.getX()>pos.getX()-halfSize.getX())
-			{this->minZone.setX(pos.getX()-halfSize.getX());}
-			if (this->maxZone.getX()<pos.getX()+halfSize.getX())
-			{this->maxZone.setX(pos.getX()+halfSize.getX());}
+			if (minZone.getX()>pos.getX()-halfSize.getX())
+			{minZone.setX(pos.getX()-halfSize.getX());}
+			if (maxZone.getX()<pos.getX()+halfSize.getX())
+			{maxZone.setX(pos.getX()+halfSize.getX());}
 
-			if (this->minZone.getY()>pos.getY()-halfSize.getY())
-			{this->minZone.setY(pos.getY()-halfSize.getY());}
-			if (this->maxZone.getY()<pos.getY()+halfSize.getY())
-			{this->maxZone.setY(pos.getY()+halfSize.getY());}
+			if (minZone.getY()>pos.getY()-halfSize.getY())
+			{minZone.setY(pos.getY()-halfSize.getY());}
+			if (maxZone.getY()<pos.getY()+halfSize.getY())
+			{maxZone.setY(pos.getY()+halfSize.getY());}
 
-			if (this->minZone.getZ()>pos.getZ()-halfSize.getZ())
-			{this->minZone.setZ(pos.getZ()-halfSize.getZ());}
-			if (this->maxZone.getZ()<pos.getZ()+halfSize.getZ())
-			{this->maxZone.setZ(pos.getZ()+halfSize.getZ());}
+			if (minZone.getZ()>pos.getZ()-halfSize.getZ())
+			{minZone.setZ(pos.getZ()-halfSize.getZ());}
+			if (maxZone.getZ()<pos.getZ()+halfSize.getZ())
+			{maxZone.setZ(pos.getZ()+halfSize.getZ());}
 
 		}
 	}
@@ -151,8 +151,17 @@ G4bool CML2ExpVoxels::loadData(void)
 	}
 	in.close();
 
+        nVoxelsgeometry=new G4int[(G4int) voxels.size()];
+        resetNEventsInVoxels();
+
 	return true;
 }
+void CML2ExpVoxels::resetNEventsInVoxels()
+{
+    for (int i=0; i<(int) voxels.size(); i++ )
+    {nVoxelsgeometry[i]=0;}
+}
+
 void CML2ExpVoxels::add(const G4Step* aStep)
 {
 	G4ThreeVector pos;
@@ -167,26 +176,27 @@ void CML2ExpVoxels::add(const G4Step* aStep)
 	G4double voxelMass, dose;
 
 // check if the event is inside the global-volume 
-	if (this->minZone.getX()<= pos.getX() && pos.getX()<this->maxZone.getX() && 
-		this->minZone.getY()<= pos.getY() && pos.getY()<this->maxZone.getY() && 
-		this->minZone.getZ()<= pos.getZ() && pos.getZ()<this->maxZone.getZ())
+	if (minZone.getX()<= pos.getX() && pos.getX()<maxZone.getX() && 
+		minZone.getY()<= pos.getY() && pos.getY()<maxZone.getY() && 
+		minZone.getZ()<= pos.getZ() && pos.getZ()<maxZone.getZ())
 	{
 // look for the voxel containing the event
-		for (int i=0; i<(int)this->voxels.size(); i++)
+		for (int i=0; i<(int)voxels.size(); i++)
 		{
-			minPos=this->voxels[i].pos-this->voxels[i].halfSize;
-			maxPos=this->voxels[i].pos+this->voxels[i].halfSize;
+			minPos=voxels[i].pos-voxels[i].halfSize;
+			maxPos=voxels[i].pos+voxels[i].halfSize;
 			if (minPos.getX()<= pos.getX() && pos.getX()<maxPos.getX() && 
 				minPos.getY()<= pos.getY() && pos.getY()<maxPos.getY() && 
 				minPos.getZ()<= pos.getZ() && pos.getZ()<maxPos.getZ())
 			{
-				voxelVolume=this->voxels[i].halfSize.getX()*this->voxels[i].halfSize.getY()*this->voxels[i].halfSize.getZ()*8.;
+				voxelVolume=voxels[i].halfSize.getX()*voxels[i].halfSize.getY()*voxels[i].halfSize.getZ()*8.;
 				voxelMass=density*voxelVolume;
 // calculate the dose 
-				dose=depEnergy/(voxelMass*this->nRecycling);
-				this->voxels[i].nEvents++;
-				this->voxels[i].depEnergy+=dose;
-				this->voxels[i].depEnergy2+=dose*dose;
+				dose=depEnergy/(voxelMass*nRecycling);
+				voxels[i].nEvents++;
+                                nVoxelsgeometry[i]++;
+				voxels[i].depEnergy+=dose;
+				voxels[i].depEnergy2+=dose*dose;
 				newEvent=true;
 
 				Sparticle *particle=new Sparticle;
@@ -203,10 +213,10 @@ void CML2ExpVoxels::add(const G4Step* aStep)
 		if (newEvent)
 		{
 // save data
-			this->nTotalEvents++;
-			if (this->nTotalEvents%this->saving_in_Selected_Voxels_every_events==0 && this->nTotalEvents>0)
+			nTotalEvents++;
+			if (nTotalEvents%saving_in_Selected_Voxels_every_events==0 && nTotalEvents>0)
 			{
-				this->saveResults();
+				saveResults();
 			}
 		}
 	}
@@ -215,7 +225,7 @@ void CML2ExpVoxels::add(const G4Step* aStep)
 G4int CML2ExpVoxels::getMinNumberOfEvents()
 {
 	int n=voxels[0].nEvents;
-	for (int i=0;i<(int)this->voxels.size();i++)
+	for (int i=0;i<(int)voxels.size();i++)
 	{ 
 		if (n>voxels[i].nEvents){n = voxels[i].nEvents;}
 	}
@@ -223,25 +233,25 @@ G4int CML2ExpVoxels::getMinNumberOfEvents()
 }
 G4int CML2ExpVoxels::getMaxNumberOfEvents()
 {
-	int n=voxels[0].nEvents;
-	for (int i=0;i<(int)this->voxels.size();i++)
+        int n=nVoxelsgeometry[0];
+	for (int i=0;i<(int)voxels.size();i++)
 	{ 
-		if (n<voxels[i].nEvents){n = voxels[i].nEvents;}
+                if (n<nVoxelsgeometry[i]){n = nVoxelsgeometry[i];}
 	}
 	return n;
 }
 void CML2ExpVoxels::saveHeader()
 {
 	std::ofstream out;
-	out.open(this->fullFileOut, std::ios::out);
-	out <<"% "<< this->headerText1 << G4endl;
-	out <<"n"<< this->seedName<<"="<< this->nCurves<<";" << G4endl;
-	out <<"fh"<< this->seedName<<"=["<< G4endl;
-	for (int i=0; i< this->nCurves; i++)
+	out.open(fullFileOut, std::ios::out);
+	out <<"% "<< headerText1 << G4endl;
+	out <<"n"<< seedName<<"="<< nCurves<<";" << G4endl;
+	out <<"fh"<< seedName<<"=["<< G4endl;
+	for (int i=0; i< nCurves; i++)
 	{
-		out << this->startCurve[i] << '\t';
-		out << this->stopCurve[i] << '\t';
-		out << this->chi2Factor[i]<< G4endl;
+		out << startCurve[i] << '\t';
+		out << stopCurve[i] << '\t';
+		out << chi2Factor[i]<< G4endl;
 	}
 	out << "];"<<G4endl;
 	out <<"% x [mm], y [mm], z [mm], Dx [mm], Dy [mm], Dz [mm], expDose [Gy], Calculated dose [Gy], Calculated dose2 [Gy^2], nEvents, normDose [Gy], normDoseError [Gy]";
@@ -251,19 +261,19 @@ void CML2ExpVoxels::saveHeader()
 
 void CML2ExpVoxels::saveResults()
 {
-	if (this->nTotalEvents>0)
+	if (nTotalEvents>0)
 	{
-		this->calculateNormalizedEd(voxels);
-		this->saveHeader();
+		calculateNormalizedEd(voxels);
+		saveHeader();
 		std::ofstream out;
-		out.open(this->fullFileOut, std::ios::app);
-		out <<"d"<< this->seedName<<"=["<< G4endl;
-		for (int i=0; i<(int)this->voxels.size(); i++)
+		out.open(fullFileOut, std::ios::app);
+		out <<"d"<< seedName<<"=["<< G4endl;
+		for (int i=0; i<(int)voxels.size(); i++)
 		{
-			out <<this->voxels[i].pos.getX()/mm<<'\t'<<this->voxels[i].pos.getY()/mm<<'\t'<<this->voxels[i].pos.getZ()/mm<<'\t';
-			out <<this->voxels[i].halfSize.getX()/mm<<'\t'<<this->voxels[i].halfSize.getY()/mm<<'\t'<<this->voxels[i].halfSize.getZ()/mm<<'\t';
-			out <<this->voxels[i].expDose/(joule/kg)<<'\t'<<this->voxels[i].depEnergy/(joule/kg)<<'\t'<<this->voxels[i].depEnergy2/((joule/kg)*(joule/kg))<<'\t'<<this->voxels[i].nEvents<< '\t';
-			out <<this->voxels[i].depEnergyNorm/(joule/kg)<<'\t'<<this->voxels[i].depEnergyNormError/(joule/kg);
+			out <<voxels[i].pos.getX()/mm<<'\t'<<voxels[i].pos.getY()/mm<<'\t'<<voxels[i].pos.getZ()/mm<<'\t';
+			out <<voxels[i].halfSize.getX()/mm<<'\t'<<voxels[i].halfSize.getY()/mm<<'\t'<<voxels[i].halfSize.getZ()/mm<<'\t';
+			out <<voxels[i].expDose/(joule/kg)<<'\t'<<voxels[i].depEnergy/(joule/kg)<<'\t'<<voxels[i].depEnergy2/((joule/kg)*(joule/kg))<<'\t'<<voxels[i].nEvents<< '\t';
+			out <<voxels[i].depEnergyNorm/(joule/kg)<<'\t'<<voxels[i].depEnergyNormError/(joule/kg);
 			out << G4endl;
 		}
 		out << "];"<<G4endl;
@@ -271,40 +281,35 @@ void CML2ExpVoxels::saveResults()
 	}
 }
 
-void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
+void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &vox)
 {
 	int i,j;
 	G4double cs, cc;
 	int n;
 	G4double d2, dd;
-	G4double v, appoo;
-	for (j=0;j<this->nCurves;j++)
+        G4double v;
+	for (j=0;j<nCurves;j++)
 	{
 		cs=cc=0.;
-		for (i=this->startCurve[j]-1;i<this->stopCurve[j];i++)
+		for (i=startCurve[j]-1;i<stopCurve[j];i++)
 		{
-			cs+=voxels[i].depEnergy*voxels[i].expDose;
-			cc+=voxels[i].depEnergy*voxels[i].depEnergy;
+			cs+=vox[i].depEnergy*vox[i].expDose;
+			cc+=vox[i].depEnergy*vox[i].depEnergy;
 		}
 		if (cc>0.)
 		{
-			this->chi2Factor[j]=cs/cc; 
+			chi2Factor[j]=cs/cc; 
 		}
-		for (i=this->startCurve[j]-1;i<this->stopCurve[j];i++)
+		for (i=startCurve[j]-1;i<stopCurve[j];i++)
 		{
-			dd=voxels[i].depEnergy*voxels[i].depEnergy;
-			d2=voxels[i].depEnergy2;
-			n=voxels[i].nEvents;
-			voxels[i].depEnergyNorm=chi2Factor[j]*voxels[i].depEnergy;
-			appoo=chi2Factor[j];
-			appoo=voxels[i].depEnergy;
-			appoo=voxels[i].depEnergyNorm;
+			dd=vox[i].depEnergy*vox[i].depEnergy;
+			d2=vox[i].depEnergy2;
+			n=vox[i].nEvents;
+			vox[i].depEnergyNorm=chi2Factor[j]*vox[i].depEnergy;
 			v=n*d2-dd;
 			if (v<0.){v=0;}
-			if (n>1){voxels[i].depEnergyNormError=this->chi2Factor[j]*std::sqrt(v/(n-1));}
-			if (n==1){voxels[i].depEnergyNormError=voxels[i].depEnergyNorm;}
+			if (n>1){vox[i].depEnergyNormError=chi2Factor[j]*std::sqrt(v/(n-1));}
+			if (n==1){vox[i].depEnergyNormError=vox[i].depEnergyNorm;}
 		}
 	}
 }
-
-

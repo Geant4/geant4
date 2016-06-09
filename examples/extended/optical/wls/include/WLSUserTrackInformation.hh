@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/include/WLSUserTrackInformation.hh
+/// \brief Definition of the WLSUserTrackInformation class
+//
 //
 //
 //
@@ -41,7 +44,7 @@ enum TrackStatus { undefined=0,
                    left=1, right=2, defined = 3,
                    EscapedFromSide=4, EscapedFromReadOut=8,
                    ReflectedAtMirror=16, ReflectedAtReadOut=32,
-		   murderee=64, InsideOfFiber=128, OutsideOfFiber=256};
+                   murderee=64, InsideOfFiber=128, OutsideOfFiber=256};
 
 /*TrackStatus:
   undefined:

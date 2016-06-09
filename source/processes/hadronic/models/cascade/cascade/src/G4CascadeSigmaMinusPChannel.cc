@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeSigmaMinusPChannel.cc,v 1.6 2010-12-15 07:40:39 gunter Exp $
+// $Id$
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
 // 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 // 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
+// 20120309  M. Kelsey -- Change zero-energy two-body bins per J. Yarba (see
+//		M. Goossens et al. in Low and Intermediate Energy Kaon Physics)
 
 #include "G4CascadeSigmaMinusPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -112,12 +114,12 @@ namespace {
      5.16, 5.08, 4.92, 4.76, 4.58, 4.42,  4.26, 4.18, 4.16, 4.14, 3.94},
 
     // L n
-    {170., 49.2, 31.0, 26.8, 22.6, 18.4, 14.27,10.09, 8.90, 8.76,  
+    {388.6, 49.2, 31.0, 26.8, 22.6, 18.4, 14.27,10.09, 8.90, 8.76,  
      8.62, 7.32, 6.03, 4.70, 3.20, 1.60,  0.80, 0.60, 0.56, 0.54,
      0.52, 0.51, 0.49, 0.47, 0.46, 0.44,  0.42, 0.41, 0.41, 0.41, 0.38},
  
     // S0 n
-    {500., 59.0, 32.0, 27.6, 23.3, 18.9, 14.51,10.14, 8.90, 8.76,
+    {281.4, 59.0, 32.0, 27.6, 23.3, 18.9, 14.51,10.14, 8.90, 8.76,
      8.62, 7.32, 6.03, 4.70, 3.20, 1.60,  0.80, 0.60, 0.56, 0.54,
      0.52, 0.51, 0.49, 0.47, 0.46, 0.44,  0.42, 0.41, 0.41, 0.41, 0.38},
 

@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/src/RE04SteppingAction.cc
+/// \brief Implementation of the RE04SteppingAction class
+//
+// $Id: $
+//
 #include "RE04SteppingAction.hh"
 
 #include "G4Step.hh"
@@ -31,12 +35,15 @@
 #include "G4Material.hh"
 #include "G4StepPoint.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04SteppingAction::RE04SteppingAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04SteppingAction::~RE04SteppingAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4Track* trk = aStep->GetTrack();

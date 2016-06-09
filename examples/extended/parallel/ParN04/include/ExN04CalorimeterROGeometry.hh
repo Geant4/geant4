@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04CalorimeterROGeometry.hh
+/// \brief Definition of the ExN04CalorimeterROGeometry class
+//
 #ifndef ExN04CalorimeterROGeometry_h
 #define ExN04CalorimeterROGeometry_h 1
 

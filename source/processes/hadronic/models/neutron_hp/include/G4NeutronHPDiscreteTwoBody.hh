@@ -24,17 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPDiscreteTwoBody_h
 #define G4NeutronHPDiscreteTwoBody_h 1
 
-//101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
-
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4NeutronHPLegendreTable.hh"
 #include "G4NeutronHPInterpolator.hh"
@@ -63,7 +62,7 @@ class G4NeutronHPDiscreteTwoBody : public G4VNeutronHPEnergyAngular
       G4double energy;
       G4int aRep, nCoeff;
       aDataFile >> energy >> aRep >> nCoeff;
-      energy*=eV;
+      energy*=CLHEP::eV;
       G4int nPoints=nCoeff;
       if(aRep>0) nPoints*=2;
       //theCoeff[i].Init(energy, nPoints);

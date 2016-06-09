@@ -32,7 +32,9 @@
 // design and code review.
 //
 #include "G4VoxelRightBreast.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Tubs.hh"
@@ -48,14 +50,13 @@
 #include "G4VoxelRightBreastROGeometry.hh"
 #include "G4VoxelRightBreastSD.hh"
 #include "G4HumanPhantomColour.hh"
+
 G4VoxelRightBreast::G4VoxelRightBreast()
 {
 }
 
 G4VoxelRightBreast::~G4VoxelRightBreast()
 {
-
-
 }
 
 G4VPhysicalVolume* G4VoxelRightBreast::Construct(const G4String& volumeName,

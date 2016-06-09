@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFission.hh,v 1.10 2006-06-29 20:47:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -61,6 +60,8 @@ class G4NeutronHPFission : public G4HadronicInteraction
   
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
   private:
   
   G4NeutronHPFissionFS theFS;
@@ -68,10 +69,12 @@ class G4NeutronHPFission : public G4HadronicInteraction
   private:
   
   G4double * xSec;
-  G4NeutronHPChannel * theFission;
+  //G4NeutronHPChannel * theFission;
+      std::vector<G4NeutronHPChannel*> theFission;
   G4String dirName;
   G4int numEle;
   // static G4String theNames[3];
+      void addChannelForNewElement();
 };
 
 #endif

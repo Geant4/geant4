@@ -74,17 +74,11 @@ monopole.
        /control/execute vis.mac
 
      The detector has a default view which is a longitudinal view of the box.
-
+     
      The tracks are drawn at the end of event, and erased at the end of run.
-     Optionaly one can choose to draw all particles, only the charged one,
-     or none. This command is defined in EventActionMessenger class.
 
 
  5- HOW TO START ?
-
-     - compile and link to generate an executable
-	% cd monopole
- 	% gmake
 
      - execute Test  in 'batch' mode from macro files
  	% monopole  monopole.in

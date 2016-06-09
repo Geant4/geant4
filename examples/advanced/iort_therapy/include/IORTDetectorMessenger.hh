@@ -64,7 +64,7 @@ private:
   // Pointer to the phantom/detector 
   IORTDetectorConstruction* iortDetector;
 
-  G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir, *changeTheDisc1Dir, *changeTheDisc2Dir, *deleteTheDiscDir, *insertTheDiscDir; 
+  G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir, *changeTheDisc1Dir, *changeTheDisc2Dir, *deleteTheDiscDir, *insertTheDiscDir, *changeTheAnglediscDir;
 
   G4UIcmdWithoutParameter   *updateCmd, *deletediscCmd, *insertdiscCmd;
   G4UIcmdWithAString        *changeThePhantomMaterialCmd, *changeTheDisc1MaterialCmd, *changeTheDisc2MaterialCmd; 
@@ -74,8 +74,7 @@ private:
     *changeTheDetectorToPhantomPositionCmd,
     *changeTheDetectorVoxelCmd;
 
-  G4UIcmdWithADoubleAndUnit   *changeOuterRadiusDiscoIORTCmd, *changeinnerRadiusDiscoIORTCmd, *changeheightDiscoIORTCmd,*changeDiscoXPositionIORTCmd,
-    *changeOuterRadiusDisco1IORTCmd, *changeinnerRadiusDisco1IORTCmd, *changeheightDisco1IORTCmd,*changeDisco1XPositionIORTCmd;
+  G4UIcmdWithADoubleAndUnit   *changeOuterRadiusDiscoIORTCmd, *changeinnerRadiusDiscoIORTCmd, *changeheightDiscoIORTCmd,*changeDiscoXPositionIORTCmd, *changeDiscoYPositionIORTCmd, *changeDiscoZPositionIORTCmd, *changeOuterRadiusDisco1IORTCmd, *changeinnerRadiusDisco1IORTCmd, *changeheightDisco1IORTCmd,*changeDisco1XPositionIORTCmd, *changeTheAnglediscCmd;
 };
 #endif
 

@@ -29,7 +29,6 @@
 /// \brief Implementation of the B4cEventAction class
 
 #include "B4cEventAction.hh"
-#include "B4cEventActionMessenger.hh"
 #include "B4cCalorimeterSD.hh"
 #include "B4cCalorHit.hh"
 #include "B4Analysis.hh"
@@ -38,6 +37,7 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
+#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -47,15 +47,25 @@
 
 B4cEventAction::B4cEventAction()
  : G4UserEventAction(),
-   fMessenger(this),
+   fMessenger(0),
    fPrintModulo(1)
 {
+  // Define /B4/event commands using generic messenger class
+  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
+
+  // Define /B4/event/setPrintModulo command
+  G4GenericMessenger::Command& setPrintModulo 
+    = fMessenger->DeclareProperty("setPrintModulo", 
+                                  fPrintModulo, 
+                                 "Print events modulo n");
+  setPrintModulo.SetRange("value>0");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cEventAction::~B4cEventAction()
 {
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

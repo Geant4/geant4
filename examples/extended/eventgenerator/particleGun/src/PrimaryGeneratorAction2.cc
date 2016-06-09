@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction2.cc
+/// \brief Implementation of the PrimaryGeneratorAction2 class
 //
-// $Id: PrimaryGeneratorAction2.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -37,6 +39,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +65,7 @@ void PrimaryGeneratorAction2::GeneratePrimaries(G4Event* anEvent)
   //cosAlpha uniform in [cos(0), cos(pi)]
   G4double cosAlpha = 1. - 2*G4UniformRand();
   G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
-  G4double psi      = twopi*G4UniformRand();	//psi uniform in [0, 2*pi]  
+  G4double psi      = twopi*G4UniformRand();  //psi uniform in [0, 2*pi]  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
 
   particleGun->SetParticleMomentumDirection(dir);

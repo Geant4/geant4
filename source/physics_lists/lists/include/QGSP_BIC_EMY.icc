@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC_EMY.icc,v 1.5 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -36,10 +35,14 @@
 // Modified:
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -47,30 +50,34 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
 
+#include "G4WarnPLStatus.hh"
+
+
 template<class T> TQGSP_BIC_EMY<T>::TQGSP_BIC_EMY(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+  // defaultCutValue = 1.0*CLHEP::mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_EMY 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_EMY 2.0"<<G4endl;
   G4cout <<G4endl;
 
-  this->defaultCutValue = 0.7*mm;  
+  G4WarnPLStatus factory;
+  factory.OnlyFromFactory("QGSP_BIC_EMY","QGSP_BIC");
+
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
   // EM Physics
@@ -89,7 +96,7 @@ template<class T> TQGSP_BIC_EMY<T>::TQGSP_BIC_EMY(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP_BIC(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonBinaryCascadePhysics(ver));

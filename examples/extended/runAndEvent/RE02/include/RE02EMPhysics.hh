@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02EMPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
+/// \file runAndEvent/RE02/include/RE02EMPhysics.hh
+/// \brief Definition of the RE02EMPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi
-
 
 #ifndef RE02EMPhysics_h
 #define RE02EMPhysics_h 1
@@ -45,6 +47,24 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+//
+/// User electromagnetic physics constructor
+///
+///  applys related processes to gamma and e-/+
+///
+/// - void ConstructParticle()
+///     does nothing
+///
+/// - void ConstructProcess()
+///     adds processes to each particles
+///     gamma :
+///       G4GammaConversion, G4ComptonScattering and G4PHotoElectricEffect
+///     electron : 
+///       G4eMultipleScattering, G4eIonisation and G4eBremsstrahlung
+///     positron :
+///       G4eMultipleScattering, G4eIonisation, G4eBremsstrahlung and
+///       G4ePlusAnnihilation
+//
 class RE02EMPhysics : public G4VPhysicsConstructor
 {
   public:
@@ -64,6 +84,5 @@ class RE02EMPhysics : public G4VPhysicsConstructor
   protected:
 
 };
-
 
 #endif

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4KDTreeResult.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -71,9 +72,9 @@ private:
 };
 
 // comparison
-bool CompareResNode(const ResNode& first, const ResNode& second)
+bool CompareResNode(const ResNode& left, const ResNode& right)
 {
-    return first < second;
+    return left < right;
 }
 
 G4KDTreeResult::G4KDTreeResult(G4KDTree* tree) : std::list<ResNode>()

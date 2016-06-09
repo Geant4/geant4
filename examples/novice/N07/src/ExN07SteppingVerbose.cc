@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07SteppingVerbose.cc,v 1.1 2006-11-04 19:23:07 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "ExN07SteppingVerbose.hh"
@@ -68,7 +67,9 @@ void ExN07SteppingVerbose::InitializeTimers()
 
   // Set verbosity for timing
   G4RunManagerKernel::GetRunManagerKernel()->GetTrackingManager()->SetVerboseLevel(0);
+#ifdef G4VERBOSE
   fManager->SetVerboseLevel(1);
+#endif
 }
 
 void ExN07SteppingVerbose::Report()

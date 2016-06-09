@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT.hh,v 1.1 2006-10-31 11:35:09 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -39,8 +38,10 @@
 #ifndef TQGSP_BERT_h
 #define TQGSP_BERT_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.3 2006-06-29 17:23:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/include/StackingAction.hh
+/// \brief Definition of the StackingAction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.04.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -47,6 +49,7 @@
 class HistoManager;
 class StackingMessenger;
 class G4Track;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,18 +60,18 @@ public:
   StackingAction();
   virtual ~StackingAction();
    
-  void SetKillStatus(G4bool value)    {killSecondary = value;};
-  void SetKill(const G4String& name)  {pname = name;};
+  void SetKillStatus(G4bool value);
+  void SetKill(const G4String& name);
      
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
 private:
 
-  HistoManager*       histoManager;    
-  StackingMessenger*  stackMessenger;
+  HistoManager*       fHistoManager;    
+  StackingMessenger*  fStackMessenger;
+  G4bool              fKillSecondary;
 
-  G4String            pname;
-  G4bool              killSecondary;
+  const G4ParticleDefinition* fParticle;
 
 };
 

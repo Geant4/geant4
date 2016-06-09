@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc,v 1.7 2006-11-06 09:24:13 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  10th August 1998.

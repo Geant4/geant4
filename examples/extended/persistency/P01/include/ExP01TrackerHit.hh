@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01TrackerHit.hh
+/// \brief Definition of the ExP01TrackerHit class
 //
-// $Id: ExP01TrackerHit.hh,v 1.2 2006-06-29 17:39:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +41,8 @@
 #include "G4ThreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Hit implementation for the persistency example
 
 class ExP01TrackerHit : public G4VHit
 {

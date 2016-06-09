@@ -19,7 +19,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  2- Physics list
     ------------
 
- PhysicsList.cc defines only G4RadioactiveDecay, Transportation processes,
+ PhysicsList.cc defines only G4RadioactiveDecay, G4Transportation processes,
  and relevant particle definitions.
  Therefore, once created, particles or ions travel as geantino.
          	
@@ -36,7 +36,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  A flag, /rdecay01/fullChain (false or true), allows to limit to
  single decay (default) or full decay chain.
  
- In case of full decay chain, TrackStatus of ions is set to fStopButAlive
+ In case of full decay chain, G4TrackStatus of ions is set to fStopButAlive
  in order to force decay at rest.  
    
  At each decay, one counts and plots energy spectrum of created particles and
@@ -45,6 +45,15 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  Total time of life of decay chain is plotted. Activity is computed.
  
  Few macros are given in example. Debug.mac is to be run in interactive mode. 
+ 
+ 4-a User data files
+ -------------------
+ Users can redefine RadioactiveDecay and PhotonEvaporation data, via commands:
+ /grdm/setRadioactiveDecayFile
+ /grdm/setPhotoEvaporationFile 
+ Examples of such files are given in subdirectory UserData. 
+ Formats are described in readme
+ Examples in macros Cf238.mac and No252.mac 
   	
  5- Visualisation
     -------------
@@ -65,14 +74,10 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  6- How to start ?
     --------------
  
-  - compile and link to generate an executable
- 	% cd rdecay01
- 	% gmake
- 		
-  - execute rdecay01 in 'batch' mode from macro files
+  - Execute rdecay01 in 'batch' mode from macro files
  	% rdecay01   singleDecay.mac
  		
-  - execute rdecay01 in 'interactive mode' with visualization
+  - Execute rdecay01 in 'interactive mode' with visualization
  	% rdecay01
  	....
  	Idle>   ---> type your commands. For instance:
@@ -97,31 +102,18 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
       7 : momentum balance
       8 : total time of life of decay chain          
                             
-   The histograms are managed by the HistoManager class and its Messenger. 
+   The histograms are managed by G4AnalysisManager and its Messenger. 
    The histos can be individually activated with the command :
-   /rdecay1/histo/setHisto id nbBins  valMin valMax unit 
+   /analysis/h1/set id nbBins  valMin valMax unit 
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
-   /rdecay1/histo/setFileName  name  (default particleGun)
+   /analysis/setFileName  name  (default rdecay1)
    
-   It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /rdecay1/histo/setFileType (root by default)
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
    
    It is also possible to print selected histograms on an ascii file:
-   /rdecay1/histo/printHisto id
-   All selected histos will be written on a file name.ascii (default RDecay1)
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default rdecay1)
 
-  Note that, by default, histograms are disabled. To activate them, uncomment
-  the flag G4ANALYSIS_USE in GNUmakefile.
- 
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake 
-
- 8- Using histograms
-    ---------------- 
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See the file InstallAida.txt
-  

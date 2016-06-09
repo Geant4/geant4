@@ -54,6 +54,7 @@ typedef GROUP8(G4CollisionnpElastic, G4CollisionNNElastic,
 
 G4CollisionNN::G4CollisionNN()
 { 
+  components=0;
   crossSectionSource = new G4XNNTotal();
   G4CollisionComposite::Register aR;
   G4ForEach<theChannels>::Apply(&aR, this);
@@ -62,6 +63,10 @@ G4CollisionNN::G4CollisionNN()
 
 G4CollisionNN::~G4CollisionNN()
 { 
+  if (components) {
+	delete components;
+	components=0;
+  }
   delete crossSectionSource;
   crossSectionSource = 0;
 }

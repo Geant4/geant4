@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.41 2011-01-03 19:34:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -312,7 +311,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   G4UIparameter* flagFact = new G4UIparameter("flagFact",'s',false);
   bfCmd->SetParameter(flagFact);
-  bfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  bfCmd->AvailableForStates(G4State_Idle);
 
   fiCmd = new G4UIcommand("/process/em/setForcedInteraction",this);
   fiCmd->SetGuidance("Set factor for the process cross section.");
@@ -336,7 +335,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   G4UIparameter* flagT = new G4UIparameter("tflag",'s',true);
   fiCmd->SetParameter(flagT);
-  fiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fiCmd->AvailableForStates(G4State_Idle);
 
   brCmd = new G4UIcommand("/process/em/setSecBiasing",this);
   brCmd->SetGuidance("Set bremsstrahlung or delta-electron splitting/Russian roullette per region.");
@@ -359,9 +358,9 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   G4UIparameter* bUnit = new G4UIparameter("bUnit",'s',true);
   brCmd->SetParameter(bUnit);
-  brCmd->SetGuidance("unit of tlength");
+  brCmd->SetGuidance("unit of energy");
 
-  brCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  brCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -526,12 +525,13 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == bfCmd) {
     G4double v1(1.0);
-    G4String s(""),s1("");
+    G4String s0(""),s1("");
     std::istringstream is(newValue);
-    is >> s >> v1 >> s1;
+    is >> s0 >> v1 >> s1;
     G4bool yes = false;
     if(s1 == "true") { yes = true; }
-    opt->SetProcessBiasingFactor(s,v1,yes);
+    opt->SetProcessBiasingFactor(s0,v1,yes);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == fiCmd) {
     G4double v1(0.0);
     G4String s1(""),s2(""),s3(""),unt("mm");
@@ -541,13 +541,17 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s3 == "true") { yes = true; }
     v1 *= G4UIcommand::ValueOf(unt);
     opt->ActivateForcedInteraction(s1,v1,s2,yes);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == brCmd) {
     G4double fb(1.0),en(1.e+30);
     G4String s1(""),s2(""),unt("MeV");
     std::istringstream is(newValue);
     is >> s1 >> s2 >> fb >> en >> unt;
     en *= G4UIcommand::ValueOf(unt);    
-    opt->ActivateSecondaryBiasing(s1,s2,fb,en);
+    if (s1=="phot"||s1=="compt"||s1=="conv") 
+                opt->ActivateSecondaryBiasingForGamma(s1,s2,fb,en);
+    else opt->ActivateSecondaryBiasing(s1,s2,fb,en);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }  
 }
 

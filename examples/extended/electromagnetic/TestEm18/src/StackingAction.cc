@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.3 2011-01-06 18:34:38 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,8 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA,EventAction* EA, HistoManager* HM)
-:runaction(RA), eventaction(EA), histoManager(HM)
+StackingAction::StackingAction(RunAction* RA,EventAction* EA)
+:fRunaction(RA), fEventaction(EA)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,15 +63,17 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   G4double energy = track->GetKineticEnergy();
   G4bool  charged = (track->GetDefinition()->GetPDGCharge() != 0.);
 
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
   if (charged) {
-    runaction->AddChargedSecondary(energy);
-    histoManager->FillHisto(4,energy);
+    fRunaction->AddChargedSecondary(energy);
+    analysisManager->FillH1(4,energy);
   } else {
-    runaction->AddNeutralSecondary(energy);
-    histoManager->FillHisto(5,energy);
+    fRunaction->AddNeutralSecondary(energy);
+    analysisManager->FillH1(5,energy);
   }
     
-  eventaction->AddSecondary(energy);  
+  fEventaction->AddSecondary(energy);  
   return fKill;
 }
 

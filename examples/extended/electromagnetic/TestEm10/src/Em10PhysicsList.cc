@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10PhysicsList.cc
+/// \brief Implementation of the Em10PhysicsList class
 //
-// $Id: Em10PhysicsList.cc,v 1.25 2009-11-21 16:12:01 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "Em10PhysicsList.hh"
@@ -39,6 +41,7 @@
 #include "G4Material.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
@@ -213,73 +216,73 @@ void Em10PhysicsList::ConstructEM()
   {      
     // G4GammaXTRadiator* 
     processXTR = new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
-				       100.,
-				       100.,
-				       pDet->GetFoilMaterial(),
-				       pDet->GetGasMaterial(),
-				       pDet->GetFoilThick(),
-				       pDet->GetGasThick(),
-				       pDet->GetFoilNumber(),
-				       "GammaXTRadiator");
+                                       100.,
+                                       100.,
+                                       pDet->GetFoilMaterial(),
+                                       pDet->GetGasMaterial(),
+                                       pDet->GetFoilThick(),
+                                       pDet->GetGasThick(),
+                                       pDet->GetFoilNumber(),
+                                       "GammaXTRadiator");
   }
   else if(fXTRModel == "gammaM" ) 
   {
     // G4XTRGammaRadModel* 
     processXTR = new G4XTRGammaRadModel(pDet->GetLogicalRadiator(),
-				       100.,
-				       100.,
-				       pDet->GetFoilMaterial(),
-				       pDet->GetGasMaterial(),
-				       pDet->GetFoilThick(),
-				       pDet->GetGasThick(),
-				       pDet->GetFoilNumber(),
-				       "GammaXTRadiator");
+                                       100.,
+                                       100.,
+                                       pDet->GetFoilMaterial(),
+                                       pDet->GetGasMaterial(),
+                                       pDet->GetFoilThick(),
+                                       pDet->GetGasThick(),
+                                       pDet->GetFoilNumber(),
+                                       "GammaXTRadiator");
   }
   else if(fXTRModel == "strawR" ) 
   {
 
     // G4StrawTubeXTRadiator* 
     processXTR = new G4StrawTubeXTRadiator(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-				0.53,	   // pDet->GetFoilThick(),
-				3.14159,	   // pDet->GetGasThick(),
-					 pDet->GetAbsorberMaterial(),
+                                         pDet->GetFoilMaterial(),
+                                         pDet->GetGasMaterial(),
+                                0.53,           // pDet->GetFoilThick(),
+                                3.14159,           // pDet->GetGasThick(),
+                                         pDet->GetAbsorberMaterial(),
                                          true,
-					 "strawXTRadiator");
+                                         "strawXTRadiator");
   }
   else if(fXTRModel == "regR" ) 
   {      
     // G4RegularXTRadiator* 
     processXTR = new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator");	    
+                                         pDet->GetFoilMaterial(),
+                                         pDet->GetGasMaterial(),
+                                         pDet->GetFoilThick(),
+                                         pDet->GetGasThick(),
+                                         pDet->GetFoilNumber(),
+                                         "RegularXTRadiator");            
   }
   else if(fXTRModel == "transpR" ) 
   {
     // G4TransparentRegXTRadiator* 
     processXTR = new G4TransparentRegXTRadiator(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator");
+                                         pDet->GetFoilMaterial(),
+                                         pDet->GetGasMaterial(),
+                                         pDet->GetFoilThick(),
+                                         pDet->GetGasThick(),
+                                         pDet->GetFoilNumber(),
+                                         "RegularXTRadiator");
   }
   else if(fXTRModel == "regM" ) 
   {
     // G4XTRRegularRadModel* 
     processXTR = new G4XTRRegularRadModel(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator");
+                                         pDet->GetFoilMaterial(),
+                                         pDet->GetGasMaterial(),
+                                         pDet->GetFoilThick(),
+                                         pDet->GetGasThick(),
+                                         pDet->GetFoilNumber(),
+                                         "RegularXTRadiator");
        
   }
   else if(fXTRModel == "transpM" ) 
@@ -287,12 +290,12 @@ void Em10PhysicsList::ConstructEM()
     // G4XTRTransparentRegRadModel* 
     // processXTR = new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
     processXTR = new Em10XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator");
+                                         pDet->GetFoilMaterial(),
+                                         pDet->GetGasMaterial(),
+                                         pDet->GetFoilThick(),
+                                         pDet->GetGasThick(),
+                                         pDet->GetFoilNumber(),
+                                         "RegularXTRadiator");
   }     
   else
   {
@@ -356,7 +359,7 @@ void Em10PhysicsList::ConstructEM()
 
     }
     else if( particleName == "mu+" ||
-	     particleName == "mu-"    )
+             particleName == "mu-"    )
     {
      // Construct processes for muon+
 

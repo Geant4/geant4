@@ -28,11 +28,14 @@
 // Description: CCalMaterialFactory is a factory class to vuild G4Material 
 //              from CCalMaterial and CCalAmaterial
 ///////////////////////////////////////////////////////////////////////////////
-#include "CCalMaterialFactory.hh"
-#include "CCalutils.hh"
 #include <fstream>
 #include <stdlib.h>
 
+#include "CCalMaterialFactory.hh"
+#include "CCalutils.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 
 //#define ddebug

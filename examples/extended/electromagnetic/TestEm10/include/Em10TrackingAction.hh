@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10TrackingAction.hh
+/// \brief Definition of the Em10TrackingAction class
+//
  #ifndef Em10TrackingAction_h
  #define Em10TrackingAction_h
 

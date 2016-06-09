@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm0/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // 
-// $Id: PhysicsList.cc,v 1.9 2010-03-21 19:07:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,39 +40,46 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
-{
+: G4VModularPhysicsList(),fCutForGamma(0),fCutForElectron(0),fCutForPositron(0),
+  fCurrentDefaultCut(0),fEmPhysicsList(0),fEmName("local"),fMessenger(0)
+{    
   G4LossTableManager::Instance();
   
-  currentDefaultCut   = 1.0*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
+  fCurrentDefaultCut   = 1.0*mm;
+  fCutForGamma         = fCurrentDefaultCut;
+  fCutForElectron      = fCurrentDefaultCut;
+  fCutForPositron      = fCurrentDefaultCut;
 
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("local");
-  emPhysicsList = new PhysListEmStandard(emName);
-
+  fEmName = G4String("local");
+  fEmPhysicsList = new PhysListEmStandard(fEmName);
+  
+  //add new units for cross sections
+  // 
+  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,7 +190,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
   
   // Em options
   //
@@ -192,16 +201,16 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  //emOptions.SetMinEnergy(100*eV);	//default    
-  //emOptions.SetMaxEnergy(100*TeV);	//default  
-  //emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  //emOptions.SetLambdaBinning(12*20);	//default=12*7
+  //emOptions.SetMinEnergy(100*eV);        //default    
+  //emOptions.SetMaxEnergy(100*TeV);        //default  
+  //emOptions.SetDEDXBinning(12*20);        //default=12*7  
+  //emOptions.SetLambdaBinning(12*20);        //default=12*7
 
   emOptions.SetBuildCSDARange(true);     
-  //emOptions.SetMaxEnergyForCSDARange(100*TeV);
+  emOptions.SetMaxEnergyForCSDARange(10*GeV);
   //emOptions.SetDEDXBinningForCSDARange(12*20);
   
-  //emOptions.SetSplineFlag(true);	//default
+  //emOptions.SetSplineFlag(true);        //default
      
   emOptions.SetVerbose(0);  
 }
@@ -214,43 +223,48 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
   
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "local") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
 
   } else if (name == "emstandard_opt0"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
 
   } else if (name == "emstandard_opt1"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option2();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
 
   } else if (name == "emstandard_opt3"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
 
+  } else if (name == "emstandard_opt4"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    
   } else if (name == "empenelope"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
 
   } else if (name == "emlivermore"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
         
   } else {
 
@@ -273,9 +287,9 @@ void PhysicsList::SetCuts()
   
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
   DumpCutValuesTable();
 }
 
@@ -283,24 +297,24 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

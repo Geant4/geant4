@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 49035 2011-03-31 10:21:28Z gcosmo $
+# $Id: GNUmakefile 59973 2012-06-25 08:22:51Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,10 +11,20 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-.PHONY: all
+.PHONY: setup clean_setup all
 all: lib bin
 
-#### G4ANALYSIS_USE := true
+setup:
+	@echo "Copying files from common"
+	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
+
+clean_setup:
+	@echo "Removing files copied from common"
+	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
+
+# ROOT support
+CPPFLAGS += -I$(shell root-config --incdir) 
+EXTRALIBS = $(shell root-config --glibs)
 
 include $(G4INSTALL)/config/binmake.gmk
 
@@ -26,12 +36,3 @@ histclean:
 	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/HistoManager.o
 
 
-ifdef ROOTSYS
-  CPPFLAGS += -I$(shell $(ROOTSYS)/bin/root-config --incdir)
-  CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
-  LDLIBS += $(shell $(ROOTSYS)/bin/root-config --libs)
-
-   ifeq ($(G4SYSTEM),Linux-g++)
-     LDLIBS += -Wl,-rpath,$(shell $(ROOTSYS)/bin/root-config --libdir)
-   endif
-endif

@@ -38,7 +38,7 @@
 // 101118 Name modifications for release T. Koi (SLAC/PPA)
 
 #include "G4LENDCrossSection.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4ElementTable.hh"
 #include "G4HadronicException.hh"
 
@@ -304,12 +304,12 @@ void G4LENDCrossSection::create_used_target_map()
          //G4cout << nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ) << G4endl;
          G4int numberOfNistIso = nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ); 
 
-         for ( G4int i = 0 ; i < numberOfNistIso ; i++ )
+         for ( G4int ii = 0 ; ii < numberOfNistIso ; ii++ )
          {
             //G4cout << nistElementBuild->GetIsotopeAbundance( iZ , nistElementBuild->GetNistFirstIsotopeN( iZ ) + i ) << G4endl;
-            if ( nistElementBuild->GetIsotopeAbundance( iZ , nistElementBuild->GetNistFirstIsotopeN( iZ ) + i ) > 0 )
+            if ( nistElementBuild->GetIsotopeAbundance( iZ , nistElementBuild->GetNistFirstIsotopeN( iZ ) + ii ) > 0 )
             {
-               G4int iMass = nistElementBuild->GetNistFirstIsotopeN( iZ ) + i;  
+               G4int iMass = nistElementBuild->GetNistFirstIsotopeN( iZ ) + ii;  
                //G4cout << iZ << " " << nistElementBuild->GetNistFirstIsotopeN( iZ ) + i << " " << nistElementBuild->GetIsotopeAbundance ( iZ , iMass ) << G4endl;  
 
                G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iMass );  

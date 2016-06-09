@@ -23,30 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/standalone/standalone.cc
+/// \brief Main program of the visualization/standalone example
 //
-// $Id: standalone.cc,v 1.3 2010-11-09 10:02:45 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"
 #include "G4VisExtent.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "StandaloneVisAction.hh"
 
 int main(int argc,char** argv) {
 
   G4VisManager* visManager = new G4VisExecutive;
+  visManager->RegisterRunDurationUserVisAction
+    ("A standalone example - 3 boxes, 2 with boolean subtracted cutout",
+     new StandaloneVisAction,
+     G4VisExtent(-10*m,10*m,-10*m,10*m,-10*m,10*m));
   visManager->Initialize ();
-
-  visManager->SetUserAction
-    (new StandaloneVisAction,
-     G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));  // 2nd argument optional.
 
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand ("/control/execute standalone.g4m");
+  UImanager->ApplyCommand ("/control/execute standalone.mac");
   ui->SessionStart();
 
   delete ui;

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.10 2010-09-20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -33,12 +32,12 @@
 //      History: first implementation, Maxim Komogorov, 10-Jul-1998
 // -----------------------------------------------------------------------------
 #include "G4QGSMFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
+#include "G4ios.hh"
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
-
-#include "Randomize.hh"
-#include "G4ios.hh"
 
 // Class G4QGSMFragmentation 
 //****************************************************************************************
@@ -48,34 +47,10 @@ arho(0.5), aphi(0.), an(-0.5), ala(-0.75), aksi(-1.), alft(0.5)
    {
    }
 
-G4QGSMFragmentation::G4QGSMFragmentation(const G4QGSMFragmentation &) : G4VLongitudinalStringDecay(),
-arho(0.5), aphi(0.), an(-0.5), ala(-0.75), aksi(-1.), alft(0.5)
-   {
-   }
-
 G4QGSMFragmentation::~G4QGSMFragmentation()
    {
    }
 
-//****************************************************************************************
-
-const G4QGSMFragmentation & G4QGSMFragmentation::operator=(const G4QGSMFragmentation &)
-   {
-    throw G4HadronicException(__FILE__, __LINE__, "G4QGSMFragmentation::operator= meant to not be accessable");
-    return *this;
-   }
-
-int G4QGSMFragmentation::operator==(const G4QGSMFragmentation &right) const
-   {
-   return !memcmp(this, &right, sizeof(G4QGSMFragmentation));
-   }
-
-int G4QGSMFragmentation::operator!=(const G4QGSMFragmentation &right) const
-   {
-   return memcmp(this, &right, sizeof(G4QGSMFragmentation));
-   }
- 
-//****************************************************************************************
 //----------------------------------------------------------------------------------------------------------
 
 G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString& theString)

@@ -23,21 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-//
-// Class Description:
-//
-//  Creates a simplified typical HEP detector: 
-//    An air beamline ( BEAM )
-//    An air central detector ( CDET )
-//    A copper calorimeter, divided in four ( ECAL )
-//    An aluminium calorimeter, divided in ten ( HCAL )
-//    An air muon detector ( MUON )
-//
-// History:
-// - Created:   P. Arce   May 2007
+/// \file errorpropagation/include/ExErrorDetectorConstruction.hh
+/// \brief Definition of the ExErrorDetectorConstruction class
 //
 
 #ifndef ExErrorDetectorConstruction_hh
@@ -54,7 +41,20 @@ class G4Material;
 class ExErrorDetectorMessenger;
 class G4UserLimits;
 
+/// Detector construction class
+///
+///  Creates a simplified typical HEP detector: 
+///    An air beamline ( BEAM )
+///    An air central detector ( CDET )
+///    A copper calorimeter, divided in four ( ECAL )
+///    An aluminium calorimeter, divided in ten ( HCAL )
+///    An air muon detector ( MUON )
+///
+/// History:
+/// Created:  May 2007
+/// \author   P. Arce 
 //------------------------------------------------------------------------
+
 class ExErrorDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
@@ -67,23 +67,23 @@ public:
   void SetMagField(G4double);
 
 private:
-  G4double xBEAM;
-  G4double xCDET;
-  G4double xECAL;
-  G4double xSOLN;
-  G4double xHCAL;
-  G4double xMUON;
-  G4double ndivECAL;
-  G4double ndivHCAL;
-  G4double yzLength;
-  G4double xHalfWorldLength;
+  G4double fXBEAM;
+  G4double fXCDET;
+  G4double fXECAL;
+  G4double fXSOLN;
+  G4double fXHCAL;
+  G4double fXMUON;
+  G4double fNdivECAL;
+  G4double fNdivHCAL;
+  G4double fYZLength;
+  G4double fXHalfWorldLength;
 
 
-  G4UserLimits*         userLimits;
+  G4UserLimits* fUserLimits;
   
-  ExErrorMagneticField* fpMagField;   // pointer to the magnetic field 
+  ExErrorMagneticField* fMagField;   // pointer to the magnetic field 
   
-  ExErrorDetectorMessenger* detectorMessenger;  // pointer to the Messenger
+  ExErrorDetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

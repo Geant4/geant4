@@ -16,8 +16,8 @@ using namespace HEPREP;
  */
 namespace cheprep {
 
-DefaultHepRepAttDef::DefaultHepRepAttDef(string name, string desc, string category, string extra)
-    : name(name), desc(desc), category(category), extra(extra) {
+DefaultHepRepAttDef::DefaultHepRepAttDef(string aName, string aDesc, string aCategory, string anExtra)
+    : name(aName), desc(aDesc), category(aCategory), extra(anExtra) {
 }
 
 DefaultHepRepAttDef::~DefaultHepRepAttDef() {

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleTransportation.icc,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/G4MonopoleTransportation.icc
+/// \brief Implementation of the G4MonopoleTransportation class inline functions
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +38,8 @@
 // Created:  3 May 2010, J. Apostolakis, B. Bozsogi
 // =======================================================================
 //
+
+#include "CLHEP/Units/SystemOfUnits.h"
 
 inline void
 G4MonopoleTransportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
@@ -122,7 +126,7 @@ inline void G4MonopoleTransportation::ResetKilledStatistics(G4int report)
   } 
 
   fSumEnergyKilled= 0;
-  fMaxEnergyKilled= -1.0*GeV;
+  fMaxEnergyKilled= -1.0*CLHEP::GeV;
 }
      // Statistics for tracks killed (currently due to looping in field)
 

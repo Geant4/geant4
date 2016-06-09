@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.16 2010-08-03 07:10:09 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 
@@ -142,6 +141,8 @@ class G4UIcommand
       { return parameter[i]; }
       inline std::vector<G4ApplicationState>* GetStateList()
       { return &availabelStateList; }
+      inline G4UImessenger * GetMessenger() const
+      { return messenger; }
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {

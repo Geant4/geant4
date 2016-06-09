@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,14 +54,14 @@ class DetectorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWithADoubleAndUnit* ThickCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString*        fMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fThickCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

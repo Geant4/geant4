@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.cc,v 1.4 2010-11-21 16:08:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +47,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4PEEffectFluoModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
@@ -55,13 +56,14 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4LossTableManager.hh"
+#include "G4SauterGavrilaAngularDistribution.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
 G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
-  : G4VEmModel(nam),isInitialized(false)
+  : G4VEmModel(nam)
 {
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
@@ -69,6 +71,9 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
   SetDeexcitationFlag(true);
   fParticleChange = 0;
   fAtomDeexcitation = 0;
+
+  // default generator
+  SetAngularDistribution(new G4SauterGavrilaAngularDistribution());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -82,10 +87,7 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 				     const G4DataVector&)
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-
-  if (isInitialized) { return; }
-  fParticleChange = GetParticleChangeForGamma();
-  isInitialized = true;
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -137,7 +139,6 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   const G4Material* aMaterial = couple->GetMaterial();
 
   G4double energy = aDynamicPhoton->GetKineticEnergy();
-  G4ParticleMomentum PhotonDirection = aDynamicPhoton->GetMomentumDirection();
 
   // select randomly one element constituing the material.
   const G4Element* anElement = SelectRandomAtom(aMaterial,theGamma,energy);
@@ -158,79 +159,56 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     */
     if(energy >= anElement->GetAtomicShell(i)) { break; }
   }
-  // no shell available
-  if (i == nShells) { return; }
+
+  G4double edep = energy;
+
+  // Normally one shell is available 
+  if (i < nShells) { 
   
-  G4double bindingEnergy  = anElement->GetAtomicShell(i);
-  G4double ElecKineEnergy = energy - bindingEnergy;
-  G4double edep = bindingEnergy;
+    G4double bindingEnergy  = anElement->GetAtomicShell(i);
+    G4double elecKineEnergy = energy - bindingEnergy;
 
-  // create photo electron
-  //
-  if (ElecKineEnergy > fminimalEnergy) {
-    G4double cosTeta = ElecCosThetaDistribution(ElecKineEnergy);
-    G4double sinTeta = sqrt(1.-cosTeta*cosTeta);
-    G4double Phi     = twopi * G4UniformRand();
-    G4double dirx = sinTeta*cos(Phi),diry = sinTeta*sin(Phi),dirz = cosTeta;
-    G4ThreeVector ElecDirection(dirx,diry,dirz);
-    ElecDirection.rotateUz(PhotonDirection);
+    // create photo electron
     //
-    G4DynamicParticle* aParticle = new G4DynamicParticle (
-                       theElectron,ElecDirection, ElecKineEnergy);
-    fvect->push_back(aParticle);
-  } else { edep = energy; }
+    if (elecKineEnergy > fminimalEnergy) {
+      edep = bindingEnergy;
+      G4ThreeVector elecDirection =
+	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
+						  elecKineEnergy,
+						  i, 
+						  couple->GetMaterial());
+   
+      G4DynamicParticle* aParticle = 
+	new G4DynamicParticle(theElectron, elecDirection, elecKineEnergy);
+      fvect->push_back(aParticle);
+    } 
 
-  // sample deexcitation
-  //
-  if(fAtomDeexcitation) {
-    G4int index = couple->GetIndex();
-    if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
-      G4int Z = (G4int)anElement->GetZ();
-      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
-      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-      size_t nbefore = fvect->size();
-      fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      size_t nafter = fvect->size();
-      if(nafter > nbefore) {
-	for (size_t i=nbefore; i<nafter; ++i) {
-	  edep -= ((*fvect)[i])->GetKineticEnergy();
-	} 
+    // sample deexcitation
+    //
+    if(fAtomDeexcitation) {
+      G4int index = couple->GetIndex();
+      if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
+	G4int Z = G4lrint(anElement->GetZ());
+	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
+	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+	size_t nbefore = fvect->size();
+	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
+	size_t nafter = fvect->size();
+	if(nafter > nbefore) {
+	  for (size_t j=nbefore; j<nafter; ++j) {
+	    edep -= ((*fvect)[j])->GetKineticEnergy();
+	  } 
+	}
       }
     }
   }
-  if(edep < 0.0) { edep = 0.0; }
 
   // kill primary photon
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
-  fParticleChange->ProposeLocalEnergyDeposit(edep);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4PEEffectFluoModel::ElecCosThetaDistribution(G4double kineEnergy)
-{
-  // Compute Theta distribution of the emitted electron, with respect to the
-  // incident Gamma.
-  // The Sauter-Gavrila distribution for the K-shell is used.
-  //
-  G4double costeta = 1.;
-  G4double gamma   = 1. + kineEnergy/electron_mass_c2;
-  if (gamma > 5.) { return costeta; }
-  G4double beta  = sqrt(gamma*gamma-1.)/gamma;
-  G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
-
-  G4double rndm,term,greject,grejsup;
-  if (gamma < 2.) { grejsup = gamma*gamma*(1.+b-beta*b); }
-  else            { grejsup = gamma*gamma*(1.+b+beta*b); }
-
-  do { rndm = 1.-2*G4UniformRand();
-       costeta = (rndm+beta)/(rndm*beta+1.);
-       term = 1.-beta*costeta;
-       greject = (1.-costeta*costeta)*(1.+b*term)/(term*term);
-  } while(greject < G4UniformRand()*grejsup);
-
-  return costeta;
+  if(edep > 0.0) {
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

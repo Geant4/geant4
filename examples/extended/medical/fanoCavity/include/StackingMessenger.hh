@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.hh,v 1.1 2007-01-23 13:34:19 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/StackingMessenger.hh
+/// \brief Definition of the StackingMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,8 +51,8 @@ class StackingMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StackingAction*    stacking;
-    G4UIcmdWithABool*  killCmd;
+    StackingAction*    fStacking;
+    G4UIcmdWithABool*  fKillCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -31,6 +31,8 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4Deuteron.hh"
@@ -161,7 +163,7 @@ G4double G4BertiniEvaporationChannel::getCoulomb()
   const G4double factor = 0.84696; // = e / ( 4 pi epsilon_0 r0 ) * 10^-6, r0=1.7E-15
   // In HETC88 this factor was 0.88235, perhaps due to different r0
 
-  G4double coulomb = factor *  particleZ * qmFactor() * residualZ / 
+  G4double coulombBarrier = factor *  particleZ * qmFactor() * residualZ / 
          ( std::pow( G4double(residualA), 0.33333333 ) + rho ) * MeV;
   
   if ( verboseLevel >= 10 )
@@ -174,7 +176,7 @@ G4double G4BertiniEvaporationChannel::getCoulomb()
 	   << "           part Z " << particleZ << G4endl
 	   << "     (correction) " << correction << G4endl;
 
-  return coulomb;
+  return coulombBarrier;
 }
 
 

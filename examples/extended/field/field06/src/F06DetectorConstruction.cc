@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field06/src/F06DetectorConstruction.cc
+/// \brief Implementation of the F06DetectorConstruction class
+//
 //
 //
 // 
@@ -48,6 +51,7 @@
 #include "G4Colour.hh"
 
 #include "G4UserLimits.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F06Field.hh"
 
@@ -95,20 +99,20 @@ G4VPhysicalVolume* F06DetectorConstruction::Construct()
   G4double expHall_y = 1.0*m;
   G4double expHall_z = 1.0*m;
 
-  solidWorld = new G4Box("World",                       //its name
-                   expHall_x,expHall_y,expHall_z);      //its size
+  solidWorld = new G4Box("World",                  //its name
+                   expHall_x,expHall_y,expHall_z); //its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   Vacuum,              //its material
-                                   "World");		//its name
+  logicWorld = new G4LogicalVolume(solidWorld,     //its solid
+                                   Vacuum,         //its material
+                                   "World");       //its name
                                    
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  physiWorld = new G4PVPlacement(0,                //no rotation
+                                 G4ThreeVector(),  //at (0,0,0)
+                                 logicWorld,       //its logical volume
+                                 "World",          //its name
+                                 0,                //its mother  volume
+                                 false,            //no boolean operation
+                                 0);               //copy number
   
   G4double maxStep = 1.0*mm;
   G4double maxTime = 41.*s;

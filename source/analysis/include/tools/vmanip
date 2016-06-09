@@ -54,7 +54,7 @@ inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
 }
 
 template <class T>
-inline void remove(std::vector<T*>& a_vec,T* a_elem) {
+inline void removep(std::vector<T*>& a_vec,T* a_elem) {
   typedef typename std::vector<T*>::iterator it_t;
   it_t it;
   for(it=a_vec.begin();it!=a_vec.end();) {
@@ -67,11 +67,44 @@ inline void remove(std::vector<T*>& a_vec,T* a_elem) {
 }
 
 template <class T>
+inline void push_back_unique(std::vector<T>& a_vec,const T& a_v) {
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) {if(*it==a_v) return;}
+  a_vec.push_back(a_v);
+}
+
+template <class T>
+inline bool remove(std::vector<T>& a_vals,const T& a_elem){
+  bool found_some = false;
+  //std::vector<T>::iterator it;
+  //for(it=a_vals.begin();it!=a_vals.end();) {
+  //  if(*it==a_elem) {
+  //    it = a_vals.erase(it);
+  //    found_some = true;
+  //  } else {
+  //    ++it;
+  //  }
+  //}
+  //TOOLS_STL : brut force avoiding erase() :
+  std::vector<T> vs;
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vals.begin();it!=a_vals.end();++it) {
+    if(*it==a_elem) {
+      found_some = true;
+    } else {
+      vs.push_back(*it);
+    }
+  }
+  a_vals = vs;
+  return found_some;
+}
+
+template <class T>
 inline void unique(std::vector<T>& a_vec) {
   typedef typename std::vector<T>::iterator it_t;
-  it_t it,it2; //Android : it2=it+1 does not compile with inlib/stl.
+  it_t it,it2;
   for(it=a_vec.begin();it!=a_vec.end();++it) {
-    it2 = it;it2++; //Android : it2=it+1 does not compile.
+    it2 = it;it2++; //TOOLS_STL : it2=it+1 does not compile.
     for(;it2!=a_vec.end();) {
       if(*it2==*it) {
         it2 = a_vec.erase(it2);

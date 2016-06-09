@@ -109,7 +109,7 @@ inline bool IsInside(G4double detectorX,
 		     G4double phantomX,
 		     G4double phantomY,
 		     G4double phantomZ,
-		     G4ThreeVector detectorToPhantomPosition)
+		     G4ThreeVector detToPhantomPosition)
 {
 // Dimensions check... X Y and Z
 // Firstly check what dimension we are modifying
@@ -119,7 +119,7 @@ inline bool IsInside(G4double detectorX,
 		    G4cout << "Error: Detector X dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( (phantomX - detectorX) < detectorToPhantomPosition.getX()) 
+	    if ( (phantomX - detectorX) < detToPhantomPosition.getX()) 
 	         {
 		    G4cout << "Error: X dimension doesn't fit with detector to phantom relative position" << G4endl;
 		    return false;
@@ -132,7 +132,7 @@ inline bool IsInside(G4double detectorX,
 		    G4cout << "Error: Detector Y dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( (phantomY - detectorY) < detectorToPhantomPosition.getY()) 
+	    if ( (phantomY - detectorY) < detToPhantomPosition.getY()) 
 	     {
 		   G4cout << "Error: Y dimension doesn't fit with detector to phantom relative position" << G4endl;
 		   return false;
@@ -145,7 +145,7 @@ inline bool IsInside(G4double detectorX,
 		    G4cout << "Error: Detector Z dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( (phantomZ - detectorZ) < detectorToPhantomPosition.getZ()) 
+	    if ( (phantomZ - detectorZ) < detToPhantomPosition.getZ()) 
 	     {
 		   G4cout << "Error: Z dimension doesn't fit with detector to phantom relative position" << G4endl;
 		   return false;
@@ -173,6 +173,8 @@ inline bool IsInside(G4double detectorX,
   void SetinnerRadiusDiscoIORT(G4double innerr);
   void SetheightDiscoIORT(G4double height);
   void SetDiscoXPositionIORT(G4double xpos);
+  void SetDiscoYPositionIORT(G4double ypos);
+  void SetDiscoZPositionIORT(G4double zpos);
 
   G4bool  SetDiscoMaterialIORT1(G4String material);
   void SetOuterRadiusDiscoIORT1(G4double outerr);
@@ -180,7 +182,7 @@ inline bool IsInside(G4double detectorX,
   void SetheightDiscoIORT1(G4double height);
   void SetDiscoXPositionIORT1(G4double xpos);
 
-
+  void SetAngleDiscoIORT0(G4double phi0);
 
 private:
 
@@ -223,6 +225,13 @@ private:
   G4Region* aRegion;
 
   
+  
+  //Disco0 IORT
+  G4Tubs* solidDiscoIORT0;
+  G4LogicalVolume* logicDiscoIORT0;
+  G4VPhysicalVolume* physiDiscoIORT0;
+  G4double AngleDiscoIORT0; 
+
   // Disco1 IORT
   G4VisAttributes* white;
   G4VisAttributes* gray;
@@ -231,6 +240,8 @@ private:
   G4double OuterRadiusDiscoIORT;
   G4double heightDiscoIORT;
   G4double DiscoXPositionIORT;
+  G4double DiscoYPositionIORT;
+  G4double DiscoZPositionIORT;
   G4Tubs* solidDiscoIORT; 
   G4LogicalVolume* logicDiscoIORT;
   G4VPhysicalVolume* physiDiscoIORT;

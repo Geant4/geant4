@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc,v 1.11 2006-06-29 21:29:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  27th March 1996
@@ -60,6 +59,11 @@ G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
   fNickname (nickname),
   fDescription (description),
   fFunctionality (f) {}
+
+G4bool G4VGraphicsSystem::IsUISessionCompatible () const
+{
+  return true;
+}
 
 std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.25 2010-11-01 18:43:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -45,7 +44,8 @@
 // 28.07.07 V.Ivanchneko make simple methods inline
 // 28.10.07 V.Ivanchneko add state, T, P to maetrial build
 // 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method 
-// 01.11.10 V.Ivanchneko add G4Pow for fast computations  
+// 01.11.10 V.Ivanchneko add G4Pow for fast computations 
+// 09.02.12 P.Gumplinger add ConstructNewIdealGasMaterial
 //
 // Class Description:
 //
@@ -66,6 +66,8 @@
 #define G4NistManager_h 1
 
 #include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4NistElementBuilder.hh"
@@ -106,16 +108,22 @@ public:
   //
   inline G4int GetZ(const G4String& symb) const;
 
-  // Get the mass of the element in amu for the natuaral isotope composition
-  // with electron shell 
+  // Get atomic weight by element symbol - mean mass in units of amu of 
+  // an atom with electron shell for the natural isotope composition 
+  //
+  inline G4double GetAtomicMassAmu(const G4String& symb) const;
+
+  // Get atomic weight in atomic units - mean mass in units of amu of an atom 
+  // with electron shell for the natural isotope composition 
   //
   inline G4double GetAtomicMassAmu(G4int Z) const;
 
-  // Get mass of the isotope in Geant4 units without electron shell
+  // Get mass of isotope without electron shell in Geant4 energy units 
   //
   inline G4double GetIsotopeMass(G4int Z, G4int N) const;
 
-  // Get mass of the isotope in Geant4 units with electron shell
+  // Get mass in Geant4 energy units of an atom of a particular isotope 
+  // with the electron shell  
   //
   inline G4double GetAtomicMass(G4int Z, G4int N) const;
 
@@ -171,8 +179,8 @@ public:
   G4Material* BuildMaterialWithNewDensity(const G4String& name,
                                           const G4String& basename, 
 					  G4double density = 0.0,
-					  G4double temp = STP_Temperature,  
-					  G4double pres = STP_Pressure);  
+					  G4double temp = CLHEP::STP_Temperature,  
+					  G4double pres = CLHEP::STP_Pressure);  
 
   // Construct a G4Material from scratch by atome count
   // 
@@ -183,9 +191,9 @@ public:
 				  G4double dens, 
 				  G4bool isotopes=true,
 				  G4State   state    = kStateSolid,     
-				  G4double  temp     = STP_Temperature,  
-				  G4double  pressure = STP_Pressure); 
-				      
+				  G4double  temp     = CLHEP::STP_Temperature,  
+				  G4double  pressure = CLHEP::STP_Pressure); 
+
   // Construct a G4Material from scratch by fraction mass
   // 
   inline G4Material* ConstructNewMaterial(
@@ -195,8 +203,8 @@ public:
 				  G4double dens, 
 				  G4bool isotopes=true,
 				  G4State   state    = kStateSolid,     
-				  G4double  temp     = STP_Temperature,  
-				  G4double  pressure = STP_Pressure); 
+				  G4double  temp     = CLHEP::STP_Temperature,  
+				  G4double  pressure = CLHEP::STP_Pressure); 
 
   // Construct a gas G4Material from scratch by atome count
   // 
@@ -206,6 +214,16 @@ public:
 					     G4double pres, 
 					     G4bool isotopes=true);
 
+  // Construct an ideal gas G4Material from scratch by atom count
+  //
+  inline G4Material* ConstructNewIdealGasMaterial(
+                                  const G4String& name,
+                                  const std::vector<G4String>& elm,
+                                  const std::vector<G4int>& nbAtoms,
+                                  G4bool isotopes    = true,
+                                  G4double  temp     = CLHEP::STP_Temperature,
+                                  G4double  pressure = CLHEP::STP_Pressure);
+				      
   // Get number of G4Materials
   //
   inline size_t GetNumberOfMaterials();
@@ -322,9 +340,16 @@ inline G4int G4NistManager::GetZ(const G4String& symb) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4double G4NistManager::GetAtomicMassAmu(const G4String& symb) const
+{
+  return elmBuilder->GetAtomicMassAmu(symb);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4NistManager::GetAtomicMassAmu(G4int Z) const
 {
-  return elmBuilder->GetA(Z);
+  return elmBuilder->GetAtomicMassAmu(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -466,6 +491,20 @@ inline G4Material* G4NistManager::ConstructNewGasMaterial(
 {
   return matBuilder->ConstructNewGasMaterial(name,nameNist,
 					     temp,pres,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4Material* G4NistManager::ConstructNewIdealGasMaterial(
+                                      const G4String& name,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4int>& nbAtoms,
+                                      G4bool isotopes,
+                                      G4double  T,
+                                      G4double  P)
+{
+  return
+    matBuilder->ConstructNewIdealGasMaterial(name,elm,nbAtoms,isotopes,T,P);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

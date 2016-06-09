@@ -37,46 +37,17 @@
 // -------------------------------------------------------------------
 #include "G4VNuclearField.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 G4VNuclearField::G4VNuclearField(G4V3DNucleus * aNucleus) : 
 theNucleus(aNucleus),
 radius(aNucleus->GetOuterRadius() + 4*fermi)
-{
-}
+{}
 
 G4VNuclearField::G4VNuclearField(const  G4VNuclearField &right) :
 theNucleus(right.theNucleus),
 radius(right.radius)
-{
-}
+{}
 
 G4VNuclearField::~G4VNuclearField()
-{
-}
-
-const G4VNuclearField & G4VNuclearField::operator=(const G4VNuclearField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VNuclearField::operator= meant not to be accessible");
-  return *this;
-}
-
-G4int G4VNuclearField::operator==(const G4VNuclearField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VNuclearField::operator== meant not to be accessible");
-  return 0;
-}
-
-G4int G4VNuclearField::operator!=(const G4VNuclearField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VNuclearField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
-
-
-
-
-
-
-
+{}

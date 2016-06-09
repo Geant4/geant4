@@ -1,0 +1,147 @@
+//$Id$
+
+///\file "electromagnetic/TestEm1/.README"
+///\brief Example TestEm1 README page
+
+/*! \page ExampleTestEm1 Example TestEm1
+
+  - How to count processes.
+  - How to activate/inactivate processes.
+  - How to survey the tracking, in perticular the range of charged particles.
+  - How to define a maximum step size.
+	
+\section TestEm1_s1 GEOMETRY DEFINITION
+ 
+  It is a simple box which represente an 'semi infinite' homogeneous medium.
+ 	
+  Two parameters define the geometry :
+   - the material of the box,
+   - the full size of the box.
+	 	
+  In addition a transverse uniform magnetic field can be applied.
+ 	
+  The default geometry is constructed in DetectorConstruction class, but all of 
+  the above parameters can be changed interactively via the commands defined in 
+  the DetectorMessenger class.
+ 	
+\section TestEm1_s2 PHYSICS LIST
+ 
+  Physics lists can be local (eg. in this example) or from G4 kernel
+  physics_lists subdirectory.
+     
+  Local physics list:	 
+   - "local"	  standard EM physics with current 'best' options setting.
+                  these options are explicited in PhysListEmStandard
+    
+  From geant4/source/physics_lists/builders:	 
+   - "emstandard_opt0" recommended standard EM physics for LHC
+   - "emstandard_opt1" best CPU performance standard physics for LHC
+   - "emstandard_opt2"     
+   - "emstandard_opt3" best current advanced EM options. 
+                       analog to "local" above
+             
+  Physics lists and options can be (re)set with UI commands
+    
+  Please, notice that options set through G4EmProcessOPtions are global, eg
+  for all particle types. In G4 builders (geant4/source/physics_lists/builders)
+  it is shown how to set options per particle type. 
+ 		
+  Few commands have been added to PhysicsList, in order to set the production 
+  threshold for secondaries for gamma and e-/e+.
+  
+  PhysicsList contains also G4Decay and G4RadioactiveDecay processes
+   	 
+\section TestEm1_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle starting at the left face 
+  of the box. The type of the particle and its energy are set in the 
+  PrimaryGeneratorAction class, and can be changed via the G4 build-in commands 
+  of G4ParticleGun class (see the macros provided with this example).
+	
+  In addition one can choose randomly the impact point of the incident particle.
+  The corresponding interactive command is built in PrimaryGeneratorMessenger.	
+ 				
+\section TestEm1_s4 VISUALIZATION
+ 
+  The Visualization Manager is set in the main () (see TestEm1.cc).
+  The initialisation of the drawing is done via the commands /vis/... in the 
+  macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+ 	
+  The detector has a default view which is a longitudinal view of the box.
+ 	
+  The tracks are drawn at the end of event, and erased at the end of run.
+ 	
+\section TestEm1_s5 PHYSICS SURVEY
+ 
+  The particle's type and the physic processes which will be available in this 
+  example are set in PhysicsList class.
+ 	
+  A set of macros defining various run conditions are provided. The processes 
+  are actived/inactived together with differents cuts, in order to survey the 
+  processes one by one.
+
+  The number of produced secondaries are counted, the number of steps, and the 
+  number of process calls responsible of the step.
+ 	
+\section TestEm1_s6 HOW TO START ?
+ 
+  - Execute TestEm1 in 'batch' mode from macro files
+\verbatim
+% TestEm1   runs.mac
+\endverbatim
+ 		
+  - Execute TestEm1 in 'interactive mode' with visualization
+\verbatim
+% TestEm1
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+		
+\section TestEm1_s7 TRACKING : StepMax
+ 
+  In order to control the accuracy of the deposition, the user can limit
+  'by hand' the maximum  step size of charged particles.
+  As an example, this limitation is implemented as a 'full' process :
+  see StepMax class and its Messenger. The 'StepMax process' is registered
+  in the Physics List. 
+  	
+\section TestEm1_s8 HISTOGRAMS
+ 
+  Testem1 produces several histo which are saved as testem1.root by default.
+  Content of these histo:  
+      - 1 : track length of primary particle
+      - 2 : number of steps primary particle
+      - 3 : step size of primary particle
+      - 4 : total energy deposit
+      - 5 : energy of charged secondaries at creation
+      - 6 : energy of neutral secondaries at creation      
+      
+   The histograms are managed by G4AnalysisManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+\verbatim
+   /analysis/setFileName  name  (default testem1)
+\endverbatim
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh 
+     
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii  (default testem1)
+    
+\subsection TestEm1_subs1 Using hbook format
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh
+
+*/

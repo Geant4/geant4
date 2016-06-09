@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc,v 1.4 2010-06-02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -35,12 +34,14 @@
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
+// 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
 //
 //----------------------------------------------------------------------------
 //
 
 #include "G4EmExtraPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4SynchrotronRadiation.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -52,6 +53,12 @@
 #include "G4MuonMinus.hh"
 #include "G4ProcessManager.hh"
 #include "G4BuilderType.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
+
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
@@ -133,7 +140,7 @@ void G4EmExtraPhysics::BuildMuonNuclear()
   G4ProcessManager * pManager = 0;
 
   muNucProcess = new G4MuonNuclearProcess();
-  muNucModel = new G4VDMuonNuclearModel();
+  muNucModel = new G4MuonVDNuclearModel();
   muNucProcess->RegisterMe(muNucModel);
 
   pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
@@ -148,7 +155,7 @@ void G4EmExtraPhysics::BuildGammaNuclear()
   if(gnActivated) return;
   gnActivated = true;
 
-  theGNPhysics = new G4ElectroNuclearBuilder();
+  theGNPhysics = new G4BertiniElectroNuclearBuilder();
   theGNPhysics->Build();
 }
 

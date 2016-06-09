@@ -17,17 +17,17 @@
 
 namespace CLHEP  {
 
-Hep3Vector & Hep3Vector::operator *= (const HepRotation & m) {
-  return *this = m * (*this);
+Hep3Vector & Hep3Vector::operator *= (const HepRotation & m1) {
+  return *this = m1 * (*this);
 }
 
-Hep3Vector & Hep3Vector::transform(const HepRotation & m) {
-  return *this = m * (*this);
+Hep3Vector & Hep3Vector::transform(const HepRotation & m1) {
+  return *this = m1 * (*this);
 }
 
-Hep3Vector & Hep3Vector::rotate(double angle, const Hep3Vector & axis){
+Hep3Vector & Hep3Vector::rotate(double aangle, const Hep3Vector & aaxis){
   HepRotation trans;
-  trans.rotate(angle, axis);
+  trans.rotate(aangle, aaxis);
   operator*=(trans);
   return *this;
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.hh,v 1.3 2006-06-29 19:55:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VTransitionRadiation  -- header file
 //

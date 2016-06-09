@@ -28,6 +28,8 @@
 // Description: CCalG4Hcal Factory class to construct the G4 geometry of the
 //              hadron calorimeter
 ///////////////////////////////////////////////////////////////////////////////
+#include <cmath>
+
 #include "CCalG4Hcal.hh"
 
 #include "CCalMaterialFactory.hh"
@@ -35,8 +37,8 @@
 #include "CCalSensitiveDetectors.hh"
 
 #include "CCalutils.hh"
-#include <cmath>
 
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 

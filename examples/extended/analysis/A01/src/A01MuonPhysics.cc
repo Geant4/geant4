@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.cc,v 1.10 2009-12-02 22:45:09 perl Exp $
+/// \file analysis/A01/src/A01MuonPhysics.cc
+/// \brief Implementation of the A01MuonPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 

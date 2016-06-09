@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauLeptonicDecayChannel.cc,v 1.5 2006-06-29 19:26:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -38,6 +37,8 @@
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 #include "G4TauLeptonicDecayChannel.hh"

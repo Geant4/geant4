@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSPhotonDetHit.cc
+/// \brief Implementation of the WLSPhotonDetHit class
+//
 //
 //
 
@@ -67,7 +70,7 @@ G4int WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
 {
   return posExit     == right.posExit    &&
          posArrive   == right.posArrive  &&
-	 arrivalTime == right.arrivalTime;  
+         arrivalTime == right.arrivalTime;  
 }
 
 void WLSPhotonDetHit::Draw(){ }

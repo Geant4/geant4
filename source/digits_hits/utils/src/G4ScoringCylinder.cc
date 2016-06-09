@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.16 2010-08-30 08:15:20 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4ScoringCylinder.hh"
-#include "G4VPhysicalVolume.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"

@@ -58,9 +58,8 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Random/DoubConv.h"
 #include <string.h>	// for strcmp
-#include <cstdlib>	// for abs(int)
-
-using namespace std;
+#include <cstdlib>	// for std::abs(int)
+#include <limits>       // for numeric_limits
 
 namespace CLHEP {
 
@@ -73,14 +72,38 @@ int Ranlux64Engine::numEngines = 0;
 // Maximum index into the seed table
 int Ranlux64Engine::maxIndex = 215;
 
+#ifndef WIN32
+namespace detail {
+
+template< std::size_t n,
+          bool = n < std::size_t(std::numeric_limits<unsigned long>::digits) >
+  struct do_right_shift;
+template< std::size_t n >
+  struct do_right_shift<n,true>
+{
+  unsigned long operator()(unsigned long value) { return value >> n; }
+};
+template< std::size_t n >
+  struct do_right_shift<n,false>
+{
+  unsigned long operator()(unsigned long) { return 0ul; }
+};
+
+template< std::size_t nbits >
+  unsigned long rshift( unsigned long value )
+{ return do_right_shift<nbits>()(value); }
+
+} // namespace detail
+#endif
+
 std::string Ranlux64Engine::name() const {return "Ranlux64Engine";}
 
 Ranlux64Engine::Ranlux64Engine()
 : HepRandomEngine()
 {
    luxury = 1;
-   int cycle    = abs(int(numEngines/maxIndex));
-   int curIndex = abs(int(numEngines%maxIndex));
+   int cycle    = std::abs(int(numEngines/maxIndex));
+   int curIndex = std::abs(int(numEngines%maxIndex));
    numEngines +=1;
    long mask = ((cycle & 0x007fffff) << 8);
    long seedlist[2];
@@ -108,8 +131,8 @@ Ranlux64Engine::Ranlux64Engine(int rowIndex, int, int lux)
 : HepRandomEngine()
 {
    luxury = lux;
-   int cycle = abs(int(rowIndex/maxIndex));
-   int   row = abs(int(rowIndex%maxIndex));
+   int cycle = std::abs(int(rowIndex/maxIndex));
+   int   row = std::abs(int(rowIndex%maxIndex));
    long mask = (( cycle & 0x000007ff ) << 20 );
    long seedlist[2]; 
    HepRandom::getTheTableSeeds( seedlist, row );
@@ -395,8 +418,13 @@ void Ranlux64Engine::setSeed(long seed, int lux) {
   // are we on a 64bit machine?
   if( sizeof(long) >= 8 ) {
      long topbits1, topbits2;
+#ifdef WIN32
      topbits1 = ( seed >> 32) & 0xffff ;
      topbits2 = ( seed >> 48) & 0xffff ;
+#else
+     topbits1 = detail::rshift<32>(seed) & 0xffff ;
+     topbits2 = detail::rshift<48>(seed) & 0xffff ;
+#endif
      init_table[0] ^= topbits1;
      init_table[2] ^= topbits2;
      //std::cout << " init_table[0] " << init_table[0] << " from " << topbits1 << std::endl;

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/ExP01TrackerSD.cc
+/// \brief Implementation of the ExP01TrackerSD class
 //
-// $Id: ExP01TrackerSD.cc,v 1.3 2010-12-01 14:18:27 witoldp Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,8 +46,10 @@
 ExP01TrackerSD::ExP01TrackerSD(G4String name)
 :G4VSensitiveDetector(name)
 {
-  G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
+  G4String HCname = name + "_HC";
+  collectionName.insert(HCname);
+  G4cout << collectionName.size() << "   CalorimeterSD name:  " << name << " collection Name: " << HCname << G4endl;
+  fHCID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,12 +63,14 @@ ExP01TrackerSD::~ExP01TrackerSD()
 
 void ExP01TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
-  trackerCollection = new ExP01TrackerHitsCollection
+  fTrackerCollection = new ExP01TrackerHitsCollection
                           (SensitiveDetectorName,collectionName[0]); 
-  static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection( HCID, trackerCollection ); 
+  if (fHCID < 0) {
+    G4cout << "CalorimeterSD::Initialize:  " << SensitiveDetectorName << "   " << collectionName[0] << G4endl;
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    
+  }
+  HCE->AddHitsCollection(fHCID, fTrackerCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +87,7 @@ G4bool ExP01TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
                                                ->GetReplicaNumber());
   newHit->SetEdep     (edep);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
-  trackerCollection->insert( newHit );
+  fTrackerCollection->insert( newHit );
   
   //newHit->Print();
   //newHit->Draw();
@@ -94,18 +100,18 @@ G4bool ExP01TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 void ExP01TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
   // storing the hits in ROOT file
-  G4int NbHits = trackerCollection->entries();
+  G4int NbHits = fTrackerCollection->entries();
   std::vector<ExP01TrackerHit*> hitsVector;
 
   { 
     G4cout << "\n-------->Storing hits in the ROOT file: in this event there are " << NbHits 
            << " hits in the tracker chambers: " << G4endl;
-    for (G4int i=0;i<NbHits;i++) (*trackerCollection)[i]->Print();
+    for (G4int i=0;i<NbHits;i++) (*fTrackerCollection)[i]->Print();
   } 
 
   
   for (G4int i=0;i<NbHits;i++) 
-    hitsVector.push_back((*trackerCollection)[i]);
+    hitsVector.push_back((*fTrackerCollection)[i]);
   
   RootIO::GetInstance()->Write(&hitsVector);
 

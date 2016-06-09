@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.icc,v 1.7 2008-01-24 15:47:23 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4SmartVoxelNode Inline implementation

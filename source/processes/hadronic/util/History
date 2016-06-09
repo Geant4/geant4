@@ -14,6 +14,65 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 Nov 2012  Dennis Wright  (hadr-util-V09-05-13)
+-------------------------------------------------
+- initialize fIsotope in copy ctor.  Fixes Coverity bug 15146.
+ 
+06 Nov 2012  Gabriele Cosmo (hadr-util-V09-05-12)
+-------------------------------------------------
+- Fix for porting on AIX in G4ReactionProduct header.
+
+15 Oct 2012  Michael Kelsey (hadr-util-V09-05-11)
+-------------------------------------------------
+- sources.cmake:  G4HadronicDeprecate.hh missing; why did nightly builds
+  work?
+
+05 Oct 2012  Michael Kelsey (hadr-util-V09-05-10, hadr-util-V09-05-09)
+----------------------------------------------------------------------
+- G4HadronicDeprecate.hh:  Macro function to generate deprecation messages.
+  Used by hadronic/stopping and hadronic/models/low_energy (so far).
+
+19 Sep 2012  Gabriele Cosmo (hadr-util-V09-05-08, hadr-util-V09-05-07)
+----------------------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+31 Jul 2012  Vladimir Ivanchenko        (hadr-util-V09-05-06)
+-------------------------------------------------------------
+- G4Nucleus - added methods GetIsotope, SetIsotope
+
+13 Jul 2012  Gunter Folger              (hadr-util-V09-05-05)
+-------------------------------------------------------------
+- G4GHEKinematicsVector: Fix coverity warning about self assignment
+    in assignment operator
+
+08 Jun 2012  Gabriele Cosmo             (hadr-util-V09-05-04)
+-------------------------------------------------------------
+- More variable shadowing fixes in G4GHEKinematicsVector.hh.
+
+08 Jun 2012  Gabriele Cosmo             (hadr-util-V09-05-03)
+-------------------------------------------------------------
+- Fixed trivial cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
+25 May 2012  Vladimir Ivantchenko       (hadr-util-V09-05-02)
+-------------------------------------------------------------
+- G4HadProjectile - added protection to kinetic energy computation
+
+05 May 2012  Vladimir Ivantchenko       (hadr-util-V09-05-01)
+-------------------------------------------------------------
+- G4HadProjectile - added default constructor
+
+05 May 2012  Vladimir Ivantchenko       (hadr-util-V09-05-00)
+-------------------------------------------------------------
+- G4HadProjectile - added methods SetGlobalTime, SetBoundEnergy
+    GetBoundEnergy needed for general stopping process;
+    always set time to zero when construct or initialise, so
+    hadronic interaction is starting from zero local time;
+    added Initialise method allowing to update the projectile
+    and not instantiate it for any new interaction;
+    all get methods are inlined
+
 17 Nov 2011  Gunter Folger              (hadr-util-V09-04-05)
 -------------------------------------------------------------
 - removed G4lrint(), G4lint(), and G4rint(); these are now in global

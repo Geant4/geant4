@@ -54,6 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hIonEffChargeSquare.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
@@ -269,15 +271,15 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
                             0.38157*y - 0.008983*y*y ) ;     
     if( q < 0.0 ) q = 0.0 ;
 
-    G4double s = 7.6 -  std::log(std::max(1.0, reducedEnergy/keV)) ; 
-    s = 1.0 + ( 0.18 + 0.0015 * z ) * std::exp( -s*s )/ (ionCharge*ionCharge) ;
+    G4double sLocal = 7.6 -  std::log(std::max(1.0, reducedEnergy/keV)) ; 
+    sLocal = 1.0 + ( 0.18 + 0.0015 * z ) * std::exp( -sLocal*sLocal )/ (ionCharge*ionCharge) ;
 
     // Screen length according to
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
     G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
-    G4double qeff   = ionCharge * s *
+    G4double qeff   = ionCharge * sLocal *
       ( q + 0.5*(1.0-q) * std::log(1.0 + lambda*lambda) / (vF*vF) ) ;
     if( 0.1 > qeff ) qeff = 0.1 ; 
     return qeff*qeff ;    

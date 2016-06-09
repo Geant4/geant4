@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -51,6 +50,8 @@
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,7 +75,7 @@ DetectorConstruction::DetectorConstruction()
   DefineMaterials();
   SetAbsorberMaterial("Lead");
   SetGapMaterial("liquidArgon");
-  
+ 
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);
 }
@@ -240,20 +241,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //     
   // World
   //
-  solidWorld = new G4Box("World",				//its name
-                   WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
+  solidWorld = new G4Box("World",                             //its name
+                   WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2); //its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   defaultMaterial,	//its material
-                                   "World");		//its name
+  logicWorld = new G4LogicalVolume(solidWorld,           //its solid
+                                   defaultMaterial,      //its material
+                                   "World");             //its name
                                    
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume				 
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  physiWorld = new G4PVPlacement(0,                      //no rotation
+                                 G4ThreeVector(),        //at (0,0,0)
+                                 logicWorld,             //its logical volume                                 
+                                 "World",                //its name
+                                 0,                      //its mother  volume
+                                 false,                  //no boolean operation
+                                 0);                     //copy number
   
   //                               
   // Calorimeter
@@ -262,45 +263,45 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   solidLayer=0; logicLayer=0; physiLayer=0;
   
   if (CalorThickness > 0.)  
-    { solidCalor = new G4Box("Calorimeter",		//its name
-    		       CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
-    			     
-      logicCalor = new G4LogicalVolume(solidCalor,	//its solid
-      				       defaultMaterial,	//its material
-      				       "Calorimeter");	//its name
-    				       
-      physiCalor = new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(),	//at (0,0,0)
-                                     logicCalor,	//its logical volume
-                                     "Calorimeter",	//its name
-                                     logicWorld,	//its mother  volume
-                                     false,		//no boolean operation
-                                     0);		//copy number
+    { solidCalor = new G4Box("Calorimeter",              //its name
+                           CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
+                                 
+      logicCalor = new G4LogicalVolume(solidCalor,       //its solid
+                                       defaultMaterial,  //its material
+                                       "Calorimeter");   //its name
+                                           
+      physiCalor = new G4PVPlacement(0,                  //no rotation
+                                     G4ThreeVector(),    //at (0,0,0)
+                                     logicCalor,         //its logical volume
+                                     "Calorimeter",      //its name
+                                     logicWorld,         //its mother  volume
+                                     false,              //no boolean operation
+                                     0);                 //copy number
   
   //                                 
   // Layer
   //
-      solidLayer = new G4Box("Layer",			//its name
+      solidLayer = new G4Box("Layer",                    //its name
                        LayerThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); //size
                        
-      logicLayer = new G4LogicalVolume(solidLayer,	//its solid
-                                       defaultMaterial,	//its material
-                                       "Layer");	//its name
+      logicLayer = new G4LogicalVolume(solidLayer,       //its solid
+                                       defaultMaterial,  //its material
+                                       "Layer");         //its name
       if (NbOfLayers > 1)                                      
-        physiLayer = new G4PVReplica("Layer",		//its name
-      				     logicLayer,	//its logical volume
-      				     logicCalor,	//its mother
-                                     kXAxis,		//axis of replication
-                                     NbOfLayers,	//number of replica
-                                     LayerThickness);	//witdth of replica
+        physiLayer = new G4PVReplica("Layer",            //its name
+                                      logicLayer,        //its logical volume
+                                      logicCalor,        //its mother
+                                      kXAxis,            //axis of replication
+                                      NbOfLayers,        //number of replica
+                                      LayerThickness);   //width of replica
       else
-        physiLayer = new G4PVPlacement(0,		//no rotation
-                                     G4ThreeVector(),	//at (0,0,0)
-                                     logicLayer,	//its logical volume				     
-                                     "Layer",		//its name
-                                     logicCalor,	//its mother  volume
-                                     false,		//no boolean operation
-                                     0);		//copy number     
+        physiLayer = new G4PVPlacement(0,                //no rotation
+                                      G4ThreeVector(),   //at (0,0,0)
+                                      logicLayer,        //its logical volume                                     
+                                      "Layer",           //its name
+                                      logicCalor,        //its mother  volume
+                                      false,             //no boolean operation
+                                      0);                //copy number     
     }                                   
   
   //                               
@@ -309,19 +310,19 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   solidAbsorber=0; logicAbsorber=0; physiAbsorber=0;  
   
   if (AbsorberThickness > 0.) 
-    { solidAbsorber = new G4Box("Absorber",		//its name
+    { solidAbsorber = new G4Box("Absorber",              //its name
                           AbsorberThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); 
                           
       logicAbsorber = new G4LogicalVolume(solidAbsorber,    //its solid
-      			                  AbsorberMaterial, //its material
-      			                  AbsorberMaterial->GetName()); //name
-      			                  
-      physiAbsorber = new G4PVPlacement(0,		   //no rotation
-      		    G4ThreeVector(-GapThickness/2,0.,0.),  //its position
-                                        logicAbsorber,     //its logical volume		    
+                                          AbsorberMaterial, //its material
+                                          AbsorberMaterial->GetName()); //name
+                                                
+      physiAbsorber = new G4PVPlacement(0,                 //no rotation
+                          G4ThreeVector(-GapThickness/2,0.,0.),  //its position
+                                        logicAbsorber,     //its logical volume                    
                                         AbsorberMaterial->GetName(), //its name
                                         logicLayer,        //its mother
-                                        false,             //no boulean operat
+                                        false,             //no boolean operat
                                         0);                //copy number
                                         
     }
@@ -333,18 +334,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   
   if (GapThickness > 0.)
     { solidGap = new G4Box("Gap",
-    			   GapThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);
-    			   
+                               GapThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);
+                               
       logicGap = new G4LogicalVolume(solidGap,
-      				     GapMaterial,
-      				     GapMaterial->GetName());
-      				     
+                                           GapMaterial,
+                                           GapMaterial->GetName());
+                                           
       physiGap = new G4PVPlacement(0,                      //no rotation
                G4ThreeVector(AbsorberThickness/2,0.,0.),   //its position
-                                   logicGap,               //its logical volume	       
+                                   logicGap,               //its logical volume               
                                    GapMaterial->GetName(), //its name
                                    logicLayer,             //its mother
-                                   false,                  //no boulean operat
+                                   false,                  //no boolean operat
                                    0);                     //copy number
     }
     
@@ -459,9 +460,9 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(magField) delete magField;		//delete the existing magn field
+  if(magField) delete magField;                //delete the existing magn field
 
-  if(fieldValue!=0.)			// create a new one if non nul
+  if(fieldValue!=0.)                        // create a new one if non nul
   { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);

@@ -1,0 +1,41 @@
+# $Id: proton.mac,v 1.2 2006-05-11 11:46:03 maire Exp $
+#
+# Macro file for "TestEm15.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Air
+#
+/testem/phys/addPhysics emstandard_opt3
+#
+/run/initialize
+#
+/testem/phys/setCuts 1 mm
+#
+/process/list
+/process/inactivate muIoni
+/process/inactivate muBrems
+/process/inactivate muPairProd
+#
+/gun/particle mu-
+/gun/energy 900 MeV
+#
+/analysis/setFileName muon
+/analysis/h1/set 1  100  0     10 cm	#true step length
+/analysis/h1/set 2  100  0     10 cm	#geom step length
+/analysis/h1/set 3  100  0     1.1 none	#ratio geom/true
+/analysis/h1/set 4  100  0     5 mm	#lateral radius
+/analysis/h1/set 5  100  0    +5 deg	#psi_space angle
+/analysis/h1/set 6  100 -50   +50 deg	#theta_plane angle
+/analysis/h1/set 7   90 -180  +180 deg	#phi-position angle
+/analysis/h1/set 8   90 -180  +180 deg	#phi-direction angle
+/analysis/h1/set 9  100  -1    +1 none	#phi correlation
+#
+##/tracking/verbose 2
+##/run/beamOn 1
+#
+/testem/stepMax 2 m
+#
+/run/beamOn 100000

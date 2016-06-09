@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.72 2010-10-26 10:42:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +62,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ionIonisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4GenericIon.hh"
@@ -88,6 +89,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   SetLinearLossLimit(0.02);
   SetStepFunction(0.1, 0.01*mm);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
   corr = G4LossTableManager::Instance()->EmCorrections();
   eth = 2*MeV;
 }
@@ -135,7 +137,6 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     else                { theBaseParticle = bpart; }
 
     SetBaseParticle(theBaseParticle);
-    SetSecondaryParticle(G4Electron::Electron());
 
     if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.14 2008-07-10 09:46:01 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4RegionStore
 //

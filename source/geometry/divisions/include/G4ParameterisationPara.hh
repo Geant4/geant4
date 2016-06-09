@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.hh,v 1.8 2010-07-02 10:46:27 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // classes G4ParameterisationParaX,
 //         G4ParameterisationParaY,

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.38 2010-11-05 16:00:11 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  19th July 1996
@@ -37,18 +36,10 @@
 
 #include "G4VisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 G4ViewParameters::G4ViewParameters ():
-  fNoValue(0x0000),
-  fXValue(0x0001),
-  fYValue(0x0002),
-  fWidthValue(0x0004),
-  fHeightValue(0x0008),
-  fAllValues(0x000F),
-  fXNegative(0x0010),
-  fYNegative(0x0020),
-  fGeometryMask(0),
   fDrawingStyle (wireframe),
   fAuxEdgeVisible (false),
   fRepStyle (polyhedron),
@@ -85,6 +76,7 @@ G4ViewParameters::G4ViewParameters ():
   fWindowLocationHintY(0),
   fWindowLocationHintXNegative(true),
   fWindowLocationHintYNegative(false),
+  fGeometryMask(0),
   fAutoRefresh (false),
   fBackgroundColour (G4Colour(0.,0.,0.)),         // Black
   fPicking (false),
@@ -257,6 +249,330 @@ void G4ViewParameters::IncrementPan (G4double right, G4double up, G4double dista
   fCurrentTargetPoint += right * unitRight + up * unitUp + distance * fViewpointDirection;
 }
 
+G4String G4ViewParameters::CameraAndLightingCommands
+(const G4Point3D standardTargetPoint) const
+{
+  std::ostringstream oss;
+
+  oss << "#\n# Camera and lights commands";
+  
+  oss << "\n/vis/viewer/set/viewpointVector "
+  << fViewpointDirection.x()
+  << ' ' << fViewpointDirection.y()
+  << ' ' << fViewpointDirection.z();
+  
+  oss << "\n/vis/viewer/set/upVector "
+  << fUpVector.x()
+  << ' ' << fUpVector.y()
+  << ' ' << fUpVector.z();
+  
+  oss << "\n/vis/viewer/set/projection ";
+    if (fFieldHalfAngle == 0.) {
+    oss
+    << "orthogonal";
+  } else {
+    oss
+    << "perspective "
+    << fFieldHalfAngle/deg
+    << " deg";
+  }
+  
+  oss << "\n/vis/viewer/zoomTo "
+  << fZoomFactor;
+  
+  oss << "\n/vis/viewer/scaleTo "
+  << fScaleFactor.x()
+  << ' ' << fScaleFactor.y()
+  << ' ' << fScaleFactor.z();
+  
+  oss << "\n/vis/viewer/set/targetPoint "
+  << G4BestUnit(standardTargetPoint+fCurrentTargetPoint,"Length")
+  << "\n# Note that if you have not set a target point, the vis system sets"
+  << "\n# a target point based on the scene - plus any panning and dollying -"
+  << "\n# so don't be alarmed by strange coordinates here.";
+  
+  oss << "\n/vis/viewer/dollyTo "
+  << G4BestUnit(fDolly,"Length");
+  
+  oss << "\n/vis/viewer/set/lightsMove ";
+  if (fLightsMoveWithCamera) {
+    oss << "camera";
+  } else {
+    oss << "object";
+  }
+  
+  oss << "\n/vis/viewer/set/lightsVector "
+  << fRelativeLightpointDirection.x()
+  << ' ' << fRelativeLightpointDirection.y()
+  << ' ' << fRelativeLightpointDirection.z();
+  
+  oss << "\n/vis/viewer/set/rotationStyle ";
+  if (fRotationStyle == constrainUpDirection) {
+    oss << "constrainUpDirection";
+  } else {
+    oss << "freeRotation";
+  }
+  
+  G4Colour c = fBackgroundColour;
+  oss << "\n/vis/viewer/set/background "
+  << c.GetRed()
+  << ' ' << c.GetGreen()
+  << ' ' << c.GetBlue()
+  << ' ' << c.GetAlpha();
+  
+  c = fDefaultVisAttributes.GetColour();
+  oss << "\n/vis/viewer/set/defaultColour "
+  << c.GetRed()
+  << ' ' << c.GetGreen()
+  << ' ' << c.GetBlue()
+  << ' ' << c.GetAlpha();
+  
+  c = fDefaultTextVisAttributes.GetColour();
+  oss << "\n/vis/viewer/set/defaultTextColour "
+  << c.GetRed()
+  << ' ' << c.GetGreen()
+  << ' ' << c.GetBlue()
+  << ' ' << c.GetAlpha();
+  
+  oss << std::endl;
+  
+  return oss.str();
+}
+
+G4String G4ViewParameters::DrawingStyleCommands() const
+{
+  std::ostringstream oss;
+  
+  oss << "#\n# Drawing style commands";
+  
+  oss << "\n/vis/viewer/set/style ";
+  if (fDrawingStyle == wireframe || fDrawingStyle == hlr) {
+    oss << "wireframe";
+  } else {
+    oss << "surface";
+  }
+  
+  oss << "\n/vis/viewer/set/hiddenEdge ";
+  if (fDrawingStyle == hlr || fDrawingStyle == hlhsr) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+  
+  oss << "\n/vis/viewer/set/auxiliaryEdge ";
+  if (fAuxEdgeVisible) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+  
+  oss << "\n/vis/viewer/set/hiddenMarker ";
+  if (fMarkerNotHidden) {
+    oss << "false";
+  } else {
+    oss << "true";
+  }
+  
+  oss << "\n/vis/viewer/set/globalLineWidthScale "
+  << fGlobalLineWidthScale;
+  
+  oss << "\n/vis/viewer/set/globalMarkerScale "
+  << fGlobalMarkerScale;
+  
+  oss << std::endl;
+  
+  return oss.str();
+}
+
+G4String G4ViewParameters::SceneModifyingCommands() const
+{
+  std::ostringstream oss;
+  
+  oss << "#\n# Scene-modifying commands";
+  
+  oss << "\n/vis/viewer/set/culling global ";
+  if (fCulling) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+
+  oss << "\n/vis/viewer/set/culling invisible ";
+  if (fCullInvisible) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+  
+  oss << "\n/vis/viewer/set/culling density ";
+  if (fDensityCulling) {
+    oss << "true " << fVisibleDensity/(g/cm3) << " g/cm3";
+  } else {
+    oss << "false";
+  }
+  
+  oss << "\n/vis/viewer/set/culling coveredDaughters ";
+  if (fCullCovered) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+  
+  oss << "\n/vis/viewer/set/sectionPlane ";
+  if (fSection) {
+    oss << "on "
+    << G4BestUnit(fSectionPlane.point(),"Length")
+    << fSectionPlane.normal().x()
+    << ' ' << fSectionPlane.normal().y()
+    << ' ' << fSectionPlane.normal().z();
+  } else {
+    oss << "off";
+  }
+  
+  oss << "\n/vis/viewer/set/cutawayMode ";
+  if (fCutawayMode == cutawayUnion) {
+    oss << "union";
+  } else {
+    oss << "intersection";
+  }
+  
+  oss << "\n/vis/viewer/clearCutawayPlanes";
+  if (fCutawayPlanes.size()) {
+    for (size_t i = 0; i < fCutawayPlanes.size(); i++) {
+      oss << "\n/vis/viewer/addCutawayPlane "
+      << G4BestUnit(fCutawayPlanes[i].point(),"Length")
+      << fCutawayPlanes[i].normal().x()
+      << ' ' << fCutawayPlanes[i].normal().y()
+      << ' ' << fCutawayPlanes[i].normal().z();
+    }
+  } else {
+    oss << "\n# No cutaway planes defined.";
+  }
+  
+  oss << "\n/vis/viewer/set/explodeFactor "
+  << fExplodeFactor
+  << ' ' << G4BestUnit(fExplodeCentre,"Length");
+  
+  oss << "\n/vis/viewer/set/lineSegmentsPerCircle "
+  << fNoOfSides;
+  
+  oss << std::endl;
+  
+  return oss.str();
+}
+
+G4String G4ViewParameters::TouchableCommands() const
+{
+  std::ostringstream oss;
+  
+  oss << "#\n# Touchable commands";
+  
+  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
+    fVisAttributesModifiers;
+
+  if (vams.empty()) {
+    oss << "\n# None";
+    oss << std::endl;
+    return oss.str();
+  }
+  
+  std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
+    iModifier;
+  for (iModifier = vams.begin();
+       iModifier != vams.end();
+       ++iModifier) {
+    oss << "\n/vis/set/touchable";
+    const G4ModelingParameters::PVNameCopyNoPath& vamPath =
+      iModifier->GetPVNameCopyNoPath();
+    G4ModelingParameters::PVNameCopyNoPathConstIterator iVAM;
+    for (iVAM = vamPath.begin();
+         iVAM != vamPath.end();
+         ++iVAM) {
+      oss << ' ' << iVAM->GetName() << ' ' << iVAM->GetCopyNo();
+    }
+    const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
+    const G4Colour& c = vamVisAtts.GetColour();
+    switch (iModifier->GetVisAttributesSignifier()) {
+      case G4ModelingParameters::VASVisibility:
+        oss << "\n/vis/touchable/set/visibility ";
+        if (vamVisAtts.IsVisible()) {
+          oss << "true";
+        } else {
+          oss << "false";
+        }
+        break;
+      case G4ModelingParameters::VASDaughtersInvisible:
+        oss << "\n/vis/touchable/set/daughtersInvisible ";
+        if (vamVisAtts.IsDaughtersInvisible()) {
+          oss << "true";
+        } else {
+          oss << "false";
+        }
+        break;
+      case G4ModelingParameters::VASColour:
+        oss << "\n/vis/touchable/set/colour "
+        << c.GetRed()
+        << ' ' << c.GetGreen()
+        << ' ' << c.GetBlue()
+        << ' ' << c.GetAlpha();
+        break;
+      case G4ModelingParameters::VASLineStyle:
+        oss << "\n/vis/touchable/set/lineStyle ";
+        switch (vamVisAtts.GetLineStyle()) {
+          case G4VisAttributes::unbroken:
+            oss << "unbroken";
+            break;
+          case G4VisAttributes::dashed:
+            oss << "dashed";
+            break;
+          case G4VisAttributes::dotted:
+          oss << "dotted";
+        }
+        break;
+      case G4ModelingParameters::VASLineWidth:
+        oss << "\n/vis/touchable/set/lineWidth "
+        << vamVisAtts.GetLineWidth();
+        break;
+      case G4ModelingParameters::VASForceWireframe:
+        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::wireframe) {
+          oss << "\n/vis/touchable/set/forceWireframe ";
+          if (vamVisAtts.IsForceDrawingStyle()) {
+            oss << "true";
+          } else {
+            oss << "false";
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceSolid:
+        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::solid) {
+          oss << "\n/vis/touchable/set/forceSolid ";
+          if (vamVisAtts.IsForceDrawingStyle()) {
+            oss << "true";
+          } else {
+            oss << "false";
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceAuxEdgeVisible:
+        oss << "\n/vis/touchable/set/forceAuxEdgeVisible ";
+        if (vamVisAtts.IsForceAuxEdgeVisible()) {
+          oss << "true";
+        } else {
+          oss << "false";
+        }
+        break;
+      case G4ModelingParameters::VASForceLineSegmentsPerCircle:
+        oss << "\n/vis/touchable/set/lineSegmentsPerCircle "
+        << vamVisAtts.GetForcedLineSegmentsPerCircle();
+        break;
+    }
+  }
+  
+  oss << std::endl;
+  
+  return oss.str();
+}
+
 void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
 
   // Put performance-sensitive parameters first.
@@ -292,6 +608,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fXGeometryString      != v.fXGeometryString)      ||
+      (fGeometryMask         != v.fGeometryMask)         ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     || 
       (fPicking              != v.fPicking)              ||
@@ -467,6 +784,9 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;
 
   os << "\n  X geometry string: " << v.fXGeometryString;
+  os << "\n  X geometry mask: "
+     << std::showbase << std::hex << v.fGeometryMask
+     << std::noshowbase << std::dec;
 
   os << "\n  Auto refresh: ";
   if (v.fAutoRefresh) os << "true";
@@ -485,6 +805,15 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   case G4ViewParameters::freeRotation:
     os << "freeRotation (Google-like rotation, using mouse-grab)"; break;
   default: os << "unrecognised"; break;
+  }
+
+  os << "\n  Vis attributes modifiers: ";
+  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
+    v.fVisAttributesModifiers;
+  if (vams.empty()) {
+    os << "None";
+  } else {
+    os << vams;
   }
 
   return os;
@@ -526,6 +855,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fXGeometryString      != v.fXGeometryString)      ||
+      (fGeometryMask         != v.fGeometryMask)         ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     ||
       (fPicking              != v.fPicking)              ||
@@ -552,6 +882,10 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   if (IsExplode() &&
       ((fExplodeFactor != v.fExplodeFactor) ||
        (fExplodeCentre != v.fExplodeCentre))) return true;
+
+  if (G4ModelingParameters::VAMSNotEqual
+      (fVisAttributesModifiers, v.fVisAttributesModifiers))
+    return true;
 
   return false;
 }
@@ -784,4 +1118,3 @@ G4int G4ViewParameters::ReadInteger(char *string, char **NextString)
     else
  	return (-Result);
 }
-   

@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.16 2010-11-11 22:32:22 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4DNAChampionElasticModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4DNAMolecularMaterial.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -39,9 +41,9 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+//  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
-  killBelowEnergy = 4*eV; 
+  killBelowEnergy = 7.4*eV; 
   lowEnergyLimit = 0 * eV; 
   highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
@@ -64,6 +66,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
            << G4endl;
   }
   fParticleChangeForGamma = 0;
+  fpMolWaterDensity = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -143,12 +146,12 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     }
        
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat";
+    eFullFileName << path << "/dna/sigmadiff_cumulated_elastic_e_champion.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) 
       G4Exception("G4DNAChampionElasticModel::Initialise","em0003",
-                  FatalException,"Missing data file:/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat");
+                  FatalException,"Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion.dat");
     
     eTdummyVec.push_back(0.);
 
@@ -186,6 +189,9 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
            << G4endl;
   }
 
+  // Initialize water density pointer
+  fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
@@ -206,9 +212,12 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
  // Calculate total cross section for model
 
  G4double sigma=0;
- 
- if (material == nistwater || material->GetBaseMaterial() == nistwater)
- {
+
+ G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
+
+ if(waterDensity!= 0.0)
+//  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  {
   const G4String& particleName = p->GetParticleName();
 
   if (ekin < highEnergyLimit)
@@ -235,16 +244,21 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
 	}
   }
 
-  if (verboseLevel > 3)
+  if (verboseLevel > 2)
   {
-    G4cout << "---> Kinetic energy(eV)=" << ekin/eV << G4endl;
-    G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "°°° G4DNAChampionElasticModel - XS INFO START" << G4endl;
+    G4cout << "°°° Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
+    G4cout << "°°° Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+    G4cout << "°°° Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+    //      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
+    G4cout << "°°° G4DNAChampionElasticModel - XS INFO END" << G4endl;
   } 
 
  } 
          
- return sigma*material->GetAtomicNumDensityVector()[1];		   
+ return sigma*waterDensity;
+// return sigma*material->GetAtomicNumDensityVector()[1];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -263,6 +277,7 @@ void G4DNAChampionElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
   
   if (electronEnergy0 < killBelowEnergy)
   {
+    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
     fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
     fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
     return ;
@@ -318,7 +333,7 @@ G4double G4DNAChampionElasticModel::Theta
     std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), integrDiff);
     std::vector<double>::iterator e11 = e12-1;
 	  
-    std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), integrDiff);
+    std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), integrDiff);    
     std::vector<double>::iterator e21 = e22-1;
 	  	
     valueT1  =*t1;
@@ -335,7 +350,7 @@ G4double G4DNAChampionElasticModel::Theta
   }
   
   if (xs11==0 && xs12==0 && xs21==0 && xs22==0) return (0.);   
-  
+
   theta = QuadInterpolator   ( valueE11, valueE12, 
     			       valueE21, valueE22, 
 			       xs11, xs12, 

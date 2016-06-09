@@ -24,116 +24,137 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.5 2010-11-24 22:56:57 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4SmartTrackStack.hh"
 #include "G4VTrajectory.hh"
+#include "G4Track.hh"
+
+void G4SmartTrackStack::dumpStatistics()
+{
+	// Print to stderr so that we can split stats output from normal
+	// output of Geant4 which is typically being printed to stdout
+	for (int i = 0; i < nTurn; i++) {
+		G4cerr << stacks[i]->GetNTrack() << " ";
+		G4cerr << stacks[i]->getTotalEnergy() << " ";
+	}
+	G4cerr << G4endl;
+}
 
 G4SmartTrackStack::G4SmartTrackStack()
-:fTurn(0),nTurn(5)
+	:fTurn(0), nTurn(5), maxNTracks(0), nTracks(0)
 {
-  for(int i=0;i<nTurn;i++)
-  { stacks[i] = new G4TrackStack(); }
-  // If entry of one sub-stack exceeds safetyValve1, we will stick
-  // to that sub-stack until entry of that sub-stack goes down
-  // to safetyValve2.
-  nStick = 100;
-  safetyValve1 = 3000; 
-  safetyValve2 = safetyValve1 - nStick;
-  maxNTracks = 0;
+	for(int i=0;i<nTurn;i++)
+	{
+	  stacks[i] = new G4TrackStack(5000);
+	  energies[i] = 0.;
+	}
 }
 
 G4SmartTrackStack::~G4SmartTrackStack()
 {
-  for(int i=0;i<nTurn;i++)
-  { delete stacks[i]; }
+	for (int i  = 0; i < nTurn; i++) {
+		delete stacks[i];
+	}
 }
 
-const G4SmartTrackStack & G4SmartTrackStack::operator=(const G4SmartTrackStack &) 
-{ return *this; }
-int G4SmartTrackStack::operator==(const G4SmartTrackStack &right) const
-{ return (this==&right); }
-int G4SmartTrackStack::operator!=(const G4SmartTrackStack &right) const
-{ return (this!=&right); }
-
-void G4SmartTrackStack::TransferTo(G4TrackStack * aStack)
-{
-  for(int i=0;i<nTurn;i++)
-  { stacks[i]->TransferTo(aStack); }
+const G4SmartTrackStack &
+G4SmartTrackStack::operator=(const G4SmartTrackStack &) {
+	return *this;
 }
 
-G4StackedTrack * G4SmartTrackStack::PopFromStack()
-{
-  if( n_stackedTrack() == 0 ) return 0;
-  G4StackedTrack * aStackedTrack = 0;
-  while(!aStackedTrack)
-  {
-    if(stacks[fTurn]->GetNTrack()==0)
-    {
-      fTurn = (fTurn+1)%nTurn;
-      //G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
-    }
-    else
-    { aStackedTrack = stacks[fTurn]->PopFromStack(); }
-  }
-  return aStackedTrack;
+int G4SmartTrackStack::operator==(const G4SmartTrackStack &right) const {
+	return (this==&right);
 }
 
-#include "G4Neutron.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+int G4SmartTrackStack::operator!=(const G4SmartTrackStack &right) const {
+	return (this!=&right);
+}
 
-void G4SmartTrackStack::PushToStack( G4StackedTrack * aStackedTrack )
+void G4SmartTrackStack::TransferTo(G4TrackStack* aStack)
 {
-  static G4ParticleDefinition* neutDef = G4Neutron::Definition();
-  static G4ParticleDefinition* elecDef = G4Electron::Definition();
-  static G4ParticleDefinition* gammDef = G4Gamma::Definition();
-  static G4ParticleDefinition* posiDef = G4Positron::Definition();
+	for (int i = 0; i < nTurn; i++) {
+		stacks[i]->TransferTo(aStack);
+	}
+  nTracks = 0;
+}
 
-  if(!aStackedTrack) return;
+G4StackedTrack G4SmartTrackStack::PopFromStack()
+{
+	G4StackedTrack aStackedTrack;
+
+	if (nTracks) {
+		while (true) {
+			if (stacks[fTurn]->GetNTrack()) {
+				aStackedTrack = stacks[fTurn]->PopFromStack();
+				energies[fTurn] -= aStackedTrack.GetTrack()->GetDynamicParticle()->GetTotalEnergy();
+        nTracks--;
+        break;
+			} else {
+				fTurn = (fTurn+1) % nTurn;
+			}
+		}
+	}
+
+	// dumpStatistics();
+	return aStackedTrack;
+}
+
+enum {
+  electronCode = 11, positronCode = -11, gammaCode = 22, neutronCode = 2112
+};
+
+void G4SmartTrackStack::PushToStack( const G4StackedTrack& aStackedTrack )
+{
 
   G4int iDest = 0;
-  if( aStackedTrack->GetTrack()->GetParentID() == 0 )
-  {
+  if (aStackedTrack.GetTrack()->GetParentID()) {
+    G4int code = aStackedTrack.GetTrack()->GetDynamicParticle()->GetPDGcode();
+    if (code == electronCode)
+      iDest = 2;
+    else if (code == gammaCode)
+      iDest = 3;
+    else if (code == positronCode)
+      iDest = 4;
+    else if (code == neutronCode)
+      iDest = 1;
+  } else {
     // We have a primary track, which should go first.
     fTurn = 0; // reseting the turn
   }
-  else
-  {
-    G4ParticleDefinition* partDef = aStackedTrack->GetTrack()->GetDefinition();
-    if(partDef==neutDef)
-    { iDest = 1; }
-    else if(partDef==elecDef)
-    { iDest = 2; }
-    else if(partDef==gammDef)
-    { iDest = 3; }
-    else if(partDef==posiDef)
-    { iDest = 4; }
-  }
-
   stacks[iDest]->PushToStack(aStackedTrack);
-  if(stacks[iDest]->GetNTrack()>safetyValve1)
-  {
-    // Too many tracks in the stack. Process tracks in this stack first
-    // unless the current stack also have too many tracks.
-    if(stacks[fTurn]->GetNTrack()<safetyValve2)
-    {
-      fTurn = iDest;
-      safetyValve2 = stacks[iDest]->GetNTrack() - nStick;
-      //G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
-    }
-  }
-
-  if(n_stackedTrack()>maxNTracks) maxNTracks = n_stackedTrack();
+  energies[iDest] += aStackedTrack.GetTrack()->GetDynamicParticle()->GetTotalEnergy();
+  nTracks++;
+  
+  G4int dy1 = stacks[iDest]->GetNTrack() - stacks[iDest]->GetSafetyValve1();
+  G4int dy2 = stacks[fTurn]->GetNTrack() - stacks[fTurn]->GetSafetyValve2();
+  
+  if (dy1 > 0 || dy1 > dy2 ||
+      (iDest == 2 &&
+       stacks[iDest]->GetNTrack() < 50 && energies[iDest] < energies[fTurn])) {
+        fTurn = iDest;
+      }
+  
+  if (nTracks > maxNTracks) maxNTracks = nTracks;
 }
 
 void G4SmartTrackStack::clear()
 {
-  for(int i=0;i<nTurn;i++)
-  { stacks[i]->clear(); }
+  for (int i = 0; i < nTurn; i++) {
+    stacks[i]->clear();
+    energies[i] = 0.0;
+    fTurn = 0;
+  }
+  nTracks = 0;
 }
 
-
+void G4SmartTrackStack::clearAndDestroy()
+{
+  for (int i = 0; i < nTurn; i++) {
+    stacks[i]->clearAndDestroy();
+    energies[i] = 0.0;
+    fTurn = 0;
+  }
+  nTracks = 0;
+}

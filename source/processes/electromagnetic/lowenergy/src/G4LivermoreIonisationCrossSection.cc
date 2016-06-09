@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationCrossSection.cc,v 1.14 2010-12-03 16:03:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Vladimir Ivanchenko
 //
 // History:
 // --------
 // 31 May 2011 V.Ivanchenko  Created  
+// 09 Mar 2012 L.Pandola     update methods
 // 
 //
 
 #include "G4LivermoreIonisationCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4VCrossSectionHandler.hh"
 #include "G4eCrossSectionHandler.hh"
@@ -87,7 +88,8 @@ void G4LivermoreIonisationCrossSection::Initialise()
 
 G4double 
 G4LivermoreIonisationCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
-						G4double kinEnergy, G4double) const
+						G4double kinEnergy, G4double,
+						const G4Material*) 
 {
   G4double cross = 0.0;
   G4int n = G4int(shell);
@@ -106,7 +108,7 @@ std::vector<G4double>
 G4LivermoreIonisationCrossSection::GetCrossSection(G4int Z,
 						   G4double kinEnergy,
 						   G4double, G4double, 
-						   G4bool) const
+						   const G4Material*)
 {
   G4int nmax = std::min(9,transitionManager->NumberOfShells(Z));
   std::vector<G4double> vec(nmax,0.0); 
@@ -122,7 +124,8 @@ std::vector<G4double>
 G4LivermoreIonisationCrossSection::Probabilities(G4int Z,
 						 G4double kinEnergy,
 						 G4double,
-						 G4double) const
+						 G4double,
+						 const G4Material*)
 {
   std::vector<G4double> vec = GetCrossSection(Z, kinEnergy);
   size_t n = vec.size();

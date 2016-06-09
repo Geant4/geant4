@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file DicomRunAction.cc
+/// \brief Implementation of the DicomRunAction class
+
 #include "DicomRunAction.hh"
 #include "DicomRun.hh"
 
@@ -33,61 +35,54 @@
 #include "G4THitsMap.hh"
 
 #include "G4UnitsTable.hh"
-//=======================================================================
-// DicomRunAction
-//  
-//
-//
-//=======================================================================
-// Constructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Constructor
 DicomRunAction::DicomRunAction():
-  FieldName(15),
-  FieldValue(14)
+  fFieldName(15),
+  fFieldValue(14)
 {
   // - Prepare data member for DicomRun.
   //   vector represents a list of MultiFunctionalDetector names.
-  theSDName.push_back(G4String("phantomSD"));
+  fSDName.push_back(G4String("phantomSD"));
 }
 
-// Destructor.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Destructor.
 DicomRunAction::~DicomRunAction()
 {
-  theSDName.clear();
+  fSDName.clear();
 }
 
-//
-//== 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Run* DicomRunAction::GenerateRun()
 {
   // Generate new RUN object, which is specially
   // dedicated for MultiFunctionalDetector scheme.
   //  Detail description can be found in DicomRun.hh/cc.
-  return new DicomRun(theSDName);
+  return new DicomRun(fSDName);
 }
 
-//
-//==
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 }
 
-//
-//== 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomRunAction::EndOfRunAction(const G4Run* aRun)
 {
     G4cout << " ###### EndOfRunAction  " <<G4endl;
   //- DicomRun object.
   DicomRun* re02Run = (DicomRun*)aRun;
   //--- Dump all scored quantities involved in DicomRun.
-  for ( G4int i = 0; i < (G4int)theSDName.size(); i++ ){
+  for ( G4int i = 0; i < (G4int)fSDName.size(); i++ ){
     //
     //---------------------------------------------
     // Dump accumulated quantities for this RUN.
     //  (Display only central region of x-y plane)
     //      0       ConcreteSD/DoseDeposit
     //---------------------------------------------
-    G4THitsMap<G4double>* DoseDeposit = re02Run->GetHitsMap(theSDName[i]+"/DoseDeposit");
+    G4THitsMap<G4double>* DoseDeposit = re02Run->GetHitsMap(fSDName[i]+"/DoseDeposit");
 
     G4cout << "=============================================================" <<G4endl;
     G4cout << " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
@@ -107,9 +102,9 @@ void DicomRunAction::EndOfRunAction(const G4Run* aRun)
         fileout <<  itr->first
                << "     "  << *(itr->second)
                << G4endl;
-	G4cout << "    " << itr->first
-	       << "     " << std::setprecision(6) << *(itr->second) << " Gy"
-	       << G4endl;
+        G4cout << "    " << itr->first
+               << "     " << std::setprecision(6) << *(itr->second) << " Gy"
+               << G4endl;
       }
       G4cout << "============================================="<<G4endl;
     }
@@ -118,33 +113,33 @@ void DicomRunAction::EndOfRunAction(const G4Run* aRun)
   
   }
 }
-//
-// --
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomRunAction::PrintHeader(std::ostream *out)
 {
   std::vector<G4String> vecScoreName;
   vecScoreName.push_back("DoseDeposit");
 
   // head line
-  //std::string vname = FillString("Volume", ' ', FieldName+1);
+  //std::string vname = FillString("Volume", ' ', fFieldName+1);
   //*out << vname << '|';
   std::string vname;
   *out << std::setw(10) << "Voxel" << " |";
   for (std::vector<G4String>::iterator it = vecScoreName.begin();
        it != vecScoreName.end(); it++) {
       //vname = FillString((*it),
-//		       ' ', 
-//		       FieldValue+1, 
-//		       false);
+//                       ' ', 
+//                       FieldValue+1, 
+//                       false);
 //    *out << vname << '|';
-      *out << std::setw(FieldValue) << (*it) << "  |";
+      *out << std::setw(fFieldValue) << (*it) << "  |";
   }
   *out << G4endl;  
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 std::string DicomRunAction::FillString(const std::string &name, 
-				       char c, G4int n, G4bool back)
+                                       char c, G4int n, G4bool back)
 {
   std::string fname("");
   G4int k = n - name.size();

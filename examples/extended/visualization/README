@@ -1,0 +1,22 @@
+
+        Geant4 extended examples - visualization
+        -----------------------------------------
+
+Examples in this directory demonstrate the use of Geant4 visualization.
+
+standalone
+-----------
+
+This example illustrates how one might use the Geant Visualization
+System as a "stand alone" graphics library and viewer.
+
+perspective
+-----------
+
+This example is another example of using the Geant Visualization
+System as a "stand-alone" graphics library and viewer. 
+
+userVisAction
+-------------
+
+This example illustrates how to create a "vis action".

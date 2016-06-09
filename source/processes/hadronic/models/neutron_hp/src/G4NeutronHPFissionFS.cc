@@ -31,19 +31,37 @@
 // 07-Sep-11 M. Kelsey -- Follow change to G4HadFinalState interface
 
 #include "G4NeutronHPFissionFS.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFissionERelease.hh"
+#include "G4ParticleTable.hh"
+
  void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
  {
+    //G4cout << "G4NeutronHPFissionFS::Init " << A << " " << Z << " " << M << G4endl;
     theFS.Init(A, Z, M, dirName, aFSType);
     theFC.Init(A, Z, M, dirName, aFSType);
     theSC.Init(A, Z, M, dirName, aFSType);
     theTC.Init(A, Z, M, dirName, aFSType);
     theLC.Init(A, Z, M, dirName, aFSType);
+
+    theFF.Init(A, Z, M, dirName, aFSType);
+    if ( getenv("G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS") && theFF.HasFSData() ) 
+    {
+       G4cout << "Activate Fission Fragments Prodcution for the target isotope of " 
+       << "Z = " << (G4int)Z
+       << ", A = " << (G4int)A
+       //<< "M = " << M
+       << G4endl;
+       G4cout << "As the result, delayed neutrons are omitted and they should be taken care by RadioaActiveDecay." 
+       << G4endl;
+       produceFissionFragments = true; 
+    }
  }
  G4HadFinalState * G4NeutronHPFissionFS::ApplyYourself(const G4HadProjectile & theTrack)
  {  
+ //G4cout << "G4NeutronHPFissionFS::ApplyYourself " << G4endl;
 // prepare neutron
    theResult.Clear();
    G4double eKinetic = theTrack.GetKineticEnergy();
@@ -70,6 +88,16 @@
   theTC.SetTarget(theTarget);
   theLC.SetNeutron(theNeutron);
   theLC.SetTarget(theTarget);
+
+
+  theFF.SetNeutron(theNeutron);
+  theFF.SetTarget(theTarget);
+
+//TKWORK 120531
+//G4cout << theTarget.GetDefinition() << G4endl; this should be NULL
+//G4cout << "Z = " << theBaseZ << ", A = " << theBaseA << ", M = " << theBaseM << G4endl;
+// theNDLDataZ,A,M should be filled in each FS (theFS, theFC, theSC, theTC, theLC and theFF)
+////G4cout << "Z = " << theNDLDataZ << ", A = " << theNDLDataA << ", M = " << theNDLDataM << G4endl;
 
 // boost to target rest system and decide on channel.
    theNeutron.Lorentz(theNeutron, -1*theTarget);
@@ -135,12 +163,16 @@
      default:
        break;
    }
+
 // dice delayed neutrons and photons, and fallback 
 // for Prompt in case channel had no FS data; add all paricles to FS.
 
+   //TKWORK120531
+   if ( produceFissionFragments ) delayed=0;
+
    G4double * theDecayConstants;
 
-   if(theNeutrons != 0)
+   if( theNeutrons != 0)
    {
      theDecayConstants = new G4double[delayed];
      //
@@ -154,6 +186,7 @@
      delete theNeutrons;  
 
      G4DynamicParticleVector * theDelayed = 0;
+//   G4cout << "delayed" << G4endl;
      theDelayed = theFS.ApplyYourself(0, delayed, theDecayConstants);
      for(i=0; i<theDelayed->size(); i++)
      {
@@ -179,6 +212,8 @@
      {
        theResult.AddSecondary(theNeutrons->operator[](i0));
      }
+
+//G4cout << "delayed" << G4endl;
      for(i0=Prompt; i0<Prompt+delayed; i0++)
      {
        G4double time = -std::log(G4UniformRand())/theDecayConstants[i0-Prompt];
@@ -209,9 +244,52 @@
 
    G4NeutronHPFissionERelease * theERelease = theFS.GetEnergyRelease();
    G4double eDepByFragments = theERelease->GetFragmentKinetic();
-   theResult.SetLocalEnergyDeposit(eDepByFragments);
+   //theResult.SetLocalEnergyDeposit(eDepByFragments);
+   if ( !produceFissionFragments ) theResult.SetLocalEnergyDeposit(eDepByFragments);
 //    cout << "local energy deposit" << eDepByFragments<<G4endl;
 // clean up the primary neutron
    theResult.SetStatusChange(stopAndKill);
+   //G4cout << "Prompt = " << Prompt << ", Delayed = " << delayed << ", All= " << all << G4endl;
+   //G4cout << "local energy deposit " << eDepByFragments/MeV << "MeV " << G4endl;
+
+   //TKWORK120531
+   if ( produceFissionFragments )
+   {
+      G4int fragA_Z=0;
+      G4int fragA_A=0;
+      G4int fragA_M=0;
+      // System is traget rest!
+      theFF.GetAFissionFragment(eKinetic,fragA_Z,fragA_A,fragA_M);
+      G4int fragB_Z=(G4int)theBaseZ-fragA_Z;
+      G4int fragB_A=(G4int)theBaseA-fragA_A-Prompt;
+      //fragA_M ignored 
+      //G4int fragB_M=theBaseM-fragA_M; 
+      //G4cout << fragA_Z << " " << fragA_A << " " << fragA_M << G4endl;
+      //G4cout << fragB_Z << " " << fragB_A << G4endl;
+
+      G4ParticleTable* pt = G4ParticleTable::GetParticleTable();
+      //Excitation energy is not taken into account 
+      G4ParticleDefinition* pdA = pt->GetIon( fragA_Z , fragA_A , 0.0 );
+      G4ParticleDefinition* pdB = pt->GetIon( fragB_Z , fragB_A , 0.0 );
+
+      //Isotropic Distribution 
+      G4double phi = twopi*G4UniformRand();
+      G4double theta = pi*G4UniformRand();
+      G4double sinth = std::sin(theta);
+      G4ThreeVector direction (sinth*std::cos(phi) , sinth*std::sin(phi), std::cos(theta) );
+
+      // Just use ENDF value for this 
+      G4double ER = eDepByFragments; 
+      G4double ma = pdA->GetPDGMass();
+      G4double mb = pdB->GetPDGMass();
+      G4double EA = ER / ( 1 + ma/mb);
+      G4double EB = ER - EA;
+      G4DynamicParticle* dpA = new G4DynamicParticle( pdA , direction , EA);
+      G4DynamicParticle* dpB = new G4DynamicParticle( pdB , -direction , EB);
+      theResult.AddSecondary(dpA);
+      theResult.AddSecondary(dpB);
+   }
+   //TKWORK 120531 END
+
    return &theResult;
  }

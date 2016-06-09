@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestStreamLogger.hh,v 1.3 2006-06-29 18:35:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

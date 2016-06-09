@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.13 2010-11-16 17:54:39 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -53,9 +52,7 @@
 #include "FCALTestbeamSetup.hh"
 #include "FCALSteppingVerbose.hh"
 #include "FCALPrimaryGeneratorAction.hh"
-#include "LHEP.hh"
-#include "QGSP.hh"
-#include "QGSP_BIC_EMY.hh"
+#include "G4PhysListFactory.hh"
 
 
 #ifdef G4ANALYSIS_USE
@@ -82,12 +79,8 @@ int main(int argc,char** argv) {
   FCALTestbeamSetup* detector = new FCALTestbeamSetup;
   runManager->SetUserInitialization(detector);
 
-  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
-  // runManager->SetUserInitialization(new LHEP);     // LHEP     
-  // runManager->SetUserInitialization(new QGSP);     // QGSP   
-  // runManager->SetUserInitialization(new QGSC);     // QGSC
-  runManager->SetUserInitialization(new QGSP_BIC_EMY);     // QGSP_BIC_EMY    
-  //***endLOOKHERE***
+  G4PhysListFactory factory;
+  runManager->SetUserInitialization(factory.ReferencePhysList());
   
 #ifdef G4VIS_USE
   // visualization manager

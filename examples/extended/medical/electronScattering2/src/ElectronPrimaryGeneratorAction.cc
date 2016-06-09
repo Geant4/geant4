@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/ElectronPrimaryGeneratorAction.cc
+/// \brief Implementation of the ElectronPrimaryGeneratorAction class
+//
 
 #include "ElectronPrimaryGeneratorAction.hh"
 #include "G4Event.hh"
@@ -30,15 +33,15 @@
 
 ElectronPrimaryGeneratorAction::ElectronPrimaryGeneratorAction()
 {
-  particleGun  = new G4GeneralParticleSource();
+  fParticleGun  = new G4GeneralParticleSource();
 }
 
 ElectronPrimaryGeneratorAction::~ElectronPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 void ElectronPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }

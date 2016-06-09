@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.cc,v 1.38 2010-12-15 07:41:01 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Introduced bug checking i3 for valid tuning pair
@@ -56,8 +55,12 @@
 //		G4ReactionProductVector
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
 //		Add optional stream argument to printCollisionOutput
+// 20121002  M. Kelsey -- Add strangeness calculation
+
+#include <algorithm>
 
 #include "G4CollisionOutput.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadParticle.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
@@ -66,7 +69,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4ThreeVector.hh"
-#include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -255,6 +257,19 @@ G4int G4CollisionOutput::getTotalBaryonNumber() const {
   baryon += theRecoilFragment.GetA_asInt();
 
   return baryon;
+}
+
+G4int G4CollisionOutput::getTotalStrangeness() const {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CollisionOutput::getTotalStrangeness" << G4endl;
+
+  G4int strange = 0;
+  G4int i(0);
+  for(i=0; i < G4int(outgoingParticles.size()); i++) {
+    strange += outgoingParticles[i].getStrangeness();
+  }
+
+  return strange;
 }
 
 

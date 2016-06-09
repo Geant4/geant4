@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.8 2011-01-03 19:34:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +46,7 @@
 //
 
 #include "G4VAtomDeexcitation.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Step.hh"
@@ -65,11 +65,10 @@
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
   : lowestKinEnergy(keV), verbose(1), name(modname), namePIXE(pname), 
-    nameElectronPIXE(""),isActive(false), flagAuger(false), flagPIXE(false)
+    nameElectronPIXE(""), isActive(false), flagAuger(false), flagPIXE(false)
 {
   vdyn.reserve(5);
   theCoupleTable = 0;
-  SetDeexcitationActiveRegion("World");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,6 +83,10 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  // needed for unit tests
+  if(0 == numOfCouples) { numOfCouples = 1; }
+
   activeDeexcitationMedia.resize(numOfCouples, false);
   activeAugerMedia.resize(numOfCouples, false);
   activePIXEMedia.resize(numOfCouples, false);
@@ -93,15 +96,19 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   if( !isActive ) { return; }
 
   // Define list of regions
-  size_t nRegions = activeRegions.size();
+  size_t nRegions = deRegions.size();
 
-  // There is no active regions
-  if(0 == nRegions) { return; }
+  if(0 == nRegions) {
+    SetDeexcitationActiveRegion("World",isActive,flagAuger,flagPIXE);
+    nRegions = 1;
+  }
 
   if(0 < verbose) {
     G4cout << G4endl;
     G4cout << "### ===  Deexcitation model " << name 
-	   << " is activated for regions:" << G4endl;  
+	   << " is activated for " << nRegions;
+    if(1 == nRegions) { G4cout << " region:" << G4endl; }
+    else              { G4cout << " regions:" << G4endl;}
   }
 
   // Identify active media
@@ -114,22 +121,22 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     }
   
     for(size_t i=0; i<numOfCouples; ++i) {
-      if( !activeDeexcitationMedia[i] ) {
-
-	const G4MaterialCutsCouple* couple =
-	  theCoupleTable->GetMaterialCutsCouple(i);
-	if (couple->GetProductionCuts() == rpcuts) {
-	  activeDeexcitationMedia[i] = deRegions[j];
-	  activeAugerMedia[i] = AugerRegions[j];
-	  activePIXEMedia[i] = PIXERegions[j];
-          const G4Material* mat = couple->GetMaterial();
-	  const G4ElementVector* theElementVector = 
-	    mat->GetElementVector();
-	  G4int nelm = mat->GetNumberOfElements();
-          if(deRegions[j]) {
-	    for(G4int k=0; k<nelm; ++k) {
-	      G4int Z = (G4int)((*theElementVector)[k])->GetZ();
-	      if(Z > 5 && Z < 93) { activeZ[Z] = true; }
+      const G4MaterialCutsCouple* couple =
+	theCoupleTable->GetMaterialCutsCouple(i);
+      if (couple->GetProductionCuts() == rpcuts) {
+	activeDeexcitationMedia[i] = deRegions[j];
+	activeAugerMedia[i] = AugerRegions[j];
+	activePIXEMedia[i] = PIXERegions[j];
+	const G4Material* mat = couple->GetMaterial();
+	const G4ElementVector* theElementVector = 
+	  mat->GetElementVector();
+	G4int nelm = mat->GetNumberOfElements();
+	if(deRegions[j]) {
+	  for(G4int k=0; k<nelm; ++k) {
+	    G4int Z = G4lrint(((*theElementVector)[k])->GetZ());
+	    if(Z > 5 && Z < 93) { 
+	      activeZ[Z] = true;
+	      //G4cout << "!!! Active de-excitation Z= " << Z << G4endl;  
 	    }
 	  }
 	}
@@ -158,18 +165,19 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 						 G4bool valAuger,
 						 G4bool valPIXE)
 {
-  G4String s = rname;
-  //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << s 
-  //	 << G4endl;
-  if(s == "world" || s == "World" || s == "WORLD") {
-    s = "DefaultRegionForTheWorld";
+  G4String ss = rname;
+  //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
+  //	 << "  " << valDeexcitation << "  " << valAuger
+  //	 << "  " << valPIXE << G4endl;
+  if(ss == "world" || ss == "World" || ss == "WORLD") {
+    ss = "DefaultRegionForTheWorld";
   }
-  size_t n = activeRegions.size();
+  size_t n = deRegions.size();
   if(n > 0) {
     for(size_t i=0; i<n; ++i) {
  
       // Region already exist
-      if(s == activeRegions[i]) {
+      if(ss == activeRegions[i]) {
 	deRegions[i] = valDeexcitation;
 	AugerRegions[i] = valAuger;
 	PIXERegions[i] = valPIXE;
@@ -178,7 +186,7 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
     }
   }
   // New region
-  activeRegions.push_back(s);
+  activeRegions.push_back(ss);
   deRegions.push_back(valDeexcitation);
   AugerRegions.push_back(valAuger);
   PIXERegions.push_back(valPIXE);
@@ -186,14 +194,15 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
+void
 G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 					   const G4Step& step, 
-					   G4double& eLoss,
+					   G4double& eLossMax,
                                            G4int coupleIndex)
 {
-  if(!flagPIXE || !isActive || !activeDeexcitationMedia[coupleIndex] ||
-     !activePIXEMedia[coupleIndex] || eLoss == 0.0) { return; }
+  G4double truelength = step.GetStepLength();
+  if(!flagPIXE && !activePIXEMedia[coupleIndex]) { return; }
+  if(eLossMax <= 0.0 || truelength <= 0.0)       { return; }
 
   // step parameters
   const G4StepPoint* preStep = step.GetPreStepPoint();
@@ -201,18 +210,16 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
   G4ThreeVector delta = step.GetPostStepPoint()->GetPosition() - prePos;
   G4double preTime = preStep->GetGlobalTime();
   G4double dt = step.GetPostStepPoint()->GetGlobalTime() - preTime;
-  G4double truelength = step.GetStepLength();
 
   // particle parameters
   const G4Track* track = step.GetTrack();
   const G4ParticleDefinition* part = track->GetDefinition();
-  G4double ekin = preStep->GetKineticEnergy() - 0.5*eLoss;
-  if(ekin <= lowestKinEnergy) { return; }
+  G4double ekin = preStep->GetKineticEnergy(); 
 
   // media parameters
   G4double gCut = (*theCoupleTable->GetEnergyCutsVector(0))[coupleIndex];
   G4double eCut = DBL_MAX;
-  if(flagAuger && activeAugerMedia[coupleIndex]) { 
+  if(CheckAugerActiveRegion(coupleIndex)) { 
     eCut = (*theCoupleTable->GetEnergyCutsVector(1))[coupleIndex];
   }
 
@@ -226,17 +233,19 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   // loop over deexcitations
   for(G4int i=0; i<nelm; ++i) {
-    G4int Z = G4int((*theElementVector)[i]->GetZ());
-    if(Z >= 93)     { continue; } 
-    if(!activeZ[Z]) { continue; }
-    G4int nshells = std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
-    G4double rho = truelength*theAtomNumDensityVector[i];
-    //G4cout << "   Z " << Z <<" is active  x(mm)= " << truelength/mm << G4endl;
-    if(rho > 0.0) {
+    G4int Z = G4lrint((*theElementVector)[i]->GetZ());
+    if(activeZ[Z] && Z < 93) {  
+      G4int nshells = std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
+      G4double rho = truelength*theAtomNumDensityVector[i];
+      //G4cout << "   Z " << Z <<" is active  x(mm)= " << truelength/mm << G4endl;
       for(G4int ii=0; ii<nshells; ++ii) {
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
 	const G4AtomicShell* shell = GetAtomicShell(Z, as);
-	if(gCut < shell->BindingEnergy()) {
+	G4double bindingEnergy = shell->BindingEnergy();
+
+	if(gCut > bindingEnergy) { break; }
+
+	if(eLossMax > bindingEnergy) { 
 	  G4double sig = rho*
 	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin, material); 
 
@@ -248,36 +257,35 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 	    // sample ionisation points
 	    do {
 	      stot -= mfp*std::log(G4UniformRand());
-	      if( stot <= 1.0) { 
+	      if( stot > 1.0 || eLossMax < bindingEnergy) { break; }
+	      // sample deexcitation
+	      vdyn.clear();
+	      GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
+	      G4int nsec = vdyn.size();
+	      if(nsec > 0) {
+		G4ThreeVector r = prePos  + stot*delta;
+		G4double time   = preTime + stot*dt;
+		for(G4int j=0; j<nsec; ++j) {
+		  G4DynamicParticle* dp = vdyn[j];
+		  G4double e = dp->GetKineticEnergy();
 
-		// sample deexcitation
-		vdyn.clear();
-		GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
-		G4int nsec = vdyn.size();
-		if(nsec > 0) {
-		  G4ThreeVector r = prePos  + stot*delta;
-		  G4double time   = preTime + stot*dt;
-		  for(G4int j=0; j<nsec; ++j) {
-		    G4DynamicParticle* dp = vdyn[j];
-		    G4double e = dp->GetKineticEnergy();
-
-		    // save new secondary if there is enough energy
-		    if(e <= eLoss) {
-		      G4Track* t = new G4Track(dp, time, r);
-		      tracks.push_back(t); 
-		      eLoss -= e;
-		    } else {
-		      delete dp;
-		    }           
-		  }        
+		  // save new secondary if there is enough energy
+		  if(eLossMax >= e) {
+		    eLossMax -= e;		    
+		    G4Track* t = new G4Track(dp, time, r);
+		    tracks.push_back(t);
+		  } else {
+		    delete dp;
+		  }
 		}
 	      }
-	    } while ( stot < 1.0 && eLoss > 0.0);
+	    } while (stot < 1.0);
 	  }
 	}
       }
     } 
   }
+  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

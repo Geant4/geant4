@@ -26,6 +26,8 @@
 #ifndef G4ResonanceID_h
 #define G4ResonanceID_h
 
+#include "G4Types.hh"
+
 class G4ResonanceID
 {
   public:

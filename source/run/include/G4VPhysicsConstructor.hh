@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicsConstructor.hh,v 1.4 2006-06-29 21:13:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -68,85 +67,56 @@
 
 class G4VPhysicsConstructor
 {
-  public: 
+  public:  // with description
+
     G4VPhysicsConstructor(const G4String& ="");
-    G4VPhysicsConstructor(const G4String& name, G4int physcis_type);
-    virtual ~G4VPhysicsConstructor(){};
+    G4VPhysicsConstructor(const G4String& name, G4int physics_type);
+    virtual ~G4VPhysicsConstructor();
 
-  public: // with description
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
     virtual void ConstructParticle()=0;
+      // This method will be invoked in the Construct() method. 
+      // each particle type will be instantiated
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
     virtual void ConstructProcess()=0;
+      // This method will be invoked in the Construct() method.
+      // each physics process will be instantiated and
+      // registered to the process manager of each particle type 
 
-  public: // with description
-   void  SetPhysicsName(const G4String& ="");
-   const G4String& GetPhysicsName() const;
+    inline void  SetPhysicsName(const G4String& ="");
+    inline const G4String& GetPhysicsName() const;
 
-   void  SetPhysicsType(G4int);
-   G4int GetPhysicsType() const;
+    inline void  SetPhysicsType(G4int);
+    inline G4int GetPhysicsType() const;
 
-   void  SetVerboseLevel(G4int value);
-   G4int GetVerboseLevel() const;
-   // set/get controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
-   // verbose level is set equal to physics list when registered 
+    inline void  SetVerboseLevel(G4int value);
+    inline G4int GetVerboseLevel() const;
+      // set/get controle flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
+      // verbose level is set equal to physics list when registered 
 
- protected: 
-   //Register a process to the particle type 
-   // according to the ordering parameter table
-   //  'true' is returned if the process is registerd successfully
-   G4bool RegisterProcess(G4VProcess*            process,
-			  G4ParticleDefinition*  particle);
+  protected: 
 
- protected:
-   G4int    verboseLevel;
-   G4String namePhysics;
-   G4int    typePhysics;
+    inline G4bool RegisterProcess(G4VProcess*            process,
+                                  G4ParticleDefinition*  particle);
+      // Register a process to the particle type 
+      // according to the ordering parameter table
+      // 'true' is returned if the process is registerd successfully
 
- protected:
-  // the particle table has the complete List of existing particle types
-  G4ParticleTable* theParticleTable;
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+  protected:
+    G4int    verboseLevel;
+    G4String namePhysics;
+    G4int    typePhysics;
 
- protected:
-  G4PhysicsListHelper* thePLHelper;
+    G4ParticleTable* theParticleTable;
+    G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+      // the particle table has the complete List of existing particle types
 
+    G4PhysicsListHelper* thePLHelper;
 };
 
-
-inline 
- G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name)
-   :verboseLevel(0),namePhysics(name),typePhysics(0)
-{
-  // pointer to the particle table
-  theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
-
-  // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-}
-
-inline 
-  G4VPhysicsConstructor::G4VPhysicsConstructor( const G4String& name, 
-						G4int type          )
-    :verboseLevel(0),namePhysics(name),typePhysics(type)
-{
-  // pointer to the particle table
-  theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
-
-  if (type<0) typePhysics = 0;
-
-  // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-}
+// Inlined methods
 
 inline void G4VPhysicsConstructor::SetVerboseLevel(G4int value)
 {

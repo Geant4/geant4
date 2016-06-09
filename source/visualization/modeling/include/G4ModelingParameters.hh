@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.18 2010-05-11 11:13:35 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  31st December 1997.
@@ -39,9 +38,13 @@
 
 #include "globals.hh"
 #include "G4VisExtent.hh"
+#include "G4VisAttributes.hh"
+#include "G4PhysicalVolumeModel.hh"
+
+#include <vector>
+#include <utility>
 
 class G4LogicalVolume;
-class G4VPhysicalVolume;
 class G4VisAttributes;
 class G4VSolid;
 class G4Event;
@@ -50,16 +53,62 @@ class G4ModelingParameters {
 
 public: // With description
 
-  friend std::ostream& operator << (std::ostream& os, const G4ModelingParameters&);
-
+  // Currently requested drawing style.
   enum DrawingStyle {
     wf,         // Draw edges    - no hidden line removal (wireframe).
     hlr,        // Draw edges    - hidden lines removed.
     hsr,        // Draw surfaces - hidden surfaces removed.
     hlhsr       // Draw surfaces and edges - hidden removed.
   };
-  // Currently requested drawing style.
 
+  // enums and nested class for communicating a modification to the vis
+  // attributes for a specfic touchable defined by PVNameCopyNoPath.
+  enum VisAttributesSignifier {
+    VASVisibility,
+    VASDaughtersInvisible,
+    VASColour,
+    VASLineStyle,
+    VASLineWidth,
+    VASForceWireframe,
+    VASForceSolid,
+    VASForceAuxEdgeVisible,
+    VASForceLineSegmentsPerCircle
+  };
+  class PVNameCopyNo {
+  public:
+    PVNameCopyNo(G4String name, G4int copyNo):
+    fName(name), fCopyNo(copyNo) {}
+    const G4String& GetName() const {return fName;}
+    G4int GetCopyNo() const {return fCopyNo;}
+  private:
+    G4String fName;
+    G4int fCopyNo;
+  };
+  typedef std::vector<PVNameCopyNo> PVNameCopyNoPath;
+  typedef PVNameCopyNoPath::const_iterator PVNameCopyNoPathConstIterator;
+  class VisAttributesModifier {
+  public:
+    VisAttributesModifier
+      (const G4VisAttributes& visAtts,
+       VisAttributesSignifier signifier,
+       const PVNameCopyNoPath& path):
+      fVisAtts(visAtts), fSignifier(signifier), fPVNameCopyNoPath(path) {}
+    VisAttributesModifier
+      (const G4VisAttributes& visAtts,
+       VisAttributesSignifier signifier,
+       const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
+    const G4VisAttributes& GetVisAttributes() const
+      {return fVisAtts;}
+    VisAttributesSignifier GetVisAttributesSignifier() const
+      {return fSignifier;}
+    const PVNameCopyNoPath& GetPVNameCopyNoPath() const
+      {return fPVNameCopyNoPath;}
+  private:
+    G4VisAttributes fVisAtts;
+    VisAttributesSignifier fSignifier;
+    PVNameCopyNoPath fPVNameCopyNoPath;
+  };
+  
   G4ModelingParameters ();
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
@@ -94,6 +143,7 @@ public: // With description
   G4VSolid*        GetSectionSolid               () const;
   G4VSolid*        GetCutawaySolid               () const;
   const G4Event*   GetEvent                      () const;
+  const std::vector<VisAttributesModifier>& GetVisAttributesModifiers() const;
 
   // Set functions...
   void SetWarning              (G4bool);
@@ -110,6 +160,25 @@ public: // With description
   void SetSectionSolid         (G4VSolid* pSectionSolid);
   void SetCutawaySolid         (G4VSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
+  void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>);
+
+  static G4bool PVNameCopyNoPathNotEqual
+  (const PVNameCopyNoPath&,
+   const PVNameCopyNoPath&);
+
+  static G4bool VAMSNotEqual
+  (const std::vector<VisAttributesModifier>&,
+   const std::vector<VisAttributesModifier>&);
+
+  friend std::ostream& operator <<
+  (std::ostream& os, const G4ModelingParameters&);
+  
+  friend std::ostream& operator <<
+  (std::ostream& os, const PVNameCopyNoPath&);
+
+  friend std::ostream& operator <<
+  (std::ostream& os,
+   const std::vector<VisAttributesModifier>&);
 
 private:
 
@@ -128,7 +197,18 @@ private:
   G4VSolid*    fpSectionSolid;   // For generic section (DCUT).
   G4VSolid*    fpCutawaySolid;   // For generic cutaways.
   const G4Event* fpEvent;        // Event being processed.
+  std::vector<VisAttributesModifier> fVisAttributesModifiers;
 };
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters&);
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath&);
+
+std::ostream& operator <<
+(std::ostream& os,
+ const std::vector<G4ModelingParameters::VisAttributesModifier>&);
 
 #include "G4ModelingParameters.icc"
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticData.hh,v 1.12 2009-11-18 23:16:57 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi

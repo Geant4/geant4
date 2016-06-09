@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmEventAction.hh
+/// \brief Definition of the exrdmEventAction class
+//
 
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,17 +44,17 @@ class exrdmEventAction : public G4UserEventAction
 {
   public:
     exrdmEventAction();
-   ~exrdmEventAction();
+    virtual ~exrdmEventAction();
 
   public:
-    void BeginOfEventAction(const G4Event* anEvent);
-    void EndOfEventAction(const G4Event* anEvent);
+    virtual void BeginOfEventAction(const G4Event* anEvent);
+    virtual void EndOfEventAction(const G4Event* anEvent);
     
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
+    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
     
   private:
-    G4String drawFlag;                         // control the drawing of event
-    exrdmEventActionMessenger*  eventMessenger;
+    G4String fDrawFlag;                         // control the drawing of event
+    exrdmEventActionMessenger*  fEventMessenger;
 };
 
 #endif

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.18 2010-12-22 09:14:54 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -39,17 +38,22 @@
 //   removed thePhysicsTable           02 Aug. 1998 H.Kurashige
 //   Modified DumpInfo                 15 Aug. 1998 H.Kurashige
 
+#include "G4VProcess.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4PhysicsTable.hh"
 #include "G4MaterialTable.hh"
 #include "G4ElementTable.hh"
 #include "G4ElementVector.hh"
-#include "G4VProcess.hh"
 
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                   : aProcessManager(0),
 	            pParticleChange(0),
                     theNumberOfInteractionLengthLeft(-1.0),
                     currentInteractionLength(-1.0),
+		    theInitialNumberOfInteractionLength(-1.0),
                     theProcessName(aName),
 		    theProcessType(aType),
 		    theProcessSubType(-1),
@@ -72,6 +76,7 @@ G4VProcess::G4VProcess(const G4VProcess& right)
 	    pParticleChange(0),
             theNumberOfInteractionLengthLeft(-1.0),
             currentInteractionLength(-1.0),
+	    theInitialNumberOfInteractionLength(-1.0),
             theProcessName(right.theProcessName),
             theProcessType(right.theProcessType),
 	    theProcessSubType(right.theProcessSubType),
@@ -83,6 +88,12 @@ G4VProcess::G4VProcess(const G4VProcess& right)
 {
 }
 
+
+void G4VProcess::ResetNumberOfInteractionLengthLeft()
+{
+  theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
+  theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
+}
 
 void G4VProcess::SubtractNumberOfInteractionLengthLeft(
                                   G4double previousStepSize )
@@ -115,6 +126,7 @@ void G4VProcess::StartTracking(G4Track*)
 {
   currentInteractionLength = -1.0;
   theNumberOfInteractionLengthLeft = -1.0;
+  theInitialNumberOfInteractionLength=-1.0;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
     G4cout << "G4VProcess::StartTracking() [" << theProcessName << "]" <<G4endl;
@@ -131,6 +143,7 @@ void G4VProcess::EndTracking()
 #endif
   theNumberOfInteractionLengthLeft = -1.0;
   currentInteractionLength = -1.0;
+  theInitialNumberOfInteractionLength=-1.0;
 }
 
 
@@ -213,14 +226,3 @@ const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition*
   
   return thePhysicsTableFileName;
 }
-
-
-
-
-
-
-
-
-
-
-

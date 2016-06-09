@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.16 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -50,7 +49,7 @@
 #include "G4eBremsstrahlungSpectrum.hh"
 #include "G4BremsstrahlungParameters.hh"
 #include "Randomize.hh"
-
+#include "G4SystemOfUnits.hh"
 
 G4eBremsstrahlungSpectrum::G4eBremsstrahlungSpectrum(const G4DataVector& bins,
   const G4String& name):G4VEnergySpectrum(),

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
 
 //---------------------------------------------------------------------------
 //
@@ -41,20 +44,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "TrackingAction.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Track.hh"
-#include "G4ThreeVector.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4EventManager.hh"
-#include "G4Event.hh"
 #include "Histo.hh"
+
+#include "G4Track.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TrackingAction::TrackingAction():
-  theHisto(Histo::GetPointer())
+  fHisto(Histo::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,22 +64,22 @@ TrackingAction::~TrackingAction()
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  theHisto->ScoreNewTrack(aTrack);
+  fHisto->ScoreNewTrack(aTrack);
 
-  if(1 < theHisto->GetVerbose() &&
-     theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && 
-     aTrack->GetParentID() > 0)
-    {
-      G4cout << "Track #"
-	     << aTrack->GetTrackID() << " of " 
-	     << aTrack->GetParticleDefinition()->GetParticleName()
-	     << " Emax(MeV)= " << theHisto->GetMaxEnergy()/MeV
-	     << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
-	     << " ## EventID= "
-	     << (G4EventManager::GetEventManager())->GetConstCurrentEvent()->GetEventID()
-	     << G4endl;
-    }
+  if(1 < fHisto->GetVerbose()) {
+    G4cout << "New track #"
+           << aTrack->GetTrackID() << " of " 
+           << aTrack->GetParticleDefinition()->GetParticleName()
+           << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
+           << " parent # " << aTrack->GetParentID()
+           << G4endl;
+  }
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void TrackingAction::PostUserTrackingAction(const G4Track*)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

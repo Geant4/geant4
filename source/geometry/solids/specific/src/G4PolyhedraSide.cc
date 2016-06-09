@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.18 2010-07-12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -39,6 +38,7 @@
 // --------------------------------------------------------------------
 
 #include "G4PolyhedraSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4IntersectingCone.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
@@ -1014,12 +1014,12 @@ G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
                                              const G4PolyhedraSideVec &vec,
                                                    G4double *normDist )
 {
-  G4ThreeVector pc = p - vec.center;
+  G4ThreeVector pct = p - vec.center;
   
   //
   // Get normal distance
   //
-  *normDist = vec.normal.dot(pc);
+  *normDist = vec.normal.dot(pct);
 
   //
   // Add edge penalty
@@ -1039,14 +1039,14 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
                                               G4double *normDist )
 {
   G4double distOut2;
-  G4ThreeVector pc = p - vec.center;
+  G4ThreeVector pct = p - vec.center;
   G4double distFaceNorm = *normDist;
   
   //
   // Okay, are we inside bounds?
   //
-  G4double pcDotRZ  = pc.dot(vec.surfRZ);
-  G4double pcDotPhi = pc.dot(vec.surfPhi);
+  G4double pcDotRZ  = pct.dot(vec.surfRZ);
+  G4double pcDotPhi = pct.dot(vec.surfPhi);
   
   //
   // Go through all permutations.
@@ -1243,10 +1243,10 @@ G4double G4PolyhedraSide::SurfaceArea()
     {
       // Define 4points for a Plane or Triangle
       //
-      G4ThreeVector v1=vec->edges[0]->corner[0];
-      G4ThreeVector v2=vec->edges[0]->corner[1];
-      G4ThreeVector v3=vec->edges[1]->corner[1];
-      G4ThreeVector v4=vec->edges[1]->corner[0];
+      v1=vec->edges[0]->corner[0];
+      v2=vec->edges[0]->corner[1];
+      v3=vec->edges[1]->corner[1];
+      v4=vec->edges[1]->corner[0];
       point1=GetPointOnPlane(v1,v2,v3,v4,&area);
       areas+=area;
     } while( ++vec < vecs + numSide);
@@ -1278,10 +1278,10 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
   {
     // Define 4points for a Plane or Triangle
     //
-    G4ThreeVector v1=vec->edges[0]->corner[0];
-    G4ThreeVector v2=vec->edges[0]->corner[1];
-    G4ThreeVector v3=vec->edges[1]->corner[1];
-    G4ThreeVector v4=vec->edges[1]->corner[0];
+    v1=vec->edges[0]->corner[0];
+    v2=vec->edges[0]->corner[1];
+    v3=vec->edges[1]->corner[1];
+    v4=vec->edges[1]->corner[0];
     point1=GetPointOnPlane(v1,v2,v3,v4,&result1);
     points.push_back(point1);
     areas.push_back(result1);

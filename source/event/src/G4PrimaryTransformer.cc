@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.29 2010-08-09 14:38:18 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4PrimaryTransformer.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4ParticleDefinition.hh"

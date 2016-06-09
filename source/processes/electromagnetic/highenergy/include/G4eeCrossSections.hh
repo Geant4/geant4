@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.hh,v 1.3 2008-07-10 18:06:38 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -83,15 +82,15 @@ private:
 
   void Initialise();
 
-  G4double Width2p(G4double s,  G4double mres, G4double g, 
+  G4double Width2p(G4double s_inv,  G4double mres, G4double gconst, 
                    G4double br, G4double mp);
 
-  G4double Width3p(G4double s,  G4double mres, G4double g, 
+  G4double Width3p(G4double s_inv,  G4double mres, G4double gconst,
                    G4double br);
 
   G4double PhaseSpace3p(G4double e); 
 
-  G4double WidthPg(G4double s,  G4double mres, G4double g, 
+  G4double WidthPg(G4double s_inv,  G4double mres, G4double gconst,
                    G4double br, G4double mp);
 
   G4double WidthRho(G4double e);

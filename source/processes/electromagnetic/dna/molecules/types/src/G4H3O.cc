@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4H3O.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -33,6 +34,8 @@
 // -------------------------------------------------------------------
 
 #include "G4H3O.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
@@ -44,7 +47,7 @@ G4H3O* G4H3O::theInstance = 0;
 G4H3O* G4H3O::Definition()
 {
     if (theInstance !=0) return theInstance;
-    const G4String name = "H3O";
+    const G4String name = "H_{3}O";
     // search in particle table]
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* anInstance = pTable->FindParticle(name);
@@ -65,7 +68,7 @@ G4H3O* G4H3O::Definition()
 
         ///Actually, neutral H3O does exist
         G4double  mass = 19.02 * g/Avogadro * c_squared ;
-        anInstance = new G4MoleculeDefinition("H3O", mass,
+        anInstance = new G4MoleculeDefinition(name, mass,
                                               11, 5,
                                               9e-9*(m*m/s),
                                               4, 0.961 * angstrom);

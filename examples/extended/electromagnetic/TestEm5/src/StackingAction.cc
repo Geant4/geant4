@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.8 2009-03-06 18:04:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,18 +42,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
-:runaction(RA), eventaction(EA), histoManager(HM)
+StackingAction::StackingAction(RunAction* RA, EventAction* EA)
+:fRunAction(RA), fEventAction(EA)
 {
-  killSecondary  = 0;
-  stackMessenger = new StackingMessenger(this);
+  fKillSecondary  = 0;
+  fStackMessenger = new StackingMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::~StackingAction()
 {
-  delete stackMessenger;
+  delete fStackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,11 +61,13 @@ StackingAction::~StackingAction()
 G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
   //keep primary particle
   if (aTrack->GetParentID() == 0) return fUrgent;
 
   //count secondary particles
-  runaction->CountParticles(aTrack->GetDefinition());
+  fRunAction->CountParticles(aTrack->GetDefinition());
 
   //
   //energy spectrum of secondaries
@@ -71,16 +75,21 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   G4double energy = aTrack->GetKineticEnergy();
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
 
-  if (charge != 0.) histoManager->FillHisto(2,energy);
+  if (charge != 0.) {
+    analysisManager->FillH1(2,energy);
+    analysisManager->FillH1(4,energy);
+  }
 
-  if (aTrack->GetDefinition() == G4Gamma::Gamma())
-      histoManager->FillHisto(3, std::log10(energy/MeV));
+  if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
+    analysisManager->FillH1(3,energy);
+    analysisManager->FillH1(5,energy);
+  }  
 
   //stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
-  if (killSecondary) {
-    if (killSecondary == 1) {
-     eventaction->AddEnergy(energy);
+  if (fKillSecondary) {
+    if (fKillSecondary == 1) {
+     fEventAction->AddEnergy(energy);
     }  
      status = fKill;
   }

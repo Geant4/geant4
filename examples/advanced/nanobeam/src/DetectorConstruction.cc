@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.3 2008-12-18 12:56:24 gunter Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

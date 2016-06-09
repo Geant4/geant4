@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.64 2010-12-11 17:04:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -34,6 +33,7 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
@@ -48,11 +48,17 @@
 #include "G4Plane3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttCheck.hh"
+#include "G4Text.hh"
 
 // GL2PS
 #include "Geant4_gl2ps.h"
 
 #include <sstream>
+
+G4int G4OpenGLViewer::fPrintSizeX = -1;
+G4int G4OpenGLViewer::fPrintSizeY = -1;
+G4String G4OpenGLViewer::fPrintFilename = "G4OpenGL";
+int G4OpenGLViewer::fPrintFilenameIndex = 0;
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
@@ -83,10 +89,6 @@ fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.),
 fRot_sens(1.),
 fPan_sens(0.01),
-fPrintSizeX(-1),
-fPrintSizeY(-1),
-fPrintFilename ("G4OpenGL"),
-fPrintFilenameIndex(0),
 fWinSize_x(0),
 fWinSize_y(0),
 fPointSize (0),
@@ -139,7 +141,7 @@ void G4OpenGLViewer::InitializeGLView ()
   
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+  
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView END\n");
 #endif
@@ -197,11 +199,11 @@ void G4OpenGLViewer::ResizeGLView()
   if ((dims[0] !=0 ) && (dims[1] !=0)) {
 
     if (fWinSize_x > (unsigned)dims[0]) {
-      G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
+      G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<fWinSize_x <<" is resize to "<<  dims[0] << G4endl;
       fWinSize_x = dims[0];
     }
     if (fWinSize_y > (unsigned)dims[1]) {
-      G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
+      G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<fWinSize_y <<" is resize to "<<  dims[1] << G4endl;
       fWinSize_y = dims[1];
     }
   }
@@ -304,18 +306,18 @@ void G4OpenGLViewer::SetView () {
   // G4OpenGLStoredViewer::CompareForKernelVisit.
   //if (fVP.IsSection () ) {  // pair of back to back clip planes.
   if (false) {  // pair of back to back clip planes.
-    const G4Plane3D& s = fVP.GetSectionPlane ();
+    const G4Plane3D& sp = fVP.GetSectionPlane ();
     double sArray[4];
-    sArray[0] = s.a();
-    sArray[1] = s.b();
-    sArray[2] = s.c();
-    sArray[3] = s.d() + radius * 1.e-05;
+    sArray[0] = sp.a();
+    sArray[1] = sp.b();
+    sArray[2] = sp.c();
+    sArray[3] = sp.d() + radius * 1.e-05;
     glClipPlane (GL_CLIP_PLANE0, sArray);
     glEnable (GL_CLIP_PLANE0);
-    sArray[0] = -s.a();
-    sArray[1] = -s.b();
-    sArray[2] = -s.c();
-    sArray[3] = -s.d() + radius * 1.e-05;
+    sArray[0] = -sp.a();
+    sArray[1] = -sp.b();
+    sArray[2] = -sp.c();
+    sArray[3] = -sp.d() + radius * 1.e-05;
     glClipPlane (GL_CLIP_PLANE1, sArray);
     glEnable (GL_CLIP_PLANE1);
   } else {
@@ -431,25 +433,32 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   if (hits < 0)
     G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
   else if (hits > 0) {
-    //G4cout << hits << " hit(s)" << G4endl;
+    G4cout << hits << " hit(s)" << G4endl;
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
       GLuint nnames = *p++;
-      p++; //OR GLuint zmin = *p++;
-      p++; //OR GLuint zmax = *p++;
+      // This bit of debug code or...
+      //GLuint zmin = *p++;
+      //GLuint zmax = *p++;
       //G4cout << "Hit " << i << ": " << nnames << " names"
-      //     << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
+      //       << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
+      // ...just increment the pointer
+      p++;
+      p++;
       for (GLuint j = 0; j < nnames; ++j) {
 	GLuint name = *p++;
-	//G4cout << "Name " << j << ": PickName: " << name << G4endl;
+	G4cout << "Hit: " << i
+	       << ", Sub-hit: " << j
+	       << ", PickName: " << name << G4endl;
 	std::map<GLuint, G4AttHolder*>::iterator iter =
 	  fOpenGLSceneHandler.fPickMap.find(name);
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
 	  G4AttHolder* attHolder = iter->second;
 	  if(attHolder && attHolder->GetAttDefs().size()) {
-	    for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
-	      G4cout << G4AttCheck(attHolder->GetAttValues()[i],
-				   attHolder->GetAttDefs()[i]);
+	    for (size_t iAtt = 0;
+		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
+	      G4cout << G4AttCheck(attHolder->GetAttValues()[iAtt],
+				   attHolder->GetAttDefs()[iAtt]);
 	    }
 	  }
 	}
@@ -662,10 +671,42 @@ bool G4OpenGLViewer::isGl2psWriting() {
 
 /* Draw Gl2Ps text if needed
  */
-void G4OpenGLViewer::DrawText(const char * textString,double,double,double, double size) {
-
+void G4OpenGLViewer::DrawText(const G4Text& g4text)
+{
+  // gl2ps or GL window ?
   if (isGl2psWriting()) {
-    gl2psText(textString,"Times-Roman",GLshort(size));
+
+    G4VSceneHandler::MarkerSizeType sizeType;
+    G4double size = fSceneHandler.GetMarkerSize(g4text,sizeType);
+    G4Point3D position = g4text.GetPosition();
+
+    G4String textString = g4text.GetText();
+    const char* textCString = textString.c_str();
+
+    glRasterPos3d(position.x(),position.y(),position.z());
+    GLint align = GL2PS_TEXT_B;
+
+    switch (g4text.GetLayout()) {
+    case G4Text::left: align = GL2PS_TEXT_BL; break;
+    case G4Text::centre: align = GL2PS_TEXT_B; break;
+    case G4Text::right: align = GL2PS_TEXT_BR;
+    }
+    
+    gl2psTextOpt(textCString,"Times-Roman",GLshort(size),align,0);
+
+  } else {
+
+    static G4int callCount = 0;
+    ++callCount;
+    //if (callCount <= 10 || callCount%100 == 0) {
+    if (callCount <= 1) {
+      G4cout <<
+	"G4OpenGLViewer::DrawText: Not implemented for \""
+	     << fName <<
+	"\"\n  Called with "
+	     << g4text
+	     << G4endl;
+    }
   }
 }
 
@@ -1052,5 +1093,6 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
    fVP.SetUpVector(new_upUnit);
    fVP.SetViewAndLights (viewPoint);
 }
+
 
 #endif

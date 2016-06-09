@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EventAction.cc,v 1.9 2006-06-29 17:53:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "ExN05EventAction.hh"
@@ -41,6 +40,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN05EventAction::ExN05EventAction()
@@ -58,9 +58,9 @@ void ExN05EventAction::BeginOfEventAction(const G4Event*)
     {
       G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
       if(pVVisManager)
-	{
-	  G4UImanager::GetUIpointer()->ApplyCommand("/vis~/draw/current");
-	}
+        {
+          G4UImanager::GetUIpointer()->ApplyCommand("/vis~/draw/current");
+        }
     }
 }
 
@@ -86,35 +86,35 @@ void ExN05EventAction::EndOfEventAction(const G4Event* evt )
     {
       int n_hit = CaloHC->entries();
       G4cout << "     " << n_hit
-	   << " hits are stored in EM ExN05CalorimeterHitsCollection." << G4endl;
+           << " hits are stored in EM ExN05CalorimeterHitsCollection." << G4endl;
       G4double totE = 0;
       for(int i=0;i<n_hit;i++)
-	{ totE += (*CaloHC)[i]->GetEdep(); }
+        { totE += (*CaloHC)[i]->GetEdep(); }
       G4cout << "     Total energy deposition in EM calorimeter crytals : "
-	   << totE / GeV << " (GeV)" << G4endl;
+           << totE / GeV << " (GeV)" << G4endl;
     }
 
   if(HadCaloHC)
     {
       int n_hit = HadCaloHC->entries();
       G4cout << "     " << n_hit
-	   << " hits are stored in HAD ExN05CalorimeterHitsCollection." << G4endl;
+           << " hits are stored in HAD ExN05CalorimeterHitsCollection." << G4endl;
       G4double totE = 0;
       for(int i=0;i<n_hit;i++)
-	{ totE += (*HadCaloHC)[i]->GetEdep(); }
+        { totE += (*HadCaloHC)[i]->GetEdep(); }
       G4cout << "     Total energy deposition in HAD calorimeter towers : "
-	   << totE / GeV << " (GeV)" << G4endl;
+           << totE / GeV << " (GeV)" << G4endl;
     }
   
   if(drawFlag)
     {
       G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
       if(pVVisManager)
-	{
-	  if(CaloHC)    CaloHC->DrawAllHits();
-	  if(HadCaloHC) HadCaloHC->DrawAllHits();
-	  G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
-	}
+        {
+          if(CaloHC)    CaloHC->DrawAllHits();
+          if(HadCaloHC) HadCaloHC->DrawAllHits();
+          G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
+        }
     }
 }
 

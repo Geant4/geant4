@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.1 2009-04-24 09:11:18 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +37,7 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
 

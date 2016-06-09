@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.62 2010-10-26 13:52:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -78,6 +77,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MuIonisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
@@ -105,6 +106,7 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
   //SetIntegral(true);
   //SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -126,8 +128,8 @@ G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 					  G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
-  return mass*(g - 1.0);
+  G4double gam = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
+  return mass*(gam - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -143,15 +145,11 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     mass = theParticle->GetPDGMass();
     G4double q = theParticle->GetPDGCharge();
     G4double elow = 0.2*MeV;
-    SetSecondaryParticle(G4Electron::Electron());
 
     // Bragg peak model
     if (!EmModel(1)) {
       if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
-      else { 
-	SetEmModel(new G4ICRU73QOModel(),1); 
-	//elow = 1.0*MeV;
-      }
+      else { SetEmModel(new G4ICRU73QOModel(),1); }
     }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(elow); 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsHP.cc,v 1.3 2010-09-23 18:53:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -41,12 +40,18 @@
 // HP model for n with E < 20 MeV
 
 #include "G4HadronElasticPhysicsHP.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"
 #include "G4HadronElastic.hh"
 #include "G4NeutronHPElastic.hh"
 #include "G4NeutronHPElasticData.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsHP);
 
 G4HadronElasticPhysicsHP::G4HadronElasticPhysicsHP(G4int ver)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_HP"), verbose(ver), 

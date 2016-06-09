@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.14 2007-01-05 14:06:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison 20th October 1996
@@ -54,6 +53,7 @@
 //      G4Colour  white   (1.0, 1.0, 1.0) ;  // white
 //      G4Colour  gray    (0.5, 0.5, 0.5) ;  // gray
 //      G4Colour  black   (0.0, 0.0, 0.0) ;  // black
+//      G4Colour  brown   (0.45,0.25,0.0) ;  // G4 logo brown
 //      G4Colour  red     (1.0, 0.0, 0.0) ;  // red
 //      G4Colour  green   (0.0, 1.0, 0.0) ;  // green
 //      G4Colour  blue    (0.0, 0.0, 1.0) ;  // blue
@@ -81,18 +81,23 @@
 #include <map>
 
 class G4Colour {
-  friend std::ostream& operator << (std::ostream& os, const G4Colour& c);
+
+  friend std::ostream& operator << (std::ostream&, const G4Colour&);
 
 public: // With description
 
   G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
 	    G4double a = 1.);
+
   G4Colour (G4ThreeVector);
   // Converts the components of the 3-vector into red, green, blue.
   // The opacity, alpha = 1.
+
   operator G4ThreeVector();
   // Converts red, green, blue into the components of a 3-vector.
+
   G4bool operator != (const G4Colour& c) const;
+  G4bool operator == (const G4Colour& c) const {return !(operator != (c));}
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;
@@ -102,6 +107,7 @@ public: // With description
   static G4Colour Gray();
   static G4Colour Grey();
   static G4Colour Black();
+  static G4Colour Brown();  // G4 logo brown
   static G4Colour Red();
   static G4Colour Green();
   static G4Colour Blue(); 
@@ -125,7 +131,6 @@ private:
 
   static std::map<G4String, G4Colour> fColourMap;
   static G4bool fInitColourMap;
-
   static void InitialiseColourMap();
     
 };
@@ -138,6 +143,7 @@ inline G4Colour G4Colour::White()   {return G4Colour(1.0, 1.0, 1.0);}
 inline G4Colour G4Colour::Gray()    {return G4Colour(0.5, 0.5, 0.5);}
 inline G4Colour G4Colour::Grey()    {return G4Colour(0.5, 0.5, 0.5);}
 inline G4Colour G4Colour::Black()   {return G4Colour(0.0, 0.0, 0.0);}
+inline G4Colour G4Colour::Brown()   {return G4Colour(0.45,0.25,0.0);}
 inline G4Colour G4Colour::Red()     {return G4Colour(1.0, 0.0, 0.0);}
 inline G4Colour G4Colour::Green()   {return G4Colour(0.0, 1.0, 0.0);}
 inline G4Colour G4Colour::Blue()    {return G4Colour(0.0, 0.0, 1.0);} 

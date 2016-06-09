@@ -8,55 +8,54 @@
 #     ERR file to collect stderr
 #     ENV evironment VAR1=Value1;VAR2=Value2
 #     CWD current working directory
+#     TST test name (used to name output/error files)
+#     TIM timeout 
 #     DBG debug flag
 
 if(DBG)
   message(STATUS "ENV=${ENV}")
 endif()
 
-#---Massage arguments---------------------------------------------------------------------------------
+#---Message arguments---------------------------------------------------------------------------------
 if(CMD)
   string(REPLACE "#" ";" _cmd ${CMD})
   if(DBG)
-    message(STATUS "testdriver:CMD=${_cmd}")
+    set(_cmd gdb --args ${_cmd})
   endif()
 endif()
 
 if(PRE)
   string(REPLACE "#" ";" _pre ${PRE})
-  if(DBG)
-    message(STATUS "testdriver:PRE=${_pre}")
-  endif()
 endif()
 
 if(POST)
   string(REPLACE "#" ";" _post ${POST})
-  if(DBG)
-    message(STATUS "testdriver:POST=${_post}")
-  endif()
 endif()
 
 if(OUT)
   set(_out OUTPUT_FILE ${OUT})
-  if(DBG)
-    message(STATUS "testdriver:OUT=${OUT}")
+else()
+  if(NOT DBG)
+    set(_out OUTPUT_VARIABLE _outvar)
   endif()
 endif()
 
 if(ERR)
   set(_err ERROR_FILE ${ERR})
-  if(DBG)
-    message(STATUS "testdriver:ERR=${ERR}")
-  endif()
 else()
-  set(_err ERROR_VARIABLE _errvar)
+  if(NOT DBG)
+    set(_err ERROR_VARIABLE _errvar)
+  endif()
+endif()
+
+if(TIM)
+  math(EXPR _timeout "${TIM} - 5")
+else()
+  math(EXPR _timeout "1500 - 5")
 endif()
 
 if(CWD)
   set(_cwd WORKING_DIRECTORY ${CWD})
-  if(DBG)
-    message(STATUS "testdriver:CWD=${CWD}")
-  endif()
 endif()
 
 #---Set environment --------------------------------------------------------------------------------
@@ -84,14 +83,23 @@ endif()
 
 if(CMD)
   #---Execute the actual test ------------------------------------------------------------------------
-  execute_process(COMMAND ${_cmd} ${_out} ${_err} ${_cwd} RESULT_VARIABLE _rc)
-
-  #---Return error is test returned an error code of write somthing to the stderr---------------------
+  execute_process(COMMAND ${_cmd} ${_out} ${_err} ${_cwd} TIMEOUT ${_timeout} RESULT_VARIABLE _rc)
+  message("G4Test rc: ${_rc}")
   if(_errvar)
-    message(FATAL_ERROR "output error: ${_errvar}")
+    message("G4Test stderr:\n ${_errvar}")
+    if(TST)
+      file(WRITE ${TST}.err ${_errvar})
+    endif()
   endif()
-  if(_rc)
-    message(FATAL_ERROR "error code: ${_rc}")
+  if(_outvar)
+    message("G4Test stdout:\n ${_outvar}")
+    if(TST)
+      file(WRITE ${TST}.out ${_outvar})
+    endif()
+  endif()
+  #---Return error is test returned an error code of write somthing to the stderr---------------------
+  if(_errvar OR _rc)
+    message(FATAL_ERROR "Test failed!!!")
   endif()
 endif()
 

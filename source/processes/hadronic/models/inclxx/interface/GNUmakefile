@@ -39,6 +39,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include/ \
 	    -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
 	    -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
+	    -I$(G4BASE)/processes/hadronic/models/binary_cascade/include/ \
+	    -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include/ \
 	    -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
@@ -46,7 +48,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/particles/shortlived/include \
-            -I$(G4BASE)/materials/include
+            -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/intercoms/include
 
 include $(G4INSTALL)/config/common.gmk
 

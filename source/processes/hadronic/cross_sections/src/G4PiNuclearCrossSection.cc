@@ -25,6 +25,7 @@
 //
 
 #include "G4PiNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"

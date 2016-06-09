@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/include/B02CellScorerStore.hh
+/// \brief Definition of the B02CellScorerStore class
 //
-// $Id: B02CellScorerStore.hh,v 1.3 2006-06-29 16:34:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class B02CellScorerStore
@@ -71,7 +73,7 @@ public:
   const G4MapGeometryCellCellScorer &GetMapGeometryCellCellScorer()  ;
 
   void AddB02CellScorer(B02CellScorer *b02cellScorer,
-			const G4GeometryCell &gCell);
+                        const G4GeometryCell &gCell);
   const B02MapGeometryCellB02CellScorer &GetMapGeometryCellB02CellScorer() const ;
   
 private:

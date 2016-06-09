@@ -82,17 +82,18 @@ of printout is established.
 
                            PHYSICS
 
-PhysicsList of the application uses components, which are distributed with
-Geant4 in /geant4/physics_lists subdirectory. 
+PhysicsList of the application uses reference Phsyics Lists or its components, 
+which are distributed with Geant4 in /geant4/physics_lists subdirectory.
 
-There is a possibility directly use one of reference Physics Lists if 
-using the environment variable PHYSLIST. Alternatively the name of the reference
-Physics List can be given via parameter of the the application as following:
+The reference Physics List name may be defined in the 3d argument of the 
+run command: 
 
-$G4BIN/Linux++/hadr01 QGSP_BERT my.macro
+Hadr01 my.macro QGSP_BERT   
 
-Finally it is possible to use UI commands (PHYSLIST environment variable is not 
-defined). The choice of the physics is provided by the UI command:
+If 3d argument is not set then the PHYSLIST environment variable is checked. 
+If both are not defined then reference Phsyics Lists is not instantiated, 
+instead the local Physics List is used which is built from components using 
+UI interface. The choice of the physics is provided by the UI command:
 
 /testhadr/Physics     QGSP_BIC
 
@@ -106,6 +107,7 @@ The cuts for electromagnetic physics can be established via
 /testhadr/CutsGamma   0.1 mm
 /testhadr/CutsEl      0.2 mm
 /testhadr/CutsPos     0.3 mm
+/testhadr/CutsProt    0.6 mm
 
 Note that testhadr UI commands are not available in the case when PHYSLIST 
 environment variable is defined. 
@@ -119,56 +121,21 @@ defined, then the example should be recompiled:
 gmake visclean
 gmake
 
-The vis.mac file can be used an example of visualization. The following command can 
-be used:
-
-/testhadr/DrawTracks  charged
-/testhadr/DrawTracks  charged+n
-/testhadr/DrawTracks  neutral
-/testhadr/DrawTracks  all
-
 
                           HISTOGRAMS
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
+There are built in histograms. The 1st one (idx=0, id="1") scores energy
+deposition along the target. Histograms "22", "23", "24", "25" scores
+energy deposition per particle type.
+ 
+All other histograms are provided in decimal logarithmic scale (log10(E/MeV),
+where E is secondary particle energy at production
 
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
+It is possible to change scale and output file name using UI commands:
 
-Once installed PI or PI-Lite in a specified local area $PI_DIR, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
+/testhadr/histo/fileName name
+/testhadr/histo/setHisto idx nbins vmin vmax unit
 
-setenv PATH ${PATH}:$PI_DIR/1.3.12/app/releases/PI/PI_1_3_12/slc3_gcc323/bin
-
-CERN users can use the PATH to the LCG area on AFS.
-
-Before compilation of the example it is optimal to clean up old 
-files:
-
-gmake histclean
-setenv G4ANALYSIS_USE 1
-gmake
-
-Before running the example the command should be issued:
-
-eval `aida-config --runtime csh`
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-/testhadr/HistoName   name
-/testhadr/HistoType   type
-/testhadr/HistoOption "uncompress"
-
-The following types are available: hbook, root, aida. They will be 
-stored in the file "name.hbook", "name.root", or "name.aida". 
-If the environment variable HISTODIR is defined, files are stored in this 
-subdirectory.
-
-To show the content of a histogram ID=i the commands may be applied:
-
-/testhadr/HistoPrint  i
+Only ROOT histograms are available.
 
 All histograms are normalized to the number of events.

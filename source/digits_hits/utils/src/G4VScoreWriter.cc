@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.10 2010-07-27 01:44:54 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4VScoreWriter.hh"
@@ -51,7 +50,9 @@ void G4VScoreWriter::SetScoringMesh(G4VScoringMesh * sm) {
     fScoringMesh->GetNumberOfSegments(fNMeshSegments);
 }
 
-void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) {
+void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
+                                        const G4String& fileName,
+                                        const G4String& option) {
 
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;
@@ -146,7 +147,8 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
   
 }
 
-void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & option) {
+void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
+                                             const G4String& option) {
 
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;

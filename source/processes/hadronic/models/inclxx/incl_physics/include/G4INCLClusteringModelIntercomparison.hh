@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,70 +39,227 @@
 #ifndef G4INCLClusteringModelIntercomparison_hh
 #define G4INCLClusteringModelIntercomparison_hh 1
 
+#ifdef INCLXX_IN_GEANT4_MODE
+#define INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set 1
+#endif // INCLXX_IN_GEANT4_MODE
+
 #include "G4INCLIClusteringModel.hh"
 #include "G4INCLParticle.hh"
+#include "G4INCLParticleTable.hh"
 #include "G4INCLCluster.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLKinematicsUtils.hh"
+#include "G4INCLHashing.hh"
+
+#include <set>
+#include <algorithm>
 
 namespace G4INCL {
 
+  /// \brief Cluster coalescence algorithm used in the IAEA intercomparison
   class ClusteringModelIntercomparison : public IClusteringModel {
   public:
-    ClusteringModelIntercomparison() {
-      zeroOut();
-
+    ClusteringModelIntercomparison(Config const * const theConfig) :
+      theNucleus(NULL),
+      selectedA(0),
+      selectedZ(0),
+      sqtot(0.),
+      cascadingEnergyPool(0.),
+      protonMass(ParticleTable::getRealMass(Proton)),
+      neutronMass(ParticleTable::getRealMass(Neutron)),
+      runningMaxClusterAlgorithmMass(theConfig->getClusterMaxMass()),
+      nConsideredMax(0),
+      nConsidered(0),
+      consideredPartners(NULL),
+      isInRunningConfiguration(NULL),
+      maxMassConfigurationSkipping(ParticleTable::maxClusterMass)
+    {
       // Set up the maximum charge and neutron number for clusters
       clusterZMaxAll = 0;
       clusterNMaxAll = 0;
-      for(G4int A=0; A<=maxClusterAlgorithmMass; ++A) {
+      for(G4int A=0; A<=runningMaxClusterAlgorithmMass; ++A) {
         if(ParticleTable::clusterZMax[A]>clusterZMaxAll)
           clusterZMaxAll = ParticleTable::clusterZMax[A];
         if(A-ParticleTable::clusterZMin[A]>clusterNMaxAll)
           clusterNMaxAll = A-ParticleTable::clusterZMin[A];
       }
-    }
+      std::fill(candidateConfiguration,
+                candidateConfiguration + ParticleTable::maxClusterMass,
+                static_cast<Particle*>(NULL));
 
-    void cleanUp() {
-      delete candidateConfiguration;
-      consideredPartners.clear();
-      runningConfiguration.clear();
-    }
+      std::fill(runningEnergies,
+                runningEnergies + ParticleTable::maxClusterMass,
+                0.0);
 
-    void zeroOut() {
-      candidateConfiguration = 0;
+      std::fill(runningPotentials,
+                runningPotentials + ParticleTable::maxClusterMass,
+                0.0);
+
+      std::fill(runningConfiguration,
+                runningConfiguration + ParticleTable::maxClusterMass,
+                -1);
+
     }
 
     virtual ~ClusteringModelIntercomparison() {
-      cleanUp();
+      delete [] consideredPartners;
+      delete [] isInRunningConfiguration;
     }
 
     virtual Cluster* getCluster(Nucleus*, Particle*);
-    virtual G4bool clusterCanEscape(Cluster const * const);
+    virtual G4bool clusterCanEscape(Nucleus const * const, Cluster const * const);
 
   private:
     void findClusterStartingFrom(const G4int oldA, const G4int oldZ);
-    G4double getPhaseSpace(G4int oldA, Particle *p);
+    G4double getPhaseSpace(const G4int oldA, Particle const * const p);
 
     Nucleus *theNucleus;
-    Particle *theLeadingParticle;
-    ParticleList consideredPartners;
-    ParticleList* candidateConfiguration;
 
-    G4double runningEnergies[ParticleTable::maxClusterMass];
-    ThreeVector runningMomenta[ParticleTable::maxClusterMass];
-    ThreeVector runningPositions[ParticleTable::maxClusterMass];
-    ParticleList runningConfiguration; // Use deque instead?
-    G4double runningPotentials[ParticleTable::maxClusterMass];
+    G4double runningEnergies[ParticleTable::maxClusterMass+1];
+    ThreeVector runningMomenta[ParticleTable::maxClusterMass+1];
+    ThreeVector runningPositions[ParticleTable::maxClusterMass+1];
+    G4double runningPotentials[ParticleTable::maxClusterMass+1];
+#if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
+    Hashing::NucleonItem runningConfiguration[ParticleTable::maxClusterMass];
+#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
+    G4int runningConfiguration[ParticleTable::maxClusterMass];
+#else
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#endif
 
     G4int selectedA, selectedZ;
     G4double sqtot;
 
     G4int clusterZMaxAll, clusterNMaxAll;
 
-    G4double participantEnergyPool;
+    G4double cascadingEnergyPool;
 
     static const G4double limitCosEscapeAngle;
+
+    const G4double protonMass;
+    const G4double neutronMass;
+
+    G4int runningMaxClusterAlgorithmMass;
+
+    G4int nConsideredMax;
+    G4int nConsidered;
+
+    /** \brief Array of considered cluster partners
+     *
+     * A dynamical array of Particle* is allocated on this variable and filled
+     * with pointers to nucleons which are eligible for clustering. We used to
+     * use a ParticleList for this purpose, but this made it very cumbersome to
+     * check whether nucleons had already been included in the running
+     * configuration. Using an array of Particle* coupled with a boolean mask
+     * (\see{isInRunningConfiguration}) reduces the overhead by a large amount.
+     * Running times for 1-GeV p+Pb208 went down by almost 30% (!).
+     *
+     * Lesson learnt: when you need speed, nothing beats a good ol' array.
+     */
+    Particle **consideredPartners;
+
+    /** \brief Array of flags for nucleons in the running configuration
+     *
+     * Clustering partners that are already used in the running cluster
+     * configuration are flagged as "true" in this array.
+     */
+    G4bool *isInRunningConfiguration;
+
+    /** \brief Best cluster configuration
+     *
+     * This array contains pointers to the nucleons which make up the best
+     * cluster configuration that has been found so far.
+     */
+    Particle *candidateConfiguration[ParticleTable::maxClusterMass];
+
+#if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
+    typedef std::set<Hashing::HashType> HashContainer;
+    typedef HashContainer::iterator HashIterator;
+
+    /// \brief Array of containers for configurations that have already been checked
+    HashContainer checkedConfigurations[ParticleTable::maxClusterMass-2];
+#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
+    /** \brief Class for storing and comparing sorted nucleon configurations
+     *
+     * This class is actually just a wrapper around an array of Particle*
+     * pointers. It provides a lexicographical comparison operator
+     * (SortedNucleonConfiguration::operator<) for inclusion in std::set
+     * containers.
+     */
+    class SortedNucleonConfiguration {
+      public:
+        // Use Particle* as nucleon identifiers
+        typedef G4int NucleonItem;
+
+        /// \brief Constructor
+        SortedNucleonConfiguration() : theSize(0), nucleons(NULL) {}
+
+        /// \brief Copy constructor
+        SortedNucleonConfiguration(const SortedNucleonConfiguration &rhs) :
+          theSize(rhs.theSize),
+          nucleons(new NucleonItem[theSize])
+      {
+        std::copy(rhs.nucleons, rhs.nucleons+theSize, nucleons);
+      }
+
+        /// \brief Destructor
+        ~SortedNucleonConfiguration() {
+          delete [] nucleons;
+        }
+
+        /// \brief Helper method for the assignment operator
+        void swap(SortedNucleonConfiguration &rhs) {
+          std::swap(theSize, rhs.theSize);
+          std::swap(nucleons, rhs.nucleons);
+        }
+
+        /// \brief Assignment operator
+        SortedNucleonConfiguration &operator=(const SortedNucleonConfiguration &rhs) {
+          SortedNucleonConfiguration tempConfig(rhs);
+          swap(tempConfig);
+          return *this;
+        }
+
+        /** \brief Order operator for SortedNucleonConfiguration
+         *
+         * The comparison is done lexicographically (i.e. from the first
+         * element to the last).
+         */
+        G4bool operator<(const SortedNucleonConfiguration &rhs) const {
+// assert(theSize==rhs.theSize);
+          return std::lexicographical_compare(nucleons, nucleons+theSize, rhs.nucleons, rhs.nucleons+theSize);
+        }
+
+        /// \brief Fill configuration with array of NucleonItem
+        void fill(NucleonItem *config, size_t n) {
+          theSize = n;
+          nucleons = new NucleonItem[theSize];
+          std::copy(config, config+theSize, nucleons);
+          std::sort(nucleons, nucleons+theSize);
+        }
+
+      private:
+        /// \brief Size of the array
+        size_t theSize;
+
+        /// \brief The real array
+        NucleonItem *nucleons;
+    };
+
+    typedef std::set<SortedNucleonConfiguration> SortedNucleonConfigurationContainer;
+    typedef SortedNucleonConfigurationContainer::iterator SortedNucleonConfigurationIterator;
+
+    /// \brief Array of containers for configurations that have already been checked
+    SortedNucleonConfigurationContainer checkedConfigurations[ParticleTable::maxClusterMass-2];
+#else
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#endif
+
+    /** \brief Maximum mass for configuration storage
+     *
+     * Skipping configurations becomes inefficient above this mass.
+     */
+    G4int maxMassConfigurationSkipping;
   };
 
 }

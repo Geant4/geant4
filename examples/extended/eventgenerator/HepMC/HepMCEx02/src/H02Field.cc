@@ -23,14 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/H02Field.cc
+/// \brief Implementation of the H02Field class
+//
 // ====================================================================
 //
 //   H02Field.hh
-//   $Id: H02Field.cc,v 1.4 2006-06-29 17:10:26 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 
 #include "H02Field.hh"
+#include "G4SystemOfUnits.hh"
 
 ////////////////////////////////////////////////////////////////////////////
 void H02Field::GetFieldValue(const G4double Point[3], G4double* Bfield) const

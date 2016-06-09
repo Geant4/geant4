@@ -35,7 +35,9 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4KaonZeroField.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
@@ -51,29 +53,6 @@ G4KaonZeroField::G4KaonZeroField(G4V3DNucleus * nucleus, G4double coeff)
 
 G4KaonZeroField::~G4KaonZeroField()
 { }
-
-
-const G4KaonZeroField & G4KaonZeroField::operator=(const G4KaonZeroField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4KaonZeroField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4KaonZeroField::operator==(const G4KaonZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4KaonZeroField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4KaonZeroField::operator!=(const G4KaonZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4KaonZeroField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 
 G4double G4KaonZeroField::GetField(const G4ThreeVector & aPosition)
 {

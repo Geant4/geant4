@@ -23,24 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeRunAction.hh
+/// \brief Definition of the LXeRunAction class
+//
+//
 #include "G4UserRunAction.hh"
 
 #ifndef LXeRunAction_h
 #define LXeRunAction_h 1
 
-class RecorderBase;
+class LXeRecorderBase;
 
 class LXeRunAction : public G4UserRunAction
 {
-public:
-  LXeRunAction(RecorderBase*);
-  ~LXeRunAction();
-  
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+  public:
 
-private:
-  RecorderBase* recorder;
+    LXeRunAction(LXeRecorderBase*);
+    virtual ~LXeRunAction();
+
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
+
+  private:
+
+    LXeRecorderBase* fRecorder;
 };
 
 #endif

@@ -38,6 +38,8 @@
 #include "G4ReactionProduct.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4HadronicDeprecate.hh"
+#include "G4ios.hh"
 
 class G4StopDeexcitationAlgorithm 
 {  
@@ -53,7 +55,9 @@ private:
 public:
 
   // Constructor
-  G4StopDeexcitationAlgorithm() {};
+  G4StopDeexcitationAlgorithm() {
+    G4HadronicDeprecate("G4StopDeexcitationAlgorithm");
+  }
 
   // Destructor
   virtual ~G4StopDeexcitationAlgorithm() {};

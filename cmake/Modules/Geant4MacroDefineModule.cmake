@@ -2,18 +2,20 @@
 #
 # This file defines the following macros for Geant4 developers needing to
 # define the sources, headers and library dependencies for a standard 
-# Geant4 granular library module, plus utlities for specializing source file
-# properties
+# Geant4 granular library module, plus utlities for specializing source 
+# file properties
 #
-# GEANT4_DEFINE_MODULE      - define a standard Geant4 Granular Library Module
+# GEANT4_DEFINE_MODULE      - define a standard Geant4 Granular Library 
+#                             Module
+#
 # ======================
 # A Geant4 Module is defined as a directory containing subdirectories
 #
 #   include - holds all header files for the module
 #   src     - holds all source files for the module
 #
-# GEANT4_DEFINE_MODULE will take the name of the module, a list of header files,
-# a list of source files and dependencies:
+# GEANT4_DEFINE_MODULE will take the name of the module, a list of header 
+# files, a list of source files and dependencies:
 #
 # GEANT4_DEFINE_MODULE(NAME name 
 #                      HEADERS hdr1 hdr2 ... 
@@ -55,6 +57,10 @@
 # definitions given to the sources.
 #
 
+if(__GEANT4MACRODEFINEMODULE_ISLOADED)
+  return()
+endif()
+set(__GEANT4MACRODEFINEMODULE_ISLOADED TRUE)
 
 include(CMakeMacroParseArguments)
 

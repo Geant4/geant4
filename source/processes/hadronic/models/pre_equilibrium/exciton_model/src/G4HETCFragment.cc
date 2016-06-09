@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.cc,v 1.4 2010-08-28 15:16:55 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by V. Lara
 //
@@ -33,6 +32,7 @@
 //            the source, use G4Pow
  
 #include "G4HETCFragment.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PreCompoundParameters.hh"
 
 G4HETCFragment::
@@ -84,10 +84,10 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
   G4int Pb = P - GetA();
   G4int Nb = Pb + H;
   if (Nb <= 0.0) { return 0.0; }
-  G4double g = (6.0/pi2)*aFragment.GetA()*theParameters->GetLevelDensity();
+  G4double ga = (6.0/pi2)*aFragment.GetA()*theParameters->GetLevelDensity();
   G4double gb = (6.0/pi2)*GetRestA()*theParameters->GetLevelDensity();
 
-  G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*g);
+  G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*ga);
   G4double Ab = G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*gb);
   U = std::max(U-A,0.0);
   if (U <= 0.0) { return 0.0; }
@@ -107,12 +107,12 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
 
   G4double Probability = r2norm*GetSpinFactor()*GetReducedMass()*GetAlpha() 
     *g4pow->Z23(GetRestA())*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
-    *U*g4pow->powN(g*gb,Nb)/g4pow->powN(g*U,N);
+    *U*g4pow->powN(gb*Y,Nb)/g4pow->powN(ga*U,N);
 
   //  G4double Probability = GetSpinFactor()/(pi*hbarc*hbarc*hbarc) 
   //  * GetReducedMass() * GetAlpha() *
   //  r0 * r0 * std::pow->Z23(GetRestA())/std::pow->pow(U,G4double(N-1)) * 
-  //  (std::pow->(gb,Nb)/std::pow(g,N)) * Pf * Hf * Nf * K(aFragment) *
+  //  (std::pow->(gb,Nb)/std::pow(ga,N)) * Pf * Hf * Nf * K(aFragment) *
   //  std::pow(Y,Nb) * (X/Nb - Y/(Nb+1));
 
   return Probability;

@@ -23,16 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: P. Arce
-// History: 30.11.07  First version
-//*******************************************************
+/// \file medical/DICOM/include/DicomDetectorConstruction.hh
+/// \brief Definition of the DicomDetectorConstruction class
 //
-// DicomDetectorConstruction.hh :
-//	- Start the building of the geometry
-//	- Initialisation of materials
-//      - Creation of the world 
-//	- Reading of the DICOM data
-//*******************************************************
 
 #ifndef DicomDetectorConstruction_h
 #define DicomDetectorConstruction_h 1
@@ -44,6 +37,18 @@
 class G4Material;
 class G4Box;
 class G4LogicalVolume;
+
+//*******************************************************
+/// Dicom detector construction
+///
+///      - Start the building of the geometry
+///      - Initialisation of materials
+///      - Creation of the world 
+///      - Reading of the DICOM data
+///
+/// History: 30.11.07  First version
+/// \author  P. Arce
+//*******************************************************
 
 class DicomDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -78,16 +83,16 @@ protected:
   void SetScorer(G4LogicalVolume* voxel_logic);
 
 protected:
-  G4Material* air;
+  G4Material* fAir;
 
   // World ...
-  G4Box* world_solid;
-  G4LogicalVolume* world_logic;
-  G4VPhysicalVolume* world_phys;
+  G4Box* fWorld_solid;
+  G4LogicalVolume* fWorld_logic;
+  G4VPhysicalVolume* fWorld_phys;
 
-  G4Box* container_solid;
-  G4LogicalVolume* container_logic;
-  G4VPhysicalVolume* container_phys;
+  G4Box* fContainer_solid;
+  G4LogicalVolume* fContainer_logic;
+  G4VPhysicalVolume* fContainer_phys;
 
   G4int fNoFiles; // number of DICOM files
   std::vector<G4Material*> fOriginalMaterials;  // list of original materials 
@@ -100,8 +105,8 @@ protected:
   std::vector<DicomPhantomZSliceHeader*> fZSliceHeaders; // list of z slice header (one per DICOM files)
   DicomPhantomZSliceHeader* fZSliceHeaderMerged; // z slice header resulted from merging all z slice headers
 
-  G4int nVoxelX, nVoxelY, nVoxelZ;
-  G4double voxelHalfDimX,  voxelHalfDimY, voxelHalfDimZ;
+  G4int fNVoxelX, fNVoxelY, fNVoxelZ;
+  G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
 };
 
 #endif

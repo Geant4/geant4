@@ -15,6 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/09/2012 I. Hrivnacova (excommon-V09-05-02)
+- Added/updated CMakeLists.txt files:
+  adding copying macros, install target, comment lines
+  and HBOOK external package in analysis
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters
+- Updated script for generating CMakeLists.txt files
+
+19/07/2012 I. Hrivnacova (excommon-V09-05-01)
+- Fix in the scripts (copying files from shared with an extension)
+
+05/06/2012 I. Hrivnacova (excommon-V09-05-00)
+- Updated scripts for copying shared files; the shared files are now
+  defined in the SharedFilesList.txt file
+
 23/11/2011 I. Hrivnacova (excommon-V09-04-01)
 - Addded physicsList directory with a physics list with genatino
   and charged geantino

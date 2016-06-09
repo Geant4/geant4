@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomRunAction.hh
+/// \brief Definition of the DicomRunAction class
 //
-// $Id: DicomRunAction.hh,v 1.1 2008-11-27 21:55:27 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 
 #ifndef DicomRunAction_h
@@ -37,13 +38,6 @@
 
 class G4Run;
 
-//=======================================================================
-// DicomRunAction
-//   
-//
-//
-//=======================================================================
-//
 class DicomRunAction : public G4UserRunAction
 {
 public:
@@ -64,9 +58,9 @@ public:
 private:
   // Data member 
   // - vector of MultiFunctionalDetecor names.
-  std::vector<G4String> theSDName;  
-  G4int FieldName;
-  G4int FieldValue;
+  std::vector<G4String> fSDName;  
+  G4int fFieldName;
+  G4int fFieldValue;
 
 
 };

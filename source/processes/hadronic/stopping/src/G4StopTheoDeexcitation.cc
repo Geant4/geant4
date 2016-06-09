@@ -39,28 +39,30 @@
 #include "G4StopTheoDeexcitation.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Fragment.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4DynamicParticleVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 // Constructor
 
-G4StopTheoDeexcitation::G4StopTheoDeexcitation()
-{}
+G4StopTheoDeexcitation::G4StopTheoDeexcitation() {
+  G4HadronicDeprecate("G4StopTheoDeexcitation");
+}
 
 // Destructor
 
 G4StopTheoDeexcitation::~G4StopTheoDeexcitation()
 {}
 
-G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z, 
-							 G4double excitation, 
-							 const G4ThreeVector& p)
+G4ReactionProductVector*
+G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z, G4double excitation, 
+			        const G4ThreeVector& p)
 {
-
   G4ExcitationHandler theHandler;
 
   // MF and FB parameters modified by MGP to force evaporation 
@@ -74,9 +76,9 @@ G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z,
   // Deexcite the nucleus 
 
   G4double atomicMass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(A),static_cast<G4int>(Z));
-  G4double m = atomicMass + excitation;
+  G4double mass = atomicMass + excitation;
   G4double pMag = p.mag();
-  G4LorentzVector initialMomentum(p.x(),p.y(),p.z(),std::sqrt(pMag*pMag + m*m));
+  G4LorentzVector initialMomentum(p.x(),p.y(),p.z(),std::sqrt(pMag*pMag + mass*mass));
   G4Fragment theExcitedNucleus(static_cast<G4int>(A),static_cast<G4int>(Z),initialMomentum);
 
   return theHandler.BreakItUp(theExcitedNucleus);

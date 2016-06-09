@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.7 2007-05-16 11:43:30 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 16.11.2006 Add beamCmd (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -66,19 +68,19 @@ public:
 
 private:
 
-  DetectorConstruction* Detector;
+  DetectorConstruction* fDetector;
 
-  G4UIdirectory*             testDir;
-  G4UIcmdWithAString*        matCmd;
-  G4UIcmdWithAString*        mat1Cmd;
-  G4UIcmdWithADoubleAndUnit* rCmd;
-  G4UIcmdWithADoubleAndUnit* lCmd;
-  G4UIcmdWithADoubleAndUnit* edepCmd;
-  G4UIcmdWithAnInteger*      binCmd;
-  G4UIcmdWithAnInteger*      nOfAbsCmd;
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithABool*          beamCmd;
-  G4UIcmdWithoutParameter*   updateCmd;
+  G4UIdirectory*             fTestDir;
+  G4UIcmdWithAString*        fMatCmd;
+  G4UIcmdWithAString*        fMat1Cmd;
+  G4UIcmdWithADoubleAndUnit* fRCmd;
+  G4UIcmdWithADoubleAndUnit* fLCmd;
+  G4UIcmdWithADoubleAndUnit* fEdepCmd;
+  G4UIcmdWithAnInteger*      fBinCmd;
+  G4UIcmdWithAnInteger*      fNOfAbsCmd;
+  G4UIcmdWithAnInteger*      fVerbCmd;
+  G4UIcmdWithABool*          fBeamCmd;
+  G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

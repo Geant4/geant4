@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.26 2010-11-10 17:53:22 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -90,7 +89,7 @@ void G4OpenInventorXtViewer::Initialise() {
 
   if(!parent) {  
     // Check if user has specified an X-Windows-type geometry string...
-    char s[32];
+    char str[32];
 
     G4String sgeometry = fVP.GetXGeometryString();
     if(sgeometry.empty()) {
@@ -100,8 +99,8 @@ void G4OpenInventorXtViewer::Initialise() {
              << G4endl;
       width = 600;
       height = 600;  
-      sprintf(s,"%dx%d",width,height);
-      sgeometry = s;
+      sprintf(str,"%dx%d",width,height);
+      sgeometry = str;
     } else {
       width = fVP.GetWindowSizeHintX();
       height = fVP.GetWindowSizeHintX();
@@ -375,7 +374,4 @@ void G4OpenInventorXtViewer::HelpCbk(
   XmTextSetString(This->fHelpText,(char*)This->Help().c_str());
 }
 
-
 #endif
-
-

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01DetectorMessenger.hh
+/// \brief Definition of the F01DetectorMessenger class
 //
-// $Id: F01DetectorMessenger.hh,v 1.4 2006-06-29 17:15:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -51,26 +53,26 @@ class F01DetectorMessenger: public G4UImessenger
 {
   public:
     F01DetectorMessenger(F01DetectorConstruction* );
-   ~F01DetectorMessenger();
+    ~F01DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    F01DetectorConstruction*   F01Detector;
+    F01DetectorConstruction*   fDetector;
     
-    G4UIdirectory*             F01detDir;
+    G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsRadCmd;
+    G4UIcmdWithAString*        fAbsMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsRadCmd;
 
-    G4UIcmdWithADoubleAndUnit* AbsZposCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsZposCmd;
 
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldZCmd;
-    G4UIcmdWithADoubleAndUnit* WorldRCmd;
+    G4UIcmdWithAString*        fWorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldZCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldRCmd;
 
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

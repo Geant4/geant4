@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm4/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc,v 1.2 2006-06-29 16:54:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -35,11 +37,12 @@
 #include "SteppingAction.hh"
 #include "EventAction.hh"
 #include "G4SteppingManager.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(EventAction* EvAct)
-:eventAction(EvAct),myVerbose(NULL)
+:fEventAction(EvAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +55,10 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  G4double EdepStep = aStep->GetTotalEnergyDeposit();
- if (EdepStep > 0.) eventAction->addEdep(EdepStep);
+ if (EdepStep > 0.) fEventAction->addEdep(EdepStep);
+  
+ //example of saving random number seed of this event, under condition
+ //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

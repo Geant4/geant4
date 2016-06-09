@@ -57,12 +57,12 @@ public:
 	~CML2Convergence(void);
 	void add(const G4Step* aStep);
 	G4bool stopRun();
-	void setMaxNumberOfEvents(G4int val){this->maxNumberOfEvents=val;};
-	G4double getMaxNumberOfEvents(){return this->maxNumberOfEvents;};
-	CML2ExpVoxels * getExpVoxels(){return this->ML2ExpVoxels;};
-	inline void saveResults(){if (this->ML2ExpVoxels!=0){this->ML2ExpVoxels->saveResults();}};
-	inline void setNewGeometry(){this->nGeometry++;	this->idCurrentLoop=this->nMaxLoops;};
-	inline int getNMaxLoops(){return this->nMaxLoops;};
+	void setMaxNumberOfEvents(G4int val){maxNumberOfEvents=val;}
+	G4double getMaxNumberOfEvents(){return maxNumberOfEvents;};
+	CML2ExpVoxels * getExpVoxels(){return ML2ExpVoxels;}
+	inline void saveResults(){if (ML2ExpVoxels!=0){ML2ExpVoxels->saveResults();}}
+	inline void setNewGeometry(){nGeometry++;	idCurrentLoop=nMaxLoops;}
+	inline int getNMaxLoops(){return nMaxLoops;}
 private:
 	G4bool convergenceCriteria();
 
@@ -72,7 +72,7 @@ private:
 	G4String fileExperimentalData;
 
 	G4bool bCompareExp;
-	G4int maxNumberOfEvents, nGeometry;
+        G4int maxNumberOfEvents, nGeometry, nAccumulatedEvents;
 	int nMaxLoops, idCurrentLoop;
 };
 

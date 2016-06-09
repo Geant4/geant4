@@ -157,9 +157,9 @@ $Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
 
      This example implements an AIDA-compliant analysis system which
      creates histograms, ntuples and plotters.  If you have built Geant4 with
-     the option to use anlaysis (answering yes to the appropriate question in
+     the option to use analysis (answering yes to the appropriate question in
      ./Configure -build), then at the completion of a simulation run,
      a file A01.aida is produced which contains these data structures.
      This file can be used as an input to the Java Analysis Studio (JAS) which allows
      the histograms and ntuples to examined, manipulated, saved and printed.
-     For further details, see README.JAIDA.
+     For further details, see also README.AIDA.

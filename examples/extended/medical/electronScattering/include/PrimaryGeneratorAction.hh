@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,16 +51,16 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:
-    void SetRndmBeam(G4double val) {rndmBeam = val;};   
+    void SetRndmBeam(G4double val) {fRndmBeam = val;};   
     void GeneratePrimaries(G4Event*);
-    G4ParticleGun* GetParticleGun() {return particleGun;};
+    G4ParticleGun* GetParticleGun() {return fParticleGun;};
 
   private:
-    G4ParticleGun*         particleGun;
-    DetectorConstruction*  detector;
-    G4double               z0, r2World, rndmBeam;
+    G4ParticleGun*         fParticleGun;
+    DetectorConstruction*  fDetector;
+    G4double               fZ0, fR2World, fRndmBeam;
     
-    PrimaryGeneratorMessenger* gunMessenger;     
+    PrimaryGeneratorMessenger* fGunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

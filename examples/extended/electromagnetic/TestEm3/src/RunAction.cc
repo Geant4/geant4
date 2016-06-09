@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.38 2010-01-24 17:25:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +40,6 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -49,19 +50,24 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4LossTableManager.hh"
 
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* hist)
-:Detector(det), Primary(prim), histoManager(hist)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+:fDetector(det), fPrimary(prim), fRunMessenger(0), fHistoManager(0)
 {
-  runMessenger = new RunActionMessenger(this);
-  applyLimit = false;
+  fRunMessenger = new RunActionMessenger(this);
+  fHistoManager = new HistoManager();
+  fApplyLimit = false;
 
-  for (G4int k=0; k<MaxAbsor; k++) { edeptrue[k] = rmstrue[k] = 1.;
-                                    limittrue[k] = DBL_MAX;
+  fChargedStep = fNeutralStep = 0.0;
+
+  for (G4int k=0; k<MaxAbsor; k++) { fEdeptrue[k] = fRmstrue[k] = 1.;
+                                    fLimittrue[k] = DBL_MAX;
   }
 }
 
@@ -69,7 +75,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
 
 RunAction::~RunAction()
 {
-  delete runMessenger;
+  delete fRunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,30 +86,33 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   //
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
   //initialize cumulative quantities
   //
   for (G4int k=0; k<MaxAbsor; k++) {
-    sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 0.;
-    energyDeposit[k].clear();  
+    fSumEAbs[k] = fSum2EAbs[k]  = fSumLAbs[k] = fSum2LAbs[k] = 0.;
+    fEnergyDeposit[k].clear();  
   }
 
-  n_gamma = 0;
-  n_elec  = 0;
-  n_pos   = 0;
+  fChargedStep = fNeutralStep = 0.0;
+
+  fN_gamma = 0;
+  fN_elec  = 0;
+  fN_pos   = 0;
 
   //initialize Eflow
   //
-  G4int nbPlanes = (Detector->GetNbOfLayers())*(Detector->GetNbOfAbsor()) + 2;
-  EnergyFlow.resize(nbPlanes);
-  lateralEleak.resize(nbPlanes);
-  for (G4int k=0; k<nbPlanes; k++) {EnergyFlow[k] = lateralEleak[k] = 0.; }
+  G4int nbPlanes = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor()) + 2;
+  fEnergyFlow.resize(nbPlanes);
+  fLateralEleak.resize(nbPlanes);
+  for (G4int k=0; k<nbPlanes; k++) {fEnergyFlow[k] = fLateralEleak[k] = 0.; }
   
   //histograms
   //
-  histoManager->book();
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  if (analysis->IsActive()) analysis->OpenFile();
    
   //example of print dEdx tables
   //
@@ -112,13 +121,13 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
+void RunAction::FillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
 {
   //accumulate statistic with restriction
   //
-  if(applyLimit) energyDeposit[kAbs].push_back(EAbs);
-  sumEAbs[kAbs]  += EAbs;  sum2EAbs[kAbs]  += EAbs*EAbs;
-  sumLAbs[kAbs]  += LAbs;  sum2LAbs[kAbs]  += LAbs*LAbs;
+  if(fApplyLimit) fEnergyDeposit[kAbs].push_back(EAbs);
+  fSumEAbs[kAbs]  += EAbs;  fSum2EAbs[kAbs]  += EAbs*EAbs;
+  fSumLAbs[kAbs]  += LAbs;  fSum2LAbs[kAbs]  += LAbs*LAbs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,9 +140,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if(norm > 0) norm = 1./norm;
   G4double qnorm = std::sqrt(norm);
 
+  fChargedStep *= norm;
+  fNeutralStep *= norm;
+
   //compute and print statistic
   //
-  G4double beamEnergy = Primary->GetParticleGun()->GetParticleEnergy();
+  G4double beamEnergy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4double sqbeam = std::sqrt(beamEnergy/GeV);
 
   G4double MeanEAbs,MeanEAbs2,rmsEAbs,resolution,rmsres;
@@ -144,52 +156,52 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n------------------------------------------------------------\n";
   G4cout << std::setw(14) << "material"
          << std::setw(17) << "Edep       RMS"
-	 << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean"
-	 << std::setw(23) << "total tracklen \n \n";
+         << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean"
+         << std::setw(23) << "total tracklen \n \n";
 
-  for (G4int k=1; k<=Detector->GetNbOfAbsor(); k++)
+  for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++)
     {
-      MeanEAbs  = sumEAbs[k]*norm;
-      MeanEAbs2 = sum2EAbs[k]*norm;
+      MeanEAbs  = fSumEAbs[k]*norm;
+      MeanEAbs2 = fSum2EAbs[k]*norm;
       rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
       //G4cout << "k= " << k << "  RMS= " <<  rmsEAbs 
-      //     << "  applyLimit: " << applyLimit << G4endl;
-      if(applyLimit) {
+      //     << "  fApplyLimit: " << fApplyLimit << G4endl;
+      if(fApplyLimit) {
         G4int    nn    = 0;
         G4double sume  = 0.0;
         G4double sume2 = 0.0;
-	// compute trancated means  
+        // compute trancated means  
         G4double lim   = rmsEAbs * 2.5;
         for(G4int i=0; i<nEvt; i++) {
-          G4double e = (energyDeposit[k])[i];
+          G4double e = (fEnergyDeposit[k])[i];
           if(std::abs(e - MeanEAbs) < lim) {
             sume  += e;
             sume2 += e*e;
             nn++;
-	  }
-	}
+          }
+        }
         G4double norm1 = G4double(nn);
         if(norm1 > 0.0) norm1 = 1.0/norm1;
-	MeanEAbs  = sume*norm1;
-	MeanEAbs2 = sume2*norm1;
-	rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+        MeanEAbs  = sume*norm1;
+        MeanEAbs2 = sume2*norm1;
+        rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
       }
 
       resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
       rmsres    = resolution*qnorm;
 
       // Save mean and RMS
-      sumEAbs[k] = MeanEAbs;
-      sum2EAbs[k] = rmsEAbs;
+      fSumEAbs[k] = MeanEAbs;
+      fSum2EAbs[k] = rmsEAbs;
 
-      MeanLAbs  = sumLAbs[k]*norm;
-      MeanLAbs2 = sum2LAbs[k]*norm;
+      MeanLAbs  = fSumLAbs[k]*norm;
+      MeanLAbs2 = fSum2LAbs[k]*norm;
       rmsLAbs  = std::sqrt(std::abs(MeanLAbs2 - MeanLAbs*MeanLAbs));
 
       //print
       //
       G4cout
-       << std::setw(14) << Detector->GetAbsorMaterial(k)->GetName() << ": "
+       << std::setw(14) << fDetector->GetAbsorMaterial(k)->GetName() << ": "
        << std::setprecision(5)
        << std::setw(6) << G4BestUnit(MeanEAbs,"Energy") << " :  "
        << std::setprecision(4)
@@ -204,20 +216,24 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n------------------------------------------------------------\n";
 
   G4cout << " Beam particle " 
-	 << Primary->GetParticleGun()->
+         << fPrimary->GetParticleGun()->
     GetParticleDefinition()->GetParticleName()
-	 << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
-  G4cout << " Mean number of gamma  " << (G4double)n_gamma*norm << G4endl;
-  G4cout << " Mean number of e-     " << (G4double)n_elec*norm << G4endl;
-  G4cout << " Mean number of e+     " << (G4double)n_pos*norm << G4endl;
+         << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
+  G4cout << " Mean number of gamma          " << (G4double)fN_gamma*norm << G4endl;
+  G4cout << " Mean number of e-             " << (G4double)fN_elec*norm << G4endl;
+  G4cout << " Mean number of e+             " << (G4double)fN_pos*norm << G4endl;
+  G4cout << std::setprecision(6)
+	 << " Mean number of charged steps  " << fChargedStep << G4endl;
+  G4cout << " Mean number of neutral steps  " << fNeutralStep << G4endl;
   G4cout << "------------------------------------------------------------\n";
   
   //Energy flow
   //
-  G4int Idmax = (Detector->GetNbOfLayers())*(Detector->GetNbOfAbsor());
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  G4int Idmax = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor());
   for (G4int Id=1; Id<=Idmax+1; Id++) {
-    histoManager->FillHisto(2*MaxAbsor+1, (G4double)Id, EnergyFlow[Id]);
-    histoManager->FillHisto(2*MaxAbsor+2, (G4double)Id, lateralEleak[Id]);
+    analysis->FillH1(2*MaxAbsor+1, (G4double)Id, fEnergyFlow[Id]);
+    analysis->FillH1(2*MaxAbsor+2, (G4double)Id, fLateralEleak[Id]);
   }
   
   //Energy deposit from energy flow balance
@@ -225,19 +241,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double EdepTot[MaxAbsor];
   for (G4int k=0; k<MaxAbsor; k++) EdepTot[k] = 0.;
   
-  G4int nbOfAbsor = Detector->GetNbOfAbsor();
+  G4int nbOfAbsor = fDetector->GetNbOfAbsor();
   for (G4int Id=1; Id<=Idmax; Id++) {
     G4int iAbsor = Id%nbOfAbsor; if (iAbsor==0) iAbsor = nbOfAbsor;
-    EdepTot [iAbsor] += (EnergyFlow[Id] - EnergyFlow[Id+1] - lateralEleak[Id]);
+    EdepTot [iAbsor] += (fEnergyFlow[Id] - fEnergyFlow[Id+1] - fLateralEleak[Id]);
   }
   
-  G4cout << "\n Energy deposition from Energy flow balance : \n"
+  G4cout << std::setprecision(3)
+	 << "\n Energy deposition from Energy flow balance : \n"
          << std::setw(10) << "  material \t Total Edep \n \n";
   G4cout.precision(6);
   
   for (G4int k=1; k<=nbOfAbsor; k++) {
     EdepTot [k] *= norm;
-    G4cout << std::setw(10) << Detector->GetAbsorMaterial(k)->GetName() << ":"
+    G4cout << std::setw(10) << fDetector->GetAbsorMaterial(k)->GetName() << ":"
            << "\t " << G4BestUnit(EdepTot [k],"Energy") << "\n";
   }
   
@@ -250,19 +267,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // Acceptance
   EmAcceptance acc;
   G4bool isStarted = false;
-  for (G4int j=1; j<=Detector->GetNbOfAbsor(); j++) {
-    if (limittrue[j] < DBL_MAX) {
+  for (G4int j=1; j<=fDetector->GetNbOfAbsor(); j++) {
+    if (fLimittrue[j] < DBL_MAX) {
       if (!isStarted) {
         acc.BeginOfAcceptance("Sampling Calorimeter",nEvt);
-	isStarted = true;
+        isStarted = true;
       }
-      MeanEAbs = sumEAbs[j];
-      rmsEAbs  = sum2EAbs[j];
-      G4String mat = Detector->GetAbsorMaterial(j)->GetName();
+      MeanEAbs = fSumEAbs[j];
+      rmsEAbs  = fSum2EAbs[j];
+      G4String mat = fDetector->GetAbsorMaterial(j)->GetName();
       acc.EmAcceptanceGauss("Edep"+mat, nEvt, MeanEAbs,
-                             edeptrue[j], rmstrue[j], limittrue[j]);
+                             fEdeptrue[j], fRmstrue[j], fLimittrue[j]);
       acc.EmAcceptanceGauss("Erms"+mat, nEvt, rmsEAbs,
-                             rmstrue[j], rmstrue[j], 2.0*limittrue[j]);
+                             fRmstrue[j], fRmstrue[j], 2.0*fLimittrue[j]);
     }
   }
   if(isStarted) acc.EndOfAcceptance();
@@ -270,11 +287,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //normalize histograms
   //
   for (G4int ih = MaxAbsor+1; ih < MaxHisto; ih++) {
-    histoManager->Normalize(ih,norm/MeV);
+    analysis->ScaleH1(ih,norm/MeV);
   }
   
-  //save histograms   
-  histoManager->save();
+  //save histograms
+  if (analysis->IsActive()) {   
+    analysis->Write();
+    analysis->CloseFile();
+  }    
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -318,16 +338,16 @@ void RunAction::PrintDedxTables()
   G4cout.setf(std::ios::scientific,std::ios::floatfield);
 
   G4ParticleDefinition*
-  part = Primary->GetParticleGun()->GetParticleDefinition();
+  part = fPrimary->GetParticleGun()->GetParticleDefinition();
   
   G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
   const G4MaterialCutsCouple* couple = 0;
 
-  for (G4int iab=1;iab <= Detector->GetNbOfAbsor(); iab++)
+  for (G4int iab=1;iab <= fDetector->GetNbOfAbsor(); iab++)
      {
-      G4Material* mat = Detector->GetAbsorMaterial(iab);
+      G4Material* mat = fDetector->GetAbsorMaterial(iab);
       G4int index = 0;
       for (size_t i=0; i<numOfCouples; i++) {
          couple = theCoupleTable->GetMaterialCutsCouple(i);
@@ -341,7 +361,7 @@ void RunAction::PrintDedxTables()
       G4cout.precision(2);
       G4cout << "\nERAN  " << tkmin/GeV << " (ekmin)\t"
                            << tkmax/GeV << " (ekmax)\t"
-			   << nbin      << " (nekbin)";
+                           << nbin      << " (nekbin)";
       G4double cutgam =
          (*(theCoupleTable->GetEnergyCutsVector(idxG4GammaCut)))[index];
       if (cutgam < tkmin) cutgam = tkmin;
@@ -358,9 +378,9 @@ void RunAction::PrintDedxTables()
       for (G4int l=0;l<nbin; ++l)
          {
            G4double dedx = G4LossTableManager::Instance()
-	                                       ->GetDEDX(part,tk[l],couple);
+                                               ->GetDEDX(part,tk[l],couple);
            G4cout << dedx/(MeV/cm) << "\t";
-	   if ((l+1)%ncolumn == 0) G4cout << "\n ";
+           if ((l+1)%ncolumn == 0) G4cout << "\n ";
          }
       G4cout << G4endl;
      }
@@ -374,9 +394,9 @@ void RunAction::PrintDedxTables()
 void RunAction::AddSecondaryTrack(const G4Track* track)
 {
   const G4ParticleDefinition* d = track->GetDefinition();
-  if(d == G4Gamma::Gamma()) { ++n_gamma; }
-  else if (d == G4Electron::Electron()) { ++n_elec; }
-  else if (d == G4Positron::Positron()) { ++n_pos; }
+  if(d == G4Gamma::Gamma()) { ++fN_gamma; }
+  else if (d == G4Electron::Electron()) { ++fN_elec; }
+  else if (d == G4Positron::Positron()) { ++fN_pos; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -384,9 +404,9 @@ void RunAction::AddSecondaryTrack(const G4Track* track)
 void RunAction::SetEdepAndRMS(G4int i, G4double edep, G4double rms, G4double lim)
 {
   if (i>=0 && i<MaxAbsor) {
-    edeptrue [i] = edep;
-    rmstrue  [i] = rms;
-    limittrue[i] = lim;
+    fEdeptrue [i] = edep;
+    fRmstrue  [i] = rms;
+    fLimittrue[i] = lim;
   }
 }
 

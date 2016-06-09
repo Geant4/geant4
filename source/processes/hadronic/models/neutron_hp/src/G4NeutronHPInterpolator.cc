@@ -60,7 +60,17 @@
       {
         G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
         G4double a = std::log(y1) - b*x1;
-        result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
+        //***************************************************************
+        //EMendoza:
+        //result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
+        //***************************************************************
+        if(b!=0){
+          result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
+        }
+        else{
+          result=y2*(x2-x1);
+        }
+        //***************************************************************
       }
     }
     else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.5 2009-05-02 15:20:53 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -42,6 +41,8 @@
 //                  - use G4ElementSelector
 
 #include "G4LivermorePolarizedRayleighModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -51,7 +52,8 @@ using namespace std;
 
 G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),formFactorData(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   crossSectionHandler(0),formFactorData(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;

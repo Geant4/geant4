@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonSD.cc
+/// \brief Implementation of the H02MuonSD class
+//
 // ====================================================================
 //
 //   H02MuonSD.cc
-//   $Id: H02MuonSD.cc,v 1.5 2006-07-05 12:04:13 gcosmo Exp $
+//   $Id$
 //
 // ====================================================================
 
@@ -60,7 +63,7 @@ void H02MuonSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID=-1;
   hitCollection= new H02MuonHitsCollection(SensitiveDetectorName, 
-					  collectionName[0]); 
+                                          collectionName[0]); 
   if(HCID<0) HCID= GetCollectionID(0);
   HCE-> AddHitsCollection(HCID, hitCollection);
 }

@@ -15,6 +15,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 11, 2012 I. Hrivnacova (exampleRE02-V09-05-03)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+Oct 12, 2012 A. Dotti (exampleRE02-V09-05-02)
+- Adding forgotten system of units in physics list file
+
+Oct 8, 2012 A.Kimura 
+- revised all codes according to the coding guideline for extended examples
+- the main program exampleRE02 was renamed RE02.
+
+Jul 28, 2012 V.Ivanchenko (exampleRE02-V09-05-01)
+- fixed elastic physics for ions
+
+Jan 27, 2012 T.Aso (exampleRE02-V09-05-00)
+- Fix the indexing scheme of CopyNo() method in the RunAction.
+
 October 10th, 2011  G.Folger  (exampleRE02-V09-04-00)
 - Fix gcc 4.6 compilation warning in RE02EventAction.cc
 

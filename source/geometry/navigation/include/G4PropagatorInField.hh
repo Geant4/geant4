@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.19 2009-11-13 17:34:26 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4PropagatorInField 
@@ -152,8 +151,8 @@ class G4PropagatorInField
    inline G4bool GetUseSafetyForOptimization();
      // Toggle & view parameter for using safety to discard 
      //   unneccesary calls to navigator (thus 'optimising' performance)
-   inline G4bool IntersectChord( G4ThreeVector  StartPointA, 
-                                 G4ThreeVector  EndPointB,
+   inline G4bool IntersectChord( const G4ThreeVector&  StartPointA,
+                                 const G4ThreeVector&  EndPointB,
                                  G4double      &NewSafety,
                                  G4double      &LinearStepLength,
                                  G4ThreeVector &IntersectionPoint);

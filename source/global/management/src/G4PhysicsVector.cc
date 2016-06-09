@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.49 2010-11-01 13:55:53 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -138,7 +137,6 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   cache->lastValue = vec.GetLastValue();
   cache->lastBin = vec.GetLastBin();
   useSpline = vec.useSpline;
-  comment = vec.comment;
 
   size_t i;
   dataVector.clear();
@@ -206,7 +204,6 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   dataVector.clear();
   binVector.clear();
   secDerivative.clear();
-  comment = "";
 
   // retrieve in ascii mode
   if (ascii){
@@ -240,6 +237,10 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
       dataVector.push_back(vData);
     }
 
+    // to remove any inconsistency 
+    numberOfNodes = siz;
+    edgeMin = binVector[0];
+    edgeMax = binVector[numberOfNodes-1];
     return true ;
   }
 
@@ -269,6 +270,11 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     dataVector.push_back(value[2*i+1]);
   }
   delete [] value;
+
+  // to remove any inconsistency 
+  numberOfNodes = size;
+  edgeMin = binVector[0];
+  edgeMax = binVector[numberOfNodes-1];
 
   return true;
 }
@@ -303,7 +309,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
                                           G4double endPointDerivative)
   //  A standard method of computation of second derivatives 
   //  First derivatives at the first and the last point should be provided
-  //  See for example W.H. Press et al. "Numerical reciptes and C"
+  //  See for example W.H. Press et al. "Numerical recipes in C"
   //  Cambridge University Press, 1997.
 {
   if(4 > numberOfNodes)   // cannot compute derivatives for less than 4 bins
@@ -376,10 +382,6 @@ void G4PhysicsVector::FillSecondDerivatives()
   if(!SplinePossible()) { return; }
  
   G4int n = numberOfNodes-1;
-
-  //G4cout << "G4PhysicsVector::FillSecondDerivatives() n= " << n 
-  //	 << "   " << this << G4endl;
-  // G4cout << *this << G4endl;
 
   G4double* u = new G4double [n];
   
@@ -501,17 +503,14 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 
 //---------------------------------------------------------------
 
-G4double G4PhysicsVector::Value(G4double theEnergy) 
+void G4PhysicsVector::ComputeValue(G4double theEnergy) 
 {
-  // Use cache for speed up - check if the value 'theEnergy' is same as the 
-  // last call. If it is same, then use the last bin location. Also the
-  // value 'theEnergy' lies between the last energy and low edge of of the 
+  // Use cache for speed up - check if the value 'theEnergy' lies 
+  // between the last energy and low edge of of the 
   // bin of last call, then the last bin location is used.
 
-  if( theEnergy == cache->lastEnergy ) {
-
-  } else if( theEnergy < cache->lastEnergy
-	&&   theEnergy >= binVector[cache->lastBin]) {
+  if( theEnergy < cache->lastEnergy
+        &&   theEnergy >= binVector[cache->lastBin]) {
      cache->lastEnergy = theEnergy;
      Interpolation(cache->lastBin);
 
@@ -520,16 +519,15 @@ G4double G4PhysicsVector::Value(G4double theEnergy)
      cache->lastEnergy = edgeMin;
      cache->lastValue  = dataVector[0];
 
-  } else if( theEnergy >= edgeMax ){
+  } else if( theEnergy >= edgeMax ) {
      cache->lastBin = numberOfNodes-1;
      cache->lastEnergy = edgeMax;
      cache->lastValue  = dataVector[cache->lastBin];
 
   } else {
-     cache->lastBin = FindBinLocation(theEnergy); 
-     cache->lastEnergy = theEnergy;
-     Interpolation(cache->lastBin);
+    cache->lastBin = FindBinLocation(theEnergy);
+    cache->lastEnergy = theEnergy;
+    Interpolation(cache->lastBin);
   }
-  return cache->lastValue;        
 }
 

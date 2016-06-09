@@ -25,6 +25,7 @@
 //
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4XNNElasticLowE.hh"
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"
@@ -33,7 +34,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-
 
 const G4double G4XNNElasticLowE::_lowLimit = 0.;
 const G4double G4XNNElasticLowE::_highLimit = 3.*GeV;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Dineutron.cc,v 1.5 2010-06-25 09:44:20 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      Bertini Cascade dineutron class implementation file
@@ -34,12 +33,15 @@
 //	06 Apr 2010:  Do G4Ions initialization in ctor.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 //	06 May 2010:  Remove created particle from master table.
+//      25 May 2012:  Add flags to suppress particle-table error message.
 // ----------------------------------------------------------------
 
 #include "G4Dineutron.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
@@ -67,7 +69,9 @@ G4Dineutron* G4Dineutron::Definition() {
     theInstance = new G4Dineutron;	// There can be only one
 
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-    pTable->Remove(theInstance);	// Make invisible to GEANT4
+    pTable->SetReadiness(false);        // Suppress error message
+    pTable->Remove(theInstance);        // Make invisible to GEANT4
+    pTable->SetReadiness(true);         // Set back 'ready to use' flag
   }
 
   return theInstance;

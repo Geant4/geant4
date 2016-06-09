@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITManager_iterator.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -84,8 +85,8 @@ G4VITManager::iterator& G4VITManager::iterator::operator++(G4int)
 
 G4bool G4VITManager::iterator::end()
 {
-    if(fNextIT) return true;
-    return false ;
+    if(fNextIT) return false;
+    return true ;
 }
 
 //______________________________________________________________________

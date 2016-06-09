@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.14 2010-10-20 09:14:11 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +34,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4BREPSolidSphere.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SphericalSurface.hh"
 
 G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,

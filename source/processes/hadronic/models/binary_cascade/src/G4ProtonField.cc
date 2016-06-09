@@ -35,7 +35,10 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4ProtonField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4V3DNucleus.hh"
@@ -77,28 +80,6 @@ G4ProtonField::G4ProtonField(G4V3DNucleus * aNucleus) :
 G4ProtonField::~G4ProtonField()
 { }
 
-
-const G4ProtonField & G4ProtonField::operator=(const G4ProtonField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ProtonField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4ProtonField::operator==(const G4ProtonField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ProtonField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4ProtonField::operator!=(const G4ProtonField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ProtonField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 G4double G4ProtonField::GetField(const G4ThreeVector & aPosition)
 {
 //G4cout << " Fermi Potential " << (fermiMom*fermiMom)/(2*proton_mass_c2) <<G4endl;
@@ -115,8 +96,6 @@ G4double G4ProtonField::GetField(const G4ThreeVector & aPosition)
   return y;
 }
 
-
-
 G4double G4ProtonField::GetBarrier()
 {
   G4double coulombBarrier = (1.44/1.14) * MeV * theZ / (1.0 + std::pow(theA,1./3.));
@@ -128,5 +107,3 @@ G4double G4ProtonField::GetBarrier()
  */
   return bindingEnergy/theA+coulombBarrier;
 }
-
-

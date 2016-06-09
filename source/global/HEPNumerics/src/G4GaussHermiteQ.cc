@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussHermiteQ.cc,v 1.8 2007-11-13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-#include "G4GaussHermiteQ.hh"
 
+#include "G4GaussHermiteQ.hh"
+#include "G4PhysicalConstants.hh"
 
 // ----------------------------------------------------------
 //

@@ -57,7 +57,6 @@ bool CML2PhaseSpaces::createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4
 	G4Material *Vacum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 	G4Box *box;
 	G4LogicalVolume *logVol;
-	G4VPhysicalVolume *phVol;
 	box = new G4Box("KBox", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, Vacum, name+"KLV", 0, 0, 0);
 	phVol= new G4PVPlacement(0, centre, name+"KPV", logVol, PVWorld, false, 0);
@@ -69,10 +68,10 @@ bool CML2PhaseSpaces::createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4
 	logVol->SetVisAttributes(simplePhSpVisAtt);
 
 
-	this->sensDetParticle=new CML2SDWithParticle();
+	sensDetParticle=new CML2SDWithParticle();
 	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
-	SDManager->AddNewDetector(this->sensDetParticle);
-	logVol->SetSensitiveDetector(this->sensDetParticle);
+	SDManager->AddNewDetector(sensDetParticle);
+	logVol->SetSensitiveDetector(sensDetParticle);
 	bCreated=true;
 	return bCreated;
 }
@@ -84,7 +83,6 @@ bool CML2PhaseSpaces::createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp
 	G4Material *Vacum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 	G4Box *box;
 	G4LogicalVolume *logVol;
-	G4VPhysicalVolume *phVol;
 	box = new G4Box(name+"Box", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, Vacum, name+"LV", 0, 0, 0);
 	phVol= new G4PVPlacement(0, centre, name+"PV", logVol, PVWorld, false, 0);
@@ -94,10 +92,10 @@ bool CML2PhaseSpaces::createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp
 	simplePhSpVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simplePhSpVisAtt);
 
-	this->sensDetParticle=new CML2SDWithParticle(idSD_Type, max_N_particles_in_PhSp_File, seed, nMaxParticlesInRamPhaseSpace, name, PhaseSpaceOutFile, bSavePhaseSpace, bStopAtPhaseSpace, primaryParticleData, accTargetZPosition);
+	sensDetParticle=new CML2SDWithParticle(idSD_Type, max_N_particles_in_PhSp_File, seed, nMaxParticlesInRamPhaseSpace, name, PhaseSpaceOutFile, bSavePhaseSpace, bStopAtPhaseSpace, primaryParticleData, accTargetZPosition);
 	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
-	SDManager->AddNewDetector(this->sensDetParticle);
-	logVol->SetSensitiveDetector(this->sensDetParticle);
+	SDManager->AddNewDetector(sensDetParticle);
+	logVol->SetSensitiveDetector(sensDetParticle);
 	bCreated=true;
 	return bCreated;
 }

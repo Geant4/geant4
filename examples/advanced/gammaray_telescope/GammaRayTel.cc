@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.19 2010-11-11 17:42:50 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -38,32 +37,32 @@
 //           See README file for details on this example            
 //  20.11.01 G.Santin: new analysis management, and some modification in the 
 //                     construction of some Action's
-// ************************************************************
+// ************************************************************ 
 
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
+#include "G4UImanager.hh" 
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
+#endif 
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
-
+ 
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPhysicsList.hh"
 #include "GammaRayTelPrimaryGeneratorAction.hh"
 #include "GammaRayTelRunAction.hh"
 #include "GammaRayTelEventAction.hh"
-
-#include "QGSP_BIC.hh"
+ 
+//#include "QGSP_BIC.hh" 
+#include "FTFP_BERT.hh" 
 
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
 #endif
-
-
+ 
 /* This global file is used to store relevant data for
    analysis with external tools */
 std::ofstream outFile;
@@ -72,34 +71,35 @@ std::ofstream outFile;
 int main(int argc, char** argv)
 {
   // Construct the default run manager
-  G4RunManager* runManager = new G4RunManager;
-  
+  G4RunManager* runManager = new G4RunManager;   
   // Set mandatory user initialization classes
   GammaRayTelDetectorConstruction* detector = 
     new GammaRayTelDetectorConstruction;
   runManager->SetUserInitialization(detector);
-
+  
   // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
   //  do not use   GammaRayTelPhysicsList, this is old style and crashes at 
   //    program exit   
   //runManager->SetUserInitialization(new GammaRayTelPhysicsList);
+  
+  //  runManager->SetUserInitialization(new QGSP_BIC);
+  runManager->SetUserInitialization(new FTFP_BERT);
 
-  runManager->SetUserInitialization(new QGSP_BIC);
-
+  
   // Set mandatory user action classes
   runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);
-
+  
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 #endif
-
+  
   // Set optional user action classes
   GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
   GammaRayTelRunAction* runAction = new GammaRayTelRunAction();
   runManager->SetUserAction(eventAction);
   runManager->SetUserAction(runAction);
-
+  
   // Set visualization and user interface
 #ifdef G4VIS_USE
   // Visualization manager
@@ -112,37 +112,25 @@ int main(int argc, char** argv)
   
   // Get the pointer to the UI manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
-#ifdef G4UI_USE
-  G4UIExecutive* ui = 0;
-  ui = new G4UIExecutive(argc, argv);
-
-  if (ui)
+  if (argc!=1)   // batch mode
     {
-      /* prerunGammaRayTel.mac is loaded by default
-	 unless a macro file is passed as the argument
-	 of the executable */
-
-      if(argc>1)
-	{
-#endif
-	  G4String command = "/control/execute ";
-	  for (int i=2; i<=argc; i++) 
-	    {
-	      G4String macroFileName = argv[i-1];
-	      UImanager->ApplyCommand(command+macroFileName);
-	    }
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
+    }
+  else
+    {
 #ifdef G4UI_USE
-	}
-      else  
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      if (ui->IsGUI())
 	{
+	  /* prerunGammaRayTel.mac is loaded by default */
 	  UImanager->ApplyCommand("/control/execute prerunGammaRayTel.mac");
 	  ui->SessionStart();
 	}
       delete ui;
-    }
 #endif  
-
+    }
   // Job termination
 #ifdef G4VIS_USE
   delete visManager;

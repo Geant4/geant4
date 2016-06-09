@@ -14,6 +14,28 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
 
+27 September 2012, Gabriele Cosmo
+--------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+17 June 2012, Gunter Folger     (hadr-qgsm-V09-05-03)
+--------------------------------------------------
+- Fixes for coverity in G4QGSModel concerning copy ctor and operator = .
+
+12 June 2012, Gunter Folger     (hadr-qgsm-V09-05-02)
+--------------------------------------------------
+- Correct shadowing warnings
+
+31 May 2012, Gunter Folger      (hadr-qgsm-V09-05-01)
+--------------------------------------------------
+- Improve indentation;
+- make copy ctor, =, ==, != operators private without implementation
+
+25 May 2012, Gunter Folger      (hadr-qgsm-V09-05-00)
+--------------------------------------------------
+-  Add ModelDescription() to QGS
+
 5 Aug 2011, M. Kelsey		(hadr-qgsm-V09-04-04)
 -----------------------------------------------------
 - G4GammaParticipants.cc:  Follow change in return value of

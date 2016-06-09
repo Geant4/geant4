@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXePMTSD.cc
+/// \brief Implementation of the LXePMTSD class
+//
+//
 #include "LXePMTSD.hh"
 #include "LXePMTHit.hh"
 #include "LXeDetectorConstruction.hh"
@@ -32,51 +36,55 @@
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXePMTSD::LXePMTSD(G4String name)
-  :G4VSensitiveDetector(name),pmtHitCollection(0),pmtPositionsX(0)
-  ,pmtPositionsY(0),pmtPositionsZ(0)
+  : G4VSensitiveDetector(name),fPMTHitCollection(0),fPMTPositionsX(0)
+  ,fPMTPositionsY(0),fPMTPositionsZ(0)
 {
   collectionName.insert("pmtHitCollection");
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXePMTSD::~LXePMTSD()
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTSD::Initialize(G4HCofThisEvent* HCE){
-  pmtHitCollection = new LXePMTHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
+LXePMTSD::~LXePMTSD() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXePMTSD::Initialize(G4HCofThisEvent* hitsCE){
+  fPMTHitCollection = new LXePMTHitsCollection
+                      (SensitiveDetectorName,collectionName[0]);
   //Store collection with event and keep ID
-  static G4int HCID = -1;
-  if(HCID<0){ 
-    HCID = GetCollectionID(0); 
+  static G4int hitCID = -1;
+  if(hitCID<0){
+    hitCID = GetCollectionID(0);
   }
-  HCE->AddHitsCollection( HCID, pmtHitCollection );
+  hitsCE->AddHitsCollection( hitCID, fPMTHitCollection );
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4bool LXePMTSD::ProcessHits(G4Step* ,G4TouchableHistory* ){
   return false;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 //Generates a hit and uses the postStepPoint's mother volume replica number
 //PostStepPoint because the hit is generated manually when the photon is
 //absorbed by the photocathode
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
 G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
-				       G4TouchableHistory* ){
+                                       G4TouchableHistory* ){
 
   //need to know if this is an optical photon
-  if(aStep->GetTrack()->GetDefinition() 
+  if(aStep->GetTrack()->GetDefinition()
      != G4OpticalPhoton::OpticalPhotonDefinition()) return false;
  
   //User replica number 1 since photocathode is a daughter volume
@@ -87,26 +95,26 @@ G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
     aStep->GetPostStepPoint()->GetTouchable()->GetVolume(1);
 
   //Find the correct hit collection
-  G4int n=pmtHitCollection->entries();
+  G4int n=fPMTHitCollection->entries();
   LXePMTHit* hit=NULL;
   for(G4int i=0;i<n;i++){
-    if((*pmtHitCollection)[i]->GetPMTNumber()==pmtNumber){
-      hit=(*pmtHitCollection)[i];
+    if((*fPMTHitCollection)[i]->GetPMTNumber()==pmtNumber){
+      hit=(*fPMTHitCollection)[i];
       break;
     }
   }
-  
+ 
   if(hit==NULL){//this pmt wasnt previously hit in this event
     hit = new LXePMTHit(); //so create new hit
     hit->SetPMTNumber(pmtNumber);
     hit->SetPMTPhysVol(physVol);
-    pmtHitCollection->insert(hit);
-    hit->SetPMTPos((*pmtPositionsX)[pmtNumber],(*pmtPositionsY)[pmtNumber],
-		   (*pmtPositionsZ)[pmtNumber]);
+    fPMTHitCollection->insert(hit);
+    hit->SetPMTPos((*fPMTPositionsX)[pmtNumber],(*fPMTPositionsY)[pmtNumber],
+                   (*fPMTPositionsZ)[pmtNumber]);
   }
 
   hit->IncPhotonCount(); //increment hit for the selected pmt
-    
+ 
   if(!LXeDetectorConstruction::GetSphereOn()){
     hit->SetDrawit(true);
     //If the sphere is disabled then this hit is automaticaly drawn
@@ -114,27 +122,26 @@ G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
   else{//sphere enabled
     LXeUserTrackInformation* trackInfo=
       (LXeUserTrackInformation*)aStep->GetTrack()->GetUserInformation();
-    if(trackInfo->GetTrackStatus()&hitSphere) 
+    if(trackInfo->GetTrackStatus()&hitSphere)
       //only draw this hit if the photon has hit the sphere first
       hit->SetDrawit(true);
   }
-    
+
   return true;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTSD::EndOfEvent(G4HCofThisEvent* ){
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTSD::clear(){
-}
+void LXePMTSD::EndOfEvent(G4HCofThisEvent* ) {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTSD::DrawAll(){
-} 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTSD::PrintAll(){
-} 
+void LXePMTSD::clear() {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXePMTSD::DrawAll() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXePMTSD::PrintAll() {}

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITModel.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -79,10 +80,10 @@ protected:
 
     G4String fName;
 
-    G4VITTimeStepper* fTimeStepper;
-    G4VITReactionProcess* fReactionProcess;
+    G4VITTimeStepper* fpTimeStepper;
+    G4VITReactionProcess* fpReactionProcess;
 
-    const G4ITReactionTable* fReactionTable ;
+    const G4ITReactionTable* fpReactionTable ;
 
     G4ITType fType1;
     G4ITType fType2;
@@ -101,32 +102,32 @@ protected :
 
 inline void G4VITModel::SetReactionTable(G4ITReactionTable* table)
 {
-    fReactionTable = table;
+    fpReactionTable = table;
 }
 
 inline const G4ITReactionTable* G4VITModel::GetReactionTable()
 {
-    return fReactionTable ;
+    return fpReactionTable ;
 }
 
 inline void G4VITModel::SetTimeStepper(G4VITTimeStepper* timeStepper)
 {
-    fTimeStepper = timeStepper ;
+    fpTimeStepper = timeStepper ;
 }
 
 inline void G4VITModel::SetReactionProcess(G4VITReactionProcess* reactionProcess)
 {
-    fReactionProcess = reactionProcess ;
+    fpReactionProcess = reactionProcess ;
 }
 
 inline G4VITTimeStepper* G4VITModel::GetTimeStepper()
 {
-    return fTimeStepper;
+    return fpTimeStepper;
 }
 
 inline G4VITReactionProcess* G4VITModel::GetReactionProcess()
 {
-    return fReactionProcess ;
+    return fpReactionProcess ;
 }
 
 inline const G4String& G4VITModel::GetName()

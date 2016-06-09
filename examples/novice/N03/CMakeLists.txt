@@ -1,6 +1,5 @@
 #----------------------------------------------------------------------------
 # Setup the project
-#
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(N03)
 
@@ -18,15 +17,14 @@ endif()
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
-# Setup include directory for this project
 #
 include(${Geant4_USE_FILE})
-include_directories(${PROJECT_SOURCE_DIR}/include)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
-# NB: headers are included so they will show up in IDEs
 #
+include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -34,41 +32,19 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exampleN03 exampleN03.cc ${sources} ${headers})
-target_link_libraries(exampleN03 ${Geant4_LIBRARIES})
+target_link_libraries(exampleN03 ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build N03. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(EXAMPLEN03_SCRIPTS
-  exampleN03.err
-  exampleN03.in
-  exampleN03.large_N.in
-  exampleN03.out
-  exo1.mac
-  exo2.mac
-  gui.mac
-  newgeom.mac
-  rndmSeed.mac
-  run1.mac
-  run2.mac
-  vis.mac
-  visTutor/exN03Tree0.mac   
-  visTutor/exN03Vis13.loop  
-  visTutor/heprep.mac
-  visTutor/exN03Vis0.mac    
-  visTutor/exN03Vis13.mac   
-  visTutor/History
-  visTutor/exN03Vis12.loop  
-  visTutor/exN03Vis5.mac
-  visTutor/exN03Vis12.mac   
-  visTutor/g4Xt.xrm
+set(N03_SCRIPTS
+    exampleN03.in exampleN03.large_N.in exampleN03.out exo1.mac exo2.mac gui.mac newgeom.mac rndmSeed.mac run1.mac run2.mac vis.mac icons.mac
+    visTutor/exN03Tree0.mac visTutor/exN03Vis12.loop visTutor/exN03Vis12.mac visTutor/exN03Vis13.loop visTutor/exN03Vis13.mac visTutor/exN03Vis5.mac visTutor/g4Xt.xrm visTutor/heprep.mac
   )
 
-file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/visTutor)
-
-foreach(_script ${EXAMPLEN03_SCRIPTS})
+foreach(_script ${N03_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
@@ -77,8 +53,8 @@ foreach(_script ${EXAMPLEN03_SCRIPTS})
 endforeach()
 
 #----------------------------------------------------------------------------
-# For internal Geant4 use - but has no effect if you build this
-# example standalone
+# Add program to the project targets
+# (this avoids the need of typing the program name after make)
 #
 add_custom_target(N03 DEPENDS exampleN03)
 
@@ -86,5 +62,4 @@ add_custom_target(N03 DEPENDS exampleN03)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS exampleN03 DESTINATION bin)
-
 

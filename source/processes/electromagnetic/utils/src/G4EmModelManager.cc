@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.63 2010-10-15 10:22:13 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -77,6 +76,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmModelManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -640,6 +642,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
     G4double cross = mod->CrossSection(couple,particle,e,cut,tmax);
     cross *= (1.0 + del/e); 
+    if(fIsCrossSectionPrim == tType) { cross *= e; }
     
     if(j==0 && startFromNull) { cross = 0.0; }
 
@@ -669,11 +672,30 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	     << " ======" << G4endl;;
       for(G4int j=0; j<n; ++j) {
 	G4VEmModel* model = models[r->ModelIndex(j)];
+        G4double emin = 
+	  std::max(r->LowEdgeEnergy(j),model->LowEnergyActivationLimit());
+        G4double emax = 
+	  std::min(r->LowEdgeEnergy(j+1),model->HighEnergyActivationLimit());
 	G4cout << std::setw(20);
 	G4cout << model->GetName() << " :  Emin= " 
-	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
+	       << std::setw(8) << G4BestUnit(emin,"Energy")
 	       << "   Emax= " 
-	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	       << std::setw(8) << G4BestUnit(emax,"Energy");
+	G4PhysicsTable* table = model->GetCrossSectionTable();
+        if(table) {
+	  size_t kk = table->size();
+          for(size_t k=0; k<kk; ++k) {
+	    G4PhysicsVector* v = (*table)[k];
+	    if(v) {
+	      G4int nn = v->GetVectorLength() - 1;
+	      G4cout << "  Table with " << nn << " bins Emin= "
+		     << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
+		     << "   Emax= " 
+		     << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
+	      break;
+	    }
+	  }
+	}
 	G4VEmAngularDistribution* an = model->GetAngularDistribution();
         if(an) { G4cout << "   " << an->GetName(); }
         if(fluoFlag && model->DeexcitationFlag()) { G4cout << "  FluoActive"; }

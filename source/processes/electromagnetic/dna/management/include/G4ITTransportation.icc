@@ -23,10 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This class is a slightly modified version of G4Transportation
-// But it should use the exact same algorithm
+// $Id$
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+/// \brief This class is a slightly modified version of G4Transportation
+///        initially written by J. Apostolakis and colleagues
+///        But it should use the exact same algorithm
+//
+// Original Author : John Apostolakis
+//
+// Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -112,7 +117,7 @@ inline void G4ITTransportation::ResetKilledStatistics(G4int report)
   }
 
   fSumEnergyKilled= 0;
-  fMaxEnergyKilled= -1.0*GeV;
+  fMaxEnergyKilled= -1.0*CLHEP::GeV;
 }
      // Statistics for tracks killed (currently due to looping in field)
 

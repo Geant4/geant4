@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------
 //
@@ -44,6 +43,8 @@
 
 #include "G4VLowEnergyDiscretePhotonProcess.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4String.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4CompositeEMDataSet.hh"

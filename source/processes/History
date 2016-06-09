@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 9, 2012 G.Cosmo (processes-V09-05-00)
+- Archived "hadronic/models/incl" module.
+- Includes following tags on top of "geant4-09-05-ref-06":
+  hadr-stopping-V09-05-13, hadr-cross-V09-05-19, hadr-man-V09-05-09,
+  hadr-proc-V09-05-05, hadr-casc-V09-05-13, emstand-V09-05-31,
+  emutils-V09-05-21, hadr-chips-proc-V09-05-04, hadr-chips-inter-V09-05-03,
+  hadr-deex-V09-05-08, hadr-pre-V09-05-03, transport-V09-05-01,
+  hadr-inclxx-V09-05-17, hadr-string-diff-V09-05-13.
+
+May 5, 2012, Gunter Folger  ( ..trunk.. )
+- revert changes by Mikhail ( rev. r58247 )
+
+Apr 27, Mikhail Kosov       (processes-cmk-V09-05-00)
+- hadronic/model/chiral_inv_phase_space moved to hadronic/chips
+
+Sep 7, 2011, Gunter Folger   (processes-cmk-V09-04-01)
+- remove/comment new modules hadronic/{common, incl++/...} from cmake 
+
+- Update GNUmakefile and use CMakeLists.txt of processes-V09-04-01 for dna architecture change.
+
+Sep 7, 2011, Gunter Folger   (processes-gmk-V09-04-00 and 
+                              processes-cmk-V09-04-00)
+- Update GNUmakefile and use CMakeLists.txt of processes-V09-04-01 for dna architecture change.
+
+Sep 5, 2011, AM, MK, SI (processes-V09-04-02)
+- Updated CMakeLists.txt for dna architecture change
+
 May 13, 2011 G.Cosmo (processes-V09-04-01)
 - Added "hadronic/models/lend" module.
 - Includes following tags on top of "geant4-09-04-ref-04":

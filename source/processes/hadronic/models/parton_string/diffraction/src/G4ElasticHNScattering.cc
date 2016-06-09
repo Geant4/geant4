@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.14 2009-12-16 17:51:13 gunter Exp $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -38,6 +38,7 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "G4ElasticHNScattering.hh"
 #include "G4LorentzRotation.hh"
@@ -137,6 +138,7 @@ G4bool G4ElasticHNScattering::
              PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
                     2*S*Mprojectile2 - 2*S*Mtarget2 - 2*Mprojectile2*Mtarget2)
                     /4./S;
+
              if(PZcms2 < 0.){ return false;} // Non succesful attempt after the de-excitation
             }
             else // if(M0projectile > projectile->GetDefinition()->GetPDGMass())
@@ -181,7 +183,6 @@ G4bool G4ElasticHNScattering::
            G4double TargMassT2; //, TargMassT;
 
 	   G4LorentzVector Qmomentum;
-
 	   Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
 
 	   Pt2=G4ThreeVector(Qmomentum.vect()).mag2();                  
@@ -262,19 +263,19 @@ G4ElasticHNScattering::~G4ElasticHNScattering()
 
 const G4ElasticHNScattering & G4ElasticHNScattering::operator=(const G4ElasticHNScattering &)
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4ElasticHNScattering = operator meant to be called");
-	return *this;
+	throw G4HadronicException(__FILE__, __LINE__, "G4ElasticHNScattering = operator not meant to be called");
+	//return *this;  //A.R. 25-Jul-2012 : fix Coverity
 }
 
 
 int G4ElasticHNScattering::operator==(const G4ElasticHNScattering &) const
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4ElasticHNScattering == operator meant to be called");
-	return false;
+	throw G4HadronicException(__FILE__, __LINE__, "G4ElasticHNScattering == operator not meant to be called");
+	//return false;  //A.R. 25-Jul-2012 : fix Coverity
 }
 
 int G4ElasticHNScattering::operator!=(const G4ElasticHNScattering &) const
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4ElasticHNScattering != operator meant to be called");
-	return true;
+	throw G4HadronicException(__FILE__, __LINE__, "G4ElasticHNScattering != operator not meant to be called");
+	//return true;  //A.R. 25-Jul-2012 : fix Coverity
 }

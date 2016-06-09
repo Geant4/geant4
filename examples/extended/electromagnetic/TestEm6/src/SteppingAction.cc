@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.11 2010-12-03 14:54:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,16 +37,12 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct)
-:runAction(RuAct)
+:fRunAction(RuAct)
 { 
- muonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
+ fMuonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,11 +57,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
  if (process == 0) return;  
  G4String processName = process->GetProcessName();
- runAction->CountProcesses(processName); //count processes
+ fRunAction->CountProcesses(processName); //count processes
   
  if (processName != "GammaToMuPair") return;
  
-#ifdef G4ANALYSIS_USE
  G4StepPoint* PrePoint = aStep->GetPreStepPoint();  
  G4double      EGamma  = PrePoint->GetTotalEnergy();
  G4ThreeVector PGamma  = PrePoint->GetMomentum();
@@ -77,25 +74,26 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
      Pplus  = (*secondary)[lp]->GetMomentum();
    } else {
      Eminus = (*secondary)[lp]->GetTotalEnergy();
-     Pminus = (*secondary)[lp]->GetMomentum();      	   
+     Pminus = (*secondary)[lp]->GetMomentum();                 
    }
  }
-    	   
+               
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
- G4double GammaPlus=EGamma*xPlus/muonMass;
- G4double GammaMinus=EGamma*xMinus/muonMass;
+ G4double GammaPlus=EGamma*xPlus/fMuonMass;
+ G4double GammaMinus=EGamma*xMinus/fMuonMass;
+ 
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
- runAction->GetHisto(0)->fill(1./(1.+std::pow(thetaPlus*GammaPlus,2)));
- runAction->GetHisto(1)->fill(std::log10(thetaPlus*GammaPlus));
+ analysisManager->FillH1(1,1./(1.+std::pow(thetaPlus*GammaPlus,2)));
+ analysisManager->FillH1(2,std::log10(thetaPlus*GammaPlus));
 
- runAction->GetHisto(2)->fill(std::log10(thetaMinus*GammaMinus));
- runAction->GetHisto(3)->fill(std::log10(std::fabs(thetaPlus *GammaPlus
+ analysisManager->FillH1(3,std::log10(thetaMinus*GammaMinus));
+ analysisManager->FillH1(4,std::log10(std::fabs(thetaPlus *GammaPlus
                                               -thetaMinus*GammaMinus)));
  
- runAction->GetHisto(4)->fill(xPlus);
- runAction->GetHisto(5)->fill(xMinus); 
-#endif
+ analysisManager->FillH1(5,xPlus);
+ analysisManager->FillH1(6,xMinus); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

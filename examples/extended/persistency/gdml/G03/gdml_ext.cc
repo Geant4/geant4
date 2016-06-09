@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G03/gdml_ext.cc
+/// \brief Main program of the persistency/gdml/G03 example
 //
-// $Id: gdml_ext.cc,v 1.7 2010-11-07 13:31:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -45,9 +47,9 @@
 
 // Example includes
 //
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
+#include "G03DetectorConstruction.hh"
+#include "G03PrimaryGeneratorAction.hh"
+#include "G03RunAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -66,11 +68,11 @@ int main(int argc, char** argv)
 
   // Set mandatory initialization and user action classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
+  G03DetectorConstruction* detector = new G03DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new QGSP_BERT);
-  runManager->SetUserAction(new PrimaryGeneratorAction);
-  RunAction* runAction = new RunAction;
+  runManager->SetUserAction(new G03PrimaryGeneratorAction);
+  G03RunAction* runAction = new G03RunAction;
   runManager->SetUserAction(runAction);
       
   // Initialisation of runManager via macro for the interactive mode

@@ -80,7 +80,11 @@ class G4ReactionProduct
     inline void* operator new(size_t) {
       return (void *)aRPAllocator.MallocSingle();
     }
-
+#ifdef __IBMCPP__
+    inline void* operator new(size_t, void *p) {
+      return p;
+    }
+#endif
     inline void operator delete(void* aReactionProduct) {
       aRPAllocator.FreeSingle((G4ReactionProduct*)aReactionProduct);
     }
@@ -110,8 +114,8 @@ class G4ReactionProduct
     
     void SetMomentum( const G4double z );
 
-    inline void SetMomentum( const G4ThreeVector &m )
-    { momentum = m; }
+    inline void SetMomentum( const G4ThreeVector &mom )
+    { momentum = mom; }
     
     inline G4ThreeVector GetMomentum() const
     { return momentum; }
@@ -122,23 +126,23 @@ class G4ReactionProduct
     inline G4double GetTotalEnergy() const
     { return totalEnergy; }
     
-    inline void SetKineticEnergy( const G4double e )
+    inline void SetKineticEnergy( const G4double en )
     {
-      kineticEnergy = e;
+      kineticEnergy = en;
       totalEnergy = kineticEnergy + mass;
     }
     
     inline G4double GetKineticEnergy() const
     { return kineticEnergy; }
 
-    inline void SetTotalEnergy( const G4double e )
+    inline void SetTotalEnergy( const G4double en )
     {
-      totalEnergy = e;
+      totalEnergy = en;
       kineticEnergy = totalEnergy - mass;
     }
     
-    inline void SetMass( const G4double m )
-    { mass = m; }
+    inline void SetMass( const G4double mas )
+    { mass = mas; }
     
     inline G4double GetMass() const
     { return mass; }
@@ -149,8 +153,8 @@ class G4ReactionProduct
     inline G4double GetTOF() const
     { return timeOfFlight; }
     
-    inline void SetSide( const G4int s )
-    { side = s; }
+    inline void SetSide( const G4int sid )
+    { side = sid; }
     
     inline G4int GetSide() const
     { return side; }

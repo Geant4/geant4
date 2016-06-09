@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01CellParameterisation.hh,v 1.4 2006-06-29 16:30:29 gunter Exp $
+/// \file analysis/A01/include/A01CellParameterisation.hh
+/// \brief Definition of the A01CellParameterisation class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -43,8 +46,8 @@ class A01CellParameterisation : public G4VPVParameterisation
                    (const G4int copyNo,G4VPhysicalVolume *physVol) const;
 
   private:
-    G4double xCell[80];
-    G4double yCell[80];
+    G4double fXCell[80];
+    G4double fYCell[80];
 };
 
 #endif

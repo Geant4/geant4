@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/src/exGPSGeometryConstruction.cc
+/// \brief Implementation of the exGPSGeometryConstruction class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 //
@@ -35,21 +38,27 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 exGPSGeometryConstruction::exGPSGeometryConstruction ()
+: fUniverse_phys(0),
+  fAl_phys(0),
+  fSphere_phys(0)
 {;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 exGPSGeometryConstruction::~exGPSGeometryConstruction ()
 {;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VPhysicalVolume* exGPSGeometryConstruction::Construct ()
 {
   //
@@ -100,7 +109,7 @@ G4VPhysicalVolume* exGPSGeometryConstruction::Construct ()
   G4LogicalVolume * universe_log
     = new G4LogicalVolume(universe_s,Vacuum,"universe_L",0,0,0);
   //
-  universe_phys
+  fUniverse_phys
     = new G4PVPlacement(0,G4ThreeVector(),"universe_P",
                         universe_log,0,false,0);
   //define an aluminium box
@@ -110,9 +119,9 @@ G4VPhysicalVolume* exGPSGeometryConstruction::Construct ()
   G4LogicalVolume * Al_log
     = new G4LogicalVolume(Al_box,Aluminium,"Box_log",0,0,0);
   //
-  Al_phys
+  fAl_phys
     = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"Box_phys",
-			Al_log,universe_phys,false,0);
+                        Al_log,fUniverse_phys,false,0);
   //
   // Define an inner sphere.
   //x1
@@ -121,9 +130,9 @@ G4VPhysicalVolume* exGPSGeometryConstruction::Construct ()
   G4LogicalVolume * aSphere_log
     = new G4LogicalVolume(aSphere_sph,SiliconDioxide,"Sphere_log",0,0,0);
   //
-  aSphere_phys
+  fSphere_phys
     = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"Sphere_phys",aSphere_log,
-			Al_phys,false,0);
+                        fAl_phys,false,0);
   
 //--------- Visualization attributes -------------------------------
   universe_log->SetVisAttributes(G4VisAttributes::Invisible);
@@ -132,16 +141,7 @@ G4VPhysicalVolume* exGPSGeometryConstruction::Construct ()
   G4VisAttributes* bVisAtt= new G4VisAttributes(G4Colour(1.0,2.0,.0));
   aSphere_log->SetVisAttributes(bVisAtt);
 
-  return universe_phys;
+  return fUniverse_phys;
 }
 
-
-
-
-
-
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

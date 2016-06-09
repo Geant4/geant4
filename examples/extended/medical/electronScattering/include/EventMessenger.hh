@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventMessenger.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/EventMessenger.hh
+/// \brief Definition of the EventMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,10 +53,10 @@ class EventMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction*          eventAction;
-    G4UIdirectory*        eventDir;          
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+    EventAction*          fEventAction;
+    G4UIdirectory*        fEventDir;          
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -34,6 +34,7 @@
 #include "G4MIRDUpperLargeIntestine.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4EllipticalTube.hh"

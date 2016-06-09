@@ -514,7 +514,7 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
     HVPoint3D  point(0,0,0);
     
     for (i=0; i<nnode; i++) { point += nodes[iNodes[i]].v; }
-    if (nnode > 0) point *= (1./nnode);
+    if (nnode > 1) point *= (1./nnode);
     //G.Barrand : faces.back().plane = HVPlane3D(n.unit(), point);
     faces.back().plane = HVPlane3D(n, point); //G.Barrand
 
@@ -717,7 +717,7 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
   if (s1 != ZERO_ZERO && s2 != ZERO_ZERO) {
     if (s1 == s2)                       return NON_PLANAR_FACE;
     int     iedge, i1 = 0, i2 = 0, ii[2];
-    double  d1 = 0., d2 = 0., dd ;
+    double  d1 = 0., d2 = 0., d3 = 0.;
     ii[0] = ie1; ii[1] = ie2;
     for (i=0; i<2; i++) {
       iedge = faces[iface].iedges[ii[i]];
@@ -737,7 +737,7 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
         iedge = edges[iedge].inext;
       }
       if (ii[i] == (int)nodes.size()) {
-        dd = d2-d1; d1 = d1/dd; d2 = d2/dd;
+        d3 = d2-d1; d1 = d1/d3; d2 = d2/d3;
         nodes.push_back(ExtNode(d2*nodes[i1].v-d1*nodes[i2].v, iedge));
       }  
     }
@@ -1550,9 +1550,9 @@ void BooleanProcessor::mergeContours(int ix, int iy, int kext, int kint)
             }
           }
           i = edges[i1int].iface1;
-          edges.push_back(ExtEdge(k[1], k[4], i, -(edges.size()+1), -1));
+          edges.push_back(ExtEdge(k[1], k[4], i, -(int(edges.size())+1), -1));
           edges.back().inext = i2int;
-          edges.push_back(ExtEdge(k[4], k[1], i, -(edges.size()-1), -1));
+          edges.push_back(ExtEdge(k[4], k[1], i, -(int(edges.size())-1), -1));
           edges.back().inext = edges[i1ext].inext;
           edges[i1ext].inext = edges.size()-2;
           edges[i1int].inext = edges.size()-1;
@@ -1704,13 +1704,13 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     int iface2 = faces.size();
 
     edges[ipnext].inext = edges.size();
-    edges.push_back(ExtEdge(i1, i3, iface1, -(edges.size()+1), -1));
+    edges.push_back(ExtEdge(i1, i3, iface1, -(int(edges.size())+1), -1));
     edges.back().inext = edges[iedge2].inext;
 
     //   A D D   N E W   T R I A N G L E   T O   T H E   L I S T
 
     edges[iedge2].inext = edges.size();
-    edges.push_back(ExtEdge(i3, i1, iface2, -(edges.size()-1), -1));
+    edges.push_back(ExtEdge(i3, i1, iface2, -(int(edges.size())-1), -1));
     faces.push_back(ExtFace(edges,0)); //G.Barrand : ok ?
     faces.back().iold   = iedge1;
     faces.back().inew   = ORIGINAL_FACE;

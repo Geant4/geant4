@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.15 2010-11-02 11:13:05 gcosmo Exp $
+// $Id$
 // GEANT4 tag $Name: $
 //
 //
@@ -38,6 +38,7 @@
 
 #include "G4tgrMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4UIcommand.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -859,19 +860,19 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
   } else if (solidType == "POLYCONE") {
     //--- Dump RZ corners, as original parameters will not be present
     //    if it was build from RZ corners
-    const G4Polycone * pc = dynamic_cast < const G4Polycone * > (so);
-    if (pc) {
-      G4double angphi = pc->GetStartPhi()/deg;
+    const G4Polycone * plc = dynamic_cast < const G4Polycone * > (so);
+    if (plc) {
+      G4double angphi = plc->GetStartPhi()/deg;
       if( angphi > 180*deg )  { angphi -= 360*deg; }
-      G4int ncor = pc->GetNumRZCorner();
+      G4int ncor = plc->GetNumRZCorner();
       params.push_back( angphi );
-      params.push_back( pc->GetOriginalParameters()->Opening_angle/deg ); 
+      params.push_back( plc->GetOriginalParameters()->Opening_angle/deg ); 
       params.push_back( ncor );
     
       for( G4int ii = 0; ii < ncor; ii++ )
       {
-        params.push_back( pc->GetCorner(ii).r ); 
-        params.push_back( pc->GetCorner(ii).z );
+        params.push_back( plc->GetCorner(ii).r ); 
+        params.push_back( plc->GetCorner(ii).z );
       }
     }
   } else if (solidType == "POLYHEDRA") {

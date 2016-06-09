@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimplexDownhill.icc,v 1.2 2007-05-11 13:05:53 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Tatsumi Koi (SLAC/SCCS), 2007
 // --------------------------------------------------------------------------
@@ -86,7 +85,7 @@ G4double G4SimplexDownhill<T>::GetMinimum()
       }
       i++;
    }
-   std::vector< G4double > minimumPoint = currentSimplex[ imin ];
+   minimumPoint = currentSimplex[ imin ];
 
 // Second Trial
 
@@ -437,7 +436,7 @@ std::vector< G4double > G4SimplexDownhill<T>::GetMinimumPoint()
       }
       i++;
    }
-   std::vector< G4double > minimumPoint = currentSimplex[ imin ];
+   minimumPoint = currentSimplex[ imin ];
 
    return minimumPoint; 
 }

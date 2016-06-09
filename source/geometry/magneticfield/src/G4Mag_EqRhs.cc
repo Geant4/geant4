@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_EqRhs.cc,v 1.12 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  This is the standard right-hand side for equation of motion  
 //    in a pure Magnetic Field .
@@ -41,6 +40,8 @@
 #include "G4MagneticField.hh"
 #include "G4Mag_EqRhs.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 const G4double G4Mag_EqRhs::fUnitConstant = 0.299792458 * (GeV/(tesla*m)); 
 

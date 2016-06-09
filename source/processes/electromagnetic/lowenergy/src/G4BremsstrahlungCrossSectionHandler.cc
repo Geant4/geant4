@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.12 2009-09-27 10:47:42 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -106,15 +105,15 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  for (size_t m=0; m<numOfCouples; m++) {
+  for (size_t mLocal=0; mLocal<numOfCouples; mLocal++) {
 
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(m);
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(mLocal);
     const G4Material* material= couple->GetMaterial();
     const G4ElementVector* elementVector = material->GetElementVector();
     const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
     G4int nElements = material->GetNumberOfElements();
 
-    G4double tcut  = (*energyCuts)[m];
+    G4double tcut  = (*energyCuts)[mLocal];
 
     G4VDataSetAlgorithm* algo = interp->Clone();
     G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo,1.,1.);

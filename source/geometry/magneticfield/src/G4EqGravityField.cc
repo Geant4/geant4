@@ -38,6 +38,7 @@
 
 #include "G4EqGravityField.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
 
 void
 G4EqGravityField::SetChargeMomentumMass(G4double,

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.14 2008-12-03 16:41:45 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // class G4PVDivision
 //

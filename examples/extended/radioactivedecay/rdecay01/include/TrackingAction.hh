@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
 //
-// $Id: TrackingAction.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -36,7 +38,6 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class HistoManager;
 class RunAction;
 class EventAction;
 class TrackingMessenger;
@@ -46,22 +47,21 @@ class TrackingMessenger;
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(HistoManager*, RunAction*, EventAction*);
+    TrackingAction(RunAction*, EventAction*);
    ~TrackingAction();
    
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
     
     void SetFullChain(G4bool flag) { fullChain = flag;};
     
   private:
-    HistoManager*       histoManager;
-    RunAction*          run;
-    EventAction*        event;
-    TrackingMessenger*  trackMessenger;
+    RunAction*          fRun;
+    EventAction*        fEvent;
+    TrackingMessenger*  fTrackMessenger;
     
-    G4double charge, mass;        
-    G4bool fullChain;
+    G4double fCharge, fMass;        
+    G4bool   fullChain;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

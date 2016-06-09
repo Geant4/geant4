@@ -4,7 +4,7 @@
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := DNAPhysics
+name := dnaphysics
 
 G4TARGET := $(name)
 G4EXLIB := true

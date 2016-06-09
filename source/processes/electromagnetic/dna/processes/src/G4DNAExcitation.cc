@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAExcitation.cc,v 1.7 2010-10-08 08:53:17 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4DNAExcitation.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,50 +79,50 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
       // Emfietzoglou model
 /*
-      if(!Model()) SetModel(new G4DNAEmfietzoglouExcitationModel);
-      Model()->SetLowEnergyLimit(8.23*eV);
-      Model()->SetHighEnergyLimit(10*MeV);
+      if(!EmModel()) SetEmModel(new G4DNAEmfietzoglouExcitationModel);
+      EmModel()->SetLowEnergyLimit(8.23*eV);
+      EmModel()->SetHighEnergyLimit(10*MeV);
 */
       // Born model
 
-      if(!Model()) SetModel(new G4DNABornExcitationModel);
-      Model()->SetLowEnergyLimit(9*eV);
-      Model()->SetHighEnergyLimit(1*MeV);
+      if(!EmModel()) SetEmModel(new G4DNABornExcitationModel);
+      EmModel()->SetLowEnergyLimit(9*eV);
+      EmModel()->SetHighEnergyLimit(1*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
     
     if(name == "proton")
     {
-      if(!Model(1)) SetModel(new G4DNAMillerGreenExcitationModel,1);
-      Model(1)->SetLowEnergyLimit(10*eV);
-      Model(1)->SetHighEnergyLimit(500*keV);
+      if(!EmModel(1)) SetEmModel(new G4DNAMillerGreenExcitationModel,1);
+      EmModel(1)->SetLowEnergyLimit(10*eV);
+      EmModel(1)->SetHighEnergyLimit(500*keV);
 
-      if(!Model(2)) SetModel(new G4DNABornExcitationModel,2);
-      Model(2)->SetLowEnergyLimit(500*keV);
-      Model(2)->SetHighEnergyLimit(100*MeV);
+      if(!EmModel(2)) SetEmModel(new G4DNABornExcitationModel,2);
+      EmModel(2)->SetLowEnergyLimit(500*keV);
+      EmModel(2)->SetHighEnergyLimit(100*MeV);
     
-      AddEmModel(1, Model(1));   
-      AddEmModel(2, Model(2));   
+      AddEmModel(1, EmModel(1));   
+      AddEmModel(2, EmModel(2));   
     }
 
     if(name == "hydrogen")
     {
-      if(!Model()) SetModel(new G4DNAMillerGreenExcitationModel);
-      Model()->SetLowEnergyLimit(10*eV);
-      Model()->SetHighEnergyLimit(500*keV);
+      if(!EmModel()) SetEmModel(new G4DNAMillerGreenExcitationModel);
+      EmModel()->SetLowEnergyLimit(10*eV);
+      EmModel()->SetHighEnergyLimit(500*keV);
    
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
 
     if( name == "alpha" || name == "alpha+" || name == "helium" )
     {
-      if(!Model()) SetModel(new G4DNAMillerGreenExcitationModel);
-      Model()->SetLowEnergyLimit(1*keV);
-      Model()->SetHighEnergyLimit(400*MeV);
+      if(!EmModel()) SetEmModel(new G4DNAMillerGreenExcitationModel);
+      EmModel()->SetLowEnergyLimit(1*keV);
+      EmModel()->SetHighEnergyLimit(400*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
   } 
@@ -132,13 +132,13 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4DNAExcitation::PrintInfo()
 {
-  if (Model(2))
+  if (EmModel(2))
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model(1)->GetName() 
+      << EmModel(1)->GetName() 
       << " and "
-      << Model(2)->GetName() 
+      << EmModel(2)->GetName() 
       << " models"
       << G4endl;
   } 
@@ -146,7 +146,7 @@ void G4DNAExcitation::PrintInfo()
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model()->GetName() 
+      << EmModel()->GetName() 
       << G4endl;
   }
 }         

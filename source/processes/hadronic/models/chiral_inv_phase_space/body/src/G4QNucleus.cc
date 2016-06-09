@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.121 2010-11-22 07:08:22 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -44,12 +43,15 @@
 //#define pardeb
 //#define ppdebug
 
-#include "G4QNucleus.hh"
-#include "Randomize.hh"
 #include <algorithm>
 #include <cmath>
 #include <vector>
-//#include <cstdlib>
+
+#include "G4QNucleus.hh"
+#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 // Static parameters definition
@@ -72,17 +74,17 @@ G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), ma
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
-  G4QHadron(90000000+s*1000000+z*1000+n), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
+G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s_value) :
+  G4QHadron(90000000+s_value*1000000+z*1000+n), Z(z),N(n),S(s_value), dZ(0),dN(0),dS(0), maxClust(0),
   theNucleons(), currentNucleon(-1), rho0(1.), radius(1.),
   Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
 #ifdef debug
-  G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
+  G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s_value<<G4endl;
 #endif
-  SetZNSQC(z,n,s);
+  SetZNSQC(z,n,s_value);
   G4QPDGCode nQPDG(90000000+S*1000000+Z*1000+N); // Not necessary (? look above)
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByZNS: nQPDG="<<nQPDG<<G4endl;
@@ -130,8 +132,8 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
-  G4QHadron(90000000+s*1000000+z*1000+n,p), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
+G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s_value, G4LorentzVector p) :
+  G4QHadron(90000000+s_value*1000000+z*1000+n,p), Z(z),N(n),S(s_value), dZ(0),dN(0),dS(0), maxClust(0),
   theNucleons(), currentNucleon(-1), rho0(1.),radius(1.),
   Tb(), TbActive(false), RhoActive(false)
 {
@@ -143,7 +145,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QPDGCode nPDG(90000000+S*1000000+Z*1000+N);
   SetQPDG(nPDG);
   G4QContent nQC(N+ZNS,Z+ZNS,S,0,0,0);
-  SetZNSQC(z,n,s);
+  SetZNSQC(z,n,s_value);
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(5) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
         <<", R="<<mediRatio<<G4endl;
@@ -379,15 +381,15 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
   //std::uninitialized_fill( probVect+1, probVect+256, 0.0 ); // Worse in performance!
   if(nucPDG<80000000) nucPDG=HadrToNucPDG(nucPDG); // Convert HadrPDGCode to NucPDGCode
-  G4int s=0;
+  G4int s_value=0;
   G4int z=0;
   G4int n=0;
   if(nucPDG>80000000 && nucPDG<100000000) // Try to convert the NUCCoding to PDGCoding
   {
-    G4QPDGCode(22).ConvertPDGToZNS(nucPDG, z, n, s);
+    G4QPDGCode(22).ConvertPDGToZNS(nucPDG, z, n, s_value);
     Z  =z;
     N  =n;
-    S  =s;
+    S  =s_value;
 #ifdef debug
     G4cout<<"G4QNucleus::InitByPDG:Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
 #endif
@@ -676,9 +678,9 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
     {
       G4LorentzVector n4M=(*u)->Get4Momentum(); // 4-mom of the current nucleon
       G4double srP2=(t4M-n4M).vect().mag2();    // p2 of the subResNucleus
-      G4double m2=m2n;                          // default subResNucleusM2 (for neutrons) 
-      if((*u)->GetPDGCode()==2212) m2=m2p;      // change it to subResNucleusM2 for protons
-      G4double srE=std::sqrt(srP2+m2);          // Energy of the subResNucleus
+      G4double m2_value=m2n;                    // default subResNucleusM2 (for neutrons) 
+      if((*u)->GetPDGCode()==2212) m2_value=m2p;// change it to subResNucleusM2 for protons
+      G4double srE=std::sqrt(srP2+m2_value);    // Energy of the subResNucleus
 #ifdef debug
       G4cout<<"G4QNucleus::SubtractNucleon:#"<<cnt++<<", correctedEnergy="<<tE-srE<<G4endl;
 #endif
@@ -752,12 +754,12 @@ void G4QNucleus::Increase(G4QContent qQC, G4LorentzVector q4M)
 }
 
 // Set Quark Content, using Z,N,S of nucleus
-void G4QNucleus::SetZNSQC(G4int z, G4int n, G4int s)
+void G4QNucleus::SetZNSQC(G4int z, G4int n, G4int s_value)
 {
-  G4int zns=z+n+s;
+  G4int zns=z+n+s_value;
   G4int Dq=n+zns;
   G4int Uq=z+zns;
-  G4int Sq=s;
+  G4int Sq=s_value;
   if      (Dq<0&&Uq<0&&Sq<0)SetQC(G4QContent( 0, 0, 0,-Dq,-Uq,-Sq));
   else if (Uq<0&&Sq<0)      SetQC(G4QContent(Dq, 0, 0,  0,-Uq,-Sq));
   else if (Dq<0&&Sq<0)      SetQC(G4QContent( 0,Uq, 0,-Dq,  0,-Sq));
@@ -1179,14 +1181,14 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       G4double nucM = mNeut;
       G4int   piPDG = -211;
       G4QPDGCode db = NNQPDG;
-      G4QPDGCode pi = PIMQPDG;
+      G4QPDGCode pi_value = PIMQPDG;
       if(N<0)
       {
         nucPDG = 2212;
         nucM   = mProt;
         piPDG  = 211;
         db     = PPQPDG;
-        pi     = PIPQPDG;
+        pi_value = PIPQPDG;
       }
       if(totMass>mPi+nucM+nucM)
       {
@@ -1202,7 +1204,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         }
         n14M+=n24M;
         h1->SetQPDG(db);
-        h2->SetQPDG(pi);
+        h2->SetQPDG(pi_value);
         h1->Set4Momentum(n14M);
         h2->Set4Momentum(pi4M);
         return true;
@@ -1418,8 +1420,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             paQPDG =G4QPDGCode(90000000+1000*(1000*S+Z-3)+N-2);
             GSResPA=paQPDG.GetMass();
 #ifdef debug
-            G4double s=GSResPA+mAlph+mProt+SAPBarr;
-            G4cout<<"G4QN::EB:paM="<<GSResPA<<",T="<<s-GSMass<<",E="<<totMass-s<<G4endl;
+            G4double s_value=GSResPA+mAlph+mProt+SAPBarr;
+            G4cout<<"G4QN::EB:paM="<<GSResPA<<",T="<<s_value-GSMass<<",E="<<totMass-s_value<<G4endl;
 #endif
             if(GSResPA+mProt+SAPBarr+mAlph<totMass) paFlag=true;
           }
@@ -1533,8 +1535,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             aaQPDG =G4QPDGCode(90000000+1000*(1000*S+Z-4)+N-4);
             GSResAA=aaQPDG.GetMass();
 #ifdef debug
-            G4double s=GSResAA+mAlph+mAlph+SAABarr;
-            G4cout<<"G4QNucl::EvapBaryon: a="<<GSResNP<<",T="<<s-GSMass<<",E="<<totMass-s
+            G4double s_value=GSResAA+mAlph+mAlph+SAABarr;
+            G4cout<<"G4QNucl::EvapBaryon: a="<<GSResNP<<",T="<<s_value-GSMass<<",E="<<totMass-s_value
                   <<",A="<<SAABarr<<G4endl;
 #endif
             if(GSResAA+mAlph+mAlph+SAABarr<totMass) aaFlag=true;
@@ -1544,8 +1546,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             naQPDG =G4QPDGCode(90000000+1000*(1000*S+Z-2)+N-3);
             GSResNA=naQPDG.GetMass();
 #ifdef debug
-            G4double s=GSResNA+mAlph+mNeut;
-            G4cout<<"G4QNucl::EvapBary: M="<<GSResNA<<",T="<<s-GSMass<<",E="<<totMass-s
+            G4double s_value=GSResNA+mAlph+mNeut;
+            G4cout<<"G4QNucl::EvapBary: M="<<GSResNA<<",T="<<s_value-GSMass<<",E="<<totMass-s_value
                   <<",C="<<ABarr<<G4endl;
 #endif
             if(GSResNA+mNeut+mAlph+ABarr<totMass) naFlag=true;
@@ -1582,8 +1584,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           npQPDG=G4QPDGCode(90000000+1000*(1000*S+Z-1)+N-1);
           GSResNP=npQPDG.GetMass();
 #ifdef debug
-          G4double s=GSResNP+mNeut+mProt;
-          G4cout<<"G4QNucl::EvapBaryon: npM="<<GSResNP<<",T="<<s-GSMass<<",E="<<totMass-s
+          G4double s_value=GSResNP+mNeut+mProt;
+          G4cout<<"G4QNucl::EvapBaryon: npM="<<GSResNP<<",T="<<s_value-GSMass<<",E="<<totMass-s_value
                 <<",C="<<PBarr<<G4endl;
 #endif
           if(GSResNP+mNeut+mProt+PBarr<totMass) npFlag=true;
@@ -1787,26 +1789,26 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             (aFlag && aExcess > aMin) ) && minE<maxE )
       {
         G4double mi=uWell+minE;          // Minimum Kinetic Energy for minimal nucleon
-        G4double mm=uWell+maxE;          // Personal maximum for Kinetic Energy
+        G4double mm_value=uWell+maxE;    // Personal maximum for Kinetic Energy
         G4double ma=uWell*a+maxE;        // Total Kinetic Energy of baryons (@@alphas?)
         if(mi<0.)
         {
           uW-=mi;
-          mm-=mi;
+          mm_value-=mi;
           mi=0.;
         }
         //G4bool good=true;
-        if(ma<mm)
+        if(ma<mm_value)
         {
-          ma=mm;
+          ma=mm_value;
           //good=false;
         }
 #ifdef debug
-        G4cout<<"G4QNuc::EvapBary:iE="<<minE<<",aE="<<maxE<<",mi="<<mi<<",mm="<<mm<<",ma="
+        G4cout<<"G4QNuc::EvapBary:iE="<<minE<<",aE="<<maxE<<",mi="<<mi<<",mm="<<mm_value<<",ma="
               <<ma<<G4endl;
 #endif
-        G4double xMi=mi/ma;                     // Minimal value of x
-        G4double xMm=mm/ma;                     // Personal maximum x
+        G4double xMi=mi/ma;                       // Minimal value of x
+        G4double xMm=mm_value/ma;                 // Personal maximum x
         //G4double xCa=maSht-coSht*log(a);        // Maximal value of x (approximation)
         //G4double xMa=xCa;                       // Maximal value of x
         //if(xMm<xMa) xMa=xMm;
@@ -1815,7 +1817,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         if(xMi<0.)xMi=0.;
         if(xMi>xMa)
         {
-          G4cerr<<"***G4QNucleus::EvapBaryon: M="<<mm/ma<<",xi="<<xMi<<",xa="<<xMa<<G4endl;
+          G4cerr<<"***G4QNucleus::EvapBaryon: M="<<mm_value/ma<<",xi="<<xMi<<",xa="<<xMa<<G4endl;
           return false;
         }
         xMi=sqrt(xMi);                          // @@ ?
@@ -3016,17 +3018,17 @@ G4int G4QNucleus::RandomizeBinom(G4double p,G4int aN)
   G4double d = 1.-p;
   if(d<=0.) return 0;
   G4double v = pow(d,aN);
-  G4double s = v;
-  if(r<s) return 0;
+  G4double s_value = v;
+  if(r<s_value) return 0;
   G4int i=0;
   G4int j=aN+1;
   G4double f=p/d;
-  while(r>s && i<aN)
+  while(r>s_value && i<aN)
   {
     j--;
     i++;
     v*=j*f/i;
-    s+=v;
+    s_value+=v;
   }
   return i;
 }
@@ -3132,7 +3134,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   G4int cca=0;                          // Counter of clusters for the same baryon number
   G4int acm=0;                          // Threshold ac value
   G4int mCand=theQCandidates.size();    // Full set of candidates made in UpdateClusters
-  G4double s=0.;                        // Prototype of summ for constant A (=ac>2)
+  G4double s_value=0.;                  // Prototype of summ for constant A (=ac>2)
   G4double comb=ae0*(ae0-1)/2;          // Product up to ac=2
   if(comb<=0.) comb=1.;
 #ifdef cldebug
@@ -3294,7 +3296,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
             {
               if(ac<ae1 && ac>0) comb*=(ae1-ac)/ac;
               acm=ac;
-              s=0.;
+              s_value=0.;
               cca=0;
 #ifdef cldebug
               if(ac%2) mac=7;                      // @@Change it if cluster set is changed
@@ -3311,7 +3313,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
               if(nc>0) for(int in=1; in<=nc; in++) prod*=(ne1-in)/in;
               if(sc>0) for(int is=1; is<=sc; is++) prod*=(se1-is)/is;
             }
-            s+=prod;
+            s_value+=prod;
             pos*=prod;
             pos/=comb;
 #ifdef cldebug
@@ -3869,16 +3871,16 @@ G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
   G4double  sum2=sum.mag2();                        // Initial squared sum
   G4double  hsum2=sum2/2;                           // Half squared sum
   G4double*  dp= new G4double[am1];                 // Displacements
-  G4int     m=am1;                                  // #0fVectors used for correction
+  G4int     m_value=am1;                            // #0fVectors used for correction
   G4double  minS=DBL_MAX;                           // Min value of Fermi Momentum
   G4int     minI=0;                                 // Index of maximum Fermi Momentum
   for(G4int i=0; i<am1; i++) dp[i]=sum.dot(vect[i]);// Calculation of dot-products
-  while(m)
+  while(m_value)
   {
-    m=0;
+    m_value=0;
     for(G4int i=0; i<am1; i++) if(dp[i]>0 && dp[i]<sum2) // can be used for the reduction
     {
-      m++;
+      m_value++;
       G4double shift=fabs(dp[i]-hsum2);
       if(shift < minS)
       {
@@ -3886,7 +3888,7 @@ G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
         minI=i;
       }
     }
-    if(m)                                            // There is a vector reducing the sum
+    if(m_value)                                      // There is a vector reducing the sum
     {
       G4ThreeVector x=(dp[minI]/hsum2)*sum;          // turn-reduction of the sum-vector
       vect[minI]-=x;                                 // turn the minI-th vector
@@ -5701,22 +5703,22 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
         G4QPDGCode h1=resChip.GetQPDG1();
         G4double m1  =h1.GetMass();             // Mass of the first hadron
         G4QPDGCode h2=resChip.GetQPDG2();
-        G4double m2  =h2.GetMass();             // Mass of the second hadron
-        if(totMass+.0001>m1+m2)
+        G4double m2_value  =h2.GetMass();       // Mass of the second hadron
+        if(totMass+.0001>m1+m2_value)
         {
 #ifdef qdebug
           if(!qH) G4cout<<"-Warning-G4QNucleus::EvaporateNucleus: (24) qH=0"<<G4endl;
 #endif
           delete qH;                            // Chipolino should not be in a sequence
           G4LorentzVector fq4M(0.,0.,0.,m1);
-          G4LorentzVector qe4M(0.,0.,0.,m2);
+          G4LorentzVector qe4M(0.,0.,0.,m2_value);
           if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
           {
-            // G4cerr<<"***G4QNuc::EvaNuc:tM="<<totMass<<"-> h1M="<<m1<<" + h2M="<<m2<<G4endl;
+            // G4cerr<<"***G4QNuc::EvaNuc:tM="<<totMass<<"-> h1M="<<m1<<" + h2M="<<m2_value<<G4endl;
             // throw G4QException("G4QNucleus::EvaporateNucleus: Chipol->h1+h2 DecIn2 error");
             G4ExceptionDescription ed;
             ed << "Chipol->h1+h2 DecIn2 error: tM=" << totMass << "-> h1M="
-               << m1 <<" + h2M=" << m2 << G4endl;
+               << m1 <<" + h2M=" << m2_value << G4endl;
             G4Exception("G4QNucleus::EvaporateNucleus()", "HAD_CHPS_0021",
                         FatalException, ed);
           }
@@ -5737,11 +5739,11 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
           if(!qH) G4cout<<"-Warning-G4QNucleus::EvaporateNucleus: (25) qH=0"<<G4endl;
 #endif
           delete qH;
-          // G4cerr<<"**G4QN::EN:M="<<totMass<<"<"<<m1<<"+"<<m2<<",d="<<m1+m2-totMass<<G4endl;
+          // G4cerr<<"**G4QN::EN:M="<<totMass<<"<"<<m1<<"+"<<m2_value<<",d="<<m1+m2_value-totMass<<G4endl;
           // throw G4QException("G4QNucleus::EvaporateNucleus: Chipolino is under MassShell");
           G4ExceptionDescription ed;
           ed << "Chipolino is under MassShell: M=" << totMass << "<" << m1
-             << "+" << m2 << ",d=" << m1+m2-totMass << G4endl;
+             << "+" << m2_value << ",d=" << m1+m2_value-totMass << G4endl;
           G4Exception("G4QNucleus::EvaporateNucleus()", "HAD_CHPS_0022",
                       FatalException, ed);
         }
@@ -7010,17 +7012,17 @@ void G4QNucleus::DecayAntiStrange(G4QHadron* qH, G4QHadronVector* evaHV)
   G4cout<<"G4QNucleus::DecayAnStran:nK0="<<n1<<",nK+="<<n2<<", nucM="<<nucM<<G4endl;
 #endif
   G4int m1=0;                        // prototype of a#of K0's
-  G4int m2=qP;                       // prototype of a#of K+'s
-  if(qP>=-qS)   m2=-qS;              // Enough charge for K+'s
+  G4int m2_value=qP;                 // prototype of a#of K+'s
+  if(qP>=-qS)   m2_value=-qS;        // Enough charge for K+'s
   else if(qP>0) m1=-qS-qP;           // Anti-Lambdas are partially compensated by neutrons
-  G4int sPDG=90000000+(qP-m2)*1000+(qN-m1);     // PDG of the Residual Nucleus
+  G4int sPDG=90000000+(qP-m2_value)*1000+(qN-m1); // PDG of the Residual Nucleus
   G4double mucM = G4QNucleus(sPDG).GetGSMass(); // Mass of the Residual Nucleus
-  if(mucM+m1*mK+m2*mK0<nucM+n1*mK+n2*mK0)       // New is smaller
+  if(mucM+m1*mK+m2_value*mK0<nucM+n1*mK+n2*mK0) // New is smaller
   {
     qPDG=sPDG;
     nucM=mucM;
     n1=m1;
-    n2=m2;
+    n2=m2_value;
   }
 #ifdef debug
   G4cout<<"G4QNucleus::DecayAnStran: n1="<<n1<<", n2="<<n2<<", nM="<<nucM<<G4endl;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP.hh,v 1.2 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +33,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 16.10.2012 A.Ribon: renamed stopping builder
 //
 //----------------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
+#include "G4LHEPStoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4LHEPPiKBuilder.hh"
@@ -79,7 +79,7 @@ class HadronPhysicsLHEP : public G4VPhysicsConstructor
     G4LHEPProtonBuilder * theLHEPPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
+    G4LHEPStoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch

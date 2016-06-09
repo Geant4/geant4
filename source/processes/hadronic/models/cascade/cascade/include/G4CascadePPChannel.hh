@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePPChannel.hh,v 1.3 2010-06-25 09:42:28 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
+//
+// 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 
 #ifndef G4_CASCADE_PP_CHANNEL_HH
 #define G4_CASCADE_PP_CHANNEL_HH
@@ -38,6 +39,17 @@ struct G4CascadePPChannelData {
   static data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadePPChannelData,G4PionNucSampler> G4CascadePPChannel;
+
+class G4CascadePPChannel
+  : public G4CascadeFunctions<G4CascadePPChannelData,G4PionNucSampler> {
+public:
+  G4CascadePPChannel()
+    : G4CascadeFunctions<G4CascadePPChannelData,G4PionNucSampler>() {;}
+  virtual ~G4CascadePPChannel() {;}
+
+  // Will replace interpolation of 0-10 MeV bin on total and elastic
+  virtual G4double 
+  findCrossSection(G4double ke, const G4double (&xsec)[30]) const;
+};
 
 #endif	/* G4_CASCADE_PP_CHANNEL_HH */

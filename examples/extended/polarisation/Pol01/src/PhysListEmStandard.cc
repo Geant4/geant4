@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.3 2009-11-21 16:27:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file polarisation/Pol01/src/PhysListEmStandard.cc
+/// \brief Implementation of the PhysListEmStandard class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -103,14 +105,14 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" || 
-	       particleName == "GenericIon" ) { 
+               particleName == "He3" || 
+               particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4hMultipleScattering,  -1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,        -1, 2,2);
 
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering, -1,1,1);
       pmanager->AddProcess(new G4hIonisation,         -1,2,2);

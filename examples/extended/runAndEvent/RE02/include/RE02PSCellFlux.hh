@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02PSCellFlux.hh
+/// \brief Definition of the RE02PSCellFlux class
 //
-// $Id: RE02PSCellFlux.hh,v 1.2 2006-12-13 15:42:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef RE02PSCellFlux_h
@@ -33,21 +35,22 @@
 
 #include "G4PSCellFlux.hh"
 ///////////////////////////////////////////////////////////////////////////////
-// (Description)
-//   This is a primitive scorer class for scoring cell flux.
-//   The Cell Flux is defined by  a sum of track length divided
-//   by the geometry volume, where all of the tracks in the geometry
-//   are taken into account. e.g. the unit of Cell Flux is mm/mm3.
 //
-//
-//   If you want to score only tracks passing through the geometry volume,
-//  please use G4PSPassageCellFlux.
-//
-//
+/// Cell flux class for a parameterized volume in a three dimentional structure
+///
+/// (Description)
+///   This is a primitive scorer class for scoring cell flux.
+///   The Cell Flux is defined by a sum of track length divided by the geometry
+///   volume, where all of the tracks in the geometry are taken into account.
+///   e.g. the unit of Cell Flux is mm/mm3.
+///
+///   If you score only tracks passing through the geometry volume, use
+///   G4PSPassageCellFlux.
+///
+///
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class RE02PSCellFlux : public G4PSCellFlux
 {

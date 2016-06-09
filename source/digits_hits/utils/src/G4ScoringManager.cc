@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.33 2010-09-24 05:51:27 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4ScoringManager.hh"
@@ -92,7 +91,7 @@ void G4ScoringManager::Accumulate(G4VHitsCollection* map)
   sm->Accumulate(static_cast<G4THitsMap<double>*>(map));
 }
 
-G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
+G4VScoringMesh* G4ScoringManager::FindMesh(const G4String& wName)
 {
   G4VScoringMesh* sm = 0;
   for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
@@ -123,7 +122,9 @@ void G4ScoringManager::Dump() const
   }
 }
 
-void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String colorMapName,G4int axflg)
+void G4ScoringManager::DrawMesh(const G4String& meshName,
+                                const G4String& psName,
+                                const G4String& colorMapName, G4int axflg)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) 
@@ -141,7 +142,10 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String color
   }
 }
 
-void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4int idxPlane,G4int iColumn,G4String colorMapName)
+void G4ScoringManager::DrawMesh(const G4String& meshName,
+                                const G4String& psName,
+                                      G4int idxPlane, G4int iColumn,
+                                const G4String& colorMapName)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) 
@@ -159,7 +163,10 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4int idxPlane
   }
 }
 
-void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4String fileName, G4String option)
+void G4ScoringManager::DumpQuantityToFile(const G4String& meshName,
+                                          const G4String& psName,
+                                          const G4String& fileName,
+                                          const G4String& option)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) {
@@ -171,7 +178,9 @@ void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4St
   }
 }
 
-void G4ScoringManager::DumpAllQuantitiesToFile(G4String meshName,G4String fileName, G4String option)
+void G4ScoringManager::DumpAllQuantitiesToFile(const G4String& meshName,
+                                               const G4String& fileName,
+                                               const G4String& option)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) {
@@ -196,7 +205,7 @@ void G4ScoringManager::RegisterScoreColorMap(G4VScoreColorMap* colorMap)
   }
 }
 
-G4VScoreColorMap* G4ScoringManager::GetScoreColorMap(G4String mapName)
+G4VScoreColorMap* G4ScoringManager::GetScoreColorMap(const G4String& mapName)
 {
   ColorMapDictItr mItr = fColorMapDict->find(mapName);
   if(mItr == fColorMapDict->end()) { return 0; }

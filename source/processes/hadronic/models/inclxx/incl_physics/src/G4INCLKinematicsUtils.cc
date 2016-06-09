@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,17 +49,18 @@ namespace G4INCL {
   }
 
   G4double KinematicsUtils::getLocalEnergy(Nucleus const * const n, Particle * const p) {
-    // assert(!p->isPion()); // No local energy for pions
+// assert(!p->isPion()); // No local energy for pions
 
     G4double vloc = 0.0;
     const G4double r = p->getPosition().mag();
     const G4double mass = p->getMass();
 
     // Local energy is constant outside the surface
-    if(r > n->getDensity()->getMaximumRadius()) {
+    if(r > n->getUniverseRadius()) {
       WARN("Tried to evaluate local energy for a particle outside the maximum radius."
-            << std::endl << p->prG4int() << std::endl
-            << "Maximum radius = " << n->getDensity()->getMaximumRadius() << std::endl);
+            << std::endl << p->print() << std::endl
+            << "Maximum radius = " << n->getDensity()->getMaximumRadius() << std::endl
+            << "Universe radius = " << n->getUniverseRadius() << std::endl);
       return 0.0;
     }
 
@@ -68,7 +69,7 @@ namespace G4INCL {
     if(kinE <= n->getPotential()->getFermiEnergy(p->getType())) {
       pfl0 = n->getPotential()->getFermiMomentum(p);
     } else {
-      const G4double tf0 = p->getPotentialEnergy() - ParticleTable::getSeparationEnergy(p->getType());
+      const G4double tf0 = p->getPotentialEnergy() - n->getPotential()->getSeparationEnergy(p);
       if(tf0<0.0) return 0.0;
       pfl0 = std::sqrt(tf0*(tf0 + 2.0*mass));
     }
@@ -153,6 +154,15 @@ namespace G4INCL {
 
   G4double KinematicsUtils::invariantMass(const G4double E, const ThreeVector & p) {
     return std::sqrt(E*E - p.mag2());
+  }
+
+  G4double KinematicsUtils::gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin) {
+    G4double mass;
+    if(p.theType==Composite)
+      mass = ParticleTable::getTableMass(p.theA, p.theZ);
+    else
+      mass = ParticleTable::getTableParticleMass(p.theType);
+    return (1.+EKin/mass);
   }
 
 }

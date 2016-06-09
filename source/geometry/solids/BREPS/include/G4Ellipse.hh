@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.hh,v 1.10 2006-06-29 18:39:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4Ellipse
@@ -39,6 +38,8 @@
 // ----------------------------------------------------------------------
 #ifndef __ELLIPTICCURVE_H
 #define __ELLIPTICCURVE_H 
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CircularCurve.hh"
 

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh,v 1.4 2006-06-29 17:00:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -60,27 +61,28 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
 public:
-  DetectorMessenger(DetectorConstruction* );
-  ~DetectorMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  DetectorMessenger(DetectorConstruction* );
+  virtual ~DetectorMessenger();
+
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
-  DetectorConstruction* Detector;
+  DetectorConstruction* fDetector;
 
-  G4UIdirectory*             testemDir;
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWithAString*        LBinCmd;
-  G4UIcmdWithADoubleAndUnit* l1Cmd;
-  G4UIcmdWithADoubleAndUnit* l2Cmd;
-  G4UIcmdWithADoubleAndUnit* l3Cmd;
-  G4UIcmdWithADoubleAndUnit* l4Cmd;
-  G4UIcmdWithADoubleAndUnit* l5Cmd;
-  G4UIcmdWithADoubleAndUnit* l6Cmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
-  G4UIcmdWith3Vector*        accCmd1;
-  G4UIcmdWith3Vector*        accCmd2;
-  G4UIcmdWith3Vector*        accCmd3;
+  G4UIdirectory*             fAtestemDir;
+  G4UIcmdWithAString*        fAMaterCmd;
+  G4UIcmdWithAString*        fALBinCmd;
+  G4UIcmdWithADoubleAndUnit* fAl1Cmd;
+  G4UIcmdWithADoubleAndUnit* fAl2Cmd;
+  G4UIcmdWithADoubleAndUnit* fAl3Cmd;
+  G4UIcmdWithADoubleAndUnit* fAl4Cmd;
+  G4UIcmdWithADoubleAndUnit* fAl5Cmd;
+  G4UIcmdWithADoubleAndUnit* fAl6Cmd;
+  G4UIcmdWithoutParameter*   fAUpdateCmd;
+  G4UIcmdWith3Vector*        fAaccCmd1;
+  G4UIcmdWith3Vector*        fAaccCmd2;
+  G4UIcmdWith3Vector*        fAaccCmd3;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -40,6 +40,14 @@
 /process/inactivate CoulombScat
 /process/inactivate Decay
 
+
+#
+#Define user radioactive data 
+#The data files should be defined before definition of the ion source 
+#otherwise the mean life time will not be selected correctly
+#
+/grdm/setRadioactiveDecayFile 82 210 UserRadData_z82.a210
+
 #
 #Next lines needed to have  atomic relaxation working 
 #
@@ -54,18 +62,22 @@
 /grdm/noVolumes
 /grdm/selectVolume Target
 
+
 /gps/position 0 0 0
 /gps/energy 0 keV
 /gps/particle ion 
 /gps/ion 82 210 0  0
-/grdm/setRadioactiveDecayFile 82 210 UserRadData_z82.a210
+
 
 #
 # Only some 
 /histo/fileName userPb210
-/tracking/verbose 1
+/tracking/verbose 0
+/grdm/nucleusLimits 210 210 82 82 
+
 /run/beamOn 2
-/run/beamOn 10
+/run/beamOn 10000
+
 
 
 

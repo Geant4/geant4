@@ -112,7 +112,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
-              -I$(G4BASE)/processes/hadronic/models/incl/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
@@ -126,7 +125,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
-              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
+              -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
               -I$(G4BASE)/processes/hadronic/models/qmd/include \
               -I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
@@ -440,7 +439,11 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),setup)
+ifneq ($(MAKECMDGOALS),clean_setup)
 -include $(dependencies)
+endif
+endif
 endif
 endif
 

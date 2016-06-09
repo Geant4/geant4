@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.7 2006-06-29 18:56:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4AssemblyVolume

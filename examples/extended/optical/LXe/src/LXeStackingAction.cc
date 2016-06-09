@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeStackingAction.cc
+/// \brief Implementation of the LXeStackingAction class
+//
+//
 #include "LXeStackingAction.hh"
 #include "LXeUserEventInformation.hh"
 #include "LXeSteppingAction.hh"
@@ -35,31 +39,32 @@
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeStackingAction::LXeStackingAction()
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeStackingAction::~LXeStackingAction()
-{}
+LXeStackingAction::LXeStackingAction() {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXeStackingAction::~LXeStackingAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4ClassificationOfNewTrack
 LXeStackingAction::ClassifyNewTrack(const G4Track * aTrack){
-  
+ 
   LXeUserEventInformation* eventInformation=
     (LXeUserEventInformation*)G4EventManager::GetEventManager()
     ->GetConstCurrentEvent()->GetUserInformation();
-  
+ 
   //Count what process generated the optical photons
-  if(aTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()){ 
+  if(aTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()){
     // particle is optical photon
     if(aTrack->GetParentID()>0){
       // particle is secondary
       if(aTrack->GetCreatorProcess()->GetProcessName()=="Scintillation")
-	eventInformation->IncPhotonCount_Scint();
+        eventInformation->IncPhotonCount_Scint();
       else if(aTrack->GetCreatorProcess()->GetProcessName()=="Cerenkov")
-	eventInformation->IncPhotonCount_Ceren();
+        eventInformation->IncPhotonCount_Ceren();
     }
   }
   else{
@@ -67,18 +72,10 @@ LXeStackingAction::ClassifyNewTrack(const G4Track * aTrack){
   return fUrgent;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeStackingAction::NewStage(){
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeStackingAction::PrepareNewEvent(){ 
-}
+void LXeStackingAction::NewStage() {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
-
-
-
+void LXeStackingAction::PrepareNewEvent() {}

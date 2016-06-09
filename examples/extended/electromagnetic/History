@@ -14,7 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+16-11-12 I. Hrivnacova (electromagnetic-V09-05-00)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+    
 02-11-08 mma (electromagnetic-V09-01-01)
 - all PhysListEmStandard: update EM options (~option_3) 
      

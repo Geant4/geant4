@@ -17,6 +17,175 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th November 2012  Gabriele Cosmo (examples-V09-06-00)
+- Updated reference outputs according to reference tag geant4-09-06-ref-00.
+- Updated documentation.
+- Includes tags: air_shower-V09-05-07, amsEcal-V09-05-03, ccal-V09-05-05,
+                 ChargeExchangeMC-V09-05-05, dnaphysics-V09-05-07,
+                 gammaknife-V09-05-06, gammaraytel-V09-05-05,
+                 hadrontherapy-V09-05-13, human_phantom-V09-05-05,
+                 iort_therapy-V09-05-14, lAr_calorimeter-V09-05-03,
+                 medical_linac-V09-05-11, microbeam-V09-05-07,
+                 microdosimetry-V09-05-06, nanobeam-V09-05-06, purmag-V09-05-03,
+                 radioprotection-V09-05-03, XrayFluo-V09-05-06,
+                 exbasic-V09-05-05, exampleA01-V09-05-03, AnaEx02-V09-05-04,
+                 AnaEx03-V09-05-05, exampleN03Con-V09-05-07, B01-V09-05-01,
+                 exbiasing-V09-05-04, ReverseMC01-V09-05-06,
+                 excommon-analysis-V09-05-04, electromagnetic-V09-05-00,
+                 testem5-V09-05-12, testem7-V09-05-11, testem9-V09-05-08,
+                 testem10-V09-05-04, testem17-V09-05-06,
+                 exEventgenerator-V09-05-02, exgps-V09-05-04,
+                 exHepMC-V09-05-02, exExoticphysics-V09-05-02,
+                 phononExample-V09-05-09, fieldex-V09-05-03,
+                 fieldex02-V09-05-01, fieldex04-V09-05-04,
+                 exGeometry-V09-05-02, olapex-V09-05-01, exHadronic-V09-05-03,
+                 exhadr03-V09-05-15, exMedical-V09-05-02, DICOM-V09-05-10,
+                 fano-V09-05-09, exOptical-V09-05-01, LXe-V09-05-02,
+                 WLS-V09-05-04, exparallel-V09-05-00, MPI-V09-05-06,
+                 exgflash-V09-05-01, exPersistency-V09-05-08,
+                 exPolarisation-V09-05-02, exRadioactivedecay-V09-05-01,
+                 rdecay02-V09-05-05, exampleRE01-V09-05-02,
+                 exampleRE02-V09-05-03, exVisualization-V09-05-01,
+                 exampleN03-V09-05-02.
+
+2nd November 2012  Gabriele Cosmo (examples-V09-05-10)
+- Updated reference outputs according to reference tag geant4-09-05-ref-10.
+- Includes tags: examples-advanced-cmk-V09-05-00, air_shower-V09-05-05,
+                 amsEcal-V09-05-01, ccal-V09-05-03, ChargeExchangeMC-V09-05-03,
+                 brachy-V09-05-01, dnaphysics-V09-05-06, eRosita-V09-05-00,
+                 gammaknife-V09-05-03, gammaraytel-V09-05-00,
+                 hadrontherapy-V09-05-09, human_phantom-V09-05-03,
+                 iort_therapy-V09-05-05, lAr_calorimeter-V09-05-01,
+                 medical_linac-V09-05-07, microbeam-V09-05-05,
+                 microdosimetry-V09-05-05, nanobeam-V09-05-03, purmag-V09-05-02,
+                 radioprotection-V09-05-02, DMX-V09-05-03, XrayFluo-V09-05-04,
+                 xraytel-V09-05-01, exampleB4-V09-05-01, exbiasing-V09-05-03,
+                 examples-extended-V09-05-00, analysisExample-V09-05-05
+                 testem0-V09-05-09, testem1-V09-05-12, testem2-V09-05-05,
+                 testem3-V09-05-11, testem4-V09-05-07, testem5-V09-05-10,
+                 testem6-V09-05-03, testem7-V09-05-09, testem8-V09-05-09,
+                 testem9-V09-05-05, testem10-V09-05-03, testem11-V09-05-07,
+                 testem12-V09-05-09, testem13-V09-05-02, testem14-V09-05-05,
+                 testem15-V09-05-05, testem16-V09-05-03, testem17-V09-05-05,
+                 testem18-V09-05-04, fieldex01-V09-05-00, fieldex02-V09-05-00,
+                 fieldex03-V09-05-00, g3tog4Tests-V09-05-04, exhadr01-V09-05-06,
+                 exHadronic-V09-05-02, exhadr02-V09-05-05, exhadr03-V09-05-11,
+                 exMedical-V09-05-01, DICOM-V09-05-09, exPersistency-V09-05-06,
+                 gtherapy-V09-05-05, exampleP01-V09-05-07, exampleP02-V09-05-00,
+                 rdecay01-V09-05-13, rdecay02-V09-05-03, exampleRE01-V09-05-01,
+                 exRunAndEvent-V09-05-01, exampleRE02-V09-05-02,
+                 exampleRE03-V09-05-01, exampleRE04-V09-05-01,
+                 exNovice-V09-05-01.
+
+2nd October 2012  Gabriele Cosmo (examples-V09-05-09)
+- Updated reference outputs according to reference tag geant4-09-05-ref-09.
+- Includes tags: microdosimetry-V09-05-02, exbasic-V09-05-00,
+                 analysisExample-V09-05-04, exbiasing-V09-05-02,
+                 excommon-V09-05-02, testem0-V09-05-04, testem1-V09-05-09,
+                 testem5-V09-05-07, testem15-V09-05-03, exerrprop-V09-05-05,
+                 exEventgenerator-V09-05-01, monopole-V09-05-03,
+                 fieldex-V09-05-02, BlineTracer-V09-05-02, exGeometry-V09-05-00.
+                 exHadronic-V09-05-01, exhadr03-V09-05-07, fano-V09-05-06,
+                 electronScattering-V09-05-06, exampleES2-V09-05-05,
+                 fano2-V09-05-05, gtherapy-V09-05-02, exOptical-V09-05-00,
+                 exParameterisations-V09-05-00, exPersistency-V09-05-04,
+                 exPolarisation-V09-05-01, exRadioactivedecay-V09-05-00,
+                 rdecay01-V09-05-11, exVisualization-V09-05-00.
+
+5th September 2012  Gabriele Cosmo (examples-V09-05-08)
+- Updated reference outputs according to reference tag geant4-09-05-ref-08.
+- Added README and .README documentation in most extended examples.
+- Includes tags: dnaphysics-V09-05-01, microdosimetry-V09-05-01,
+                 exampleA01-V09-05-02, AnaEx01-V09-05-05, AnaEx02-V09-05-03,
+                 AnaEx03-V09-05-04, exampleN03Con-V09-05-05, testem0-V09-05-02,
+                 excommon-analysis-V09-05-03, testem1-V09-05-08,
+                 testem2-V09-05-02, testem3-V09-05-02, testem4-V09-05-05,
+                 testem5-V09-05-06, testem10-V09-05-02, testem17-V09-05-04,
+                 exHepMC-V09-05-00, mctruthex-V09-05-02, p6decayer-V09-05-02,
+                 exhadr03-V09-05-06, gtherapy-V09-05-01, ParN02-V09-05-01,
+                 ParN04-V09-05-01.
+
+10th August 2012  Gabriele Cosmo (examples-V09-05-07)
+- Updated reference outputs according to reference tag geant4-09-05-ref-07.
+- Includes tags: ccal-V09-05-00, hadrontherapy-V09-05-02,
+                 microdosimetry-V09-04-07, excommon-analysis-V09-05-02,
+                 excommon-V09-05-01, testem1-V09-05-07, testem7-V09-05-05,
+                 testem10-V09-05-01, g3tog4Tests-V09-05-01, exhadr00-V09-05-05,
+                 exhadr01-V09-05-03, hadr03-V09-05-05, G01-V09-05-02,
+                 G02-V09-05-00, G03-V09-05-00, G04-V09-05-00,
+                 exampleP01-V09-05-05, exampleRE01-V09-05-00,
+                 exampleRE02-V09-05-01.
+
+29th June 2012  Gabriele Cosmo (examples-V09-05-06)
+- Updated reference outputs according to reference tag geant4-09-05-ref-06.
+- Included Doxygen documentation and comments.
+- Includes tags: doxygen-V09-05-00, air_shower-V09-05-03, XrayFluo-V09-05-02,
+                 hadrontherapy-V09-05-01, human_phantom-V09-05-01, 
+                 iort_therapy-V09-05-02, medical_linac-V09-05-06,
+                 analysisExample-V09-05-03, AnaEx02-V09-05-02, AnaEx03-V09-05-02,
+                 excommon-V09-05-00, testem0-V09-05-01, p6decayer-V09-05-01,
+                 fieldex04-V09-05-01, g3tog4Tests-V09-05-00, DICOM-V09-05-02,
+                 exTransforms-V09-05-01, exampleES2-V09-05-00, LXe-V09-05-00,
+                 WLS-V09-05-00, exampleP01-V09-05-04, exampleN06-V09-05-01,
+                 exampleN07-V09-05-00.
+
+31st May 2012  Gabriele Cosmo (examples-V09-05-05)
+- Updated reference outputs according to reference tag geant4-09-05-ref-05.
+- Includes tags: medical_linac-V09-05-04, microbeam-V09-05-01,
+                 analysisExample-V09-05-02, testem5-V09-05-05,
+                 testem8-V09-05-08, testem9-V09-05-02, testem11-V09-05-04,
+                 testem12-V09-05-06, testem15-V09-05-02, testem18-V09-05-02,
+                 monopole-V09-05-00, exhadr00-V09-05-03, exhadr01-V09-05-01,
+                 exhadr02-V09-05-02, rdecay01-V09-05-10, rdecay02-V09-05-01,
+                 exampleRE03-V09-05-00.
+
+27th April 2012  Gabriele Cosmo (examples-V09-05-04)
+- Updated reference outputs according to reference tag geant4-09-05-ref-04.
+- Includes tags: AnEx01-V09-05-04, AnaEx02-V09-05-00, testem1-V09-05-06,
+                 testem2-V09-05-01, testem3-V09-05-01, testem5-V09-05-04,
+                 testem6-V09-05-01, testem7-V09-05-04, testem8-V09-05-07,
+                 testem9-V09-05-01, testem11-V09-05-03, testem12-V09-05-05,
+                 testem13-V09-05-00, testem14-V09-05-01, testem15-V09-05-01,
+                 testem16-V09-05-01, testem17-V09-05-03, testem18-V09-05-01,
+                 p6decayer-V09-05-00, electronScattering-V09-05-05,
+                 fano-V09-05-05, fano2-V09-05-04, exampleP01-V09-05-03,
+                 G01-V09-05-00, exam-ext-vis-persp-V09-05-02
+                 exam-ext-vis-standalone-V09-05-01, exam-ext-vis-UVA-V09-05-03.
+
+30th March 2012  Gabriele Cosmo (examples-V09-05-03)
+- Updated reference outputs according to reference tag geant4-09-05-ref-03.
+- Includes tags: testem0-V09-05-00, testem1-V09-05-04, testem2-V09-05-00,
+                 testem4-V09-05-04, testem5-V09-05-03, testem6-V09-05-00,
+                 testem7-V09-05-01, testem8-V09-05-01, testem11-V09-05-02,
+                 testem12-V09-05-03, testem14-V09-05-00, testem15-V09-05-00,
+                 testem16-V09-05-00, testem17-V09-05-02, testem18-V09-05-00,
+                 particleGunExample-V09-05-03, exTransforms-V09-05-00,
+                 exhadr00-V09-05-00, exhadr02-V09-05-00, DICOM-V09-05-01,
+                 rdecay01-V09-05-08, exampleRE02-V09-05-00,
+                 exam-ext-vis-perps-V09-05-01, exam-ext-vis-UVA-V09-05-00,
+                 exam-ext-vis-standalone-V09-05-00
+
+29th February 2012  Gabriele Cosmo (examples-V09-05-02)
+- Updated reference outputs according to reference tag geant4-09-05-ref-02.
+- Includes tags: air_shower-V09-05-02, microbeam-V09-05-00, AnaEx01-V09-05-03,
+                 excommon-analysis-V09-05-01, testem1-V09-05-03,
+                 testem3-V09-05-00, testem4-V09-05-02, testem5-V09-05-02,
+                 testem7-V09-05-00, testem8-V09-05-00, testem11-V09-05-01,
+                 testem12-V09-05-02, particleGunExample-V09-05-02,
+                 electronScattering-V09-05-04, exampleES2-V09-05-04,
+                 fano-V09-05-04, fano2-V09-05-03, rdecay01-V09-05-07.
+
+31st January 2012  Gabriele Cosmo (examples-V09-05-01)
+- Updated reference outputs according to reference tag geant4-09-05-ref-01.
+- Includes tags: air_shower-V09-05-01, hadrontherapy-V09-05-00
+                 human_phantom-V09-05-00, iort_therapy-V09-05-01
+                 medical_linac-V09-05-00, purtag-V09-05-00, XrayFluo-V09-05-01,
+                 radioprotection-V09-05-00, exampleB4-V09-05-00,
+                 AnaEx01-V09-05-01, particleGunExample-V09-05-01,
+                 exhadr01-V09-05-00, electronScattering-V09-05-01,
+                 fano-V09-05-00, fano2-V09-05-00, exampleN02-V09-05-00,
+                 rdecay01-V09-05-05, exampleN03-V09-05-00, exampleN06-V09-05-00.
+
 2nd December 2011  Gabriele Cosmo (examples-V09-05-00)
 - Updated reference outputs according to reference tag geant4-09-05-ref-00.
 - Includes tags: air_shower-V09-04-01, dnaphysics-V09-04-08, eRosita-V09-04-01,

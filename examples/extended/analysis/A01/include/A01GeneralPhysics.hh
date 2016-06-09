@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01GeneralPhysics.hh,v 1.5 2006-06-29 16:31:08 gunter Exp $
+/// \file analysis/A01/include/A01GeneralPhysics.hh
+/// \brief Definition of the A01GeneralPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -50,9 +53,7 @@ class A01GeneralPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
 };
-
 
 #endif
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.86 2010-10-26 10:42:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -86,6 +85,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hIonisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
@@ -111,6 +112,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
 {
   SetStepFunction(0.2, 0.1*mm);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
   ratio = 0.0;
   eth = 2*MeV;
@@ -136,8 +138,8 @@ G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 					 G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
-  return mass*(g - 1.0);
+  G4double gam = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
+  return mass*(gam - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....  
@@ -176,7 +178,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(
       theBaseParticle = bpart;
     }
     SetBaseParticle(theBaseParticle);
-    SetSecondaryParticle(G4Electron::Electron());
 
     mass  = part->GetPDGMass();
     ratio = electron_mass_c2/mass;

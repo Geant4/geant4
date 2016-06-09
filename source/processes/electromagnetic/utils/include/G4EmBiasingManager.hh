@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmBiasingManager.hh,v 1.61 2010-08-17 17:36:59 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -51,13 +50,19 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4DynamicParticle.hh"
+#include "Randomize.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Region;
-class G4DynamicParticle;
 class G4Track;
+class G4VEnergyLossProcess;
+class G4VEmModel;
+class G4MaterialCutsCouple;
+class G4ParticleChangeForLoss;
+class G4ParticleChangeForGamma;
 
 class G4EmBiasingManager 
 {
@@ -83,12 +88,32 @@ public:
 
   // return weight of splitting or Russian roulette
   // G4DynamicParticle may be deleted
-  G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&, 
-				 G4int coupleIdx);
+  // two functions are required because of the different ParticleChange
+  // ApplySecondaryBiasing() are wrappers
 
-  // Splitting or Russian roulette, G4Track may be deleted
-  void ApplySecondaryBiasing(std::vector<G4Track*>&, G4double primaryWeight, 
-			     G4int coupleIdx);
+  // for G4VEmProcess 
+  G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&, 
+				 const G4Track& track,
+				 G4VEmModel* currentModel,
+				 G4ParticleChangeForGamma* pParticleChange,
+				 G4double& eloss, 
+   				 G4int coupleIdx,  
+				 G4double tcut, 
+				 G4double safety = 0.0);
+
+  // for G4VEnergyLossProcess 
+  G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&,
+				 const G4Track& track,
+				 G4VEmModel* currentModel,
+				 G4ParticleChangeForLoss* pParticleChange,
+				 G4double& eloss, 
+   				 G4int coupleIdx,  
+				 G4double tcut, 
+				 G4double safety = 0.0);
+
+  // for G4VEnergyLossProcess 
+  G4double ApplySecondaryBiasing(std::vector<G4Track*>&,
+				 G4int coupleIdx);
 
   inline G4bool SecondaryBiasingRegion(G4int coupleIdx);
 
@@ -97,6 +122,20 @@ public:
   inline void ResetForcedInteraction();
 
 private:
+
+  void ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
+		     const G4Track& track,
+		     G4double& eloss, 
+		     G4double safety);
+
+  G4double ApplySplitting(std::vector<G4DynamicParticle*>& vd,
+			  const G4Track& track,
+			  G4VEmModel* currentModel, 
+			  G4int index,
+			  G4double tcut);
+
+  inline G4double ApplyRussianRoulette(std::vector<G4DynamicParticle*>& vd,
+				       G4int index); 
 
   // copy constructor and hide assignment operator
   G4EmBiasingManager(G4EmBiasingManager &);
@@ -114,6 +153,13 @@ private:
   std::vector<G4int>           idxForcedCouple;
   std::vector<G4int>           idxSecBiasedCouple;
 
+  std::vector<G4DynamicParticle*> tmpSecondaries;
+
+  G4VEnergyLossProcess*         eIonisation;
+
+  const G4ParticleDefinition*  theElectron;
+
+  G4double fSafetyMin;
   G4double currentStepLimit;
   G4bool   startTracking;
 };
@@ -140,6 +186,24 @@ inline G4bool G4EmBiasingManager::ForcedInteractionRegion(G4int coupleIdx)
 inline void G4EmBiasingManager::ResetForcedInteraction()
 {
   startTracking = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double
+G4EmBiasingManager::ApplyRussianRoulette(std::vector<G4DynamicParticle*>& vd,
+					 G4int index)
+{
+  size_t n = vd.size();
+  G4double weight = secBiasedWeight[index];
+  for(size_t k=0; k<n; ++k) {
+    if(G4UniformRand()*weight > 1.0) {
+      const G4DynamicParticle* dp = vd[k];
+      delete dp;
+      vd[k] = 0;
+    }
+  }
+  return weight;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

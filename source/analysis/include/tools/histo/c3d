@@ -6,7 +6,7 @@
 
 #include "base_cloud"
 
-#include <tools/mnmx>
+#include "../mnmx"
 
 #include "h3d"
 
@@ -14,6 +14,11 @@ namespace tools {
 namespace histo {
 
 class c3d : public base_cloud {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c3d");
+    return s_v;
+  }
 public:
   bool set_title(const std::string&);
   unsigned int dimension() const {return 3;}
@@ -60,6 +65,12 @@ public:
   bool set_conversion_parameters(unsigned int,double,double,
                                  unsigned int,double,double,
                                  unsigned int,double,double);
+
+  bool set_histogram(h3d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
+  }
 public:
   c3d();
   c3d(const std::string&,int=-1);
@@ -255,10 +266,10 @@ bool c3d::convert(
 ,unsigned int aBinsZ,double aLowerEdgeZ,double aUpperEdgeZ 
 ) { 
   if(m_histo) return true; // Done.
-  m_histo = new histo::h3d(this->title(),
-                              aBinsX,aLowerEdgeX,aUpperEdgeX,
-                              aBinsY,aLowerEdgeY,aUpperEdgeY,
-                              aBinsZ,aLowerEdgeZ,aUpperEdgeZ);
+  m_histo = new histo::h3d(base_cloud::title(),
+                           aBinsX,aLowerEdgeX,aUpperEdgeX,
+                           aBinsY,aLowerEdgeY,aUpperEdgeY,
+                           aBinsZ,aLowerEdgeZ,aUpperEdgeZ);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -396,7 +407,7 @@ bool c3d::convert(
 ,const std::vector<double>& aEdgesZ
 ) { 
   if(m_histo) return true;
-  m_histo = new histo::h3d(this->title(),
+  m_histo = new histo::h3d(base_cloud::title(),
                            aEdgesX,aEdgesY,aEdgesZ);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);

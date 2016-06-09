@@ -24,12 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin32.hh,v 1.7 2006-06-29 21:20:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // OpenInventor graphics system factory.
-
-#if defined (G4VIS_BUILD_OIWIN32_DRIVER) || defined (G4VIS_USE_OIWIN32)
 
 #ifndef G4OPENINVENTORWIN32_HH
 #define G4OPENINVENTORWIN32_HH
@@ -43,7 +40,5 @@ public:
   G4OpenInventorWin32 () {}
   virtual ~G4OpenInventorWin32 () {}
 };
-
-#endif
 
 #endif

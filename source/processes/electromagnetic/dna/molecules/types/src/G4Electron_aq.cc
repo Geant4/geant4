@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Electron_aq.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -33,6 +34,8 @@
 // -------------------------------------------------------------------
 
 #include "G4Electron_aq.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
@@ -43,7 +46,7 @@ G4Electron_aq* G4Electron_aq::theInstance = 0;
 G4Electron_aq* G4Electron_aq::Definition()
 {
     if (theInstance !=0) return theInstance;
-    const G4String name = "e_aq";
+    const G4String name = "e_{aq}";
     // search in particle table]
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* anInstance = pTable->FindParticle(name);
@@ -65,7 +68,7 @@ G4Electron_aq* G4Electron_aq::Definition()
 
 
         G4double mass = 1*g/Avogadro * c_squared;
-        anInstance = new G4MoleculeDefinition("e_aq", mass,
+        anInstance = new G4MoleculeDefinition(name, mass,
                                               0, 1,
                                               4.9e-9*(m*m/s),
                                               1, 0.23* nm);

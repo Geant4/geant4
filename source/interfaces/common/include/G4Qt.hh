@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh,v 1.6 2010-05-20 07:01:03 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  To unify Qt event treatment between 
 // G4/interfaces Qt sessions and G4/visualizations Qt drivers.

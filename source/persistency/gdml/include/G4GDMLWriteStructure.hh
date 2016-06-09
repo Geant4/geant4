@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh,v 1.39 2009-04-24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4GDMLWriteStructure

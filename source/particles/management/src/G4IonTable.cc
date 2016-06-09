@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.66 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -46,6 +45,8 @@
 //      Remove test of cuts in SetCuts   16 Jan  03 V.Ivanchenko
 
 #include "G4IonTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4StateManager.hh"
 #include "G4Ions.hh"
@@ -779,6 +780,25 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A, G4int L) const
 /////////////////
 // -- Methods for handling conatiner  ---
 /////////////////
+
+void G4IonTable::clear()
+{
+  if (G4ParticleTable::GetParticleTable()->GetReadiness()) {
+    G4Exception("G4IonTable::clear()",
+		"PART116", JustWarning,
+		"No effects because readyToUse is true.");    
+    return;
+  }
+
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>2) {
+      G4cout << "G4IonTable::Clear() : number of Ion regsitered =  "; 
+      G4cout << fIonList->size() <<  G4endl;
+    }
+#endif
+  fIonList->clear();
+}
+
 void G4IonTable::Insert(const G4ParticleDefinition* particle)
 {
   if (!IsIon(particle)) return;
@@ -796,6 +816,26 @@ void G4IonTable::Insert(const G4ParticleDefinition* particle)
 /////////////////
 void G4IonTable::Remove(const G4ParticleDefinition* particle)
 {
+  if (G4ParticleTable::GetParticleTable()->GetReadiness()) {
+    G4StateManager* pStateManager = G4StateManager::GetStateManager();
+    G4ApplicationState currentState = pStateManager->GetCurrentState();
+    if (currentState != G4State_PreInit) {
+      G4String msg = "Request of removing ";
+      msg += particle->GetParticleName();  
+      msg += " has No effects other than Pre_Init";
+      G4Exception("G4IonTable::Remove()",
+		  "PART117", JustWarning, msg);
+      return;
+    } else {
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>0){
+	G4cout << particle->GetParticleName()
+	       << " will be removed from the IonTable " << G4endl;
+      }
+#endif
+    }
+  }
+
   if (IsIon(particle)) {
     G4int Z = particle->GetAtomicNumber();
     G4int A = particle->GetAtomicMass();  

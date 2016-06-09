@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.hh,v 1.2 2007-11-06 09:41:34 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VScoreWriter_h
@@ -47,9 +46,12 @@ public:
 
 public:
   // store a quantity into a file
-  virtual void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
+  virtual void DumpQuantityToFile(const G4String& psName,
+                                  const G4String& fileName,
+                                  const G4String& option);
   // store all quantities into a file
-  virtual void DumpAllQuantitiesToFile(G4String & fileName, G4String & option);
+  virtual void DumpAllQuantitiesToFile(const G4String& fileName,
+                                       const G4String& option);
 
   // set a socring mesh to retrieve its quantities
   void SetScoringMesh(G4VScoringMesh * sm); 

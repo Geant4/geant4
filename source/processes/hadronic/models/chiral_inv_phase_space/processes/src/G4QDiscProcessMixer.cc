@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QDiscProcessMixer class -------------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -37,6 +36,10 @@
 //#define debug
 
 #include "G4QDiscProcessMixer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Constructor
 G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
@@ -44,6 +47,8 @@ G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
                                          G4ProcessType pType):
   G4VDiscreteProcess(name, pType), DPParticle(particle)
 {
+  G4HadronicDeprecate("G4QDiscProcessMixer");
+
 #ifdef debug
   G4cout<<"G4QDiscProcessMixer::Constructor is called processName="<<name<<G4endl;
 #endif
@@ -63,15 +68,15 @@ void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME
   if(!theDPVector.size()) // The first process in the DiscreteProcessVector (MaxE=INF)
   {
     std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
-      new std::pair<G4VDiscreteProcess*, G4double>(DP, maxEn);
+                                   new std::pair<G4VDiscreteProcess*, G4double>(DP, maxEn);
     theDPVector.push_back( QDiscProc );
   }
   else
   {
-    if(ME<theDPVector[theDPVector.size()-1]->second)
+    if(ME < theDPVector[theDPVector.size()-1]->second)
     {
       std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
-        new std::pair<G4VDiscreteProcess*, G4double>(DP, ME);
+                                      new std::pair<G4VDiscreteProcess*, G4double>(DP, ME);
       theDPVector.push_back( QDiscProc );
     }
     else // Wrong Max Energy Order for the new process in the sequence of processes
@@ -81,8 +86,7 @@ void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME
       // G4Exception("G4QDiscProcessMixer::AddDiscreteProcess: Wrong Max Energy Order");
       G4ExceptionDescription ed;
       ed << " LastMaxE(" << theDPVector.size()-1 << ")="
-         << theDPVector[theDPVector.size()-1]->second << " <= MaxE=" << ME
-         << G4endl;
+         << theDPVector[theDPVector.size()-1]->second << " <= MaxE=" << ME << G4endl;
       G4Exception("G4QDiscProcessMixer::AddDiscreteProcess()", "HAD_CHPS_0000",
                   FatalException, ed);
     }
@@ -91,6 +95,10 @@ void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME
 
 G4bool G4QDiscProcessMixer::IsApplicable(const G4ParticleDefinition& particle) 
 {
+#ifdef debug
+  G4cout<<"G4QDiscProcessMixer::IsApplicable: part="<<particle.GetParticleName()<<" = "
+        <<DPParticle->GetParticleName()<<G4endl;
+#endif
   if(particle == *DPParticle) return true;
   return false;
 }
@@ -102,11 +110,18 @@ G4double G4QDiscProcessMixer::PostStepGetPhysicalInteractionLength(const G4Track
   G4double kEn=Track.GetDynamicParticle()->GetKineticEnergy(); // Projectile kinetic energy
   G4int maxDP=theDPVector.size();
   if(maxDP) for(G4int i=maxDP-1; i>-1; i--) if(kEn < theDPVector[i]->second)
+  {
+#ifdef debug
+    G4cout<<"G4QDPMix::PSGetPIL:"<<i<<",kEn="<<kEn<<" < "<<theDPVector[i]->second<<", PIL="
+        <<theDPVector[i]->first->PostStepGetPhysicalInteractionLength(Track,PrevStSize,F)
+        <<G4endl;
+#endif
     return theDPVector[i]->first->PostStepGetPhysicalInteractionLength(Track,PrevStSize,F);
+  }
   return DBL_MAX;
 }
 
-// A fake class for compilation only
+// compilation fake class (length is calculated in PostStepGetPhysicalInteractionLength)
 G4double G4QDiscProcessMixer::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
 {
   return DBL_MAX;
@@ -119,6 +134,9 @@ G4VParticleChange* G4QDiscProcessMixer::PostStepDoIt(const G4Track& Track,
   G4int maxDP=theDPVector.size();
   if(maxDP) for(G4int i=maxDP-1; i>-1; i--) if(kEn < theDPVector[i]->second)
   {
+#ifdef debug
+    G4cout<<"G4QDPMix::PSDoIt: i="<<i<<",kEn="<<kEn<<" < "<<theDPVector[i]->second<<G4endl;
+#endif
     //EnMomConservation= theDPVector[i]->first->GetEnegryMomentumConservation();
     //nOfNeutrons      = theDPVector[i]->first->GetNumberOfNeutronsInTarget();
     return theDPVector[i]->first->PostStepDoIt(Track, Step);

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -44,6 +45,7 @@
 //#define debugs
 
 #include "G4QHyperonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QHyperonNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
@@ -79,7 +81,7 @@ G4QHyperonNuclearCrossSection::~G4QHyperonNuclearCrossSection()
 G4double G4QHyperonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                        G4int tgZ, G4int tgN, G4int PDG)
 {
-  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
+  //A.R.23-Oct-2012 Shadowed variable  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
@@ -266,9 +268,9 @@ G4double G4QHyperonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int n=0; n<nL; n++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[n] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -373,7 +375,7 @@ G4double G4QHyperonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double a4=a2*a2;
     G4double a8=a4*a4;
     G4double c=(170.+3600./a2s)/(1.+65./a2s);
-    G4double g=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
+    G4double g_value=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
     G4double e=390.;                       // Defolt values for deutrons
     G4double r=0.27;
     G4double h=2.E-7;
@@ -385,9 +387,9 @@ G4double G4QHyperonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
       h=1.E-8*a2/(1.+a2/17.)/(1.+3.E-20*a8);
       t=(.2+.00056*a2)/(1.+a2*.0006);
     }
-    sigma=(c+d*d)/(1.+t/ssp+r/p4)+(g+e*std::exp(-6.*P))/(1.+h/p4/p4);
+    sigma=(c+d*d)/(1.+t/ssp+r/p4)+(g_value+e*std::exp(-6.*P))/(1.+h/p4/p4);
 #ifdef pdebug
-    G4cout<<"G4QHyperonNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g
+    G4cout<<"G4QHyperonNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g_value
           <<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }

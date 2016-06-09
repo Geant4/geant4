@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
+/// \brief Definition of the DicomPartialDetectorConstruction class
+//
+
 #ifndef DicomPartialDetectorConstruction_h
 #define DicomPartialDetectorConstruction_h 1
 
@@ -41,6 +45,9 @@ struct matInfo
   G4int nvoxels;
   G4int id;
 };
+
+/// Construct a DICOM Geant4 geometry produced from the intersetion
+///  of a DICOM file and a volume
 
 class DicomPartialDetectorConstruction : public DicomDetectorConstruction
 {
@@ -68,16 +75,16 @@ private:
 
 
 private:
-  G4PartialPhantomParameterisation* thePartialPhantomParam;
+  G4PartialPhantomParameterisation* fPartialPhantomParam;
 
-  std::multimap<G4int,G4int> theFilledIDs;
-  std::map< G4int, std::map< G4int, G4int > > theFilledMins;
-  std::map< G4int, std::map< G4int, G4int > > theFilledMaxs;
-  G4int theNVoxels;
-  G4double dimX, dimY, dimZ;
-  G4double offsetX, offsetY, offsetZ;
-  size_t* mateIDs;
-  std::vector<G4Material*> thePhantomMaterials; 
+  std::multimap<G4int,G4int> fFilledIDs;
+  std::map< G4int, std::map< G4int, G4int > > fFilledMins;
+  std::map< G4int, std::map< G4int, G4int > > fFilledMaxs;
+  G4int fNVoxels;
+  G4double fDimX, fDimY, fDimZ;
+  G4double fOffsetX, fOffsetY, fOffsetZ;
+  size_t* fMateIDs;
+  std::vector<G4Material*> fPhantomMaterials; 
 
 };
 

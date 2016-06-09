@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.2 2007-10-31 16:16:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/include/SteppingAction.hh
+/// \brief Definition of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,17 +58,17 @@ class SteppingAction : public G4UserSteppingAction
     void UserSteppingAction(const G4Step*);
     
   private:
-    DetectorConstruction* detector;
-    RunAction*            runAction;
-    EventAction*          eventAction;
-    TrackingAction*       trackAction;        
-    HistoManager*         histoManager;
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAction;
+    EventAction*          fEventAction;
+    TrackingAction*       fTrackAction;        
+    HistoManager*         fHistoManager;
     
-    G4VPhysicalVolume*    wall;
-    G4VPhysicalVolume*    cavity;
+    G4VPhysicalVolume*    fWall;
+    G4VPhysicalVolume*    fCavity;
     G4bool                first; 
-    G4double              trackSegm;
-    G4ThreeVector         directionIn;        
+    G4double              fTrackSegm;
+    G4ThreeVector         fDirectionIn;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

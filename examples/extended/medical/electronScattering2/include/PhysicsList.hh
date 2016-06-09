@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.2 2011-01-05 18:48:54 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering2/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,29 +48,29 @@ public:
   PhysicsList();
   virtual ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
         
   void AddPhysicsList(const G4String& name);
     
-  void ConstructProcess();    
+  virtual void ConstructProcess();    
   void AddDecay();
   void AddStepMax();       
     
-  void SetCuts();
+  virtual void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
     
 private:
   
-  PhysicsListMessenger* pMessenger; 
+  PhysicsListMessenger* fMessenger; 
 
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  G4String fEmName;
+  G4VPhysicsConstructor*  fEmPhysicsList;
     
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;    
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

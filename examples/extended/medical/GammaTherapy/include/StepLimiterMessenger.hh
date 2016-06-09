@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepLimiterMessenger.hh,v 1.2 2006-06-29 21:56:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/GammaTherapy/include/StepLimiterMessenger.hh
+/// \brief Definition of the StepLimiterMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +37,7 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class StepLimiterPerRegion;
+class StepLimiter;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,14 +45,19 @@ class G4UIcmdWithADoubleAndUnit;
 class StepLimiterMessenger: public G4UImessenger
 {
 public:
-  StepLimiterMessenger(StepLimiterPerRegion*);
-  ~StepLimiterMessenger();
+
+  StepLimiterMessenger(StepLimiter*);
+  virtual ~StepLimiterMessenger();
 
   void SetNewValue(G4UIcommand*, G4String);
 
 private:
-  StepLimiterPerRegion* stepLimiter;
-  G4UIcmdWithADoubleAndUnit* stepMaxCmd;
+
+  StepLimiterMessenger & operator=(const StepLimiterMessenger &right);
+  StepLimiterMessenger(const StepLimiterMessenger&);
+
+  StepLimiter* fStepLimiter;
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

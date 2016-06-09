@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousProcess.hh,v 1.6 2006-06-29 21:07:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -135,51 +134,6 @@ class G4VContinuousProcess : public G4VProcess
       G4VContinuousProcess & operator=(const G4VContinuousProcess &right);
 
 };
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
-
-inline G4double G4VContinuousProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4double previousStepSize,
-			     G4double currentMinimumStep,
-			     G4double& currentSafety,
-                             G4GPILSelection* selection
-			    )
-{
-  // GPILSelection is set to defaule value of CandidateForSelection
-  valueGPILSelection = CandidateForSelection;
-
-  // get Step limit proposed by the process
-  G4double steplength = GetContinuousStepLimit(track,previousStepSize,currentMinimumStep, currentSafety);
-
-  // set return value for G4GPILSelection
-  *selection = valueGPILSelection;
-
-#ifdef G4VERBOSE
-   if (verboseLevel>1){
-    G4cout << "G4VContinuousProcess::AlongStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<G4endl;
-  }
-#endif
-
-  return  steplength ;
-}
-
-inline G4VParticleChange* G4VContinuousProcess::AlongStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    )
-{ 
-    return pParticleChange;
-}
 
 #endif
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.43 2010-10-19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4Para
 //
@@ -495,7 +494,7 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   newpy  = p.y()-fTthetaSphi*p.z();
 
   calpha = 1/std::sqrt(1+fTalpha*fTalpha);
-  if (fTalpha) {salpha = -calpha/fTalpha;} // NOTE: using MINUS std::sin(alpha)
+  if (fTalpha) {salpha = -calpha*fTalpha;} // NOTE: using MINUS std::sin(alpha)
   else         {salpha = 0.;}
   
   //  xshift = newpx*calpha+newpy*salpha;

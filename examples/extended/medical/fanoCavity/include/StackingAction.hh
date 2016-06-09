@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.1 2007-01-23 13:34:19 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/StackingAction.hh
+/// \brief Definition of the StackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,21 +52,21 @@ class StackingAction : public G4UserStackingAction
     StackingAction(DetectorConstruction*,RunAction*,HistoManager* );
    ~StackingAction();
    
-    void SetKillStatus(G4bool value) {killTrack = value;};
+    void SetKillStatus(G4bool value) {fKillTrack = value;};
      
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    DetectorConstruction* detector;  
-    RunAction*            runAction;
-    HistoManager*         histoManager;
-    StackingMessenger*    stackMessenger;
+    DetectorConstruction* fDetector;  
+    RunAction*            fRunAction;
+    HistoManager*         fHistoManager;
+    StackingMessenger*    fStackMessenger;
 
-    G4Material*           matWall;
-    G4double              Zcav;
-    G4EmCalculator*       emCal;
+    G4Material*           fMatWall;
+    G4double              fZcav;
+    G4EmCalculator*       fEmCal;
     G4bool                first;
-    G4bool                killTrack;               
+    G4bool                fKillTrack;               
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

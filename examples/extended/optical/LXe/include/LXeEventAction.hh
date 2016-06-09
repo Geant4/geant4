@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeEventAction.hh
+/// \brief Definition of the LXeEventAction class
+//
 
 #ifndef LXeEventAction_h
 #define LXeEventAction_h 1
@@ -33,45 +36,46 @@
 #include "G4ThreeVector.hh"
 
 class G4Event;
-class RecorderBase;
+class LXeRecorderBase;
 
 class LXeEventAction : public G4UserEventAction
 {
-public:
-  LXeEventAction(RecorderBase*);
-  ~LXeEventAction();
-  
-public:
-  void BeginOfEventAction(const G4Event*);
-  void EndOfEventAction(const G4Event*);
-  
-  void SetSaveThreshold(G4int save);
+  public:
 
-  void SetEventVerbose(G4int v){verbose=v;}
+    LXeEventAction(LXeRecorderBase*);
+    virtual ~LXeEventAction();
 
-  void SetPMTThreshold(G4int t){pmtThreshold=t;}
+  public:
 
-  void SetForceDrawPhotons(G4bool b){forcedrawphotons=b;}
-  void SetForceDrawNoPhotons(G4bool b){forcenophotons=b;}
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-private:
-  RecorderBase* recorder;
-  LXeEventMessenger* eventMessenger;
+    void SetSaveThreshold(G4int );
 
-  G4int              saveThreshold;
+    void SetEventVerbose(G4int v){fVerbose=v;}
 
-  G4int              scintCollID;
-  G4int              pmtCollID;
+    void SetPMTThreshold(G4int t){fPMTThreshold=t;}
 
-  G4int              verbose;
-  
-  G4int              pmtThreshold;
-  
-  G4bool forcedrawphotons;
-  G4bool forcenophotons;
+    void SetForceDrawPhotons(G4bool b){fForcedrawphotons=b;}
+    void SetForceDrawNoPhotons(G4bool b){fForcenophotons=b;}
+
+  private:
+
+    LXeRecorderBase* fRecorder;
+    LXeEventMessenger* fEventMessenger;
+
+    G4int              fSaveThreshold;
+
+    G4int              fScintCollID;
+    G4int              fPMTCollID;
+
+    G4int              fVerbose;
+
+    G4int              fPMTThreshold;
+
+    G4bool fForcedrawphotons;
+    G4bool fForcenophotons;
 
 };
 
 #endif
-
-    

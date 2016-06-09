@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Sept 12: P.Gumplinger (xrays-V09-05-06)
+- Remove what has now become an annoying NOTE warning in the constructor of 
+  G4Cerenkov
+
+10 July 12: G.Cosmo (xrays-V09-05-05)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+08 June 12: V.Ivanchenko (xrays-V09-05-04)
+- fixed shadowing
+
+05 June 12: V. Grichine (xrays-V09-05-03)
+- G4VTransitionRadiation, G4SynchrotronRadiationInMat,
+  G4ForwardXrayTR - trying to fix Coverity warnings
+
+17 May 12: P. Gumplinger (xrays-V09-05-02)
+- G4Cerenkov.hh, G4Scintillation.hh trying to fix Coverity warnings
+
+08 February 12: V. Grichine (xrays-V09-05-01)
+- G4SynchrotronRadiarion and G4SynchrotronRadiarionInMat was modified to 
+  provide more realistic angualr distribution for secondary SR gammas 
+  accordong to simplified dipole busted approach.
+
+20 December 11: V. Grichine  (xrays-V09-05-00)
+- G4VXTRenergyLoss.cc and regular XTR radiators/models were updated for more 
+  accurate angular distribution of XTR
+
 18 November 11: G.Folger     (xrays-V09-04-10)
 - G4VXTRenergyLoss.cc: migrate to new g4Exception, fix compilation warning
 

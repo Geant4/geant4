@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannelList.hh,v 1.10 2006-06-29 20:46:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -103,6 +102,7 @@ class G4NeutronHPChannelList
 
   G4StableIsotopes theStableOnes;
   
+  G4HadFinalState unChanged;
 };
 
 #endif

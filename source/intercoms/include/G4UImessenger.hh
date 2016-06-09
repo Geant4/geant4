@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.hh,v 1.9 2006-06-29 19:08:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UImessenger_h
@@ -33,8 +32,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-
-class G4UIcommand;
+#include "G4UIdirectory.hh"
 
 // class description:
 //
@@ -48,9 +46,9 @@ class G4UIcommand;
 
 class G4UImessenger 
 {
-
   public: // with description
       G4UImessenger();
+      G4UImessenger(const G4String& path, const G4String& dsc);
       // Constructor. In the implementation of the concrete messenger, all commands
       // related to the messenger must be constructed.
       virtual ~G4UImessenger();
@@ -81,7 +79,29 @@ class G4UImessenger
 
   protected:
       void AddUIcommand(G4UIcommand * newCommand);
+  
+      // shortcut way for creating directory and commands
+      G4UIdirectory* baseDir; // used if new object is created
+      G4String baseDirName;   // used if dir already exists
+      void CreateDirectory(const G4String& path, const G4String& dsc);
+      template <typename T> T* CreateCommand(const G4String& cname, 
+                                             const G4String& dsc);
+
 };
 
-#endif
+template <typename T>
+T* G4UImessenger::CreateCommand(const G4String& cname, const G4String& dsc)
+{
+  G4String path;
+  if( cname(0) != '/' ) {
+    path = baseDirName + cname;
+    if (path(0) != '/') path = "/" + path;
+  }
 
+  T* command = new T(path.c_str(), this);
+  command-> SetGuidance(dsc.c_str());
+
+  return command;
+}
+
+#endif

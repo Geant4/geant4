@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.8 2010-12-15 10:26:41 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -40,6 +39,8 @@
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
 //
 #include "G4PenelopeComptonModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
@@ -59,7 +60,8 @@
 
 G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
 					       const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),oscManager(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),fAtomDeexcitation(0),
+   oscManager(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -94,7 +96,18 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeComptonModel::Initialise()" << G4endl;
+
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopeComptonModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
+
 
   if (verboseLevel > 0) 
     {
@@ -314,11 +327,11 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  ionEnergy = (*theTable)[i]->GetIonisationEnergy();
 	  if (photonEnergy0 > ionEnergy)
 	    {
-	      G4double aux = photonEnergy0*(photonEnergy0-ionEnergy)*2.0;
+	      G4double aux2 = photonEnergy0*(photonEnergy0-ionEnergy)*2.0;
 	      hartreeFunc = (*theTable)[i]->GetHartreeFactor(); 
 	      oscStren = (*theTable)[i]->GetOscillatorStrength();
-	      pzomc = hartreeFunc*(aux-electron_mass_c2*ionEnergy)/
-		(electron_mass_c2*std::sqrt(2.0*aux+ionEnergy*ionEnergy));
+	      pzomc = hartreeFunc*(aux2-electron_mass_c2*ionEnergy)/
+		(electron_mass_c2*std::sqrt(2.0*aux2+ionEnergy*ionEnergy));
 	      if (pzomc > 0) 	
 		rni = 1.0-0.5*std::exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
 				       (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));		
@@ -773,29 +786,29 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
       a=0.5*(xb-xa);
       b=0.5*(xb+xa);
       c=a*Abscissas[0];
-      G4double d = Weights[0]*
+      G4double dLocal = Weights[0]*
 	(DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
       
       for (G4int j=1;j<npoints;j++)
 	{
 	  c=a*Abscissas[j];
-	  d += Weights[j]*
+	  dLocal += Weights[j]*
 	    (DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
 	}    
-      G4double s1=d*a;
+      G4double s1=dLocal*a;
       a=0.5*(xc-xb);
       b=0.5*(xc+xb);
       c=a*Abscissas[0];
-      d=Weights[0]*
+      dLocal=Weights[0]*
 	(DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
       
       for (G4int j=1;j<npoints;j++)
 	{
 	  c=a*Abscissas[j];
-	  d += Weights[j]*
+	  dLocal += Weights[j]*
 	    (DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
 	}    
-      G4double s2=d*a;
+      G4double s2=dLocal*a;
       icall=icall+4*npoints;
       G4double s12=s1+s2;
       if (std::abs(s12-si)<std::max(Ptol*std::abs(s12),1e-35))

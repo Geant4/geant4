@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.7 2010-08-11 17:14:02 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4PrimaryParticle.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"

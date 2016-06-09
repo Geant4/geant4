@@ -23,20 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeGeneralPhysics.cc
+/// \brief Implementation of the LXeGeneralPhysics class
+//
+//
 #include "LXeGeneralPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include <iomanip>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
-                     :  G4VPhysicsConstructor(name)
-{
+                     :  G4VPhysicsConstructor(name) {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXeGeneralPhysics::~LXeGeneralPhysics() {
+  fDecayProcess = NULL;
 }
 
-LXeGeneralPhysics::~LXeGeneralPhysics()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -48,8 +56,10 @@ void LXeGeneralPhysics::ConstructParticle()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();  
+  G4ChargedGeantino::ChargedGeantinoDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeGeneralPhysics::ConstructProcess()
 {
@@ -60,7 +70,7 @@ void LXeGeneralPhysics::ConstructProcess()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess->IsApplicable(*particle)) { 
+    if (fDecayProcess->IsApplicable(*particle)) {
       pmanager ->AddProcess(fDecayProcess);
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
@@ -68,5 +78,3 @@ void LXeGeneralPhysics::ConstructProcess()
     }
   }
 }
-
-

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.29 2010-10-20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids

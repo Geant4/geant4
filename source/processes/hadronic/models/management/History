@@ -14,6 +14,56 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 September 2012 - Gabriele Cosmo (hadr-modman-V09-05-07)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+23 August 2012 - Vladimir Ivanchenko (hadr-modman-V09-05-06)
+- G4HadronicInteractionRegistry - added method FindModel allowing to
+  access G4HadronicInteraction by name
+
+17 August 2012 - Vladimir Ivanchenko (hadr-modman-V09-05-05)
+- An attempt to introduce hadronic model factory
+
+25 May 2012 - Gunter Folger      (hadr-modman-V09-05-04)
+- modify G4VHighEnergyGenerator:
+  - add ModelDescripion() to interface.
+  - make copy ctor, =,  ==, and  != operators private, not implemented 
+- G4VIntraNuclearTransportModel: add PropagateModelDescription() 
+
+12 April 2012 - Gunter Folger    (hadr-modman-V09-05-03)
+- increase default limit for catastrophic loss to 5 GeV;
+   GetFatalEnergyCheckLevels() now returns a const std::pair<> 
+   of values.
+- add G4VIntraNuclearTransportModel::Description() printing 
+   a short message, and then crash with G4Exception.
+   
+16 March 2012 - Gunter Folger    (hadr-modman-V09-05-02)
+--------------------------------------------------------
+- provide method and default values for checking of "catastrophic"
+  energy non-conservation. Current default is a deviation
+  larger than 150. MeV and at least 10% of the kinetic energy 
+  of the primary.
+  
+22 January 2012 - Dennis Wright  (hadr-modman-V09-05-01)
+--------------------------------------------------------
+- move G4InelasticInteraction.hh, .cc to models/low_energy
+- G4IsoParticleChange.hh : move from /management to /models/management,
+    remove Set and GetProductionPosition methods, and change Set
+    and GetParentParticle argument from G4DynamicParticle to 
+    G4ParticleDefinition.
+- G4VIsotopeProduction.hh : replace G4Track argument in GetIsotope 
+    with G4HadProjectile  
+- G4VHighEnergyGenerator.hh, .cc : add virtual method
+    PartonStringModelDescription
+
+18 January 2012 - Vladimir Ivanchenko (hadr-modman-V09-05-00)
+------------------------------------------------------------
+- G4VIntraNuclearTransportModel - include pointer to G4VPreCompoundModel
+    in the constructor and cleanup
+- G4VPreCompoundModel - include pointer of G4ExcitationHandler in 
+    the constructor and cleanup
+ 
 3 November 2011 - Dennis Wright    (hadr-modman-V09-04-05)
 ----------------------------------------------------------
 - add constructor and virtual destructor to G4VIsotopeProduction to 

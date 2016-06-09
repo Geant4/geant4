@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.5 2010-08-28 15:53:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -35,16 +34,19 @@
 //          value will be asigned.
 //	M.Kelsey 07.03.2011
 //	    Add data member and Set method to store original projectile
+//      V.Ivanchenko 03.01.2012
+//          Added G4VPreCompoundModel pointer to the constructor and cleanup
 // -----------------------------------------------------------------------------
 
 #ifndef G4VIntraNuclearTransportModel_h
 #define G4VIntraNuclearTransportModel_h 1
 
 // Class Description
-// Base class for intra-nuclear transport models in geant4. By merit of inheriting
-// from this class a intra-nuclear transport model can be used in conjunction with
-// any precompound, string parton model or other high energy generator in the
-// generation of final states for inelastic scattering.
+// Base class for intra-nuclear transport models in geant4. By merit 
+// of inheriting from this class a intra-nuclear transport model can 
+// be used in conjunction with any precompound, string parton model 
+// or other high energy generator in the generation of final states 
+// for inelastic scattering.
 // Class Description - End
 
 #include "G4V3DNucleus.hh"
@@ -61,7 +63,8 @@ class G4VIntraNuclearTransportModel : public G4HadronicInteraction
 {
 public:
 
-  G4VIntraNuclearTransportModel(const G4String& modelName = "CascadeModel");
+  G4VIntraNuclearTransportModel(const G4String& modelName = "CascadeModel",
+				G4VPreCompoundModel* ptr = 0);
 
   virtual ~G4VIntraNuclearTransportModel();
 
@@ -69,13 +72,16 @@ public:
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
 				     G4V3DNucleus* theNucleus) = 0;
 
-  inline void SetDeExcitation(G4VPreCompoundModel* const  value);
+  inline void SetDeExcitation(G4VPreCompoundModel* ptr);
 
   inline void Set3DNucleus(G4V3DNucleus* const value);
 
   inline void SetPrimaryProjectile(const G4HadProjectile &aPrimary);
 
   inline const G4String& GetModelName() const;
+
+  virtual void ModelDescription(std::ostream& outFile) const ;
+  virtual void PropagateModelDescription(std::ostream& outFile) const ;
 
 private:
 
@@ -113,7 +119,7 @@ inline G4V3DNucleus* G4VIntraNuclearTransportModel::Get3DNucleus() const
 
 inline void G4VIntraNuclearTransportModel::Set3DNucleus(G4V3DNucleus* const value)
 {
-   delete the3DNucleus;  the3DNucleus = value;
+  delete the3DNucleus;  the3DNucleus = value;
 }
 
 inline G4VPreCompoundModel* G4VIntraNuclearTransportModel::GetDeExcitation() const
@@ -122,10 +128,10 @@ inline G4VPreCompoundModel* G4VIntraNuclearTransportModel::GetDeExcitation() con
 }
 
 inline void 
-G4VIntraNuclearTransportModel::SetDeExcitation(G4VPreCompoundModel* const  value)
+G4VIntraNuclearTransportModel::SetDeExcitation(G4VPreCompoundModel* value)
 {
-   delete theDeExcitation; 
-   theDeExcitation = value;
+  // previous pre-compound model will be deleted at the end of job 
+  theDeExcitation = value;
 }
 
 inline const G4HadProjectile* 

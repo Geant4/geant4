@@ -24,9 +24,8 @@
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/setFileName alpha
-/testem/histo/setFileType root
-/testem/histo/setHisto 2 100 75 85 mm
-/testem/histo/setHisto 3 100 75 85 mm
+/analysis/setFileName alpha
+/analysis/h1/set 2 100 75 85 mm
+/analysis/h1/set 3 100 75 85 mm
 #
 /run/beamOn 10000

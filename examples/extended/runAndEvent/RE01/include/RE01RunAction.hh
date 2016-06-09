@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/include/RE01RunAction.hh
+/// \brief Definition of the RE01RunAction class
 //
-// $Id: RE01RunAction.hh,v 1.2 2006-06-29 17:43:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 
 #ifndef RE01RunAction_h
@@ -34,20 +36,18 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-
 class G4Run;
 
 class RE01RunAction : public G4UserRunAction
 {
-  public:
-    RE01RunAction();
-   ~RE01RunAction();
+public:
+  RE01RunAction();
+  virtual ~RE01RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+public:
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
 };
-
 
 #endif
 

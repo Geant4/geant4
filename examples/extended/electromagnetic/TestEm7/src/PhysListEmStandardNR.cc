@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardNR.cc,v 1.5 2010-10-13 12:21:56 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/src/PhysListEmStandardNR.cc
+/// \brief Implementation of the PhysListEmStandardNR class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -57,6 +59,8 @@
 #include "G4CoulombScattering.hh"
 
 #include "G4DummyModel.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,7 +100,7 @@ void PhysListEmStandardNR::ConstructProcess()
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-	    
+            
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
@@ -140,7 +144,7 @@ void PhysListEmStandardNR::ConstructProcess()
       pmanager->AddDiscreteProcess(nucr);      
 
     } else if (particleName == "proton" ||
-	       particleName == "deuteron" ||
+               particleName == "deuteron" ||
                particleName == "triton") { 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4DummyModel* dm = new G4DummyModel();
@@ -157,8 +161,8 @@ void PhysListEmStandardNR::ConstructProcess()
       pmanager->AddDiscreteProcess(nucr);      
      
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,        -1, 2,2);      

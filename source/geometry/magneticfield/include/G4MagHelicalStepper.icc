@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.icc,v 1.13 2007-05-18 15:45:15 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Linear Step in regions of no field
 //
@@ -64,7 +63,7 @@ G4MagHelicalStepper::GetInverseCurve(const G4double Momentum,
 {
   
   G4double  inv_momentum = 1.0 / Momentum ;
-  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+  G4double particleCharge = fPtrMagEqOfMot->FCof() / (CLHEP::eplus*CLHEP::c_light); 
   G4double fCoefficient = -fUnitConstant  * particleCharge*inv_momentum;
  
   return  fCoefficient*Bmag;

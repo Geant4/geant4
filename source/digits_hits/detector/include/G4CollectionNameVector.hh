@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollectionNameVector.hh,v 1.2 2006-06-29 18:05:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4CollectionNameVector_H 
@@ -40,7 +39,7 @@ class G4CollectionNameVector : public std::vector<G4String>
     G4CollectionNameVector() {;}
     virtual ~G4CollectionNameVector() {;}
 
-    void insert(G4String s) { push_back(s); }
+    void insert(G4String str) { push_back(str); }
 };
 
 #endif

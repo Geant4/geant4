@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file eventgenerator/particleGun/include/PrimaryGeneratorMessenger.hh
+/// \brief Definition of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,8 +54,8 @@ class PrimaryGeneratorMessenger: public G4UImessenger
   private:
     PrimaryGeneratorAction* Action;
     
-    G4UIdirectory*        Dir;       
-    G4UIcmdWithAnInteger* selectActionCmd;
+    G4UIdirectory*        fDir;       
+    G4UIcmdWithAnInteger* fSelectActionCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

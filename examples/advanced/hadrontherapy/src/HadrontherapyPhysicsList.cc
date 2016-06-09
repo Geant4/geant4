@@ -46,6 +46,7 @@
 //       export PHYSLIST=QGSP_BIC_EMY
 //       User must considered that, in this second case, radioactive processes are not activated 
  
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
@@ -64,7 +65,7 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
@@ -194,7 +195,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
     hadronPhys.push_back( new G4EmExtraPhysics());
     hadronPhys.push_back( new G4HadronElasticPhysics());
-    hadronPhys.push_back( new G4QStoppingPhysics());
+    hadronPhys.push_back( new G4StoppingPhysics());
     hadronPhys.push_back( new G4IonBinaryCascadePhysics());
     hadronPhys.push_back( new G4NeutronTrackingCut());
     

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,17 +37,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* run): runAction(run)
+TrackingAction::TrackingAction(RunAction* run): fRunAction(run)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TrackingAction::~TrackingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   // extract Projected Range of primary particle
   if (aTrack->GetTrackID() == 1) {
-    G4double x = aTrack->GetPosition().x() + runAction->GetOffsetX();
-    runAction->AddProjRange(x);
+    G4double x = aTrack->GetPosition().x() + fRunAction->GetOffsetX();
+    fRunAction->AddProjRange(x);
   }  
 }
 

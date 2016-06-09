@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * ThreeVector.cc
  *
- *  Created on: 4 June 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 June 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLThreeVector.hh"

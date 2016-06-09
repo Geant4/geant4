@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaDetectorConstruction.cc,v 1.4 2010-12-15 07:36:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +32,8 @@
 #include "eRositaDetectorConstruction.hh"
 #include "eRositaTrackerSD.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"

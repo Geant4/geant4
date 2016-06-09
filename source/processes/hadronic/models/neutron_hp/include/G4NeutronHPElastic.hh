@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElastic.hh,v 1.10 2006-06-29 20:47:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -53,20 +52,26 @@ class G4NeutronHPElastic : public G4HadronicInteraction
   G4NeutronHPElastic();
   
   ~G4NeutronHPElastic();
-  
+
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
-  G4int GetNiso() {return theElastic[0].GetNiso();}
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
+  //G4int GetNiso() {return theElastic[0].GetNiso();}
+  G4int GetNiso() {return (*theElastic[0]).GetNiso();}
 
   void DoNotSuspend() {overrideSuspension = true;}
 
   private:
   
   G4double * xSec;
-  G4NeutronHPChannel * theElastic;
+  //G4NeutronHPChannel * theElastic;
+  std::vector<G4NeutronHPChannel*> theElastic;
   G4String dirName;
   G4int numEle;
   G4bool overrideSuspension;
+
+      void addChannelForNewElement();
 };
 
 #endif

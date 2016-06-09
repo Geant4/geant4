@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.25 2010-07-12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -39,10 +38,11 @@
 // --------------------------------------------------------------------
 
 #include "G4PolyconeSide.hh"
+#include "meshdefs.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4IntersectingCone.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
-#include "meshdefs.hh"
 #include "G4SolidExtentList.hh"
 #include "G4GeometryTolerance.hh"
 
@@ -476,8 +476,8 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
   
   *bestDistance = std::sqrt( dFrom*dFrom + dOut2 );
   
-  G4double rad = p.perp();
-  if (rad!=0.) { return G4ThreeVector(rNorm*p.x()/rad,rNorm*p.y()/rad,zNorm); }
+  G4double rds = p.perp();
+  if (rds!=0.) { return G4ThreeVector(rNorm*p.x()/rds,rNorm*p.y()/rds,zNorm); }
   return G4ThreeVector( 0.,0., zNorm ).unit();
 }
 
@@ -802,8 +802,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   //
   if (phiIsOpen && rNorm > DBL_MIN)
   {    
-    G4double cosPhi = std::cos(startPhi),
-       sinPhi = std::sin(startPhi);
+    cosPhi = std::cos(startPhi);
+    sinPhi = std::sin(startPhi);
 
     G4ThreeVector a0( r[0]*cosPhi, r[0]*sinPhi, z[0] ),
                   a1( r[1]*cosPhi, r[1]*sinPhi, z[1] ),
@@ -927,18 +927,19 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   //
   // Are we off the surface in r,z space?
   //
-  G4double s = deltaR*rS + deltaZ*zS;
-  if (s < 0)
+  G4double q = deltaR*rS + deltaZ*zS;
+  if (q < 0)
   {
-    distOutside2 = s*s;
+    distOutside2 = q*q;
     if (edgeRZnorm) *edgeRZnorm = deltaR*rNormEdge[0] + deltaZ*zNormEdge[0];
   }
-  else if (s > length)
+  else if (q > length)
   {
-    distOutside2 = sqr( s-length );
+    distOutside2 = sqr( q-length );
     if (edgeRZnorm)
     {
-      G4double deltaR  = rx - r[1], deltaZ = zx - z[1];
+      deltaR = rx - r[1];
+      deltaZ = zx - z[1];
       *edgeRZnorm = deltaR*rNormEdge[1] + deltaZ*zNormEdge[1];
     }
   }

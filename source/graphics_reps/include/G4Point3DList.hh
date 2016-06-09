@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Point3DList.hh,v 1.12 2006-06-29 19:05:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  July 1995

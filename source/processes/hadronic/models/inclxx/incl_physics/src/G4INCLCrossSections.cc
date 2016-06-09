@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,7 +40,7 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLLogger.hh"
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -67,7 +67,7 @@ namespace G4INCL {
     // NEW FIT BY J.VANDERMEULEN  + FIT BY Th AOUST ABOVE (3,3) RES
     //                              CONST AT LOW AND VERY HIGH ENERGY
     //      COMMON/BL8/RATHR,RAMASS                                           REL21800
-    //      G4integer f17
+    //      integer f17
     // RATHR and RAMASS are always 0.0!!!
 
     G4double x = KinematicsUtils::totalEnergyInCM(particle1, particle2);
@@ -187,7 +187,7 @@ namespace G4INCL {
   }
 
   G4double CrossSections::deltaProduction(Particle const * const p1, Particle const * const p2) {
-    // assert(p1->isNucleon() && p2->isNucleon());
+// assert(p1->isNucleon() && p2->isNucleon());
     const G4double sqrts = KinematicsUtils::totalEnergyInCM(p1,p2);
     if(sqrts < ParticleTable::effectivePionMass + 2*ParticleTable::effectiveNucleonMass + 50.) { // approximately yields INCL4.6's hard-coded threshold in collis, 2065 MeV
       return 0.0;
@@ -200,7 +200,7 @@ namespace G4INCL {
 
   G4double CrossSections::deltaProduction(const G4int isospin, const G4double pLab) {
     G4double xs = 0.0;
-    // assert(isospin==-2 || isospin==0 || isospin==2);
+// assert(isospin==-2 || isospin==0 || isospin==2);
 
     const G4double momentumGeV = 0.001 * pLab;
     if(pLab < 800.0) {
@@ -272,7 +272,7 @@ namespace G4INCL {
       return CrossSections::elasticProtonNeutron(momentum);
     } else {
       ERROR("G4INCL::CrossSections::elasticNN: Bad input!" << std::endl
-        << p1->prG4int() << p2->prG4int() << std::endl);
+        << p1->print() << p2->print() << std::endl);
     }
     return 0.0;
   }
@@ -359,7 +359,69 @@ namespace G4INCL {
 	return (3.68 + 0.76*x) * 1.0e-6;
       }
     }
-    return 0.0; // Should never reach this poG4int
+    return 0.0; // Should never reach this point
   }
+
+  G4double CrossSections::interactionDistanceNN(const G4double projectileKineticEnergy) {
+    ThreeVector nullVector;
+    ThreeVector unitVector(0., 0., 1.);
+
+    Particle protonProjectile(Proton, unitVector, nullVector);
+    protonProjectile.setEnergy(protonProjectile.getMass()+projectileKineticEnergy);
+    protonProjectile.adjustMomentumFromEnergy();
+    Particle neutronProjectile(Neutron, unitVector, nullVector);
+    neutronProjectile.setEnergy(neutronProjectile.getMass()+projectileKineticEnergy);
+    neutronProjectile.adjustMomentumFromEnergy();
+
+    Particle protonTarget(Proton, nullVector, nullVector);
+    Particle neutronTarget(Neutron, nullVector, nullVector);
+    const G4double sigmapp = total(&protonProjectile, &protonTarget);
+    const G4double sigmapn = total(&protonProjectile, &neutronTarget);
+    const G4double sigmanp = total(&neutronProjectile, &protonTarget);
+    const G4double sigmann = total(&neutronProjectile, &neutronTarget);
+    /* We compute the interaction distance from the largest of the NN cross
+     * sections. Note that this is different from INCL4.6, which just takes the
+     * average of the four, and will in general lead to a different geometrical
+     * cross section.
+     */
+    const G4double largestSigma = std::max(sigmapp, std::max(sigmapn, std::max(sigmanp,sigmann)));
+    const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
+
+    return interactionDistance;
+  }
+
+  G4double CrossSections::interactionDistancePiN(const G4double projectileKineticEnergy) {
+    ThreeVector nullVector;
+    ThreeVector unitVector(0., 0., 1.);
+
+    Particle piPlusProjectile(PiPlus, unitVector, nullVector);
+    piPlusProjectile.setEnergy(piPlusProjectile.getMass()+projectileKineticEnergy);
+    piPlusProjectile.adjustMomentumFromEnergy();
+    Particle piZeroProjectile(PiZero, unitVector, nullVector);
+    piZeroProjectile.setEnergy(piZeroProjectile.getMass()+projectileKineticEnergy);
+    piZeroProjectile.adjustMomentumFromEnergy();
+    Particle piMinusProjectile(PiMinus, unitVector, nullVector);
+    piMinusProjectile.setEnergy(piMinusProjectile.getMass()+projectileKineticEnergy);
+    piMinusProjectile.adjustMomentumFromEnergy();
+
+    Particle protonTarget(Proton, nullVector, nullVector);
+    Particle neutronTarget(Neutron, nullVector, nullVector);
+    const G4double sigmapipp = total(&piPlusProjectile, &protonTarget);
+    const G4double sigmapipn = total(&piPlusProjectile, &neutronTarget);
+    const G4double sigmapi0p = total(&piZeroProjectile, &protonTarget);
+    const G4double sigmapi0n = total(&piZeroProjectile, &neutronTarget);
+    const G4double sigmapimp = total(&piMinusProjectile, &protonTarget);
+    const G4double sigmapimn = total(&piMinusProjectile, &neutronTarget);
+    /* We compute the interaction distance from the largest of the pi-N cross
+     * sections. Note that this is different from INCL4.6, which just takes the
+     * average of the six, and will in general lead to a different geometrical
+     * cross section.
+     */
+    const G4double largestSigma = std::max(sigmapipp, std::max(sigmapipn, std::max(sigmapi0p, std::max(sigmapi0n, std::max(sigmapimp,sigmapimn)))));
+    const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
+
+    return interactionDistance;
+  }
+
 }
 

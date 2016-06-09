@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.16 2007-03-25 22:54:52 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //----------------------------------------------------------------
@@ -202,6 +201,13 @@ inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
   isParentWeightProposed = false;
 }
 
+inline void G4VParticleChange::InitializeParentGlobalTime(const G4Track& track)
+{
+  // set the parent track's global time at the pre-step point
+  theParentGlobalTime = track.GetStep()->GetPreStepPoint()->GetGlobalTime();
+} 
+
+
 inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
 {
   // Reset theTrueStepLength
@@ -276,6 +282,7 @@ inline void G4VParticleChange::Initialize(const G4Track& track)
   InitializeTrueStepLength(track);
   InitializeSecondaries(track);
   InitializeParentWeight(track);
+  InitializeParentGlobalTime(track);
   InitializeStepInVolumeFlags(track);
 }
 

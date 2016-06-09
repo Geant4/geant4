@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.8 2010-07-26 03:52:33 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4VScoreColorMap.hh"

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/StepLimiterBuilder.cc
+/// \brief Implementation of the StepLimiterBuilder class
 //
-// $Id: StepLimiterBuilder.cc,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -44,15 +46,13 @@
 #include "StepLimiterBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "StepLimiterPerRegion.hh"
+#include "StepLimiter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepLimiterBuilder::StepLimiterBuilder(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{
-  stepMax = new StepLimiterPerRegion();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,15 +68,15 @@ void StepLimiterBuilder::ConstructParticle()
 
 void StepLimiterBuilder::ConstructProcess()
 {
+  StepLimiter* stepMax = new StepLimiter();
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
-
       pmanager->AddDiscreteProcess(stepMax);
-
     }
   }
 }

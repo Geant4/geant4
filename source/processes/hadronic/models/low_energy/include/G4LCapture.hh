@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.hh,v 1.11 2006-06-29 20:43:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Low energy model: neutron capture -- header file
@@ -47,7 +46,9 @@
 
 #ifndef G4LCapture_h
 #define G4LCapture_h 1
- 
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4Element.hh"
@@ -77,13 +78,15 @@ class G4LCapture : public G4HadronicInteraction
     // void Description() const;
     virtual void ModelDescription(std::ostream& outFile) const;
 
+    virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
   private:
 
     // Computes atomic mass in GeV using method from G4LFission
     inline
     G4double Atomas(const G4double A, const G4double Z)
     {
-      return G4LFission::Atomas(A, Z)/GeV;
+      return G4LFission::Atomas(A, Z)/CLHEP::GeV;
     }
 };
 #endif

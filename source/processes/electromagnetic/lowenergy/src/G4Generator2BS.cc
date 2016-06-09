@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BS.cc,v 1.10 2010-10-14 14:01:02 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -58,27 +57,25 @@
 
 #include "G4Generator2BS.hh"
 #include "Randomize.hh"   
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"   
 
-//
-
 G4Generator2BS::G4Generator2BS(const G4String&)
-  : G4VBremAngularDistribution("AngularGen2BS"),z(1),rejection_argument1(0), 
-    rejection_argument2(0),rejection_argument3(0),EnergyRatio(1)
+  : G4VEmAngularDistribution("AngularGen2BS"),fz(1),ratio(1),
+    ratio1(1),ratio2(1),delta(0)
 {
   g4pow = G4Pow::GetInstance();
+  nwarn = 0;
 }
-
-//    
 
 G4Generator2BS::~G4Generator2BS() 
 {}
 
-//
-
-G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
-				    const G4double final_energy,
-				    const G4int Z)
+G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
+					       G4double final_energy,
+					       G4int Z,
+					       const G4Material*)
 {
 
   // Adapted from "Improved bremsstrahlung photon angular sampling in the EGS4 code system"
@@ -88,50 +85,57 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   // National Research Council of Canada
   // Departement of Medical Physics, Memorial Sloan-Kettering Cancer Center, New York
 
-  G4double theta = 0;
+  G4double energy = dp->GetTotalEnergy();
+  ratio = final_energy/energy;
+  ratio1 = (1 + ratio)*(1 + ratio);
+  ratio2 = 1 + ratio*ratio;
 
-  G4double initialTotalEnergy = (initial_energy+electron_mass_c2)/electron_mass_c2;
-  G4double finalTotalEnergy = (final_energy+electron_mass_c2)/electron_mass_c2;
-  EnergyRatio = finalTotalEnergy/initialTotalEnergy;
-  G4double gMaxEnergy = (pi*initialTotalEnergy)*(pi*initialTotalEnergy);
+  G4double gamma = energy/electron_mass_c2;
+  G4double beta  = std::sqrt((gamma - 1)*(gamma + 1))/gamma;
 
   //G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
   //z = (0.00008116224*(std::pow(Zeff,0.3333333)));
 
   // VI speadup
-  z = 0.00008116224*(g4pow->Z13(Z) + g4pow->Z13(Z+1));
+  fz = 0.00008116224*g4pow->Z13(Z)*g4pow->Z13(Z+1);
 
-  // Rejection arguments
-  rejection_argument1 = (1.0+EnergyRatio*EnergyRatio); 
-  rejection_argument2 = - 2.0*EnergyRatio + 3.0*rejection_argument1;
-  rejection_argument3 = ((1-EnergyRatio)/(2.0*initialTotalEnergy*EnergyRatio))*
-    ((1-EnergyRatio)/(2.0*initialTotalEnergy*EnergyRatio));
+  // majoranta
+  G4double ymax = 2*beta*(1 + beta)*gamma*gamma;
+  G4double gMax = RejectionFunction(0.0);
+  gMax = std::max(gMax,RejectionFunction(ymax));
 
-  // Calculate rejection function at 0, 1 and Emax
-  G4double gfunction0 = RejectionFunction(0.0);
-  G4double gfunction1 = RejectionFunction(1.0);
-  G4double gfunctionEmax = RejectionFunction(gMaxEnergy);
-
-  // Calculate Maximum value 
-  G4double gMaximum = std::max(gfunction0,gfunction1);
-  gMaximum = std::max(gMaximum,gfunctionEmax);
-
-  G4double rand, gfunctionTest, randTest;
+  G4double y, gfun;
 
   do{
-    rand = G4UniformRand();
-    rand /= (1 - rand + 1.0/gMaxEnergy);
-    gfunctionTest = RejectionFunction(rand);
-    randTest = G4UniformRand();
+    G4double q = G4UniformRand();
+    y = q*ymax/(1 + ymax*(1 - q));
+    gfun = RejectionFunction(y);
 
-  } while(randTest*gMaximum > gfunctionTest);
+    // violation point
+    if(gfun > gMax && nwarn >= 20) {
+      ++nwarn;
+      G4cout << "### WARNING in G4Generator2BS: Etot(MeV)= " << energy/MeV 
+	     << "  Egamma(MeV)" << (energy - final_energy)/MeV
+	     << " gMax= " << gMax << "  < " << gfun
+	     << "  results are not reliable!" 
+	     << G4endl;
+      if(20 == nwarn) { 
+	G4cout << "   WARNING in G4Generator2BS is closed" << G4endl; 
+      }
+    }
 
-  theta = std::sqrt(rand)/initialTotalEnergy;
+  } while(G4UniformRand()*gMax > gfun || y > ymax);
 
-  return theta;
+  
+  G4double cost = 1 - 2*y/ymax;
+  G4double sint = std::sqrt((1 - cost)*(1 + cost));
+  G4double phi  = twopi*G4UniformRand(); 
+
+  fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi),cost);
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+
+  return fLocalDirection;
 }
-
-//
 
 void G4Generator2BS::PrintGeneratorInformation() const
 {

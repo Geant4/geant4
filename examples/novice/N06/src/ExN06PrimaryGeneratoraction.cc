@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PrimaryGeneratorAction.cc,v 1.6 2006-06-29 17:54:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +38,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,7 +95,7 @@ void ExN06PrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
                "the particleGun is not an opticalphoton" << G4endl;
      return;
    }
-     	       
+                    
  G4ThreeVector normal (1., 0., 0.);
  G4ThreeVector kphoton = particleGun->GetParticleMomentumDirection();
  G4ThreeVector product = normal.cross(kphoton); 

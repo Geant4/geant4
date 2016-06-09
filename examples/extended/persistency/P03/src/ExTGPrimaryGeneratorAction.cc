@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGPrimaryGeneratorAction.cc,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// ---------------------------------------------------------------------------
+/// \file ExTGPrimaryGeneratorAction.cc
+/// \brief Implementation of the ExTGPrimaryGeneratorAction class
 
 #include "ExTGPrimaryGeneratorAction.hh"
 #include "G4Event.hh"
@@ -34,38 +34,35 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGPrimaryGeneratorAction::ExTGPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
 // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
   
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(10*MeV);
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(10*MeV);
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGPrimaryGeneratorAction::~ExTGPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
-// ---------------------------------------------------------------------------

@@ -36,11 +36,11 @@
 //          - DumpProblem method is added providing more information
 //          - Reduced usage of exotic std functions  
 
+#include <numeric>
 
 #include "G4FermiPhaseSpaceDecay.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
-
-#include <numeric>
 
 G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 {
@@ -182,10 +182,11 @@ G4FermiPhaseSpaceDecay::NBodyDecay(G4double M,  const std::vector<G4double>& mr)
 }
 
 std::vector<G4LorentzVector*> *
-G4FermiPhaseSpaceDecay::TwoBodyDecay(G4double M, const std::vector<G4double>& m) const
+G4FermiPhaseSpaceDecay::TwoBodyDecay(G4double M, 
+				     const std::vector<G4double>& mass) const
 {
-  G4double m0 = m.front();
-  G4double m1 = m.back();
+  G4double m0 = mass.front();
+  G4double m1 = mass.back();
   G4double mom = PtwoBody(M,m0,m1);
   G4ThreeVector p = IsotropicVector(mom);
 

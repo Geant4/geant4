@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,7 +46,7 @@
 namespace G4INCL {
 
   /**
-   * An abstract G4interface to cluster formation model(s).
+   * An abstract interface to cluster formation model(s).
    */
   class IClusteringModel {
   public:
@@ -54,7 +54,7 @@ namespace G4INCL {
     virtual ~IClusteringModel() {};
 
     /**
-     * Choose a cluster candidate to be produced. At this poG4int we
+     * Choose a cluster candidate to be produced. At this point we
      * don't yet decide if it can pass through the Coulomb barrier or
      * not.
      */
@@ -63,9 +63,7 @@ namespace G4INCL {
     /**
      * Determine whether cluster can escape or not.
      */
-    virtual G4bool clusterCanEscape(Cluster const * const) = 0;
-
-    static G4int maxClusterAlgorithmMass;
+    virtual G4bool clusterCanEscape(Nucleus const * const, Cluster const * const) = 0;
   };
 
 }

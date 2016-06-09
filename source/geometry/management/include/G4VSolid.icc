@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.icc,v 1.9 2007-05-11 13:30:12 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4VSolid Inline implementation
@@ -33,9 +32,9 @@
 // --------------------------------------------------------------------
 
 inline
-G4bool G4VSolid::operator==( const G4VSolid& s) const
+G4bool G4VSolid::operator==( const G4VSolid& right) const
 {
-  return (this==&s) ? true : false;
+  return (this==&right) ? true : false;
 }
 
 inline

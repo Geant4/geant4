@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.12 2006-06-29 16:30:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copied from his UserAnalyser class)
@@ -37,15 +36,16 @@
 //
 // -------------------------------------------------------------------
 
-#include "XrayTelAnalysis.hh"
-#include "globals.hh"
-#include "G4Track.hh"
-#include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
+
+#include "XrayTelAnalysis.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
+#include "G4ios.hh"
 #include "G4SteppingManager.hh"
 #include "G4ThreeVector.hh"
-
 
 XrayTelAnalysis* XrayTelAnalysis::instance = 0;
 

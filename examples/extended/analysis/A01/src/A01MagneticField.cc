@@ -23,29 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MagneticField.cc,v 1.7 2009-11-21 00:22:55 perl Exp $
+/// \file analysis/A01/src/A01MagneticField.cc
+/// \brief Implementation of the A01MagneticField class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
 #include "A01MagneticField.hh"
 #include "A01MagneticFieldMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
 A01MagneticField::A01MagneticField()
 {
-  messenger = new A01MagneticFieldMessenger(this);
-  By = 1.0*tesla;
+  fMessenger = new A01MagneticFieldMessenger(this);
+  fBy = 1.0*tesla;
   
 }
 
 A01MagneticField::~A01MagneticField()
-{ delete messenger; }
+{ delete fMessenger; }
 
 void A01MagneticField::GetFieldValue(const G4double [4],double *Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[2] = 0.;
-  Bfield[1] = By;
+  Bfield[1] = fBy;
 
 }
 

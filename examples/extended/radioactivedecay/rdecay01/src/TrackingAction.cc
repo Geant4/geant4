@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -43,19 +45,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(HistoManager* histo,
-                               RunAction* RA, EventAction* EA)
-:histoManager(histo),run(RA),event(EA)
+TrackingAction::TrackingAction(RunAction* RA, EventAction* EA)
+:fRun(RA),fEvent(EA)
 {
   fullChain = false;
-  trackMessenger = new TrackingMessenger(this);   
+  fTrackMessenger = new TrackingMessenger(this);   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::~TrackingAction()
 {
-  delete trackMessenger;
+  delete fTrackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,8 +65,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   G4ParticleDefinition* particle = track->GetDefinition();
   G4String name   = particle->GetParticleName();
-  charge = particle->GetPDGCharge();
-  mass   = particle->GetPDGMass();  
+  fCharge = particle->GetPDGCharge();
+  fMass   = particle->GetPDGMass();  
     
   G4double Ekin = track->GetKineticEnergy();
   G4int ID      = track->GetTrackID();
@@ -74,7 +75,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
   //count particles
   //
-  run->ParticleCount(name, Ekin);
+  fRun->ParticleCount(name, Ekin);
   
   //energy spectrum
   //
@@ -85,19 +86,19 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
            particle == G4AntiNeutrinoE::AntiNeutrinoE()) ih = 2;
   else if (particle == G4Gamma::Gamma()) ih = 3;
   else if (particle == G4Alpha::Alpha()) ih = 4;
-  else if (charge > 2.) ih = 5;
-  if (ih) histoManager->FillHisto(ih, Ekin);
+  else if (fCharge > 2.) ih = 5;
+  if (ih) G4AnalysisManager::Instance()->FillH1(ih, Ekin);
   
   //fullChain: stop ion and print decay chain
   //
-  if (charge > 2.) {
+  if (fCharge > 2.) {
     G4Track* tr = (G4Track*) track;
     if (fullChain) tr->SetTrackStatus(fStopButAlive);
-    if (ID == 1) event->AddDecayChain(name);
-      else       event->AddDecayChain(" ---> " + name); 
+    if (ID == 1) fEvent->AddDecayChain(name);
+      else       fEvent->AddDecayChain(" ---> " + name); 
   }
   
-  //example of saving random number seed of this event, under condition
+  //example of saving random number seed of this fEvent, under condition
   //
   ////condition = (ih == 3);
   if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
@@ -109,13 +110,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
   //keep only ions
   //
-  if (charge < 3. ) return;
+  if (fCharge < 3. ) return;
 
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  
   //get time
   //   
   G4double time = track->GetGlobalTime();
   G4int ID = track->GetTrackID();
-  if (ID == 1) run->PrimaryTiming(time);	//time of life of primary ion  
+  if (ID == 1) fRun->PrimaryTiming(time);        //time of life of primary ion  
       
   //energy and momentum balance (from secondaries)
   //
@@ -134,20 +137,20 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
        G4Track* trk = (*secondaries)[itr];
        EkinTot += trk->GetKineticEnergy();
        //exclude gamma desexcitation from momentum balance
-       if (trk->GetDefinition() != G4Gamma::Gamma())	 
-         Pbalance += trk->GetMomentum();	         
+       if (trk->GetDefinition() != G4Gamma::Gamma())         
+         Pbalance += trk->GetMomentum();                 
     }
     G4double Pbal = Pbalance.mag();  
-    run->Balance(EkinTot,Pbal);  
-    histoManager->FillHisto(6,EkinTot);
-    histoManager->FillHisto(7,Pbal);
+    fRun->Balance(EkinTot,Pbal);  
+    analysis->FillH1(6,EkinTot);
+    analysis->FillH1(7,Pbal);
   }
   
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    run->EventTiming(time);		//total time of life
-    histoManager->FillHisto(8,time);
+    fRun->EventTiming(time);                     //total time of life
+    analysis->FillH1(8,time);
   }
 }
 

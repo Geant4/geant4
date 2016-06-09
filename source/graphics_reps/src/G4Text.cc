@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.cc,v 1.9 2006-06-29 19:07:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  17/11/96.
@@ -52,7 +51,26 @@ fLayout   (left)  ,
 fXOffset(0.) , fYOffset(0.)
 {}
 
+G4Text::G4Text (const G4Text& text):
+G4VMarker (text),
+fText     (text.fText),
+fLayout   (text.fLayout),
+fXOffset  (text.fXOffset),
+fYOffset  (text.fYOffset)
+{}
+
 G4Text::~G4Text () {}
+
+G4Text& G4Text::operator= (const G4Text& rhs)
+{
+  if (&rhs == this) return *this;
+  G4VMarker::operator=(rhs);
+  fText = rhs.fText;
+  fLayout = rhs.fLayout;
+  fXOffset = rhs.fXOffset;
+  fYOffset = rhs.fYOffset;
+  return *this;
+}
 
 std::ostream& operator<< (std::ostream& os, const G4Text& text)
 {
@@ -60,5 +78,13 @@ std::ostream& operator<< (std::ostream& os, const G4Text& text)
      << "\"\n  layout " << text.GetLayout()
      << ", offset (" << text.GetXOffset() << ',' << text.GetYOffset() << ")\n"
      << (const G4VMarker&)text;
+  return os;
+}
+
+std::ostream& operator<< (std::ostream& os, G4Text::Layout layout)
+{
+  if (layout == G4Text::left) os << "left";
+  if (layout == G4Text::centre) os << "centre";
+  if (layout == G4Text::right) os << "right";
   return os;
 }

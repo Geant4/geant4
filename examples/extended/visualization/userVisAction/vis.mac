@@ -13,7 +13,7 @@
 /vis/scene/add/volume world
 /vis/scene/add/userAction
 /vis/scene/add/axes
-/vis/scene/add/scale 1 m z
+/vis/scene/add/scale
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
@@ -28,8 +28,6 @@
 /vis/viewer/flush
 #
 # for drawing the tracks
-# (if too many tracks cause core dump => storeTrajectory 0)
-/tracking/storeTrajectory 1
 /vis/scene/add/trajectories
 # (if you prefer refreshing each event, comment out next line)
 #/vis/scene/endOfEventAction accumulate

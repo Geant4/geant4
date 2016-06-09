@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaMessenger.cc,v 1.1 2009-10-25 19:06:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/MyKleinNishinaMessenger.cc
+/// \brief Implementation of the MyKleinNishinaMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,19 +39,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyKleinNishinaMessenger::MyKleinNishinaMessenger(MyKleinNishinaCompton* pPhys)
-:pKleinNishina(pPhys)
+:fKleinNishina(pPhys)
 {  
-  csFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor",this);
-  csFactor->SetGuidance("multiply Compton cross section");
-  csFactor->SetParameterName("factor",false);
-  csFactor->SetRange("factor>=0");
+  fCsFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor",this);
+  fCsFactor->SetGuidance("multiply Compton cross section");
+  fCsFactor->SetParameterName("factor",false);
+  fCsFactor->SetRange("factor>=0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyKleinNishinaMessenger::~MyKleinNishinaMessenger()
 {
-  delete csFactor;
+  delete fCsFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,8 +59,8 @@ MyKleinNishinaMessenger::~MyKleinNishinaMessenger()
 void MyKleinNishinaMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {
-  if (command == csFactor)
-   {pKleinNishina->SetCSFactor(csFactor->GetNewDoubleValue(newValue));}        
+  if (command == fCsFactor)
+   {fKleinNishina->SetCSFactor(fCsFactor->GetNewDoubleValue(newValue));}        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

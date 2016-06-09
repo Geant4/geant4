@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.32 2010-10-06 13:17:15 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //---------------------------------------------------------------
 //
@@ -118,6 +117,7 @@ public: //without description
    void SetVerboseLevel(G4int vLevel);
    void SetVerbose(G4VSteppingVerbose*);
    G4Step* GetStep() const;
+   void SetNavigator(G4Navigator* value);
 
 
 // Other member functions
@@ -178,7 +178,6 @@ public: //without description
    G4double   GetfPreviousStepSize();
    const G4TouchableHandle& GetTouchableHandle();
    G4SteppingControl GetStepControlFlag();
-   G4Navigator GetNavigator();
    G4UserSteppingAction* GetUserAction();
    G4double GetphysIntLength();
    G4ForceCondition GetfCondition();
@@ -199,7 +198,6 @@ public: //without description
    void InvokeAlongStepDoItProcs();
    void InvokePostStepDoItProcs();
    void InvokePSDIP(size_t); // 
-   void SetNavigator(G4Navigator* value);
    G4double CalculateSafety();
       // Return the estimated safety value at the PostStepPoint
    void ApplyProductionCut(G4Track*);

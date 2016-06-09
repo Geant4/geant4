@@ -23,27 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04SteppingVerbose.hh
+/// \brief Definition of the F04SteppingVerbose class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04SteppingVerbose_h
 #define F04SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-class F04SteppingVerbose : public G4SteppingVerbose 
+class F04SteppingVerbose : public G4SteppingVerbose
 {
-  public:   
+  public:
 
     F04SteppingVerbose();
-   ~F04SteppingVerbose();
+    virtual ~F04SteppingVerbose();
 
-    void StepInfo();
-    void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 };
 
 #endif

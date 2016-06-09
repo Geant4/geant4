@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02-11-2012 L.Garnier Tag (exampleN03-V09-05-02)
+- Fix CMakeFile.txt, gui.mac and icons.mac. Now ok for cmake
+     
+02-11-2012 L.Garnier Tag (exampleN03-V09-05-01)
+- Add icons.mac
 
+12-12-11 mma (exampleN03-V09-05-00)
+- modify SteppingVerbose for OutOfWorld
+     
 29-11-11 2011 Ben Morgan (exampleN03-V09-04-05)
 - CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
   to build directory, plus comments and neatification.

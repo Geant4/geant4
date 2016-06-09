@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectileDiffractiveChannel.cc,v 1.2 2007-11-15 16:07:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Author : Gunter Folger Nov 2007
@@ -106,10 +105,10 @@ G4KineticTrackVector * G4ProjectileDiffractiveChannel::Scatter(G4Nucleus &theNuc
 		  if ( pdgCode < 80000000) {     // check if ion; should be 90Million, but 89Million is possible
 		      secDef= G4ParticleTable::GetParticleTable()->FindParticle(pdgCode);
 		  }else {
-		      G4int N = pdgCode % 1000;
-		      G4int Z = (pdgCode/1000) %1000;
-		      if ( Z < 500 && N < 500){   // protect for delta being coded as/in nucleus 
-			 secDef = G4ParticleTable::GetParticleTable()->GetIon(Z,N+Z, 0);
+		      G4int qN = pdgCode % 1000;
+		      G4int qZ = (pdgCode/1000) %1000;
+		      if ( qZ < 500 && qN < 500){   // protect for delta being coded as/in nucleus 
+			 secDef = G4ParticleTable::GetParticleTable()->GetIon(qZ,qN+qZ, 0);
 			 if ( ! secDef ) 
 			 {  // exceptions to the rule!
 	        	    if ( pdgCode == 90000001 ) secDef= G4Neutron::Neutron();

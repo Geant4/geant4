@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.42 2010-11-01 16:43:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -58,6 +57,19 @@ G4BREPSolid::G4BREPSolid(const G4String& name)
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  static G4bool warn=true;
+  if (warn)
+  {
+    G4cout
+         << "--------------------------------------------------------" << G4endl
+         << "WARNING: BREPS classes are being dismissed.  They will |" << G4endl
+         << "         be removed starting  from next  Geant4  major |" << G4endl
+         << "         release.  Please, consider switching to adopt |" << G4endl
+         << "         correspondent CSG or specific primitives.     |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+    warn = false;
+  }
 }
 
 G4BREPSolid::G4BREPSolid( const G4String&   name        , 
@@ -71,6 +83,19 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  static G4bool warn=true;
+  if (warn)
+  {
+    G4cout
+         << "--------------------------------------------------------" << G4endl
+         << "WARNING: BREPS classes are being dismissed.  They will |" << G4endl
+         << "         be removed starting  from next  Geant4  major |" << G4endl
+         << "         release.  Please, consider switching to adopt |" << G4endl
+         << "         correspondent CSG or specific primitives.     |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+    warn = false;
+  }
   Initialize();
 }
 
@@ -1434,7 +1459,6 @@ G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
         {
           if(a+1<nb_of_surfaces)
           {
-            const G4Vector3D& Dir = rayref.GetDir();
             const G4Point3D& Hit = srf->GetClosestHit();
             const G4Vector3D& Norm = srf->SurfaceNormal(Hit);
 

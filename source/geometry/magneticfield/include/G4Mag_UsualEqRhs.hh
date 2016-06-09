@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.7 2006-06-29 18:23:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4Mag_UsualEqRhs
@@ -68,9 +67,10 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
      
   private:
 
-    G4double  fInvCurrentMomentumXc;   // This extra state enables us 
-                                    // to save a square root in a
-                                    // critical method.
+    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
+                            // This extra state was meant to save a square root 
+                            // in a critical method.   But its use reduced
+                            // robustness (it was unstable for large steps.)
 };
 
 #endif /* G4MAG_USUAL_EQRHS */

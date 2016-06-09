@@ -18,7 +18,6 @@
 #
 # histogram file
 /testem/histo/setFileName run01
-/testem/histo/setFileType root
 #
 /run/initialize
 #

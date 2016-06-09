@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.hh,v 1.3 2008-11-20 12:35:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Geant4 Hadron Elastic Charge Exchange Process -- header file

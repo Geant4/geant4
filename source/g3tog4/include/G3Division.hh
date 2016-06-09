@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.hh,v 1.8 2006-06-29 18:11:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:

@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/include/F02CalorHit.hh
+/// \brief Definition of the F02CalorHit class
 //
-// $Id: F02CalorHit.hh,v 1.4 2006-06-29 17:17:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -46,7 +46,7 @@ class F02CalorHit : public G4VHit
   public:
 
       F02CalorHit();
-     ~F02CalorHit();
+      ~F02CalorHit();
       F02CalorHit(const F02CalorHit&);
       const F02CalorHit& operator=(const F02CalorHit&);
       G4int operator==(const F02CalorHit&) const;
@@ -54,22 +54,22 @@ class F02CalorHit : public G4VHit
       inline void* operator new(size_t);
       inline void  operator delete(void*);
 
-      void Print();
+      virtual void Print();
       
   public:
   
-      void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
+      void AddAbs(G4double de, G4double dl) {fEdepAbs += de; fTrackLengthAbs += dl;};
+      void AddGap(G4double de, G4double dl) {fEdepGap += de; fTrackLengthGap += dl;};      
                  
-      G4double GetEdepAbs()     { return EdepAbs; };
-      G4double GetTrakAbs()     { return TrackLengthAbs; };
-      G4double GetEdepGap()     { return EdepGap; };
-      G4double GetTrakGap()     { return TrackLengthGap; };
+      G4double GetEdepAbs()     { return fEdepAbs; };
+      G4double GetTrackAbs()    { return fTrackLengthAbs; };
+      G4double GetEdepGap()     { return fEdepGap; };
+      G4double GetTrackGap()    { return fTrackLengthGap; };
      
   private:
   
-      G4double EdepAbs, TrackLengthAbs;
-      G4double EdepGap, TrackLengthGap;
+      G4double fEdepAbs, fTrackLengthAbs;
+      G4double fEdepGap, fTrackLengthGap;
       
 };
 

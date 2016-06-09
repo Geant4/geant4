@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01FieldSetup.hh
+/// \brief Definition of the F01FieldSetup class
 //
-// $Id: F01FieldSetup.hh,v 1.3 2006-06-29 17:15:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 //    A class for control of the Magnetic Field of the detector.
@@ -59,7 +61,7 @@ public:
   F01FieldSetup(G4ThreeVector) ;  //  The value of the field
   F01FieldSetup() ;               //  A zero field
 
- ~F01FieldSetup() ;  
+  ~F01FieldSetup() ;  
       
   
   void SetStepperType( G4int i) { fStepperType = i ; }

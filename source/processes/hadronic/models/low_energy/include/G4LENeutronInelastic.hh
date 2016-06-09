@@ -36,6 +36,8 @@
 // the corresponding process.
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InelasticInteraction.hh"
 
 
@@ -46,7 +48,9 @@ class G4LENeutronInelastic : public G4InelasticInteraction
     G4LENeutronInelastic() : G4InelasticInteraction("G4LENeutronInelastic")
     {
       SetMinEnergy(0.0);
-      SetMaxEnergy(55.*GeV);
+      SetMaxEnergy(55.*CLHEP::GeV);
+      G4cout << "WARNING: model G4LENeutronInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
     
     ~G4LENeutronInelastic() {}

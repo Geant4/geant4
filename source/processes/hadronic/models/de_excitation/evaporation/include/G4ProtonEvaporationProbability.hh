@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ProtonEvaporationProbability.hh,v 1.14 2010-11-17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // J.M. Quesada (August2008). Based on:
 //

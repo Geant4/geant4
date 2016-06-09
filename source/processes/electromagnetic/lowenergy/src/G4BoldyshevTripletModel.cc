@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BoldyshevTripletModel.cc,v 1.2 2010/11/12 16:48:13 flongo Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 //
@@ -35,6 +35,8 @@
 
 
 #include "G4BoldyshevTripletModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,7 +46,7 @@ using namespace std;
 
 G4BoldyshevTripletModel::G4BoldyshevTripletModel(const G4ParticleDefinition*,
 								 const G4String& nam)
-  :G4VEmModel(nam),smallEnergy(4.*MeV),isInitialised(false),
+  :G4VEmModel(nam),fParticleChange(0),smallEnergy(4.*MeV),isInitialised(false),
    crossSectionHandler(0),meanFreePathTable(0)
 {
   lowEnergyLimit = 4.0*electron_mass_c2;

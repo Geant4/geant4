@@ -1,8 +1,8 @@
-// $Id: Doxymodules_new.h 55087 2011-11-16 10:11:00Z gcosmo $
+// $Id: Doxymodules_new.h 60059 2012-06-27 13:00:49Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_new.h
-/// \brief The page that defines the class groups for examples documentation 
+/// \brief The page that defines the extended/new examples modules 
 
 
 /** @defgroup extended_new new

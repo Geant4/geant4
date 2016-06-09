@@ -168,27 +168,27 @@ http://geant4.cern.ch
 3) Unpack the source package to a location of your choice. As an illustration,
    this guide will assume it's been unpacked to
 
-   /path/to/geant4.9.5.0
+   /path/to/geant4.9.6.0
 
 4) IF YOU ARE ON LINUX OR MAC OS X ('UNIX'):
     4.1) Create a directory alongside the source directory in which to
          perform the build, e.g. using our directory from above
 
          $ cd /path/to
-         $ mkdir geant4.9.5.0-build
+         $ mkdir geant4.9.6.0-build
          $ ls
-         geant4.9.5.0  geant4.9.5.0-build
+         geant4.9.6.0  geant4.9.6.0-build
 
     4.2) Change to this build directory and run cmake, pointing it to the 
          location of the unpacked sources, e.g. carrying on from above
 
-         $ cd geant4.9.5.0-build
-         $ cmake ../geant4.9.5.0
+         $ cd geant4.9.6.0-build
+         $ cmake ../geant4.9.6.0
 
          CMake will then run to configure and generate standard Makefiles, 
          and on Linux you should see output similar to
 
-         $ cmake ../geant4.9.5.0
+         $ cmake ../geant4.9.6.0
          -- The C compiler identification is GNU
          -- The CXX compiler identification is GNU
          -- Check for working C compiler: /usr/bin/gcc
@@ -205,7 +205,7 @@ http://geant4.cern.ch
          
          -- Configuring done
          -- Generating done
-         -- Build files have been written to: /path/to/geant4.9.5.0
+         -- Build files have been written to: /path/to/geant4.9.6.0
 
         On Mac OS X this output will be slightly different!
 
@@ -762,7 +762,7 @@ and installed it to
 
 +- /usr/local
    +- lib/
-      +- Geant4-9.5.0
+      +- Geant4-9.6.0
          +- Geant4Config.cmake
 
 where we've illustrated the location of the Geant4Config files in the two trees.
@@ -788,7 +788,7 @@ install tree, instead doing:
 $ cd /home/geant4/exampleN01
 $ mkdir build-N01
 $ cd build-N01
-$ cmake -DGeant4_DIR=/usr/local/lib/geant4-9.5.0 ..
+$ cmake -DGeant4_DIR=/usr/local/lib/geant4-9.6.0 ..
 $ make -jN
 $ ./exampleN01
 
@@ -849,11 +849,11 @@ then be compiled with the appropriate flags to enable it.
 
 You can also pass version numbers to select a minimum version of Geant4:
 
-find_package(Geant4 9.5.0 REQUIRED)
+find_package(Geant4 9.6.0 REQUIRED)
 
 or even an exact version
 
-find_package(Geant4 9.5.0 EXACT REQUIRED)
+find_package(Geant4 9.6.0 EXACT REQUIRED)
 
 There are many other things you can do with find_package and CMake to build,
 install and package geant4 based applications. You should consult the
@@ -917,7 +917,7 @@ and installed it to
 
 +- /usr/local
    +- share/
-      +- Geant4-9.5.0
+      +- Geant4-9.6.0
          +- geant4-environment-setup.(c)sh
 
 where we've illustrated the location of the geant4-environment-setup.(c)sh
@@ -931,7 +931,7 @@ $ source /home/geant4/build/geant4-environment-setup.(c)sh
 Or, if you want to build your application using the Install Tree of Geant4, 
 simply source the script in the Install Tree, e.g.
 
-$ source /usr/local/share/Geant4-9.5.0/geant4-environment-setup.(c)sh
+$ source /usr/local/share/Geant4-9.6.0/geant4-environment-setup.(c)sh
 
 Your environment will then be configured to build applications using the Geant4
 GNU Makefile system as described in the Application Developers Guide:

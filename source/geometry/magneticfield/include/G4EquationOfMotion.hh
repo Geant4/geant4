@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.hh,v 1.10 2006-06-29 18:22:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4EquationOfMotion

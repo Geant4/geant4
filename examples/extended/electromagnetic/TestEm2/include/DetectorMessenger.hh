@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.6 2006-06-29 16:49:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,18 +52,18 @@ public:
   DetectorMessenger(DetectorConstruction* );
  ~DetectorMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
-  DetectorConstruction* Detector;
+  DetectorConstruction*      fDetector;
 
-  G4UIdirectory*             testemDir;
-  G4UIdirectory*             detDir;  
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWith3Vector*        LBinCmd;
-  G4UIcmdWith3Vector*        RBinCmd;
-  G4UIcmdWithADoubleAndUnit* FieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIdirectory*             fTestemDir;
+  G4UIdirectory*             fDetDir;  
+  G4UIcmdWithAString*        fMaterCmd;
+  G4UIcmdWith3Vector*        fLBinCmd;
+  G4UIcmdWith3Vector*        fRBinCmd;
+  G4UIcmdWithADoubleAndUnit* fFieldCmd;
+  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

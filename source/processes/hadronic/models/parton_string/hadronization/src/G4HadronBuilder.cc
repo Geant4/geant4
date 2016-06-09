@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.12 2010-11-03 17:11:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -36,8 +35,9 @@
 // -----------------------------------------------------------------------------
 
 #include "G4HadronBuilder.hh"
-#include "G4HadronicException.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4HadronicException.hh"
 #include "G4ParticleTable.hh"
 
 G4HadronBuilder::G4HadronBuilder(G4double mesonMix, G4double barionMix,

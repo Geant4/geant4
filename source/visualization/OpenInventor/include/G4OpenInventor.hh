@@ -24,16 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.hh,v 1.9 2006-06-29 21:20:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Guy Barrand 26 Mar 1998.
 // OpenInventor graphics system factory.
 
 #ifndef G4OPENINVENTOR_HH
 #define G4OPENINVENTOR_HH
-
-#if defined(G4VIS_BUILD_OI_DRIVER) || defined(G4VIS_USE_OI)
 
 #include "G4VGraphicsSystem.hh"
 
@@ -52,7 +49,5 @@ private:
 private:
   G4VInteractorManager* interactorManager;
 };
-
-#endif
 
 #endif

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/rdecay02.cc
+/// \brief Main program of the radioactivedecay/rdecay02 example
+//
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
@@ -52,7 +55,7 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 
   // Creation of the analysis manager
-  exrdmAnalysisManager::getInstance();
+  exrdmAnalysisManager::GetInstance();
 
   // set mandatory initialization classes
 
@@ -98,7 +101,7 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  exrdmAnalysisManager::dispose();
+  exrdmAnalysisManager::Dispose();
   delete runManager;
 
   return 0;

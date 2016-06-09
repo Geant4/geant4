@@ -24,15 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.hh,v 1.5 2010-04-27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
-
+//
+// Modifications:
+// 23 January 2012 by V.Ivanchenko added pointer of G4VPhotonEvaporation to 
+//    the constructor
 
 #ifndef G4VEvaporationFactory_hh
-#define G4VEvaporationFactory_hh
+#define G4VEvaporationFactory_hh 1
 
 #include "G4VEvaporationChannel.hh"
 #include <vector>
@@ -40,30 +42,24 @@
 class G4VEvaporationFactory
 {
 public:
-  G4VEvaporationFactory();
+
+  G4VEvaporationFactory(G4VEvaporationChannel* photoEvaporation);
+
   virtual ~G4VEvaporationFactory();
 
-  inline std::vector<G4VEvaporationChannel*> * GetChannel();
+  virtual std::vector<G4VEvaporationChannel*> * GetChannel() = 0;
 
 private:
+
   G4VEvaporationFactory(const G4VEvaporationFactory & );
   const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
   G4bool operator==(const G4VEvaporationFactory & val) const;
   G4bool operator!=(const G4VEvaporationFactory & val) const;
 
 protected:
-  virtual std::vector<G4VEvaporationChannel*> * CreateChannel() = 0;
 
-private:
-  std::vector<G4VEvaporationChannel*>* channel;
+  G4VEvaporationChannel* thePhotonEvaporation;
 
 };
-
-inline std::vector<G4VEvaporationChannel*> * 
-G4VEvaporationFactory::GetChannel()
-{
-  if (channel == 0) { channel = CreateChannel(); }
-  return channel;
-}
 
 #endif

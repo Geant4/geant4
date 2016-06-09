@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.18 2010-11-01 18:18:57 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -45,6 +44,8 @@
 #include "G4IonisParamElm.hh"
 #include "G4NistManager.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 

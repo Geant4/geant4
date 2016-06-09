@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G02/geotest.cc
+/// \brief Main program of the persistency/gdml/G02 example
 //
-// $Id: geotest.cc,v 1.5 2010-11-30 10:53:38 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -45,9 +47,9 @@
 
 // Example includes
 //
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
+#include "G02DetectorConstruction.hh"
+#include "G02PrimaryGeneratorAction.hh"
+#include "G02RunAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -66,11 +68,11 @@ int main(int argc, char** argv)
 
   // Set mandatory initialization and user action classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
+  G02DetectorConstruction* detector = new G02DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new QGSP_BERT);
-  runManager->SetUserAction(new PrimaryGeneratorAction);
-  RunAction* runAction = new RunAction;
+  runManager->SetUserAction(new G02PrimaryGeneratorAction);
+  G02RunAction* runAction = new G02RunAction;
   runManager->SetUserAction(runAction);
       
   // Initialisation of runManager via macro for the interactive mode

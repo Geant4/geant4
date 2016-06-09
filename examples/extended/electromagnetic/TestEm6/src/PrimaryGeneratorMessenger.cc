@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.5 2006-06-29 16:57:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/src/PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,25 +41,25 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
-:Action(Gun)
+:fAction(Gun)
 { 
-  gunDir = new G4UIdirectory("/testem/gun/");
-  gunDir->SetGuidance("gun control");
+  fGunDir = new G4UIdirectory("/testem/gun/");
+  fGunDir->SetGuidance("gun control");
 
-  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
-  RndmCmd->SetGuidance("random lateral extension on the beam");
-  RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
-  RndmCmd->SetParameterName("rBeam",false);
-  RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
-  RndmCmd->AvailableForStates(G4State_Idle);  
+  fRndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
+  fRndmCmd->SetGuidance("random lateral extension on the beam");
+  fRndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
+  fRndmCmd->SetParameterName("rBeam",false);
+  fRndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
+  fRndmCmd->AvailableForStates(G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-  delete RndmCmd;
-  delete gunDir;  
+  delete fRndmCmd;
+  delete fGunDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,8 +67,8 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                                G4String newValue)
 { 
-  if (command == RndmCmd)
-   {Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
+  if (command == fRndmCmd)
+   {fAction->SetRndmBeam(fRndmCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

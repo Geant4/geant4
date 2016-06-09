@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLClustering.hh
  * \brief Static class for cluster formation
  *
- * Created on: 13th July 2011
- *     Author: Davide Mancusi
+ * \date 13th July 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLCLUSTERING_HH
@@ -59,19 +59,25 @@ namespace G4INCL {
   class Clustering {
   public:
     /**
-     * Choose a cluster candidate to be produced. At this poG4int we
+     * Choose a cluster candidate to be produced. At this point we
      * don't yet decide if it can pass through the Coulomb barrier or
      * not.
      */
     static Cluster* getCluster(Nucleus *n, Particle *p) {
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+      Cluster * const c=theClusteringModel->getCluster(n,p);
+// assert(!c || c->getA()<=n->getA()/2);
+      return c;
+#else
       return theClusteringModel->getCluster(n,p);
+#endif
     }
 
     /**
      * Determine whether cluster can escape or not.
      */
-    static G4bool clusterCanEscape(Cluster const * const c) {
-      return theClusteringModel->clusterCanEscape(c);
+    static G4bool clusterCanEscape(Nucleus const * const n, Cluster const * const c) {
+      return theClusteringModel->clusterCanEscape(n, c);
     }
 
     /// \brief Get the clustering model.

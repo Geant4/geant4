@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEAntiSigmaZeroInelastic.cc,v 1.11 2010-11-20 04:01:33 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-
-#include "globals.hh"
-#include "G4ios.hh"
 
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
@@ -40,7 +36,8 @@
  
 #include "G4HEAntiSigmaZeroInelastic.hh"
 #include "G4Gamma.hh"
-
+#include "globals.hh"
+#include "G4ios.hh"
 
 void G4HEAntiSigmaZeroInelastic::ModelDescription(std::ostream& outFile) const
 {

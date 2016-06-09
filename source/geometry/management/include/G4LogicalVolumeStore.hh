@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.13 2007-04-10 10:13:50 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4LogicalVolumeStore
 //

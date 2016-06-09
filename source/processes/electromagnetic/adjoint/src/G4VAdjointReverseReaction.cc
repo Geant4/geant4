@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAdjointReverseReaction.cc,v 1.3 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4VAdjointReverseReaction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"

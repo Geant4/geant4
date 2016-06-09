@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01RunMessenger.cc
+/// \brief Implementation of the F01RunMessenger class
 //
-// $Id: F01RunMessenger.cc,v 1.6 2006-06-29 17:16:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -44,44 +46,50 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-F01RunMessenger::F01RunMessenger(F01RunAction* RA)
-  : runAction (RA)
+F01RunMessenger::F01RunMessenger(F01RunAction* action)
+ : G4UImessenger(),
+   fRunAction(action),
+   fRndmDir(0),
+   fRndmSaveCmd(0),
+   fRndmReadCmd(0)
 {
-  RndmDir = new G4UIdirectory("/rndm/");
-  RndmDir->SetGuidance("Rndm status control.");
+  fRndmDir = new G4UIdirectory("/rndm/");
+  fRndmDir->SetGuidance("Rndm status control.");
   
-  RndmSaveCmd = new G4UIcmdWithAnInteger("/rndm/save",this);
-  RndmSaveCmd->SetGuidance("set frequency to save rndm status on external files.");
-  RndmSaveCmd->SetGuidance("freq = 0 not saved");
-  RndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq = 1 saved on:   endOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq = 2 saved on: endOfEvent.rndm");    
-  RndmSaveCmd->SetParameterName("frequency",false);
-  RndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
-  RndmSaveCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fRndmSaveCmd = new G4UIcmdWithAnInteger("/rndm/save",this);
+  fRndmSaveCmd->SetGuidance("set frequency to save rndm status on external files.");
+  fRndmSaveCmd->SetGuidance("freq = 0 not saved");
+  fRndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
+  fRndmSaveCmd->SetGuidance("freq = 1 saved on:   endOfRun.rndm");
+  fRndmSaveCmd->SetGuidance("freq = 2 saved on: endOfEvent.rndm");    
+  fRndmSaveCmd->SetParameterName("frequency",false);
+  fRndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
+  fRndmSaveCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
          
-  RndmReadCmd = new G4UIcmdWithAString("/rndm/read",this);
-  RndmReadCmd->SetGuidance("get rndm status from an external file.");
-  RndmReadCmd->SetParameterName("fileName",true);
-  RndmReadCmd->SetDefaultValue ("beginOfRun.rndm");
-  RndmReadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fRndmReadCmd = new G4UIcmdWithAString("/rndm/read",this);
+  fRndmReadCmd->SetGuidance("get rndm status from an external file.");
+  fRndmReadCmd->SetParameterName("fileName",true);
+  fRndmReadCmd->SetDefaultValue ("beginOfRun.rndm");
+  fRndmReadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01RunMessenger::~F01RunMessenger()
 {
-  delete RndmSaveCmd; delete RndmReadCmd; delete RndmDir;  
+  delete fRndmSaveCmd; 
+  delete fRndmReadCmd; 
+  delete fRndmDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
 { 
-  if (command == RndmSaveCmd)
-      runAction->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValues));
-		 
-  if (command == RndmReadCmd)
+  if (command == fRndmSaveCmd)
+      fRunAction->SetRndmFreq(fRndmSaveCmd->GetNewIntValue(newValues));
+                 
+  if (command == fRndmReadCmd)
     { G4cout << "\n---> rndm status restored from file: " << newValues << G4endl;
       CLHEP::HepRandom::restoreEngineStatus(newValues);
       CLHEP::HepRandom::showEngineStatus();

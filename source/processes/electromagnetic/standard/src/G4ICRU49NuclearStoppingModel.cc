@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.cc,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +50,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ICRU49NuclearStoppingModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
@@ -88,31 +89,33 @@ void G4ICRU49NuclearStoppingModel::Initialise(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
-G4ICRU49NuclearStoppingModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-						const G4MaterialCutsCouple*,
-						const G4DynamicParticle*,
-						G4double, G4double)
+G4ICRU49NuclearStoppingModel::SampleSecondaries(
+                         std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double, G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
-G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(const G4Material* mat,
-						   const G4ParticleDefinition* p,
-						   G4double kinEnergy,
-						   G4double)
+G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(
+                         const G4Material* mat,
+			 const G4ParticleDefinition* p,
+			 G4double kinEnergy,
+			 G4double)
 {
   G4double nloss = 0.0;
-  if(kinEnergy <= 0.0) return nloss; 
+  if(kinEnergy <= 0.0) { return nloss; }
 
   // projectile
-  G4double m1 = p->GetPDGMass();
+  G4double mass1 = p->GetPDGMass();
   G4double z1 = std::fabs(p->GetPDGCharge()/eplus);
 
-  if(kinEnergy*proton_mass_c2/m1 > z1*z1*100.*MeV) return nloss;
+  if(kinEnergy*proton_mass_c2/mass1 > z1*z1*MeV) { return nloss; }
 
   // Projectile nucleus
-  m1 /= amu_c2;
+  mass1 /= amu_c2;
 
   //  loop for the elements in the material
   G4int numberOfElements = mat->GetNumberOfElements();
@@ -122,8 +125,8 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(const G4Material* mat,
   for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double m2 = element->GetA()*mole/g ;
-    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, m1, m2))
+    G4double mass2 = element->GetA()*mole/g ;
+    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, mass1, mass2))
            * atomDensity[iel] ;
   }
   nloss *= theZieglerFactor;
@@ -135,7 +138,7 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(const G4Material* mat,
 G4double 
 G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
 						   G4double z1, G4double z2,
-						   G4double m1, G4double m2)
+						   G4double mass1, G4double mass2)
 {
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double nloss = 0.0;
@@ -144,12 +147,12 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
   G4int iz2 = G4int(z2);
   
   G4double rm;
-  if(iz1 > 1) rm = (m1 + m2) * ( g4pow->Z23(iz1) + g4pow->Z23(iz2) );
-  else        rm = (m1 + m2) * g4pow->Z13(iz2);
+  if(iz1 > 1) { rm = (mass1 + mass2)*(g4pow->Z23(iz1) + g4pow->Z23(iz2)); }
+  else        { rm = (mass1 + mass2)*g4pow->Z13(iz2); }
 
-  G4double er = 32.536 * m2 * energy / ( z12 * rm ) ;  // reduced energy
+  G4double er = 32.536 * mass2 * energy / ( z12 * rm ) ;  // reduced energy
 
-  if (er >= ed[0]) nloss = ad[0];
+  if (er >= ed[0]) { nloss = ad[0]; }
   else {
     // the table is inverse in energy
     for (G4int i=102; i>=0; --i)
@@ -163,18 +166,18 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
 
   // Stragling
   if(lossFlucFlag) {
-    //    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
-    //              (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
-    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+    // G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
+    // (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
+    G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
 				    (4.0 + 0.197/(er*er) + 6.584/er));
 
-    nloss *= G4RandGauss::shoot(1.0,sig) ;
+    nloss *= G4RandGauss::shoot(1.0,sig);
     lossFlucFlag = false;
   }
    
-  nloss *= 8.462 * z12 * m1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
+  nloss *= 8.462 * z12 * mass1 / rm; // Return to [ev/(10^15 atoms/cm^2]
 
-  if ( nloss < 0.0) nloss = 0.0 ;
+  if ( nloss < 0.0) { nloss = 0.0; }
 
   return nloss;
 }

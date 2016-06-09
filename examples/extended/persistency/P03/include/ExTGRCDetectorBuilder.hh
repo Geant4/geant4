@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCDetectorBuilder.hh,v 1.5 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file persistency/P03/include/ExTGRCDetectorBuilder.hh
+/// \brief Definition of the ExTGRCDetectorBuilder class
 //
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
+// $Id$
 
 #ifndef ExTGRCDetectorBuilder_h
 #define ExTGRCDetectorBuilder_h
@@ -39,6 +37,11 @@
 //---------------------------------------------------------------------------- 
 
 class ExTGRCLineProcessor;
+
+/// Detector builder class implementing cuts per region
+///
+/// Changes:     creation   May 2007
+/// \author:    P. Arce
 
 class ExTGRCDetectorBuilder : public G4tgbDetectorBuilder
 { 
@@ -51,7 +54,7 @@ class ExTGRCDetectorBuilder : public G4tgbDetectorBuilder
     virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop);
   private:
 
-    ExTGRCLineProcessor* tlproc;
+    ExTGRCLineProcessor* fTlproc;
 };
 
 #endif

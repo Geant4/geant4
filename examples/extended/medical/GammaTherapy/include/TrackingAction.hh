@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+//
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
 
@@ -51,16 +54,19 @@ class Histo;
 class TrackingAction : public G4UserTrackingAction
 {
 
-  public:
-    TrackingAction();
-    ~TrackingAction();
+public:
+  TrackingAction();
+  virtual ~TrackingAction();
 
-    void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*) {};
+  void PreUserTrackingAction(const G4Track*);
+  void PostUserTrackingAction(const G4Track*);
 
-  private:
+private:
 
-    Histo* theHisto;
+  TrackingAction(const TrackingAction & right);
+  const TrackingAction & operator = (const TrackingAction & right);
+
+  Histo* fHisto;
 
 };
 

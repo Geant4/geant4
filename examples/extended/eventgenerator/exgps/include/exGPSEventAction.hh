@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSEventAction.hh
+/// \brief Definition of the exGPSEventAction class
+//
 
 #ifndef exGPSEventAction_h
 #define exGPSEventAction_h 1
@@ -44,13 +47,13 @@ class exGPSEventAction : public G4UserEventAction
     virtual void   BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
+    void SetDrawFlag   (G4String val)  {fDrawFlag = val;};
+    void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
   private:
-    G4String                    drawFlag;
-    G4int                       printModulo;                         
-    exGPSEventActionMessenger*  eventMessenger;
+    G4String                    fDrawFlag;
+    G4int                       fPrintModulo;                         
+    exGPSEventActionMessenger*  fEventMessenger;
 };
 
 #endif

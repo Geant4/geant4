@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June 2012 P. Gumplinger (exampleN06-V09-05-01)
+- remove SetModel from ExN06PhysicsList.cc to cowork with op-V09-05-04
+
+24 January 2012 P. Gumplinger (exampleN06-V09-05-00)
+- set /tracking/verbose 3 in exampleN06.in and optPhoton.mac
+  to also test timing of optical photons - see Problem #1275
+
 29 November 2011 Ben Morgan (exampleN06-V09-04-01)
 - CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
   to build directory, plus comments and neatification.

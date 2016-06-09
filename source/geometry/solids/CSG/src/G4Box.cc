@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.53 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //
@@ -42,6 +41,7 @@
 
 #include "G4Box.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "Randomize.hh"

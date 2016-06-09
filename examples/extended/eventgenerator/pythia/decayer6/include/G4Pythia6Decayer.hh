@@ -24,16 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.hh,v 1.2 2008-12-18 12:56:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// Implements the G4VExtDecayer abstract class using the Pythia6 interface.
+/// \file eventgenerator/pythia/decayer6/include/G4Pythia6Decayer.hh
+/// \brief Definition of the G4Pythia6Decayer class
 //
-// According to TPythia6Decayer class in Root:
-// http://root.cern.ch/
-// see http://root.cern.ch/root/License.html
-// ----------------------------------------------------------------------------
-
 #ifndef G4_PYTHIA6_DECAYER_H
 #define G4_PYTHIA6_DECAYER_H
 
@@ -48,7 +43,12 @@ class Pythia6Particle;
 class G4Track;
 class G4DecayProducts;
 
-// ----------------------------------------------------------------------------
+/// Pythia6 decayer
+///
+/// Implements the G4VExtDecayer abstract class using the Pythia6 interface.
+/// According to TPythia6Decayer class in Root:
+/// http://root.cern.ch/
+/// see http://root.cern.ch/root/License.html
 
 class G4Pythia6Decayer : public G4VExtDecayer
 {

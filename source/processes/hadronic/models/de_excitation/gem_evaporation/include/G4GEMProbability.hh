@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh,v 1.6 2010-11-05 14:42:52 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------
 //
@@ -41,6 +40,8 @@
 
 #ifndef G4GEMProbability_h
 #define G4GEMProbability_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
@@ -89,8 +90,8 @@ private:
 
   inline G4double I0(G4double t);
   inline G4double I1(G4double t, G4double tx);
-  inline G4double I2(G4double s, G4double sx);
-  G4double I3(G4double s, G4double sx);
+  inline G4double I2(G4double s0, G4double sx);
+  G4double I3(G4double s0, G4double sx);
 
   // Copy constructor
   G4GEMProbability();
@@ -218,7 +219,7 @@ G4GEMProbability::CalcBetaParam(const G4Fragment & fragment) const
   //on proof in Dostrovskii's paper)
   G4double res;
   if(GetZ_asInt() == 0) {
-    res = (1.66/fG4pow->Z23(fragment.GetA_asInt()-GetA_asInt())-0.05)*MeV/
+    res = (1.66/fG4pow->Z23(fragment.GetA_asInt()-GetA_asInt())-0.05)*CLHEP::MeV/
 	   CalcAlphaParam(fragment);
   } else {
     res = -GetCoulombBarrier(fragment);
@@ -237,13 +238,13 @@ inline G4double G4GEMProbability::I1(G4double t, G4double tx)
 }
 
 
-inline G4double G4GEMProbability::I2(G4double s, G4double sx)
+inline G4double G4GEMProbability::I2(G4double s0, G4double sx)
 {
-  G4double S = 1.0/std::sqrt(s);
+  G4double S = 1.0/std::sqrt(s0);
   G4double Sx = 1.0/std::sqrt(sx);
   
   G4double p1 = S*S*S*( 1.0 + S*S*( 1.5 + 3.75*S*S) );
-  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s);
+  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s0);
   
   return p1-p2;
 }

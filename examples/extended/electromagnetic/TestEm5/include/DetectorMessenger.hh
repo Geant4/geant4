@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.5 2006-06-29 16:54:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,26 +52,26 @@ class DetectorMessenger: public G4UImessenger
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsSizYZCmd;
+    G4UIcmdWithAString*        fAbsMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
 
-    G4UIcmdWithADoubleAndUnit* AbsXposCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsXposCmd;
 
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldXCmd;
-    G4UIcmdWithADoubleAndUnit* WorldYZCmd;
+    G4UIcmdWithAString*        fWorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldXCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldYZCmd;
 
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

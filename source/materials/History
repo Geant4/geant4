@@ -17,6 +17,150 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-11-12 P. Mato (materials-V09-05-33)
+- Added include G4SystemOfUnits.hh in unit tests 
+
+10-10-12 V.Ivanchenko (materials-V09-05-32)
+- G4ElementData - updated and simplified 
+
+30-08-12 Pere Mato (materials-V09-05-31)
+- Added test/CMakeLists.txt
+
+15-08-12 V.Ivanchenko (materials-V09-05-30)
+- G4AtomicShell - reorder shells decenting in energy (in past shells
+    were ordered by quantum numbers and for high Z atoms low-energy
+    outer shells have lower indexes than some shells with higher quantum 
+    numbers) 
+- G4Material - when construct material from the base one use mean 
+    excitation energy from base material and not recompute from scratch
+- G4NistMaterialBuilder - added G4_THYMINE, G4_CYTOSINE and G4_URACIL;
+    for G4_ADENINE and G4_GUANINE use combination by atom numbers and not
+    by mass fraction
+
+11-07-12 V.Ivanchenko (materials-V09-05-29)
+11-07-12 V.Ivanchenko (materials-V09-05-28)
+- Fixed bug of previous tag
+
+11-07-12 V.Ivanchenko (materials-V09-05-27)
+- G4SandiaTable - move inline methods with static variables to the source
+
+05-07-12 V.Ivanchenko (materials-V09-05-26)
+- G4SandiaTable - remove execution of std::pow from all functions
+    instead use precomuted values in static array, removed
+    unnecessary asserts from inline methods, some CPU performance
+    improvement expected
+
+11-06-12 G.Cosmo (materials-V09-05-25)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+26-05-12 V.Ivanchenko (materials-V09-05-24)
+- G4Element - M.Kesley identified a bug in Neff computation in ref01
+
+23-05-12 G.Cosmo (materials-V09-05-23)
+- Fixed trivial cases of variable shadowing.
+
+23-05-12 V.Ivanchenko (materials-V09-05-22)
+23-05-12 V.Ivanchenko (materials-V09-05-21)
+- G4NistMaterialBuilder : fixed bug introduced in the previous tag
+
+16-05-12 gum (materials-V09-05-20)
+- G4OpticalSurface : trying to fix Coverity report
+- G4NistMaterialBuilder : build H2O via atom count and not mass
+    fraction
+
+09-05-12 V.Ivanchenko (materials-V09-05-19)
+- G4Element, G4Isotope : fixed not important Coverity warning by
+    removing "return" from constructors
+- G4ExtDEDXTable - changed options to open file in order to fix
+    Coverity warning
+     
+01-05-12 mma (materials-V09-05-18)
+- G4Element, G4Material : cosmetic in printing functions
+     
+24-04-12 mma (materials-V09-05-17)
+- G4Material : go back to materials-V09-05-15
+    
+23-04-12 V.Ivanchenko (materials-V09-05-16)
+- G4Material : add fMassOfMolecule computation inside constructors
+    with mass fraction
+- G4Element : normalize to 1 the sum of isotope abundances
+
+21-04-12 V.Ivanchenko (materials-V09-05-15)
+- G4Material : add fMassOfMolecule definition into G4Material constructor 
+    with base material
+     
+21-04-12 mma (materials-V09-05-14)
+- G4Material : fMassOfMolecule, only computed when relevant
+- update test/testMatComponents.cc     
+     
+13-04-12 mma (materials-V09-05-13)
+- G4Material : map<G4Material*,G4double> fMatComponents, filled in AddMaterial()
+- update test/testMatComponents.cc
+     
+12-04-12 mma (materials-V09-05-12)
+- G4Material : new data member fMatComponents (a map), for composite built via
+      AddMaterial()
+- example in test/testMatComponents.cc
+
+05-03-12 V.Ivanchenko (materials-V09-05-11)
+- G4Element - add construction of Isotope vector for all elements,
+    if user does not create isotopes then vector of of isotopes
+    with natural abundances is created using NIST data;
+    extend printout of G4Exceptions
+- G4Isotope - extend printout of G4Exceptions 
+- G4ExtDEDXTable - trying to fix Coverity report
+
+25-02-12 V.Ivanchenko (materials-V09-05-10)
+- G4Material - return back to the version of 9.5
+     
+21-02-12 mma (materials-V09-05-09)
+- G4Material : fZmean, fAmean
+               for single materials : GetZ(), GetA(), GetAtomicMassAmu()
+	       for any materials : GetZmean(), GetAmean(), GetAmeanAmu() 
+     
+20-02-12 mma (materials-V09-05-08)
+- G4Material : fAeff kept in geant4 unit
+  GetAtomicMassAmu()  {return fAeff*mole/g;}
+
+19-02-12 V.Ivanchenko (materials-V09-05-07)
+- G4Material, G4Element, G4Isotope, G4NistManager, G4NistMaterialBuilder,
+  G4NistElement - added or cleaned methods GetA(), GetAtomicMassAmu(),
+  improved comments
+
+14-02-12 V.Ivanchenko (materials-V09-05-06)
+- G4NistManager - fixed compillation problem introduced in previos tags
+
+12-02-12 V.Ivanchenko (materials-V09-05-05)
+- G4Material - provided methods GetZ (effective Z) and GetA (atomic weight)
+    both for simple and compound materials (before was only for simple)
+- G4NistMessenger - cleanup comments
+- G4NistMaterialBuilder - cleanup logic of AddMaterial method
+- G4IonisParamMat - more safe computation of element index and indentifications
+  of Hydrogen and Helium
+
+09-02-12 P.Gumplinger (materials-V09-05-04)
+- G4NistManager         - add ConstructNewIdealGasMaterial
+- G4NistMaterialBuilder - add ConstructNewIdealGasMaterial
+- G4NistElementBuilder  - add GetA(const G4String& symb)
+
+04-02-12 V.Ivanchenko (materials-V09-05-03)
+- G4NistElementBuilder - improved comments
+- G4NistManager - improve comments
+- G4ExtDEDXTable - an extra attempt to fix Coverity warning
+
+24-01-12 P.Gumplinger (materials-V09-05-02)
+- G4OpticalSurface.cc: remove std:: in front of fopen and fscanf
+
+17-01-12 P.Gumplinger (materials-V09-05-01)
+- G4MaterialPropertiesTable.icc: add return statement in GetConstProperty
+  after G4Exception to keep a compiler happy
+
+12-01-12 P.Gumplinger (materials-V09-05-00)
+- G4MaterialPropertiesTable.icc: cosmetic changes to GetProperty,
+    GetConstProperty and ConstPropertyExists methods
+- G4OpticalSurface.cc: avoid compilation warning on Ubuntu
+
 10-11-11 V.Ivanchenko (materials-V09-04-18)
 - G4SandiaTable, G4IonisParamElm, G4IonisParamMat, G4OpticalSurface
     fixed problems reported by Coverity, mainly in assignment operator

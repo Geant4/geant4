@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.10 2009-11-21 00:22:55 perl Exp $
+/// \file analysis/A01/src/A01DetectorConstruction.cc
+/// \brief Implementation of the A01DetectorConstruction class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -55,6 +58,7 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "A01DetectorConstMessenger.hh"
 #include "A01MagneticField.hh"
@@ -67,40 +71,40 @@
 #include "A01HadCalorimeter.hh"
 
 A01DetectorConstruction::A01DetectorConstruction()
- : air(0), argonGas(0), scintillator(0), CsI(0), lead(0),
-   worldVisAtt(0), magneticVisAtt(0),
-   armVisAtt(0), hodoscopeVisAtt(0), chamberVisAtt(0),
-   wirePlaneVisAtt(0), EMcalorimeterVisAtt(0), cellVisAtt(0),
-   HadCalorimeterVisAtt(0), HadCalorimeterCellVisAtt(0),
-   armAngle(30.*deg), secondArmPhys(0)
+ : fAir(0), fArgonGas(0), fScintillator(0), fCsI(0), fLead(0),
+   fWorldVisAtt(0), fMagneticVisAtt(0),
+   fArmVisAtt(0), fHodoscopeVisAtt(0), fChamberVisAtt(0),
+   fWirePlaneVisAtt(0), fEMcalorimeterVisAtt(0), fCellVisAtt(0),
+   fHadCalorimeterVisAtt(0), fHadCalorimeterCellVisAtt(0),
+   fArmAngle(30.*deg), fSecondArmPhys(0)
 
 {
-  messenger = new A01DetectorConstMessenger(this);
-  magneticField = new A01MagneticField();
-  fieldMgr = new G4FieldManager();
-  armRotation = new G4RotationMatrix();
-  armRotation->rotateY(armAngle);
+  fMessenger = new A01DetectorConstMessenger(this);
+  fMagneticField = new A01MagneticField();
+  fFieldMgr = new G4FieldManager();
+  fArmRotation = new G4RotationMatrix();
+  fArmRotation->rotateY(fArmAngle);
 }
 
 A01DetectorConstruction::~A01DetectorConstruction()
 {
-  delete armRotation;
-  delete magneticField;
-  delete fieldMgr;
-  delete messenger;
+  delete fArmRotation;
+  delete fMagneticField;
+  delete fFieldMgr;
+  delete fMessenger;
 
   DestroyMaterials();
 
-  delete worldVisAtt;
-  delete magneticVisAtt;
-  delete armVisAtt;
-  delete hodoscopeVisAtt;
-  delete chamberVisAtt;
-  delete wirePlaneVisAtt;
-  delete EMcalorimeterVisAtt;
-  delete cellVisAtt;
-  delete HadCalorimeterVisAtt;
-  delete HadCalorimeterCellVisAtt;
+  delete fWorldVisAtt;
+  delete fMagneticVisAtt;
+  delete fArmVisAtt;
+  delete fHodoscopeVisAtt;
+  delete fChamberVisAtt;
+  delete fWirePlaneVisAtt;
+  delete fEMcalorimeterVisAtt;
+  delete fCellVisAtt;
+  delete fHadCalorimeterVisAtt;
+  delete fHadCalorimeterCellVisAtt;
 }
 
 G4VPhysicalVolume* A01DetectorConstruction::Construct()
@@ -111,9 +115,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VSensitiveDetector* chamber1;
   G4VSensitiveDetector* chamber2;
   G4VSensitiveDetector* EMcalorimeter;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   G4VSensitiveDetector* HadCalorimeter;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   ConstructMaterials();
 
   // Local Magnetic Field
@@ -121,8 +123,8 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
 
   if(!fieldIsInitialized)
   {
-    fieldMgr->SetDetectorField(magneticField);
-    fieldMgr->CreateChordFinder(magneticField);
+    fFieldMgr->SetDetectorField(fMagneticField);
+    fFieldMgr->CreateChordFinder(fMagneticField);
     fieldIsInitialized = true;
   }
 
@@ -130,7 +132,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   // experimental hall (world volume)
   G4VSolid* worldSolid = new G4Box("worldBox",10.*m,3.*m,10.*m);
   G4LogicalVolume* worldLogical
-    = new G4LogicalVolume(worldSolid,air,"worldLogical",0,0,0);
+    = new G4LogicalVolume(worldSolid,fAir,"worldLogical",0,0,0);
   G4VPhysicalVolume* worldPhysical
     = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,0,0);
 
@@ -141,8 +143,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4Material* G4_Galactic = man->FindOrBuildMaterial("G4_Galactic");
   
    G4LogicalVolume* magneticLogical
-    = new G4LogicalVolume(magneticSolid,G4_Galactic,"magneticLogical",fieldMgr,0,0);
-  //                                                                  ********
+    = new G4LogicalVolume(magneticSolid,G4_Galactic,"magneticLogical",fFieldMgr,0,0);
  
   // placement of Tube 
  
@@ -158,24 +159,24 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   // first arm
   G4VSolid* firstArmSolid = new G4Box("firstArmBox",1.5*m,1.*m,3.*m);
   G4LogicalVolume* firstArmLogical
-    = new G4LogicalVolume(firstArmSolid,air,"firstArmLogical",0,0,0);
+    = new G4LogicalVolume(firstArmSolid,fAir,"firstArmLogical",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,-5.*m),firstArmLogical,
                     "firstArmPhysical",worldLogical,0,0);
 
   // second arm
   G4VSolid* secondArmSolid = new G4Box("secondArmBox",2.*m,2.*m,3.5*m);
   G4LogicalVolume* secondArmLogical
-    = new G4LogicalVolume(secondArmSolid,air,"secondArmLogical",0,0,0);
-  G4double x = -5.*m * std::sin(armAngle);
-  G4double z = 5.*m * std::cos(armAngle);
-  secondArmPhys
-    = new G4PVPlacement(armRotation,G4ThreeVector(x,0.,z),secondArmLogical,
-                        "secondArmPhys",worldLogical,0,0);
+    = new G4LogicalVolume(secondArmSolid,fAir,"secondArmLogical",0,0,0);
+  G4double x = -5.*m * std::sin(fArmAngle);
+  G4double z = 5.*m * std::cos(fArmAngle);
+  fSecondArmPhys
+    = new G4PVPlacement(fArmRotation,G4ThreeVector(x,0.,z),secondArmLogical,
+                        "fSecondArmPhys",worldLogical,0,0);
 
   // hodoscopes in first arm
   G4VSolid* hodoscope1Solid = new G4Box("hodoscope1Box",5.*cm,20.*cm,0.5*cm);
   G4LogicalVolume* hodoscope1Logical
-    = new G4LogicalVolume(hodoscope1Solid,scintillator,"hodoscope1Logical",0,0,0);
+    = new G4LogicalVolume(hodoscope1Solid,fScintillator,"hodoscope1Logical",0,0,0);
   for(int i1=0;i1<15;i1++)
   {
     G4double x1 = (i1-7)*10.*cm;
@@ -186,7 +187,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   // drift chambers in first arm
   G4VSolid* chamber1Solid = new G4Box("chamber1Box",1.*m,30.*cm,1.*cm);
   G4LogicalVolume* chamber1Logical
-    = new G4LogicalVolume(chamber1Solid,argonGas,"chamber1Logical",0,0,0);
+    = new G4LogicalVolume(chamber1Solid,fArgonGas,"chamber1Logical",0,0,0);
   for(int j1=0;j1<5;j1++)
   {
     G4double z1 = (j1-2)*0.5*m;
@@ -197,14 +198,14 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   // "virtual" wire plane
   G4VSolid* wirePlane1Solid = new G4Box("wirePlane1Box",1.*m,30.*cm,0.1*mm);
   G4LogicalVolume* wirePlane1Logical
-    = new G4LogicalVolume(wirePlane1Solid,argonGas,"wirePlane1Logical",0,0,0);
+    = new G4LogicalVolume(wirePlane1Solid,fArgonGas,"wirePlane1Logical",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),wirePlane1Logical,
                     "wirePlane1Physical",chamber1Logical,0,0);
 
   // hodoscopes in second arm
   G4VSolid* hodoscope2Solid = new G4Box("hodoscope2Box",5.*cm,20.*cm,0.5*cm);
   G4LogicalVolume* hodoscope2Logical
-    = new G4LogicalVolume(hodoscope2Solid,scintillator,"hodoscope2Logical",0,0,0);
+    = new G4LogicalVolume(hodoscope2Solid,fScintillator,"hodoscope2Logical",0,0,0);
   for(int i2=0;i2<25;i2++)
   {
     G4double x2 = (i2-12)*10.*cm;
@@ -215,7 +216,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   // drift chambers in second arm
   G4VSolid* chamber2Solid = new G4Box("chamber2Box",1.5*m,30.*cm,1.*cm);
   G4LogicalVolume* chamber2Logical
-    = new G4LogicalVolume(chamber2Solid,argonGas,"chamber2Logical",0,0,0);
+    = new G4LogicalVolume(chamber2Solid,fArgonGas,"chamber2Logical",0,0,0);
   for(int j2=0;j2<5;j2++)
   {
     G4double z2 = (j2-2)*0.5*m - 1.5*m;
@@ -226,31 +227,30 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   // "virtual" wire plane
   G4VSolid* wirePlane2Solid = new G4Box("wirePlane2Box",1.5*m,30.*cm,0.1*mm);
   G4LogicalVolume* wirePlane2Logical
-    = new G4LogicalVolume(wirePlane2Solid,argonGas,"wirePlane2Logical",0,0,0);
+    = new G4LogicalVolume(wirePlane2Solid,fArgonGas,"wirePlane2Logical",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),wirePlane2Logical,
                     "wirePlane2Physical",chamber2Logical,0,0);
 
   // CsI calorimeter
   G4VSolid* EMcalorimeterSolid = new G4Box("EMcalorimeterBox",1.5*m,30.*cm,15.*cm);
   G4LogicalVolume* EMcalorimeterLogical
-    = new G4LogicalVolume(EMcalorimeterSolid,CsI,"EMcalorimeterLogical",0,0,0);
+    = new G4LogicalVolume(EMcalorimeterSolid,fCsI,"EMcalorimeterLogical",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,2.*m),EMcalorimeterLogical,
                     "EMcalorimeterPhysical",secondArmLogical,0,0);
 
   // EMcalorimeter cells
   G4VSolid* cellSolid = new G4Box("cellBox",7.5*cm,7.5*cm,15.*cm);
   G4LogicalVolume* cellLogical
-    = new G4LogicalVolume(cellSolid,CsI,"cellLogical",0,0,0);
+    = new G4LogicalVolume(cellSolid,fCsI,"cellLogical",0,0,0);
   G4VPVParameterisation* cellParam = new A01CellParameterisation();
   new G4PVParameterised("cellPhysical",cellLogical,EMcalorimeterLogical,
                          kXAxis,80,cellParam);
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   // hadron calorimeter
   G4VSolid* HadCalorimeterSolid
     = new G4Box("HadCalorimeterBox",1.5*m,30.*cm,50.*cm);
   G4LogicalVolume* HadCalorimeterLogical
-    = new G4LogicalVolume(HadCalorimeterSolid,lead,"HadCalorimeterLogical",0,0,0);
+    = new G4LogicalVolume(HadCalorimeterSolid,fLead,"HadCalorimeterLogical",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,3.*m),HadCalorimeterLogical,
                     "HadCalorimeterPhysical",secondArmLogical,0,0);
 
@@ -258,7 +258,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VSolid* HadCalColumnSolid
     = new G4Box("HadCalColumnBox",15.*cm,30.*cm,50.*cm);
   G4LogicalVolume* HadCalColumnLogical
-    = new G4LogicalVolume(HadCalColumnSolid,lead,"HadCalColumnLogical",0,0,0);
+    = new G4LogicalVolume(HadCalColumnSolid,fLead,"HadCalColumnLogical",0,0,0);
   new G4PVReplica("HadCalColumnPhysical",HadCalColumnLogical,
                    HadCalorimeterLogical,kXAxis,10,30.*cm);
 
@@ -266,7 +266,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VSolid* HadCalCellSolid
     = new G4Box("HadCalCellBox",15.*cm,15.*cm,50.*cm);
   G4LogicalVolume* HadCalCellLogical
-    = new G4LogicalVolume(HadCalCellSolid,lead,"HadCalCellLogical",0,0,0);
+    = new G4LogicalVolume(HadCalCellSolid,fLead,"HadCalCellLogical",0,0,0);
   new G4PVReplica("HadCalCellPhysical",HadCalCellLogical,
                    HadCalColumnLogical,kYAxis,2,30.*cm);
 
@@ -274,7 +274,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VSolid* HadCalLayerSolid
     = new G4Box("HadCalLayerBox",15.*cm,15.*cm,2.5*cm);
   G4LogicalVolume* HadCalLayerLogical
-    = new G4LogicalVolume(HadCalLayerSolid,lead,"HadCalLayerLogical",0,0,0);
+    = new G4LogicalVolume(HadCalLayerSolid,fLead,"HadCalLayerLogical",0,0,0);
   new G4PVReplica("HadCalLayerPhysical",HadCalLayerLogical,
                   HadCalCellLogical,kZAxis,20,5.*cm);
 
@@ -282,10 +282,9 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VSolid* HadCalScintiSolid
     = new G4Box("HadCalScintiBox",15.*cm,15.*cm,0.5*cm);
   G4LogicalVolume* HadCalScintiLogical
-    = new G4LogicalVolume(HadCalScintiSolid,scintillator,"HadCalScintiLogical",0,0,0);
+    = new G4LogicalVolume(HadCalScintiSolid,fScintillator,"HadCalScintiLogical",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,2.*cm),HadCalScintiLogical,
                     "HadCalScintiPhysical",HadCalLayerLogical,0,0);
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
   // sensitive detectors -----------------------------------------------------
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -315,46 +314,46 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
 
   // visualization attributes ------------------------------------------------
 
-  worldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  worldVisAtt->SetVisibility(false);
-  worldLogical->SetVisAttributes(worldVisAtt);
+  fWorldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  fWorldVisAtt->SetVisibility(false);
+  worldLogical->SetVisAttributes(fWorldVisAtt);
 
-  magneticVisAtt = new G4VisAttributes(G4Colour(0.9,0.9,0.9));   // LightGray
-  magneticLogical->SetVisAttributes(magneticVisAtt);
+  fMagneticVisAtt = new G4VisAttributes(G4Colour(0.9,0.9,0.9));   // LightGray
+  magneticLogical->SetVisAttributes(fMagneticVisAtt);
 
-  armVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  armVisAtt->SetVisibility(false);
-  firstArmLogical->SetVisAttributes(armVisAtt);
-  secondArmLogical->SetVisAttributes(armVisAtt);
+  fArmVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  fArmVisAtt->SetVisibility(false);
+  firstArmLogical->SetVisAttributes(fArmVisAtt);
+  secondArmLogical->SetVisAttributes(fArmVisAtt);
 
-  hodoscopeVisAtt = new G4VisAttributes(G4Colour(0.8888,0.0,0.0));
-  hodoscope1Logical->SetVisAttributes(hodoscopeVisAtt);
-  hodoscope2Logical->SetVisAttributes(hodoscopeVisAtt);
+  fHodoscopeVisAtt = new G4VisAttributes(G4Colour(0.8888,0.0,0.0));
+  hodoscope1Logical->SetVisAttributes(fHodoscopeVisAtt);
+  hodoscope2Logical->SetVisAttributes(fHodoscopeVisAtt);
 
-  chamberVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  chamber1Logical->SetVisAttributes(chamberVisAtt);
-  chamber2Logical->SetVisAttributes(chamberVisAtt);
+  fChamberVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  chamber1Logical->SetVisAttributes(fChamberVisAtt);
+  chamber2Logical->SetVisAttributes(fChamberVisAtt);
 
-  wirePlaneVisAtt = new G4VisAttributes(G4Colour(0.0,0.8888,0.0));
-  wirePlaneVisAtt->SetVisibility(false);
-  wirePlane1Logical->SetVisAttributes(wirePlaneVisAtt);
-  wirePlane2Logical->SetVisAttributes(wirePlaneVisAtt);
+  fWirePlaneVisAtt = new G4VisAttributes(G4Colour(0.0,0.8888,0.0));
+  fWirePlaneVisAtt->SetVisibility(false);
+  wirePlane1Logical->SetVisAttributes(fWirePlaneVisAtt);
+  wirePlane2Logical->SetVisAttributes(fWirePlaneVisAtt);
 
-  EMcalorimeterVisAtt = new G4VisAttributes(G4Colour(0.8888,0.8888,0.0));
-  EMcalorimeterVisAtt->SetVisibility(false);
-  EMcalorimeterLogical->SetVisAttributes(EMcalorimeterVisAtt);
+  fEMcalorimeterVisAtt = new G4VisAttributes(G4Colour(0.8888,0.8888,0.0));
+  fEMcalorimeterVisAtt->SetVisibility(false);
+  EMcalorimeterLogical->SetVisAttributes(fEMcalorimeterVisAtt);
 
-  cellVisAtt = new G4VisAttributes(G4Colour(0.9,0.9,0.0));
-  cellLogical->SetVisAttributes(cellVisAtt);
+  fCellVisAtt = new G4VisAttributes(G4Colour(0.9,0.9,0.0));
+  cellLogical->SetVisAttributes(fCellVisAtt);
 
-  HadCalorimeterVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
-  HadCalorimeterLogical->SetVisAttributes(HadCalorimeterVisAtt);
-  HadCalorimeterCellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
-  HadCalorimeterCellVisAtt->SetVisibility(false);
-  HadCalColumnLogical->SetVisAttributes(HadCalorimeterCellVisAtt);
-  HadCalCellLogical->SetVisAttributes(HadCalorimeterCellVisAtt);
-  HadCalLayerLogical->SetVisAttributes(HadCalorimeterCellVisAtt);
-  HadCalScintiLogical->SetVisAttributes(HadCalorimeterCellVisAtt);
+  fHadCalorimeterVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
+  HadCalorimeterLogical->SetVisAttributes(fHadCalorimeterVisAtt);
+  fHadCalorimeterCellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
+  fHadCalorimeterCellVisAtt->SetVisibility(false);
+  HadCalColumnLogical->SetVisAttributes(fHadCalorimeterCellVisAtt);
+  HadCalCellLogical->SetVisAttributes(fHadCalorimeterCellVisAtt);
+  HadCalLayerLogical->SetVisAttributes(fHadCalorimeterCellVisAtt);
+  HadCalScintiLogical->SetVisAttributes(fHadCalorimeterCellVisAtt);
 
   // return the world physical volume ----------------------------------------
 
@@ -377,7 +376,7 @@ void A01DetectorConstruction::ConstructMaterials()
   // Argon gas
   a = 39.95*g/mole;
   density = 1.782e-03*g/cm3;
-  argonGas = new G4Material(name="ArgonGas", z=18., a, density);
+  fArgonGas = new G4Material(name="ArgonGas", z=18., a, density);
 
   // elements for mixtures and compounds
   a = 1.01*g/mole;
@@ -395,26 +394,26 @@ void A01DetectorConstruction::ConstructMaterials()
 
   // Air
   density = 1.29*mg/cm3;
-  air = new G4Material(name="Air", density, nElem=2);
-  air->AddElement(elN, weightRatio=.7);
-  air->AddElement(elO, weightRatio=.3);
+  fAir = new G4Material(name="Air", density, nElem=2);
+  fAir->AddElement(elN, weightRatio=.7);
+  fAir->AddElement(elO, weightRatio=.3);
 
   // Scintillator
   density = 1.032*g/cm3;
-  scintillator = new G4Material(name="Scintillator", density, nElem=2);
-  scintillator->AddElement(elC, 9);
-  scintillator->AddElement(elH, 10);
+  fScintillator = new G4Material(name="Scintillator", density, nElem=2);
+  fScintillator->AddElement(elC, 9);
+  fScintillator->AddElement(elH, 10);
 
   // CsI
   density = 4.51*g/cm3;
-  CsI = new G4Material(name="CsI", density, nElem=2);
-  CsI->AddElement(elI, weightRatio=.5);
-  CsI->AddElement(elCs,weightRatio=.5);
+  fCsI = new G4Material(name="CsI", density, nElem=2);
+  fCsI->AddElement(elI, weightRatio=.5);
+  fCsI->AddElement(elCs,weightRatio=.5);
 
   // Lead
   a = 207.19*g/mole;
   density = 11.35*g/cm3;
-  lead = new G4Material(name="Lead", z=82., a, density);
+  fLead = new G4Material(name="Lead", z=82., a, density);
 
   G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -454,18 +453,18 @@ void A01DetectorConstruction::DumpGeometricalTree(G4VPhysicalVolume* aVolume,G4i
 
 void A01DetectorConstruction::SetArmAngle(G4double val)
 {
-  if(!secondArmPhys)
+  if(!fSecondArmPhys)
   {
     G4cerr << "Detector has not yet been constructed." << G4endl;
     return;
   }
 
-  armAngle = val;
-  *armRotation = G4RotationMatrix();  // make it unit vector
-  armRotation->rotateY(armAngle);
-  G4double x = -5.*m * std::sin(armAngle);
-  G4double z = 5.*m * std::cos(armAngle);
-  secondArmPhys->SetTranslation(G4ThreeVector(x,0.,z));
+  fArmAngle = val;
+  *fArmRotation = G4RotationMatrix();  // make it unit vector
+  fArmRotation->rotateY(fArmAngle);
+  G4double x = -5.*m * std::sin(fArmAngle);
+  G4double z = 5.*m * std::cos(fArmAngle);
+  fSecondArmPhys->SetTranslation(G4ThreeVector(x,0.,z));
 
   // tell G4RunManager that we change the geometry
   G4RunManager::GetRunManager()->GeometryHasBeenModified();

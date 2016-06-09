@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.hh,v 1.8 2010-10-27 07:57:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------
 //
@@ -72,8 +71,12 @@ public: // with description
   G4RichTrajectory(const G4Track* aTrack);
   G4RichTrajectory(G4RichTrajectory &);
   virtual ~G4RichTrajectory();
-  
+
+private:
+  G4RichTrajectory& operator= (const G4RichTrajectory &);
+
   // Operators
+public:
   inline void* operator new(size_t);
   inline void  operator delete(void*);
   inline int operator == (const G4RichTrajectory& right) const

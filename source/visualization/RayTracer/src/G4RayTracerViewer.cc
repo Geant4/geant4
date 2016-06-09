@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.18 2009-08-19 08:39:19 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4RayTracerViewer.hh"
 
 #include "G4ios.hh"
 #include <sstream>
+#include "G4SystemOfUnits.hh"
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
@@ -46,6 +46,8 @@ G4RayTracerViewer::G4RayTracerViewer
 {
   theTracer = aTracer;
   if (!aTracer) theTracer = new G4TheRayTracer;
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 G4RayTracerViewer::~G4RayTracerViewer() {}
@@ -72,13 +74,11 @@ void G4RayTracerViewer::SetView()
     SetViewSpan(200. * frontHalfAngle / theTracer->GetNColumn());
   theTracer->SetTargetPosition(targetPoint);
   theTracer->SetEyePosition(cameraPosition);
-  theTracer->SetHeadAngle(fVP.GetViewpointDirection().phi());
+  theTracer->SetUpVector(fVP.GetUpVector());
   const G4Vector3D
     actualLightpointDirection(-fVP.GetActualLightpointDirection());
   theTracer->SetLightDirection(actualLightpointDirection);
   theTracer->SetBackgroundColour(fVP.GetBackgroundColour());
-  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
-  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 

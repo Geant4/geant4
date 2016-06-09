@@ -26,8 +26,10 @@
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
+
 #include "G4NeutronHPMadlandNixSpectrum.hh"
-  
+#include "G4SystemOfUnits.hh"
+
   G4double G4NeutronHPMadlandNixSpectrum::Madland(G4double aSecEnergy, G4double tm)
   {
     G4double result;

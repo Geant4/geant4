@@ -23,107 +23,123 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01TrackInformation.cc
+/// \brief Implementation of the RE01TrackInformation class
 //
-// $Id: RE01TrackInformation.cc,v 1.2 2006-06-29 17:44:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "RE01TrackInformation.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"    
 
 G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackInformation::RE01TrackInformation()
+  : G4VUserTrackInformation()
 {
-    originalTrackID = 0;
-    particleDefinition = 0;
-    originalPosition = G4ThreeVector(0.,0.,0.);
-    originalMomentum = G4ThreeVector(0.,0.,0.);
-    originalEnergy = 0.;
-    originalTime = 0.;
-    trackingStatus = 1;
-    sourceTrackID = -1;
-    sourceTrackID = -1;
-    sourceDefinition = 0;
-    sourcePosition = G4ThreeVector(0.,0.,0.);
-    sourceMomentum = G4ThreeVector(0.,0.,0.);
-    sourceEnergy = 0.;
-    sourceTime = 0.;
+    fOriginalTrackID = 0;
+    fParticleDefinition = 0;
+    fOriginalPosition = G4ThreeVector(0.,0.,0.);
+    fOriginalMomentum = G4ThreeVector(0.,0.,0.);
+    fOriginalEnergy = 0.;
+    fOriginalTime = 0.;
+    fTrackingStatus = 1;
+    fSourceTrackID = -1;
+    fSourceDefinition = 0;
+    fSourcePosition = G4ThreeVector(0.,0.,0.);
+    fSourceMomentum = G4ThreeVector(0.,0.,0.);
+    fSourceEnergy = 0.;
+    fSourceTime = 0.;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackInformation::RE01TrackInformation(const G4Track* aTrack)
+  : G4VUserTrackInformation()
 {
-    originalTrackID = aTrack->GetTrackID();
-    particleDefinition = aTrack->GetDefinition();
-    originalPosition = aTrack->GetPosition();
-    originalMomentum = aTrack->GetMomentum();
-    originalEnergy = aTrack->GetTotalEnergy();
-    originalTime = aTrack->GetGlobalTime();
-    trackingStatus = 1;
-    sourceTrackID = -1;
-    sourceDefinition = 0;
-    sourcePosition = G4ThreeVector(0.,0.,0.);
-    sourceMomentum = G4ThreeVector(0.,0.,0.);
-    sourceEnergy = 0.;
-    sourceTime = 0.;
+    fOriginalTrackID = aTrack->GetTrackID();
+    fParticleDefinition = aTrack->GetDefinition();
+    fOriginalPosition = aTrack->GetPosition();
+    fOriginalMomentum = aTrack->GetMomentum();
+    fOriginalEnergy = aTrack->GetTotalEnergy();
+    fOriginalTime = aTrack->GetGlobalTime();
+    fTrackingStatus = 1;
+    fSourceTrackID = -1;
+    fSourceDefinition = 0;
+    fSourcePosition = G4ThreeVector(0.,0.,0.);
+    fSourceMomentum = G4ThreeVector(0.,0.,0.);
+    fSourceEnergy = 0.;
+    fSourceTime = 0.;
 }
 
-RE01TrackInformation::RE01TrackInformation(const RE01TrackInformation* aTrackInfo)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+RE01TrackInformation
+::RE01TrackInformation(const RE01TrackInformation* aTrackInfo)
+  : G4VUserTrackInformation()
 {
-    originalTrackID = aTrackInfo->originalTrackID;
-    particleDefinition = aTrackInfo->particleDefinition;
-    originalPosition = aTrackInfo->originalPosition;
-    originalMomentum = aTrackInfo->originalMomentum;
-    originalEnergy = aTrackInfo->originalEnergy;
-    originalTime = aTrackInfo->originalTime;
-    trackingStatus = aTrackInfo->trackingStatus;
-    sourceTrackID = aTrackInfo->sourceTrackID;
-    sourceDefinition = aTrackInfo->sourceDefinition;
-    sourcePosition = aTrackInfo->sourcePosition;
-    sourceMomentum = aTrackInfo->sourceMomentum;
-    sourceEnergy = aTrackInfo->sourceEnergy;
-    sourceTime = aTrackInfo->sourceTime;
+    fOriginalTrackID = aTrackInfo->fOriginalTrackID;
+    fParticleDefinition = aTrackInfo->fParticleDefinition;
+    fOriginalPosition = aTrackInfo->fOriginalPosition;
+    fOriginalMomentum = aTrackInfo->fOriginalMomentum;
+    fOriginalEnergy = aTrackInfo->fOriginalEnergy;
+    fOriginalTime = aTrackInfo->fOriginalTime;
+    fTrackingStatus = aTrackInfo->fTrackingStatus;
+    fSourceTrackID = aTrackInfo->fSourceTrackID;
+    fSourceDefinition = aTrackInfo->fSourceDefinition;
+    fSourcePosition = aTrackInfo->fSourcePosition;
+    fSourceMomentum = aTrackInfo->fSourceMomentum;
+    fSourceEnergy = aTrackInfo->fSourceEnergy;
+    fSourceTime = aTrackInfo->fSourceTime;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackInformation::~RE01TrackInformation()
-{ ; }
+{;}
 
-RE01TrackInformation& RE01TrackInformation::operator =(const RE01TrackInformation& aTrackInfo)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+RE01TrackInformation& RE01TrackInformation
+::operator =(const RE01TrackInformation& aTrackInfo)
 {
-    originalTrackID = aTrackInfo.originalTrackID;
-    particleDefinition = aTrackInfo.particleDefinition;
-    originalPosition = aTrackInfo.originalPosition;
-    originalMomentum = aTrackInfo.originalMomentum;
-    originalEnergy = aTrackInfo.originalEnergy;
-    originalTime = aTrackInfo.originalTime;
-    trackingStatus = aTrackInfo.trackingStatus;
-    sourceTrackID = aTrackInfo.sourceTrackID;
-    sourceDefinition = aTrackInfo.sourceDefinition;
-    sourcePosition = aTrackInfo.sourcePosition;
-    sourceMomentum = aTrackInfo.sourceMomentum;
-    sourceEnergy = aTrackInfo.sourceEnergy;
-    sourceTime = aTrackInfo.sourceTime;
+    fOriginalTrackID = aTrackInfo.fOriginalTrackID;
+    fParticleDefinition = aTrackInfo.fParticleDefinition;
+    fOriginalPosition = aTrackInfo.fOriginalPosition;
+    fOriginalMomentum = aTrackInfo.fOriginalMomentum;
+    fOriginalEnergy = aTrackInfo.fOriginalEnergy;
+    fOriginalTime = aTrackInfo.fOriginalTime;
+    fTrackingStatus = aTrackInfo.fTrackingStatus;
+    fSourceTrackID = aTrackInfo.fSourceTrackID;
+    fSourceDefinition = aTrackInfo.fSourceDefinition;
+    fSourcePosition = aTrackInfo.fSourcePosition;
+    fSourceMomentum = aTrackInfo.fSourceMomentum;
+    fSourceEnergy = aTrackInfo.fSourceEnergy;
+    fSourceTime = aTrackInfo.fSourceTime;
 
     return *this;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackInformation::SetSourceTrackInformation(const G4Track* aTrack)
 {
-    sourceTrackID = aTrack->GetTrackID();
-    sourceDefinition = aTrack->GetDefinition();
-    sourcePosition = aTrack->GetPosition();
-    sourceMomentum = aTrack->GetMomentum();
-    sourceEnergy = aTrack->GetTotalEnergy();
-    sourceTime = aTrack->GetGlobalTime();
+    fSourceTrackID = aTrack->GetTrackID();
+    fSourceDefinition = aTrack->GetDefinition();
+    fSourcePosition = aTrack->GetPosition();
+    fSourceMomentum = aTrack->GetMomentum();
+    fSourceEnergy = aTrack->GetTotalEnergy();
+    fSourceTime = aTrack->GetGlobalTime();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackInformation::Print() const
 {
     G4cout 
-     << "Source track ID " << sourceTrackID << " (" << sourceDefinition->GetParticleName() << ","
-     << sourceEnergy/GeV << "[GeV]) at " << sourcePosition << G4endl;
+     << "Source track ID " << fSourceTrackID << " (" 
+     << fSourceDefinition->GetParticleName() << ","
+     << fSourceEnergy/GeV << "[GeV]) at " << fSourcePosition << G4endl;
     G4cout
-     << "Original primary track ID " << originalTrackID << " (" << particleDefinition->GetParticleName() << ","
-     << originalEnergy/GeV << "[GeV])" << G4endl;
+      << "Original primary track ID " << fOriginalTrackID << " (" 
+      << fParticleDefinition->GetParticleName() << ","
+     << fOriginalEnergy/GeV << "[GeV])" << G4endl;
 }
 

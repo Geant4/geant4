@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.18 2006-06-29 21:29:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -36,6 +35,17 @@
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include <sstream>
+
+G4Colour                   G4VVisCommand::fCurrentColour = G4Colour::White();
+G4Colour                   G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
+G4Text::Layout             G4VVisCommand::fCurrentTextLayout = G4Text::left;
+G4double                   G4VVisCommand::fCurrentLineWidth = 1.;
+// Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
+// Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
+// Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
+G4ModelingParameters::PVNameCopyNoPath G4VVisCommand::fCurrentTouchablePath;
+
+G4VVisCommand::G4VVisCommand () {}
 
 G4VVisCommand::~G4VVisCommand () {}
 

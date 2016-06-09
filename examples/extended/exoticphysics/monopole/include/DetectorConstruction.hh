@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.3 2010-06-04 19:03:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +36,6 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
 
 class G4LogicalVolume;
 class G4Material;
@@ -51,45 +52,40 @@ public:
   DetectorConstruction();
   ~DetectorConstruction();
 
-  void SetSizeX    (G4double);
-  void SetSizeYZ   (G4double);              
-  void SetMaterial (G4String);            
-  void SetMagField (G4double);
-     
-  void SetMaxStepSize   (G4double);
-     
   G4VPhysicalVolume* Construct();
-  void               UpdateGeometry();
-     
-  G4double     GetWorldSizeX()    {return worldSizeX;};
-  G4double     GetWorldSizeYZ()   {return worldSizeYZ;};
-  G4Material*  GetWorldMaterial() {return worldMaterial;};     
-  G4double     GetAbsorSizeX()    {return absorSizeX;};
-  G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};
-  G4double     GetMaxStepSize()   {return maxStepSize;};
-  G4Material*  GetAbsorMaterial() {return absorMaterial;};
-  
-  void         PrintParameters();
-                       
+
+  // set geometry and field parameters
+  void SetSizeX(G4double);
+  void SetSizeYZ(G4double);              
+  void SetMaterial(const G4String&);            
+  void SetMagField(G4double);
+  void SetMaxStepSize(G4double);
+  void UpdateGeometry();
+          
+  // access to geometry
+  inline G4double     GetWorldSizeX()    {return fWorldSizeX;};
+  inline G4double     GetAbsorSizeX()    {return fAbsorSizeX;};
+  inline G4double     GetMaxStepSize()   {return fMaxStepSize;};
+  inline const G4Material* GetAbsorMaterial() {return fAbsorMaterial;};
+                           
 private:
 
-  void               DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();     
+  void PrintParameters();
   
-  G4double            worldSizeX;
-  G4double            worldSizeYZ;
-  G4Material*         worldMaterial;           
-  G4double            absorSizeX;
-  G4double            absorSizeYZ;
-  G4double	      maxStepSize;
-  G4Material*         absorMaterial;
+  G4double            fWorldSizeX;
+  G4double            fWorldSizeYZ;
+  G4Material*         fWorldMaterial;           
+  G4double            fAbsorSizeX;
+  G4double            fAbsorSizeYZ;
+  G4double            fMaxStepSize;
+  G4Material*         fAbsorMaterial;
 
-  G4UniformMagField*  magField;
-  G4MonopoleFieldSetup* fMFieldSetup;
+  G4UniformMagField*    fMagField;
+  G4MonopoleFieldSetup* fMonFieldSetup;
 
-  G4LogicalVolume*    lAbsor;
+  G4LogicalVolume*    fLogAbsor;
                
-  DetectorMessenger* detectorMessenger;
+  DetectorMessenger*  fDetectorMessenger;
 
 };
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.10 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -396,7 +395,7 @@ void G4NURBS::Conscheck() const
 	 << G4NURBS::Tochar(dir) 
 	 << " direction must be >= 1" << G4endl;
       G4Exception("G4NURBS::Conscheck()",
-		  "greps1001", FatalException, ed);
+		  "greps9001", FatalException, ed);
     }
     if (m[dir].nbrCtrlPts<=0)
     {
@@ -405,7 +404,7 @@ void G4NURBS::Conscheck() const
              << G4NURBS::Tochar(dir) 
              << " direction must be >= 1" << G4endl;
       G4Exception("G4NURBS::Conscheck()",
-		  "greps1002", FatalException, ed);
+		  "greps9002", FatalException, ed);
     }
   }  // end of dummy
 }
@@ -434,7 +433,7 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
        << "\teven if they are defined later, the array must be allocated."
        << G4endl;
     G4Exception("G4NURBS::G4NURBS()",
-		"greps1003", FatalException, ed);
+		"greps9003", FatalException, ed);
   }
   //mnbralias = 0;
 
@@ -453,7 +452,7 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
 	   << " direction."
 	   << G4endl;
         G4Exception("G4NURBS::G4NURBS()",
-		    "greps1004", FatalException, ed);
+		    "greps9004", FatalException, ed);
       }
       //m[dir].nbralias = 0;
     }  // end of knots-making
@@ -500,7 +499,7 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
 	 << " knots vector)"
 	 << G4endl;
       G4Exception("G4NURBS::G4NURBS()",
-		  "greps1005", FatalException, ed);
+		  "greps9005", FatalException, ed);
     }
     //m[dir].nbralias = 0;
   }
@@ -567,16 +566,16 @@ G4NURBS::~G4NURBS()
  * Find this "breakpoint" allows the evaluation routines to concentrate *
  * on only those control points actually effecting the curve around u.] *
  *                                                                      *
- *  m   is the number of points on the curve (or surface direction) *
- *  k   is the order of the curve (or surface direction)            *
- *  kv  is the knot vector ([0..m+k-1]) to find the break point in. *
+ *  np  is the number of points on the curve (or surface direction)     *
+ *  k   is the order of the curve (or surface direction)                *
+ *  kv  is the knot vector ([0..np+k-1]) to find the break point in.    *
  *                                                                      *
  ************************************************************************/
-static G4int FindBreakPoint(G4double u, const Float *kv, G4int m, G4int k)
+static G4int FindBreakPoint(G4double u, const Float *kv, G4int np, G4int k)
 {
   G4int i;
-  if (u == kv[m+1]) return m;      /* Special case for closed interval */
-  i = m + k;
+  if (u == kv[np+1]) return np;      /* Special case for closed interval */
+  i = np + k;
   while ((u < kv[i]) && (i > 0)) i--;
   return(i);
 }
@@ -596,7 +595,7 @@ static G4int FindBreakPoint(G4double u, const Float *kv, G4int m, G4int k)
 static void BasisFunctions(G4double u, G4int brkPoint,
                            const Float *kv, G4int k, G4double *bvals)
 {
-  G4int r, s, i;
+  G4int r, q, i;
   G4double omega;
 
   bvals[0] = 1.0;
@@ -604,7 +603,7 @@ static void BasisFunctions(G4double u, G4int brkPoint,
   {
     i = brkPoint - r + 1;
     bvals[r-1] = 0.0;
-    for (s=r-2; s >= 0; s--)
+    for (q=r-2; q >= 0; q--)
     {
       i++;
       if (i < 0)
@@ -615,8 +614,8 @@ static void BasisFunctions(G4double u, G4int brkPoint,
       {
         omega = (u - kv[i]) / (kv[i+r-1] - kv[i]);
       }
-      bvals[s+1] = bvals[s+1] + (1.0-omega) * bvals[s];
-      bvals[s]   = omega * bvals[s];
+      bvals[q+1] = bvals[q+1] + (1.0-omega) * bvals[q];
+      bvals[q]   = omega * bvals[q];
     }
   }
 }
@@ -629,7 +628,7 @@ static void BasisFunctions(G4double u, G4int brkPoint,
 static void BasisDerivatives(G4double u, G4int brkPoint,
                              const Float *kv, G4int k, G4double *dvals)
 {
-  G4int s, i;
+  G4int q, i;
   G4double omega, knotScale;
 
   BasisFunctions(u, brkPoint, kv, k-1, dvals);
@@ -639,12 +638,12 @@ static void BasisDerivatives(G4double u, G4int brkPoint,
   knotScale = kv[brkPoint+1] - kv[brkPoint];
 
   i = brkPoint - k + 1;
-  for (s=k-2; s >= 0; s--)
+  for (q=k-2; q >= 0; q--)
   {
     i++;
     omega = knotScale * ((G4double)(k-1)) / (kv[i+k-1] - kv[i]);
-    dvals[s+1] += -omega * dvals[s];
-    dvals[s] *= omega;
+    dvals[q+1] += -omega * dvals[q];
+    dvals[q] *= omega;
   }
 }
 

@@ -33,9 +33,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 
 #
 # Define the Geant4 Module.
@@ -43,52 +46,55 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
     HEADERS
-				G4INCLBook.hh
-				G4INCLCluster.hh
-				G4INCLConfigEnums.hh
-				G4INCLConfig.hh
-				G4INCLDeExcitation.hh
-				G4INCLEventInfo.hh
-				G4INCLFinalState.hh
-				G4INCLGeant4Compat.hh
-				G4INCLGeant4Random.hh
-				G4INCLGlobals.hh
-				G4INCLIParticleDataSource.hh
-				G4INCLIRandomGenerator.hh
-				G4INCLLogger.hh
-				G4INCLParticleTable.hh
-				G4INCLParticleType.hh
-				G4INCLRandom.hh
-				G4INCLRanecu.hh
-				G4INCLRootFinder.hh
-				G4INCLStandaloneParticleDataSource.hh
-				G4INCLStore.hh
-				G4INCLThreeVector.hh
-				G4INCLVersion.hh
-				G4INCLIChannel.hh
-				G4INCLIAvatar.hh
-				G4INCLParticle.hh
+        G4INCLParticleTable.hh
+        G4INCLRanecu.hh
+        G4INCLIChannel.hh
+        G4INCLIAvatar.hh
+        G4INCLConfig.hh
+        G4INCLNaturalIsotopicDistributions.hh
+        G4INCLHashing.hh
+        G4INCLLogger.hh
+        G4INCLGlobalInfo.hh
+        G4INCLGlobals.hh
+        G4INCLParticleType.hh
+        G4INCLBook.hh
+        G4INCLIRandomGenerator.hh
+        G4INCLIntersection.hh
+        G4INCLGeant4Random.hh
+        G4INCLIFunction1D.hh
+        G4INCLConfigEnums.hh
+        G4INCLRandom.hh
+        G4INCLEventInfo.hh
+        G4INCLRootFinder.hh
+        G4INCLDeExcitation.hh
+        G4INCLVersion.hh
+        G4INCLGeant4Compat.hh
+        G4INCLParticleSpecies.hh
+        G4INCLThreeVector.hh
+        G4INCLFinalState.hh
+        G4INCLParticle.hh
+        G4INCLInverseInterpolationTable.hh
+
     SOURCES
-		    G4INCLBook.cc
-     		G4INCLCluster.cc
-		    G4INCLConfig.cc
-		    G4INCLConfigVersion.cc
-		    G4INCLEventInfo.cc
-				G4INCLFinalState.cc
-	    	G4INCLGlobals.cc
-		    G4INCLIParticleDataSource.cc
-		    G4INCLIRandomGenerator.cc
-		    G4INCLLogger.cc
-		    G4INCLParticleTable.cc
-		    G4INCLRandom.cc
-		    G4INCLRanecu.cc
-		    G4INCLRootFinder.cc
-		    G4INCLStandaloneParticleDataSource.cc
-				G4INCLStore.cc
-		    G4INCLThreeVector.cc
-				G4INCLIChannel.cc
-				G4INCLIAvatar.cc
-		    G4INCLParticle.cc
+        G4INCLThreeVector.cc
+        G4INCLParticleTable.cc
+        G4INCLIAvatar.cc
+        G4INCLIFunction1D.cc
+        G4INCLEventInfo.cc
+        G4INCLGlobals.cc
+        G4INCLConfigVersion.cc
+        G4INCLParticle.cc
+        G4INCLIntersection.cc
+        G4INCLConfig.cc
+        G4INCLRootFinder.cc
+        G4INCLRanecu.cc
+        G4INCLInverseInterpolationTable.cc
+        G4INCLRandom.cc
+        G4INCLFinalState.cc
+        G4INCLNaturalIsotopicDistributions.cc
+        G4INCLLogger.cc
+        G4INCLParticleSpecies.cc
+
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -105,14 +111,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4procman
         G4track
         G4volumes
+        G4intercoms
+
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global
         G4materials
         G4particles
         G4track
-    LINK_LIBRARIES
-)
+        G4intercoms
 
-# List any source specific properties here
-
+LINK_LIBRARIES)# List any source specific properties here

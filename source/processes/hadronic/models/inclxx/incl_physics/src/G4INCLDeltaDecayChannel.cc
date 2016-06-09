@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -58,7 +58,7 @@ namespace G4INCL {
     const G4double geff = p->getEnergy()/m;
     const G4double qqq = KinematicsUtils::momentumInCM(m, ParticleTable::effectiveNucleonMass, ParticleTable::effectivePionMass);
     const G4double psf = std::pow(qqq, 3)/(std::pow(qqq, 3) + 5832000.0);
-    const G4double tdel = -G4INCL::hc/(gg*psf)*std::log(Random::shoot())*geff;
+    const G4double tdel = -G4INCL::PhysicalConstants::hc/(gg*psf)*std::log(Random::shoot())*geff;
     return tdel;
   }
 
@@ -78,7 +78,7 @@ namespace G4INCL {
     //     s       X1,X2,hel,B1,B2,B3)
 
     // This routine describes the anisotropic decay of a particle of mass
-    // xi G4into 2 particles of masses x1,x2.
+    // xi into 2 particles of masses x1,x2.
     // The anisotropy is supposed to follow a 1+3*hel*(cos(theta))**2
     // law with respect to the direction of the incoming particle.
     // In the input, p1,p2,p3 is the momentum of particle xi.
@@ -166,7 +166,7 @@ namespace G4INCL {
 
     G4double xq = KinematicsUtils::momentumInCM(deltaMass,
         theParticle->getMass(),
-        ParticleTable::getMass(pionType));
+        ParticleTable::getINCLMass(pionType));
 
     q1 *= xq;
     q2 *= xq;

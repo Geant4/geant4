@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CheckVolumeSD.cc,v 1.3 2006-06-29 17:24:02 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/src/CheckVolumeSD.cc
+/// \brief Implementation of the CheckVolumeSD class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.01.2003 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -50,7 +52,7 @@
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
  :G4VSensitiveDetector(name)
 {
-  theHisto = HistoManager::GetPointer();
+  fHisto = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,7 +70,7 @@ void CheckVolumeSD::Initialize(G4HCofThisEvent*)
 G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   const G4Track* track = aStep->GetTrack();
-  if(track->GetTrackID() > 1) theHisto->AddLeakingParticle(track);
+  if(track->GetTrackID() > 1) { fHisto->AddLeakingParticle(track); }
   return true;
 }
 

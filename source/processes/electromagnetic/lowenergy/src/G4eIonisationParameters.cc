@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.26 2010-12-03 16:03:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -46,6 +45,7 @@
 // -------------------------------------------------------------------
 
 #include "G4eIonisationParameters.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VEMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
@@ -159,9 +159,9 @@ void G4eIonisationParameters::LoadData()
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   
-  for (G4int m=0; m<nMaterials; m++) {
+  for (G4int mLocal=0; mLocal<nMaterials; mLocal++) {
 
-    const G4Material* material= (*materialTable)[m];        
+    const G4Material* material= (*materialTable)[mLocal];        
     const G4ElementVector* elementVector = material->GetElementVector();
     const size_t nElements = material->GetNumberOfElements();
       
@@ -272,8 +272,8 @@ void G4eIonisationParameters::LoadData()
 
 	  G4DataVector* eVector = new G4DataVector;
 	  size_t eSize = e.size();
-	  for (size_t s=0; s<eSize; s++) {
-	    eVector->push_back(e[s]);
+	  for (size_t sLocal=0; sLocal<eSize; sLocal++) {
+	    eVector->push_back(e[sLocal]);
 	  }
 	  G4VEMDataSet* set = new G4EMDataSet(shell,eVector,a[k],interp,1.,1.);
 
@@ -359,9 +359,9 @@ void G4eIonisationParameters::LoadData()
 	G4DataVector* eVector = new G4DataVector;
 	G4DataVector* dVector = new G4DataVector;
 	size_t eSize = e.size();
-	for (size_t s=0; s<eSize; s++) {
-           eVector->push_back(e[s]);
-           dVector->push_back(d[s]);
+	for (size_t sLocal2=0; sLocal2<eSize; sLocal2++) {
+           eVector->push_back(e[sLocal2]);
+           dVector->push_back(d[sLocal2]);
 	}
 	G4VEMDataSet* set = new G4EMDataSet(z,eVector,dVector,inter,1.,1.);
     	excit[z] = set;	

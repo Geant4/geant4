@@ -38,6 +38,10 @@
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <cmath>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4GeometryManager.hh"
@@ -48,7 +52,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "globals.hh"
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Colour.hh"
@@ -62,7 +65,6 @@
 #include "IORTDetectorSD.hh"
 #include "IORTMatrix.hh"
 #include "IORTAnalysisManager.hh"
-#include <cmath>
 #include "G4Tubs.hh"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -73,6 +75,10 @@ IORTDetectorConstruction::IORTDetectorConstruction(G4VPhysicalVolume* physicalTr
     phantomLogicalVolume(0), detectorLogicalVolume(0), 
     phantomPhysicalVolume(0), detectorPhysicalVolume(0),
     aRegion(0),
+
+    solidDiscoIORT0(0),
+    logicDiscoIORT0(0),
+    physiDiscoIORT0(0),
 
     solidDiscoIORT(0),
     logicDiscoIORT(0),
@@ -96,30 +102,34 @@ IORTDetectorConstruction::IORTDetectorConstruction(G4VPhysicalVolume* physicalTr
 
   // Default detector voxels size
   // 200 slabs along the beam direction (X)
-  sizeOfVoxelAlongX = 0.5 *mm; // 
-  sizeOfVoxelAlongY = 0.5 *mm; //  
-  sizeOfVoxelAlongZ = 0.5 *mm; // 
+  sizeOfVoxelAlongX = 0.5 *CLHEP::mm; // 
+  sizeOfVoxelAlongY = 0.5 *CLHEP::mm; //  
+  sizeOfVoxelAlongZ = 0.5 *CLHEP::mm; // 
 
   // Define here the material of the water phantom and of the detector
   SetPhantomMaterial("G4_WATER"); 
   // Construct geometry (messenger commands)
-  SetDetectorSize(7.*cm, 15.*cm, 15.*cm);    
-  SetPhantomSize(20. *cm, 20. *cm, 20. *cm);   
-  SetPhantomPosition(G4ThreeVector(4.5 *cm, 0. *cm, 0. *cm)); 
-  SetDetectorToPhantomPosition(G4ThreeVector(0. *cm, 2.5 *cm, 2.5 *cm));  
+  SetDetectorSize(7.*CLHEP::cm, 15.*CLHEP::cm, 15.*CLHEP::cm);    
+  SetPhantomSize(20. *CLHEP::cm, 20. *CLHEP::cm, 20. *CLHEP::cm);   
+  SetPhantomPosition(G4ThreeVector(4.5 *CLHEP::cm, 0. *CLHEP::cm, 0. *CLHEP::cm)); 
+  SetDetectorToPhantomPosition(G4ThreeVector(0. *CLHEP::cm, 2.5 *CLHEP::cm, 2.5 *CLHEP::cm));  
 
   // Default protection disc geometry and materials
-  SetOuterRadiusDiscoIORT (40. *mm);  
-  SetinnerRadiusDiscoIORT (0.*mm);   
-  SetheightDiscoIORT (2.0*mm);        
-  SetDiscoXPositionIORT (-11.0*mm);
+  SetOuterRadiusDiscoIORT (40. *CLHEP::mm);  
+  SetinnerRadiusDiscoIORT (0.*CLHEP::mm);   
+  SetheightDiscoIORT (2.0*CLHEP::mm);        
+  SetDiscoXPositionIORT (-11.0*CLHEP::mm);
+  SetDiscoYPositionIORT (0.0*CLHEP::mm);
+  SetDiscoZPositionIORT (0.0*CLHEP::mm);
   SetDiscoMaterialIORT("G4_WATER");   
 
-  SetOuterRadiusDiscoIORT1 (40. *mm);  
-  SetinnerRadiusDiscoIORT1 (0.*mm);   
-  SetheightDiscoIORT1 (1.0*mm);        
-  SetDiscoXPositionIORT1 (-8.0*mm);
-  SetDiscoMaterialIORT1("G4_WATER");    
+  SetOuterRadiusDiscoIORT1 (40. *CLHEP::mm);  
+  SetinnerRadiusDiscoIORT1 (0.*CLHEP::mm);   
+  SetheightDiscoIORT1 (1.0*CLHEP::mm);        
+  SetDiscoXPositionIORT1 (-8.0*CLHEP::mm);
+  SetDiscoMaterialIORT1("G4_WATER");
+
+  SetAngleDiscoIORT0 (90.0 *CLHEP::deg);    
 
   // Write virtual parameters to the real ones and check for consistency      
   UpdateGeometry();
@@ -166,7 +176,7 @@ void IORTDetectorConstruction::ConstructPhantom()
     //red -> SetForceSolid(true);
     //red -> SetForceWireframe(true);
     phantomLogicalVolume -> SetVisAttributes(red); 
-   // phantomLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
+    //phantomLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -242,14 +252,37 @@ void IORTDetectorConstruction::ConstructDetector()
 
 }
 
-
-
-
-
 void IORTDetectorConstruction::ConstructDisc()
 {
+// ---------------------------------------------------------------//
+  //                    6.0 mm Protection Discs Volume          //
+    // ---------------------------------------------------------------//
+  const G4double startAngleDiscoIORT0 = 0.*CLHEP::deg;
+  const G4double spanningAngleDiscoIORT0 = 360.*CLHEP::deg;
 
+  //G4double phi0 = 180. *CLHEP::deg; // messenger    
 
+  // Matrix definition for a rotation (deg).       
+  G4RotationMatrix rm0;               
+  rm0.rotateY(AngleDiscoIORT0);
+
+  
+  solidDiscoIORT0 = new G4Tubs("DiscoIORT0", innerRadiusDiscoIORT, 
+				    OuterRadiusDiscoIORT,
+				    (heightDiscoIORT + heightDiscoIORT1), 
+				    startAngleDiscoIORT0, 
+				    spanningAngleDiscoIORT0);
+
+  G4LogicalVolume* logDiscoIORT0 = new G4LogicalVolume(solidDiscoIORT0, 
+							      detectorMaterial, "DiscoIORT0Log", 0, 0, 0);
+
+  physiDiscoIORT0 = new G4PVPlacement(G4Transform3D(rm0, G4ThreeVector((DiscoXPositionIORT + heightDiscoIORT1),DiscoYPositionIORT,DiscoZPositionIORT)),
+					   "DiscoIORT0Phys", logDiscoIORT0, detectorPhysicalVolume, false, 0); 
+
+  white = new G4VisAttributes( G4Colour());
+  white -> SetVisibility(true);
+  // white -> SetForceSolid(true);
+  logDiscoIORT0 -> SetVisAttributes(white);
 
 // ---------------------------------------------------------------//
   //                    4.0 mm Aluminium Protection Disc          //
@@ -259,21 +292,24 @@ void IORTDetectorConstruction::ConstructDisc()
  // DiscoMaterialIORT = leadNist;   // messenger
   gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
   gray-> SetVisibility(true);
+  //gray -> SetForceWireframe(true);
   //gray-> SetForceSolid(true);
 
   gray1 = new G4VisAttributes( G4Colour(0.7, 0.7, 0.7 ));
   gray1-> SetVisibility(true);
- // gray1-> SetForceSolid(true);
- // const G4double OuterRadiusDiscoIORT = 35. *mm;  // messenger
- // const G4double innerRadiusDiscoIORT = 0.*mm;   // messenger
-//  const G4double heightDiscoIORT = 3.0*mm;        // messenger
-  const G4double startAngleDiscoIORT = 0.*deg;
-  const G4double spanningAngleDiscoIORT = 360.*deg;
- // const G4double DiscoXPositionIORT = -14.0*mm; // messenger 
+  //gray1 -> SetForceWireframe(true);
+  //gray1-> SetForceSolid(true);
+ // const G4double OuterRadiusDiscoIORT = 35. *CLHEP::mm;  // messenger
+ // const G4double innerRadiusDiscoIORT = 0.*CLHEP::mm;   // messenger
+ //  const G4double heightDiscoIORT = 3.0*CLHEP::mm;        // messenger
+  const G4double startAngleDiscoIORT = 0.*CLHEP::deg;
+  const G4double spanningAngleDiscoIORT = 360.*CLHEP::deg;
+ // const G4double DiscoXPositionIORT = -14.0*CLHEP::mm; // messenger 
 
 //G4Material* DiscoMaterialIORT = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);// messenger 
   
-   G4double phi = 90. *deg;     
+   
+  G4double phi = 0. *CLHEP::deg;     
 
   // Matrix definition for a 90 deg rotation. Also used for other volumes       
   G4RotationMatrix rm;               
@@ -286,27 +322,25 @@ void IORTDetectorConstruction::ConstructDisc()
 				    startAngleDiscoIORT, 
 				    spanningAngleDiscoIORT);
 
-  G4LogicalVolume* logicDiscoIORT = new G4LogicalVolume(solidDiscoIORT, 
+  G4LogicalVolume* logDiscoIORT = new G4LogicalVolume(solidDiscoIORT, 
 							      DiscoMaterialIORT, "DiscoIORTLog", 0, 0, 0);
 
-  physiDiscoIORT = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(DiscoXPositionIORT,0.,0.)),
-					   "DiscoIORTPhys", logicDiscoIORT, detectorPhysicalVolume, false, 0); 
-  white = new G4VisAttributes( G4Colour());
-  white -> SetVisibility(true);
-  white -> SetForceSolid(true);
-  logicDiscoIORT -> SetVisAttributes(gray1);
+  physiDiscoIORT = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(0.,0.,(- heightDiscoIORT1))),
+					   "DiscoIORTPhys", logDiscoIORT, physiDiscoIORT0, false, 0); 
+  
+  logDiscoIORT -> SetVisAttributes(gray1);
   
   
       // ---------------------------------------------------------------//
       //             2.0 mm Lead Protection Disc                          //
       // ---------------------------------------------------------------//
   
- // const G4double OuterRadiusDiscoIORT1 = 35. *mm;
- // const G4double innerRadiusDiscoIORT1 = 0.*mm;
- // const G4double heightDiscoIORT1 = 0.5*mm;
-  const G4double startAngleDiscoIORT1 = 0.*deg;
-  const G4double spanningAngleDiscoIORT1 = 360.*deg;
-//  const G4double DiscoXPositionIORT1 = -10.5*mm; messenger
+ // const G4double OuterRadiusDiscoIORT1 = 35. *CLHEP::mm;
+ // const G4double innerRadiusDiscoIORT1 = 0.*CLHEP::mm;
+ // const G4double heightDiscoIORT1 = 0.5*CLHEP::mm;
+  const G4double startAngleDiscoIORT1 = 0.*CLHEP::deg;
+  const G4double spanningAngleDiscoIORT1 = 360.*CLHEP::deg;
+//  const G4double DiscoXPositionIORT1 = -10.5*CLHEP::mm; messenger
 //  G4Material* DiscoMaterialIORT1 = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);// messenger  
   
        
@@ -317,15 +351,15 @@ void IORTDetectorConstruction::ConstructDisc()
 				    startAngleDiscoIORT1, 
 				    spanningAngleDiscoIORT1);
 
-  G4LogicalVolume* logicDiscoIORT1 = new G4LogicalVolume(solidDiscoIORT1, 
+  G4LogicalVolume* logDiscoIORT1 = new G4LogicalVolume(solidDiscoIORT1, 
 							      DiscoMaterialIORT1, "DiscoIORTLog1", 0, 0, 0);
 
-  physiDiscoIORT1 = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(DiscoXPositionIORT1,0.,0.)),
-					   "DiscoIORTPhys1", logicDiscoIORT1, detectorPhysicalVolume, false, 0); 
+  physiDiscoIORT1 = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(0.,0.,heightDiscoIORT)),
+					   "DiscoIORTPhys1", logDiscoIORT1, physiDiscoIORT0, false, 0); 
   white = new G4VisAttributes( G4Colour());
   white -> SetVisibility(true);
   white -> SetForceSolid(true);
-  logicDiscoIORT1 -> SetVisAttributes(gray);
+  logDiscoIORT1 -> SetVisAttributes(gray);
 
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -543,6 +577,19 @@ void IORTDetectorConstruction::SetDiscoXPositionIORT(G4double xpos)
         
 }
 
+void IORTDetectorConstruction::SetDiscoYPositionIORT(G4double ypos)
+{
+    
+    DiscoYPositionIORT = ypos;
+        
+}
+
+void IORTDetectorConstruction::SetDiscoZPositionIORT(G4double zpos)
+{
+    
+    DiscoZPositionIORT = zpos;
+        
+}
 
 void IORTDetectorConstruction::SetOuterRadiusDiscoIORT1(G4double outerr)
 {
@@ -566,6 +613,12 @@ void IORTDetectorConstruction::SetDiscoXPositionIORT1(G4double xpos)
 {
     
     DiscoXPositionIORT1 = xpos;
+}
+
+void IORTDetectorConstruction::SetAngleDiscoIORT0(G4double phi0)
+{
+    
+    AngleDiscoIORT0 = phi0;
 }
 
 /////////////////////////////////protection disc///////////end///////////
@@ -601,6 +654,9 @@ void IORTDetectorConstruction::UpdateGeometry()
     else    ConstructDetector();
 
     // update disc function
+    delete solidDiscoIORT0;
+    delete logicDiscoIORT0;
+    delete physiDiscoIORT0;
     delete solidDiscoIORT;
     delete logicDiscoIORT;
     delete physiDiscoIORT;
@@ -648,6 +704,9 @@ void IORTDetectorConstruction::UpdateGeometry()
 
 void IORTDetectorConstruction::DeleteDisc()
 {
+    delete solidDiscoIORT0;
+    delete logicDiscoIORT0;
+    delete physiDiscoIORT0;
     delete solidDiscoIORT;
     delete logicDiscoIORT;
     delete physiDiscoIORT;
@@ -688,6 +747,3 @@ void IORTDetectorConstruction::PrintParameters()
 	numberOfVoxelsAlongZ  << ')' << G4endl;
 
 }
-
-
-

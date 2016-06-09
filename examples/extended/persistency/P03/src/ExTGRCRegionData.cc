@@ -23,18 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionData.cc,v 1.4 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
+/// \file ExTGRCRegionData.cc
+/// \brief Implementation of the ExTGRCRegionData class
+
 
 #include "ExTGRCRegionData.hh"
 #include "G4tgrUtils.hh"
 #include "G4UIcommand.hh"
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCRegionData::ExTGRCRegionData(const std::vector<G4String>& wl )
 {
   if( wl.size() < 2 )
@@ -43,20 +42,23 @@ ExTGRCRegionData::ExTGRCRegionData(const std::vector<G4String>& wl )
                 "InvalidArgument", FatalErrorInArgument,
                 G4UIcommand::ConvertToString( G4int(wl.size()) ) );
   }
-  theRegionName = wl[0];
+  fRegionName = wl[0];
   for( size_t ii = 1; ii < wl.size(); ii++ )
   {
-    theLVNames.push_back( wl[ii] );
+    fLVNames.push_back( wl[ii] );
   }
-  bCutsSet = false;
+  fbCutsSet = false;
+  fGammaCut = 1.;
+  fElectronCut = 1.;
+  fPositronCut = 1.;
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCRegionData::~ExTGRCRegionData()
 {
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGRCRegionData::SetCutsData( const std::vector<G4String>& rc )
 {
   if( (rc.size() != 3) && (rc.size() != 4) )
@@ -70,23 +72,23 @@ void ExTGRCRegionData::SetCutsData( const std::vector<G4String>& rc )
                 G4UIcommand::ConvertToString( G4int(rc.size()) ) );
   }
 
-  if( bCutsSet )
+  if( fbCutsSet )
   {
     G4Exception("ExTGRCRegionData::SetCutsData()",
                 "InvalidArgument", JustWarning,
-    G4String("Cuts are already set for region " + theRegionName).c_str() );
+    G4String("Cuts are already set for region " + fRegionName).c_str() );
   }
 
-  theGammaCut = G4tgrUtils::GetDouble( rc[1] );
-  theElectronCut = G4tgrUtils::GetDouble( rc[2] );
+  fGammaCut = G4tgrUtils::GetDouble( rc[1] );
+  fElectronCut = G4tgrUtils::GetDouble( rc[2] );
   if( rc.size() == 3 )
   {
-    thePositronCut = theElectronCut;
+    fPositronCut = fElectronCut;
   }
   else
   {
-    thePositronCut = G4tgrUtils::GetDouble( rc[3] );
+    fPositronCut = G4tgrUtils::GetDouble( rc[3] );
   }
 
-  bCutsSet = true;
+  fbCutsSet = true;
 }

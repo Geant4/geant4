@@ -23,15 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4FTFParameters_h
-#define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.10 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
+#ifndef G4FTFParameters_h
+#define G4FTFParameters_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-#include "G4VComponentCrossSection.hh"   // 31 May 2011
+#include "G4ChipsComponentXS.hh"
 
 class G4FTFParameters
 {
@@ -80,6 +83,7 @@ class G4FTFParameters
         void SetProbabilityOfTarDiff(const G4double aValue);
 
         void SetAveragePt2(const G4double aValue);
+        void SetProbLogDistr(const G4double aValue);
 
 // --------- Set parameters of a string kink --------------------------------
         void SetPt2Kink(const G4double aValue);
@@ -130,6 +134,7 @@ class G4FTFParameters
         G4double GetProbabilityOfTarDiff();
 
         G4double GetAveragePt2();
+        G4double GetProbLogDistr();
 
 // --------- Get parameters of a string kink --------------------------------
         G4double GetPt2Kink();
@@ -156,7 +161,7 @@ class G4FTFParameters
         G4double FTFhNcmsEnergy;                // Initial hN CMS energy
 
 // ------------ hN cross section manager -----------------------------
-        G4VComponentCrossSection* FTFxsManager;
+        G4ChipsComponentXS* FTFxsManager;
 // ------------ Geometrical parameteres ------------------------------
         G4double FTFXtotal;                     // Total X in mb
         G4double FTFXelastic;                   // Elastic X in mb
@@ -184,6 +189,7 @@ class G4FTFParameters
         G4double ProbabilityOfTarDiff;
 
         G4double AveragePt2;
+        G4double ProbLogDistr;
 
 // ---------- Parameters of kink -------------------------------------
         G4double Pt2kink;
@@ -205,8 +211,8 @@ class G4FTFParameters
 };
 
 // --------------------------------------------------------------------
-inline  void G4FTFParameters::SethNcmsEnergy(const G4double s)
-             {FTFhNcmsEnergy = s;}
+inline  void G4FTFParameters::SethNcmsEnergy(const G4double S)
+             {FTFhNcmsEnergy = S;}
 
 // --------- Set geometrical parameteres ------------------------------
 inline  void G4FTFParameters::SetTotalCrossSection(const G4double Xtotal)
@@ -256,21 +262,24 @@ inline void G4FTFParameters::SetProbOfSameQuarkExchange(const G4double aValue)
              {ProbOfSameQuarkExchange = aValue;}
 
 inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
-             {ProjMinDiffMass = aValue*GeV;}
+             {ProjMinDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProjMinNonDiffMass(const G4double aValue)
-             {ProjMinNonDiffMass = aValue*GeV;}
+             {ProjMinNonDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProbabilityOfProjDiff(const G4double aValue)
              {ProbabilityOfProjDiff = aValue;}
 
 inline  void G4FTFParameters::SetTarMinDiffMass(const G4double aValue)
-             {TarMinDiffMass = aValue*GeV;}
+             {TarMinDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetTarMinNonDiffMass(const G4double aValue)
-             {TarMinNonDiffMass = aValue*GeV;}
+             {TarMinNonDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProbabilityOfTarDiff(const G4double aValue)
              {ProbabilityOfTarDiff = aValue;}
 
 inline  void G4FTFParameters::SetAveragePt2(const G4double aValue)
-             {AveragePt2 = aValue*GeV*GeV;}
+             {AveragePt2 = aValue*CLHEP::GeV*CLHEP::GeV;}
+
+inline  void G4FTFParameters::SetProbLogDistr(const G4double aValue)
+             {ProbLogDistr = aValue;}
 
 // --------- Set parameters of a string kink --------------------------------
 inline  void G4FTFParameters::SetPt2Kink(const G4double aValue) 
@@ -366,6 +375,7 @@ inline  G4double G4FTFParameters::GetTarMinNonDiffMass()      {return TarMinNonD
 inline  G4double G4FTFParameters::GetProbabilityOfTarDiff()   {return ProbabilityOfTarDiff;}
 
 inline  G4double G4FTFParameters::GetAveragePt2()             {return AveragePt2;}
+inline  G4double G4FTFParameters::GetProbLogDistr()           {return ProbLogDistr;}
 
 // --------- Get parameters of a string kink --------------------------
 inline  G4double G4FTFParameters::GetPt2Kink()                {return Pt2kink;}

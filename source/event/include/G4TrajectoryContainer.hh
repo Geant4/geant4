@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh,v 1.17 2010-10-27 07:21:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4TrajectoryContainer
@@ -53,6 +52,11 @@ class G4TrajectoryContainer
     G4TrajectoryContainer();
     ~G4TrajectoryContainer();
 
+  private:
+    G4TrajectoryContainer(const G4TrajectoryContainer&);
+    G4TrajectoryContainer& operator=(const G4TrajectoryContainer&);
+
+  public:
     inline void *operator new(size_t);
     inline void operator delete(void* anEvent);
 

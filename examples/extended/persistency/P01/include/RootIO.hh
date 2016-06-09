@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RootIO.hh,v 1.4 2010-12-01 14:18:27 witoldp Exp $
+/// \file persistency/P01/include/RootIO.hh
+/// \brief Definition of the RootIO class
+//
+// $Id$
 #ifndef INCLUDE_ROOTIO_HH 
 #define INCLUDE_ROOTIO_HH 1
 
@@ -34,12 +37,14 @@
 
 #include "ExP01TrackerHit.hh"
 
-/** @class rootio rootio.hh include/rootio.hh
+/** @class RootIO
  *   
  *
  *  @author Witold POKORSKI
  *  @date   2005-10-27
  */
+
+/// Root IO implementation for the persistency example
 
 class RootIO 
 {

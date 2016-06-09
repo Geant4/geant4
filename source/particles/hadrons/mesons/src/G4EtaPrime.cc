@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.20 2010-10-01 02:41:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------
@@ -39,6 +38,7 @@
 //
 
 #include "G4EtaPrime.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

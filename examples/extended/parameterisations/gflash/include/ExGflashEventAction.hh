@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/include/ExGflashEventAction.hh
+/// \brief Definition of the ExGflashEventAction class
+//
 #ifndef ExGflashEventAction_h
 #define ExGflashEventAction_h
 
@@ -31,15 +34,15 @@
 
 
 class ExGflashEventAction: public G4UserEventAction {
-	public:
-	ExGflashEventAction();
-	~ExGflashEventAction();
-	
-	void BeginOfEventAction(const G4Event*);
-	void EndOfEventAction(const G4Event*);
-	private:
-	G4int nevent;
-	G4double dtime;
-	G4int calorimeterCollectionId;
+  public:
+    ExGflashEventAction();
+    ~ExGflashEventAction();
+    
+    void BeginOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
+  private:
+    G4int nevent;
+    G4double dtime;
+    G4int calorimeterCollectionId;
 };
 #endif

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.8 2010-09-20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -51,7 +50,9 @@ public:
    virtual ~G4VLongitudinalStringDecay();
 
 private:
-
+   // not implemented to protect/forbid use
+   G4VLongitudinalStringDecay(const G4VLongitudinalStringDecay &right);
+   const G4VLongitudinalStringDecay & operator=(const G4VLongitudinalStringDecay &right);
    int operator==(const G4VLongitudinalStringDecay &right) const;
    int operator!=(const G4VLongitudinalStringDecay &right) const;
 

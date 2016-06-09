@@ -23,22 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DetectorMessenger.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/include/RMC01DetectorMessenger.hh
+/// \brief Definition of the RMC01DetectorMessenger class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01DetectorMessenger
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01DetectorMessenger
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RMC01DetectorMessenger_h
 #define RMC01DetectorMessenger_h 1
@@ -60,23 +65,20 @@ class RMC01DetectorMessenger: public G4UImessenger
   public:
     RMC01DetectorMessenger(RMC01DetectorConstruction* );
     
-   ~RMC01DetectorMessenger();
+    virtual ~RMC01DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RMC01DetectorConstruction* theDetector;
+    RMC01DetectorConstruction* fTheDetector;
     
-    G4UIdirectory*             GeneralDir;
-    G4UIdirectory*             detDir;
+    G4UIdirectory*             fGeneralDir;
+    G4UIdirectory*             fDetDir;
     
-    G4UIcmdWithADoubleAndUnit*   SetSensitiveVolumeHeightCmd;
-    G4UIcmdWithADoubleAndUnit*   SetSensitiveVolumeRadiusCmd;
-    G4UIcmdWithADoubleAndUnit*   SetShieldingThicknessCmd;
-    
-   
-       
-    
+    G4UIcmdWithADoubleAndUnit*   fSetSensitiveVolumeHeightCmd;
+    G4UIcmdWithADoubleAndUnit*   fSetSensitiveVolumeRadiusCmd;
+    G4UIcmdWithADoubleAndUnit*   fSetShieldingThicknessCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

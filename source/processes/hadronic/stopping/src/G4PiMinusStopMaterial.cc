@@ -31,14 +31,14 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4ios.hh"
+#include <vector>
 
 #include "G4PiMinusStopMaterial.hh"
 
-#include <vector>
-
 #include "globals.hh"
+#include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4PionMinus.hh"
@@ -69,8 +69,11 @@ G4PiMinusStopMaterial::~G4PiMinusStopMaterial()
   if (_definitions != 0) delete _definitions;
   _definitions = 0;
 
-  for (unsigned int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
-  if (_momenta != 0) delete _momenta;
+  //A.R. 26-Jul-2012 Coverity fix
+  if (_momenta != 0) {
+    for (unsigned int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
+    delete _momenta;
+  }
 
   delete _distributionE;
   delete _distributionAngle;
@@ -149,8 +152,11 @@ G4PiMinusStopMaterial::P4Vector(const G4double binding,
 
     }  while ((eKin1 + eKin2 + eRecoil) > availableE);
   
-  _momenta->push_back(new G4LorentzVector(p1));
-  _momenta->push_back(new G4LorentzVector(p2));
+  //A.R. 26-Jul-2012 Coverity fix
+  if (_momenta != 0) {
+    _momenta->push_back(new G4LorentzVector(p1));
+    _momenta->push_back(new G4LorentzVector(p2));
+  }
 
   return _momenta;
 
@@ -176,11 +182,15 @@ G4LorentzVector G4PiMinusStopMaterial::MakeP4(G4double p, G4double theta, G4doub
 G4double G4PiMinusStopMaterial::RecoilEnergy(const G4double mass)
 {
   G4ThreeVector p(0.,0.,0.);
-  
-  for (unsigned int i = 0; i< _momenta->size(); i++)
-    {
-      p = p + (*_momenta)[i]->vect();
-    }
+
+  //A.R. 26-Jul-2012 Coverity fix
+  if (_momenta != 0) {  
+    for (unsigned int i = 0; i< _momenta->size(); i++)
+      {
+        p = p + (*_momenta)[i]->vect();
+      }
+  }
+
   G4double pNucleus = p.mag();
   G4double eNucleus = std::sqrt(pNucleus*pNucleus + mass*mass);
 

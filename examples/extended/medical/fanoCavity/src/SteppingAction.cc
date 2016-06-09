@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.5 2010-10-25 13:29:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,13 +46,13 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
                                EventAction* EvAct,TrackingAction* TrAct,
-			       HistoManager* histo)
-:detector(det), runAction(RuAct), eventAction(EvAct), trackAction(TrAct),
- histoManager(histo), wall(0), cavity(0)
+                               HistoManager* histo)
+:fDetector(det), fRunAction(RuAct), fEventAction(EvAct), fTrackAction(TrAct),
+ fHistoManager(histo), fWall(0), fCavity(0)
 { 
   first = true;
-  trackSegm = 0.;
-  directionIn = G4ThreeVector(0.,0.,0.);
+  fTrackSegm = 0.;
+  fDirectionIn = G4ThreeVector(0.,0.,0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,10 +64,10 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
- //get detector pointers
+ //get fDetector pointers
  if (first) {
-   wall   = detector->GetWall();
-   cavity = detector->GetCavity();
+   fWall   = fDetector->GetWall();
+   fCavity = fDetector->GetCavity();
    first  = false;
  }
  
@@ -78,13 +80,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  G4StepPoint* point2 = step->GetPostStepPoint(); 
  const G4VProcess* process = point2->GetProcessDefinedStep();
- if (process) runAction->CountProcesses(process->GetProcessName());
+ if (process) fRunAction->CountProcesses(process->GetProcessName());
  
  //energy deposit in cavity
  //
- if (volume == cavity) { 
+ if (volume == fCavity) { 
    G4double edep = step->GetTotalEnergyDeposit();
-   if (edep > 0.) trackAction->AddEdepCavity(edep);     
+   if (edep > 0.) fTrackAction->AddEdepCavity(edep);     
  }
 
  //keep only charged particles
@@ -95,19 +97,19 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  G4int id;
  G4double steplen = step->GetStepLength();
- if (volume == wall) {runAction->StepInWall  (steplen); id = 9;}
- else                {runAction->StepInCavity(steplen); id = 10;}
- histoManager->FillHisto(id,steplen);
+ if (volume == fWall) {fRunAction->StepInWall  (steplen); id = 9;}
+ else                {fRunAction->StepInCavity(steplen); id = 10;}
+ fHistoManager->FillHisto(id,steplen);
  
  //last step before hitting the cavity
  //
- if ((volume == wall) && (point2->GetStepStatus() == fGeomBoundary)) {
-   directionIn = point1->GetMomentumDirection();
+ if ((volume == fWall) && (point2->GetStepStatus() == fGeomBoundary)) {
+   fDirectionIn = point1->GetMomentumDirection();
  } 
  
  //keep only charged particles within cavity
  //
- if (volume == wall) return;
+ if (volume == fWall) return;
  
  G4double ekin1 = point1->GetKineticEnergy();
  G4double ekin2 = point2->GetKineticEnergy();
@@ -115,36 +117,36 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //first step in cavity
  //
  if (point1->GetStepStatus() == fGeomBoundary) {
-   trackSegm = 0.;
+   fTrackSegm = 0.;
    G4ThreeVector vertex = step->GetTrack()->GetVertexPosition();
-   histoManager->FillHisto(4,vertex.z());          
-   runAction->FlowInCavity(0,ekin1);
-   histoManager->FillHisto(5,ekin1);
+   fHistoManager->FillHisto(4,vertex.z());          
+   fRunAction->FlowInCavity(0,ekin1);
+   fHistoManager->FillHisto(5,ekin1);
    if (steplen>0.) {    
      G4ThreeVector directionOut = 
               (point2->GetPosition() - point1->GetPosition()).unit();
      G4ThreeVector normal = point1->GetTouchableHandle()->GetSolid()
                             ->SurfaceNormal(point1->GetPosition());
-     histoManager->FillHisto(6,std::acos(-directionIn*normal));
-     histoManager->FillHisto(7,std::acos(-directionOut*normal));
-   }		   
+     fHistoManager->FillHisto(6,std::acos(-fDirectionIn*normal));
+     fHistoManager->FillHisto(7,std::acos(-directionOut*normal));
+   }                   
  }
   
  //within cavity
  //
- if (step->GetTrack()->GetCurrentStepNumber() == 1) trackSegm = 0.;
- trackSegm += steplen;
+ if (step->GetTrack()->GetCurrentStepNumber() == 1) fTrackSegm = 0.;
+ fTrackSegm += steplen;
  if (ekin2 <= 0.) {
-   runAction->AddTrakCavity(trackSegm);
-   histoManager->FillHisto(8,trackSegm);      
+   fRunAction->AddTrakCavity(fTrackSegm);
+   fHistoManager->FillHisto(8,fTrackSegm);      
  } 
  
  //exit cavity
  //
  if (point2->GetStepStatus() == fGeomBoundary) {
-   runAction->FlowInCavity(1,ekin2);
-   runAction->AddTrakCavity(trackSegm);
-   histoManager->FillHisto(8,trackSegm);      
+   fRunAction->FlowInCavity(1,ekin2);
+   fRunAction->AddTrakCavity(fTrackSegm);
+   fHistoManager->FillHisto(8,fTrackSegm);      
  }
 }
 

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadronPhysics.cc,v 1.9 2009-11-21 01:00:19 perl Exp $
+/// \file analysis/A01/src/A01HadronPhysics.cc
+/// \brief Implementation of the A01HadronPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Hadron Physics List with Parameterization Model by T. Koi
@@ -32,6 +35,7 @@
 #include "A01HadronPhysics.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <iomanip>   
 

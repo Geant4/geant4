@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomHandler.hh
+/// \brief Definition of the DicomHandler class
+//
 // The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//      *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca
 //      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
@@ -38,21 +41,6 @@
 // + Université Laval, Québec (QC) Canada
 //*******************************************************//
 
-//*******************************************************
-//
-// DicomHandler.hh :
-//	- Handling of DICM images
-//	- Transforming *.dcm to *.g4 ( pixels->density )
-//	- Reading headers and pixels
-//	- Transforming pixel to density and creating *.g4
-//	  files
-//	- Functions are in DicomHandler.cc
-//
-//
-// Base on previous code by :
-//	Dragan Tubic <tdragan@gel.ulaval.ca>
-//*******************************************************
-
 #ifndef DicomHandler_h
 #define DicomHandler_h 1
 
@@ -61,6 +49,19 @@
 #include <fstream>
 
 #include "globals.hh"
+
+//*******************************************************
+/// Dicom Handler class
+///        - Handling of DICM images
+///        - Transforming *.dcm to *.g4 ( pixels->density )
+///        - Reading headers and pixels
+///        - Transforming pixel to density and creating *.g4
+///          files
+///        - Functions are in DicomHandler.cc
+///
+/// Base on previous code by :
+///        Dragan Tubic <tdragan@gel.ulaval.ca>
+//*******************************************************
 
 class DicomHandler
 {
@@ -97,23 +98,23 @@ private:
     void read_undefined_nested(FILE *);
     void read_undefined_item(FILE *);
 
-    short compression;
-    G4int nFiles;
-    short rows;
-    short columns;
-    short bitAllocated;
-    G4int maxPixelValue, minPixelValue;
+    short fCompression;
+    G4int fNFiles;
+    short fRows;
+    short fColumns;
+    short fBitAllocated;
+    G4int fMaxPixelValue, fMinPixelValue;
     
-    G4double pixelSpacingX, pixelSpacingY;
-    G4double sliceThickness;
-    G4double sliceLocation;
+    G4double fPixelSpacingX, fPixelSpacingY;
+    G4double fSliceThickness;
+    G4double fSliceLocation;
     
-    G4int rescaleIntercept, rescaleSlope;
+    G4int fRescaleIntercept, fRescaleSlope;
     
-    G4bool littleEndian, implicitEndian;
-    short pixelRepresentation;
+    G4bool fLittleEndian, fImplicitEndian;
+    short fPixelRepresentation;
 
-    G4int** tab;
+    G4int** fTab;
     std::map<G4float,G4String> fMaterialIndices;
 };
 #endif

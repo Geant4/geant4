@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.hh,v 1.2 2010-11-23 18:40:21 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef EROSITAPHYSICSLIST_HH

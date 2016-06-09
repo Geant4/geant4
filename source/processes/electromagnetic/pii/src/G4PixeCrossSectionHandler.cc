@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeCrossSectionHandler.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -39,6 +38,7 @@
 // -------------------------------------------------------------------
 
 #include "G4PixeCrossSectionHandler.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4IInterpolator.hh"
 #include "G4LogLogInterpolator.hh"
 #include "G4IDataSet.hh"
@@ -584,9 +584,9 @@ void G4PixeCrossSectionHandler::ActiveElements()
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int m=0; m<nMaterials; m++)
+  for (G4int mat=0; mat<nMaterials; mat++)
     {
-      const G4Material* material= (*materialTable)[m];
+      const G4Material* material= (*materialTable)[mat];
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4int nElements = material->GetNumberOfElements();
 
@@ -652,9 +652,9 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int m=0; m<nMaterials; m++)
+  for (G4int mat=0; mat<nMaterials; mat++)
     {
-      const G4Material* material = (*materialTable)[m];
+      const G4Material* material = (*materialTable)[mat];
       G4int nElements = material->GetNumberOfElements();
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();

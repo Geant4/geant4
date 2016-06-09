@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointComptonModel.cc,v 1.7 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
 
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"

@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomIntersectVolume.hh
+/// \brief Definition of the DicomIntersectVolume class
+//
+
 #ifndef DicomIntersectVolume__HH
 #define DicomIntersectVolume__HH
 
@@ -39,6 +43,8 @@ class G4PhantomParameterisation;
 class G4UIcmdWithAString;
 class G4VSolid;
 
+/// Manages intersections of DICOM files with volumes
+
 class DicomIntersectVolume : public G4UImessenger
 {
 public:
@@ -46,7 +52,7 @@ public:
   ~DicomIntersectVolume();
 
   void SetNewValue(G4UIcommand * command,
-		   G4String newValues);
+                   G4String newValues);
 
 private:
 
@@ -59,20 +65,20 @@ private:
   std::vector<G4String> GetWordsInString( const G4String& stemp);
 
 private:
-  G4UIcmdWithAString* theUserVolumeCmd;
-  G4UIcmdWithAString* theG4VolumeCmd;
+  G4UIcmdWithAString* fUserVolumeCmd;
+  G4UIcmdWithAString* fG4VolumeCmd;
 
-  G4VSolid* theSolid;
+  G4VSolid* fSolid;
 
-  G4VPhysicalVolume* thePhantomVolume;
+  G4VPhysicalVolume* fPhantomVolume;
 
   std::ofstream fout;
 
-  G4PhantomParameterisation* theRegularParam;
+  G4PhantomParameterisation* fRegularParam;
 
-  G4ThreeVector thePhantomMinusCorner;
+  G4ThreeVector fPhantomMinusCorner;
 
-  G4bool* theVoxelIsInside;
+  G4bool* fVoxelIsInside;
 };
 
 #endif

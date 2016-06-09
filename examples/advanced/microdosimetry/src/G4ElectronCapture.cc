@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronCapture.cc,v 1.1 2010-08-31 11:23:58 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ElectronCapture.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
@@ -56,6 +56,7 @@ G4ElectronCapture::G4ElectronCapture(const G4String& regName, G4double ekinlim)
   if(regName == "" || regName == "world") { 
     regionName = "DefaultRegionForTheWorld";
   }
+  pParticleChange = &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,6 +117,7 @@ G4VParticleChange* G4ElectronCapture::PostStepDoIt(const G4Track& aTrack,
   pParticleChange->Initialize(aTrack);
   pParticleChange->ProposeTrackStatus(fStopAndKill);
   pParticleChange->ProposeLocalEnergyDeposit(aTrack.GetKineticEnergy());
+  fParticleChange.SetProposedKineticEnergy(0.0);
   return pParticleChange;
 }
 

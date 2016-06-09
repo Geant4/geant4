@@ -33,16 +33,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/G4VGlauberDataSet.cc
+/// \brief Implementation of the G4VGlauberDataSet class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4VGlauberDataSet.cc
 //
-// Version:		0.B
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.B
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////

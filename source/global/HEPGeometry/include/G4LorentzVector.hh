@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LorentzVector.hh,v 1.5 2006-06-29 18:59:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4LorentzVector_hh
 #define G4LorentzVector_hh

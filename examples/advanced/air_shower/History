@@ -1,4 +1,3 @@
-$Id: History,v 1.25 2010-11-09 14:50:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +6,32 @@ $Id: History,v 1.25 2010-11-09 14:50:21 allison Exp $
 
                            History file
                            ------------
+
+28.11.2012 - G. Cosmo (air_shower-V09-05-07)
+             Fixed cases of variable shadowing.
+
+06.11.2012 - L. Pandola (air_shower-V09-05-06)
+             Fixed syntax in CMakeLists.txt.
+
+26.10.2012 - L. Pandola (air_shower-V09-05-05)
+	     Replace CMakeLists.txt to deal with UI/VIS.
+
+11.10.2012 - G.Cosmo (air_shower-V09-05-04)
+	     Explicit inclusion of units and constants headers.
+
+26.06.2012 - G.Cosmo (air_shower-V09-05-03)
+             Removed call to SetModel for optical physics, according to
+             latest change to optical boundary process.
+
+31.01.2012 - G.Folger (air_shower-V09-05-02)
+             fix another compilation warning from gcc4.6: variables set but 
+	     not used, in src/UltraEventAction.cc
+
+18.01.2012 - G.Folger (air_shower-V09-05-01)
+             fix compilation warnings from gcc4.6: variables set but not used.
+
+08.12.2011 - P.Mato (air_shower-V09-05-00)
+	     Added CMakeLists.txt file
 
 31.10.2011 - L.Pandola (air_shower-V09-04-01)
 	     Migrated G4Exceptions to the new scheme

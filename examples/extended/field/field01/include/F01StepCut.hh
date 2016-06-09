@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01StepCut.hh
+/// \brief Definition of the F01StepCut class
 //
-// $Id: F01StepCut.hh,v 1.5 2006-06-29 17:16:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -46,28 +48,28 @@ class F01StepCut : public G4VDiscreteProcess
 
      ~F01StepCut();
 
-     G4double PostStepGetPhysicalInteractionLength(
+     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    );
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
 
-     G4VParticleChange* PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    );
+     virtual G4VParticleChange* PostStepDoIt(
+                             const G4Track& ,
+                             const G4Step& 
+                            );
 
     void SetMaxStep(G4double);
 
   protected:
 
      // it is not needed here !
-     G4double GetMeanFreePath(const G4Track& aTrack,
+     virtual G4double GetMeanFreePath(const G4Track& aTrack,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
                             );
 
-			    
+                            
   private:
   
   // hide assignment operator as private 
@@ -75,7 +77,7 @@ class F01StepCut : public G4VDiscreteProcess
 
   private:
 
-     G4double MaxChargedStep ;
+     G4double fMaxChargedStep ;
 };
 
 // inlined function members implementation
@@ -94,15 +96,15 @@ inline G4double F01StepCut::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-   G4double ProposedStep = DBL_MAX;
+   G4double proposedStep = DBL_MAX;
 
-   if((MaxChargedStep > 0.) &&
+   if((fMaxChargedStep > 0.) &&
       (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
-        ProposedStep = MaxChargedStep ;
+        proposedStep = fMaxChargedStep ;
 
-   return ProposedStep;
+   return proposedStep;
 }
 
 inline G4VParticleChange* F01StepCut::PostStepDoIt(

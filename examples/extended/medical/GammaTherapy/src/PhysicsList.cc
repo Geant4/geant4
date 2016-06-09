@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.17 2009-11-21 16:47:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/GammaTherapy/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -57,33 +59,33 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+PhysicsList::PhysicsList(): G4VModularPhysicsList()
 {
-  emBuilderIsRegisted = false;
-  decayIsRegisted = false;
-  stepLimiterIsRegisted = false;
-  helIsRegisted = false;
-  bicIsRegisted = false;
-  ionIsRegisted = false;
-  gnucIsRegisted = false;
-  stopIsRegisted = false;
-  verbose = 1;
-  G4LossTableManager::Instance()->SetVerbose(1);
+  fEmBuilderIsRegisted = false;
+  fHelIsRegisted = false;
+  fBicIsRegisted = false;
+  fIonIsRegisted = false;
+  fGnucIsRegisted = false;
+  fStopIsRegisted = false;
+  fVerbose = 1;
+  G4LossTableManager::Instance()->SetVerbose(fVerbose);
   defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
 
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   // Add Physics builders
   RegisterPhysics(new G4DecayPhysics());
@@ -92,14 +94,17 @@ PhysicsList::PhysicsList()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
-{}
+{
+  delete fMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  if(verbose > 0) 
+  if(fVerbose > 0) {
     G4cout << "### PhysicsList Construte Particles" << G4endl;
+  }
   G4VModularPhysicsList::ConstructParticle();
 }
 
@@ -107,88 +112,75 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  if(verbose > 0) 
+  if(fVerbose > 0) {
     G4cout << "### PhysicsList Construte Processes" << G4endl;
-  if(!emBuilderIsRegisted) AddPhysicsList("emstandard");
+  }
+  if(!fEmBuilderIsRegisted) { AddPhysicsList("emstandard"); }
   RegisterPhysics(new StepLimiterBuilder());
   G4VModularPhysicsList::ConstructProcess();
 
   // Define energy interval for loss processes
+  // from 10 eV to 10 GeV
   G4EmProcessOptions emOptions;
-  emOptions.SetMinEnergy(0.1*keV);
-  emOptions.SetMaxEnergy(100.*GeV);
+  emOptions.SetMinEnergy(0.01*keV);
+  emOptions.SetMaxEnergy(10.*GeV);
   emOptions.SetDEDXBinning(90);
   emOptions.SetLambdaBinning(90);
-  //  emOptions.SetBuildCSDARange(false);
-  emOptions.SetApplyCuts(true);
-  //emOptions.SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if(verbose > 0) {
+  if(fVerbose > 0) {
     G4cout << "### PhysicsList Add Physics <" << name 
-           << "> emBuilderIsRegisted= " << emBuilderIsRegisted
-           << G4endl;
+           << "> " << G4endl;
   }
-  if ((name == "emstandard") && !emBuilderIsRegisted) {
+  if ((name == "emstandard") && !fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmStandardPhysics());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;    
+    fEmBuilderIsRegisted = true;
 
-  } else if (name == "emstandard_opt1" && !emBuilderIsRegisted) {
+  } else if (name == "emstandard_opt1" && !fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmStandardPhysics_option1());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fEmBuilderIsRegisted = true;
 
-  } else if (name == "emstandard_opt2" && !emBuilderIsRegisted) {
+  } else if (name == "emstandard_opt2" && !fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmStandardPhysics_option2());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fEmBuilderIsRegisted = true;
 
-  } else if (name == "emstandard_opt3" && !emBuilderIsRegisted) {
+  } else if (name == "emstandard_opt3" && !fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmStandardPhysics_option3());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fEmBuilderIsRegisted = true;
 
-  } else if (name == "emlivermore" && !emBuilderIsRegisted) {
+  } else if (name == "emlivermore" && !fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmLivermorePhysics());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fEmBuilderIsRegisted = true;
 
-  } else if (name == "empenelope" && !emBuilderIsRegisted) {
+  } else if (name == "empenelope" && !fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmPenelopePhysics());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fEmBuilderIsRegisted = true;
 
-  } else if (name == "elastic" && !helIsRegisted && emBuilderIsRegisted) {
+  } else if (name == "elastic" && !fHelIsRegisted && fEmBuilderIsRegisted) {
     RegisterPhysics(new G4HadronElasticPhysics());
-    helIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fHelIsRegisted = true;
     
-  } else if (name == "binary" && !bicIsRegisted && emBuilderIsRegisted) {
+  } else if (name == "binary" && !fBicIsRegisted && fEmBuilderIsRegisted) {
     RegisterPhysics(new G4HadronInelasticQBBC());
-    bicIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fBicIsRegisted = true;
     
-  } else if (name == "binary_ion" && !ionIsRegisted && emBuilderIsRegisted) {
+  } else if (name == "binary_ion" && !fIonIsRegisted && fEmBuilderIsRegisted) {
     RegisterPhysics(new G4IonBinaryCascadePhysics());
-    ionIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fIonIsRegisted = true;
 
-  } else if (name == "gamma_nuc" && !gnucIsRegisted && emBuilderIsRegisted) {
+  } else if (name == "gamma_nuc" && !fGnucIsRegisted && fEmBuilderIsRegisted) {
     RegisterPhysics(new G4EmExtraPhysics());
-    gnucIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    fGnucIsRegisted = true;
 
-  } else if (name == "stopping" && !stopIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4QStoppingPhysics());
-    gnucIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+  } else if (name == "stopping" && !fStopIsRegisted && fEmBuilderIsRegisted) {
+    RegisterPhysics(new G4StoppingPhysics());
+    fStopIsRegisted = true;
     
-  } else if(!emBuilderIsRegisted) {
+  } else if(!fEmBuilderIsRegisted) {
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
            << " fail - EM physics should be registered first " << G4endl;
   } else {
@@ -201,43 +193,35 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-
-  if (verbose>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetVerbose(G4int val)
-{
-  verbose = val;
+  if (fVerbose>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

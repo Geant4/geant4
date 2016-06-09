@@ -42,7 +42,7 @@
 // This model is a re-implementation of the Photolectric angular distribution
 // developed my M. Maire for the Standard EM Physics G4PhotoElectricEffect 
 //
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+// This class is obsolete and will be removed soon
 
 // -------------------------------------------------------------------
 //
@@ -50,33 +50,31 @@
 #ifndef G4PhotoElectricAngularGeneratorSauterGavrila_h
 #define G4PhotoElectricAngularGeneratorSauterGavrila_h 1
 
-#include "G4VPhotoElectricAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
 #include "G4ios.hh"
 #include "globals.hh"
 
-class G4PhotoElectricAngularGeneratorSauterGavrila : public G4VPhotoElectricAngularDistribution
+class G4PhotoElectricAngularGeneratorSauterGavrila : public G4VEmAngularDistribution
 {
 
 public:
 
-  G4PhotoElectricAngularGeneratorSauterGavrila(const G4String& name);
+  G4PhotoElectricAngularGeneratorSauterGavrila();
 
   ~G4PhotoElectricAngularGeneratorSauterGavrila();
 
-  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, 
-					  const G4double kineticEnergy, 
-					  const G4ThreeVector& polarization, 
-					  const G4int shellId) const;
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double e = 0.0,
+                                         G4int shellId = 0,
+                                         const G4Material* mat = 0);
 
   void PrintGeneratorInformation() const;
-
-protected:
 
 private:
 
   // hide assignment operator 
-     G4PhotoElectricAngularGeneratorSauterGavrila & operator=(const  G4PhotoElectricAngularGeneratorSauterGavrila &right);
-     G4PhotoElectricAngularGeneratorSauterGavrila(const  G4PhotoElectricAngularGeneratorSauterGavrila&);
+  G4PhotoElectricAngularGeneratorSauterGavrila & operator=(const  G4PhotoElectricAngularGeneratorSauterGavrila &right);
+  G4PhotoElectricAngularGeneratorSauterGavrila(const  G4PhotoElectricAngularGeneratorSauterGavrila&);
 
 };
 

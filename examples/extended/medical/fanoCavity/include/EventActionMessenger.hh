@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,10 +53,10 @@ class EventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction*          eventAction;
-    G4UIdirectory*        eventDir;        
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+    EventAction*          fEventAction;
+    G4UIdirectory*        fEventDir;        
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

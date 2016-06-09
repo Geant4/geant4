@@ -27,10 +27,13 @@
 // Implementation of the HETC88 code into Geant4.
 // Evaporation and De-excitation parts
 // T. Lampen, Helsinki Institute of Physics, May-2000
+//
+// 20120608  M. Kelsey -- Change vars 's','m','m2' to avoid name collisions
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4Deuteron.hh"
@@ -77,11 +80,9 @@ void G4BENeutronChannel::calculateProbability()
 
   const G4double levelParam = getLevelDensityParameter();
   
-  const G4double s    = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-  // const G4double temp = ( std::pow( s, 2. ) - 3 * s + 3 ) / ( 4 * std::pow( levelParam, 2. ) ) 
-  //  + beta() * ( s - 1 ) /  ( 2 * levelParam );
-  const G4double eye0 = std::exp( s ) * ( s - 1 ) /  ( 2 * levelParam );
-  const G4double eye1 = ( std::pow( s, 2. ) - 3*s +3 ) * std::exp( s ) / ( 4 * std::pow( levelParam, 2. ) ) ;
+  const G4double slevel = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
+  const G4double eye0 = std::exp( slevel ) * ( slevel - 1 ) /  ( 2 * levelParam );
+  const G4double eye1 = ( slevel*slevel - 3*slevel +3 ) * std::exp( slevel ) / ( 4 * levelParam*levelParam ) ;
   
   emissionProbability = std::pow( G4double(residualA), 0.666666 ) * alpha() * ( eye1 + beta() * eye0 );
   
@@ -106,33 +107,6 @@ void G4BENeutronChannel::calculateProbability()
 
 G4double  G4BENeutronChannel::sampleKineticEnergy()
 {
-  // Samples the kinetic energy of the particle in CMS
-  //
-  // Algorithm used in HETC98
-  //
-//    G4double e1;
-//    G4double e2;
-//    G4double s;
-//    G4double levelParam;
-//    G4double eye0;
-//    G4double eye1;
-//    G4double kineticEnergyAv;
-//    G4double kineticEnergy;
-  
-//    e1 = RandExponential::shoot( 1 );
-//    e2 = RandExponential::shoot( 1 );
-
-//    levelParam  = getLevelDensityParameter();
-//    s = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-//    eye0 = 0.5 * ( s - 1 ) * std::exp( s ) / levelParam;
-//    eye1 = ( std::pow( s, 2. ) - 3*s + 3 ) * std::exp( s ) / ( 4 * std::pow( levelParam, 2. ) );
-//    kineticEnergyAv = 2 * ( std::pow( s, 3. ) - 6.0 * std::pow( s, 2. ) + 15.0 * s - 15.0 )  / 
-//        ( ( 2.0 * std::pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
-//    kineticEnergyAv = ( kineticEnergyAv + beta() ) / ( 1.0 + beta() * eye0
-//  	   / eye1 );
-  
-//    kineticEnergy = 0.5 * ( e1 + e2 ) * kineticEnergyAv + getThresh() - getQ();
-
   ////////////////
   // A random number is sampled from the density function
   // P(x) = x * std::exp ( 2 std::sqrt ( a ( xMax - x ) ) )  [not normalized],
@@ -145,7 +119,7 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
   
   const G4double xMax  = excitationEnergy - getThresh() - correction + beta(); // maximum number
   const G4double xProb = ( - 1 + std::sqrt ( 1 + 4 * levelParam * xMax ) ) / ( 2 * levelParam ); // most probable value
-  const G4double m = xProb * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
+  const G4double maxProb = xProb * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
 
   // Sample x according to density function P(x) with rejection method
   G4double r1;
@@ -154,7 +128,7 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
   do
     {
       r1 = beta() + G4UniformRand() * ( xMax - beta() );
-      r2 = G4UniformRand() * m;
+      r2 = G4UniformRand() * maxProb;
       koe++;
     }
   while (  r1 * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );

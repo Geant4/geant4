@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh,v 1.5 2009-07-17 12:36:41 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4InteractionContent_h
@@ -42,17 +41,23 @@
 #include "globals.hh"
 #include "G4VSplitableHadron.hh"
 #include "G4Nucleon.hh"                // Uzhi 16.07.09
+
+//#define debug_QGSM
+#ifdef debug_QGSM
+  #include "../../qgsm/include/G4QGSMSplitableHadron.hh"
+  #include <deque>
+#endif  
+
 class G4InteractionContent 
 {
 
   public:
 
+      G4InteractionContent() {}
       G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant);
 
       ~G4InteractionContent();
 
-      int operator==(const G4InteractionContent &right) const;
-      int operator!=(const G4InteractionContent &right) const;
       G4bool operator<(const G4InteractionContent &right) const;
       
       G4VSplitableHadron * GetProjectile() const ;
@@ -82,12 +87,11 @@ class G4InteractionContent
 #endif      
      
 
-public:
-      G4InteractionContent(){}
-      const G4InteractionContent & operator=(const G4InteractionContent &right);
-
 private:
+      G4InteractionContent & operator=(const G4InteractionContent &right);
       G4InteractionContent(const G4InteractionContent &right);
+      int operator==(const G4InteractionContent &right) const;
+      int operator!=(const G4InteractionContent &right) const;
 
   protected:
 
@@ -167,29 +171,74 @@ inline void G4InteractionContent::SplitHadrons()
 {
 	if ( theProjectile != NULL ) theProjectile->SplitUp();
 	if ( theTarget != NULL ) theTarget->SplitUp();
+        #ifdef G4DEBUG
+	//  Dump();
+	#endif
 }
+
 #ifdef G4DEBUG
 inline void G4InteractionContent::Dump()
 {
+	G4LorentzVector mom(0.,0.,0.,0.);
 	G4cout  << " G4InteractionContent " << this << G4endl
-	        << "Hard/Soft/Diff " 
-		<< theNumberOfHard<<" / " 
-		<<theNumberOfSoft<<" / " 
-		<<theNumberOfDiffractive << G4endl
-		<< "Projectile " ;
-        if ( theProjectile ) 
-	{ G4cout <<  theProjectile->GetDefinition()->GetPDGEncoding() 
-		 << "  " << theProjectile->Get4Momentum()<< G4endl;
+			<< "Hard/Soft/Diff "
+			<< theNumberOfHard<<" / "
+			<<theNumberOfSoft<<" / "
+			<<theNumberOfDiffractive << G4endl
+			<< "Projectile " ;
+	if ( theProjectile ) {
+		G4cout <<  theProjectile->GetDefinition()->GetPDGEncoding()
+				<< "  " << theProjectile->Get4Momentum()<< G4endl;
+		mom+=theProjectile->Get4Momentum();
+		#ifdef debug_QGSM 
+			G4QGSMSplitableHadron * at =(G4QGSMSplitableHadron*)theProjectile;
+			std::deque<G4Parton *>color=at->GetColorPartons();
+			std::deque<G4Parton *>anticolor=at->GetAntiColorPartons();
+			G4cout << " proj. color/anti size " << color.size() << " / " << anticolor.size() << G4endl;
+			std::deque<G4Parton *>::iterator p_iter;
+			G4LorentzVector colmom(0.,0.,0.,0.);
+			for ( p_iter=color.begin(); p_iter!= color.end(); ++p_iter){
+				G4cout << "proj color : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
+				colmom+=(*p_iter)->Get4Momentum();
+			}
+
+			G4LorentzVector anticolmom(0.,0.,0.,0.);
+			for ( p_iter=anticolor.begin(); p_iter!= anticolor.end(); ++p_iter){
+				G4cout << "proj antic : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
+				anticolmom+=(*p_iter)->Get4Momentum();
+			}
+			G4cout << " proj. color/anti mom " << colmom << " / " << anticolmom  << " Sum: " << colmom+anticolmom <<G4endl;
+                #endif
 	} else {	 
-	  G4cout << " none " << G4endl;
+		G4cout << " none " << G4endl;
 	}	    
-        if ( theTarget ) 
-	{ G4cout <<  theTarget->GetDefinition()->GetPDGEncoding() 
-		 << "  " << theTarget->Get4Momentum()<< G4endl;
-	} else {	 
-	  G4cout << " none " << G4endl;
+	if ( theTarget ) {
+		G4cout <<  "Target     " << theTarget->GetDefinition()->GetPDGEncoding()
+				<< "  " << theTarget->Get4Momentum()<< G4endl;
+		mom+=theTarget->Get4Momentum();
+		#ifdef debug_QGSM 
+			G4QGSMSplitableHadron * at =(G4QGSMSplitableHadron*)theTarget;
+			std::deque<G4Parton *>color=at->GetColorPartons();
+			std::deque<G4Parton *>anticolor=at->GetAntiColorPartons();
+			G4cout << " target color/anti size " << color.size() << " / " << anticolor.size() << G4endl;
+			std::deque<G4Parton *>::iterator p_iter;
+			G4LorentzVector colmom(0.,0.,0.,0.);
+			for ( p_iter=color.begin(); p_iter!= color.end(); ++p_iter){
+				G4cout << "target color : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
+				colmom+=(*p_iter)->Get4Momentum();
+			}
+
+			G4LorentzVector anticolmom(0.,0.,0.,0.);
+			for ( p_iter=anticolor.begin(); p_iter!= anticolor.end(); ++p_iter){
+				G4cout << "target antic : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
+				anticolmom+=(*p_iter)->Get4Momentum();
+					}
+			G4cout << " target color/anti mom " << colmom << " / " << anticolmom  << " Sum: " << colmom+anticolmom <<G4endl;
+                #endif
+		} else {
+		G4cout << " none " << G4endl;
 	}	    
-		    
+	G4cout << "total 4-mom of interaction content " << mom << G4endl;
 }      
 #endif      
 

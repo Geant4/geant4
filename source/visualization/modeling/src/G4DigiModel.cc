@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DigiModel.cc,v 1.1 2010-05-30 11:24:30 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  26th August 1998.
@@ -42,6 +41,7 @@ G4DigiModel::~G4DigiModel () {}
 G4DigiModel::G4DigiModel ():
   fpCurrentDigi(0)
 {
+  fType = "G4DigiModel";
   fGlobalTag = "G4DigiModel for all digis.";
   fGlobalDescription = fGlobalTag;
 }

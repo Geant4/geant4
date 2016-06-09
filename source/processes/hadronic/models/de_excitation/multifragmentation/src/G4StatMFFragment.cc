@@ -24,15 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc,v 1.7 2008-07-25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4StatMFFragment.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4HadronicException.hh"
-
 
 // Copy constructor
 G4StatMFFragment::G4StatMFFragment(const G4StatMFFragment & )

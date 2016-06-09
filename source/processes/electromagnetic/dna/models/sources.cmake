@@ -52,7 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNABornExcitationModel.hh
         G4DNABornIonisationModel.hh
         G4DNAChampionElasticModel.hh
-        G4DNADiffusionControlledModel.hh
+        G4DNASmoluchowskiReactionModel.hh
         G4DNADingfelderChargeDecreaseModel.hh
         G4DNADingfelderChargeIncreaseModel.hh
         G4DNAEmfietzoglouExcitationModel.hh
@@ -71,7 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNABornExcitationModel.cc
         G4DNABornIonisationModel.cc
         G4DNAChampionElasticModel.cc
-        G4DNADiffusionControlledModel.cc
+        G4DNASmoluchowskiReactionModel.cc
         G4DNADingfelderChargeDecreaseModel.cc
         G4DNADingfelderChargeIncreaseModel.cc
         G4DNAEmfietzoglouExcitationModel.cc

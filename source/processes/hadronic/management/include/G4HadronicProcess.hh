@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh,v 1.43 2011-01-08 02:22:15 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -40,8 +39,11 @@
 // J.L. Chuma, TRIUMF, 10-Mar-1997
 // Last modified: 04-Apr-1997
 // 19-May-2008 V.Ivanchenko cleanup and added comments
-// 05-Jul-2010 V.Ivanchenko cleanup commented lines 
-//
+// 05-Jul-2010 V.Ivanchenko cleanup commented lines
+// 28-Jul-2012 M.Maire add function GetTargetDefinition() 
+// 14-Sep-2012 Inherit from RestDiscrete, use subtype code (now in ctor) to
+//		configure base-class
+// 28-Sep-2012 M. Kelsey -- Undo inheritance change, keep new ctor
 
 #ifndef G4HadronicProcess_h
 #define G4HadronicProcess_h 1
@@ -52,8 +54,6 @@
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
 #include <vector>
-#include "G4VIsotopeProduction.hh"
-#include "G4IsoParticleChange.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4VLeadingParticleBiasing.hh"
 
@@ -69,9 +69,12 @@ class G4ParticleChange;
 class G4HadronicProcess : public G4VDiscreteProcess
 {
 public:
-    
-  G4HadronicProcess(const G4String& processName = "Hadronic", 
-		    G4ProcessType aType = fHadronic);    
+  G4HadronicProcess(const G4String& processName="Hadronic",
+		    G4ProcessType procType=fHadronic);    
+
+  // Preferred signature for subclasses, specifying their subtype here
+  G4HadronicProcess(const G4String& processName, 
+		    G4HadronicProcessType subType);    
 
   virtual ~G4HadronicProcess();
 
@@ -126,21 +129,18 @@ public:
   inline const G4Nucleus* GetTargetNucleus() const
   { return &targetNucleus; }
   
+  //  G4ParticleDefinition* GetTargetDefinition();
+  inline const G4Isotope* GetTargetIsotope()
+  { return targetNucleus.GetIsotope(); }
+  
   virtual void ProcessDescription(std::ostream& outFile) const;
  
 protected:    
 
-  // reset number of interaction length and save  
-  virtual void ResetNumberOfInteractionLengthLeft()
-  { G4VProcess::ResetNumberOfInteractionLengthLeft(); 
-    theInitialNumberOfInteractionLength = 
-      G4VProcess::theNumberOfInteractionLengthLeft;
-  }
-
   // generic method to choose secondary generator 
   // recommended for all derived classes
-  inline G4HadronicInteraction *ChooseHadronicInteraction(
-      G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
+  inline G4HadronicInteraction* ChooseHadronicInteraction(
+      G4double kineticEnergy, G4Material* aMaterial, G4Element* anElement)
   { return theEnergyRangeManager.GetHadronicInteraction(kineticEnergy,
 							aMaterial,anElement);
   }
@@ -149,20 +149,7 @@ protected:
   inline G4Nucleus* GetTargetNucleusPointer() 
   { return &targetNucleus; }
   
-
 public:
-
-  // Methods for isotope production    
-  static void EnableIsotopeProductionGlobally();
-  static void DisableIsotopeProductionGlobally();
-    
-  void EnableIsotopeCounting()  {isoIsOnAnyway = 1;}
-  void DisableIsotopeCounting() {isoIsOnAnyway = -1;}
-    
-  void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
-  { theProductionModels.push_back(aModel); }
-
-  static G4IsoParticleChange * GetIsotopeProductionInfo();
 
   void BiasCrossSectionByFactor(G4double aScale);
 
@@ -199,77 +186,66 @@ protected:
   { theEnergyRangeManager = value; }
 
   // access to the chosen generator
-  inline G4HadronicInteraction *GetHadronicInteraction()
+  inline G4HadronicInteraction* GetHadronicInteraction() const
   { return theInteraction; }
     
   // access to the cross section data set
   inline G4double GetLastCrossSection() 
   { return theLastCrossSection; }
 
+  // fill result
+  void FillResult(G4HadFinalState* aR, const G4Track& aT);
+
+  // Check the result for catastrophic energy non-conservation
+  G4HadFinalState* CheckResult(const G4HadProjectile& thePro,
+			       const G4Nucleus& targetNucleus, 
+			       G4HadFinalState* result) const;
+
+  // Check 4-momentum balance
+  void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
+
 private:
-    
-  void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
-
-  void FillResult(G4HadFinalState * aR, const G4Track & aT);
-
-  G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
-				      const G4Track & aTrack,
-				      const G4Nucleus & aNucleus);
-                                          
-  G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
-				       const G4Nucleus & aNucleus,
-				       G4HadFinalState * aResult);
-
-  inline G4double GetTotalNumberOfInteractionLengthTraversed()
-  { return theInitialNumberOfInteractionLength
-      -G4VProcess::theNumberOfInteractionLengthLeft;
-  }
-            
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
-  void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
-    
+  // hide assignment operator as private 
+  G4HadronicProcess& operator=(const G4HadronicProcess& right);
+  G4HadronicProcess(const G4HadronicProcess&);
+
+  // Set E/p conservation check levels from environment variables
+  void GetEnergyMomentumCheckEnvvars();
+
+protected:
+
+  G4HadProjectile thePro;
+
+  G4ParticleChange* theTotalResult; 
+
+  G4int epReportLevel;
+
 private:
     
   G4EnergyRangeManager theEnergyRangeManager;
     
-  G4HadronicInteraction *theInteraction;
+  G4HadronicInteraction* theInteraction;
 
   G4CrossSectionDataStore* theCrossSectionDataStore;
- 
+     
   G4Nucleus targetNucleus;
-    
-  G4HadronicProcess *dispatch;
 
   bool G4HadronicProcess_debug_flag;
 
   // Energy-momentum checking
-  G4int epReportLevel;
   std::pair<G4double, G4double> epCheckLevels;
   G4bool levelsSetByProcess;
 
-  // swiches for isotope production    
-  static G4bool isoIsEnabled; // true or false; local swich overrides
-  G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
-    
-  G4IsoParticleChange theIsoPC;
-  std::vector<G4VIsotopeProduction *> theProductionModels;
-    
   std::vector<G4VLeadingParticleBiasing *> theBias;
-
-  static G4IsoParticleChange* theIsoResult;
-  static G4IsoParticleChange* theOldIsoResult;
-    
-  G4ParticleChange* theTotalResult; 
-    
+  
   G4double theInitialNumberOfInteractionLength;   
 
   G4double aScaleFactor;
-  G4bool xBiasOn;
+  G4bool   xBiasOn;
   G4double theLastCrossSection;
-
-  G4int ModelingState;
 };
  
 #endif

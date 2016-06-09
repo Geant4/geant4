@@ -16,6 +16,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+25th September 2012  Ivana Hrivnacova
+- Renamed standalone.g4m in standalone.mac
+
+11th June 2012  John Allison  (exam-ext-vis-standalone-V09-05-02)
+- standalone.cc: Changed SetUserAction to RegisterRunDurationUserVisAction.
+- Improved README.
+- Added .README for doxygen.
+
+9th April 2012  John Allison  (exam-ext-vis-standalone-V09-05-01)
+- standalone.cc: Corrected vis user action extent.
+- standalone.g4m: Removed arguments from /vis/scene/add/userAction.
+- README: Improved.
+
+21st March 2012  John Allison  (exam-ext-vis-standalone-V09-05-00)
+- Re-tagged with directory specify name.
+
+21st March 2012  John Allison  (exam-ext-vis-V09-05-01)
+- Minor cosmetic improvements to comments and REAME.
+
+12th March 2012  John Allison  (exam-ext-vis-V09-05-00)
+- Added README.
+- Improved standalone.g4m.
+
 9th November 2010  John Allison  (exam-ext-vis-V09-03-00)
 - Introduced G4UIExecutive.
 

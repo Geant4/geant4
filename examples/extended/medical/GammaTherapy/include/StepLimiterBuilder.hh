@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/StepLimiterBuilder.hh
+/// \brief Definition of the StepLimiterBuilder class
 //
-// $Id: StepLimiterBuilder.hh,v 1.2 2006-06-29 21:56:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,15 +40,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepLimiterPerRegion;
-
 class StepLimiterBuilder : public G4VPhysicsConstructor
 {
 public:
+
   StepLimiterBuilder(const G4String& name = "stepLimiter");
   virtual ~StepLimiterBuilder();
 
-public:
   // This method is dummy for physics
   virtual void ConstructParticle();
 
@@ -60,8 +60,6 @@ private:
    // hide assignment operator
   StepLimiterBuilder & operator=(const StepLimiterBuilder &right);
   StepLimiterBuilder(const StepLimiterBuilder&);
-
-  StepLimiterPerRegion* stepMax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

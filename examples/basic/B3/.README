@@ -41,6 +41,10 @@
    - radioactive decay hadronic processes which path is defined via 
      the G4RADIOACTIVEDATA envirnoment variable.
  	 
+   See more on installation of the datasets in
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html">
+   Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+
 \section B3_s3 PRIMARY GENERATOR
 
    The default particle beam is an ion (F18), at rest, randomly distributed 
@@ -66,9 +70,9 @@
    	
 \section B3_s5 STACKING ACTION
 
-   Beta decay of Fluor generates a neutrino. One wishes do not track this
-   neutrino. Therefore one kills it immediately, before created particles
-   will put in a stack.
+   Beta decay of Fluor generates a neutrino. One wishes not to track this
+   neutrino; therefore one kills it immediately, before created particles
+   are put in a stack.
    The function B3StackingAction::ClassifyNewTrack() is invoked by G4 kernel
    each time a new particle is created.
        		
@@ -82,20 +86,35 @@ The following paragraphs are common to all basic examples
    in the main () function in exampleB3.cc.    
    The initialisation of the drawing is done via a set of /vis/ commands
    in the macro vis.mac. This macro is automatically read from
-   the main () function when the example is used in interactive running mode.
+   the main function when the example is used in interactive running mode.
 
-   By default, vis.mac opens an OpenGL viewer.
-   The user can switch to other graphics systems by commenting out this line
+   By default, vis.mac opens an OpenGL viewer (/vis/open OGL).
+   The user can change the initial viewer by commenting out this line
    and instead uncommenting one of the other /vis/open statements, such as
    HepRepFile or DAWNFILE (which produce files that can be viewed with the
-   HepRApp and DAWN viewers, respectively).
+   HepRApp and DAWN viewers, respectively).  Note that one can always
+   open new viewers at any time from the command line.  For example, if
+   you already have a view in, say, an OpenGL window with a name
+   "viewer-0", then
+\verbatim
+/vis/open DAWNFILE
+\endverbatim
+   then to get the same view
+\verbatim
+/vis/viewer/copyView viewer-0
+\endverbatim
+   or to get the same view *plus* scene-modifications
+\verbatim
+/vis/viewer/set/all viewer-0
+\endverbatim
+   then to see the result
+\verbatim
+/vis/viewer/flush
+\endverbatim
 
    The DAWNFILE, HepRepFile drivers are always available
-   (since they require no external libraries), but the OGL driver requires:
-     -# the visualisation & interfaces categories have been compiled
-        with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
-     -# exampleB3.cc has been compiled with G4VIS_USE_OPENGLX.
-   (This is best done through Configure or CMake.)
+   (since they require no external libraries), but the OGL driver requires
+   that the Geant4 libraries have been built with the OpenGL option.
 
    For more information on visualization, including information on how to
    install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
@@ -110,27 +129,17 @@ The following paragraphs are common to all basic examples
    The tracks are automatically drawn at the end of each event, accumulated
    for all events and erased at the beginning of the next run.
 
-
 \section B3_B USER INTERFACES
  
    The user command interface is set via the G4UIExecutive class
-   in the the main () function in exampleB3.cc 
+   in the main () function in exampleB3.cc 
    The selection of the user command interface is then done automatically 
-   according to the Geant4 configuration. The default command interface, 
-   called G4UIterminal, is done via a standard G4cin/G4cout.
-   On Linux and Sun-cc one can use a smarter command interface G4UItcsh. 
-   It is enough to set the environment variable G4UI_USE_TCSH before compiling 
-   exampleB3.cc
+   according to the Geant4 configuration or it can be done explicitly via 
+   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
 
 \section B3_C HOW TO RUN
  
-    - compile and link to generate an executable
-\verbatim
-% cd B3
-% make
-\endverbatim                
- 
-    - execute exampleB3 in the 'interactive mode' with visualization
+   - Execute exampleB3 in the 'interactive mode' with visualization
 \verbatim
 % exampleB3
 and type in the commands from run1.mac line by line:  
@@ -147,8 +156,8 @@ Idle> /control/execute run1.mac
 Idle> exit
 \endverbatim                
 
-    - execute exampleB3 in the 'batch' mode from macro files 
-      (without visualization)
+   - Execute exampleB3 in the 'batch' mode from macro files 
+   (without visualization)
 \verbatim
 % exampleB3 run2.mac
 % exampleB3 exampleB3.in > exampleB3.out

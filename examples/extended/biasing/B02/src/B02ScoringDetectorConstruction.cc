@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02ScoringDetectorConstruction.cc
+/// \brief Implementation of the B02ScoringDetectorConstruction class
 //
-// $Id: B02ScoringDetectorConstruction.cc,v 1.7 2006-06-29 16:34:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "globals.hh"
@@ -37,6 +39,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
 {  
@@ -65,11 +69,11 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
 
 
   G4Tubs *score_worldCylinder = new G4Tubs("score_worldCylinder",
-				     innerRadiusCylinder,
-				     outerRadiusCylinder,
-				     hightCylinder,
-				     startAngleCylinder,
-				     spanningAngleCylinder);
+                                     innerRadiusCylinder,
+                                     outerRadiusCylinder,
+                                     hightCylinder,
+                                     startAngleCylinder,
+                                     spanningAngleCylinder);
 
   // logical score world
 
@@ -81,7 +85,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   name = "score_world_phys";
   G4VPhysicalVolume* score_worldCylinder_phys =
     new G4PVPlacement(0, G4ThreeVector(0,0,0), score_worldCylinder_log,
-		      name, 0, false, 0);
+                      name, 0, false, 0);
 
 
   ///////////////////////////////////////////////
@@ -97,11 +101,11 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *tube_M = new G4Tubs("tube_M",
-			      innerRadiusShield,
-			      outerRadiusShield,
-			      MhightShield,
-			      startAngleShield,
-			      spanningAngleShield);
+                              innerRadiusShield,
+                              outerRadiusShield,
+                              MhightShield,
+                              startAngleShield,
+                              spanningAngleShield);
   
   G4LogicalVolume *M1_log = 
     new G4LogicalVolume(tube_M, Galactic, "M1_log");
@@ -113,7 +117,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
 //  G4VPhysicalVolume *pM1 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
-		      M1_log, name, score_worldCylinder_log, false, 0);
+                      M1_log, name, score_worldCylinder_log, false, 0);
   
 
   /////////////////// D1 ///////////////////////////
@@ -126,11 +130,11 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
 
   G4Tubs *tube_D = new G4Tubs("tube_D",
-			      innerRadiusShield,
-			      outerRadiusShield,
-			      DhightShield,
-			      startAngleShield,
-			      spanningAngleShield);
+                              innerRadiusShield,
+                              outerRadiusShield,
+                              DhightShield,
+                              startAngleShield,
+                              spanningAngleShield);
   
   G4LogicalVolume *D1_log = 
     new G4LogicalVolume(tube_D, Galactic, "D1_log");
@@ -139,7 +143,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
 //  G4VPhysicalVolume *pD1 = 
     new G4PVPlacement(0, G4ThreeVector(0, 0, 0),
-		      D1_log, name, M1_log, false, 0);
+                      D1_log, name, M1_log, false, 0);
 
   /////////////////////// M2 //////////////////////////////////
   
@@ -152,7 +156,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   pos_z = MhightShield;
 //  G4VPhysicalVolume *pM2 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
-		      M2_log, name, score_worldCylinder_log, false, 0);
+                      M2_log, name, score_worldCylinder_log, false, 0);
   
   //////////////////// D2 /////////////////////////////////
 
@@ -163,7 +167,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
 //  G4VPhysicalVolume *pD2 = 
     new G4PVPlacement(0, G4ThreeVector(0, 0, 0),
-		      D2_log, name, M2_log, false, 0);
+                      D2_log, name, M2_log, false, 0);
   
   /////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////

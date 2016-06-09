@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm0/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 
 //
-// $Id: DetectorConstruction.cc,v 1.10 2009-11-14 18:04:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -48,22 +50,23 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pBox(0), aMaterial(0)
+:fBox(0),fBoxSize(0),fMaterial(0),fDetectorMessenger(0)
 {
-  BoxSize = 1*mm;
+  fBoxSize = 1*mm;
   DefineMaterials();
   SetMaterial("Germanium");  
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -154,33 +157,33 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
 
   G4Box* 
-    sBox = new G4Box("Container",			//its name
-		     BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
-		   
+    sBox = new G4Box("Container",                        //its name
+                     fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+                   
   G4LogicalVolume*
-    lBox = new G4LogicalVolume(sBox,			//its shape
-			       aMaterial,		//its material
-			       aMaterial->GetName());	//its name
+    lBox = new G4LogicalVolume(sBox,                        //its shape
+                               fMaterial,                //its material
+                               fMaterial->GetName());        //its name
 
-  pBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume
-                           aMaterial->GetName(),	//its name
-                           0,				//its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			     
+  fBox = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           lBox,                        //its logical volume
+                           fMaterial->GetName(),        //its name
+                           0,                                //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                             
   //always return the root volume
   //
-  return pBox;
+  return fBox;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n The Box is " << G4BestUnit(BoxSize,"Length")
-         << " of " << aMaterial->GetName() << G4endl;
+  G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
+         << " of " << fMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,8 +197,8 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
      G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
   if (pttoMaterial) {
-    aMaterial = pttoMaterial;
-    if (pBox) G4RunManager::GetRunManager()
+    fMaterial = pttoMaterial;
+    if (fBox) G4RunManager::GetRunManager()
                              ->DefineWorldVolume(ConstructVolumes());
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "

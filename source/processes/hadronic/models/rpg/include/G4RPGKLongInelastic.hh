@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RPGKLongInelastic.hh,v 1.1 2007-07-18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: D. H. Wright
 // Date:   18 June 2007
@@ -39,6 +38,7 @@
 #ifndef G4RPGKLongInelastic_h
 #define G4RPGKLongInelastic_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
 #include "G4RPGKZeroInelastic.hh"
 #include "G4RPGAntiKZeroInelastic.hh"
@@ -51,7 +51,7 @@ class G4RPGKLongInelastic : public G4RPGInelastic
     G4RPGKLongInelastic() : G4RPGInelastic("G4RPGKLongInelastic")  
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
 
     virtual ~G4RPGKLongInelastic(){ }

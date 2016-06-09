@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.hh,v 1.4 2010-06-15 16:33:55 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/geometry commands - John Allison  31st January 2006
 

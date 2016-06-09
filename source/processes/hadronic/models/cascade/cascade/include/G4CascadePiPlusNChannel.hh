@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePiPlusNChannel.hh,v 1.3 2010-06-25 09:42:34 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4_CASCADE_PIPLUSN_CHANNEL_HH
 #define G4_CASCADE_PIPLUSN_CHANNEL_HH

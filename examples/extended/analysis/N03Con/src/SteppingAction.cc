@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -45,7 +47,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
                                          EventAction* evt)
-:detector(det), eventaction(evt)					 
+:fDetector(det), fEventaction(evt)                                         
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,8 +70,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();
       
-  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
-  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
+  if (volume == fDetector->GetAbsorber()) fEventaction->AddAbs(edep,stepl);
+  if (volume == fDetector->GetGap())      fEventaction->AddGap(edep,stepl);
   
   //example of saving random number seed of this event, under condition
   //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.9 2010-06-07 05:40:46 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm4/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,24 +38,21 @@
 
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
-
-#ifdef G4ANALYSIS_USE
-  #include "AIDA/IHistogram1D.h"
-#endif
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run)
-:Run(run),drawFlag("none"),printModulo(10000),eventMessenger(NULL)
+:fRun(run),fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(NULL)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,24 +62,23 @@ void EventAction::BeginOfEventAction( const G4Event* evt)
  G4int evtNb = evt->GetEventID();
 
  //printing survey
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;  
  
  //additional initializations   
- TotalEnergyDeposit = 0.;
+ fTotalEnergyDeposit = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction( const G4Event*)
-{	 		 
-  if (drawFlag != "none") 
+{                          
+  if (fDrawFlag != "none") 
     G4cout << " Energy deposit: " 
-           << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
-	   
-#ifdef G4ANALYSIS_USE
-  Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
-#endif
+           << G4BestUnit(fTotalEnergyDeposit,"Energy") << G4endl;
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, fTotalEnergyDeposit/MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

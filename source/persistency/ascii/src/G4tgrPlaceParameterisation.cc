@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.cc,v 1.8 2010-10-13 07:56:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrPlaceParameterisation

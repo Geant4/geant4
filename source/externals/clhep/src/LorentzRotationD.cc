@@ -17,7 +17,7 @@ namespace CLHEP  {
 // ----------  Decomposition:
 
 void HepLorentzRotation::decompose 
-	(HepBoost & boost, HepRotation & rotation) const {
+	(HepBoost & bboost, HepRotation & rotation) const {
 
   // The boost will be the pure boost based on column 4 of the transformation
   // matrix.  Since the constructor takes the beta vector, and not beta*gamma,
@@ -26,17 +26,17 @@ void HepLorentzRotation::decompose
 
   Hep3Vector betaVec ( xt(), yt(), zt() );
   betaVec *= 1.0 / tt();
-  boost.set( betaVec );
+  bboost.set( betaVec );
 
   // The rotation will be inverse of B times T.
 
   HepBoost B( -betaVec );
   HepLorentzRotation R( B * *this );
 
-  HepRep3x3 m3  ( R.xx(), R.xy(), R.xz(),
+  HepRep3x3 m1  ( R.xx(), R.xy(), R.xz(),
                   R.yx(), R.yy(), R.yz(),
                   R.zx(), R.zy(), R.zz() );
-  rotation.set( m3 );
+  rotation.set( m1 );
   rotation.rectify();
   
   return;
@@ -44,45 +44,45 @@ void HepLorentzRotation::decompose
 }
 
 void HepLorentzRotation::decompose 
-	(Hep3Vector & boost, HepAxisAngle & rotation) const {
+	(Hep3Vector & bboost, HepAxisAngle & rotation) const {
   HepRotation r;
   HepBoost b;
   decompose(b,r);
-  boost = b.boostVector();
+  bboost = b.boostVector();
   rotation = r.axisAngle();
   return;
 }
 
 void HepLorentzRotation::decompose 
-	(HepRotation & rotation, HepBoost & boost) const {
+	(HepRotation & rotation, HepBoost & bboost) const {
 
   // In this case the pure boost is based on row 4 of the matrix.  
 
   Hep3Vector betaVec( tx(), ty(), tz() );
   betaVec *= 1.0 / tt();
-  boost.set( betaVec );
+  bboost.set( betaVec );
 
   // The rotation will be T times the inverse of B.
 
   HepBoost B( -betaVec );
   HepLorentzRotation R( *this * B );
 
-  HepRep3x3 m3 ( R.xx(), R.xy(), R.xz(),
+  HepRep3x3 m1 ( R.xx(), R.xy(), R.xz(),
                  R.yx(), R.yy(), R.yz(),
                  R.zx(), R.zy(), R.zz() );
-  rotation.set( m3 );
+  rotation.set( m1 );
   rotation.rectify();
   return;
 
 }
 
 void HepLorentzRotation::decompose 
-	(HepAxisAngle & rotation, Hep3Vector & boost) const {
+	(HepAxisAngle & rotation, Hep3Vector & bboost) const {
   HepRotation r;
   HepBoost b;
   decompose(r,b);
   rotation = r.axisAngle();
-  boost = b.boostVector();
+  bboost = b.boostVector();
   return;
 }
 
@@ -199,11 +199,11 @@ void HepLorentzRotation::rectify() {
   beta *= 1.0/gam;
   HepLorentzRotation R = (*this) * HepBoost(-beta);
 
-  HepRep3x3  m3 ( R.xx(), R.xy(), R.xz(),
+  HepRep3x3  m1 ( R.xx(), R.xy(), R.xz(),
                   R.yx(), R.yy(), R.yz(),
                   R.zx(), R.zy(), R.zz() );
 
-  HepRotation Rgood (m3);
+  HepRotation Rgood (m1);
   Rgood.rectify();
 
   set ( Rgood, HepBoost(beta) );

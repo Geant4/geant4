@@ -119,7 +119,11 @@ $(G4TMPDIR)/%.d: src/%.cc
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),setup)
+ifneq ($(MAKECMDGOALS),clean_setup)
 -include $(dependencies)
+endif
+endif
 endif
 endif
 

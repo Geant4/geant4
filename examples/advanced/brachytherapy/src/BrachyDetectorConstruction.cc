@@ -37,6 +37,7 @@
 //    *                                      *
 //    ****************************************
 //
+#include "G4SystemOfUnits.hh"
 #include "G4CSGSolid.hh"
 #include "G4MaterialPropertyVector.hh"
 #include "G4SDManager.hh"

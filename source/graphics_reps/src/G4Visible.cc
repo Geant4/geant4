@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.18 2010-12-06 14:39:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  30th October 1996
@@ -43,7 +42,7 @@ G4Visible::G4Visible ():
 G4Visible::G4Visible (const G4Visible& visible){
   fAllocatedVisAttributes = visible.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes)
-    fpVisAttributes = new G4VisAttributes(visible.fpVisAttributes);
+    fpVisAttributes = new G4VisAttributes(*visible.fpVisAttributes);
   else fpVisAttributes = visible.fpVisAttributes;
 }
 
@@ -61,7 +60,7 @@ G4Visible& G4Visible::operator= (const G4Visible& rhs) {
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes) {
     delete fpVisAttributes;
-    fpVisAttributes = new G4VisAttributes(rhs.fpVisAttributes);
+    fpVisAttributes = new G4VisAttributes(*rhs.fpVisAttributes);
   }
   else fpVisAttributes = rhs.fpVisAttributes;
   return *this;

@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.hh,v 1.5 2009-08-30 16:12:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
+// 17-Aug-2012 V.Ivanchenko added hadronic model factories
 
 // Class Description
-// This is the a singleton class to store all hadronic interactions
+// This is a singleton class to store all hadronic interactions
 // Class Description - End
 
 #ifndef G4HadronicInteractionRegistry_h
@@ -50,21 +50,24 @@ public:
   ~G4HadronicInteractionRegistry();
 
   void Clean();
-  //delete models
+  // delete models
   
   void RegisterMe(G4HadronicInteraction * aModel);
-  //register new model
+  // register new model
 
   void RemoveMe(G4HadronicInteraction * aModel);
-  //deregister model
-    
+  // deregister model
+
+  G4HadronicInteraction* FindModel(const G4String& name);
+  // find existing hadronic interaction by name
+
 private:
 
   G4HadronicInteractionRegistry();
 
   static G4HadronicInteractionRegistry* theInstance;
   
-  std::vector <G4HadronicInteraction *> allModels;
+  std::vector <G4HadronicInteraction*>  allModels;
 
 };
 

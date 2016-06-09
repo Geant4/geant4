@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/HepMCG4AsciiReaderMessenger.cc
+/// \brief Implementation of the HepMCG4AsciiReaderMessenger class
+//
 // ====================================================================
 //
 //   HepMCG4AsciiReaderMessenger.cc
-//   $Id: HepMCG4AsciiReaderMessenger.cc,v 1.4 2006-06-29 17:12:20 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #include "HepMCG4AsciiReaderMessenger.hh"
@@ -69,7 +72,7 @@ HepMCG4AsciiReaderMessenger::~HepMCG4AsciiReaderMessenger()
 
 ///////////////////////////////////////////////////////////////////
 void HepMCG4AsciiReaderMessenger::SetNewValue(G4UIcommand* command,
-					      G4String newValues)
+                                              G4String newValues)
 ///////////////////////////////////////////////////////////////////
 {
   if (command==verbose) {
@@ -78,7 +81,7 @@ void HepMCG4AsciiReaderMessenger::SetNewValue(G4UIcommand* command,
   } else if (command==open) {
     gen-> SetFileName(newValues);
     G4cout << "HepMC Ascii inputfile: " 
-	   << gen-> GetFileName() << G4endl;
+           << gen-> GetFileName() << G4endl;
     gen-> Initialize();
   }
 }

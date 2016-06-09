@@ -48,7 +48,7 @@ namespace HepGeom {
 
     /**
      * Constructor from three numbers. */
-    Point3D(float x, float y, float z) : BasicVector3D<float>(x,y,z) {}
+    Point3D(float x1, float y1, float z1) : BasicVector3D<float>(x1,y1,z1) {}
 
     /**
      * Constructor from array of floats. */
@@ -127,7 +127,7 @@ namespace HepGeom {
 
     /**
      * Constructor from three numbers. */
-    Point3D(double x, double y, double z) : BasicVector3D<double>(x,y,z) {}
+    Point3D(double x1, double y1, double z1) : BasicVector3D<double>(x1,y1,z1) {}
 
     /**
      * Constructor from array of floats. */

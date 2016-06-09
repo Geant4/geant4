@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/readHits.cc
+/// \brief Main program of the persistency/P01 example
+//
 // Include files
 #include "TROOT.h"
 #include "TFile.h"
@@ -39,7 +42,7 @@ int main(int argc,char** argv)
   // initialize ROOT
   TSystem ts;
   gSystem->Load("libCintex");
-  gSystem->Load("libClassesDict");
+  gSystem->Load("libExP01ClassesDict");
   //  ROOT::Cintex::Cintex::SetDebug(2);
   ROOT::Cintex::Cintex::Enable();
   if(argc<2) G4cout << "Missing name of the file to read!" << G4endl;
@@ -51,15 +54,15 @@ int main(int argc,char** argv)
  
   TIter next(fo.GetListOfKeys());
   TKey *key;
-  double tot_en;
+  //double tot_en;
   while ((key=(TKey*)next()))
   {
     fo.GetObject(key->GetName(), hits);
  
-    tot_en = 0;
+    //tot_en = 0;
     G4cout << "Collection: " << key->GetName() << G4endl;
     G4cout << "Number of hits: " << hits->size() << G4endl;
-    for (int i=0;i!=hits->size();i++)
+    for (size_t i=0;i!=hits->size();i++)
     {
       (*hits)[i]->Print();
     }         

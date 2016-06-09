@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 28th, 2012 G.Cosmo - B01-V09-05-01
+- Fixed cases of variable shadowing.
+
+Oct 13th, 2012 A. Dotti - B01-V09-05-00
+- Adding Explicit use of system of units
+
 Nov 14th, 2011 A.Howard - B01-V09-04-00
 - migrated B01DetectorConstruction.cc to new G4Exception
 

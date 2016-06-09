@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/perspective/src/PerspectiveVisActionMessenger.cc
+/// \brief Implementation of the PerspectiveVisActionMessenger class
 //
-// $Id: PerspectiveVisActionMessenger.cc,v 1.3 2006-11-06 20:07:36 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 
 #include "PerspectiveVisActionMessenger.hh"
 
@@ -48,6 +50,8 @@ PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
   fpCommandOS = new G4UIcmdWithAString ("/perspectiveDemo/optionString", this);
   fpCommandOS -> SetGuidance
     ("Option string - any combination of \"x\", \"y\", \"z\", \"a[ll]\".");
+  fpCommandOS -> SetGuidance
+    ("Controls direction of perspective lines.");
   fpCommandOS -> SetParameterName ("option-string", omitable = true);
   fpCommandOS -> SetDefaultValue("all");
 

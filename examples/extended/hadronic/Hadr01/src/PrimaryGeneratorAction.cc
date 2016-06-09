@@ -23,17 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.4 2006-11-15 14:58:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// EventActionMessenger
+// PrimaryGeneratorAction
 //
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 16.11.2006 Add option allowing to have user defined beam position (VI)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -41,33 +43,34 @@
 
 #include "PrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  particleGun  = new G4ParticleGun(1);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  histo = HistoManager::GetPointer();
+  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fHisto = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(histo->DefaultBeamPosition()) {
-    G4double zVertex = -(5.0*mm + histo->Length());
-    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  if(fHisto->DefaultBeamPosition()) {
+    G4double zVertex = -(5.0*mm + fHisto->Length());
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
   }
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc,v 1.6 2011-01-09 02:37:48 dennis Exp $
+// $Id$
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -38,160 +38,168 @@
 #include "G4CrossSectionPairGG.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4NistManager.hh"
 #include "G4ThreeVector.hh"
 #include "G4NistManager.hh"
 
 G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
-                                           G4double Etransit)
- : G4VCrossSectionDataSet("G4CrossSectionPairGG"),
-   theLowX(low),  ETransition(Etransit)		    
-{
-  NistMan = G4NistManager::Instance();
-  theHighX=new G4GlauberGribovCrossSection();
-  verboseLevel=0;
+      G4double Etransit) :
+      G4VCrossSectionDataSet("G4CrossSectionPairGG"), theLowX(low), ETransition(
+            Etransit) {
+   NistMan = G4NistManager::Instance();
+   theHighX = new G4GlauberGribovCrossSection();
+   verboseLevel = 0;
 }
 
-G4CrossSectionPairGG::~G4CrossSectionPairGG()
-{
-//   The cross section registry wil delete these
-//    delete theLowX;
-//    delete theHighX;
+G4CrossSectionPairGG::~G4CrossSectionPairGG() {
+   //   The cross section registry wil delete these
+   //    delete theLowX;
+   //    delete theHighX;
 }
 
-
-void
-G4CrossSectionPairGG::CrossSectionDescription(std::ostream& outFile) const
-{
-  outFile << "G4CrossSectionPairGG is used to add the relativistic rise to\n"
-          << "hadronic cross section data sets above a given energy.  In this\n"
-          << "case, the Glauber-Gribov cross section is used above 91 GeV.\n"
-          << "At this energy the low energy cross section is smoothly joined\n"
-          << "to the high energy cross section.  Below 91 GeV the Barashenkov\n"
-          << "cross section is used for pions (G4PiNuclearCrossSection), the\n"
-          << "Axen-Wellisch cross section is used for protons\n"
-          << "(G4ProtonInelasticCrossSection), and the Wellisch-Laidlaw cross\n"
-          << "section is used for neutrons (G4NeutronInelasticCrossSection).\n";
+void G4CrossSectionPairGG::CrossSectionDescription(
+      std::ostream& outFile) const {
+   outFile << "G4CrossSectionPairGG is used to add the relativistic rise to\n"
+         << "hadronic cross section data sets above a given energy.  In this\n"
+         << "case, the Glauber-Gribov cross section is used above 91 GeV.\n"
+         << "At this energy the low energy cross section is smoothly joined\n"
+         << "to the high energy cross section.  Below 91 GeV the Barashenkov\n"
+         << "cross section is used for pions (G4PiNuclearCrossSection), the\n"
+         << "Axen-Wellisch cross section is used for protons\n"
+         << "(G4ProtonInelasticCrossSection), and the Wellisch-Laidlaw cross\n"
+         << "section is used for neutrons (G4NeutronInelasticCrossSection).\n";
 }
 
-G4bool G4CrossSectionPairGG::IsElementApplicable(const G4DynamicParticle* aParticle, 
-						 G4int Z, 
-						 const G4Material* mat)
-{
-    G4bool isApplicable(false);
-    G4double Ekin=aParticle->GetKineticEnergy();
-    if (Ekin <= ETransition ) 
-    {
-      isApplicable = theLowX->IsElementApplicable(aParticle,Z,mat);
-    } else if(Z > 1) {
+G4bool G4CrossSectionPairGG::IsElementApplicable(
+      const G4DynamicParticle* aParticle, G4int Z, const G4Material* mat) {
+   G4bool isApplicable(false);
+   G4double Ekin = aParticle->GetKineticEnergy();
+   if (Ekin <= ETransition) {
+      isApplicable = theLowX->IsElementApplicable(aParticle, Z, mat);
+   } else if (Z > 1) {
       isApplicable = true;
-    }
-    return isApplicable;    
+   }
+   return isApplicable;
 }
 
-G4double G4CrossSectionPairGG::GetElementCrossSection(const G4DynamicParticle* aParticle,
-						      G4int ZZ, const G4Material* mat)
+G4double G4CrossSectionPairGG::GetElementCrossSection(
+      const G4DynamicParticle* aParticle, G4int ZZ, const G4Material* mat)
 {
-    G4double Xsec(0.);
-    std::vector<ParticleXScale>::iterator iter;
-    iter=scale_factors.begin();
-    G4ParticleDefinition * pDef=aParticle->GetDefinition();
-    while ( iter !=scale_factors.end() && (*iter).first != pDef ) {++iter;}
-    
-    
-    G4double Ekin=aParticle->GetKineticEnergy();
-    if (Ekin < ETransition ) 
-    {
-      Xsec=theLowX->GetElementCrossSection(aParticle,ZZ,mat);
-    } else {
+   G4double Xsec(0.);
 
-      G4int AA=G4lrint(NistMan->GetAtomicMassAmu(ZZ));
-      Xsec=theHighX->GetInelasticGlauberGribov(aParticle,ZZ,AA)
-           * (*iter).second[ZZ];
-      if ( verboseLevel > 2 )
-	{  G4cout << " scaling .." << ZZ << " " << AA << " " <<
-	    (*iter).second[ZZ]<< " " 
-		  <<theHighX->GetInelasticGlauberGribov(aParticle,ZZ,AA) 
-		  << "  " << Xsec << G4endl;
-	}	   
-    }
-    
-    return Xsec;
+   if (aParticle->GetKineticEnergy() < ETransition)
+   {
+      Xsec = theLowX->GetElementCrossSection(aParticle, ZZ, mat);
+   } else {
+
+      std::vector<ParticleXScale>::iterator iter = scale_factors.begin();
+      G4ParticleDefinition * pDef = aParticle->GetDefinition();
+      while (iter != scale_factors.end() && (*iter).first != pDef)
+      {
+         ++iter;
+      }
+      if (iter != scale_factors.end() )
+      {
+         G4int AA = G4lrint(NistMan->GetAtomicMassAmu(ZZ));
+         Xsec = theHighX->GetInelasticGlauberGribov(aParticle, ZZ, AA)
+				            * (*iter).second[ZZ];
+         if (verboseLevel > 2)
+         {
+            G4cout << " scaling .." << ZZ << " " << AA << " "
+                  << (*iter).second[ZZ] << " "
+                  << theHighX->GetInelasticGlauberGribov(aParticle, ZZ, AA)
+                  << "  " << Xsec << G4endl;
+         }
+      } else {
+         // BuildPhysicsTable not done for pDef=aParticle->GetDefinition
+         //  build table, and recurse
+         BuildPhysicsTable(*pDef);
+         Xsec=GetElementCrossSection(aParticle, ZZ, mat);
+      }
+   }
+
+   return Xsec;
 }
 
-void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef)
-{
-    theLowX->BuildPhysicsTable(pDef);
-    theHighX->BuildPhysicsTable(pDef);
+void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef) {
+   theLowX->BuildPhysicsTable(pDef);
+   theHighX->BuildPhysicsTable(pDef);
 
-    if ( verboseLevel > 0 ) {
-      G4cout << "G4CrossSectionPairGG::BuildPhysicsTable " 
-	     << theLowX->GetName() 
-	     << "  " << theHighX->GetName() << G4endl;
-    }
-    
-    G4ParticleDefinition * myDef=const_cast<G4ParticleDefinition*>(&pDef);
-    std::vector<ParticleXScale>::iterator iter;
-    iter=scale_factors.begin();
-    while ( iter !=scale_factors.end() && (*iter).first != myDef ) {++iter;}
+   if (verboseLevel > 0) {
+      G4cout << "G4CrossSectionPairGG::BuildPhysicsTable "
+            << theLowX->GetName() << "  " << theHighX->GetName() << G4endl;
+   }
 
-    //  new particle, initialise
-    
-    G4Material* mat = 0;
+   G4ParticleDefinition * myDef = const_cast<G4ParticleDefinition*>(&pDef);
+   std::vector<ParticleXScale>::iterator iter;
+   iter = scale_factors.begin();
+   while (iter != scale_factors.end() && (*iter).first != myDef) {
+      ++iter;
+   }
 
-    if ( iter == scale_factors.end() )
-    {
-       XS_factors factors (93);
-       G4ThreeVector mom(0.0,0.0,1.0);
-       G4DynamicParticle DynPart(myDef, mom, ETransition);  // last is kinetic Energy
+   //  new particle, initialise
 
-       if (verboseLevel > 0) { 
-	  G4cout << "G4CrossSectionPairGG::BuildPhysicsTable for particle "
-	         << pDef.GetParticleName() << G4endl;
-       }	   
-       for (G4int aZ=1; aZ<93; ++aZ)
-       {
-          factors[aZ]=1.;   // default, to give reasonable value if only high is applicable
-          G4int AA=G4lrint(NistMan->GetAtomicMassAmu(aZ));
-          G4bool isApplicable = theLowX->IsElementApplicable(&DynPart, aZ, mat) && (aZ > 1);
-		   
-	  if (isApplicable)
-	  {
-	     factors[aZ]=theLowX->GetElementCrossSection(&DynPart,aZ,mat) /
-	       theHighX->GetInelasticGlauberGribov(&DynPart,aZ,AA);
-                      
-	  }  
-	  if (verboseLevel > 0) { 
-	     G4cout << "Z=" << aZ<< ",  A="<< AA << ", scale=" << factors[aZ];
-	     if ( verboseLevel == 1) { G4cout  << G4endl; }
-	     else {
-	       if (isApplicable) {
-		 G4cout << ",  low / high " <<  theLowX->GetElementCrossSection(&DynPart,aZ,mat)
-			<< "  " << theHighX->GetInelasticGlauberGribov(&DynPart,aZ,AA) << G4endl;
-	       } else { G4cout << ",   N/A" << G4endl; }	 
-             }
-	  }
-       }
-       ParticleXScale forPart(myDef,factors);
-       scale_factors.push_back(forPart);
-    }
+   G4Material* mat = 0;
+
+   if (iter == scale_factors.end()) {
+      XS_factors factors(93);
+      G4ThreeVector mom(0.0, 0.0, 1.0);
+      G4DynamicParticle DynPart(myDef, mom, ETransition); // last is kinetic Energy
+
+      if (verboseLevel > 0) {
+         G4cout << "G4CrossSectionPairGG::BuildPhysicsTable for particle "
+               << pDef.GetParticleName() << G4endl;
+      }
+      for (G4int aZ = 1; aZ < 93; ++aZ) {
+         factors[aZ] = 1.; // default, to give reasonable value if only high is applicable
+         G4int AA = G4lrint(NistMan->GetAtomicMassAmu(aZ));
+         G4bool isApplicable = theLowX->IsElementApplicable(&DynPart, aZ,
+               mat) && (aZ > 1);
+
+         if (isApplicable) {
+            factors[aZ] = theLowX->GetElementCrossSection(&DynPart, aZ, mat)
+						      / theHighX->GetInelasticGlauberGribov(&DynPart, aZ, AA);
+
+         }
+         if (verboseLevel > 0) {
+            G4cout << "Z=" << aZ << ",  A=" << AA << ", scale="
+                  << factors[aZ];
+            if (verboseLevel == 1) {
+               G4cout << G4endl;
+            } else {
+               if (isApplicable) {
+                  G4cout << ",  low / high "
+                        << theLowX->GetElementCrossSection(&DynPart, aZ,
+                              mat) << "  "
+                              << theHighX->GetInelasticGlauberGribov(&DynPart,
+                                    aZ, AA) << G4endl;
+               } else {
+                  G4cout << ",   N/A" << G4endl;
+               }
+            }
+         }
+      }
+      ParticleXScale forPart(myDef, factors);
+      scale_factors.push_back(forPart);
+   }
 }
 
 /*
-void G4CrossSectionPairGG::DumpHtml(const G4ParticleDefinition&,
-                                    std::ofstream outFile)
-{
-  outFile << "         <li><b>"
-          << " G4CrossSectionPairGG: " << theLowX->GetName() << " cross sections \n";
-  outFile << "below " << ETransition/GeV << " GeV, Glauber-Gribov above \n";
-}
-*/
+ void G4CrossSectionPairGG::DumpHtml(const G4ParticleDefinition&,
+ std::ofstream outFile)
+ {
+ outFile << "         <li><b>"
+ << " G4CrossSectionPairGG: " << theLowX->GetName() << " cross sections \n";
+ outFile << "below " << ETransition/GeV << " GeV, Glauber-Gribov above \n";
+ }
+ */
 
-void G4CrossSectionPairGG::DumpPhysicsTable(const G4ParticleDefinition&)
-{
-  G4cout << std::setw(24) << " " << " G4CrossSectionPairGG: "
+void G4CrossSectionPairGG::DumpPhysicsTable(const G4ParticleDefinition&) {
+   G4cout << std::setw(24) << " " << " G4CrossSectionPairGG: "
          << theLowX->GetName() << " cross sections " << G4endl;
-  G4cout << std::setw(27) << " " << "below " << ETransition/GeV
+   G4cout << std::setw(27) << " " << "below " << ETransition / GeV
          << " GeV, Glauber-Gribov above " << G4endl;
 }

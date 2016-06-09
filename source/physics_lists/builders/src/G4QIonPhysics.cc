@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonPhysics.cc,v 1.1 2010-06-03 09:31:41 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -41,7 +40,9 @@
 #include "G4BuilderType.hh"
 
 G4QIonPhysics::G4QIonPhysics(const G4String& name)
- : G4VPhysicsConstructor(name), wasActivated(false)
+ : G4VPhysicsConstructor(name)
+    , fQAAInelasticProcess(0),fQAAElasticProcess(0)
+    , wasActivated(false)
 {
   SetPhysicsType(bIons);
 }

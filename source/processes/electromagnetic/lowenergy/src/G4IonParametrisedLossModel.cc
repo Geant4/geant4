@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonParametrisedLossModel.cc,v 1.10 2010-11-04 12:21:48 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -80,6 +79,8 @@
 
 
 #include "G4IonParametrisedLossModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4IonStoppingData.hh"
 #include "G4VIonDEDXTable.hh"
@@ -101,8 +102,8 @@
 
 G4IonParametrisedLossModel::G4IonParametrisedLossModel(
              const G4ParticleDefinition*, 
-             const G4String& name)
-  : G4VEmModel(name),
+             const G4String& nam)
+  : G4VEmModel(nam),
     braggIonModel(0),
     betheBlochModel(0),
     nmbBins(90),
@@ -354,6 +355,8 @@ void G4IonParametrisedLossModel::Initialise(
   // The particle change object 
   if(! particleChangeLoss) {
     particleChangeLoss = GetParticleChangeForLoss();
+    braggIonModel -> SetParticleChange(particleChangeLoss, 0);
+    betheBlochModel -> SetParticleChange(particleChangeLoss, 0);
   }
  
   // The G4BraggIonModel and G4BetheBlochModel instances are initialised with
@@ -602,7 +605,7 @@ void G4IonParametrisedLossModel::PrintDEDXTable(
                    const G4Material* material,  // Absorber material
                    G4double lowerBoundary,      // Minimum energy per nucleon
                    G4double upperBoundary,      // Maximum energy per nucleon
-                   G4int nmbBins,               // Number of bins
+                   G4int numBins,               // Number of bins
                    G4bool logScaleEnergy) {     // Logarithmic scaling of energy
 
   G4double atomicMassNumber = particle -> GetAtomicMass();
@@ -644,7 +647,7 @@ void G4IonParametrisedLossModel::PrintDEDXTable(
   G4double deltaEnergy = (energyUpperBoundary - energyLowerBoundary) / 
                                                            G4double(nmbBins);
 
-  for(int i = 0; i < nmbBins + 1; i++) {
+  for(int i = 0; i < numBins + 1; i++) {
 
       G4double energy = energyLowerBoundary + i * deltaEnergy;
       if(logScaleEnergy) energy = std::exp(energy);
@@ -666,7 +669,7 @@ void G4IonParametrisedLossModel::PrintDEDXTableHandlers(
                    const G4Material* material,  // Absorber material
                    G4double lowerBoundary,      // Minimum energy per nucleon
                    G4double upperBoundary,      // Maximum energy per nucleon
-                   G4int nmbBins,               // Number of bins
+                   G4int numBins,               // Number of bins
                    G4bool logScaleEnergy) {     // Logarithmic scaling of energy
 
   LossTableList::iterator iter = lossTableList.begin();
@@ -677,7 +680,7 @@ void G4IonParametrisedLossModel::PrintDEDXTableHandlers(
       if(isApplicable) {  
 	(*iter) -> PrintDEDXTable(particle, material,
                                   lowerBoundary, upperBoundary, 
-                                  nmbBins,logScaleEnergy); 
+                                  numBins,logScaleEnergy); 
         break;
       } 
   }
@@ -732,7 +735,7 @@ void G4IonParametrisedLossModel::SampleSecondaries(
                                     (energy + cacheMass) / (energy * energy);
 
   G4double kinEnergySec;
-  G4double g;
+  G4double grej;
 
   do {
 
@@ -743,16 +746,16 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 
     // Deriving the value of the rejection function at the obtained kinetic 
     // energy:
-    g = 1.0 - betaSquared * kinEnergySec / rossiMaxKinEnergySec;
+    grej = 1.0 - betaSquared * kinEnergySec / rossiMaxKinEnergySec;
 
-    if(g > 1.0) {
+    if(grej > 1.0) {
         G4cout << "G4IonParametrisedLossModel::SampleSecondary Warning: "
                << "Majorant 1.0 < "
-               << g << " for e= " << kinEnergySec
+               << grej << " for e= " << kinEnergySec
                << G4endl;
     }
 
-  } while( G4UniformRand() >= g );
+  } while( G4UniformRand() >= grej );
 
   G4double momentumSec =
            std::sqrt(kinEnergySec * (kinEnergySec + 2.0 * electron_mass_c2));
@@ -1241,7 +1244,7 @@ G4double G4IonParametrisedLossModel::ComputeLossForStep(
 // #########################################################################
 
 G4bool G4IonParametrisedLossModel::AddDEDXTable(
-                                const G4String& name,
+                                const G4String& nam,
                                 G4VIonDEDXTable* table, 
                                 G4VIonDEDXScalingAlgorithm* algorithm) {
 
@@ -1260,7 +1263,7 @@ G4bool G4IonParametrisedLossModel::AddDEDXTable(
   for(;iter != iter_end; iter++) {
      G4String tableName = (*iter) -> GetName();
 
-     if(tableName == name) { 
+     if(tableName == nam) { 
         G4cerr << "G4IonParametrisedLossModel::AddDEDXTable() Cannot "
                << " add table: Name already exists."      
                << G4endl;
@@ -1274,7 +1277,7 @@ G4bool G4IonParametrisedLossModel::AddDEDXTable(
      scalingAlgorithm = new G4VIonDEDXScalingAlgorithm; 
  
   G4IonDEDXHandler* handler = 
-                      new G4IonDEDXHandler(table, scalingAlgorithm, name); 
+                      new G4IonDEDXHandler(table, scalingAlgorithm, nam); 
 
   lossTableList.push_front(handler);
 
@@ -1284,7 +1287,7 @@ G4bool G4IonParametrisedLossModel::AddDEDXTable(
 // #########################################################################
 
 G4bool G4IonParametrisedLossModel::RemoveDEDXTable(
-				 const G4String& name) {
+				 const G4String& nam) {
 
   LossTableList::iterator iter = lossTableList.begin();
   LossTableList::iterator iter_end = lossTableList.end();
@@ -1292,7 +1295,7 @@ G4bool G4IonParametrisedLossModel::RemoveDEDXTable(
   for(;iter != iter_end; iter++) {
      G4String tableName = (*iter) -> GetName();
 
-     if(tableName == name) { 
+     if(tableName == nam) { 
         delete (*iter);
 
         // Remove from table list

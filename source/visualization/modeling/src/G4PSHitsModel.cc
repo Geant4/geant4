@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.cc,v 1.4 2009-11-04 12:44:39 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura
@@ -44,6 +43,7 @@ G4PSHitsModel::~G4PSHitsModel () {}
 G4PSHitsModel::G4PSHitsModel (const G4String& requestedMapName):
   fRequestedMapName(requestedMapName), fpCurrentHits(0)
 {
+  fType = "G4PSHitsModel";
   fGlobalTag = "G4PSHitsModel for G4THitsMap<G4double> hits.";
   fGlobalDescription = fGlobalTag;
 }
@@ -54,8 +54,8 @@ void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
     size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t i = 0; i < nMeshes; ++i) {
-      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
       if (mesh && mesh->IsActive()) {
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
 	for(MeshScoreMap::const_iterator i = scoreMap.begin();

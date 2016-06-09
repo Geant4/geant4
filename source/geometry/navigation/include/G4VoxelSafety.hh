@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VoxelSafety.hh,v 1.2 2010-11-04 17:32:46 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4VoxelSafety
 //
@@ -49,11 +48,7 @@
 
 #include "G4BlockingList.hh"
 
-// #include "G4AuxiliaryNavServices.hh"
-
-// Required for voxel handling & voxel stack
-//
-#include <vector>
+#include <vector>  // Required for voxel handling & voxel stack
 
 class G4SmartVoxelNode;
 class G4SmartVoxelHeader;
@@ -74,33 +69,35 @@ class G4VoxelSafety
 
     inline G4int GetVerboseLevel() const { return fVerbose; } 
     inline void  SetVerboseLevel(G4int level) { fVerbose= level; } 
-      // Get/Set Verbose(ness) level.
-      // [if level>0 && G4VERBOSE, printout can occur]
-
-    // inline void  CheckMode(G4bool mode);
-      //  Make extra checks
+      //
+      // If level>0 && G4VERBOSE, printout can occur
 
   protected:
-    G4double  SafetyForVoxelHeader( G4SmartVoxelHeader* pHead,
-                              const G4ThreeVector& localPoint ); 
 
-    G4double  SafetyForVoxelNode(   G4SmartVoxelNode *curVoxelNode, 
+    G4double  SafetyForVoxelHeader( const G4SmartVoxelHeader* pHead,
+                                    const G4ThreeVector& localPoint,
+                                    G4double maxLength,
+                                    const G4VPhysicalVolume& currentPhysical,
+                                    G4double  distUpperDepth = 0.0,
+                                    G4double  previousMinSafety= DBL_MAX
+                                   );
+
+    G4double  SafetyForVoxelNode(   const G4SmartVoxelNode *curVoxelNode,
                               const G4ThreeVector& localPoint ); 
 
     G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
 					const G4ThreeVector& localPoint ) const;
-  private: 
-    // BEGIN State 
-    //    - values used during computation of Safety 
+  private:
+
+    // BEGIN State - values used during computation of Safety 
     // 
     G4BlockingList fBlockList;
       // Blocked volumes
+
     G4LogicalVolume* fpMotherLogical;
 
-    //
     //  BEGIN Voxel Stack information
     //
-
     G4int fVoxelDepth;
       // Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
       //       fVoxelDepth==-1 -> not in voxel
@@ -117,7 +114,7 @@ class G4VoxelSafety
     std::vector<G4int> fVoxelNodeNoStack;    
       // Node no point is inside at each level 
 
-    std::vector<G4SmartVoxelHeader*> fVoxelHeaderStack;
+    std::vector<const G4SmartVoxelHeader*> fVoxelHeaderStack;
       // Voxel headers at each level
 
     G4SmartVoxelNode* fVoxelNode;
@@ -125,13 +122,10 @@ class G4VoxelSafety
 
     //
     //  END Voxel Stack information
-    //
 
     G4bool fCheck;
     G4int  fVerbose;
     G4double kCarTolerance;
 };
-
-// #include "G4VoxelSafety.icc"
 
 #endif

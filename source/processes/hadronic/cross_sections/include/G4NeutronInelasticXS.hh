@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.hh,v 1.6 2010-10-15 22:33:22 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -82,6 +81,8 @@ public:
                               const G4Isotope* iso,
                               const G4Element* elm,
                               const G4Material* mat);
+
+  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
   */
 
   virtual

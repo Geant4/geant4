@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.50 2010-11-22 07:08:01 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -54,24 +53,24 @@ using namespace std;
 // Constructors
 
 // Initialize by  the full quark content
-G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
-  nD(d),nU(u),nS(s),nAD(ad),nAU(au),nAS(as)
+G4QContent::G4QContent(G4int d, G4int u, G4int s_value, G4int ad, G4int au, G4int as):
+  nD(d),nU(u),nS(s_value),nAD(ad),nAU(au),nAS(as)
 {
   // Bug report 1131 identifies conditional to have no effect.
   // Remove it. 
   // D.H. Wright 11 November 2010 
   /*
-  if(d<0||u<0||s<0||ad<0||au<0||as<0)
+  if(d<0||u<0||s_value<0||ad<0||au<0||as<0)
   {
 #ifdef erdebug
-    G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s<<","<<ad<<","<<au<<","<<as<<G4endl;
+    G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s_value<<","<<ad<<","<<au<<","<<as<<G4endl;
 #endif
     if(d<0) ad-=d;
     if(u<0) au-=u;
-    if(s<0) as-=s;
+    if(s_value<0) as-=s_value;
     if(ad<0) d-=ad;
     if(au<0) u-=au;
-    if(as<0) s-=as;
+    if(as<0) s_value-=as;
   }
   */
 }
@@ -510,29 +509,29 @@ G4QContent G4QContent::operator-=(G4QContent& rhs)
 // Overloading of QC addition
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs)
 {
-  G4QContent s  = lhs;
-  return     s += rhs;
+  G4QContent s_value  = lhs;
+  return     s_value += rhs;
 }
 
 // Overloading of QC subtraction
 G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs)
 {
-  G4QContent s  = lhs;
-  return     s -= rhs;
+  G4QContent s_value  = lhs;
+  return     s_value -= rhs;
 }
 
 // Overloading of QC multiplication by Int
 G4QContent operator*(const G4QContent& lhs, const G4int&      rhs)
 {
-  G4QContent s  = lhs;
-  return     s *= rhs;
+  G4QContent s_value  = lhs;
+  return     s_value *= rhs;
 }
 
 // Overloading of Int times QC multiplication
 G4QContent operator*(const G4int&      lhs, const G4QContent& rhs)
 {
-  G4QContent s  = rhs;
-  return     s *= lhs;
+  G4QContent s_value  = rhs;
+  return     s_value *= lhs;
 }
 
 // Destructor - - - - - - - 
@@ -1311,9 +1310,9 @@ G4int G4QContent::GetSPDGCode() const
 
   G4int b=GetBaryonNumber();
   G4int c=GetCharge();
-  G4int s=GetStrangeness();
+  G4int s_value=GetStrangeness();
 #ifdef debug
-  G4cout<<"G4QC::SPDGC:bef. b="<<b<<",n="<<n<<",c="<<c<<",s="<<s<<",Q="<<GetThis()<<G4endl;
+  G4cout<<"G4QC::SPDGC:bef. b="<<b<<",n="<<n<<",c="<<c<<",s="<<s_value<<",Q="<<GetThis()<<G4endl;
 #endif
   if (b)                                         // =---------------------= Baryon case
   {
@@ -1322,12 +1321,12 @@ G4int G4QContent::GetSPDGCode() const
     if(ab>=2 && n>=6)                            // Multi-Baryonium (NuclearFragment)
     {
       G4int mI=nU-nAU-nD+nAD;
-      //if     (abs(mI)>3||mS>3||(b>0&&s<-1)||(b<0&&s>1)) return  0;
-      //else if(abs(mI)>2||mS>2||(b>0&&s< 0)||(b<0&&s>0)) return 10;
-      if ( (b > 0 && s < -1) || (b < 0 && s > 1) ) return 10;
+      //if     (abs(mI)>3||mS>3||(b>0&&s_value<-1)||(b<0&&s_value>1)) return  0;
+      //else if(abs(mI)>2||mS>2||(b>0&&s_value< 0)||(b<0&&s_value>0)) return 10;
+      if ( (b > 0 && s_value < -1) || (b < 0 && s_value > 1) ) return 10;
       else if (abs(mI) > 2 || mS > 2 
-                           || (b > 0 && s < 0) 
-                           || (b < 0 && s > 0)) return GetZNSPDGCode();
+                           || (b > 0 && s_value < 0) 
+                           || (b < 0 && s_value > 0)) return GetZNSPDGCode();
       else if(mU>=mS&&mD>=mS&&mU+mD+mS==3*b)     // Possible Unary Nuclear Cluster
       {
         G4int mZ=(mU+mD-mS-mS+3*mI)/6;
@@ -1404,7 +1403,7 @@ G4int G4QContent::GetSPDGCode() const
   else             // ------------------------->>------------------------>> Meson case
   {
 #ifdef debug
-    G4cout<<"G4QC::SPDG:mDUS="<<mD<<","<<mU<<","<<mS<<",b,c,s="<<b<<","<<c<<","<<s<<G4endl;
+    G4cout<<"G4QC::SPDG:mDUS="<<mD<<","<<mU<<","<<mS<<",b,c,s="<<b<<","<<c<<","<<s_value<<G4endl;
 #endif
     if(n>4)                                      // Super Exotics
     {
@@ -1414,10 +1413,10 @@ G4int G4QContent::GetSPDGCode() const
       return 0;
     }
     if(n==4) return 10;                          // M+M Chipolino
-    if(abs(s)>1)
+    if(abs(s_value)>1)
     {
 #ifdef debug
-      G4cout<<"**G4QC::SPDG:Stran="<<s<<",QC="<<GetThis()<<" - Superstrange Meson"<<G4endl;
+      G4cout<<"**G4QC::SPDG:Stran="<<s_value<<",QC="<<GetThis()<<" - Superstrange Meson"<<G4endl;
 #endif
       return 0;
     }
@@ -1463,7 +1462,7 @@ G4int G4QContent::GetSPDGCode() const
 #endif
       return 0;
     }
-    if (c<0 || (c==0 && mS>0 && s>0)) p=-p;
+    if (c<0 || (c==0 && mS>0 && s_value>0)) p=-p;
   }
 #ifdef debug
   G4cout<<"G4QC::GetSPDG:output SPDGcode="<<p<<" for the QuarkContent="<<GetThis()<<G4endl;

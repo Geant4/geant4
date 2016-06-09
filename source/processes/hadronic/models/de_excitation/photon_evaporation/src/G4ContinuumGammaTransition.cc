@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaTransition.cc,v 1.5 2010-11-17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -55,6 +54,8 @@
 #include "G4VLevelDensityParameter.hh"
 #include "G4ConstantLevelDensityParameter.hh"
 #include "G4RandGeneralTmp.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
 

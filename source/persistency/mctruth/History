@@ -15,6 +15,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 July, 12  G.Cosmo (mctruth-V09-05-03)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+20 June, 12  G.Cosmo (mctruth-V09-05-02)
+- Corrected GNUMakefile to use G4BASE instead of $G4INSTALL/source.
+
+25 May, 12  G.Cosmo (mctruth-V09-05-01)
+- Fixed trivial cases of variable shadowing.
+
+13 December, 11  G.Cosmo (mctruth-V09-05-00)
+- Removed fake copy-constructor. Fixing Coverity defect.
+
 15 June, 11  G.Cosmo (mctruth-V09-04-03)
 - Use cast as workaround to fix compilation error on VC2010 below...
 

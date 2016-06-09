@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITModelProcessor.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -41,7 +42,7 @@ std::map<const G4Track*, G4bool> G4ITModelProcessor::fHasReacted ;
 G4ITModelProcessor::G4ITModelProcessor()
 {
     //ctor
-    fTrack = 0;
+    fpTrack = 0;
     fpModelHandler = 0;
     fpModel = 0;
     fInitialized = false;
@@ -52,12 +53,13 @@ G4ITModelProcessor::G4ITModelProcessor()
     {
         fCurrentModel[i].assign(G4ITType::size(),0);
     }
+    fUserMinTimeStep = -1.;
 }
 
 G4ITModelProcessor::~G4ITModelProcessor()
 {
     //dtor
-    if(fpModelHandler) delete fpModelHandler;
+//    if(fpModelHandler) delete fpModelHandler; deleted by G4ITStepManager
     fCurrentModel.clear();
     fReactionInfo.clear();
 }
@@ -66,11 +68,12 @@ G4ITModelProcessor::~G4ITModelProcessor()
 G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& /*other*/)
 {
     //copy ctorr
-    fTrack = 0;
+    fpTrack = 0;
     fpModelHandler = 0;
     fpModel = 0;
     fInitialized = false;
     fpModelManager = 0;
+    fUserMinTimeStep = -1.;
 }
 
 // Should not be used
@@ -134,7 +137,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
                 model       =  modman -> GetModel(currentGlobalTime);
                 G4VITTimeStepper* stepper   = model->GetTimeStepper() ;
 
-                stepper -> PrepareForAllProcessors() ;
+//                stepper -> PrepareForAllProcessors() ;
                 stepper -> Prepare() ;
                 fCurrentModel[i][j] = model;
             }
@@ -172,16 +175,16 @@ void G4ITModelProcessor::DoCalculateStep()
 {
     if(fpModel) // ie only one model has been declared and will be used
     {
-        fpModel -> GetTimeStepper()->CalculateStep(*fTrack, fUserMinTimeStep);
+        fpModel -> GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
     }
     else // ie many models have been declared and will be used
     {
-        std::vector<G4VITModel*>& model = fCurrentModel[GetIT(fTrack)->GetITType()];
+        std::vector<G4VITModel*>& model = fCurrentModel[GetIT(fpTrack)->GetITType()];
 
         for(int i =0 ; i < (int) model.size() ; i++)
         {
             if(model[i] == 0) continue;
-            model[i]->GetTimeStepper()->CalculateStep(*fTrack, fUserMinTimeStep);
+            model[i]->GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
         }
     }
 }

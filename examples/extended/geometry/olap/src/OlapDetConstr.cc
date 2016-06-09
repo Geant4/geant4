@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/OlapDetConstr.cc
+/// \brief Implementation of the OlapDetConstr class
 //
-// $Id: OlapDetConstr.cc,v 1.5 2010-11-16 14:34:30 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

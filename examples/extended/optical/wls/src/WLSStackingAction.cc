@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSStackingAction.cc
+/// \brief Implementation of the WLSStackingAction class
+//
 //
 //
 

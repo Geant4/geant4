@@ -33,6 +33,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04CalorimeterSD::ExN04CalorimeterSD(G4String name)

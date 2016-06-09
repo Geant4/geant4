@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.27 2010-11-07 11:14:33 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison 24th January 1998.
@@ -81,6 +80,7 @@
 
 #ifdef G4VIS_USE_OIX
 #include "G4OpenInventorX.hh"
+#include "G4OpenInventorXtExtended.hh"
 #endif
 
 #ifdef G4VIS_USE_OIWIN32
@@ -127,68 +127,75 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
 
-// Register OGL graphics system with generic nicknames
+// Register OGL graphics system with generic nicknames.
+// Note: Any graphics system can be used with any UI session except
+// OPENGLQT - this must have a UI Qt session unless in batch mode.  This
+// is handled in /vis/sceneHandler/create but a potential fallback is
+// defined here.
 #ifdef G4VIS_USE_OPENGL
   G4VGraphicsSystem* ogl  = 0;
   G4VGraphicsSystem* ogli = 0;
   G4VGraphicsSystem* ogls = 0;
-// Follow G4UIExecutive
-#if defined(G4UI_USE_QT)
+  G4VGraphicsSystem* ogl_fallback = 0;
+  G4VGraphicsSystem* ogli_fallback = 0;
+  G4VGraphicsSystem* ogls_fallback = 0;
 #ifdef G4VIS_USE_OPENGLQT
   ogl  = new G4OpenGLStoredQt;
   ogli = new G4OpenGLImmediateQt;
   ogls = new G4OpenGLStoredQt;
+#if defined G4VIS_USE_OPENGLXM
+  ogl_fallback  = new G4OpenGLStoredXm;
+  ogli_fallback = new G4OpenGLImmediateXm;
+  ogls_fallback = new G4OpenGLStoredXm;
+#elif defined G4VIS_USE_OPENGLX
+  ogl_fallback  = new G4OpenGLStoredX;
+  ogli_fallback = new G4OpenGLImmediateX;
+  ogls_fallback = new G4OpenGLStoredX;
+#elif defined G4VIS_USE_OPENGLWIN32
+  ogl_fallback  = new G4OpenGLStoredWin32;
+  ogli_fallback = new G4OpenGLImmediateWin32;
+  ogls_fallback = new G4OpenGLStoredWin32;
 #endif
-#elif defined(G4UI_USE_WT)
-#ifdef G4VIS_USE_OPENGLWT
+#elif defined G4VIS_USE_OPENGLWT
   ogl  = new G4OpenGLImmediateWt;
   ogli = new G4OpenGLImmediateWt;
   ogls = new G4OpenGLImmediateWt;
-#endif
-#elif defined(G4UI_USE_XM)
-#ifdef G4VIS_USE_OPENGLXM
+#elif defined G4VIS_USE_OPENGLXM
   ogl  = new G4OpenGLStoredXm;
   ogli = new G4OpenGLImmediateXm;
   ogls = new G4OpenGLStoredXm;
-#endif
-#elif defined(G4UI_USE_WIN32)
-#ifdef G4VIS_USE_OPENGLWIN32
+#elif defined G4VIS_USE_OPENGLWIN32
   ogl  = new G4OpenGLStoredWin32;
   ogli = new G4OpenGLImmediateWin32;
   ogls = new G4OpenGLStoredWin32;
-#endif
-#elif defined(G4UI_USE_TCSH)
-#if defined (G4VIS_USE_OPENGLX)
+#elif defined G4VIS_USE_OPENGLX
   ogl  = new G4OpenGLStoredX;
   ogli = new G4OpenGLImmediateX;
   ogls = new G4OpenGLStoredX;
-#elif defined (G4VIS_USE_OPENGLWIN32)
-  ogl  = new G4OpenGLStoredWin32;
-  ogli = new G4OpenGLImmediateWin32;
-  ogls = new G4OpenGLStoredWin32;
-#endif
-#else
-#if defined (G4VIS_USE_OPENGLX)
-  ogl  = new G4OpenGLStoredX;
-  ogli = new G4OpenGLImmediateX;
-  ogls = new G4OpenGLStoredX;
-#elif defined (G4VIS_USE_OPENGLWIN32)
-  ogl  = new G4OpenGLStoredWin32;
-  ogli = new G4OpenGLImmediateWin32;
-  ogls = new G4OpenGLStoredWin32;
-#endif
 #endif
   if (ogl) {
-    ogl->SetNickName("OGL");
+    ogl->SetNickname("OGL");
     RegisterGraphicsSystem (ogl);
   }
   if (ogli) {
-    ogli->SetNickName("OGLI");
+    ogli->SetNickname("OGLI");
     RegisterGraphicsSystem (ogli);
   }
   if (ogls) {
-    ogls->SetNickName("OGLS");
+    ogls->SetNickname("OGLS");
     RegisterGraphicsSystem (ogls);
+  }
+  if (ogl_fallback) {
+    ogl_fallback->SetNickname("OGL_FALLBACK");
+    RegisterGraphicsSystem (ogl_fallback);
+  }
+  if (ogli_fallback) {
+    ogli_fallback->SetNickname("OGLI_FALLBACK");
+    RegisterGraphicsSystem (ogli_fallback);
+  }
+  if (ogls_fallback) {
+    ogls_fallback->SetNickname("OGLS_FALLBACK");
+    RegisterGraphicsSystem (ogls_fallback);
   }
 #endif
 
@@ -208,8 +215,30 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #endif
 
 #ifdef G4VIS_USE_OPENGLQT
-  RegisterGraphicsSystem (new G4OpenGLImmediateQt);
-  RegisterGraphicsSystem (new G4OpenGLStoredQt);
+  G4VGraphicsSystem* gsi = new G4OpenGLImmediateQt;
+  G4VGraphicsSystem* gss = new G4OpenGLStoredQt;
+  RegisterGraphicsSystem (gsi);
+  RegisterGraphicsSystem (gss);
+  G4VGraphicsSystem* gsi_fallback = 0;
+  G4VGraphicsSystem* gss_fallback = 0;
+#if defined G4VIS_USE_OPENGLXM
+  gsi_fallback = new G4OpenGLImmediateXm;
+  gss_fallback = new G4OpenGLStoredXm;
+#elif defined G4VIS_USE_OPENGLX
+  gsi_fallback = new G4OpenGLImmediateX;
+  gss_fallback = new G4OpenGLStoredX;
+#elif defined G4VIS_USE_OPENGLWIN32
+  gsi_fallback = new G4OpenGLImmediateWin32;
+  gss_fallback = new G4OpenGLStoredWin32;
+#endif
+  if (gsi_fallback) {
+    gsi_fallback->SetNickname(gsi->GetNickname()+"_FALLBACK");
+    RegisterGraphicsSystem (gsi_fallback);
+  }
+  if (gss_fallback) {
+    gss_fallback->SetNickname(gss->GetNickname()+"_FALLBACK");
+    RegisterGraphicsSystem (gss_fallback);
+  }
 #endif
 
 #ifdef G4VIS_USE_OPENGLWT
@@ -226,13 +255,14 @@ G4VisExecutive::RegisterGraphicsSystems () {
   oi = new G4OpenInventorWin32;
 #endif
   if (oi) {
-    oi->SetNickName("OI");
+    oi->SetNickname("OI");
     RegisterGraphicsSystem (oi);
   }
 #endif
 
 #ifdef G4VIS_USE_OIX
   RegisterGraphicsSystem (new G4OpenInventorX);
+  RegisterGraphicsSystem (new G4OpenInventorXtExtended);
 #endif
 
 #ifdef G4VIS_USE_OIWIN32

@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCDetectorBuilder.cc,v 1.5 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
+/// \file ExTGRCDetectorBuilder.cc
+/// \brief Implementation of the ExTGRCDetectorBuilder class
 
 #include "ExTGRCDetectorBuilder.hh"
 #include "ExTGRCLineProcessor.hh"
@@ -37,25 +35,25 @@
 #include "G4tgrFileReader.hh"
 #include "G4tgrVolumeMgr.hh"
 
-//---------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCDetectorBuilder::ExTGRCDetectorBuilder()
-  : G4tgbDetectorBuilder(), tlproc(0)
+  : G4tgbDetectorBuilder(), fTlproc(0)
 {
 }
 
-//---------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCDetectorBuilder::~ExTGRCDetectorBuilder()
 {
-  if (tlproc)  { delete tlproc; }
+  if (fTlproc)  { delete fTlproc; }
 }
 
-//---------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const G4tgrVolume* ExTGRCDetectorBuilder::ReadDetector()
 {
   //------------------- construct geometry
-  tlproc = new ExTGRCLineProcessor;
+  fTlproc = new ExTGRCLineProcessor;
   G4tgrFileReader* tfr = G4tgrFileReader::GetInstance();
-  tfr->SetLineProcessor( tlproc );
+  tfr->SetLineProcessor( fTlproc );
   tfr->ReadFiles();
 
   //---------- find top G4tgrVolume 
@@ -65,7 +63,7 @@ const G4tgrVolume* ExTGRCDetectorBuilder::ReadDetector()
   return tgrVoltop;
 }
 
-//---------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* ExTGRCDetectorBuilder::
 ConstructDetector( const G4tgrVolume* tgrVoltop)
 {

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -115,7 +114,7 @@ private:
   //with log(E) vs. log(XS)
   //Element [0] of the table is the total XS, element [iS] is the 
   //partial cross section for shell iS-1
-  std::map<const G4int,G4PhysicsTable*> *logAtomicShellXS;
+  std::map<G4int,G4PhysicsTable*> *logAtomicShellXS;
 
   size_t SelectRandomShell(G4int Z,G4double energy);
   G4String WriteTargetShell(size_t shellID);

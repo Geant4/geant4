@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02PhysicsList.hh,v 1.2 2006-06-29 17:45:01 gunter Exp $
+/// \file runAndEvent/RE02/include/RE02PhysicsList.hh
+/// \brief Definition of the RE02PhysicsList class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef RE02PhysicsList_h
@@ -32,6 +35,15 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+//
+/// Physics list class
+///
+/// - constructor
+///     registers general, standard EM, muon, hadron and ion physics
+///
+/// - void SetCuts()
+///     invokes default SetCuts methods with SetCutsWithDefault()
+//
 class RE02PhysicsList: public G4VModularPhysicsList
 {
 public:
@@ -42,9 +54,7 @@ public:
   // SetCuts()
   virtual void SetCuts();
 
-
 };
-
 
 #endif
 

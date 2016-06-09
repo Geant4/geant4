@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04UserTrackInformation.hh
+/// \brief Definition of the F04UserTrackInformation class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04UserTrackInformation_h
 #define F04UserTrackInformation_h 1
 
@@ -50,16 +47,14 @@ class F04UserTrackInformation : public G4VUserTrackInformation
   public:
 
     F04UserTrackInformation();
-    ~F04UserTrackInformation();
-  
-    void SetTrackStatusFlag(TrackStatus s){ status = s; }
-    TrackStatus GetTrackStatusFlag()const { return status; }
+    virtual ~F04UserTrackInformation();
 
-    void Print() const { }
-  
+    void SetTrackStatusFlag(TrackStatus s){ fStatus = s; }
+    TrackStatus GetTrackStatusFlag()const { return fStatus; }
+
   private:
 
-    TrackStatus status;
+    TrackStatus fStatus;
 
 };
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc,v 1.6 2010-11-10 23:53:23 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // File I/O manager class for writing or reading calcuated dose
@@ -109,23 +108,23 @@ GMocrenDataPrimitive<T>::operator + (const GMocrenDataPrimitive<T> & _right) {
   rprim.setSize(kSize);
   rprim.setCenterPosition(kCenter);
   
-  T mm[2] = {9e100,-9e100};
-  //if(mm[0] > _right.minmax[0]) mm[0] = _right.minmax[0];
-  //if(mm[1] < _right.minmax[1]) mm[1] = _right.minmax[1];
+  T mms[2] = {9e100,-9e100};
+  //if(mms[0] > _right.minmax[0]) mms[0] = _right.minmax[0];
+  //if(mms[1] < _right.minmax[1]) mms[1] = _right.minmax[1];
 
   int num = kSize[0]*kSize[1];
   for(int z = 0; z < kSize[2]; z++) {
     T * img = new T[num];
     for(int xy = 0; xy < num; xy++) {
       img[xy] = kImage[z][xy] + _right.kImage[z][xy];
-      if(mm[0] > img[xy]) mm[0] = img[xy];
-      if(mm[1] < img[xy]) mm[1] = img[xy];
+      if(mms[0] > img[xy]) mms[0] = img[xy];
+      if(mms[1] < img[xy]) mms[1] = img[xy];
     }
     rprim.addImage(img);
   }
-  rprim.setMinMax(mm);
+  rprim.setMinMax(mms);
 
-  T scl = mm[1]/DOSERANGE;
+  T scl = mms[1]/DOSERANGE;
   rprim.setScale(scl);
 
   return rprim;
@@ -508,10 +507,10 @@ bool G4GMocrenIO::storeData4() {
   char cmt[1025];
   for(int i = 0; i < 1025; i++) cmt[i] = '\0';
   //std::strncpy(cmt, kComment.c_str(), 1024);
-  const char * cm = kComment.c_str();
-  size_t lcm = std::strlen(cm);
+  const char * cmnt = kComment.c_str();
+  size_t lcm = std::strlen(cmnt);
   if(lcm > 1024) lcm = 1024;
-  std::strncpy(cmt, cm, lcm);
+  std::strncpy(cmt, cmnt, lcm);
   ofile.write((char *)cmt, 1024);
   if(DEBUG || kVerbose > 0) {
     G4cout << "Data comment : "
@@ -935,10 +934,10 @@ bool G4GMocrenIO::storeData4() {
 
       // steps
       float stepPoints[6];
-      for(int ns = 0; ns < nsteps; ns++) {
+      for(int isteps = 0; isteps < nsteps; isteps++) {
 	kTracks[nt].getStep(stepPoints[0], stepPoints[1], stepPoints[2],
 			    stepPoints[3], stepPoints[4], stepPoints[5],
-			    ns);
+			    isteps);
 
 	if(kLittleEndianOutput) {
 	  ofile.write((char *)stepPoints, sizeof(float)*6);
@@ -3922,11 +3921,11 @@ void G4GMocrenIO::getTrack(int _num, std::vector<float *> & _steps,
 
   // steps
   int nsteps = kTracks[_num].getNumberOfSteps();
-  for(int ns = 0; ns < nsteps; ns++) {
+  for(int isteps = 0; isteps < nsteps; isteps++) {
     float * stepPoints = new float[6];
     kTracks[_num].getStep(stepPoints[0], stepPoints[1], stepPoints[2],
 			  stepPoints[3], stepPoints[4], stepPoints[5],
-			  ns);
+			  isteps);
     _steps.push_back(stepPoints);
   }
 }

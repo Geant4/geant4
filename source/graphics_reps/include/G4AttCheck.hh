@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.hh,v 1.8 2006-10-17 16:14:08 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4ATTCHECK_HH
 #define G4ATTCHECK_HH

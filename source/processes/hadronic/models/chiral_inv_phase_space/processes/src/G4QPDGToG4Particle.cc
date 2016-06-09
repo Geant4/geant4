@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------
 //                 by Mikhail Kossov, December 2003.
@@ -42,9 +41,12 @@
 //#define pdebug
 
 #include "G4QPDGToG4Particle.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QPDGToG4Particle::G4QPDGToG4Particle()
 {
+  G4HadronicDeprecate("G4QPDGToG4Particle");
 }
 
 G4QPDGToG4Particle::~G4QPDGToG4Particle() // The map is distructed only in the EndOfJob

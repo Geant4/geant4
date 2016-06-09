@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:57:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +43,7 @@ class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 
-      const G4int MaxTally = 21;		// 0 + 20
+      const G4int MaxTally = 21;                // 0 + 20
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,44 +65,45 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetTallySize     (G4int, G4ThreeVector);
      void SetTallyMaterial (G4int, G4String);
      void SetTallyPosition (G4int, G4ThreeVector);
-     
+
+     virtual     
      G4VPhysicalVolume* Construct();
      void               UpdateGeometry();
      
   public:  
                     
-     G4double     GetWorldSizeX()    {return worldSizeX;};
-     G4double     GetWorldSizeYZ()   {return worldSizeYZ;};
-     G4Material*  GetWorldMaterial() {return worldMaterial;};     
-     G4double     GetAbsorSizeX()    {return absorSizeX;};
-     G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};           
-     G4Material*  GetAbsorMaterial() {return absorMaterial;};
+     G4double     GetWorldSizeX()    {return fWorldSizeX;};
+     G4double     GetWorldSizeYZ()   {return fWorldSizeYZ;};
+     G4Material*  GetWorldMaterial() {return fWorldMaterial;};     
+     G4double     GetAbsorSizeX()    {return fAbsorSizeX;};
+     G4double     GetAbsorSizeYZ()   {return fAbsorSizeYZ;};           
+     G4Material*  GetAbsorMaterial() {return fAbsorMaterial;};
      
-     G4int            GetTallyNumber()  {return tallyNumber;};
-     G4double         GetTallyMass(G4int n)    {return tallyMass[n];};          
-     G4LogicalVolume* GetLogicalTally(G4int n) {return lTally[n];}
+     G4int            GetTallyNumber()         {return fTallyNumber;};
+     G4double         GetTallyMass(G4int n)    {return fTallyMass[n];};          
+     G4LogicalVolume* GetLogicalTally(G4int n) {return fLTally[n];}
      
      void         PrintParameters();
                        
   private:
   
-     G4double            worldSizeX;
-     G4double            worldSizeYZ;
-     G4Material*         worldMaterial;           
-     G4double            absorSizeX;
-     G4double            absorSizeYZ;     
-     G4Material*         absorMaterial;
-     G4UniformMagField*  magField;
-     G4LogicalVolume*    lAbsor;
+     G4double            fWorldSizeX;
+     G4double            fWorldSizeYZ;
+     G4Material*         fWorldMaterial;           
+     G4double            fAbsorSizeX;
+     G4double            fAbsorSizeYZ;     
+     G4Material*         fAbsorMaterial;
+     G4UniformMagField*  fMagField;
+     G4LogicalVolume*    fLAbsor;
      
-     G4int               tallyNumber;                   
-     G4ThreeVector       tallySize[MaxTally];
-     G4Material*         tallyMaterial[MaxTally];
-     G4double            tallyMass[MaxTally]; 
-     G4ThreeVector       tallyPosition[MaxTally];
-     G4LogicalVolume*    lTally[MaxTally];
+     G4int               fTallyNumber;                   
+     G4ThreeVector       fTallySize[MaxTally];
+     G4Material*         fTallyMaterial[MaxTally];
+     G4double            fTallyMass[MaxTally]; 
+     G4ThreeVector       fTallyPosition[MaxTally];
+     G4LogicalVolume*    fLTally[MaxTally];
      
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger*  fDetectorMessenger;
 
   private:
     

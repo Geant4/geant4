@@ -120,11 +120,11 @@ void G4HumanPhantomEventAction::EndOfEventAction(const G4Event* evt)
  totalEventEnergyDeposit();
 }
 
-void G4HumanPhantomEventAction:: Fill(G4String bodypartName, 
+void G4HumanPhantomEventAction:: Fill(G4String bName, 
 				      G4double energyDeposit)
 
 {
- energyTotal[bodypartName] += energyDeposit;
+ energyTotal[bName] += energyDeposit;
 }
 
 void G4HumanPhantomEventAction::totalEventEnergyDeposit() 

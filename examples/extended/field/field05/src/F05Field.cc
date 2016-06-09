@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/src/F05Field.cc
+/// \brief Implementation of the F05Field class
+//
 //
 //
 //
@@ -41,6 +44,7 @@
 
 #include "G4MagIntegratorStepper.hh"
 #include "G4ClassicalRK4.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

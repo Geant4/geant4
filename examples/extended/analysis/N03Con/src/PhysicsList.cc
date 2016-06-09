@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -42,6 +44,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -160,7 +163,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" )     {
+               particleName == "He3" )     {
       //alpha 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
@@ -171,8 +174,8 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);     
       
       } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+                 (particle->GetPDGCharge() != 0.0) && 
+                 (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);        

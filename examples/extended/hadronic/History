@@ -1,0 +1,35 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadronic Examples History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17-11-12 I. Hrivnacova (exHadronic-V09-05-03)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+13-10-12 A. Dotti (exHadronic-V09-05-02)
+- Adding explicit use of system of units
+
+29-09-12 I. Hrivnacova (exHadronic-V09-05-01)
+- Renamed hadr0N.cc to Hadr0N.cc to match exactly with the example directory name
+  (this allows to configure CMake build in the same way on both case sensitive
+  and case insensitive platforms).
+
+21-09-12 I. Hrivnacova (exHadronic-V09-05-00)
+- Updated CMakeLists.txt files:
+  adding visualization, copying macros, install target and comment lines
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters  

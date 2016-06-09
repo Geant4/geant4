@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.icc,v 1.12 2006-07-10 16:09:30 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  31st December 1997.
@@ -33,6 +32,10 @@
 
 inline const G4ModelingParameters* G4VModel::GetModelingParameters () const {
   return fpMP;
+}
+
+inline const G4String& G4VModel::GetType () const {
+  return fType;
 }
 
 inline const G4String& G4VModel::GetGlobalTag () const {
@@ -61,6 +64,10 @@ inline void G4VModel::SetExtent (const G4VisExtent& extent) {
 
 inline void G4VModel::SetGlobalDescription (const G4String& desc) {
   fGlobalDescription = desc;
+}
+
+inline void G4VModel::SetType (const G4String& type) {
+  fType = type;
 }
 
 inline void G4VModel::SetGlobalTag (const G4String& tag) {

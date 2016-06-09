@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.cc,v 1.7 2006-06-29 19:00:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
 //

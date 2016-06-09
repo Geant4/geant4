@@ -15,6 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-12 G.Cosmo (testem10-V09-05-04)
+- Fixed cases of variable shadowing.
+
+12-10-12 V.Ivant (testem10-V09-05-03)
+- Migration to the updated analysis tool
+
+18-08-12 V.Ivant (testem10-V09-05-02)
+- Em10SteppingAction - rewritten (old code was very non-optimized and 
+  provides crashes)
+
+11-07-12 V.Ivant (testem10-V09-05-01)
+- Em10RunAction - cleanup initialisation
+
+10-07-12 V.Ivant (testem10-V09-05-00)
+- Em10RunAction - fixed write outside boundaries of C-array 
+
 03-10-11 G.Folger (testem10-V09-04-00)
 - Fix gcc46 compilation warning in Em10PrimaryGeneratorAction.cc 
     and src/Em10Materials.cc

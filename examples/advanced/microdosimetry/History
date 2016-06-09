@@ -9,6 +9,31 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+3 Nov 2012 - S.Incerti - microdosimetry-V09-05-06
+- Removed shadowing in SteppingAction
+- Updated physics list for usage of SetEmModel() method
+
+26 Oct 2012 - L.Pandola - microdosimetry-V09-05-05
+- Changed CMakeLists.txt to deal with VIS/UI
+
+26 Oct 2012 - S.Incerti - microdosimetry-V09-05-04
+- Renamed executable
+
+12 Oct 2012 - G.Cosmo - microdosimetry-V09-05-03
+- Explicit inclusion of units and constants headers
+
+1 Oct 2012 - V. Ivantchenko - microdosimetry-V09-05-02
+- G4ElectronCapture - clean up killing captured electron
+
+16 Aug 2012 - S. Incerti - microdosimetry-V09-05-01
+- Switched to new analysis interface
+
+10 Aug 2012 - S. Incerti - microdosimetry-V09-05-00
+- Removed export=root option in HistoManager
+
+23 July 2012 - M. Karamitros -  microdosimetry-V09-04-07
+- Added TrackingAction (count N secondaries created in/outside
+  "target" region) + Modified related classes (RunAct and main)
 
 18 August 2011 - S. Incerti -  microdosimetry-V09-04-06
 - Added scoring of msc 

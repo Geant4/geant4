@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeIncrease.cc,v 1.4 2010-03-18 16:36:48 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4DNAChargeIncrease.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,20 +73,20 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 
     if( name == "hydrogen" )
     {
-      if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
-      Model()->SetLowEnergyLimit(100*eV);
-      Model()->SetHighEnergyLimit(100*MeV);
+      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeIncreaseModel);
+      EmModel()->SetLowEnergyLimit(100*eV);
+      EmModel()->SetHighEnergyLimit(100*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
     
     if( name =="alpha+" || name =="helium" )
     {
-      if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
-      Model()->SetLowEnergyLimit(1*keV);
-      Model()->SetHighEnergyLimit(400*MeV);
+      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeIncreaseModel);
+      EmModel()->SetLowEnergyLimit(1*keV);
+      EmModel()->SetHighEnergyLimit(400*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     
@@ -98,7 +98,7 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 void G4DNAChargeIncrease::PrintInfo()
 {
   G4cout
-    << " Total cross sections computed from " << Model()->GetName() << " model"
+    << " Total cross sections computed from " << EmModel()->GetName() << " model"
     << G4endl;
 }         
 

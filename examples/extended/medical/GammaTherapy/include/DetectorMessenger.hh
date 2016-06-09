@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
@@ -60,40 +63,35 @@ class DetectorMessenger: public G4UImessenger
 {
 public: // Without description
 
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+  DetectorMessenger(DetectorConstruction* );
+  virtual ~DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
 
-    DetectorConstruction* hDet;
+  DetectorConstruction* fDetector;
     
-    G4UIdirectory*             detDir;
-    G4UIdirectory*             detDir1;
-    G4UIdirectory*             detDir2;
+  G4UIdirectory*             fDetDir;
+  G4UIdirectory*             fDetDir1;
+  G4UIdirectory*             fDetDir2;
 
-    G4UIcmdWithAnInteger*      NumOfAbsCmd;
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsGapCmd;
-    G4UIcmdWithADoubleAndUnit* AbsSizYZCmd;
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldXCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
-    G4UIcmdWithADoubleAndUnit* XMagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* YMagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* ZMagFieldCmd;
-    G4UIcmdWithAString*        HistoCmd;
-    G4UIcmdWithAString*        HistoTCmd;
-    G4UIcmdWithABool*          ntupCmd;
-    G4UIcmdWithAnInteger*      NumOfEvt;
-    G4UIcmdWithAnInteger*      verbCmd;
-    G4UIcmdWithAnInteger*      intCmd;
-    G4UIcmdWithAnInteger*      nhistCmd;
-    G4UIcmdWithAnInteger*      nDebugSCmd;
-    G4UIcmdWithAnInteger*      nDebugECmd;
-    G4UIcmdWithADoubleAndUnit* DeltaECmd;
+  G4UIcmdWithAString*        fAbsMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
+  G4UIcmdWithADoubleAndUnit* fAbsGapCmd;
+  G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
+  G4UIcmdWithAString*        fWorldMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fWorldXCmd;
+  G4UIcmdWithoutParameter*   fUpdateCmd;
+  G4UIcmdWithADoubleAndUnit* fXMagFieldCmd;
+  G4UIcmdWithADoubleAndUnit* fYMagFieldCmd;
+  G4UIcmdWithADoubleAndUnit* fZMagFieldCmd;
+  G4UIcmdWithAString*        fHistoCmd;
+  G4UIcmdWithAnInteger*      fNumOfAbsCmd;
+  G4UIcmdWithAnInteger*      fNumOfEvt;
+  G4UIcmdWithAnInteger*      fVerbCmd;
+  G4UIcmdWithAnInteger*      fIntCmd;
+  G4UIcmdWithADoubleAndUnit* fDeltaECmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

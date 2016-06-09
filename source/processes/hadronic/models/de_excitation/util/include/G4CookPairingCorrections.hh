@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CookPairingCorrections.hh,v 1.6 2010-11-15 16:09:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,6 +32,8 @@
 
 #ifndef G4CookPairingCorrections_h
 #define G4CookPairingCorrections_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 
@@ -57,7 +58,7 @@ public:
 
 
   G4double GetPairingZ(G4int Z) const {
-    if ( this->IsInTableThisZ(Z) ) return PairingZTable[Z-ZTableMin]*MeV;
+    if ( this->IsInTableThisZ(Z) ) return PairingZTable[Z-ZTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CookPairingCorrections: out of table for Z = " << Z << G4endl;
@@ -72,7 +73,7 @@ public:
   }
   
   G4double GetPairingN(const G4int N) const {
-    if ( this->IsInTableThisN(N) ) return PairingNTable[N-NTableMin]*MeV;
+    if ( this->IsInTableThisN(N) ) return PairingNTable[N-NTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CookPairingCorrections: out of table for N = " << N << G4endl;

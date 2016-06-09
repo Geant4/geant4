@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.cc,v 1.4 2010-10-15 23:49:33 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +38,7 @@
 //
 
 #include "G4IonProtonCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"

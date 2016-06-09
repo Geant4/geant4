@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.8 2009-03-06 18:04:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +43,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* DET, RunAction* RA,
-                               EventAction* EA, HistoManager* HM)
-:detector(DET), runaction(RA), eventaction(EA), histoManager(HM)
+                               EventAction* EA)
+:fDetector(DET), fRunAction(RA), fEventAction(EA)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,17 +57,17 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
-     != detector->GetAbsorber()) return;
+     != fDetector->GetAbsorber()) return;
 
- eventaction->AddEnergy (aStep->GetTotalEnergyDeposit());
+ fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
  if (charge != 0.) { 
-   eventaction->AddTrakLenCharg(aStep->GetStepLength());
-   eventaction->CountStepsCharg();
+   fEventAction->AddTrakLenCharg(aStep->GetStepLength());
+   fEventAction->CountStepsCharg();
  } else {
-   eventaction->AddTrakLenNeutr(aStep->GetStepLength());
-   eventaction->CountStepsNeutr();   
+   fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
+   fEventAction->CountStepsNeutr();   
  }
 }
 

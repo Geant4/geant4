@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.6 2010-06-07 05:40:46 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,16 +42,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run, HistoManager* histo)
-:runAct(run), drawFlag("none"), printModulo(10000), histoManager(histo)
+:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fHistoManager(histo)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +62,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
  //survey convergence
  //
- if (evtNb%printModulo == 0) runAct->SurveyConvergence(evtNb);
+ if (evtNb%fPrintModulo == 0) fRunAct->SurveyConvergence(evtNb);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

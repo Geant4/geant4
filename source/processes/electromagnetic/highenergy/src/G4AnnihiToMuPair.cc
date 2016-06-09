@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.6 2009-11-09 18:24:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -43,6 +42,8 @@
 
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"

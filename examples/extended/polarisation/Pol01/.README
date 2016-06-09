@@ -1,0 +1,146 @@
+//$Id$
+
+///\file "polarisation/Pol01/.README"
+///\brief Example Pol01 README page
+
+/*! \page ExamplePol01 Example Pol01
+
+ How to compute and plot the QED processes including
+ polarization.
+ Two possible scenarios are available:
+ - Polarization transfer of an incoming beam to final state particles 
+ - Material dependent transmission of a polarized beams.
+ The method is explained below : see item Physics. 
+	
+\section Pol01_s1 GEOMETRY DEFINITION
+ 
+ The geometry consists of a single block of a homogeneous material,
+ placed in a world.
+
+ Three parameters define the geometry :
+ - the material of the box,
+ - the thickness of the box (sizeZ),
+ - the  transverse dimension of the box (sizeXY).
+
+ The default geometry (5mm of Iron, G4_Fe) is constructed in 
+ DetectorConstruction, but the above parameters can be changed 
+ interactively via the commands defined in DetectorMessenger.
+ Its polarization can be accessed via the G4PolarizationMessenger
+ (see example macro file), and is given in the global coordinate 
+ system. 
+ 	
+\section Pol01_s2 PHYSICS LIST
+ 
+ The Physics List contains QED particle definitions (electrons,
+ positrons and photons) and a general transportation process.
+ In addition the user can add one of the two process modules:
+  - 1. "standard"  - standard (unpolarized) EM physics
+  - 2. "polarized" - polarized EM physics 
+  
+ These physics list contain the standard electromagnetic processes.
+ 	 
+\section Pol01_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle starting
+ at the edge of the box. The type of the particle and its
+ energy are set in PrimaryGeneratorAction (10 MeV electron).
+ By default the G4ParticleGun polarization is zero.
+ All parameter can be changed via the G4 build-in commands of
+ ParticleGun class (see the macros provided with this example). 
+ 	
+\section Pol01_s4 PHYSICS
+ 
+ This example uses the following physics processes:
+   - electromagnetic:
+     -  photo-electric effect
+     -  Compton scattering
+     -  pair production
+     -  bremsstrahlung
+     -  ionization
+     -  multiple scattering
+     -  annihilation
+     
+   or
+   - polarized electromagnetic:
+     (incl. simulation of polarization transfer, and
+      asymmetries for longitudinally polarized leptons, and
+      circularly polarized photons) 
+       - polarized photo-electric effect
+       - polarized Compton scattering
+       - polarized pair production
+       - polarized bremsstrahlung
+       - polarized ionization
+       - multiple scattering
+       - polarized annihilation
+       
+   and
+   - transportation
+
+ and defines the following particles:
+ 
+   electron, positron, photon 
+
+
+\section Pol01_s5 HISTOGRAMS
+         
+ The test contains 12 built-in 1D histograms, which are managed by the
+ HistoManager class and its messenger, HistoMessenger. The histos can be individually 
+ activated with the command :
+\verbatim
+/testem/histo/setHisto id nbBins  valMin valMax unit 
+\endverbatim
+ where unit is the desired unit for the histo (MeV or keV, etc..)
+ (see the macro histos.mac).
+
+  -  1  gamma energy
+  -  2  gamma cos(theta)
+  -  3  gamma phi
+  -  4  gamma polarization
+  -  5  electron energy
+  -  6  electron cos(theta)
+  -  7  electron phi
+  -  8  electron polarization
+  -  9  positron energy
+  - 10 positron cos(theta)
+  - 11 positron phi
+  - 12 positron polarization
+
+ If AIDA is available, i.e. if G4ANALYSIS_USE is set, these
+ histograms are stored in a compressed XML file
+ (Pol01.aida). These results can be displayed using a small
+ program (plotResults.java) based on JAIDA by simply calling 
+
+\verbatim
+% gmake plots
+\endverbatim
+ 	 				
+\section Pol01_s6 VISUALIZATION
+ 
+ Simulated events can be displayed on top of a representation of 
+ the geometry, see vis.mac for an example.
+	
+\section Pol01_s7- HOW TO START ?
+ 
+ - Execute Pol01 in 'batch' mode from the default macro file :
+\verbatim
+% Pol01   pol01.in
+\endverbatim
+
+ - Execute Pol01 in 'batch' mode including aida output :
+\verbatim
+% Pol01   histos.mac
+\endverbatim
+
+ - If available use JAIDA to display the results via
+\verbatim
+% gmake plots
+\endverbatim
+
+ - A visualisation example is available by calling 
+\verbatim
+% Pol01  
+[...]
+PreInit> /control/execute vis.mac
+\endverbatim
+
+*/

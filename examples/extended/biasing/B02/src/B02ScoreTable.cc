@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02ScoreTable.cc
+/// \brief Implementation of the B02ScoreTable class
 //
-// $Id: B02ScoreTable.cc,v 1.2 2007-06-22 13:38:55 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -84,9 +86,9 @@ void B02ScoreTable::PrintHeader(std::ostream *out)
   for (std::vector<G4String>::iterator it = vecScoreName.begin();
        it != vecScoreName.end(); it++) {
     vname = FillString((*it),
-		       ' ', 
-		       FieldValue+1, 
-		       false);
+                       ' ', 
+                       FieldValue+1, 
+                       false);
     *out << vname << '|';
   }
   *out << G4endl;  
@@ -104,13 +106,13 @@ G4String B02ScoreTable::CreateName(const G4GeometryCell &gCell) {
    
 
 void B02ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
-				      std::ostream *out) {
+                                      std::ostream *out) {
   
   // this lines sort the ScoreValues according to the volume 
   // name they belong to
   std::map<G4String , G4CellScoreComposer> MapStringSCScorer;
   for (G4MapGeometryCellCellScorer::const_iterator mit = 
-	 mcs.begin();
+         mcs.begin();
        mit != mcs.end(); ++mit) {
     G4GeometryCell gCell = (*mit).first; // get a key identifying a volume
     G4String name(CreateName(gCell)); 
@@ -118,7 +120,7 @@ void B02ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
     G4double importance = 1;
     if (fIStore) {
       if (fIStore->IsKnown(gCell)) {
-	importance = fIStore->GetImportance(gCell);
+        importance = fIStore->GetImportance(gCell);
       }
     }
     MapStringSCScorer[name] = (*mit).second->GetCellScoreComposer();
@@ -126,8 +128,8 @@ void B02ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
   }
   // now do the printing
   for ( std::map<G4String , G4CellScoreComposer>::iterator
-	  it = MapStringSCScorer.begin();
-	it != MapStringSCScorer.end(); ++it) {
+          it = MapStringSCScorer.begin();
+        it != MapStringSCScorer.end(); ++it) {
     G4String name((*it).first);
     PrintLine(name, (*it).second.GetStandardCellScoreValues(), out); 
   }
@@ -135,8 +137,8 @@ void B02ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
 }
 
 void B02ScoreTable::PrintLine(const G4String &name,
-			     const G4CellScoreValues &sc_scores,
-			     std::ostream *out) 
+                             const G4CellScoreValues &sc_scores,
+                             std::ostream *out) 
 {
   std::string fname = FillString(name, '.', FieldName);
   *out << fname << " |";
@@ -171,7 +173,7 @@ void B02ScoreTable::PrintLine(const G4String &name,
 
 
 std::string B02ScoreTable::FillString(const std::string &name, 
-				       char c, G4int n, G4bool back)
+                                       char c, G4int n, G4bool back)
 {
   std::string fname("");
   G4int k = n - name.size();

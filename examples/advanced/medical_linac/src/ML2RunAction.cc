@@ -43,12 +43,13 @@
 
 #include "ML2RunAction.hh"
 
-CML2RunAction::CML2RunAction(CML2Convergence *convergence, G4int nBeam, G4bool bOnlyVisio)
+CML2RunAction::CML2RunAction(CML2Convergence *conv, G4int nB, G4bool bOV)
 {
-	this->bRotationTranslationFilesNames=true;
-	this->convergence=convergence;
-	this->nBeam=nBeam;
-	this->bOnlyVisio=bOnlyVisio;
+    bRotationTranslationFilesNames=true;
+    convergence=conv;
+    nBeam=nB;
+    bOnlyVisio=bOV;
+    nLoop=0;
 }
 
 CML2RunAction::~CML2RunAction(void)
@@ -56,38 +57,39 @@ CML2RunAction::~CML2RunAction(void)
 }
 void CML2RunAction::BeginOfRunAction(const G4Run *)
 {
-	G4String fullName;
-	if (this->bRotationTranslationFilesNames)
-	{fullName=CML2AcceleratorConstruction::GetInstance()->getCurrentRotationString()+CML2PhantomConstruction::GetInstance()->getCurrentTranslationString();}
-	else
-	{fullName="";}
-	CML2PhantomConstruction::GetInstance()->setNewName(fullName);
+    G4String fullName;
+    if (bRotationTranslationFilesNames)
+    {fullName=CML2AcceleratorConstruction::GetInstance()->getCurrentRotationString()+
+                CML2PhantomConstruction::GetInstance()->getCurrentTranslationString();}
+    else
+    {fullName="";}
+    CML2PhantomConstruction::GetInstance()->setNewName(fullName);
 
-	CML2AcceleratorConstruction::GetInstance()->writeInfo();
-	CML2PhantomConstruction::GetInstance()->writeInfo();
+    CML2AcceleratorConstruction::GetInstance()->writeInfo();
+    CML2PhantomConstruction::GetInstance()->writeInfo();
 
-	std::cout<<"*********************************************"<<'\n';
-	if (this->convergence->getNMaxLoops()<0 || this->bOnlyVisio)
-	{	
-		std::cout << "loop n. "<<++this->nLoop <<'\n';
-	}
-	else
-	{
-		std::cout << "loop n. "<<++this->nLoop<<"/" <<this->convergence->getNMaxLoops() <<'\n';
-	}
-	if (!this->bOnlyVisio)
-	{std::cout << "Launched "<< this->nBeam <<" random primary particles" << '\n';}
-	std::cout<<"*********************************************"<<'\n';
-	this->MyTime.Start();
+    std::cout<<"*********************************************"<<'\n';
+    if (convergence->getNMaxLoops()<0 || bOnlyVisio)
+    {
+        std::cout << "loop n. "<<++nLoop <<'\n';
+    }
+    else
+    {
+        std::cout << "loop n. "<<++nLoop<<"/" <<convergence->getNMaxLoops() <<'\n';
+    }
+    if (!bOnlyVisio)
+    {std::cout << "Launched "<< nBeam <<" random primary particles" << '\n';}
+    std::cout<<"*********************************************"<<'\n';
+    MyTime.Start();
 }
 void CML2RunAction::EndOfRunAction(const G4Run *)
 {
-	CML2WorldConstruction::GetInstance()->savePhantomData();
-	CML2WorldConstruction::GetInstance()->savePhaseSpaceData();
-	this->convergence->saveResults();
+    CML2WorldConstruction::GetInstance()->savePhantomData();
+    CML2WorldConstruction::GetInstance()->savePhaseSpaceData();
+    convergence->saveResults();
 
-	this->MyTime.Stop();
-	this->loopElapsedTime=MyTime.GetUserElapsed();
-	std::cout << "loop elapsed time [s] : "<< this->loopElapsedTime << '\n';
-	std::cout <<'\n';
+    MyTime.Stop();
+    loopElapsedTime=MyTime.GetUserElapsed();
+    std::cout << "loop elapsed time [s] : "<< loopElapsedTime << '\n';
+    std::cout <<'\n';
 }

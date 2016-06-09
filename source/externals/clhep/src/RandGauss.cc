@@ -35,7 +35,7 @@
 #include "CLHEP/Random/RandGauss.h"
 #include "CLHEP/Random/DoubConv.h"
 #include <string.h>	// for strcmp
-#include <cmath>	// for log()
+#include <cmath>	// for std::log()
 
 namespace CLHEP {
 

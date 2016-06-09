@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTableEntry.cc,v 1.4 2006-06-29 18:13:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -46,9 +45,9 @@ G3MatTableEntry::G3MatTableEntry(const G3MatTableEntry& right)
 G3MatTableEntry::~G3MatTableEntry()
 {}
 
-const G3MatTableEntry& 
-G3MatTableEntry::operator=(const G3MatTableEntry& right)
-{ 
+G3MatTableEntry& G3MatTableEntry::operator=(const G3MatTableEntry& right)
+{
+  if (&right == this)  { return *this; }
   fID = right.GetID();
   fMaterial = right.GetMaterial();     
   return *this;

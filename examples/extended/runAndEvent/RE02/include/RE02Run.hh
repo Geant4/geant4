@@ -23,18 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02Run.hh
+/// \brief Definition of the RE02Run class
 //
-// $Id: RE02Run.hh,v 1.3 2006-11-18 01:37:23 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
-//---------------------------------------------------------------------
-// (Purpose) 
-//    Example implementation for multi-functional-detector and 
-//   primitive scorer.
-//    This RE02Run class has collections which accumulate
-//   a event information into a run information.
-//
-//---------------------------------------------------------------------
 
 #ifndef RE02Run_h
 #define RE02Run_h 1
@@ -44,7 +38,40 @@
 
 #include "G4THitsMap.hh"
 #include <vector>
-//
+
+//---------------------------------------------------------------------
+/// User run class
+///
+/// (Description) 
+///    An example implementation for the multi-functional-detector and 
+///   primitive scorers.
+///    This RE02Run class has collections which accumulate event information 
+///   into run information.
+///
+/// - constructor
+///     gets HitsCollection names, collection IDs and HitsMaps of
+///        primitive scorers from the muti-functional detector
+///
+/// - void RecordEvent(const G4Event*)
+///     accumulates HitsMaps over all events into a run HitsMap
+///
+/// - G4int GetNumberOfHitsMap() const
+///     gets the size of the run HitsMap
+///
+/// - G4THitsMap<G4double>* GetHitsMap(G4int i)
+///     gets a run HitsMap of the i-th primitive scorer
+///
+/// - G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
+///                                  const G4String& colName)
+///     gets a run HitsMap with the detName and the colName
+///
+/// - G4THitsMap<G4double>* GetHitsMap(const G4String& fullName)
+///     gets a run HitsMap with the fullName
+///
+/// - void DumpAllScorer()
+///     shows all HitsMap information of this run.
+///     This method calls G4THisMap::PrintAll() for individual HitsMap.
+//---------------------------------------------------------------------
 class RE02Run : public G4Run {
 
 public:
@@ -61,22 +88,22 @@ public:
   // Access methods for scoring information.
   // - Number of HitsMap for this RUN. 
   //   This is equal to number of collections.
-  G4int GetNumberOfHitsMap() const {return theRunMap.size();}
+  G4int GetNumberOfHitsMap() const {return fRunMap.size();}
   // - Get HitsMap of this RUN.
   //   by sequential number, by multifucntional name and collection name,
   //   and by collection name with full path.
-  G4THitsMap<G4double>* GetHitsMap(G4int i){return theRunMap[i];}
+  G4THitsMap<G4double>* GetHitsMap(G4int i){return fRunMap[i];}
   G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
-				  const G4String& colName);
+                                  const G4String& colName);
   G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
   // - Dump All HitsMap of this RUN.
   //   This method calls G4THisMap::PrintAll() for individual HitsMap.
   void DumpAllScorer();
 
 private:
-  std::vector<G4String> theCollName;
-  std::vector<G4int> theCollID;
-  std::vector<G4THitsMap<G4double>*> theRunMap;
+  std::vector<G4String> fCollName;
+  std::vector<G4int> fCollID;
+  std::vector<G4THitsMap<G4double>*> fRunMap;
 };
 
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.18 2010-10-23 19:27:38 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +40,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,7 +60,7 @@ ExN06DetectorConstruction::~ExN06DetectorConstruction(){;}
 G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 {
 
-//	------------- Materials -------------
+// ------------- Materials -------------
 
   G4double a, z, density;
   G4int nelements;
@@ -98,7 +98,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
               3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
 //
 // Water
-//	      
+//              
   G4double RefractiveIndex1[nEntries] =
             { 1.3435, 1.344,  1.3445, 1.345,  1.3455,
               1.346,  1.3465, 1.347,  1.3475, 1.348,
@@ -221,7 +221,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   Air->SetMaterialPropertiesTable(myMPT2);
 
 //
-//	------------- Volumes --------------
+// ------------- Volumes --------------
 
 // The experimental Hall
 //
@@ -234,7 +234,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
     = new G4PVPlacement(0,G4ThreeVector(),expHall_log,"World",0,false,0);
 
 // The Water Tank
-//	
+//        
   G4Box* waterTank_box = new G4Box("Tank",tank_x,tank_y,tank_z);
 
   G4LogicalVolume* waterTank_log
@@ -255,7 +255,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
       new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),bubbleAir_log,"Bubble",
                         waterTank_log,false,0);
 
-//	------------- Surfaces --------------
+// ------------- Surfaces --------------
 //
 // Water Tank
 //
@@ -275,7 +275,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   OpAirSurface->SetModel(glisur);
 
   G4LogicalSkinSurface* AirSurface = 
-	  new G4LogicalSkinSurface("AirSurface", bubbleAir_log, OpAirSurface);
+          new G4LogicalSkinSurface("AirSurface", bubbleAir_log, OpAirSurface);
 
   G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
         (AirSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty());

@@ -1,0 +1,156 @@
+//$Id$
+
+///\file "electromagnetic/TestEm12/.README"
+///\brief Example TestEm12 README page
+
+/*! \page ExampleTestEm12 Example TestEm12
+
+
+ How to plot a depth dose profile in spherical geometry.        
+
+	
+\section TestEm12_s1 GEOMETRY DEFINITION
+ 
+  The geometry consists of a single sphere of an homogenous material.
+  Optionally, the sphere can be divided in thin shells.
+  
+  3 parameters define the geometry :
+  - the material of the sphere,
+  - the radius of the sphere (absorRadius),
+  - the number of shells (nbOfLayers)
+          
+  In addition a transverse uniform magnetic field can be applied.
+ 
+  The default geometry is constructed in DetectorConstruction class,
+  but all of the above parameters can be changed interactively via
+  the commands defined in the DetectorMessenger class.
+ 	
+\section TestEm12_s2 PHYSICS LIST
+ 
+ Physics lists can be local (eg. in this example) or from G4 kernel
+ physics_lists subdirectory.
+     
+ Local physics lists:	 
+ - "local"	standard EM physics with current 'best' options setting.
+			
+ From geant4/source/physics_lists/builders:	 
+  - "emstandard_opt0" recommended standard EM physics for LHC
+  - "emstandard_opt1" best CPU performance standard physics for LHC
+  - "emstandard_opt2"     
+  - "emstandard_opt3" best current advanced EM options. 
+                      analog to "local" above  
+  - "emlivermore"  low-energy EM physics using Livermore data
+  - "empenelope"   low-energy EM physics implementing Penelope models
+  - "dna"          em physics for DNA simulation
+      
+ Physics lists and options can be (re)set with UI commands
+    
+ Please, notice that options set through G4EmProcessOPtions are global, eg
+ for all particle types. In G4 builders, it is shown how to set options per
+ particle type.
+
+ 	 
+\section TestEm12_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle randomly shooted at
+  the centre of the sphere. The type of the particle and its energy are set 
+  in the PrimaryGeneratorAction class, and can be changed via the G4 
+  build-in commands of G4ParticleGun class (see the macros provided with 
+  this example).
+
+  In addition one can desactivate the randomness of the direction of the 
+  incident particle. The corresponding interactive command is built in
+  PrimaryGeneratorMessenger class.
+          
+  A RUN is a set of events.
+ 					
+\section TestEm12_s4 VISUALIZATION
+ 
+  The Visualization Manager is set in the main () (see TestEm12.cc).
+  The initialisation of the drawing is done via the commands
+  /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+ 	
+ The detector has a default view which is a longitudinal view of the 
+ box.
+ 
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionaly one can choose to draw all particles, only the charged one,
+ or none. This command is defined in EventActionMessenger class.
+ 		
+\section TestEm12_s5 HOW TO START ?
+ 
+ - Execute TestEm12 in 'batch' mode from macro files
+\verbatim
+% TestEm12   run01.mac
+\endverbatim
+ 		
+ - Execute TestEm12 in 'interactive mode' with visualization
+\verbatim
+% TestEm12
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+		
+\section TestEm12_s6 TRACKING  and STEP MAX
+ 
+ Testem12 computes the total energy deposited along the trajectory of 
+ the incident particle : the so-called longitudinal energy profile,
+ or depth dose distribution.
+ The energy deposited (edep) is randomly distribued along the step (see
+ SteppingAction).
+ 
+ In order to control the accuracy of the deposition, the maximum  step size 
+ of charged particles is computed automatically from the binning of 
+ histograms 1 and 8 (see HistoManager).
+ 
+ As an example, this limitation is implemented as a 'full' process :
+ see StepMax class and its messenger, StepMaxMessenger. The 'StepMax process' is registered
+ in the Physics List.
+ 
+ In RunAction::BeginOfRun() the stepMax value is passed from the 
+ HistoManager to the StepMax process. 
+ A boolean UI command allows to desactivate this mechanism.
+ Another UI command allows to define directly a stepMax value.
+      	
+\section TestEm12_s7 HISTOGRAMS
+ 
+ Testem12 has several predefined 1D histograms : 
+ 
+  - 1 : energy profile dE/dr (in MeV/mm per event)
+  - 2 : total energy deposited in the absorber
+  - 3 : total track length of the primary track
+  - 4 : step size of the primary track      
+  - 5 : projected range of the primary track
+  - 6 : total track length of charged secondary tracks
+  - 7 : step size of charged secondary tracks      
+  - 8 : normalized energy profile d(E/E0)/d(r/r0), where r0 is the range of
+        the primary particle of energy E0
+          
+ The histograms are managed by the HistoManager class and its messenger, 
+ HistoMessenger. 
+ The histos can be individually activated with the command :
+\verbatim
+/testem/histo/setHisto id nbBins  valMin valMax unit 
+\endverbatim
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+  One can control the name of the histograms file with the command:
+\verbatim
+/testem/histo/setFileName  name  (default testem12)
+\endverbatim
+    
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh      
+  
+  It is also possible to print selected histograms on an ascii file:
+\verbatim
+/testem/histo/printHisto id
+\endverbatim
+  All selected histos will be written on a file name.ascii  (default testem12) 
+  
+*/

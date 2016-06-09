@@ -19,16 +19,15 @@ MCTruthConfig class.
 
 HOW TO BUILD THE EXAMPLE ?
 
-- install HepMC event record (version 2.06.03)
+- if you do not have it yet, install HepMC event record (tested with version 2.06.08)
 
-- set HEPMC_DIR variable to point to the directory where HepMC is installed;
-  add the path "$HEPMC_DIR/lib" to your LD_LIBRARY_PATH variable.
+- set HEPMC_ROOT_DIR variable to point to the directory where HepMC is installed; 
+  if the HepMC is installed in your system directory (/usr/local) you do not need to set anything
 
-- compile and link to generate the executable:
-        % gmake
-
+- run the CMake configuration and build mctruthex target in your build directory
+      
 - execute the application:
-        % mctruthex
+        % your_binary_directory/mctruthex
 
 DESCRIPTION OF THE MCTRUTH HANDLING MECHANISM
  

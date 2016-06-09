@@ -15,7 +15,7 @@
 #include "CLHEP/Random/RandGaussQ.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 #include <iostream>
-#include <cmath>	// for log()
+#include <cmath>	// for std::log()
 
 namespace CLHEP {
 
@@ -149,13 +149,13 @@ double RandGaussQ::transformSmall (double r) {
   
   for ( int i = 1; i < 50; i++ ) {
     double vn2 = 1.0/(guess*guess);
-    double s = -13*11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2*vn2;
-    	      s +=    11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2;
-    	      s +=      -9*7*5*3 * vn2*vn2*vn2*vn2*vn2;
-	      s +=         7*5*3 * vn2*vn2*vn2*vn2;
-    	      s +=          -5*3 * vn2*vn2*vn2;
-	      s += 	       3 * vn2*vn2    - vn2  +    1.0;
-    v = std::sqrt ( 2.0 * std::log ( s / (r*guess*std::sqrt(CLHEP::twopi)) ) );
+    double s1 = -13*11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2*vn2;
+            s1 +=    11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2;
+            s1 +=      -9*7*5*3 * vn2*vn2*vn2*vn2*vn2;
+            s1 +=         7*5*3 * vn2*vn2*vn2*vn2;
+            s1 +=          -5*3 * vn2*vn2*vn2;
+            s1 +=            3 * vn2*vn2    - vn2  +    1.0;
+    v = std::sqrt ( 2.0 * std::log ( s1 / (r*guess*std::sqrt(CLHEP::twopi)) ) );
     if ( std::fabs(v-guess) < eps ) break;
     guess = v;
   }

@@ -24,33 +24,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.hh,v 1.6 2008-12-18 12:57:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:              G4QuadrangularFacet.hh
-//
-// Date:                15/06/2005
-// Author:              P R Truscott
-// Organisation:        QinetiQ Ltd, UK
-// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:            C/MAT/N03517
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
-//
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// Class G4QuadrangularFacet
 //
 // Class description:
 //
 //   The G4QuadrangularFacet class is used for the contruction of
 //   G4TessellatedSolid.
-//   It is defined by four vertices, which shall be in the same plane and be
+//   It is defined by four fVertices, which shall be in the same plane and be
 //   supplied in anti-clockwise order looking from the outsider of the solid
 //   where it belongs. Its constructor
 //   
@@ -58,54 +42,170 @@
 //                          const G4ThreeVector vt2, const G4ThreeVector vt3,
 //                          G4FacetVertexType);
 //
-//   takes 5 parameters to define the four vertices:
+//   takes 5 parameters to define the four fVertices:
 //     1) G4FacetvertexType = "ABSOLUTE": in this case Pt0, vt1, vt2 and vt3
-//        are the four vertices required in anti-clockwise order when looking
+//        are the four fVertices required in anti-clockwise order when looking
 //        from the outsider.
 //     2) G4FacetvertexType = "RELATIVE": in this case the first vertex is Pt0,
 //        the second vertex is Pt0+vt, the third vertex is Pt0+vt2 and 
 //        the fourth vertex is Pt0+vt3, in anti-clockwise order when looking 
 //        from the outsider.
 
+// CHANGE HISTORY
+// --------------
+//
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
+// 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
+//
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef G4QuadranglarFacet_HH
-#define G4QuadranglarFacet_HH 1
+#ifndef G4QuadrangularFacet_HH
+#define G4QuadrangularFacet_HH 1
 
 #include "G4VFacet.hh"
-#include "G4TriangularFacet.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
-#include "globals.hh"
+#include "G4TriangularFacet.hh"
 
 class G4QuadrangularFacet : public G4VFacet
 {
   public:  // with description
 
-    G4QuadrangularFacet (const G4ThreeVector Pt0, const G4ThreeVector vt1,
-                         const G4ThreeVector vt2, const G4ThreeVector vt3,
-                         G4FacetVertexType);
-    virtual ~G4QuadrangularFacet ();
-    
+    G4QuadrangularFacet (const G4ThreeVector &Pt0, const G4ThreeVector &vt1,
+                         const G4ThreeVector &vt2, const G4ThreeVector &vt3,
+                               G4FacetVertexType);
     G4QuadrangularFacet (const G4QuadrangularFacet &right);
-    const G4QuadrangularFacet &operator=(G4QuadrangularFacet &right);    
+   ~G4QuadrangularFacet ();
+
+    G4QuadrangularFacet &operator=(const G4QuadrangularFacet &right);    
 
     G4VFacet *GetClone ();
-    
+
     G4ThreeVector Distance (const G4ThreeVector &p);
-    G4double Distance (const G4ThreeVector &p, const G4double minDist);
-    G4double Distance (const G4ThreeVector &p, const G4double minDist,
+    G4double Distance (const G4ThreeVector &p, G4double minDist);
+    G4double Distance (const G4ThreeVector &p, G4double minDist,
                        const G4bool outgoing);
     G4double Extent   (const G4ThreeVector axis);
     G4bool Intersect  (const G4ThreeVector &p, const G4ThreeVector &v,
                        const G4bool outgoing, G4double &distance,
                              G4double &distFromSurface, G4ThreeVector &normal);
-      
+    G4ThreeVector GetSurfaceNormal () const;
+
     G4double GetArea ();
     G4ThreeVector GetPointOnFace () const;
 
+    G4GeometryType GetEntityType () const;
+
+    inline G4bool IsDefined () const;
+    inline G4int GetNumberOfVertices () const;
+    inline G4ThreeVector GetVertex (G4int i) const;
+    inline void SetVertex (G4int i, const G4ThreeVector &val);
+    inline void SetVertices(std::vector<G4ThreeVector> *v);
+
+    inline G4double GetRadius () const;
+    inline G4ThreeVector GetCircumcentre () const;
+
   private:
 
-    G4TriangularFacet *facet1;
-    G4TriangularFacet *facet2;
+    inline G4int GetVertexIndex (G4int i) const;
+    inline void SetVertexIndex (G4int i, G4int val);
+
+    inline G4int AllocatedMemory();
+
+  private:
+
+    G4double fRadius;
+    G4ThreeVector fCircumcentre;
+
+    G4TriangularFacet fFacet1, fFacet2;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+// Inlined Methods
+///////////////////////////////////////////////////////////////////////////////
+
+inline G4int G4QuadrangularFacet::GetNumberOfVertices () const
+{
+  return 4;
+}
+
+inline G4ThreeVector G4QuadrangularFacet::GetVertex (G4int i) const
+{
+  return i == 3 ? fFacet2.GetVertex(2) : fFacet1.GetVertex(i);
+}
+
+
+inline G4double G4QuadrangularFacet::GetRadius () const
+{
+  return fRadius;
+}
+
+inline G4ThreeVector G4QuadrangularFacet::GetCircumcentre () const
+{
+  return fCircumcentre;
+}
+
+inline void G4QuadrangularFacet::SetVertex (G4int i, const G4ThreeVector &val)
+{
+  switch (i)
+  {
+    case 0:
+      fFacet1.SetVertex(0, val);
+      fFacet2.SetVertex(0, val);
+      break;
+    case 1:
+      fFacet1.SetVertex(1, val);
+      break;
+    case 2:
+      fFacet1.SetVertex(2, val);
+      fFacet2.SetVertex(1, val);
+      break;
+    case 3:
+      fFacet2.SetVertex(2, val);
+      break;
+    }
+}
+
+inline void G4QuadrangularFacet::SetVertices(std::vector<G4ThreeVector> *v)
+{
+  fFacet1.SetVertices(v);
+  fFacet2.SetVertices(v);
+}
+
+inline G4bool G4QuadrangularFacet::IsDefined () const
+{
+  return fFacet1.IsDefined();
+}
+
+inline G4int G4QuadrangularFacet::GetVertexIndex (G4int i) const
+{
+  return i == 3 ? fFacet2.GetVertexIndex(2) : fFacet1.GetVertexIndex(i);
+}
+
+
+inline void G4QuadrangularFacet::SetVertexIndex (G4int i, G4int val)
+{
+  switch (i)
+  {
+    case 0:
+      fFacet1.SetVertexIndex(0, val);
+      fFacet2.SetVertexIndex(0, val);
+      break;
+    case 1:
+      fFacet1.SetVertexIndex(1, val);
+      break;
+    case 2:
+      fFacet1.SetVertexIndex(2, val);
+      fFacet2.SetVertexIndex(1, val);
+      break;
+    case 3:
+      fFacet2.SetVertexIndex(2, val);
+      break;
+  }
+}
+
+inline G4int G4QuadrangularFacet::AllocatedMemory()
+{
+  return sizeof(*this) + fFacet1.AllocatedMemory() + fFacet2.AllocatedMemory();
+}
 
 #endif

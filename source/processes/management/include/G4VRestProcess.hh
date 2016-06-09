@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestProcess.hh,v 1.6 2006-06-29 21:07:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -122,52 +121,6 @@ class G4VRestProcess : public G4VProcess
       G4VRestProcess & operator=(const G4VRestProcess &right);
 };
 
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
-
-inline G4double G4VRestProcess::AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4ForceCondition* condition
-			    )
-{
-  // beggining of tracking 
-  ResetNumberOfInteractionLengthLeft();
-
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-
-  // get mean life time
-  currentInteractionLength = GetMeanLifeTime(track, condition);
-
-#ifdef G4VERBOSE
- if ((currentInteractionLength <0.0) || (verboseLevel>2)){
-    G4cout << "G4VRestProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
-  }
-#endif 
-
-  return theNumberOfInteractionLengthLeft * currentInteractionLength;
-}
-
-
-inline G4VParticleChange* G4VRestProcess::AtRestDoIt( 
-			     const G4Track&,
-			     const G4Step& 
-			    )
-{
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
-
-    return pParticleChange;
-}
 
 
 #endif

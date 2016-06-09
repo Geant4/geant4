@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedSolid.cc,v 1.6 2007-05-11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -45,9 +44,9 @@ G4PlacedSolid::G4PlacedSolid()
 }
 
 
-G4PlacedSolid::G4PlacedSolid(G4BREPSolid* s, G4Axis2Placement3D* p)
+G4PlacedSolid::G4PlacedSolid(G4BREPSolid* sol, G4Axis2Placement3D* p)
 {
-  solid =s;
+  solid = sol;
   if(p)
   {
     G4double x,y,z;

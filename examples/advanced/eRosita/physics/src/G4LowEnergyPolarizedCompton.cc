@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.25 2008/05/02 19:23:38 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // ------------------------------------------------------------
@@ -63,6 +63,8 @@
 
 #include "G4LowEnergyPolarizedCompton.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"

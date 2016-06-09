@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEOmegaMinusInelastic.hh,v 1.11 2007-02-26 18:29:56 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy OmegaMinus Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -39,6 +38,8 @@
 // the corresponding process.
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InelasticInteraction.hh"
  
 class G4LEOmegaMinusInelastic : public G4InelasticInteraction
@@ -48,7 +49,9 @@ class G4LEOmegaMinusInelastic : public G4InelasticInteraction
     G4LEOmegaMinusInelastic() : G4InelasticInteraction("G4LEOmegaMinusInelastic")
     {
       SetMinEnergy(0.0);
-      SetMaxEnergy(25.*GeV);
+      SetMaxEnergy(25.*CLHEP::GeV);
+      G4cout << "WARNING: model G4LEOmegaMinusInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
     
     ~G4LEOmegaMinusInelastic() {}

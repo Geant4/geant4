@@ -32,6 +32,7 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 
 # List the headers and sources
 #
@@ -40,20 +41,29 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 # will need to work out how to either locate them, or generate a list.
 # This isn't critical for building the analysis library.
 set(G4analysis_HEADERS
-    include/g4analysis_defs.hh       
+    include/G4AnalysisMessenger.hh
     include/G4AnalysisVerbose.hh
-    include/G4RootAnalysisManager.hh  
-    include/G4XmlAnalysisManager.hh
     include/G4CsvAnalysisManager.hh
+    include/g4csv_defs.hh
+    include/g4csv.hh
+    include/G4Fcn.hh
+    include/G4HnInformation.hh
+    include/G4RootAnalysisManager.hh
+    include/g4root_defs.hh
+    include/g4root.hh
     include/G4VAnalysisManager.hh
+    include/G4XmlAnalysisManager.hh
+    include/g4xml_defs.hh
+    include/g4xml.hh
 )
 
 # - Sources
 set(G4analysis_SOURCES
+    src/G4AnalysisMessenger.cc
     src/G4AnalysisVerbose.cc
     src/G4CsvAnalysisManager.cc
-    src/G4VAnalysisManager.cc
     src/G4RootAnalysisManager.cc
+    src/G4VAnalysisManager.cc
     src/G4XmlAnalysisManager.cc
 )
 
@@ -65,12 +75,12 @@ include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)
   GEANT4_LIBRARY_TARGET(NAME G4analysis 
     SOURCES ${G4analysis_SOURCES} ${G4analysis_HEADERS}
-    GEANT4_LINK_LIBRARIES G4globman
+    GEANT4_LINK_LIBRARIES G4globman G4intercoms
     )
 else()
   GEANT4_LIBRARY_TARGET(NAME G4analysis 
     SOURCES ${G4analysis_SOURCES} ${G4analysis_HEADERS}
-    GEANT4_LINK_LIBRARIES G4global
+    GEANT4_LINK_LIBRARIES G4global G4intercoms
     )
 endif()
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.hh,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -51,9 +50,9 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VBremAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
 
-class G4DipBustGenerator : public G4VBremAngularDistribution
+class G4DipBustGenerator : public G4VEmAngularDistribution
 {
 
 public:
@@ -61,6 +60,11 @@ public:
   G4DipBustGenerator(const G4String& name = "");
 
   virtual ~G4DipBustGenerator();
+
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double out_energy,
+                                         G4int Z,
+                                         const G4Material* mat = 0);
 
   G4double PolarAngle(const G4double initial_energy,
 		      const G4double final_energy,

@@ -47,7 +47,7 @@
 #include <iostream>
 #include "HepMC/PythiaWrapper.h"
 #include "HepMC/IO_HEPEVT.h"
-#include "HepMC/IO_AsciiParticles.h"
+#include "HepMC/IO_GenEvent.h"
 #include "HepMC/GenEvent.h"
     
 int main() { 
@@ -88,7 +88,7 @@ int main() {
     //
     // Instantial an IO strategy to write the data to file - it uses the 
     //  same ParticleDataTable
-    HepMC::IO_AsciiParticles ascii_io("example_MyPythia.dat",std::ios::out);
+    HepMC::IO_GenEvent ascii_io("example_MyPythia.dat",std::ios::out);
     //
     //........................................EVENT LOOP
     for ( int i = 1; i <= 10; i++ ) {
@@ -112,6 +112,3 @@ int main() {
 
     return 0;
 }
-
-
- 

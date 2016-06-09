@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.cc,v 1.6 2006-06-29 18:23:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "G4DELPHIMagField.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DELPHIMagField::G4DELPHIMagField()
 {

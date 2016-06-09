@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CHIPSElastic.hh,v 1.4 2010-01-13 15:42:06 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Geant4 Header : G4CHIPSElastic
 //

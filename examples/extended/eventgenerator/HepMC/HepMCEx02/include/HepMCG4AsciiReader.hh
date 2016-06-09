@@ -23,24 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/include/HepMCG4AsciiReader.hh
+/// \brief Definition of the HepMCG4AsciiReader class
+//
 // ====================================================================
 //
 //   HepMCG4AsciiReader.hh
-//   $Id: HepMCG4AsciiReader.hh,v 1.5 2010-05-24 05:31:10 kmura Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef HEPMC_G4_ASCII_READER_H
 #define HEPMC_G4_ASCII_READER_H
 
 #include "HepMCG4Interface.hh"
-#include "HepMC/IO_AsciiParticles.h"
+#include "HepMC/IO_GenEvent.h"
 
 class HepMCG4AsciiReaderMessenger;
 
 class HepMCG4AsciiReader : public HepMCG4Interface {
 protected:
   G4String filename;
-  HepMC::IO_AsciiParticles* asciiInput;
+  HepMC::IO_GenEvent* asciiInput;
 
   G4int verbose;
   HepMCG4AsciiReaderMessenger* messenger;

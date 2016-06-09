@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRadiator.hh,v 1.3 2006-06-29 19:55:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,6 +55,8 @@ public:
                         G4double,G4double,G4int,
                         const G4String & processName = "XTRegularRadiator");
   ~G4RegularXTRadiator ();
+
+  G4double SpectralXTRdEdx(G4double energy);
 
   // Pure virtual function from base class
 

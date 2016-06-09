@@ -27,9 +27,8 @@
 /gun/particle e- 
 /gun/energy 15.7 MeV
 #
-/testem/histo/setFileName hanson/19um.local
-/testem/histo/setFileType root
-/testem/histo/setHisto 12  120 0 30 deg		#space angle    
+/analysis/setFileName hanson/19um.local
+/anlysis/h1/set 12  120 0 30 deg		#space angle    
 #
 /testem/event/printModulo 100000
 # 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.16 2010-12-15 07:39:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -39,6 +38,8 @@
 #include <iomanip>
 
 #include "G4PDGCodeChecker.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////
 G4PDGCodeChecker::G4PDGCodeChecker()

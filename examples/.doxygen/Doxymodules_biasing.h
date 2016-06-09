@@ -1,0 +1,76 @@
+// $Id: Doxymodules_biasing.h 60059 2012-06-27 13:00:49Z gcosmo $
+// The example class categories definitions for Doxygen
+
+/// \file Doxymodules_biasing.h
+/// \brief The page that defines the extended/biasing examples modules 
+
+
+/** @defgroup extended_biasing biasing
+ *  Extended examples biasing classes
+ *  @{
+ */
+
+/** @defgroup extended_biasing_B01 B01
+ *  Biasing example B01
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class B01DetectorConstruction {};
+  class B01PhysicsList {};
+  class B01PrimaryGeneratorAction {};
+  class B01RunAction {};
+  class B01Run {};
+  class B01ScoreTable {};
+
+
+/** @} */
+
+/** @defgroup extended_biasing_B02 B02
+ *  Biasing example B02
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class B02CellScorer {};
+  class B02CellScorerStore {};
+  class B02DetectorConstruction {};
+  class B02ImportanceDetectorConstruction {};
+  class B02PhysicsList {};
+  class B02PrimaryGeneratorAction {};
+  class B02PSScoringDetectorConstruction {};
+  class B02PVolumeStore {};
+  class B02RunAction {};
+  class B02Run {};
+  class B02ScoreTable {};
+  class B02ScoringDetectorConstruction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_ReverseMC01 ReverseMC01
+ *  Biasing example ReverseMC01
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class G4AdjointPhysicsList {};
+  class G4AdjointPhysicsMessenger {};
+  class Histo1DVar {};
+  class Histo2DVar {};
+  class Histograms {};
+  class RMC01AdjointEventAction {};
+  class RMC01AnalysisManager {};
+  class RMC01AnalysisManagerMessenger {};
+  class RMC01DetectorConstruction {};
+  class RMC01DetectorMessenger {};
+  class RMC01DoubleWithWeightHit {};
+  class RMC01EventAction {};
+  class RMC01PrimaryGeneratorAction {};
+  class RMC01RunAction {};
+  class RMC01SD {};
+  enum  side {};
+  class VariableLengthPartition {};
+
+/** @} */
+
+/** @} */

@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01TrackerHit.cc,v 1.5 2006-11-14 07:07:38 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01TrackerHit.cc
+/// \brief Implementation of the RE01TrackerHit class
+//
+// $Id$
 //
 
-
 #include "RE01TrackerHit.hh"
+
 #include "G4VVisManager.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
@@ -38,43 +40,26 @@
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
-
+#include "G4SystemOfUnits.hh"    
 
 G4Allocator<RE01TrackerHit> RE01TrackerHitAllocator;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerHit::RE01TrackerHit()
+  : G4VHit(), fEdep(0.0), fPos(0),fTrackID(-1)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerHit::~RE01TrackerHit()
 {;}
 
-RE01TrackerHit::RE01TrackerHit(const RE01TrackerHit &right)
-  : G4VHit()
-{
-  edep = right.edep;
-  pos = right.pos;
-  trackID = right.trackID;
-}
-
-const RE01TrackerHit& RE01TrackerHit::operator=(const RE01TrackerHit &right)
-{
-  edep = right.edep;
-  pos = right.pos;
-  trackID = right.trackID;
-  return *this;
-}
-
-G4int RE01TrackerHit::operator==(const RE01TrackerHit &right) const
-{
-  return (this==&right) ? 1 : 0;
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Circle circle(pos);
+    G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
@@ -84,31 +69,35 @@ void RE01TrackerHit::Draw()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 const std::map<G4String,G4AttDef>* RE01TrackerHit::GetAttDefs() const
 {
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("RE01TrackerHit",isNew);
   if (isNew) {
-    G4String HitType("HitType");
-    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Physics","","G4String");
+    G4String hitType("HitType");
+    (*store)[hitType] = G4AttDef(hitType,"Hit Type","Physics","","G4String");
 
-    G4String TrackID("TrackID");
-    (*store)[TrackID] = G4AttDef(TrackID,"Track ID","Physics","","G4int");
+    G4String trackID("TrackID");
+    (*store)[trackID] = G4AttDef(trackID,"Track ID","Physics","","G4int");
 
-    G4String Energy("Energy");
-    (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
+    G4String energy("Energy");
+    (*store)[energy] = G4AttDef(energy,"Energy Deposited","Physics",
+                                "G4BestUnit","G4double");
 
-    G4String ETrack("ETrack");
-    (*store)[ETrack] = G4AttDef(ETrack,"Energy Deposited By Track","Physics","G4BestUnit","G4double");
+    G4String eTrack("ETrack");
+    (*store)[eTrack] = G4AttDef(eTrack,"Energy Deposited By Track","Physics",
+                                "G4BestUnit","G4double");
 
-    G4String Pos("Pos");
-    (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+    G4String pos("Pos");
+    (*store)[pos] = G4AttDef(pos, "Position",
+                      "Physics","G4BestUnit","G4ThreeVector");
   }
   return store;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 std::vector<G4AttValue>* RE01TrackerHit::CreateAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
@@ -116,24 +105,24 @@ std::vector<G4AttValue>* RE01TrackerHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","RE01TrackerHit",""));
 
   values->push_back
-    (G4AttValue("TrackID",G4UIcommand::ConvertToString(trackID),""));
+    (G4AttValue("TrackID",G4UIcommand::ConvertToString(fTrackID),""));
 
   values->push_back
-    (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
+    (G4AttValue("Energy",G4BestUnit(fEdep,"Energy"),""));
 
   G4double noEnergy = 0.*MeV;
   values->push_back
     (G4AttValue("ETrack",G4BestUnit(noEnergy,"Energy"),""));
 
   values->push_back
-    (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
+    (G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
   
    return values;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackerHit::Print()
 {
-  G4cout << "TrackID " << trackID << "   Position " << pos << "       : " << edep/keV << " [keV]" << G4endl;
+  G4cout << "TrackID " << fTrackID << "   Position " << fPos << "       : " 
+         << fEdep/keV << " [keV]" << G4endl;
 }
-
-

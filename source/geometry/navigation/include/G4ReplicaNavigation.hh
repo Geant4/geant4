@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.hh,v 1.6 2007-05-18 07:31:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4ReplicaNavigation
@@ -42,6 +41,8 @@
 #ifndef G4REPLICANAVIGATION_HH
 #define G4REPLICANAVIGATION_HH
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4Types.hh"
 #include "G4NavigationHistory.hh"
 #include "G4LogicalVolume.hh"
@@ -55,97 +56,128 @@
 
 class G4VSolid;
 
+struct G4ExitNormal
+{
+   // Bucket to hold value of Normal (3-vector), 
+   // bools for calculated and leave-behind or 'validConvex',
+   // and exiting side.
+   
+   enum  ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPX,kMX,kPY,kMY,kPZ,kMZ,kMother};
+     // Identity of 'Side' of Replicas. Used by DistanceToOut methods.
+
+   G4ThreeVector exitNormal;
+   G4bool        calculated;   // Normal
+   G4bool        validConvex;  // Solid locally convex
+   ESide         exitSide;
+
+ public:
+
+   G4ExitNormal(G4ThreeVector norm = G4ThreeVector(0.,0.,0.),
+                G4bool        calc = false,
+                G4bool        valid= false,
+                ESide         side = kNull )
+   { exitNormal= norm; calculated= calc; validConvex=valid; exitSide=side;}
+};
+
 class G4ReplicaNavigation
 {
-   friend class G4ReplicaNavigationTester;
+  public:  // with description
 
- public:  // with description
+    G4ReplicaNavigation();
+   ~G4ReplicaNavigation();
 
-  G4ReplicaNavigation();
-  ~G4ReplicaNavigation();
+    inline G4bool LevelLocate( G4NavigationHistory& history,
+                         const G4VPhysicalVolume *blockedVol,
+                         const G4int blockedNum,
+                         const G4ThreeVector &globalPoint,
+                         const G4ThreeVector* globalDirection,
+                         const G4bool pLocatedOnEdge, 
+                               G4ThreeVector &localPoint );
 
-  inline G4bool LevelLocate( G4NavigationHistory& history,
-                       const G4VPhysicalVolume *blockedVol,
-                       const G4int blockedNum,
-                       const G4ThreeVector &globalPoint,
-                       const G4ThreeVector* globalDirection,
-                       const G4bool pLocatedOnEdge, 
-                             G4ThreeVector &localPoint );
-
-  G4double ComputeStep( const G4ThreeVector &globalPoint,
-                        const G4ThreeVector &globalDirection,
-                        const G4ThreeVector &localPoint,
-                        const G4ThreeVector &localDirection,
-                        const G4double currentProposedStepLength,
-                              G4double &newSafety,
-                              G4NavigationHistory &history,
-                              G4bool &validExitNormal,
-                              G4ThreeVector &exitNormal,
-                              G4bool &exiting,
-                              G4bool &entering,
-                              G4VPhysicalVolume *(*pBlockedPhysical),
-                              G4int &blockedReplicaNo );
-
-  G4double ComputeSafety( const G4ThreeVector &globalPoint,
+    G4double ComputeStep( const G4ThreeVector &globalPoint,
+                          const G4ThreeVector &globalDirection,
                           const G4ThreeVector &localPoint,
+                          const G4ThreeVector &localDirection,
+                          const G4double currentProposedStepLength,
+                                G4double &newSafety,
                                 G4NavigationHistory &history,
-                          const G4double pProposedMaxLength=DBL_MAX );
+                                G4bool &validExitNormal,
+                                G4bool &calculatedExitNormal,
+                                G4ThreeVector &exitNormal,
+                                G4bool &exiting,
+                                G4bool &entering,
+                                G4VPhysicalVolume *(*pBlockedPhysical),
+                                G4int &blockedReplicaNo );
 
-  EInside BackLocate( G4NavigationHistory &history,
-                const G4ThreeVector &globalPoint,
-                      G4ThreeVector &localPoint,
-                const G4bool &exiting,
-                      G4bool &notKnownInside ) const;
-
-  void ComputeTransformation( const G4int replicaNo,
-                                    G4VPhysicalVolume *pVol,
-                                    G4ThreeVector &point ) const; 
-  void ComputeTransformation( const G4int replicaNo,
-                                    G4VPhysicalVolume *pVol ) const; 
-
-  EInside Inside( const G4VPhysicalVolume *pVol,
-                  const G4int replicaNo,
-                  const G4ThreeVector &localPoint ) const;
-  G4double DistanceToOut( const G4VPhysicalVolume *pVol,
-                          const G4int replicaNo,
-                          const G4ThreeVector &localPoint ) const;
-  G4double DistanceToOut( const G4VPhysicalVolume *pVol,
-                          const G4int replicaNo,
-                          const G4ThreeVector &localPoint,
-                          const G4ThreeVector &localDirection ) const;
-
-  inline G4int GetVerboseLevel() const;
-  inline void  SetVerboseLevel(G4int level);
-    // Get/Set Verbose(ness) level.
-    // [if level>0 && G4VERBOSE, printout can occur]
-
-  inline void  CheckMode(G4bool mode);
-    // Run navigation in "check-mode", therefore using additional
-    // verifications and more strict correctness conditions.
-    // Is effective only with G4VERBOSE set.
-
- private:
-
-  inline G4int VoxelLocate( const G4SmartVoxelHeader *pHead,
+    G4double ComputeSafety( const G4ThreeVector &globalPoint,
                             const G4ThreeVector &localPoint,
-                            const G4int blocked=-1 ) const;
+                                  G4NavigationHistory &history,
+                            const G4double pProposedMaxLength=DBL_MAX );
 
-  G4double DistanceToOutPhi( const G4ThreeVector &localPoint,
-                             const G4ThreeVector &localDirection,
-                             const G4double width ) const;
+    EInside BackLocate( G4NavigationHistory &history,
+                  const G4ThreeVector &globalPoint,
+                        G4ThreeVector &localPoint,
+                  const G4bool &exiting,
+                        G4bool &notKnownInside ) const;
 
-  G4double DistanceToOutRad( const G4ThreeVector &localPoint,
-                             const G4ThreeVector &localDirection,
-                             const G4double width,
-                             const G4double offset,
-                             const G4int replicaNo ) const;
-  inline void SetPhiTransformation( const G4double ang,
-                                          G4VPhysicalVolume *pVol=0 ) const;
- private:
+    void ComputeTransformation( const G4int replicaNo,
+                                      G4VPhysicalVolume *pVol,
+                                      G4ThreeVector &point ) const; 
+    void ComputeTransformation( const G4int replicaNo,
+                                      G4VPhysicalVolume *pVol ) const; 
+
+    EInside Inside( const G4VPhysicalVolume *pVol,
+                    const G4int replicaNo,
+                    const G4ThreeVector &localPoint ) const;
+    G4double DistanceToOut( const G4VPhysicalVolume *pVol,
+                            const G4int replicaNo,
+                            const G4ThreeVector &localPoint ) const;
+    G4double DistanceToOut( const G4VPhysicalVolume *pVol,
+                            const G4int replicaNo,
+                            const G4ThreeVector &localPoint,
+                            const G4ThreeVector &localDirection,
+                                  G4ExitNormal& candidateNormal ) const;
+
+    inline G4int GetVerboseLevel() const;
+    inline void  SetVerboseLevel(G4int level);
+      // Get/Set Verbose(ness) level.
+      // [if level>0 && G4VERBOSE, printout can occur]
+
+    inline void  CheckMode(G4bool mode);
+      // Run navigation in "check-mode", therefore using additional
+      // verifications and more strict correctness conditions.
+      // Is effective only with G4VERBOSE set.
+
+  private:
+
+    inline G4int VoxelLocate( const G4SmartVoxelHeader *pHead,
+                              const G4ThreeVector &localPoint,
+                              const G4int blocked=-1 ) const;
+
+    G4double DistanceToOutPhi( const G4ThreeVector &localPoint,
+                               const G4ThreeVector &localDirection,
+                               const G4double width,
+                               G4ExitNormal& foundNormal ) const;
+
+    G4double DistanceToOutRad( const G4ThreeVector &localPoint,
+                               const G4ThreeVector &localDirection,
+                               const G4double width,
+                               const G4double offset,
+                               const G4int replicaNo,
+                                     G4ExitNormal& foundNormal ) const;
+    inline void SetPhiTransformation( const G4double ang,
+                                            G4VPhysicalVolume *pVol=0 ) const;
+  private:
+
+    // Invariants - unaltered during navigation
+    // **********
 
     G4bool fCheck; 
     G4int  fVerbose;
+      // Configuration parameters
+
     G4double kCarTolerance, kRadTolerance, kAngTolerance;
+      // Local copy of constants
 };
 
 #include "G4ReplicaNavigation.icc"

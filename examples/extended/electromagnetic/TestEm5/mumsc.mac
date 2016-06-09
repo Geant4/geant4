@@ -24,10 +24,9 @@
 /gun/particle mu+
 /gun/energy 100 GeV
 #
-/testem/histo/setFileName mumsc/local
-/testem/histo/setFileType root
-/testem/histo/setHisto 14  100 -5.0  +5.0 mm		#x-position at exit  
-/testem/histo/setHisto 15  100  0.  +10.0 mm		#radius at exit  
+/analysis/setFileName mumsc/local
+/analysis/h1/set 14  100 -5.0  +5.0 mm		#x-position at exit  
+/analysis/h1/set 15  100  0.  +10.0 mm		#radius at exit  
 #
 /testem/stack/killSecondaries
 #

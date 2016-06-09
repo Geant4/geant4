@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.cc,v 1.5 2010-10-25 17:23:01 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ElectronIonPair.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4StepPoint.hh"
@@ -61,7 +61,7 @@ G4ElectronIonPair::G4ElectronIonPair()
   curMaterial = 0;
   curMeanEnergy = 0.0;
   nMaterials = 0;
-  FanoFactor = 0.2;
+  invFanoFactor = 1.0/0.2;
   Initialise();
 }
 

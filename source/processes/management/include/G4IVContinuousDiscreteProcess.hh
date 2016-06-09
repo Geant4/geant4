@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVContinuousDiscreteProcess.hh,v 1.8 2006-06-29 21:07:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -48,10 +47,15 @@
 #ifndef G4IVContinuousDiscreteProcess_h
 #define G4IVContinuousDiscreteProcess_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
 
 #include "G4VProcess.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4MaterialTable.hh"
 
 class G4IVContinuousDiscreteProcess : public G4VProcess 
 {
@@ -134,13 +138,10 @@ class G4IVContinuousDiscreteProcess : public G4VProcess
       G4PhysicsTable* theInverseNlambdaTable ; 
       const G4double BIGSTEP ;
 };
+
 // -----------------------------------------
 //  inlined function members implementation
 // -----------------------------------------
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4MaterialTable.hh"
-
 
 inline void G4IVContinuousDiscreteProcess::
                              SubtractNumberOfInteractionLengthLeft(
@@ -194,15 +195,9 @@ inline G4double G4IVContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLe
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<G4endl;
+    G4cout << "IntractionLength= " << steplength/CLHEP::cm <<"[cm] " <<G4endl;
   }
   return  steplength ;
 }
 
 #endif
-
-
-
-
-
-

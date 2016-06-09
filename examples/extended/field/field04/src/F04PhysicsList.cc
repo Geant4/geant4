@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04PhysicsList.cc
+/// \brief Implementation of the F04PhysicsList class
 //
 //
-
 #include "F04PhysicsList.hh"
 #include "F04PhysicsListMessenger.hh"
 
@@ -55,7 +56,11 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
-F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList() 
+#include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
 {
     G4LossTableManager::Instance();
 
@@ -91,34 +96,41 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
     RegisterPhysics(new F04ExtraPhysics());
     RegisterPhysics(new G4OpticalPhysics());
 
-    stepMaxProcess = new F04StepMax();
+    fStepMaxProcess = new F04StepMax();
+    fMaxChargedStep = DBL_MAX;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04PhysicsList::~F04PhysicsList()
 {
     delete fMessenger;
 
-    delete stepMaxProcess;
+    delete fStepMaxProcess;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04PhysicsList::ConstructParticle()
 {
     G4VModularPhysicsList::ConstructParticle();
 
-    G4DecayTable* MuonPlusDecayTable = new G4DecayTable();
-    MuonPlusDecayTable -> Insert(new
+    G4DecayTable* muonPlusDecayTable = new G4DecayTable();
+    muonPlusDecayTable -> Insert(new
                            G4MuonDecayChannelWithSpin("mu+",0.986));
-    MuonPlusDecayTable -> Insert(new
+    muonPlusDecayTable -> Insert(new
                            G4MuonRadiativeDecayChannelWithSpin("mu+",0.014));
-    G4MuonPlus::MuonPlusDefinition() -> SetDecayTable(MuonPlusDecayTable);
+    G4MuonPlus::MuonPlusDefinition() -> SetDecayTable(muonPlusDecayTable);
 
-    G4DecayTable* MuonMinusDecayTable = new G4DecayTable();
-    MuonMinusDecayTable -> Insert(new
+    G4DecayTable* muonMinusDecayTable = new G4DecayTable();
+    muonMinusDecayTable -> Insert(new
                             G4MuonDecayChannelWithSpin("mu-",0.986));
-    MuonMinusDecayTable -> Insert(new
+    muonMinusDecayTable -> Insert(new
                             G4MuonRadiativeDecayChannelWithSpin("mu-",0.014));
-    G4MuonMinus::MuonMinusDefinition() -> SetDecayTable(MuonMinusDecayTable);
+    G4MuonMinus::MuonMinusDefinition() -> SetDecayTable(muonMinusDecayTable);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04PhysicsList::ConstructProcess()
 {
@@ -131,59 +143,61 @@ void F04PhysicsList::ConstructProcess()
     G4VProcess* decay;
     decay = processTable->FindProcess("Decay",G4MuonPlus::MuonPlus());
 
-    G4ProcessManager* fManager;
-    fManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+    G4ProcessManager* pmanager;
+    pmanager = G4MuonPlus::MuonPlus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(decayWithSpin);
+    if (pmanager) {
+      if (decay) pmanager->RemoveProcess(decay);
+      pmanager->AddProcess(decayWithSpin);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(decayWithSpin, idxPostStep);
-      fManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
+      pmanager ->SetProcessOrdering(decayWithSpin, idxPostStep);
+      pmanager ->SetProcessOrdering(decayWithSpin, idxAtRest);
     }
 
     decay = processTable->FindProcess("Decay",G4MuonMinus::MuonMinus());
 
-    fManager = G4MuonMinus::MuonMinus()->GetProcessManager();
+    pmanager = G4MuonMinus::MuonMinus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(decayWithSpin);
+    if (pmanager) {
+      if (decay) pmanager->RemoveProcess(decay);
+      pmanager->AddProcess(decayWithSpin);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(decayWithSpin, idxPostStep);
-      fManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
+      pmanager ->SetProcessOrdering(decayWithSpin, idxPostStep);
+      pmanager ->SetProcessOrdering(decayWithSpin, idxAtRest);
     }
 
     G4PionDecayMakeSpin* poldecay = new G4PionDecayMakeSpin();
 
     decay = processTable->FindProcess("Decay",G4PionPlus::PionPlus());
 
-    fManager = G4PionPlus::PionPlus()->GetProcessManager();
+    pmanager = G4PionPlus::PionPlus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(poldecay);
+    if (pmanager) {
+      if (decay) pmanager->RemoveProcess(decay);
+      pmanager->AddProcess(poldecay);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(poldecay, idxPostStep);
-      fManager ->SetProcessOrdering(poldecay, idxAtRest);
+      pmanager ->SetProcessOrdering(poldecay, idxPostStep);
+      pmanager ->SetProcessOrdering(poldecay, idxAtRest);
     }
 
     decay = processTable->FindProcess("Decay",G4PionMinus::PionMinus());
 
-    fManager = G4PionMinus::PionMinus()->GetProcessManager();
+    pmanager = G4PionMinus::PionMinus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(poldecay);
+    if (pmanager) {
+      if (decay) pmanager->RemoveProcess(decay);
+      pmanager->AddProcess(poldecay);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(poldecay, idxPostStep);
-      fManager ->SetProcessOrdering(poldecay, idxAtRest);
+      pmanager ->SetProcessOrdering(poldecay, idxPostStep);
+      pmanager ->SetProcessOrdering(poldecay, idxAtRest);
     }
 
     AddStepMax();
 }
 
 /*
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04PhysicsList::RemoveFromPhysicsList(const G4String& name)
 {
     G4bool success = false;
@@ -203,6 +217,8 @@ void F04PhysicsList::RemoveFromPhysicsList(const G4String& name)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04PhysicsList::ClearPhysics()
 {
     for (G4PhysConstVector::iterator p  = physicsVector->begin();
@@ -212,6 +228,8 @@ void F04PhysicsList::ClearPhysics()
     physicsVector->clear();
 }
 */
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04PhysicsList::SetCuts()
 {
@@ -230,11 +248,15 @@ void F04PhysicsList::SetCuts()
     if (verboseLevel>0) DumpCutValuesTable();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04PhysicsList::SetCutForGamma(G4double cut)
 {
     fCutForGamma = cut;
     SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04PhysicsList::SetCutForElectron(G4double cut)
 {
@@ -242,22 +264,30 @@ void F04PhysicsList::SetCutForElectron(G4double cut)
     SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04PhysicsList::SetCutForPositron(G4double cut)
 {
     fCutForPositron = cut;
     SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04PhysicsList::SetStepMax(G4double step)
 {
-  MaxChargedStep = step ;
-  stepMaxProcess->SetStepMax(MaxChargedStep);
+  fMaxChargedStep = step ;
+  fStepMaxProcess->SetStepMax(fMaxChargedStep);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04StepMax* F04PhysicsList::GetStepMaxProcess()
 {
-  return stepMaxProcess;
+  return fStepMaxProcess;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04PhysicsList::AddStepMax()
 {
@@ -268,9 +298,9 @@ void F04PhysicsList::AddStepMax()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
+      if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
       {
-         if (pmanager) pmanager ->AddDiscreteProcess(stepMaxProcess);
+         if (pmanager) pmanager ->AddDiscreteProcess(fStepMaxProcess);
       }
   }
 }

@@ -53,14 +53,13 @@ G4endl;
 
 void G4WarnPLStatus::OnlyFromFactory(const G4String aPL, const G4String basePL) const
 {
-    G4ExceptionDescription desc;
-    desc <<
+    G4cout << 
 "*=====================================================================" <<G4endl <<
 "*                                                                     " <<G4endl <<
-"*   The Physics list "<<aPL<<", a variation of "<< basePL<< " is now  " <<G4endl <<
-"*      available only via the physics list factory                    " <<G4endl <<
-"*                                                                     " <<G4endl <<
-"*   Please replace code like                                          " <<G4endl <<
+"*   The Physics list "<<aPL<<", a variation of "<< basePL<< " will be " <<G4endl <<
+"*      available only via the physics list factory starting from the  " <<G4endl <<
+"*      next release, Geant4 10 .                                      " <<G4endl <<
+"*   We recommend you to replace code like                             " <<G4endl <<
 "*                                                                     " <<G4endl <<
 "       runManager->SetUserInitialization( new " << aPL << " );        " <<G4endl <<
 "*                                                                     " <<G4endl <<
@@ -81,10 +80,9 @@ void G4WarnPLStatus::OnlyFromFactory(const G4String aPL, const G4String basePL) 
 "*                                                                      " <<G4endl <<
 "*=====================================================================*" <<G4endl<<
 G4endl;
-    G4String txtPL;
-    txtPL=aPL + "::" + aPL;
-    G4Exception(txtPL,"PhysicsLists001", FatalException,desc);
-
+    //G4String txtPL;
+    //txtPL=aPL + "::" + aPL;
+    //G4Exception(txtPL,"PhysicsLists001", FatalException,desc);
 }
 
 
@@ -94,7 +92,8 @@ void G4WarnPLStatus::Unsupported(const G4String aPL, const G4String Replacement)
 "*=====================================================================" <<G4endl <<
 "*                                                                     " <<G4endl <<
 "*   The Physics list "<<aPL<<" is NO LONGER SUPPORTED !   " <<G4endl <<
-"*   and is likely to be deleted in a future release of Geant4             " <<G4endl <<
+//"*   and is likely to be deleted in a future release of Geant4             " <<G4endl <<
+"*   and will be deleted in the next release, Geant4 10                " <<G4endl <<
 "*                                                                     " <<G4endl;
    if (Replacement.size() > 0)
    {

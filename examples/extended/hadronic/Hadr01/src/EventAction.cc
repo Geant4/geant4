@@ -23,25 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.6 2010-06-07 05:40:46 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
 // EventAction
 //
-// Created: 31.04.2006 V.Ivanchenko
+// Created: 21.06.2008 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
 
 #include "EventAction.hh"
 #include "G4Event.hh"
-#include "HistoManager.hh"
 #include "EventActionMessenger.hh"
+#include "HistoManager.hh"
 
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -49,21 +50,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction():
-  printModulo(100),
-  nSelected(0),
-  drawFlag("all"),
-  debugStarted(false)
+  fPrintModulo(100),
+  fSelected(0),
+  fDebugStarted(false)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
   UI = G4UImanager::GetUIpointer();
-  selectedEvents.clear();
+  fSelectedEvents.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,39 +73,39 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   // New event
   G4int nEvt = evt->GetEventID();
 
-  if(nSelected>0) {
-    for(G4int i=0; i<nSelected; i++) {
-      if(nEvt == selectedEvents[i]) {
+  if(fSelected>0) {
+    for(G4int i=0; i<fSelected; ++i) {
+      if(nEvt == fSelectedEvents[i]) {
         UI->ApplyCommand("/random/saveThisEvent");
         UI->ApplyCommand("/tracking/verbose  2");
-        debugStarted = true;
+        fDebugStarted = true;
         break;
       }
     }
   }
 
   // Initialize user actions
-  HistoManager* man = HistoManager::GetPointer();
-  man->BeginOfEvent(); 
-  if(man->GetVerbose() > 0 || G4int(nEvt/printModulo)*printModulo == nEvt) 
+  if(G4int(nEvt/fPrintModulo)*fPrintModulo == nEvt) {
     G4cout << "EventAction: Event # "
            << nEvt << " started" << G4endl;
-
+  }
+  HistoManager::GetPointer()->BeginOfEvent(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::EndOfEventAction(const G4Event*)
+void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  if(debugStarted) {
+  if(fDebugStarted) {
     UI->ApplyCommand("/tracking/verbose  0");
-    debugStarted = false;
+    fDebugStarted = false;
+    G4cout << "EventAction: Event ended" << G4endl;
   }
-
   HistoManager* man = HistoManager::GetPointer();
   man->EndOfEvent(); 
-  if(man->GetVerbose() > 1) 
-    G4cout << "EventAction: Event ended" << G4endl;
+  if(man->GetVerbose() > 1) {
+    G4cout << "EventAction: Event " << evt->GetEventID() << " ended" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

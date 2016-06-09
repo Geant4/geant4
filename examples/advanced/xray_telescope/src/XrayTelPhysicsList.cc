@@ -48,6 +48,10 @@
 //
 // **********************************************************************
 
+#include "XrayTelPhysicsList.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -62,10 +66,6 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
-
-#include "globals.hh"
-
-#include "XrayTelPhysicsList.hh"
 
 XrayTelPhysicsList::XrayTelPhysicsList():  G4VUserPhysicsList()
 {

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/PrimaryGeneratorAction3.hh
+/// \brief Definition of the PrimaryGeneratorAction3 class
 //
-// $Id: PrimaryGeneratorAction3.hh,v 1.3 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -52,14 +54,14 @@ class PrimaryGeneratorAction3
     void GeneratePrimaries(G4Event*);
 
   public:
-    G4ThreeVector GetNewUz() { return newUz; };
-    G4double GetAlphaMax()   { return alphaMax; };
+    G4ThreeVector GetNewUz() { return fNewUz; };
+    G4double GetAlphaMax()   { return fAlphaMax; };
     
   private:
-    G4ThreeVector          newUz;   
-    G4double               alphaMax;	//max angle
+    G4ThreeVector          fNewUz;   
+    G4double               fAlphaMax;     //max angle
     
-    G4ParticleGun*         particleGun;
+    G4ParticleGun*         fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4coutDestination.cc,v 1.2 2006-06-29 19:04:41 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -42,12 +41,12 @@ G4coutDestination::~G4coutDestination()
 {
 }
 
-G4int G4coutDestination::ReceiveG4cout(G4String)
+G4int G4coutDestination::ReceiveG4cout(const G4String&)
 {
   return 0;
 }
 
-G4int G4coutDestination::ReceiveG4cerr(G4String)
+G4int G4coutDestination::ReceiveG4cerr(const G4String&)
 {
   return 0;
 }

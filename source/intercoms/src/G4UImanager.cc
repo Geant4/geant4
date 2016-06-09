@@ -24,10 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.34 2010-05-19 14:50:30 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// 
+//
 // ---------------------------------------------------------------------
 
 #include "G4UImanager.hh"
@@ -44,14 +43,14 @@
 #include "G4Tokenizer.hh"
 
 #include <sstream>
-
+#include <fstream>
 
 G4UImanager * G4UImanager::fUImanager = 0;
 G4bool G4UImanager::fUImanagerHasBeenKilled = false;
 
 G4UImanager * G4UImanager::GetUIpointer()
 {
-  if(!fUImanager) 
+  if(!fUImanager)
   {
     if(!fUImanagerHasBeenKilled)
     {
@@ -79,6 +78,7 @@ G4UImanager::G4UImanager()
   pauseAtBeginOfEvent = false;
   pauseAtEndOfEvent = false;
   maxHistSize = 20;
+  searchPath="";
 }
 
 void G4UImanager::CreateMessenger()
@@ -123,7 +123,7 @@ G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {
   G4String theCommand = aCommand;
   savedCommand = treeTop->FindPath( theCommand );
-  if( savedCommand == NULL ) 
+  if( savedCommand == NULL )
   {
     G4cerr << "command not found" << G4endl;
     return G4String();
@@ -131,7 +131,7 @@ G4String G4UImanager::GetCurrentValues(const char * aCommand)
   return savedCommand->GetCurrentValue();
 }
 
-G4String G4UImanager::GetCurrentStringValue(const char * aCommand, 
+G4String G4UImanager::GetCurrentStringValue(const char * aCommand,
 G4int parameterNumber, G4bool reGet)
 {
   if(reGet || savedCommand == NULL)
@@ -153,7 +153,7 @@ G4int parameterNumber, G4bool reGet)
   return token;
 }
 
-G4String G4UImanager::GetCurrentStringValue(const char * aCommand, 
+G4String G4UImanager::GetCurrentStringValue(const char * aCommand,
 const char * aParameterName, G4bool reGet)
 {
   if(reGet || savedCommand == NULL)
@@ -172,7 +172,7 @@ const char * aParameterName, G4bool reGet)
 G4int G4UImanager::GetCurrentIntValue(const char * aCommand,
 const char * aParameterName, G4bool reGet)
 {
-  G4String targetParameter = 
+  G4String targetParameter =
      GetCurrentStringValue( aCommand, aParameterName, reGet );
   G4int value;
   const char* t = targetParameter;
@@ -184,7 +184,7 @@ const char * aParameterName, G4bool reGet)
 G4int G4UImanager::GetCurrentIntValue(const char * aCommand,
 G4int parameterNumber, G4bool reGet)
 {
-  G4String targetParameter = 
+  G4String targetParameter =
      GetCurrentStringValue( aCommand, parameterNumber, reGet );
   G4int value;
   const char* t = targetParameter;
@@ -196,7 +196,7 @@ G4int parameterNumber, G4bool reGet)
 G4double G4UImanager::GetCurrentDoubleValue(const char * aCommand,
 const char * aParameterName, G4bool reGet)
 {
-  G4String targetParameter = 
+  G4String targetParameter =
      GetCurrentStringValue( aCommand, aParameterName, reGet );
   G4double value;
   const char* t = targetParameter;
@@ -208,7 +208,7 @@ const char * aParameterName, G4bool reGet)
 G4double G4UImanager::GetCurrentDoubleValue(const char * aCommand,
 G4int parameterNumber, G4bool reGet)
 {
-  G4String targetParameter = 
+  G4String targetParameter =
      GetCurrentStringValue( aCommand, parameterNumber, reGet );
   G4double value;
   const char* t = targetParameter;
@@ -255,7 +255,7 @@ void G4UImanager::LoopS(const char* valueList)
   is >> d1 >> d2 >> d3;
   Loop(mf,vn,d1,d2,d3);
 }
-  
+
 void G4UImanager::Loop(const char * macroFile,const char * variableName,
                    G4double initialValue,G4double finalValue,G4double stepSize)
 {
@@ -263,18 +263,18 @@ void G4UImanager::Loop(const char * macroFile,const char * variableName,
   if (stepSize > 0) {
     for(G4double d=initialValue;d<=finalValue;d+=stepSize)
       {
-	std::ostringstream os;
-	os << d;
-	cd += os.str();
-	cd += " ";
+  std::ostringstream os;
+  os << d;
+  cd += os.str();
+  cd += " ";
       }
   } else {
     for(G4double d=initialValue;d>=finalValue;d+=stepSize)
       {
-	std::ostringstream os;
-	os << d;
-	cd += os.str();
-	cd += " ";
+  std::ostringstream os;
+  os << d;
+  cd += os.str();
+  cd += " ";
       }
   }
   Foreach(macroFile,variableName,cd);
@@ -327,7 +327,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
       if( ib == G4int(std::string::npos) )
       {
         G4cerr << aCommand << G4endl;
-        for(G4int iz=0;iz<ia;iz++) G4cerr << " ";
+        for(G4int i=0;i<ia;i++) G4cerr << " ";
         G4cerr << "^" << G4endl;
         G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
         G4String nullStr;
@@ -361,7 +361,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
   return aCommand;
 }
 
-G4int G4UImanager::ApplyCommand(G4String aCmd)
+G4int G4UImanager::ApplyCommand(const G4String& aCmd)
 {
   return ApplyCommand(aCmd.data());
 }
@@ -412,10 +412,10 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   if( targetCommand == NULL )
   { return fCommandNotFound; }
 
-  if(!(targetCommand->IsAvailable())) 
+  if(!(targetCommand->IsAvailable()))
   { return fIllegalApplicationState; }
- 
-  if(saveHistory) historyFile << aCommand << G4endl; 
+
+  if(saveHistory) historyFile << aCommand << G4endl;
   if( G4int(histVec.size()) >= maxHistSize )
   { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
@@ -444,7 +444,7 @@ void G4UImanager::StoreHistory(G4bool historySwitch,const char* fileName)
 
 void G4UImanager::PauseSession(const char* msg)
 {
-  if(session) session->PauseSessionStart(msg); 
+  if(session) session->PauseSessionStart(msg);
 }
 
 void G4UImanager::ListCommands(const char* direct)
@@ -527,7 +527,7 @@ void G4UImanager::SetAlias(const char * aliasLine)
   G4String aliasName = aLine(0,i);
   G4String aliasValue = aLine(i+1,aLine.length()-(i+1));
   if(aliasValue(0)=='"')
-  { 
+  {
     G4String strippedValue;
     if(aliasValue(aliasValue.length()-1)=='"')
     { strippedValue = aliasValue(1,aliasValue.length()-2); }
@@ -552,7 +552,7 @@ void G4UImanager::ListAlias()
 }
 
 void G4UImanager::CreateHTML(const char* dir)
-{ 
+{
   G4UIcommandTree* tr = FindDirectory(dir);
   if(tr!=0)
   { tr->CreateHTML(); }
@@ -560,3 +560,47 @@ void G4UImanager::CreateHTML(const char* dir)
   { G4cerr << "Directory <" << dir << "> is not found." << G4endl; }
 }
 
+void G4UImanager::ParseMacroSearchPath()
+{
+  searchDirs.clear();
+
+  size_t idxfirst = 0;
+  size_t idxend = 0;
+  G4String pathstring = "";
+  while( (idxend = searchPath.index(':', idxfirst)) != G4String::npos) {
+    pathstring = searchPath.substr(idxfirst, idxend-idxfirst);
+    if(pathstring.size() != 0) searchDirs.push_back(pathstring);
+    idxfirst = idxend + 1;
+  }
+
+  pathstring = searchPath.substr(idxfirst, searchPath.size()-idxfirst);
+  if(pathstring.size() != 0) searchDirs.push_back(pathstring);
+}
+
+
+static G4bool FileFound(const G4String& fname)
+{
+  G4bool qopen = false;
+  std::ifstream fs;
+  fs.open(fname.c_str(), std::ios::in);
+  if(fs.good()) {
+    fs.close();
+    qopen = true;
+  }
+  return qopen;
+}
+
+G4String G4UImanager::FindMacroPath(const G4String& fname) const
+{
+  G4String macrofile = fname;
+
+  for (size_t i = 0; i < searchDirs.size(); i++) {
+    G4String fullpath = searchDirs[i] + "/" + fname;
+    if ( FileFound(fullpath) ) {
+      macrofile = fullpath;
+      break;
+    }
+  }
+
+  return macrofile;
+}

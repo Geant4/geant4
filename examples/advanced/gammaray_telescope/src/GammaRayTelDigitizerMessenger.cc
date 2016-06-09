@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizerMessenger.cc,v 1.5 2006-06-29 15:56:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -42,6 +41,7 @@
 #include "GammaRayTelDigitizerMessenger.hh"
 
 #include "GammaRayTelDigitizer.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

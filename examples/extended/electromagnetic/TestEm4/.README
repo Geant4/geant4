@@ -1,0 +1,110 @@
+//$Id$
+
+///\file "electromagnetic/TestEm4/.README"
+///\brief Example TestEm4 README page
+
+/*! \page ExampleTestEm4 Example TestEm4
+
+ Plot energy deposited by 9 MeV photon beam in an homogeneous medium.
+	
+\section TestEm4_s1 GEOMETRY DEFINITION
+ 
+ It is a cylinder of 5 cm radius filled with C6F6.
+ 	
+\section TestEm4_s2 PHYSICS LIST
+ 
+ The particle list contains only gamma, electron,positron.
+ The physics list contains the 'standard' electromagnetic processes.
+ 	 
+\section TestEm4_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic is a single 9 MeV gamma randomly shooted at the
+ middle of the cylinder. 
+ 	 				
+\section TestEm4_s4 VISUALIZATION
+ 
+ The Visualization Manager is set in the main () (see TestEm4.cc).
+ The initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is
+ automatically read from the main in case of interactive running mode.
+ 
+ The detector has a default view which is a transversal view of the 
+ cylinder.
+ 
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionaly one can choose to draw all particles, only the charged one,
+ or none. This command is defined in EventActionMessenger class.
+ 	
+\section TestEm4_s5 PHYSICS SURVEY
+ 
+ The energy deposited in C6F6 is histogramed.
+ 	
+\section TestEm4_s6 HOW TO START ?
+ 
+ - Execute TestEm4 in 'batch' mode from macro files
+\verbatim
+% TestEm4   TestEm4.in
+\endverbatim
+  		
+ - Execute TestEm4 in 'interactive mode' with visualization
+\verbatim
+% TestEm4
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+  		
+ - Visualize the histogram (paw)
+\verbatim
+paw> h/file 1 testem4.hbook
+paw> option stat
+paw> option logy
+paw> h/pl 1 	
+\endverbatim
+   
+
+\section TestEm4_s7 USING HISTOGRAMS
+
+ The format of the histogram file can be : root (default),
+ hbook, xml, csv, by selecting g4nnn.hh in RunAction.hh 
+ 
+\subsection TestEm4_subs1 Using hbook format
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in RunAction.hh
+  
+\section TestEm4_s8- RANDOM NUMBERS HANDLING
+ 
+   CLHEP provides several random number engines. In this example the Ranecu
+   engine is choosen at beginning of the main (TestEm4.cc).
+	
+   By default, G4RunManager does not save the rndm seed.
+   To do so the user must set in BeginOfRunAction:
+   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+	
+   Then the rndm seed is systematically saved at beginning of run
+   (currentRun.rndm) and beginning of event (currentEvent.rndm)
+   Therefore, in case of abnormal end, the seed of the last event processed
+   is available in currentEvent.rndm
+	
+   Even in case of normal run processing, the user may wish to preserve the
+   rndm seed of selected events. At any time in the event, put the
+   following statement:
+\verbatim
+if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
+\endverbatim
+   currentEvent.rndm will be copied to runXXevntYY.rndm
+   (see SteppingAction::UserSteppingAction() )
+	
+   To restart a run from a given rndm seed, use the UI command :
+\verbatim
+/random/resetEngineFrom  fileName 
+\endverbatim
+	
+   The macro rndmSeed.mac shows how to save and reset the random number
+   seed between runs, from UI commands.	
+
+*/
+  

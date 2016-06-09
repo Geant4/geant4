@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSRunAction.hh
+/// \brief Definition of the exGPSRunAction class
+//
 #ifndef exGPSRunAction_h
 #define exGPSRunAction_h 1
 
@@ -36,12 +39,12 @@ class G4Run;
 class exGPSRunAction : public G4UserRunAction
 {
   public:
-  exGPSRunAction();
-  ~exGPSRunAction();
+   exGPSRunAction();
+   virtual ~exGPSRunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
   private:
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDVCrossSectionHandler.hh,v 1.14 2006/06/29 19:37:01 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,10 +48,12 @@
 #ifndef G4RDVCROSSSECTIONHANDLER_HH
 #define G4RDVCROSSSECTIONHANDLER_HH 1
 
-#include "globals.hh"
-#include "G4DataVector.hh"
 #include <map>
 #include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4DataVector.hh"
 #include "G4MaterialCutsCouple.hh"
 
 class G4RDVDataSetAlgorithm;
@@ -66,17 +68,17 @@ public:
   G4RDVCrossSectionHandler();
 
   G4RDVCrossSectionHandler(G4RDVDataSetAlgorithm* interpolation,
-			 G4double minE = 250*eV, G4double maxE = 100*GeV,
+			 G4double minE = 250*CLHEP::eV, G4double maxE = 100*CLHEP::GeV,
 			 G4int nBins = 200,
-			 G4double unitE = MeV, G4double unitData = barn,
+			 G4double unitE = CLHEP::MeV, G4double unitData = CLHEP::barn,
 			 G4int minZ = 1, G4int maxZ = 99);
 
   virtual ~G4RDVCrossSectionHandler();
 
   void Initialise(G4RDVDataSetAlgorithm* interpolation = 0,
-		  G4double minE = 250*eV, G4double maxE = 100*GeV,
+		  G4double minE = 250*CLHEP::eV, G4double maxE = 100*CLHEP::GeV,
 		  G4int numberOfBins = 200,
-		  G4double unitE = MeV, G4double unitData = barn,
+		  G4double unitE = CLHEP::MeV, G4double unitData = CLHEP::barn,
 		  G4int minZ = 1, G4int maxZ = 99);
 
   G4int SelectRandomAtom(const G4MaterialCutsCouple* couple, G4double e) const;
@@ -144,14 +146,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

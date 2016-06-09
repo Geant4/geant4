@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITType.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -82,7 +83,7 @@ inline G4ITType operator -(const G4ITType& left,const int& right) {
 class G4ITTypeManager
 {
 private:
-    static G4ITTypeManager* fInstance ;
+    static G4ITTypeManager* fgInstance ;
     G4ITType fLastType;
     G4ITTypeManager();
     virtual ~G4ITTypeManager();

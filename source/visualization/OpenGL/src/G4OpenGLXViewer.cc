@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.57 2010-12-11 17:04:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -49,6 +48,7 @@
 #include "G4Normal3D.hh"
 #include "G4StateManager.hh"
 #include "G4VisManager.hh"
+#include "G4Text.hh"
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -94,7 +94,7 @@ void G4OpenGLXViewer::SetView () {
   Bool success = glXMakeCurrent (dpy, win, cx);
   if (!success) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to attach a GLX context."
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to attach a GLX context."
            << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
@@ -131,14 +131,14 @@ void G4OpenGLXViewer::GetXConnection () {
   dpy = XOpenDisplay (0);
   if (!dpy) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't open display." << G4endl;
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't open display." << G4endl;
     return;
   }
 
 // make sure OpenGL is supported and installed properly.
   if (!glXQueryExtension (dpy, &errorBase, &eventBase)) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer X Server has no GLX extension." 
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer X Server has no GLX extension." 
 	 << G4endl;
     return;
   }
@@ -151,7 +151,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 // get window's attributes
   if (!XGetWindowAttributes(dpy, XRootWindow (dpy, vi -> screen), &xwa)) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't return window attributes"
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't return window attributes"
 	 << G4endl;
     return;
   }
@@ -160,7 +160,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
   cx = glXCreateContext (dpy, vi, 0, true);
   if (!cx) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't create context."
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't create context."
 	 << G4endl;
     return;
   }
@@ -198,7 +198,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
       fViewId = -1;  // This flags an error.
       if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cerr <<
-  "G4OpenGLViewer::G4OpenGLViewer failed to allocate a standard colormap."
+  "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a standard colormap."
 	       << G4endl;
       return;
     }
@@ -216,7 +216,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
   if (!cmap) {
     fViewId = -1;  // This flags an error.
     if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-      G4cout << "G4OpenGLViewer::G4OpenGLViewer failed to allocate a Colormap."
+      G4cout << "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a Colormap."
 	     << G4endl;
     return;
   }
@@ -293,7 +293,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   Bool success = glXMakeCurrent (dpy, win, cx);
   if (!success) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to attach a GLX context."
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to attach a GLX context."
 	 << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
@@ -304,8 +304,8 @@ void G4OpenGLXViewer::CreateMainWindow () {
 
 }
 
-void G4OpenGLXViewer::CreateFontLists () {
-
+void G4OpenGLXViewer::CreateFontLists()
+{
   std::map<G4double,G4String> fonts;  // G4VMarker screen size and font name.
   fonts[10.] = "-adobe-courier-bold-r-normal--10-100-75-75-m-60-iso8859-1";
   fonts[11.] = "-adobe-courier-bold-r-normal--11-80-100-100-m-60-iso8859-1";
@@ -323,56 +323,87 @@ void G4OpenGLXViewer::CreateFontLists () {
     XFontStruct* font_info = XLoadQueryFont(dpy, i->second);
     if (!font_info) {
       G4cerr <<
-	"G4OpenGLXViewer: XLoadQueryFont failed for font\n  "
+	"G4OpenGLXViewer::CreateFontLists XLoadQueryFont failed for font\n  "
 	     << i->second
 	     << G4endl;
       continue;
     }
     G4int font_base = glGenLists(256);
     if (!font_base) {
-      G4cerr << "G4OpenGLXViewer: out of display lists for fonts." 
+      G4cerr <<
+	"G4OpenGLXViewer::CreateFontLists out of display lists for fonts." 
 	     << G4endl;
       continue;
     }
     G4int first = font_info->min_char_or_byte2;
     G4int last  = font_info->max_char_or_byte2;
-    glXUseXFont(font_info->fid, first, last-first+1,font_base+first);
-    G4OpenGLFontBaseStore::AddFontBase(this,font_base,i->first,i->second);
+    glXUseXFont(font_info->fid, first, last-first+1, font_base + first);
+    G4int width = font_info->max_bounds.width;
+    G4OpenGLFontBaseStore::AddFontBase
+      (this, font_base, i->first, i->second, width);
   }
 }
 
-
-void G4OpenGLXViewer::DrawText(const char * textString,double,double,double, double size) {
-  
-  // gl2ps or GL window ?
+void G4OpenGLXViewer::DrawText(const G4Text& g4text)
+{
   if (isGl2psWriting()) {
-    // Don't car about position
-    G4OpenGLViewer::DrawText(textString,0.,0.,0.,size);
+
+    G4OpenGLViewer::DrawText(g4text);
+
   } else {
-    G4int font_base = G4OpenGLFontBaseStore::GetFontBase(this,(int)size);
-    if (font_base < 0) {
+
+    G4VSceneHandler::MarkerSizeType sizeType;
+    G4double size = fSceneHandler.GetMarkerSize(g4text,sizeType);
+
+    const G4OpenGLFontBaseStore::FontInfo& fontInfo =
+      G4OpenGLFontBaseStore::GetFontInfo(this,(int)size);
+    if (fontInfo.fFontBase < 0) {
       static G4int callCount = 0;
       ++callCount;
-      if (callCount <= 10 || callCount%100 == 0) {
+      //if (callCount <= 10 || callCount%100 == 0) {
+      if (callCount <= 1) {
         G4cout <<
-          "G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
-               << callCount <<
-          "\n  No fonts available."
-          "\n  Called with text \""
-               << textString
-               << ", size " << size
-          //               << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
+	  "G4OpenGLXViewer::DrawText: No fonts available for \""
+	       << fName <<
+          "\"\n  Called with "
+               << g4text
                << G4endl;
       }
       return;
     }
-    glDisable (GL_DEPTH_TEST);
-    glDisable (GL_LIGHTING);
-    
-    // No action on offset or layout at present.
+
+    const G4Colour& c = fSceneHandler.GetTextColour(g4text);
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+
+    G4Point3D position = g4text.GetPosition();
+
+    G4String textString = g4text.GetText();
+    const char* textCString = textString.c_str();
+  
+    // Set position for raster-style drawers (X, Xm)
+    glRasterPos3d(position.x(),position.y(),position.z());
+
     glPushAttrib(GL_LIST_BIT);
-    glListBase(font_base);
-    glCallLists(strlen(textString), GL_UNSIGNED_BYTE, (GLubyte *)textString);
+
+    // Calculate move for centre and right adjustment
+    G4double span = textString.size() * fontInfo.fWidth;
+    G4double xmove = 0., ymove = 0.;
+    switch (g4text.GetLayout()) {
+    case G4Text::left: break;
+    case G4Text::centre: xmove -= span / 2.; break;
+    case G4Text::right: xmove -= span;
+    }
+
+    //Add offsets
+    xmove += g4text.GetXOffset();
+    ymove += g4text.GetYOffset();
+
+    // Do move
+    glBitmap(0,0,0,0,xmove,ymove,0);
+
+    // Write characters
+    glListBase(fontInfo.fFontBase);
+    glCallLists(strlen(textCString),GL_UNSIGNED_BYTE,(GLubyte*)textCString);
     glPopAttrib();
   }
 }

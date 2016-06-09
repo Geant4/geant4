@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc,v 1.25 2010-10-26 09:16:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +41,11 @@
 // 11.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
+#include "G4PAIPhotonModel.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4Region.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -52,7 +56,6 @@
 #include "G4SandiaTable.hh"
 #include "G4PAIxSection.hh"
 
-#include "G4PAIPhotonModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

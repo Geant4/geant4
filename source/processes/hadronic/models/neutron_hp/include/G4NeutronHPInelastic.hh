@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelastic.hh,v 1.9 2006-06-29 20:48:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -95,12 +94,16 @@ class G4NeutronHPInelastic : public G4HadronicInteraction
   
   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus & aTargetNucleus);
 
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
   private:
   
   G4double * xSec;
-  G4NeutronHPChannelList * theInelastic; // one List per element
+  //G4NeutronHPChannelList * theInelastic; // one List per element
+      std::vector<G4NeutronHPChannelList*> theInelastic; // one List per element
   G4String dirName;
   G4int numEle;
+      void addChannelForNewElement();
   
   private:
   

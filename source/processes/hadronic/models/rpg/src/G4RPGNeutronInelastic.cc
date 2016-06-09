@@ -23,24 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNeutronInelastic.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGNeutronInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
 
 G4HadFinalState* 
 G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
-                                      G4Nucleus& targetNucleus)
+                                     G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
   const G4HadProjectile* originalIncident = &aTrack;
 
-  //
   // create the target particle
-  //
   G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
   
   G4ReactionProduct modifiedOriginal;
@@ -54,10 +52,8 @@ G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     return &theParticleChange;
   }
 
-  //
   // Fermi motion and evaporation
   // As of Geant3, the Fermi energy calculation had not been Done
-  //
   G4double ek = originalIncident->GetKineticEnergy()/MeV;
   G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     

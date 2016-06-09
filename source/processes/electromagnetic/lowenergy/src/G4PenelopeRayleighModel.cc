@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc,v 1.4 2010-12-15 10:26:41 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -35,6 +34,8 @@
 //
 
 #include "G4PenelopeRayleighModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PenelopeSamplingData.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -51,7 +52,7 @@
 
 G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),logAtomicCrossSection(0),   
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),logAtomicCrossSection(0),   
    atomicFormFactor(0),logFormFactorTable(0),pMaxTable(0),samplingTable(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
@@ -88,7 +89,7 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
 
 G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
-  std::map <const G4int,G4PhysicsFreeVector*>::iterator i;
+  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
   if (logAtomicCrossSection)
     {
       for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
@@ -155,9 +156,9 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
   // logAtomicCrossSection and atomicFormFactor are created only once,
   // since they are never cleared
   if (!logAtomicCrossSection)
-    logAtomicCrossSection = new std::map<const G4int,G4PhysicsFreeVector*>;
+    logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
   if (!atomicFormFactor)
-    atomicFormFactor = new std::map<const G4int,G4PhysicsFreeVector*>;
+    atomicFormFactor = new std::map<G4int,G4PhysicsFreeVector*>;
 
   if (!logFormFactorTable)
     logFormFactorTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
@@ -823,7 +824,7 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 	  G4DataVector* pdfih = new G4DataVector();
 	  G4DataVector* sumi = new G4DataVector();
 	  
-	  G4double dx = (*x)[i+1]-(*x)[i];
+	  G4double dxLocal = (*x)[i+1]-(*x)[i];
 	  G4double dxi = ((*x)[i+1]-(*x)[i])/(G4double (nip-1));
 	  G4double pdfmax = 0;
 	  for (G4int k=0;k<nip;k++)
@@ -866,8 +867,8 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 	  
 	  G4double pli = (*pdfi)[0]*factor;
 	  G4double pui = (*pdfi)[pdfi->size()-1]*factor;
-	  G4double B_temp = 1.0-1.0/(pli*pui*dx*dx);
-	  G4double A_temp = (1.0/(pli*dx))-1.0-B_temp;
+	  G4double B_temp = 1.0-1.0/(pli*pui*dxLocal*dxLocal);
+	  G4double A_temp = (1.0/(pli*dxLocal))-1.0-B_temp;
 	  G4double C_temp = 1.0+A_temp+B_temp;
 	  if (C_temp < 1e-35)
 	    {

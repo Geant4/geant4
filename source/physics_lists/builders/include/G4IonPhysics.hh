@@ -23,70 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.hh,v 1.2 2010-06-03 14:37:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
+// GRAS tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4IonBuilder
+// Header:    G4IonPhysics
 //
-// Author:      V.Ivanchenko 09.11.2005
+// Author:    V.Ivanchenko  02.03.2011
 //
-// Modified:
+// Modified: 
+// 16.10.2012 A.Ribon: renamed G4IonFTFPBinaryCascadePhysics as G4IonPhysics     
 //
-//----------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 //
 
 #ifndef G4IonPhysics_h
 #define G4IonPhysics_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-#include "G4VPhysicsConstructor.hh"
-
-class  G4DeuteronInelasticProcess;
-class  G4LEDeuteronInelastic;
-class  G4TritonInelasticProcess;
-class  G4LETritonInelastic;
-class  G4AlphaInelasticProcess;
-class  G4LEAlphaInelastic;
+class G4HadronicInteraction;
+class G4VCrossSectionDataSet;
+class G4FTFBuilder;
+class G4BinaryLightIonReaction;
 
 class G4IonPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4IonPhysics(G4int verbose =1);
-  //obsolete
-  G4IonPhysics(const G4String& name);
-  virtual ~G4IonPhysics();
 
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
+  G4IonPhysics(G4int ver = 0);
+  G4IonPhysics(const G4String& nname);
+  virtual ~G4IonPhysics();
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  void ConstructParticle();
+  void ConstructProcess();
 
 private:
 
-  // Deuteron physics
-  G4DeuteronInelasticProcess* fDeuteronProcess;
-  G4LEDeuteronInelastic*      fDeuteronModel;
+  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
 
-  // Triton physics
-  G4TritonInelasticProcess*   fTritonProcess;
-  G4LETritonInelastic*        fTritonModel;
+//  G4VCrossSectionDataSet*   fTripathi;
+//  G4VCrossSectionDataSet*   fTripathiLight;
+//  G4VCrossSectionDataSet*   fShen;
+//  G4VCrossSectionDataSet*   fIonH;
+    G4VCrossSectionDataSet*   fGGNuclNucl;
 
-  // Alpha physics
-  G4AlphaInelasticProcess*    fAlphaProcess;
-  G4LEAlphaInelastic*         fAlphaModel;
+  G4BinaryLightIonReaction* theIonBC;
+  G4HadronicInteraction*    theFTFP;
+  G4FTFBuilder*             theBuilder;
 
-
+  G4int  verbose;
   G4bool wasActivated;
 };
 
-// 2002 by J.P. Wellisch
 
 #endif
+
+
+
+
+
+
+
 

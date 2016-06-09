@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
+#include <typeinfo>
+
 #include "G4CollisionManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4CollisionInitialState.hh"
 #include "G4BCAction.hh"
-
-#include <typeinfo>
 
 G4CollisionManager::G4CollisionManager()
 {

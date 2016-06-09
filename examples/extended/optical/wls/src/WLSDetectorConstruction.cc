@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSDetectorConstruction.cc
+/// \brief Implementation of the WLSDetectorConstruction class
+//
 //
 //
 
@@ -58,6 +61,8 @@
 #include "WLSPhotonDetSD.hh"
 
 #include "G4UserLimits.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 WLSPhotonDetSD* WLSDetectorConstruction::mppcSD = NULL;
 

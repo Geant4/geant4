@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.25 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //------------------ G4PhotoElectricEffect physics process ------------------
 //                   by Michel Maire, 24 May 1996

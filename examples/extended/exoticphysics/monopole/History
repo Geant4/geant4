@@ -15,12 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 September 12: I.Hrivnacova (monopole-V09-05-03)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Replaced tabulators with space characters  
+
+19 September 12: V.Ivant (monopole-V09-05-02)
+- remove not needed file
+
+4 September 12: I.Hrivnacova (monopole-V09-05-01)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Adding .README  
+
+28 May 12: V.Ivant (monopole-V09-05-00)
+- applied code convention
+
 08 December 10: V.Ivant (monopole-V09-03-08)
 - added forgotten files
 
 29 November 10: V.Ivant (monopole-V09-03-07)
 - Use the most recent version of monopole transportation,
-  delta-electron prudction enabled, non-integer monopole charge allowed
+  delta-electron production enabled, non-integer monopole charge allowed
 
 9 November 10: M.Asai (monopole-V09-03-06)
 - Fix AIDA file option.

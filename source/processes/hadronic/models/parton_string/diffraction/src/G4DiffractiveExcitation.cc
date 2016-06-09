@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.24 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -45,6 +45,8 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DiffractiveExcitation.hh"
 #include "G4FTFParameters.hh"
@@ -77,7 +79,7 @@ G4bool G4DiffractiveExcitation::
 //G4cout<<G4endl<<"ExciteParticipants --------------"<<G4endl;
 // -------------------- Projectile parameters -----------------------
      G4LorentzVector Pprojectile=projectile->Get4Momentum();
-//G4cout<<"Pproj "<<Pprojectile<<G4endl;
+
      if(Pprojectile.z() < 0.)
      {
        target->SetStatus(2);
@@ -109,9 +111,10 @@ G4bool G4DiffractiveExcitation::
 // -------------------- Target parameters -------------------------
      G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
      G4int    absTargetPDGcode=std::abs(TargetPDGcode);
-//G4cout<<"Excit "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
+//G4cout<<"Entry to QE or Excit "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
 
      G4LorentzVector Ptarget=target->Get4Momentum();
+//G4cout<<"Pproj "<<Pprojectile<<G4endl;
 //G4cout<<"Ptarget "<<Ptarget<<G4endl;
      G4double M0target = Ptarget.mag();
 
@@ -130,6 +133,7 @@ G4bool G4DiffractiveExcitation::
      G4double ProbTargetDiffraction=theParameters->GetProbabilityOfTarDiff();
 
      G4double AveragePt2=theParameters->GetAveragePt2();
+     G4double ProbLogDistr=theParameters->GetProbLogDistr();         // Uzhi 21.05.2012
 
 //     G4double ProbOfDiffraction=ProbProjectileDiffraction +
 //                                ProbTargetDiffraction;
@@ -141,6 +145,8 @@ G4bool G4DiffractiveExcitation::
      G4LorentzVector Psum;      // 4-momentum in CMS
      Psum=Pprojectile+Ptarget;
      G4double S=Psum.mag2(); 
+
+//Uzhi_SqrtS=std::sqrt(S);
 
 // Transform momenta to cms and then rotate parallel to z axis;
      G4LorentzRotation toCms(-1*Psum.boostVector());
@@ -236,6 +242,13 @@ G4cout<<"M0pr M0tr "<<M0projectile<<" "<<M0target<<" "<<SumMasses<<G4endl;
 //G4cout<<"Targ "<<Ptarget<<G4endl;
      G4double maxPtSquare; // = PZcms2;
 /*
+Uzhi_targetdiffraction=0;
+Uzhi_projectilediffraction=0;
+Uzhi_Mx2=1.0;
+Uzhi_modT=0.;
+G4int Uzhi_QE=0;
+*/
+/*
 G4cout<<"Start --------------------"<<G4endl;
 G4cout<<"Proj "<<M0projectile<<" "<<ProjectileDiffStateMinMass<<"  "<<ProjectileNonDiffStateMinMass<<G4endl;
 G4cout<<"Targ "<<M0target    <<" "<<TargetDiffStateMinMass    <<" "<<TargetNonDiffStateMinMass<<G4endl;
@@ -245,8 +258,9 @@ G4cout<<"Rapid "<<ProjectileRapidity<<G4endl; //" "<<TargetRapidity<<G4endl;
 // Charge exchange can be possible for baryons -----------------
 
 // Getting the values needed for exchange ----------------------
-     G4double MagQuarkExchange        =theParameters->GetMagQuarkExchange();
-     G4double SlopeQuarkExchange      =theParameters->GetSlopeQuarkExchange();
+     G4double MagQuarkExchange        =theParameters->GetMagQuarkExchange();//0.045; //
+     G4double SlopeQuarkExchange      =theParameters->GetSlopeQuarkExchange();//0.; //
+// 777777777777777777777777777777777777777777777777777777777777777777777777777777
      G4double DeltaProbAtQuarkExchange=theParameters->GetDeltaProbAtQuarkExchange();
 
 //     G4double NucleonMass=
@@ -255,7 +269,7 @@ G4cout<<"Rapid "<<ProjectileRapidity<<G4endl; //" "<<TargetRapidity<<G4endl;
               (G4ParticleTable::GetParticleTable()->FindParticle(2224))->GetPDGMass();
 
 //G4double TargetRapidity(0.);
-//G4cout<<"Prob Q Exch "<<MagQuarkExchange*std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity))<<G4endl;
+//G4cout<<"Prob Q Exch "<<MagQuarkExchange*std::exp(-SlopeQuarkExchange*ProjectileRapidity)<<G4endl;
 
 //G4cout<<"Q exc Mag Slop Wdelta"<<MagQuarkExchange<<" "<<SlopeQuarkExchange<<" "<<DeltaProbAtQuarkExchange<<G4endl;
 //G4cout<<"ProjectileRapidity "<<ProjectileRapidity<<G4endl;
@@ -268,6 +282,7 @@ G4cout<<"Rapid "<<ProjectileRapidity<<G4endl; //" "<<TargetRapidity<<G4endl;
      {    
 //        std::exp(-SlopeQuarkExchange*(ProjectileRapidity - 1.36)))  //TargetRapidity))) 1.45
 //G4cout<<"Q exchange"<<G4endl;
+//Uzhi_QE=1;
       G4int NewProjCode(0), NewTargCode(0);
 
       G4int ProjQ1(0), ProjQ2(0), ProjQ3(0);
@@ -388,9 +403,24 @@ TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode);
 
 if(TestParticle) 
 {
- M0projectile=
+ G4double MtestPart=                             // 31.05.2012
  (G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode))->GetPDGMass();
- M0projectile2 = M0projectile * M0projectile;
+/*
+G4cout<<"TestParticle Name "<<NewProjCode<<" "<<TestParticle->GetParticleName()<<G4endl;
+G4cout<<"MtestPart M0projectile projectile->GetDefinition()->GetPDGMass() "<<MtestPart<<" "<<M0projectile<<" "<<projectile->GetDefinition()->GetPDGMass()<<G4endl;
+G4bool Test =M0projectile <= projectile->GetDefinition()->GetPDGMass(); 
+G4cout<<"M0projectile <= projectile->GetDefinition()->GetPDGMass() "<<Test<<G4endl;
+*/
+
+  if(MtestPart > M0projectile) 
+  {M0projectile = MtestPart;}
+  else 
+  {
+   if(std::abs(M0projectile - projectile->GetDefinition()->GetPDGMass()) < 140.*MeV)
+   {M0projectile = MtestPart;}
+  }
+//G4cout<<"M0projectile After check "<<M0projectile<<G4endl;
+  M0projectile2 = M0projectile * M0projectile;
 
  ProjectileDiffStateMinMass   =M0projectile+210.*MeV; //210 MeV=m_pi+70 MeV 
  ProjectileNonDiffStateMinMass=M0projectile+210.*MeV; //210 MeV=m_pi+70 MeV
@@ -424,14 +454,20 @@ if(TestParticle)
 //       target->SetDefinition(                                          // Fix 15.12.09
 //       G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode));// Fix 15.12.09 
 
-//G4cout<<"NewTargCode "<<NewTargCode<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
 TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode);
+//G4cout<<"New targ "<<NewTargCode<<" "<<TestParticle->GetParticleName()<<G4endl;
 if(TestParticle) 
 {
- M0target=
+ G4double MtestPart=                             // 31.05.2012
  (G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode))->GetPDGMass();
- M0target2 = M0target * M0target;
+
+ if(MtestPart > M0target)
+ {M0target=MtestPart;}
+ else
+ {
+  if(std::abs(M0target - target->GetDefinition()->GetPDGMass()) < 140.*MeV)
+  {M0target=MtestPart;}
+ }
 
  TargetDiffStateMinMass   =M0target+220.*MeV;         //220 MeV=m_pi+80 MeV;    
  TargetNonDiffStateMinMass=M0target+220.*MeV;         //220 MeV=m_pi+80 MeV; 
@@ -508,15 +544,6 @@ if(TestParticle)
 
        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3); // *****************************
 
-//G4cout<<"ProjQ1, ProjQ2, ProjQ3 "<<ProjQ1<<" "<<ProjQ2<<" "<<ProjQ3<<" "<<NewProjCode<<G4endl;
-
-//G4int                 TestParticleID=NewProjCode;
-//G4ParticleDefinition* TestParticle=0;
-//G4double              TestParticleMass=DBL_MAX;
-
-//TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode);
-//if(TestParticle) TestParticleMass=TestParticle->GetPDGMass(); 
-
        if((ProjQ1==ProjQ2) && (ProjQ1==ProjQ3)) {NewProjCode +=2; ProjDeltaHasCreated=true;}
        else if(projectile->GetDefinition()->GetPDGiIsospin() == 3)// Projectile was Delta
        { if(G4UniformRand() > DeltaProbAtQuarkExchange)
@@ -575,9 +602,14 @@ if(ProjDeltaHasCreated) {ProbProjectileDiffraction=1.; ProbTargetDiffraction=0.;
 if(TargDeltaHasCreated) {ProbProjectileDiffraction=0.; ProbTargetDiffraction=1.;}
        if(ProjDeltaHasCreated) 
        {
-        M0projectile=
+        G4double MtestPart=                             // 31.05.2012
           (G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode))->GetPDGMass();
-        M0projectile2 = M0projectile * M0projectile;
+
+        if(MtestPart >= M0projectile)                   // 31.05.2012
+        {                                               // 31.05.2012
+         M0projectile = MtestPart;                      // 31.05.2012
+         M0projectile2 = M0projectile * M0projectile;   // 31.05.2012
+        }                                               // 31.05.2012
 
         ProjectileDiffStateMinMass   =M0projectile+210.*MeV; //210 MeV=m_pi+70 MeV
         ProjectileNonDiffStateMinMass=M0projectile+210.*MeV; //210 MeV=m_pi+70 MeV
@@ -587,9 +619,14 @@ if(TargDeltaHasCreated) {ProbProjectileDiffraction=0.; ProbTargetDiffraction=1.;
 //         (G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode))->GetPDGMass())
        if(TargDeltaHasCreated)
        {
-        M0target=
+        G4double MtestPart=                             // 31.05.2012
           (G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode))->GetPDGMass();
-        M0target2 = M0target * M0target;
+
+        if(MtestPart >=M0target)                        // 31.05.2012
+        {                                               // 31.05.2012
+         M0target=MtestPart;                            // 31.05.2012
+         M0target2 = M0target * M0target;               // 31.05.2012
+        }                                               // 31.05.2012
 
         TargetDiffStateMinMass   =M0target+210.*MeV;         //210 MeV=m_pi+70 MeV;    
         TargetNonDiffStateMinMass=M0target+210.*MeV;         //210 MeV=m_pi+70 MeV; 
@@ -642,6 +679,7 @@ if(TargDeltaHasCreated) {ProbProjectileDiffraction=0.; ProbTargetDiffraction=1.;
         target->Set4Momentum(Ptarget);
 
         G4bool Result= theElastic->ElasticScattering (projectile,target,theParameters);
+//G4cout<<"Result of el. scatt "<<Result<<G4endl;
         return Result;
        } // end of if(Make elastic scattering for projectile meson?)
       } else
@@ -677,7 +715,7 @@ G4cout<<"SqrtS "<<SqrtS<<G4endl;
 
 G4cout<<"Prob ProjDiff TargDiff "<<ProbProjectileDiffraction<<" "<<ProbTargetDiffraction<<" "<<ProbOfDiffraction<<G4endl;
 G4cout<<"Pr Y "<<Pprojectile.rapidity()<<" Tr Y "<<Ptarget.rapidity()<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
+//G4int Uzhi; G4cin>>Uzhi;
 */
 /*
      if(ProjectileNonDiffStateMinMass + TargetNonDiffStateMinMass > SqrtS) // 24.07.10
@@ -726,7 +764,8 @@ G4int Uzhi; G4cin>>Uzhi;
      G4int whilecount=0;
 
 //   Choose a process ---------------------------
-
+//ProbOfDiffraction=1.;                 // Uzhi Difr
+//ProbProjectileDiffraction=1.;         // Uzhi 
      if(G4UniformRand() < ProbOfDiffraction)
        {
         if(G4UniformRand() < ProbProjectileDiffraction)
@@ -734,6 +773,11 @@ G4int Uzhi; G4cin>>Uzhi;
 //G4cout<<"projectile diffraction"<<G4endl;
 
          do {
+/*
+Uzhi_projectilediffraction=1;
+Uzhi_targetdiffraction=0;
+Uzhi_Mx2=1.;
+*/
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -802,12 +846,18 @@ G4int Uzhi; G4cin>>Uzhi;
           } while ((Pprojectile+Qmomentum).mag2() <  ProjectileDiffStateMinMass2); //||  
                   //Repeat the sampling because there was not any excitation
 //((Ptarget    -Qmomentum).mag2() <  M0target2                  )) );
+          projectile->SetStatus(1*projectile->GetStatus());          // VU 10.04.2012
         }
         else
         { // -------------- Target diffraction ----------------
 
 //G4cout<<"Target diffraction"<<G4endl;
          do {
+/*
+Uzhi_projectilediffraction=0;
+Uzhi_targetdiffraction=1;
+Uzhi_Mx2=1.;
+*/
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -890,6 +940,7 @@ G4cout<<Seco<<G4endl;
 // (((Pprojectile+Qmomentum).mag2() <  M0projectile2          ) ||  //No without excitation
 //  ((Ptarget    -Qmomentum).mag2() <  TargetDiffStateMinMass2)) );
 //G4cout<<"Go out"<<G4endl;
+          target->SetStatus(1*target->GetStatus());     // VU 10.04.2012
          } // End of if(G4UniformRand() < ProbProjectileDiffraction)
         }
         else  //----------- Non-diffraction process ------------
@@ -897,6 +948,11 @@ G4cout<<Seco<<G4endl;
 
 //G4cout<<"Non-diffraction process"<<G4endl;
          do {
+/*
+Uzhi_projectilediffraction=0;
+Uzhi_targetdiffraction=0;
+Uzhi_Mx2=1.;
+*/
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -946,16 +1002,18 @@ G4cout<<Seco<<G4endl;
              PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;
              PMinusMax=SqrtS-TargMassT;
 
-//           PMinusNew=ChooseP(PMinusMin, PMinusMax);  // 12.06.11
-             PMinusNew=(PMinusMax-PMinusMin)*G4UniformRand() + PMinusMin;
+             if(G4UniformRand() < ProbLogDistr)                       // Uzhi 25.04.2012
+             {     PMinusNew=ChooseP(PMinusMin, PMinusMax);}               // 12.06.11
+             else {PMinusNew=(PMinusMax-PMinusMin)*G4UniformRand() + PMinusMin;}
              Qminus=PMinusNew-Pprojectile.minus();
 
              TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
-//           TPlusMax=SqrtS-PMinusNew;                      
-             TPlusMax=SqrtS-ProjMassT;      
+             TPlusMax=SqrtS-PMinusNew;                   // Why is it closed???
+//             TPlusMax=SqrtS-ProjMassT;      
 
-//           TPlusNew=ChooseP(TPlusMin, TPlusMax); // 12.06.11
-             TPlusNew=(TPlusMax-TPlusMin)*G4UniformRand() +TPlusMin;
+             if(G4UniformRand() < 0.5) //ProbLogDistr)                 // Uzhi 29.05.2012 0.5)
+             {     TPlusNew=ChooseP(TPlusMin, TPlusMax);}                   // 12.06.11
+             else {TPlusNew=(TPlusMax-TPlusMin)*G4UniformRand() +TPlusMin;} 
 
              Qplus=-(TPlusNew-Ptarget.plus());
 
@@ -969,6 +1027,9 @@ G4int Uzhi; G4cin>>Uzhi;
        } while ( 
  ((Pprojectile+Qmomentum).mag2() <  ProjectileNonDiffStateMinMass2) || //No double Diffraction
  ((Ptarget    -Qmomentum).mag2() <  TargetNonDiffStateMinMass2    ));
+
+      projectile->SetStatus(0*projectile->GetStatus());     // VU 10.04.2012
+      target->SetStatus(0*target->GetStatus());             // VU 10.04.2012
      }
 
      Pprojectile += Qmomentum;
@@ -986,7 +1047,20 @@ G4int Uzhi; G4cin>>Uzhi;
 // Creation time and position of target nucleon were determined at
 // ReggeonCascade() of G4FTFModel
 // ------------------------------------------------------
+/*
+if(Uzhi_projectilediffraction != 0) 
+{Uzhi_Mx2=Pprojectile.mag2(); Uzhi_modT=(target->Get4Momentum()-Ptarget).mag2();}
 
+if(Uzhi_targetdiffraction     != 0) 
+{Uzhi_Mx2=Ptarget.mag2(); Uzhi_modT=(projectile->Get4Momentum()-Pprojectile).mag2();}
+
+if(Uzhi_QE!= 0) 
+{
+ Uzhi_projectilediffraction=0;
+ Uzhi_targetdiffraction    =0;
+ Uzhi_Mx2                  =1.;
+}
+*/
 //G4cout<<"Mproj "<<Pprojectile.mag()<<G4endl;
 //G4cout<<"Mtarg "<<Ptarget.mag()<<G4endl;
      projectile->Set4Momentum(Pprojectile);
@@ -1065,8 +1139,13 @@ G4cout<<"Defin "<<hadron->GetDefinition()->GetPDGEncoding()<<G4endl;
 //G4cout<<G4endl<<"Check for Kink!##############"<<G4endl<<G4endl;
         if(W > Wmin)
         {                                        // Kink is possible
-          G4double Pt2kink=theParameters->GetPt2Kink();
-          Pt = std::sqrt(Pt2kink*(std::pow(W2/16./Pt2kink+1.,G4UniformRand()) - 1.));
+          if(hadron->GetStatus() == 0)           // VU 10.04.2012
+          {
+           G4double Pt2kink=theParameters->GetPt2Kink(); // For non-diffractive
+           Pt = std::sqrt(Pt2kink*(std::pow(W2/16./Pt2kink+1.,G4UniformRand()) - 1.));
+          }
+          else
+          {Pt=0.;}                                       // For diffractive
 
           if(Pt > 500.*MeV)
           {
@@ -1320,28 +1399,28 @@ if((start->GetDefinition()->GetParticleSubType() == "quark") &&
            tmp.set(0.,0.,1.);
           }
 
-          G4LorentzVector Pstart(tmp,0.);
-          G4LorentzVector   Pend(tmp,0.);
+          G4LorentzVector Pstart1(tmp,0.);
+          G4LorentzVector   Pend1(tmp,0.);
 
           if(isProjectile)
           {
-           Pstart*=(-1.)*Minus/2.;
-           Pend  *=(+1.)*Plus /2.;
+           Pstart1*=(-1.)*Minus/2.;
+           Pend1  *=(+1.)*Plus /2.;
           } 
           else
           {
-           Pstart*=(+1.)*Plus/2.;
-           Pend  *=(-1.)*Minus/2.;
+           Pstart1*=(+1.)*Plus/2.;
+           Pend1  *=(-1.)*Minus/2.;
           }
 
-          Momentum=-Pstart.mag();
-          Pstart.setT(Momentum);  // It is assumed that quark has m=0.
+          Momentum=-Pstart1.mag();
+          Pstart1.setT(Momentum);  // It is assumed that quark has m=0.
 
-          Momentum=-Pend.mag();
-          Pend.setT(Momentum);    // It is assumed that di-quark has m=0.
+          Momentum=-Pend1.mag();
+          Pend1.setT(Momentum);    // It is assumed that di-quark has m=0.
 
-	  start->Set4Momentum(Pstart);
-	  end->Set4Momentum(Pend);
+	  start->Set4Momentum(Pstart1);
+	  end->Set4Momentum(Pend1);
           SecondString=0;
         }            // End of kink is impossible 
 

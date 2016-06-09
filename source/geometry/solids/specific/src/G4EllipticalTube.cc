@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.33 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -400,13 +399,13 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
       //
       // How far?
       //
-      G4double s = -sigz/v.z();
+      G4double q = -sigz/v.z();
       
       //
       // Where does that place us?
       //
-      G4double xi = p.x() + s*v.x(),
-               yi = p.y() + s*v.y();
+      G4double xi = p.x() + q*v.x(),
+               yi = p.y() + q*v.y();
       
       //
       // Is this on the surface (within ellipse)?
@@ -414,9 +413,9 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
       if (CheckXY(xi,yi) <= 1.0)
       {
         //
-        // Yup. Return s, unless we are on the surface
+        // Yup. Return q, unless we are on the surface
         //
-        return (sigz < -halfTol) ? s : 0;
+        return (sigz < -halfTol) ? q : 0;
       }
       else if (xi*dy*dy*v.x() + yi*dx*dx*v.y() >= 0)
       {
@@ -442,14 +441,14 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
       if (CheckXY(p.x(),p.y(),-halfTol) <= 1.0) return kInfinity;
     }
     else {
-      G4double s = -sigz/v.z();
+      G4double q = -sigz/v.z();
 
-      G4double xi = p.x() + s*v.x(),
-               yi = p.y() + s*v.y();
+      G4double xi = p.x() + q*v.x(),
+               yi = p.y() + q*v.y();
       
       if (CheckXY(xi,yi) <= 1.0)
       {
-        return (sigz > -halfTol) ? s : 0;
+        return (sigz > -halfTol) ? q : 0;
       }
       else if (xi*dy*dy*v.x() + yi*dx*dx*v.y() >= 0)
       {
@@ -461,8 +460,8 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   //
   // Check intersection with the elliptical tube
   //
-  G4double s[2];
-  G4int n = IntersectXY( p, v, s );
+  G4double q[2];
+  G4int n = IntersectXY( p, v, q );
   
   if (n==0) return kInfinity;
   
@@ -481,16 +480,16 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   
   //
   // We are now certain that point p is not on the surface of 
-  // the solid (and thus std::fabs(s[0]) > halfTol). 
+  // the solid (and thus std::fabs(q[0]) > halfTol). 
   // Return kInfinity if the intersection is "behind" the point.
   //
-  if (s[0] < 0) return kInfinity;
+  if (q[0] < 0) return kInfinity;
   
   //
   // Check to see if we intersect the tube within
   // dz, but only when we know it might miss
   //
-  G4double zi = p.z() + s[0]*v.z();
+  G4double zi = p.z() + q[0]*v.z();
 
   if (v.z() < 0)
   {
@@ -501,7 +500,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
     if (zi > +dz) return kInfinity;
   }
 
-  return s[0];
+  return q[0];
 }
 
 
@@ -636,7 +635,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     //
     // Yup. What distance?
     //
-    G4double s = (dz-p.z())/v.z();
+    G4double q = (dz-p.z())/v.z();
     
     //
     // Are we on the surface? If so, return zero
@@ -650,14 +649,14 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     //
     // Best so far?
     //
-    if (s < sBest) { sBest = s; nBest = normHere; }
+    if (q < sBest) { sBest = q; nBest = normHere; }
   }
   
   //
   // Check furthest intersection with ellipse 
   //
-  G4double s[2];
-  G4int n = IntersectXY( p, v, s );
+  G4double q[2];
+  G4int n = IntersectXY( p, v, q );
 
   if (n == 0)
   {
@@ -684,12 +683,12 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     if (calcNorm)  { *norm = nBest; }
     return sBest;
   }
-  else if (s[n-1] > sBest)
+  else if (q[n-1] > sBest)
   {
     if (calcNorm)  { *norm = nBest; }
     return sBest;
   }  
-  sBest = s[n-1];
+  sBest = q[n-1];
       
   //
   // Intersection with ellipse. Get normal at intersection point.
@@ -771,10 +770,10 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
   xdi /= normi;
   ydi /= normi;
   
-  G4double s = 0.5*(xdi*(p.y()-yi) - ydi*(p.x()-xi));
-  if (xi*yi < 0) s = -s;
+  G4double q = 0.5*(xdi*(p.y()-yi) - ydi*(p.x()-xi));
+  if (xi*yi < 0) q = -q;
   
-  if (s < sBest) sBest = s;
+  if (q < sBest) sBest = q;
   
   //
   // Return best answer
@@ -792,17 +791,17 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 // Arguments:
 //     p     - (in) Point on trajectory
 //     v     - (in) Vector along trajectory
-//     s     - (out) Up to two points of intersection, where the
-//                   intersection point is p + s*v, and if there are
-//                   two intersections, s[0] < s[1]. May be negative.
+//     q     - (out) Up to two points of intersection, where the
+//                   intersection point is p + q*v, and if there are
+//                   two intersections, q[0] < q[1]. May be negative.
 // Returns:
 //     The number of intersections. If 0, the trajectory misses. If 1, the 
 //     trajectory just grazes the surface.
 //
 // Solution:
-//     One needs to solve: ( (p.x + s*v.x)/dx )**2  + ( (p.y + s*v.y)/dy )**2 = 1
+//     One needs to solve: ( (p.x + q*v.x)/dx )**2  + ( (p.y + q*v.y)/dy )**2 = 1
 //
-//     The solution is quadratic: a*s**2 + b*s + c = 0
+//     The solution is quadratic: a*q**2 + b*q + c = 0
 //
 //           a = (v.x/dx)**2 + (v.y/dy)**2
 //           b = 2*p.x*v.x/dx**2 + 2*p.y*v.y/dy**2
@@ -810,7 +809,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 //
 G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
                                      const G4ThreeVector &v,
-                                           G4double s[2] ) const
+                                           G4double ss[2] ) const
 {
   G4double px = p.x(), py = p.y();
   G4double vx = v.x(), vy = v.y();
@@ -830,7 +829,7 @@ G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
     //
     // Grazes surface
     //
-    s[0] = -b/a/2.0;
+    ss[0] = -b/a/2.0;
     return 1;
   }
   
@@ -839,7 +838,7 @@ G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
   G4double q = -0.5*( b + (b < 0 ? -radical : +radical) );
   G4double sa = q/a;
   G4double sb = c/q;    
-  if (sa < sb) { s[0] = sa; s[1] = sb; } else { s[0] = sb; s[1] = sa; }
+  if (sa < sb) { ss[0] = sa; ss[1] = sb; } else { ss[0] = sb; ss[1] = sa; }
   return 2;
 }
 

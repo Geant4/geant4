@@ -23,18 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionData.hh,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file persistency/P03/include/ExTGRCRegionData.hh
+/// \brief Definition of the ExTGRCRegionData class
 //
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
+// $Id$
 
 #ifndef ExTGRCRegionData_h
 #define ExTGRCRegionData_h
 
 #include <vector>
 #include "globals.hh"
+
+/// Stores cuts per region data
+///
+/// Changes:     creation   May 2007
+/// \author      P. Arce
 
 class ExTGRCRegionData 
 { 
@@ -47,19 +50,19 @@ class ExTGRCRegionData
 
     //--- Get methods
 
-    G4String GetRegionName() const     { return theRegionName;  }
-    std::vector<G4String> GetLVNames() { return theLVNames;     }
-    G4double GetGammaCut() const       { return theGammaCut;    }
-    G4double GetElectronCut() const    { return theElectronCut; }
-    G4double GetPositronCut() const    { return thePositronCut; }
-    G4bool CutsAreSet() const          { return bCutsSet;       }
+    G4String GetRegionName() const     { return fRegionName;  }
+    std::vector<G4String> GetLVNames() { return fLVNames;     }
+    G4double GetGammaCut() const       { return fGammaCut;    }
+    G4double GetElectronCut() const    { return fElectronCut; }
+    G4double GetPositronCut() const    { return fPositronCut; }
+    G4bool CutsAreSet() const          { return fbCutsSet;       }
 
   private:
 
-    G4String theRegionName;
-    std::vector<G4String> theLVNames;
-    G4double theGammaCut, theElectronCut, thePositronCut;
-    G4bool bCutsSet;
+    G4String fRegionName;
+    std::vector<G4String> fLVNames;
+    G4double fGammaCut, fElectronCut, fPositronCut;
+    G4bool fbCutsSet;
 };
 
 #endif

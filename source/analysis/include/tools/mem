@@ -18,16 +18,14 @@
 namespace tools {
 
 class mem {
-public:
+protected:
   mem(){increment();}
   virtual ~mem(){decrement();}
-private:
   mem(const mem&){}
   mem& operator=(const mem&){return *this;}
 public:
   static void increment(){counter()++;}
   static void decrement(){counter()--;}
-
 
   static void increment(const char* a_class){
     counter()++;
@@ -90,11 +88,13 @@ public:
     }
     list().clear();
   }
-private:
+
   static int& counter() {
     static int s_count = 0;
     return s_count;
   }
+
+protected:
   static bool& check_by_class() {
     static bool s_check_by_class = false;
     return s_check_by_class;
@@ -107,6 +107,16 @@ private:
     return s_list;
   }
 };
+
+inline const std::string& s_new() {
+  static const std::string s_v("new");
+  return s_v;
+}
+
+inline const std::string& s_malloc() {
+  static const std::string s_v("malloc");
+  return s_v;
+}
 
 }
 

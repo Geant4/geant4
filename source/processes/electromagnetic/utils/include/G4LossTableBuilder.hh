@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh,v 1.8 2008-07-22 15:55:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // -------------------------------------------------------------------
@@ -56,6 +55,9 @@
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
 
+class G4VEmModel;
+class G4ParticleDefinition;
+
 class G4LossTableBuilder
 {
 
@@ -65,17 +67,32 @@ public:
 
   virtual ~G4LossTableBuilder();
 
-  void BuildDEDXTable(G4PhysicsTable* dedxTable, const std::vector<G4PhysicsTable*>&);
+  // build sum of all energy loss processes
+  void BuildDEDXTable(G4PhysicsTable* dedxTable, 
+		      const std::vector<G4PhysicsTable*>&);
 
-  void BuildRangeTable(const G4PhysicsTable* dedxTable, G4PhysicsTable* rangeTable,
+  // build range
+  void BuildRangeTable(const G4PhysicsTable* dedxTable, 
+		       G4PhysicsTable* rangeTable,
 		       G4bool isIonisation = false);
 
+  // build inverse range
   void BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
 			      G4PhysicsTable* invRangeTable,
 			      G4bool isIonisation = false);
 
+  // build a table requested by any model class
+  G4PhysicsTable* BuildTableForModel(G4PhysicsTable* table, 
+				     G4VEmModel* model,
+				     const G4ParticleDefinition*,
+				     G4double emin, G4double emax, 
+				     G4bool spline);
+
+  // initialise base materials
   void InitialiseBaseMaterials(G4PhysicsTable* table);
 
+
+  // access methods
   inline const std::vector<G4int>* GetCoupleIndexes();
 
   inline const std::vector<G4double>* GetDensityFactors();

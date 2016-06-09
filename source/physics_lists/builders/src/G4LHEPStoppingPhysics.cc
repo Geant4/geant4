@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LHEPStoppingPhysics.cc,v 1.2 2010-06-03 15:03:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +33,7 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
+// 16.10.2012 A.Ribon: deprecated class, to be removed in G4 version 10.
 //
 //----------------------------------------------------------------------------
 //
@@ -55,14 +55,28 @@
 #include "G4KaonMinusAbsorption.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
+#include "G4HadronicDeprecate.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4LHEPStoppingPhysics);
+
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(G4int ver)
-  : G4VPhysicsConstructor("LHEP Stopping"), verbose(ver), wasActivated(false)
-{}
+  : G4VPhysicsConstructor("LHEP Stopping")
+ , muProcess(0), piProcess(0), kProcess(0), apProcess(0), anProcess(0)
+    , verbose(ver), wasActivated(false)
+{
+  G4HadronicDeprecate("G4LHEPStoppingPhysics");
+}
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(const G4String& nam, G4int ver)
-  : G4VPhysicsConstructor(nam), verbose(ver), wasActivated(false)
-{}
+: G4VPhysicsConstructor(nam), muProcess(0), piProcess(0), kProcess(0), apProcess(0), anProcess(0)
+, verbose(ver), wasActivated(false)
+{
+  G4HadronicDeprecate("G4LHEPStoppingPhysics");
+}
 
 G4LHEPStoppingPhysics::~G4LHEPStoppingPhysics()
 {

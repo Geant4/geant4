@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.hh,v 1.3 2006-06-29 18:05:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4SDStructure_h

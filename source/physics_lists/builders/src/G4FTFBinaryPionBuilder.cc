@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPionBuilder.cc 54715 2011-11-11 16:16:06Z gcosmo $
+// $Id: G4FTFBinaryPionBuilder.cc 62122 2012-10-01 09:33:38Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -40,6 +40,7 @@
 //----------------------------------------------------------------------------
 //
 #include "G4FTFBinaryPionBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"

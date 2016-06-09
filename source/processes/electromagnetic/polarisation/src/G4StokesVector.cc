@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.cc,v 1.4 2009-11-12 12:57:15 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 Class file
 //
@@ -44,6 +43,7 @@
 //
 #include "G4StokesVector.hh"
 #include "G4PolarizationHelper.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 const G4StokesVector G4StokesVector::ZERO=G4ThreeVector(0.,0.,0.);
@@ -150,19 +150,18 @@ void G4StokesVector::RotateAz(G4double cosphi, G4double sinphi)
 
 G4double G4StokesVector::GetBeta() 
 {
-  G4double beta=getPhi();
-  if (isPhoton)
-    return 0.5*beta;
-  return beta;
+  G4double bet=getPhi();
+  if (isPhoton) { bet *= 0.5; }
+  return bet;
 }
 
 void G4StokesVector::DiceUniform() 
 {
   G4double costheta=2.*G4UniformRand()-1.;
   G4double sintheta=std::sqrt(1.-costheta*costheta);
-  G4double phi     =2.*pi*G4UniformRand();
-  setX(std::sin(phi)*sintheta);
-  setY(std::cos(phi)*sintheta);
+  G4double aphi     =2.*pi*G4UniformRand();
+  setX(std::sin(aphi)*sintheta);
+  setY(std::cos(aphi)*sintheta);
   setZ(costheta);
 }
 

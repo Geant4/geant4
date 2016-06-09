@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VBremAngularDistribution.cc,v 1.1 2010-10-14 16:34:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -59,7 +58,10 @@
 
 G4VBremAngularDistribution::G4VBremAngularDistribution(const G4String& name) 
   : G4VEmAngularDistribution(name)
-{}
+{
+  G4cout << "### G4VBremAngularDistribution interface class is obsolete "
+	 << "and will be removed for the next release." << G4endl;
+}
 
 //    
 

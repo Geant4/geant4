@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P02/src/ExP02DetConstrReader.cc
+/// \brief Implementation of the ExP02DetConstrReader class
+//
 //ROOT
 #include "TROOT.h"
 #include "TFile.h"
@@ -37,11 +40,13 @@
 // local
 #include "ExP02DetConstrReader.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExP02DetConstrReader::ExP02DetConstrReader()
 {  
   // initialize ROOT
   TSystem ts;
-  gSystem->Load("libClassesDict");
+  gSystem->Load("libExP02ClassesDict");
 
   //  ROOT::Cintex::Cintex::SetDebug(2);
   ROOT::Cintex::Cintex::Enable();
@@ -49,8 +54,12 @@ ExP02DetConstrReader::ExP02DetConstrReader()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExP02DetConstrReader::~ExP02DetConstrReader()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* ExP02DetConstrReader::Construct()
 {

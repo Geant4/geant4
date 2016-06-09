@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.35 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //
@@ -288,7 +287,7 @@ void HepPolyhedron::CreatePrism()
 
 void HepPolyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
                               G4int v1, G4int v2, G4int vEdge,
-                              G4bool ifWholeCircle, G4int ns, G4int &kface)
+                              G4bool ifWholeCircle, G4int nds, G4int &kface)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::RotateEdge                   Date:    05.12.96 *
@@ -302,7 +301,7 @@ void HepPolyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
  *                 vertices                                            *
  *        vEdge  - visibility of the edge                              *
  *        ifWholeCircle - is true in case of whole circle rotation     *
- *        ns     - number of discrete steps                            *
+ *        nds    - number of discrete steps                            *
  *        r[]    - r-coordinates                                       *
  *        kface  - current free cell in the pF array                   *
  *                                                                     *
@@ -313,11 +312,11 @@ void HepPolyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
   G4int i;
   G4int i1  = k1;
   G4int i2  = k2;
-  G4int ii1 = ifWholeCircle ? i1 : i1+ns;
-  G4int ii2 = ifWholeCircle ? i2 : i2+ns;
+  G4int ii1 = ifWholeCircle ? i1 : i1+nds;
+  G4int ii2 = ifWholeCircle ? i2 : i2+nds;
   G4int vv  = ifWholeCircle ? vEdge : 1;
 
-  if (ns == 1) {
+  if (nds == 1) {
     if (r1 == 0.) {
       pF[kface++]   = G4Facet(i1,0,    v2*i2,0, (i2+1),0);
     }else if (r2 == 0.) {
@@ -328,19 +327,19 @@ void HepPolyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
   }else{
     if (r1 == 0.) {
       pF[kface++]   = G4Facet(vv*i1,0,    v2*i2,0, vEdge*(i2+1),0);
-      for (i2++,i=1; i<ns-1; i2++,i++) {
+      for (i2++,i=1; i<nds-1; i2++,i++) {
         pF[kface++] = G4Facet(vEdge*i1,0, v2*i2,0, vEdge*(i2+1),0);
       }
       pF[kface++]   = G4Facet(vEdge*i1,0, v2*i2,0, vv*ii2,0);
     }else if (r2 == 0.) {
       pF[kface++]   = G4Facet(vv*i1,0,    vEdge*i2,0, v1*(i1+1),0);
-      for (i1++,i=1; i<ns-1; i1++,i++) {
+      for (i1++,i=1; i<nds-1; i1++,i++) {
         pF[kface++] = G4Facet(vEdge*i1,0, vEdge*i2,0, v1*(i1+1),0);
       }
       pF[kface++]   = G4Facet(vEdge*i1,0, vv*i2,0,    v1*ii1,0);
     }else{
       pF[kface++]   = G4Facet(vv*i1,0,    v2*i2,0, vEdge*(i2+1),0,v1*(i1+1),0);
-      for (i1++,i2++,i=1; i<ns-1; i1++,i2++,i++) {
+      for (i1++,i2++,i=1; i<nds-1; i1++,i2++,i++) {
         pF[kface++] = G4Facet(vEdge*i1,0, v2*i2,0, vEdge*(i2+1),0,v1*(i1+1),0);
       }  
       pF[kface++]   = G4Facet(vEdge*i1,0, v2*i2,0, vv*ii2,0,      v1*ii1,0);
@@ -350,7 +349,7 @@ void HepPolyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
 
 void HepPolyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
                                  G4int *kk, G4double *r,
-                                 G4double dphi, G4int ns, G4int &kface)
+                                 G4double dphi, G4int nds, G4int &kface)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::SetSideFacets                Date:    20.05.97 *
@@ -363,7 +362,7 @@ void HepPolyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
  *        kk[]  - indeces of nodes                                     *
  *        r[]   - radiuses                                             *
  *        dphi  - delta phi                                            *
- *        ns     - number of discrete steps                            *
+ *        nds    - number of discrete steps                            *
  *        kface  - current free cell in the pF array                   *
  *                                                                     *
  ***********************************************************************/
@@ -383,27 +382,27 @@ void HepPolyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
     k2 = kk[ii[2]];
     k3 = kk[ii[3]];
     pF[kface++] = G4Facet(vv[0]*k1,0, vv[2]*k2,0, vv[3]*k3,0);
-    if (r[ii[0]] != 0.) k1 += ns;
-    if (r[ii[2]] != 0.) k2 += ns;
-    if (r[ii[3]] != 0.) k3 += ns;
+    if (r[ii[0]] != 0.) k1 += nds;
+    if (r[ii[2]] != 0.) k2 += nds;
+    if (r[ii[3]] != 0.) k3 += nds;
     pF[kface++] = G4Facet(vv[2]*k3,0, vv[0]*k2,0, vv[3]*k1,0);
   }else if (kk[ii[0]] == kk[ii[1]]) {
     k1 = kk[ii[0]];
     k2 = kk[ii[2]];
     k3 = kk[ii[3]];
     pF[kface++] = G4Facet(vv[1]*k1,0, vv[2]*k2,0, vv[3]*k3,0);
-    if (r[ii[0]] != 0.) k1 += ns;
-    if (r[ii[2]] != 0.) k2 += ns;
-    if (r[ii[3]] != 0.) k3 += ns;
+    if (r[ii[0]] != 0.) k1 += nds;
+    if (r[ii[2]] != 0.) k2 += nds;
+    if (r[ii[3]] != 0.) k3 += nds;
     pF[kface++] = G4Facet(vv[2]*k3,0, vv[1]*k2,0, vv[3]*k1,0);
   }else if (kk[ii[2]] == kk[ii[3]]) {
     k1 = kk[ii[0]];
     k2 = kk[ii[1]];
     k3 = kk[ii[2]];
     pF[kface++] = G4Facet(vv[0]*k1,0, vv[1]*k2,0, vv[3]*k3,0);
-    if (r[ii[0]] != 0.) k1 += ns;
-    if (r[ii[1]] != 0.) k2 += ns;
-    if (r[ii[2]] != 0.) k3 += ns;
+    if (r[ii[0]] != 0.) k1 += nds;
+    if (r[ii[1]] != 0.) k2 += nds;
+    if (r[ii[2]] != 0.) k3 += nds;
     pF[kface++] = G4Facet(vv[1]*k3,0, vv[0]*k2,0, vv[3]*k1,0);
   }else{
     k1 = kk[ii[0]];
@@ -411,10 +410,10 @@ void HepPolyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
     k3 = kk[ii[2]];
     k4 = kk[ii[3]];
     pF[kface++] = G4Facet(vv[0]*k1,0, vv[1]*k2,0, vv[2]*k3,0, vv[3]*k4,0);
-    if (r[ii[0]] != 0.) k1 += ns;
-    if (r[ii[1]] != 0.) k2 += ns;
-    if (r[ii[2]] != 0.) k3 += ns;
-    if (r[ii[3]] != 0.) k4 += ns;
+    if (r[ii[0]] != 0.) k1 += nds;
+    if (r[ii[1]] != 0.) k2 += nds;
+    if (r[ii[2]] != 0.) k3 += nds;
+    if (r[ii[3]] != 0.) k4 += nds;
     pF[kface++] = G4Facet(vv[2]*k4,0, vv[1]*k3,0, vv[0]*k2,0, vv[3]*k1,0);
   }
 }
@@ -1244,16 +1243,16 @@ G4double HepPolyhedron::GetSurfaceArea() const
  *                                                                     *
  ***********************************************************************/
 {
-  G4double s = 0.;
+  G4double srf = 0.;
   for (G4int iFace=1; iFace<=nface; iFace++) {
     G4int i0 = std::abs(pF[iFace].edge[0].v);
     G4int i1 = std::abs(pF[iFace].edge[1].v);
     G4int i2 = std::abs(pF[iFace].edge[2].v);
     G4int i3 = std::abs(pF[iFace].edge[3].v);
     if (i3 == 0) i3 = i0;
-    s += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).mag();
+    srf += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).mag();
   }
-  return s/2.;
+  return srf/2.;
 }
 
 G4double HepPolyhedron::GetVolume() const
@@ -1272,14 +1271,14 @@ G4double HepPolyhedron::GetVolume() const
     G4int i1 = std::abs(pF[iFace].edge[1].v);
     G4int i2 = std::abs(pF[iFace].edge[2].v);
     G4int i3 = std::abs(pF[iFace].edge[3].v);
-    G4Point3D g;
+    G4Point3D pt;
     if (i3 == 0) {
       i3 = i0;
-      g  = (pV[i0]+pV[i1]+pV[i2]) * (1./3.);
+      pt = (pV[i0]+pV[i1]+pV[i2]) * (1./3.);
     }else{
-      g  = (pV[i0]+pV[i1]+pV[i2]+pV[i3]) * 0.25;
+      pt = (pV[i0]+pV[i1]+pV[i2]+pV[i3]) * 0.25;
     }
-    v += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).dot(g);
+    v += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).dot(pt);
   }
   return v/6.;
 }
@@ -1942,8 +1941,8 @@ HepPolyhedronSphere::HepPolyhedronSphere(G4double rmin, G4double rmax,
 
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  G4int ns = (GetNumberOfRotationSteps() + 1) / 2;
-  G4int np1 = G4int(dthe*ns/pi+.5) + 1;
+  G4int nds = (GetNumberOfRotationSteps() + 1) / 2;
+  G4int np1 = G4int(dthe*nds/pi+.5) + 1;
   if (np1 <= 1) np1 = 2;
   G4int np2 = rmin < perMillion ? 1 : np1;
 
@@ -2112,8 +2111,8 @@ HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(G4double ax, G4double by,
   //   P R E P A R E   T W O   P O L Y L I N E S
   //   generate sphere of radius cz first, then rescale x and y later
 
-  G4int ns = (GetNumberOfRotationSteps() + 1) / 2;
-  G4int np1 = G4int(dthe*ns/pi) + 2 + cutflag;
+  G4int nds = (GetNumberOfRotationSteps() + 1) / 2;
+  G4int np1 = G4int(dthe*nds/pi) + 2 + cutflag;
 
   G4double *zz, *rr;
   zz = new G4double[np1+1];
@@ -2121,7 +2120,7 @@ HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(G4double ax, G4double by,
   if (!zz || !rr)
     {
       G4Exception("HepPolyhedronEllipsoid::HepPolyhedronEllipsoid",
-		  "greps0002", FatalException, "Out of memory");
+		  "greps1002", FatalException, "Out of memory");
     }
 
   G4double a = dthe/(np1-cutflag-1);

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.2 2006-06-29 16:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/include/PrimaryGeneratorMessenger.hh
+/// \brief Definition of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,12 +49,12 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
    ~PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
-    G4UIdirectory*          gunDir;         
-    G4UIcmdWithABool*       RndmCmd;
+    PrimaryGeneratorAction* fAction;
+    G4UIdirectory*          fGunDir;         
+    G4UIcmdWithABool*       fRndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -37,7 +37,7 @@
 
 #include "G4DNAElectronSolvatation.hh"
 #include "G4Electron.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 
 G4DNAElectronSolvatation::G4DNAElectronSolvatation(const G4String& processName,
         G4ProcessType type):G4VEmProcess (processName, type),
@@ -64,8 +64,8 @@ void G4DNAElectronSolvatation::InitialiseProcess(const G4ParticleDefinition*)
         isInitialised = true;
         SetBuildTableFlag(false);
 
-        if(!Model()) SetModel(new G4DNASancheSolvatationModel);
-        AddEmModel(1, Model());
+        if(!EmModel()) SetEmModel(new G4DNASancheSolvatationModel);
+        AddEmModel(1, EmModel());
     }
 }
 

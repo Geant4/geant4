@@ -15,6 +15,34 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 22nd, 2012  I.Hrivnacova (g3tog4Tests-V09-05-04)
+---------------------------
+- Added the "g3tog4" component to find_package call in 
+  clGeometry/CMakeLists.txt and the check on existence of Geant4_g3tog4_FOUND 
+  in g3tog4//CMakeLists.txt
+
+October 14th, 2012 A. Dotti (g3tog4Tests-V09-05-03)
+---------------------------
+- Added explicit inclusion of system of units
+
+September 4th, 2012 I.Hrivnacova (g3tog4Tests-V09-05-02)
+---------------------------
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added .README  
+
+July 2nd, 2012 I.Hrivnacova (g3tog4Tests-V09-05-01)
+---------------------------
+- Updated class decription for Doxygen
+
+June 5th, 2012 I.Hrivnacova (g3tog4Tests-V09-05-00)
+---------------------------
+- Removed cltog4 example as it was just a duplication of clGeometry.
+- Restructured clGeometry for use of classes from common.
+- Applied coding guidelines, code clean-up.
+- Changed gun particle position & direction in test macros 
+  to get particles to go through volumes inside HALL
+
 November 23rd, 2011 G.Cosmo (g3tog4Tests-V09-04-01)
 ---------------------------
 - Merged changes from previous tag never considered for testing...

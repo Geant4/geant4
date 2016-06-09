@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.cc,v 1.4 2010-09-30 21:23:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +39,7 @@
 
 #include "G4IonQMDPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4TritonInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"
@@ -48,9 +48,12 @@
 #include "G4BinaryLightIonReaction.hh"
 #include "G4QMDReaction.hh"
 
-#include "G4TripathiCrossSection.hh"
-#include "G4TripathiLightCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
+//#include "G4TripathiCrossSection.hh"
+//#include "G4TripathiLightCrossSection.hh"
+//#include "G4IonsShenCrossSection.hh"
+
+#include "G4GGNuclNuclCrossSection.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -60,9 +63,20 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
+
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+//  fTripathi = 0;
+//  fTripathiLight = 0;
+//  fShen = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
@@ -76,6 +90,12 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+//  fTripathi = 0;
+//  fTripathiLight = 0;
+//  fShen = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
@@ -88,9 +108,9 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
 G4IonQMDPhysics::~G4IonQMDPhysics()
 {
   if(wasActivated) {
-    delete fTripathi;
-    delete fTripathiLight;
-    delete fShen;
+//    delete fTripathi;
+//    delete fTripathiLight;
+//    delete fShen;
     delete fLEDModel;
     delete fLETModel;
     delete fLEAModel;
@@ -112,9 +132,9 @@ void G4IonQMDPhysics::ConstructProcess()
   G4QMDReaction* fQMD= new G4QMDReaction();
   model_list.push_back(fQMD);
   
-  fShen = new G4IonsShenCrossSection;
-  fTripathi = new G4TripathiCrossSection;
-  fTripathiLight = new G4TripathiLightCrossSection;
+//  fShen = new G4IonsShenCrossSection;
+//  fTripathi = new G4TripathiCrossSection
+//    fTripathiLight = new G4TripathiLightCrossSection;
 
   fLEDModel = new G4LEDeuteronInelastic();
   fLETModel = new G4LETritonInelastic();
@@ -139,10 +159,12 @@ void G4IonQMDPhysics::AddProcess(const G4String& name,
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
   
-  hadi->AddDataSet(fShen);
-  hadi->AddDataSet(fTripathi);
-  hadi->AddDataSet(fTripathiLight);
-  
+//  hadi->AddDataSet(fShen);
+//  hadi->AddDataSet(fTripathi);
+//  hadi->AddDataSet(fTripathiLight);
+
+  hadi->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name()));
+    
   BIC->SetMinEnergy(eminBIC);
   BIC->SetMaxEnergy(emaxQMD);  //reset when QMD is present 
   hadi->RegisterMe(BIC);

@@ -35,6 +35,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4XPDGElastic.hh"
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"
@@ -160,16 +161,16 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   G4ParticleDefinition* def2 = trk2.GetDefinition();
   
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
-  G4double m1 = def1->GetPDGMass();
-  G4double m2 = def2->GetPDGMass();
-  G4double m = std::max(m1,m2);
+  G4double m_1 = def1->GetPDGMass();
+  G4double m_2 = def2->GetPDGMass();
+  G4double m_max = std::max(m_1,m_2);
   //  if (m1 > m) m = m1;
   
   G4double pLab = 0.;
 
-  if (m > 0. && sqrtS > (m1 + m2)) 
+  if (m_max > 0. && sqrtS > (m_1 + m_2)) 
     {
-      pLab = std::sqrt( (sqrtS*sqrtS - (m1+m2)*(m1+m2) ) * (sqrtS*sqrtS - (m1-m2)*(m1-m2)) ) / (2*m);
+      pLab = std::sqrt( (sqrtS*sqrtS - (m_1+m_2)*(m_1+m_2) ) * (sqrtS*sqrtS - (m_1-m_2)*(m_1-m_2)) ) / (2*m_max);
       
       // The PDG fit formula requires p in GeV/c
       

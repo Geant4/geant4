@@ -24,6 +24,636 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+17th November 2012  John Allison  (vis-V09-05-49)
+- visman-V09-05-47:
+  o Improved guidance on command directories.
+- openinventor-V09-05-17:
+  o Reverted to openinventor-V09-05-14.
+  o Fixed compiler warnings.
+
+13th November 2012  Laurent Garnier
+- opengl-V09-05-53:
+  o Fix bug #1385 on Linux at launch.
+
+5th November 2012  John Allison
+- openinventor-V09-05-16:
+  o Fixed libXpm linking problem.
+
+5th November 2012  Joseph Perl  (vis-V09-05-48)
+Rolling openinventor back to: openinventor-V09-05-14
+
+2nd November 2012  Joseph Perl  (vis-V09-05-47)
+-openinventor-V09-05-15:
+  o Fixed Coin3D dependency issue (FJ).
+-visman-V09-05-46:
+  o Tidied G4ViewParameters.hh (JA).
+- opengl-V09-05-51:
+  o Fixed bug in display-list-re-use algorithm.
+  o Fixed a possible problem in batch mode for Qt scene tree component.
+- opengl-V09-05-52:
+  o Fix bug #1368, Qt batch mode display a window and printEPS (JA and LG).
+
+1st November 2012  John Allison  (vis-V09-05-46)
+- opengl-V09-05-50:
+  o Fixed compiler warnings (FJ).
+  o Fixed bug in printEPS for batch (LG).
+
+31st October 2012  John Allison
+- openinventor-V09-05-14:  FWJ
+  o Fixed shadowed variables (compiler warnings).
+  o Corrected unrecoverable zoom-out when switching
+    to Perspective camera.
+  o Fixed incomplete mouse-over position readout.
+  o Added License and Disclaimer JA,
+
+30th October 2012  John Allison
+- visman-V09-05-45: Improved PrintAvailableGraphicsSystems.
+- opengl-V09-05-49:
+  o printSize, etc. (set by /vis/ogl/printSize, etc.) made static, i.e.,
+    applies to all OGL viewers.
+  o Corrected effect of toggle transparency pop-up action.
+
+29th October 2012  John Allison
+- visman-V09-05-44: G4VisCommandsSceneAdd.cc: /vis/scene/add/date:
+  o Added user-specified date-time as last argument(s) on command line.
+
+28th October 2012  Laurent Garnier
+- visexternal-V09-04-04 and visexternal-V09-04-05:
+  o 26th October 2012  Laurent Garnier, recorded 28th October JA.
+  o Remove create date in eps files (very useful to be able to compare them)
+
+27th October 2012  John Allison  (vis-V09-05-45)
+- visman-V09-05-43:
+  o Implemented the concept of a "fallback" graphics system.  Used only
+    Qt at present.  A Qt viewer will only work with a Qt session so if
+    for a user instantiates a non-Qt session we wish to avoid instantiating
+    a Qt viewer - instantiate, Xm, for example, instead.  (It's OK to
+    instantiate a Qt viewer in batch - no window is opened, but one can create
+    a scene, change view parameters and "/vis/ogl/printEPS" to get an
+    eps file in batch.)
+- opengl-V09-05-48:
+  o Solves problem of batch v. non-Qt session.
+  o Records changes to colour and visibility of touchables in
+    VisAttributesModifiers, so that they may be transmitted to other
+    viewers.
+  o Qt fixes.
+  o Bug fix: Hidden markers can now be handled on-the-fly, i.e., without
+    having to rebuild the display lists.
+
+24th October 2012  John Allison
+- modeling-V09-05-22 and visman-V09-05-42:
+  o Improvements for printing of parameters and att defs.
+
+18th October 2012  John Allison  (vis-V09-05-44)
+- visman-V09-05-41:
+  o Reverted to G4OpenInventorXt as the default OI for X Windows.
+  o Get G4OpenInventorXtExtended with "/vis/open OIXE".
+- openinventor-V09-05-12 (Frederick Jones):
+  o Bug fixes.
+  o Disabled initial auto setting to first viewpoint of the new
+    G4OpenInventorXtExaminerViewer.
+
+17th October 2012  John Allison  (vis-V09-05-43)
+- visman-V09-05-40:
+  o Added G4OpenInventorXtExtended and made it the default OI for
+    X Windows.
+- openinventor-V09-05-11:
+  o Encapsulated Fred's code in a new driver, G4OpenInventorXtExtended
+  (OIXE).
+- openinventor-V09-05-10 (Frederick Jones):
+  o G4OpenInventorXtExaminerViewer
+    . New class implements functional extensions to the 
+      Xt-based viewer.  A plug-in replacement for
+      SoXtExaminerViewer (the standard viewer provided
+      with Coin3d).
+  o G4OpenInventorXtViewer
+    . Instantiates G4OpenInventorXtExaminerViewer instead
+      of SoXtExaminerViewer.  Added some additional menu items.
+
+12th October 2012  John Allison  (vis-V09-05-42)
+- opengl-V09-05-47, co-works interfaces-V09-05-20:
+  o Introduced some trial code for capturing touchable colour changes.
+
+11th October 2012  John Allison
+- modeling-V09-05-21: Tidied.
+- visman-V09-05-39: Added /vis/viewer/save.
+
+9th October 2012  John Allison
+- modeling-V09-05-20: Tidied.
+- visman-V09-05-38: Fixed warnings.
+
+9th October 2012  John Allison  (vis-V09-05-41)
+- modeling-V09-05-19:
+  o Added some utility functions.
+- visman-V09-05-37:
+  o Completed /vis/touchable/set/ commands.
+
+8th October 2012  John Allison
+- modeling-V09-05-17 and modeling-V09-05-18:
+  o Further refinement for /vis/touchable/set/...
+- modeling-V09-05-16:
+  o Refined and added code for /vis/touchable/set/...
+
+7th October 2012  John Allison
+- modeling-V09-05-15: G4ModelingParameters:
+  o Added VisAttributesModifiers, enums and a nested class for communicating a
+    modification to the vis attributes for a specfic touchable defined by
+    PVNameCopyNoPath, to be used by new commands, /vis/touchable/set/...
+- visman-V09-05-36:
+  o Added the copying of VisAttributesModifiers to modeling parameters, ready
+    for use by new commands, /vis/touchable/set/...
+- visXXX-V09-05-04:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+- openinventor-V09-05-09:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
+6th October 2012  John Allison
+- modeling-V09-05-14:
+  o G4PhysicalVolumeModel: Added SetBaseFullPVPath.  The base full path is the
+    full path of the top physical volume (actually the full path of the mother
+    of the top physical volume), so that even if a user issues
+    "/vis/drawVolume sub-detector", the full path includes the base full path,
+    i.e., the full path up to the world volume.
+- visman-V09-05-35:
+  o G4VisCommandSceneAdd.cc: G4VisCommandSceneAddVolume:
+    Pick up found full path from G4PhysicalVolumeSearchScene so that it can
+    be passed to G4PhysicalVolumeModel as a base, as described above.
+  o G4VSceneHandler: Deprecated NURBS to be removed at next major release.
+
+3rd October 2012  John Allison
+- visXXX-V09-05-03: Protected the case of G4LogicalVolumeModel.
+
+1st October 2012  John Allison  (vis-V09-05-40)
+- modeling-V09-05-13:
+  o G4TrajectoriesModel: Added GetAttDefs and CreateCurrentAttValues for event ID.
+- visman-V09-05-34: Added eventID to G4Atts for trajectories.
+- visman-V09-05-33: Explicitly include units header.
+- opengl-V09-05-43: Improved performance for hidden markers.
+- opengl-V09-05-42: Fixed compiler warning.
+- opengl-V09-05-41: Explicitly include units header.
+- opengl-V09-05-40: Fixed compiler warnings.
+
+27th September 2012  John Allison
+- opengl-V09-05-39: Improved display list re-use.
+
+27th September 2012  John Allison  (vis-V09-05-39)
+- opengl-V09-05-38: Fix for small bug and compiler warnings.
+
+27th September 2012  John Allison  (vis-V09-05-38, co-works interfaces-V09-05-16)
+- visman-V09-05-32:
+  o Added an extra refresh for auto-refresh viewers at end of run.
+- opengl-V09-05-37:
+  o Major re-design of scene and transient processing.
+
+26th September 2012  John Allison
+- visman-V09-05-31: G4ViewParameters: Added useful Set methods.
+- visman-V09-05-29: Added G4VViewer::RefreshView().
+
+25th September 2012  John Allison  (vis-V09-05-37, co-works interfaces-V09-05-15)
+- modeling-V09-05-11:
+  o G4ArrowModel.cc: Added protection (limited width to length/50).
+- visman-V09-05-28:
+  o /vis/scene/add/axes: Added protection (limited width of axes to length/50).
+- opengl-V09-05-35:
+  o  Tidied up.
+- opengl-V09-05-36:
+  o A fix in Qt.
+- openinventor-V09-05-08:
+  o Pick up default vis attributes if primitive has none.
+
+24th September 2012  John Allison
+- opengl-V09-05-34 - needs interfaces-V09-05-15:
+  o Material (for surface rendering) follows glColor at all times.
+  o Changed glColor3d to glColor4d throughout.
+
+6th September 2012  John Allison  (vis-V09-05-36, co-works interfaces-V09-05-12)
+- visman-V09-05-27:
+  o Removed multi-requested parameter guidance.  Collapsed guidance to one
+    long string with '\n' for new lines.  (G4UIparameter cannot cope with
+    multi-line guidance.)
+- opengl-V09-05-31:
+  o G4OpenGLSceneHandler and G4OpenGLStoredSceneHandler:
+    . Protected against null result of dynamic_cast on viewer (shouldn't happen!!).
+
+4th September 2012  John Allison
+- modeling-V09-05-10: Bug fix for G4LogicalVolumeModel.
+
+9th August 2012  John Allison  (vis-V09-05-35, co-works interfaces-V09-05-11)
+- Tagged.
+
+8th August 2012  John Allison
+- opengl-V09-05-29: Fixes "unused parameter" warning.
+
+8th August 2012  John Allison  (vis-V09-05-34, co-works interfaces-V09-05-09)
+- vis-HepRep-V09-05-06, openinventor-V09-05-06,
+  VRML-V09-05-05, gMocren-V09-05-05:
+  o Intercepted 2D primitives - JustWarning printed.
+- visman-V09-05-26:
+  o /vis/scene/add/frame: Fixed bug in SetParameterRange.
+- opengl-V09-05-28, coworks interfaces-V09-05-09:
+  o Big changes to Qt interface
+  o G4OpenGLStoredSceneHandler:
+    . Moved colour from display list to PO so that a sub-class may
+      modify through the new virtual function below.
+  o G4OpenGLStoredViewer:
+    . Added virtual void DisplayTimePOColourModification
+          (G4Colour&, size_t /*currentPOListIndex*/) {}
+      so that a sub-class may modify the colur/transparency.  (If the
+      transparency is modified the rendering may not be optimal since
+      the order of rendering is determined at POList construction time.)
+
+30th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+  o Add search widget in scene tree
+  o Double click now allow to change color/transparency
+
+23th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+  o Do not apply changes to other viewer when moving scene tree slider
+  o Fix a problem on scene tree with non touchable volumes
+ 
+19th July 2012  John Allison
+- G4OpenGLStored/ImmediateSceneHandler.cc:
+  o Disabled GL_DEPTH_TEST and GL_LIGHTING for 2D objects, but see...
+- G4OpenGLSceneHandler.cc:
+  o Disabled GL_DEPTH_TEST and GL_LIGHTING
+
+20th July 2012  John Allison
+- DAWN-V09-05-05:
+  o Implemented 2D text.
+  o Added print-once warnings for other 2D.
+
+17th July 2012  John Allison  (vis-V09-05-33, co-works interfaces-V09-05-08)
+- opengl-V09-05-27:
+  o Fix Linux compiler warnings.
+  o More Qt improvements.
+
+17th July 2012  John Allison  (vis-V09-05-32, co-works interfaces-V09-05-08)
+- visman-V09-05-25:
+  o Improved /vis/viewer/copyViewFrom: added lights direction and move.
+  o Moved fProcessing2D from G4OpenGLSceneHandler.
+- opengl-V09-05-26, co-works interfaces-V09-05-08:
+  o Fixed text layout in Qt.
+  o Improvements in Qt viewer.
+  o Improvements in X viewers:
+    . Now 3D text is hidden, when appropiate, by volumes drawn in surface mode.
+  o Moved fProcessing2D to G4VSceneHandler.
+  o Now may be used by all and any driver.
+
+13th July 2012 Laurent Garnier
+- G4OpenGLQtViewer : Updates in Scene tree viewer algorithm 
+  (speedup and fix transparency bug of 11th July).
+
+15th July 2012  John Allison
+- modeling-V09-05-09:
+  o Introduced G4ArrowModel.
+  o G4AxesModel: Re-implemented (uses G4ArrowModel).
+- visman-V09-05-24: Re-implemented:
+  o /vis/scene/add/arrow
+  o /vis/scene/add/axes
+
+11th July 2012 Laurent Garnier  (vis-V09-05-31, co-works interfaces-V09-05-08)
+- G4OpenGLQtViewer : Change Scene tree viewer algorithm
+
+9th July 2012  John Allison  (vis-V09-05-30)
+- Tagged.
+
+5th July 2012  Gabriele Cosmo
+- modeling-V09-05-08, visman-V09-05-23, opengl-V09-05-24,
+  raytracer-V09-05-05, DAWN-V09-05-04,  VRML-V09-05-04,
+  vis-HepRep-V09-05-04, gMocren-V09-05-04, :
+  o Explicitly use inclusion of headers for system of units and physical
+    constants, in plan to remove implicit inclusion from globals.hh.
+
+3rd July 2012  John Allison
+- raytracer-V09-05-04:
+  o Fixed some Coverity warnings.
+
+3rd July 2012  John Allison  (vis-V09-05-29)
+- opengl-V09-05-23, openinventor-V09-05-05:
+  o Fixed some Coverity warnings.
+- raytracer-V09-05-03:
+  o Tagged a fix: uses std::sqrt.
+
+2nd July 2012  John Allison
+- opengl-V09-05-22:
+  o Important bug-fix for non-display-list text (i.e., Qt).
+
+18th June 2012  John Allison  (vis-V09-05-28)
+- opengl-V09-05-21:
+  o Fix drawing of non-display-list text.
+
+16th June 2012  John Allison  (vis-V09-05-27)
+- opengl-V09-05-20:
+  o Fixes drawing of trajectories when no memory for display lists.
+  o Fixes cases of extra drawing, causing loss of trajectories.
+- opengl-V09-05-19:
+  o Added /vis/ogl/set/eventsDrawInterval.
+
+12th June 2012    John Allison  (vis-V09-05-26)
+- opengl-V09-05-18 (Laurent Garnier):
+  o Fixed shadow warnings where possible.
+  o Many warnings remain due to the use "s" and/or "sr" in Qt macros
+    and headers.  These will have to wait until CLHEP global variables
+    are fixed.
+
+10th June 2012  John Allison  (vis-V09-05-25)
+- vis-HepRep-V09-05-03: Fixed remaining shadow warnings.
+- Now all shadow warnings fixed except in Qt.
+
+8th June 2012  John Allison  (vis-V09-05-24)
+- DAWN-V09-05-03, raytracer-V09-05-02, vistree-V09-05-02, visXXX-V09-05-02,
+  gMocren-V09-05-03, openinventor-V09-05-04:
+  o Shadow clean.
+- vis-HepRep-V09-05-02, opengl-V09-05-17:
+  o Partial shadow clean.
+
+7th June 2012  John Allison
+- modeling-V09-05-07, visman-V09-05-22:
+  o Shadow clean.
+
+6th June 2012  John Allison  (vis-V09-05-23)
+- visman-V09-05-21: Fix compiler warning.
+
+5th June 2012  John Allison  (vis-V09-05-22)
+- visman-V09-05-20: Added /vis/scene/add/line(2D) and arrow(2D).
+
+3rd June 2012  John Allison
+- visman-V09-05-19: Coverity fixes.
+
+31st May 2012  John Allison
+- modeling-V09-05-06:
+  o Brought stray print statement under control of verbosity.
+  o Fixes bug report 1310.
+
+29th May 2012  John Allison  (vis-V09-05-21)
+- opengl-V09-05-16:
+  o Fixed bug in vis-V09-05-20.
+  o Implemented proper treatment of transparency in OpenGL stored mode
+    in the case that trajectories passed through or behind transparent
+    persistent objects (detector components).  Required proper ordering
+    of display list execution. 
+
+23rd May 2012  John Allison  (vis-V09-05-20)
+- Health Check 2012:
+  o Over the years we have added drivers and features and added fixes.
+    A health check revealed several instances of code duplication,
+    unnecessary screen refeshing, incorrect buffer switching
+    (necessitating extra refreshing), etc.  This tag is an attempt to
+    bring the basic vis algorithms up to full health and efficiency.
+    . visman-V09-05-18
+    and consequent changes to
+    . DAWN-V09-05-02
+    . visXXX-V09-05-01
+    . VRML-V09-05-03
+    . vis-HepRep-V09-05-01
+    . openinventor-V09-05-03
+    . opengl-V09-05-15
+
+22nd May 2012  John Allison  (vis-V09-05-19)
+- opengl-V09-05-14: Fixed Linux compiler warnings.
+
+22nd May 2012  John Allison  (vis-V09-05-18)
+- opengl-V09-05-13:
+  o Multiple fixes and improvements to Qt.
+  o Introduced depth of geometry slider.
+  o G4OpenGLStoredSceneHandler: Removed Set/Clear/Draw from EndModeling.
+
+22nd April 2012  John Allison  (vis-V09-05-17)
+- visman-V09-05-17: G4VisCommandsSceneAdd: Fixed compiler warnings.
+
+11th April 2012  John Allison
+- visman-V09-05-16: Added /vis/scene/activateModel.
+
+10th April 2012  John Allison  (vis-V09-05-16)
+- opengl-V09-05-12:
+  o G4OpenGLWin32Viewer.cc: Make it work for Win64 (Pere Mato).
+- openinventor-V09-05-02:
+  o G4OOpenInventorWinViewer.cc: Make it work for Win64 (Pere Mato).
+
+10th April 2012  John Allison  (vis-V09-05-15)
+- opengl-V09-05-11:
+  o X and Xm drivers: Implemented text layout and offset.
+  o G4OpenGLQtViewer : Many fixes.
+  o G4OpenGLXm classes: Change G4Exception id to opengl20xx.
+
+10th April 2012  John Allison  (vis-V09-05-14)
+- modeling-V09-05-05: Undid deleterious effect of modeling-V09-05-02!!
+- visman-V09-05-15: Migrated to G4Scene::Model.
+- visman-V09-05-14: Added
+  G4VisManager::RegisterRunDuration/EndOfEvent/EndOfRunUserVisAction.
+  Now you can register any number of named vis actions and associate
+  them with particular types of action.  They are added to the scene
+  with /vis/scene/add/userAction [<name>] (default all).
+- gMocren-V09-05-01: Migrated to G4Scene::Model.
+- vistree-V09-05-01: Migrated to G4Scene::Model.
+
+8th April 2012  John Allison
+- visman-V09-05-13: Added /vis/viewer/copyViewFrom.
+- visman-V09-05-12: Added /vis/set/colour and /vis/set/lineWidth
+
+4th April 2012  John Allison  (vis-V09-05-14)
+- modeling-V09-05-04:
+  o Added Get/SetType for all models (sub-classes of G4VModel).
+  o G4PhysicalVolumeModel: Draw only one replica if top volume.
+  o Other small improvements and fixes.
+- visman-V09-05-11: Many small improvements.
+- opengl-V09-05-10:
+  o X and Xm drivers: Implemented text layout and offet.
+
+2nd April 2012  John Allison, Laurent Garnier  (vis-V09-05-13)
+- opengl-V09-05-09: Introduce QT tree ("Scene" panel in G4UIQt session).
+
+28th March 2012  John Allison
+- VRML-V09-05-02: Protect debug statement.
+
+26th March 2012  John Allison  (vis-V09-05-12)
+- visman-V09-05-10:
+  o G4VisCommandsSet.cc: Added #include <cctype> for strict Windows compiler.
+
+23rd March 2012  John Allison  (vis-V09-05-11 - needs greps-V09-05-06)
+- visman-V09-05-09: Added /vis/set/textLayout.
+- modeling-V09-05-03: G4AxesModel: Augmented global description.
+
+21st March 2012  John Allison
+- visman-V09-05-08:
+  o Introduced concept of "current quantities" for use in vis commands.
+  o Added /vis/set/textColour, the first command in the series that
+    will allow the user to change the above current quantities for use by
+    subsequent commands.
+
+7th March 2012  John Allison  (vis-V09-05-10)
+- modeling-V09-05-02: G4CallbackModel: Add destructor.
+- visman-V09-05-07:
+  o Added /vis/scene/add/logo2D and text2D.
+  o Improved /vis/scene/add/axes, logo and scale:
+    . Size computed automatically by default.
+
+6th March 2012  John Allison
+- opengl-V09-05-08: Fix problem with persistent text.
+
+29th February 2012  John Allison  (vis-V09-05-09)
+- opengl-V09-05-07: Fixed minor problem with text:
+
+28th February 2012  John Allison  (vis-V09-05-08)
+- visman-V09-05-06: Migrated to G4VScenehandler::fObjectTransformation.
+- opengl-V09-05-06:
+  o Migrated to G4VScenehandler::fObjectTransformation.
+  o Improved rendering speed (Laurent Garnier).
+- DAWN-V09-05-01
+- VRML-V09-05-01: Migrated to G4VScenehandler::fObjectTransformation.
+- vis-HepRep-V09-05-00: Migrated to G4VScenehandler::fObjectTransformation.
+- gMocren-V09-05-00: Migrated to G4VScenehandler::fObjectTransformation.
+
+27th February 2012  John Allison  (visJAfpObjectTranformation)
+- Private tag of code before change of fpObjectTranformation.
+
+14th February 2012  John Allison
+- opengl-V09-05-05:
+  o Fixed bug in TO copy constructor that affected position of stored text.
+  o General tidy.
+
+13th February 2012  John Allison  (vis-V09-05-07)
+- visman-V09-05-05: Small improvement to /vis/scene/add/eventID.
+- opengl-V09-05-04: Fix compilation error with gcc 4.3.
+
+11th February 2012  John Allison  (vis-V09-05-06)
+- Needs global-V09-05-00 and greps-V09-05-05.
+- Merged vis-V09-05-04-2ndbranch (tag vis-V09-05-04-2ndbranch-08) to trunk.
+  Includes:
+  o visman-V09-05-04: essentially same as visman-V09-05-03.
+  o opengl-V09-05-03: Fixes text in Qt.  Other small improvements.
+
+11th February 2012  John Allison  (vis-V09-05-04-2ndbranch-08)
+- Tagged
+
+9th February 2012  John Allison
+- visman-V09-05-03:
+  o Added /vis/scene/add/date and /vis/scene/add/frame.
+  o /vis/scene/add/eventID: Added layout parameter.
+
+8th February 2012  John Allison
+- raytracer-V09-05-01: Adopt fix proposed by jasondet@gmail.com for
+  up-vector bug #1274.
+
+7th February 2012  John Allison
+- raytracer-V09-05-00: Fix up-vector bug #1274.  Also other small fixes.
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-07)
+- Needs greps-V09-05-05: Fixes to copy constructors.
+- vis-V09-05-04-2ndbranch-opengl-06: Uses above copy contructors.
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-06)
+- vis-V09-05-04-2ndbranch-opengl-05:
+  o PO/TOList: Changed G4Text* to G4TextPlus*.
+
+4th February 2012  John Allison  (vis-V09-05-04-2ndbranch-05)
+- Needs greps-V09-05-04 (G4Text copy constructor).
+- vis-V09-05-04-2ndbranch-opengl-04:
+  o PO/TOList: Changed G4TextModel* to G4Text*.
+  o Fixes a problem with TO text.
+
+2nd February 2012  John Allison  (vis-V09-05-04-2ndbranch-04)
+- vis-V09-05-04-2ndbranch-opengl-03:
+  o Removed glDrawBuffer(GL_FRONT) when no memory for display lists.
+  o G4OpenGLStoredViewer.cc:
+    . When re-using AddPrimitive, by-pass the stored AddPrimitive to
+      avoid making more display lists and other stuff in
+      AddPrimitivePreamble, etc.  Use
+        static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+          G4OpenGLSceneHandler::AddPrimitive(...).
+    . Fixes StoredQt text problem.
+
+1st February 2012  John Allison
+- vis-V09-05-04-2ndbranch-opengl-02: G4OpenGLStoredViewer::DrawDisplayLists:
+  o Some systems, notably Qt, re-use model->DescribeYourselfTo(sceneHandler)
+    but we don't want to create any further display lists, so...
+      G4bool tempMFDL = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+      fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  o But text problem has come back!!!
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-03)
+- vis-V09-05-04-2ndbranch-opengl-01:
+  o G4OpenGLStoredQtViewer: Removed DrawText.  Fixes stored text problem.
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-02)
+- vis-V09-05-04-2ndbranch-opengl-00:
+  o Special case text: skeleton.  Some systems, notabley Qt, process
+    text in a special way; it cannot be stored in display lists.  So the
+    text model pointer is stored in the PO/TO and processed separately.
+    (PO = Persistent object, TO = transient object.)  The nested classes
+    G4OpenGLStoredSceneHandler::PO and TO keep relevent information,
+    e.g., the display list index or, in this case, when relevant, a
+    pointer to the G4TextModel.
+
+30th January 2012  John Allison  (vis-V09-05-04-2ndbranch-01)
+- VRML-V09-05-00, DAWN-V09-05-00:
+  o Fixed Ubuntu warning about ignoring return value of system call.
+- vistree-V09-05-00:
+  o G4VTreeSceneHandler.hh:
+    . Removed empty implementations of Begin/EndPrimitives, so now
+      picks up the default (and correct non-empty default
+      implementations in G4VSceneHandler).  The problem is that
+      objectTransformation must be set to something.  This was causing a
+      G4Exception in G4VisManager::DrawT.
+
+13th January 2012  John Allison  (vis-V09-05-05)
+- DAWN-V09-05-00, VRML-V09-05-00:
+  o Fixed Ubuntu warnings about ignoring return value of system call.
+- visman-V09-05-02, opengl-V09-05-02 (Laurent Garnier):
+  o Fixes for Qt Stored text.
+
+12th January 2012  John Allison
+- vistree-V09-05-00: G4VTreeSceneHandler.hh:
+  o Removed empty implementations of Begin/EndPrimitives, so now
+    picks up the default (and correct non-empty default
+    implementations in G4VSceneHandler).  The problem is that
+    objectTransformation must be set to something.  This was causing a
+    G4Exception in G4VisManager::DrawT.
+
+3rd January 2012  John Allison  (vis-V09-05-04)
+- modeling-V09-05-01: Validates geometry in all worlds.
+
+3rd January 2012  John Allison  (vis-V09-05-03)
+- opengl-V09-05-01 and openinventor-V09-05-00:
+  o Removed #ifdef G4VIS... protection from header files so that they
+    can be used for a possible dynamic library.  Of course, the
+    protection remains on the implementation files.
+
+3rd January 2012  John Allison  (vis-V09-05-02)
+- visman-V09-05-01:
+  o /vis/scene/notifyHandlers:
+    . Downgraded "scene has changed" from WARNING to NOTE. 
+  o G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
+    causing two copies of the geometry to be drawn.
+- visXXX-V09-05-00:
+  o Removed #ifdef ...XXXSG... protections.
+    . No longer any reliance on imported tree code; own tree code used. 
+- opengl-V09-05-00:
+  o Corrected treatment of colour for transient objects.
+  o G4OpenGLSceneHandler: Significant rationalisation.
+
+30th December 2011  John Allison  (vis-V09-05-01 co-works greps-V09-05-02)
+- modeling-V09-05-00: G4TrajectoriesModel::DescribeYourselfTo:
+  o Used Begin/EndDraw to improve drawing speed.
+    . Assumes all trajectories are drawn with the same transformation.
+      If not, a fatal exception with be raised in G4VisManager::DrawT.
+  o Changed FatalException to JustWarning in
+    G4AttributeFilterT<T>::AddInterval and AddValue.
+- visman-V09-05-00:
+  o G4VisManager: Implemented Begin/EndDraw(2D).
+    . Note that this forces all thus-bracketed Draw messages to have the
+      same transformation.  If an attempt to change the transformation
+      is detected, a fatal exception is raised.
+  o G4VSceneHandler: Added Get/SetObjectTransformation.
+  o Marker size bug fix.
+
+2nd December 2011  John Allison (vis-V09-05-00)
+- Corresponds to geant4-09-05-ref-00.
+- opengl-V09-04-26 and 27: CMake improvements (Ben Morgan).
+- opengl-V09-04-28: Qt fixes (Laurent Garnier).
+- openinventor-V09-04-03 and 04: CMake improvements (Ben Morgan).
+
 15th November 2011  John Allison (vis-V09-04-18)
 - opengl-V09-04-25: Fix compiler warning + cosmetics.
 
@@ -72,7 +702,11 @@ History file for visualization category
 5th November 2011  Joseph Perl (vis-V09-04-12)
 - global tag for release 9.5
 - On top of vis-V09-04-11:
-  o modeling-V09-04-04  o visman-V09-04-08  o vis-HepRep-V09-04-03  o vistest-V09-04-01  o opengl-V09-04-16
+  o modeling-V09-04-04
+  o visman-V09-04-08
+  o vis-HepRep-V09-04-03
+  o vistest-V09-04-01
+  o opengl-V09-04-16
 
 4th November 2011  John Allison
 - visman-V09-04-08 (needs greps-V09-04-09):
@@ -102,6 +736,9 @@ History file for visualization category
 
 25th October 2011  John Allison
 - vistest-V09-04-00: Minor improvements.
+
+25th October 2011  John Allison  (vis-V09-04-11-01 on vis-V09-04-11-branch)
+- OpenGL: Reworked AddPrimitive for G4Polymarker.
 
 25th October 2011  John Allison  (vis-V09-04-11)
 - Another interim tag.

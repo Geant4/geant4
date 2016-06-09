@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4JTPolynomialSolver.cc,v 1.8 2010-07-14 10:45:46 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4JTPolynomialSolver.hh"
+#include "G4SystemOfUnits.hh"
 
 const G4double G4JTPolynomialSolver::base   = 2;
 const G4double G4JTPolynomialSolver::eta    = DBL_EPSILON;

@@ -1,6 +1,3 @@
-$Id: History,v 1.4 2010-12-03 08:19:59 kmura Exp $
--------------------------------------------------------------------
-
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
@@ -11,6 +8,41 @@ $Id: History,v 1.4 2010-12-03 08:19:59 kmura Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 November 2012, I. Hrivnacova (MPI-V09-05-06)
+- Fixed .README files
+
+20 November 2012, I. Hrivnacova (MPI-V09-05-05)
+- Fixed CmakeLists.txt in the top directory
+
+16 November 2012, K. Murakami (MPI-V09-05-04)
+- Updated CmakeLists.txt for examples. Fixed link errors.
+- Updated README document.
+
+16 November 2012, I. Hrivnacova (MPI-V09-05-03)
+- Update of CMake files:
+  - Added CMakeLists.txt in for processing MPI from upper directories
+  - Removed exMPI02/FindROOT.cmake (available with Geant4 distribution)
+  - Minor changes in exMPI01, exMPI02 CMake build in order to be able
+    to build examples from the upper directories
+  - Added comment lines 
+  - Added copying macros in the build area
+  - Install targets under CMAKE_INSTALL_PREFIX/bin and not in source
+
+15 November 2012, K. Murakami (MPI-V09-05-02)
+ - typos in documents are fixed.
+
+8 November 2012, K. Murakami (MPI-V09-05-01)
+ - explicit inclusion of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+ - updated documentations
+
+1 November 2012, K. Murakami (MPI-V09-05-00)
+ - Migrated to CMake build with change of directory structure.
+ - G4Exception is replaced with new one.
+ - Fixed infinite-loop of slaves when a macro does not exists.
+ - Added support for execution of maro with /control/macroPath.
+ - Added best guess of selection of a UI shell.
+ - Added Doxygen-style docs.
 
 3 December 2010 K. Murakami (MPI-V09-03-02)
  - /mpi/wait command is removed. It is automatically called
@@ -36,7 +68,5 @@ $Id: History,v 1.4 2010-12-03 08:19:59 kmura Exp $
  << exMPI02 >>
  - use G4UIcsh instead of G4UItcsh because OpenMPI is now default.
 
-
 16 Nov. 2007 K.Murakami
  - commited to G4 CVS.
-

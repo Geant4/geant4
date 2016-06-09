@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file optical/LXe/include/LXePMTHit.hh
+/// \brief Definition of the LXePMTHit class
+//
+//
 #ifndef LXePMTHit_h
 #define LXePMTHit_h 1
 
@@ -40,45 +43,46 @@ class G4VTouchable;
 
 class LXePMTHit : public G4VHit
 {
-public:
-  
-  LXePMTHit();
-  ~LXePMTHit();
-  LXePMTHit(const LXePMTHit &right);
+  public:
+ 
+    LXePMTHit();
+    virtual ~LXePMTHit();
+    LXePMTHit(const LXePMTHit &right);
 
-  const LXePMTHit& operator=(const LXePMTHit &right);
-  G4int operator==(const LXePMTHit &right) const;
+    const LXePMTHit& operator=(const LXePMTHit &right);
+    G4int operator==(const LXePMTHit &right) const;
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
-  
-  void Draw();
-  void Print();
+    inline void *operator new(size_t);
+    inline void operator delete(void *aHit);
+ 
+    virtual void Draw();
+    virtual void Print();
 
-  inline void SetDrawit(G4bool b){drawit=b;}
-  inline G4bool GetDrawit(){return drawit;}
+    inline void SetDrawit(G4bool b){fDrawit=b;}
+    inline G4bool GetDrawit(){return fDrawit;}
 
-  inline void IncPhotonCount(){photons++;}
-  inline G4int GetPhotonCount(){return photons;}
+    inline void IncPhotonCount(){fPhotons++;}
+    inline G4int GetPhotonCount(){return fPhotons;}
 
-  inline void SetPMTNumber(G4int n) { pmtNumber = n; }
-  inline G4int GetPMTNumber() { return pmtNumber; }
+    inline void SetPMTNumber(G4int n) { fPmtNumber = n; }
+    inline G4int GetPMTNumber() { return fPmtNumber; }
 
-  inline void SetPMTPhysVol(G4VPhysicalVolume* physVol){this->physVol=physVol;}
-  inline G4VPhysicalVolume* GetPMTPhysVol(){return physVol;}
+    inline void SetPMTPhysVol(G4VPhysicalVolume* physVol){this->fPhysVol=physVol;}
+    inline G4VPhysicalVolume* GetPMTPhysVol(){return fPhysVol;}
 
-  inline void SetPMTPos(G4double x,G4double y,G4double z){
-    pos=G4ThreeVector(x,y,z);
-  }
-  
-  inline G4ThreeVector GetPMTPos(){return pos;}
+    inline void SetPMTPos(G4double x,G4double y,G4double z){
+      fPos=G4ThreeVector(x,y,z);
+    }
+ 
+    inline G4ThreeVector GetPMTPos(){return fPos;}
 
-private:
-  G4int pmtNumber;
-  G4int photons;
-  G4ThreeVector pos;
-  G4VPhysicalVolume* physVol;
-  G4bool drawit;
+  private:
+
+    G4int fPmtNumber;
+    G4int fPhotons;
+    G4ThreeVector fPos;
+    G4VPhysicalVolume* fPhysVol;
+    G4bool fDrawit;
 
 };
 
@@ -97,5 +101,3 @@ inline void LXePMTHit::operator delete(void *aHit){
 }
 
 #endif
-
-

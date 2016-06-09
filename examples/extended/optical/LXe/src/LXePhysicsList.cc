@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXePhysicsList.cc
+/// \brief Implementation of the LXePhysicsList class
+//
+//
 #include "LXePhysicsList.hh"
 
 #include "LXeGeneralPhysics.hh"
@@ -32,9 +36,13 @@
 #include "G4OpticalPhysics.hh"
 #include "G4OpticalProcessIndex.hh"
 
-LXePhysicsList::LXePhysicsList():  G4VModularPhysicsList()
+#include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXePhysicsList::LXePhysicsList() : G4VModularPhysicsList()
 {
-  // default cut value  (1.0mm) 
+  // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
 
   // General Physics
@@ -63,16 +71,14 @@ LXePhysicsList::LXePhysicsList():  G4VModularPhysicsList()
 
 }
 
-LXePhysicsList::~LXePhysicsList()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXePhysicsList::~LXePhysicsList() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXePhysicsList::SetCuts(){
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-  SetCutsWithDefault();   
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets
+  //   the default cut value for all particle types
+  SetCutsWithDefault();
 }
-
-
-
-

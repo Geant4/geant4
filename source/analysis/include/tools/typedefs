@@ -59,9 +59,10 @@ inline uint32 uint32_mx() { //4 294 967 295
   for(unsigned int i=0;i<32;i++)  n += 1<<i;  
   return n;
 }
-inline uint64 uint64_mx() { //18 446 744 073 709 551 614
+inline uint64 uint64_mx() { //18 446 744 073 709 551 615
+  uint64 one = 1;
   uint64 n = 0;
-  for(unsigned int i=0;i<64;i++)  n += 1<<i;  
+  for(unsigned int i=0;i<64;i++)  n += one<<i;  
   return n;
 }
 
@@ -70,12 +71,16 @@ typedef unsigned char byte;
 //for ./io :
 typedef unsigned char uchar;
 typedef short int16;
+typedef unsigned short ushort;
 typedef unsigned short uint16;
 typedef uint32 ref;
 // sizeof(long)==sizeof(void*) on all platforms.
 typedef unsigned long diff_pointer_t;
 typedef char* cstr_t;
 typedef const char* const_cstr_t;
+
+class fits_bit {public:char m_c;}; //for exlib/cfitsio
+class csv_time {public:long m_l;}; //for inlib/rcsv_ntuple
 
 }
 

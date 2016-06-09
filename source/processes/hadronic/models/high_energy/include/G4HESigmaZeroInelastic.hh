@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HESigmaZeroInelastic.hh,v 1.14 2007-04-11 18:11:30 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -46,6 +45,8 @@
 
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4HELambdaInelastic.hh"
 
 class G4HESigmaZeroInelastic : public G4HEInelastic  
@@ -53,10 +54,12 @@ class G4HESigmaZeroInelastic : public G4HEInelastic
   public:  // with description 
     G4HESigmaZeroInelastic() : G4HEInelastic("G4HESigmaZeroInelastic")
     {
-      theMinEnergy = 20*GeV;
-      theMaxEnergy = 10*TeV;
+      theMinEnergy = 20*CLHEP::GeV;
+      theMaxEnergy = 10*CLHEP::TeV;
       MAXPART      = 2048;
       verboseLevel = 0; 
+      G4cout << "WARNING: model G4HESigmaZeroInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl; 
     }
 
     ~G4HESigmaZeroInelastic() {};

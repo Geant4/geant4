@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.15 2010-03-31 09:26:09 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,6 +75,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,7 +83,7 @@ PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
 {
   defaultCutValue = 1.*km;
-  pMes = new PhysicsListMessenger(this);
+  fMes = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
 }
 
@@ -88,7 +91,7 @@ PhysicsList::PhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete pMes;
+  delete fMes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,7 +184,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-	  
+          
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);

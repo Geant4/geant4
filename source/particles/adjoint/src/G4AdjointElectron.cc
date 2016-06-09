@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointElectron.cc,v 1.2 2008-11-13 08:23:12 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // ------------------------------------------------------------
@@ -39,6 +38,8 @@
 // 
 
 #include "G4AdjointElectron.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

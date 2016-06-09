@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNAMillerGreenExcitationModel_h
@@ -37,7 +36,7 @@
 #include "G4Proton.hh"
 #include "G4DNAGenericIonsManager.hh"
 #include "G4DNAEmfietzoglouExcitationModel.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "Randomize.hh"
 #include "G4NistManager.hh"
 
@@ -70,8 +69,9 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  // Water density table
+  const std::vector<G4double>* fpMolWaterDensity;
 
-  G4Material* nistwater;
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
@@ -90,7 +90,7 @@ private:
 
   G4int nLevels;
 
-  G4WaterExcitationStructure waterExcitation;
+  G4DNAWaterExcitationStructure waterExcitation;
   
   G4double S_1s(G4double t, 
 		G4double energyTransferred, 

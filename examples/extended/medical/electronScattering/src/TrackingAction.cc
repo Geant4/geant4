@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc,v 1.2 2010-05-22 21:21:52 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,14 +39,16 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
                                HistoManager* HM)
-:detector(DET), runaction(RA), histoManager(HM)
+:fDetector(DET), fRunAction(RA), fHistoManager(HM)
 {
- Zend = 0.5*(detector->GetThicknessWorld()); 
+ fZend = 0.5*(fDetector->GetThicknessWorld()); 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +65,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   G4ThreeVector direction = track->GetMomentumDirection();    
 
   if (charge == 0.0)       return;
-  if (position.z() < Zend) return;
+  if (position.z() < fZend) return;
   if (direction.z() <= 0.) return;
     
   G4double rmin, dr, ds;
@@ -70,11 +74,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //projected angle at exit
   //
   G4double ux = direction.x(), uy = direction.y(), uz = direction.z();
-  if (histoManager->HistoExist(ih)) {
+  if (fHistoManager->HistoExist(ih)) {
     G4double thetax = std::atan(ux/uz);
     G4double thetay = std::atan(uy/uz);
-    histoManager->FillHisto(ih, thetax);
-    histoManager->FillHisto(ih, thetay);
+    fHistoManager->FillHisto(ih, thetax);
+    fHistoManager->FillHisto(ih, thetay);
   }
       
   //dN/dS at exit
@@ -82,26 +86,26 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   G4double x = position.x(), y = position.y();
   G4double r = std::sqrt(x*x + y*y);
   ih = 2;
-  if (histoManager->HistoExist(ih)) {
-    dr = histoManager->GetBinWidth(ih);
+  if (fHistoManager->HistoExist(ih)) {
+    dr = fHistoManager->GetBinWidth(ih);
     rmin = ((int)(r/dr))*dr;
     ds = twopi*(rmin + 0.5*dr)*dr;        
-    histoManager->FillHisto(ih, r, 1/ds);  
+    fHistoManager->FillHisto(ih, r, 1/ds);  
   }
       
   //d(N/cost)/dS at exit
   //
   ih = 3;
-  if (histoManager->HistoExist(ih)) {
-    dr = histoManager->GetBinWidth(ih);
+  if (fHistoManager->HistoExist(ih)) {
+    dr = fHistoManager->GetBinWidth(ih);
     rmin = ((int)(r/dr))*dr;
     ds = twopi*(rmin + 0.5*dr)*dr;        
-    histoManager->FillHisto(ih, r, 1/(uz*ds));
+    fHistoManager->FillHisto(ih, r, 1/(uz*ds));
   }
   
   //vector of d(N/cost)/dS at exit
   //
-  runaction->SumFluence(r, 1/uz);
+  fRunAction->SumFluence(r, 1/uz);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

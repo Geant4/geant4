@@ -30,21 +30,21 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /* \file G4INCLInteractionAvatar.cc
- * \brief Virtual class for G4interaction avatars.
+ * \brief Virtual class for interaction avatars.
  *
  * This class is inherited by decay and collision avatars. The goal is to
  * provide a uniform treatment of common physics, such as Pauli blocking,
  * enforcement of energy conservation, etc.
  *
- *  Created on: Mar 1st, 2011
- *      Author: Davide Mancusi
+ *  \date Mar 1st, 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLInteractionAvatar.hh"
@@ -176,7 +176,7 @@ namespace G4INCL {
         (*i)->setOutOfWell();
         fs->addOutgoingParticle(*i);
         DEBUG("Pion was created outside its potential well." << std::endl
-            << (*i)->prG4int());
+            << (*i)->print());
       }
 
     // Try to enforce energy conservation
@@ -214,8 +214,8 @@ namespace G4INCL {
         restoreParticles();
 
         // Delete newly created particles
-        for( ParticleIter i = created.begin(); i != created.end(); ++i )
-          delete *i;
+        for( ParticleIter j = created.begin(); j != created.end(); ++j )
+          delete *j;
 
         FinalState *fsBlocked = new FinalState;
         delete fs;
@@ -275,8 +275,8 @@ namespace G4INCL {
       // ...except for pions beyond their surface radius.
       if((*i)->isOutOfWell()) continue;
 
-      const G4bool success = bringParticleInside(*i);
-      if( !success ) {
+      const G4bool successBringParticlesInside = bringParticleInside(*i);
+      if( !successBringParticlesInside ) {
         ERROR("Failed to bring particle inside the nucleus!" << std::endl);
       }
     }
@@ -284,33 +284,40 @@ namespace G4INCL {
     // Collision accepted!
     for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i ) {
       if(!(*i)->isOutOfWell()) {
-        // Decide if the particle should be made G4into a spectator
+        // Decide if the particle should be made into a spectator
+        // (Back to spectator)
         G4bool goesBackToSpectator = false;
         if((*i)->isNucleon() && theNucleus->getStore()->getConfig()->getBackToSpectator()) {
-          const G4double threshold = (*i)->getPotentialEnergy()
-            - ParticleTable::getSeparationEnergy((*i)->getType())
-            + theNucleus->getStore()->getConfig()->getBackToSpectatorThreshold();
+          G4double threshold = (*i)->getPotentialEnergy();
+          if((*i)->getType()==Proton)
+            threshold += Math::twoThirds*theNucleus->getTransmissionBarrier(*i);
           if((*i)->getKineticEnergy() < threshold)
             goesBackToSpectator = true;
         }
+
+        // Thaw the particle propagation
+        (*i)->thawPropagation();
+
         // Increment or decrement the participant counters
         if(goesBackToSpectator) {
-          if((*i)->isParticipant()) {
-            theNucleus->getStore()->getBook()->decrementParticipants();
-            (*i)->makeSpectator();
+          DEBUG("The following particle goes back to spectator:" << std::endl
+              << (*i)->print() << std::endl);
+          if(!(*i)->isTargetSpectator()) {
+            theNucleus->getStore()->getBook()->decrementCascading();
           }
+          (*i)->makeTargetSpectator();
         } else {
-          if(!(*i)->isParticipant()) {
-            theNucleus->getStore()->getBook()->incrementParticipants();
-            (*i)->makeParticipant();
+          if((*i)->isTargetSpectator()) {
+            theNucleus->getStore()->getBook()->incrementCascading();
           }
+          (*i)->makeParticipant();
         }
       }
     }
     ParticleList destroyed = fs->getDestroyedParticles();
     for( ParticleIter i = destroyed.begin(); i != destroyed.end(); ++i )
-      if((*i)->isParticipant())
-        theNucleus->getStore()->getBook()->decrementParticipants();
+      if(!(*i)->isTargetSpectator())
+        theNucleus->getStore()->getBook()->decrementCascading();
 
     return fs;
   }
@@ -352,8 +359,11 @@ namespace G4INCL {
 
     // Apply the root-finding algorithm
     const G4bool success = RootFinder::solve(violationEFunctor, 1.0);
-    if(!success) {
-      WARN("Couldn't enforce energy conservation after an G4interaction, root-finding algorithm failed." << std::endl);
+    if(success) { // Apply the solution
+      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
+      (*violationEFunctor)(theSolution.first);
+    } else {
+      WARN("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
     }
     delete violationEFunctor;
     return success;
@@ -363,8 +373,9 @@ namespace G4INCL {
    * *** InteractionAvatar::ViolationEMomentumFunctor methods ***
    * ***                                                      ***/
 
-  InteractionAvatar::ViolationEMomentumFunctor::ViolationEMomentumFunctor(Nucleus * const nucleus, FinalState const * const finalState, ThreeVector const * const boost, const G4bool localE) 
-    : initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
+  InteractionAvatar::ViolationEMomentumFunctor::ViolationEMomentumFunctor(Nucleus * const nucleus, FinalState const * const finalState, ThreeVector const * const boost, const G4bool localE) :
+    RootFunctor(0., 1E6),
+    initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
     theNucleus(nucleus),
     boostVector(boost),
     shouldUseLocalEnergy(localE)
@@ -405,8 +416,8 @@ namespace G4INCL {
       else
         (*i)->setPotentialEnergy(0.);
 
-      if(shouldUseLocalEnergy && !(*i)->isPion() && theNucleus) { // This translates AECSVT's loops 1, 3 and 4
-        // assert(theNucleus); // Local energy without a nucleus doesn't make sense
+      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
+// assert(theNucleus); // Local energy without a nucleus doesn't make sense
         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
         G4double locEOld;
@@ -434,17 +445,18 @@ namespace G4INCL {
    * *** InteractionAvatar::ViolationEEnergyFunctor methods ***
    * ***                                                    ***/
 
-  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState) 
-    : initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
+  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState) :
+    RootFunctor(0., 1E6),
+    initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
     theNucleus(nucleus),
     theParticle(finalState->getModifiedParticles().front()),
     theEnergy(theParticle->getEnergy()),
     theMomentum(theParticle->getMomentum()),
     energyThreshold(KinematicsUtils::energy(theMomentum,ParticleTable::effectiveDeltaDecayThreshold))
   {
-    // assert(theNucleus);
-    // assert(finalState->getModifiedParticles().size()==1);
-    // assert(theParticle->isDelta());
+// assert(theNucleus);
+// assert(finalState->getModifiedParticles().size()==1);
+// assert(theParticle->isDelta());
   }
 
   G4double InteractionAvatar::ViolationEEnergyFunctor::operator()(const G4double alpha) const {

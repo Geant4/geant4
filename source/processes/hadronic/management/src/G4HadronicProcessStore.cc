@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.20 2011-01-08 02:23:20 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4HadronicProcessStore.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
@@ -130,6 +130,51 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   buildTableStart = true;
   theEPTestMessenger = new G4HadronicEPTestMessenger(this);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
+                                 const G4ParticleDefinition* part,
+                                 G4double energy,
+                                 const G4VProcess* proc,
+                                 const G4Element*  element)
+{
+  G4double cross = 0.;    
+  G4int subType = proc->GetProcessSubType();      
+  if (subType == fHadronElastic)   
+    cross = GetElasticCrossSectionPerAtom(part,energy,element);
+  else if (subType == fHadronInelastic)   
+    cross = GetInelasticCrossSectionPerAtom(part,energy,element);
+  else if (subType == fCapture)   
+    cross = GetCaptureCrossSectionPerAtom(part,energy,element);      
+  else if (subType == fFission)   
+    cross = GetFissionCrossSectionPerAtom(part,energy,element); 
+  else if (subType == fChargeExchange)   
+    cross = GetChargeExchangeCrossSectionPerAtom(part,energy,element);
+  return cross;
+}  	   
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCrossSectionPerVolume(
+                                 const G4ParticleDefinition* part,
+                                 G4double energy,
+                                 const G4VProcess* proc,
+                                 const G4Material* material)
+{
+  G4double cross = 0.;    
+  G4int subType = proc->GetProcessSubType();      
+  if (subType == fHadronElastic)   
+    cross = GetElasticCrossSectionPerVolume(part,energy,material);
+  else if (subType == fHadronInelastic)   
+    cross = GetInelasticCrossSectionPerVolume(part,energy,material);
+  else if (subType == fCapture)   
+    cross = GetCaptureCrossSectionPerVolume(part,energy,material);      
+  else if (subType == fFission)   
+    cross = GetFissionCrossSectionPerVolume(part,energy,material); 
+  else if (subType == fChargeExchange)   
+    cross = GetChargeExchangeCrossSectionPerVolume(part,energy,material);
+  return cross;
+}  	   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -392,8 +437,8 @@ void G4HadronicProcessStore::RegisterParticle(G4HadronicProcess* proc,
     std::multimap<PD,HP,std::less<PD> >::iterator it;
     for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
       if(it->first == part) {
-	HP process = (it->second);
-	if(proc == process) { return; }
+	HP process2 = (it->second);
+	if(proc == process2) { return; }
       }
     }
   }
@@ -471,8 +516,8 @@ void G4HadronicProcessStore::RegisterParticleForExtraProcess(
     std::multimap<PD,G4VProcess*,std::less<PD> >::iterator it;
     for(it=ep_map.lower_bound(part); it!=ep_map.upper_bound(part); ++it) {
       if(it->first == part) {
-	G4VProcess* process = (it->second);
-	if(proc == process) { return; }
+	G4VProcess* process2 = (it->second);
+	if(proc == process2) { return; }
       }
     }
   }
@@ -592,6 +637,10 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
               << " from " << (*jt).second->GetMinEnergy()/GeV
               << " GeV to " << (*jt).second->GetMaxEnergy()/GeV
               << " GeV </b></li>\n";
+
+      // Print ModelDescription, ignore that we overwrite files n-times.
+      PrintModelHtml((*jt).second);
+
     }
     outFile << "    </ul>\n";
     outFile << "  </li>\n";
@@ -608,7 +657,24 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   }
 }
 
+void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
+{
+	G4String dirName(getenv("G4PhysListDocDir"));
+	G4String pathName = dirName + "/" + mod->GetModelName() + ".html";
+	std::ofstream outModel;
+	outModel.open(pathName);
+	outModel << "<html>\n";
+	outModel << "<head>\n";
+	outModel << "<title>Description of " << mod->GetModelName() << "</title>\n";
+	outModel << "</head>\n";
+	outModel << "<body>\n";
 
+	mod->ModelDescription(outModel);
+
+	outModel << "</body>\n";
+	outModel << "</html>\n";
+
+}
 void G4HadronicProcessStore::Dump(G4int level)
 {
   if(level > 0) {
@@ -629,7 +695,9 @@ void G4HadronicProcessStore::Dump(G4int level)
 			   pname == "pi+" ||
 			   pname == "pi-" ||
                            pname == "gamma" ||
+                           pname == "e+" ||
                            pname == "e-" ||
+                           pname == "mu+" ||
                            pname == "mu-" ||
 			   pname == "kaon+" ||
 			   pname == "kaon-" ||

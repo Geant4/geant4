@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpticalSurface.cc,v 1.17 2010-10-25 15:16:02 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -56,14 +55,15 @@ G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
 {
   if (this != &right)
     {
-      theName                    = right.GetName();
+      theName                    = right.theName;
+      theType                    = right.theType;
       theModel                   = right.theModel;
       theFinish                  = right.theFinish;
-      theType                    = right.GetType();
       sigma_alpha                = right.sigma_alpha;
       polish                     = right.polish;
       theMaterialPropertiesTable = right.theMaterialPropertiesTable;
       AngularDistribution        = right.AngularDistribution;
+      readFileHandle             = right.readFileHandle;
      } 
   return *this;
 }
@@ -115,9 +115,12 @@ G4OpticalSurface::~G4OpticalSurface()
 }
 
 G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
-  : G4SurfaceProperty(right.GetName())
+  : G4SurfaceProperty(right.theName,right.theType)
 {
-	*this = right;
+       *this = right;
+       this->theMaterialPropertiesTable = right.theMaterialPropertiesTable;
+       this->AngularDistribution = right.AngularDistribution;
+       this->readFileHandle = right.readFileHandle;
 }
 
 G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
@@ -261,17 +264,24 @@ void G4OpticalSurface::ReadFile()
 
   readFileName = pathString + "/" + readFileName;
 
-  // Open LUT with Material and Integer Angle
-  FILE* readFileHandle;
-
   readFileHandle = fopen(readFileName,"r");
 
   if (readFileHandle) {
+     G4int ncols;
      G4int idxmax = incidentIndexMax*thetaIndexMax*phiIndexMax;
-     for (G4int i=0;i<idxmax;i++) {
-       fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+     for (G4int i = 0; i<idxmax; i++) {
+       ncols = fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+       if (ncols < 0) break;
      }
-     G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
+     if (ncols >= 0) {
+        G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
+     }
+     else {
+        G4String excep = "LUT - data file: "+ readFileName +" not read propery";
+        G4Exception("G4OpticalSurface::ReadFile()", "mat312",
+                    FatalException, excep);
+        return;
+     }
   }
   else {
      G4String excep = "LUT - data file: " + readFileName + " not found";

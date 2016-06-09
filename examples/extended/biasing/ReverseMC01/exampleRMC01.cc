@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/exampleRMC01.cc
+/// \brief Main program of the biasing/ReverseMC01 example
 //
-// $Id: exampleRMC01.cc,v 1.2 2010-05-12 12:42:51 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -37,6 +39,10 @@
 // This example intends to show how to use the adjoint/reverse simulation mode.
 // 
 // --------------------------------------------------------------
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -77,10 +83,9 @@ int main(int argc,char** argv) {
   //Physics and geometry are declared as in a normal G4 application
   //--------------------------------------------
   theRunManager->SetUserInitialization(detector);
-  theRunManager->SetUserInitialization(new G4AdjointPhysicsList); // in this physics list all the adjoint
-  								  //  processes have to be declared
-			
-							  
+  theRunManager->SetUserInitialization(new G4AdjointPhysicsList);
+                        
+                                                          
   
   theRunManager->SetUserAction(new RMC01PrimaryGeneratorAction);
   theRunManager->SetUserAction(new RMC01EventAction);
@@ -93,8 +98,8 @@ int main(int argc,char** argv) {
   
   G4AdjointSimManager* theAdjointSimManager = G4AdjointSimManager::GetInstance();
   
-  //It is possible to define action that will be used duirng the adjoint tracking phase
-  //
+  //It is possible to define action that will be used during
+  //                                        the adjoint tracking phase
   
   theAdjointSimManager->SetAdjointRunAction(theRunAction);
   theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);

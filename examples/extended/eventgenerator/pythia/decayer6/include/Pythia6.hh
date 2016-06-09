@@ -23,17 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// According to TPythia6 class from Root:
-// (The TPythia6 class is an interface class to F77 routines in Pythia6                //
-// CERNLIB event generators, written by T.Sjostrand.)                         
-// http://root.cern.ch/
-// see http://root.cern.ch/root/License.html
-//
-// The complete Pythia6 documentation can be found at:
-// http://home.thep.lu.se/~torbjorn/pythiaaux/recent.html
+/// \file eventgenerator/pythia/decayer6/include/Pythia6.hh
+/// \brief Definition of the Pythia6 class
+
 // 
 // ----------------------------------------------------------------------------
 
@@ -93,6 +87,7 @@
 
 int const KNDCAY  =  8000; //should be 4000 for pythia61
 
+/// PYJETS common-block 
 struct Pyjets_t
 {
   int    N;
@@ -102,6 +97,7 @@ struct Pyjets_t
   double V[5][4000];
 };
 
+/// PYDAT1 common-block 
 struct Pydat1_t
 {
   int    MSTU[200];
@@ -110,6 +106,7 @@ struct Pydat1_t
   double PARJ[200];
 };
 
+/// PYDAT3 common-block 
 struct Pydat3_t
 {
   int    MDCY[3][500];
@@ -118,6 +115,7 @@ struct Pydat3_t
   int    KFDP[5][KNDCAY];
 };
 
+/// Structure for Pythia6 particle properties
 struct Pythia6Particle  
 {
    Pythia6Particle(
@@ -149,6 +147,18 @@ struct Pythia6Particle
 };   
 
 typedef std::vector<Pythia6Particle*> ParticleVector;
+
+/// The C++ interface class to Pythia6 
+///
+/// According to TPythia6 class from Root:
+/// (The TPythia6 class is an interface class to F77 routines in Pythia6                //
+/// CERNLIB event generators, written by T.Sjostrand.)                         
+/// http://root.cern.ch/
+/// see http://root.cern.ch/root/License.html
+///
+/// The complete Pythia6 documentation can be found at:
+/// http://home.thep.lu.se/~torbjorn/pythiaaux/recent.html
+/// 
 
 class Pythia6
 {

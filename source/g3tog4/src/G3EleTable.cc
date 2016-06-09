@@ -24,14 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.cc,v 1.16 2006-06-29 18:12:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
-#include "G4Types.hh"
 #include <sstream>
-#include "G4ios.hh"
+
 #include "G3EleTable.hh"
+
+#include "G4Types.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 
 G3EleTable::G3EleTable() :_MaxEle(109){
   _EleNames = new char*[_MaxEle];
@@ -51,11 +54,11 @@ G3EleTable::GetEle(G4double Z){
   char name[20], sym[3];
   G4int index = (G4int) Z-1;
   if (!parse(Z, name, sym, A)) {
-    G4String nm(name);
+    G4String na(name);
     G4String sy(sym);
     if (_Ele[index] == 0) {
       // add an element to the element table here
-      _Ele[index] = new G4Element(nm, sy, Z, A*g/mole);
+      _Ele[index] = new G4Element(na, sy, Z, A*g/mole);
     }
   }
   return _Ele[index];

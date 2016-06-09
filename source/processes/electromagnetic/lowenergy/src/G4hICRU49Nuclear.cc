@@ -54,8 +54,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hICRU49Nuclear.hh"
-#include "G4UnitsTable.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -72,14 +74,14 @@ G4hICRU49Nuclear::~G4hICRU49Nuclear()
 
 G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
                                 G4double z1, G4double z2, 
-                                G4double m1, G4double m2) const
+                                G4double m1, G4double m2Local) const
 {  
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double ionloss = 0.0;
   
-  G4double rm = (m1 + m2) * ( std::pow(z1, .23) + std::pow(z2, .23) ) ;
+  G4double rm = (m1 + m2Local) * ( std::pow(z1, .23) + std::pow(z2, .23) ) ;
 
-  G4double er = 32.536 * m2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
+  G4double er = 32.536 * m2Local * energy / ( z1 * z2 * rm ) ;  // reduced energy
 
   static G4double a[104][2] = {
   { 1.0E+8, 5.831E-8},
@@ -211,7 +213,7 @@ G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
 
   // Stragling
   if(lossFlucFlag) {
-    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+    G4double sig = 4.0 * m1 * m2Local / ((m1 + m2Local)*(m1 + m2Local)*
                   (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
 
     ionloss *= G4RandGauss::shoot(1.0,sig) ;

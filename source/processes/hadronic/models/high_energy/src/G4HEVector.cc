@@ -24,13 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.22 2010-11-29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
-
-#include "globals.hh"
-#include "G4ios.hh"
 
 //
 // G4 Gheisha friend class G4GHEVector
@@ -39,6 +35,10 @@
 // Fesefeldt, bug fixed in Defs1, 14 August 2000
 
 #include "G4HEVector.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 
 G4HEVector::G4HEVector(const G4HadProjectile * aParticle)
@@ -320,48 +320,43 @@ G4double G4HEVector::getKineticEnergy() const
   return kineticEnergy;
 }
 
-void 
-G4HEVector::setMass( G4double m ) 
-   { 
-     mass = m; 
-     return; 
-   }
 
-void 
-G4HEVector::setMassAndUpdate( G4double m )
-   {
-     kineticEnergy = Amax(0., energy - mass);
-     mass = m;
-     energy = kineticEnergy + mass;
-     G4double momnew = std::sqrt(Amax(0., energy*energy - mass*mass));
-     if ( momnew == 0.0) 
-        {
-         px = 0.;
-         py = 0.;
-         pz = 0.;
-        }
-    else
-        {
-         G4double momold = std::sqrt(px*px + py*py + pz*pz);
-         if (momold == 0.)
-            { 
-              G4double cost = 1.-2.*G4UniformRand();
-              G4double sint = std::sqrt(1.-cost*cost);
-              G4double phi  = twopi*G4UniformRand();
-              px            = momnew*sint*std::cos(phi);
-              py            = momnew*sint*std::sin(phi);
-              pz            = momnew*cost;
-            }
-         else
-            {
-              momnew /= momold;
-              px     *= momnew ;
-              py     *= momnew ;
-              pz     *= momnew ;
-            }
-        }     
-     return;
-   }    
+void G4HEVector::setMass(G4double amass) 
+{ 
+  mass = amass; 
+  return; 
+}
+
+
+void G4HEVector::setMassAndUpdate(G4double amass)
+{
+  kineticEnergy = Amax(0., energy - mass);
+  mass = amass;
+  energy = kineticEnergy + mass;
+  G4double momnew = std::sqrt(Amax(0., energy*energy - mass*mass));
+  if (momnew == 0.0) {
+    px = 0.;
+    py = 0.;
+    pz = 0.;
+  } else {
+    G4double momold = std::sqrt(px*px + py*py + pz*pz);
+    if (momold == 0.) { 
+      G4double cost = 1.-2.*G4UniformRand();
+      G4double sint = std::sqrt(1.-cost*cost);
+      G4double phi = twopi*G4UniformRand();
+      px = momnew*sint*std::cos(phi);
+      py = momnew*sint*std::sin(phi);
+      pz = momnew*cost;
+    } else {
+      momnew /= momold;
+      px *= momnew ;
+      py *= momnew ;
+      pz *= momnew ;
+    }
+  }     
+  return;
+}
+
 
 G4double G4HEVector::getMass() const 
 { 
@@ -393,12 +388,13 @@ G4HEVector::getTOF()
      return timeOfFlight; 
    }
 
-void 
-G4HEVector::setSide( G4int s ) 
-   { 
-     side = s; 
-     return; 
-   }
+
+void G4HEVector::setSide(G4int aside) 
+{ 
+  side = aside; 
+  return; 
+}
+
 
 G4int 
 G4HEVector::getSide() 
@@ -1142,13 +1138,13 @@ G4HEVector::setDefinition(G4String name)
    } 
 
 G4int G4HEVector::FillQuarkContent()
-      //  calculate quark and anti-quark contents
-      //  return value is PDG encoding for this particle.
-      //  It means error if the return value is differnt from
-      //  this->thePDGEncoding.
 {
+  // Calculate quark and anti-quark content
+  // Return value is PDG encoding for this particle
+  // Error if return value is differnt from this->thePDGEncoding
+
   G4int tempPDGcode = code;
-  G4double eplus = 1.;
+  G4double echarge = 1.;
 
   for (G4int flavor=0; flavor<NumberOfQuarkFlavor; flavor++){
     theQuarkContent[flavor] =0;
@@ -1176,9 +1172,9 @@ G4int G4HEVector::FillQuarkContent()
 	tempPDGcode = 0;
       }
     } else {
-      G4int temp = -1*tempPDGcode; 
-      if (temp<=NumberOfQuarkFlavor){
-	theAntiQuarkContent[temp-1] =1;
+      G4int temp0 = -1*tempPDGcode; 
+      if (temp0 <= NumberOfQuarkFlavor) {
+	theAntiQuarkContent[temp0-1] =1;
       } else {
 	//  --- thePDGEncoding is wrong 
 	tempPDGcode = 0;
@@ -1233,12 +1229,12 @@ G4int G4HEVector::FillQuarkContent()
     // check charge
     G4double totalCharge = 0.0;
     for (G4int flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
-      totalCharge += (-1./3.)*eplus*theQuarkContent[flavor];
-      totalCharge += 1./3.*eplus*theAntiQuarkContent[flavor];
-      totalCharge += 2./3.*eplus*theQuarkContent[flavor+1];
-      totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
+      totalCharge += (-1./3.)*echarge*theQuarkContent[flavor];
+      totalCharge += 1./3.*echarge*theAntiQuarkContent[flavor];
+      totalCharge += 2./3.*echarge*theQuarkContent[flavor+1];
+      totalCharge += (-2./3.)*echarge*theAntiQuarkContent[flavor+1];
     }
-    if (std::abs(totalCharge-charge)>0.1*eplus) { 
+    if (std::abs(totalCharge-charge)>0.1*echarge) { 
       tempPDGcode = 0;
     }
   } else if (particleType == "baryon"){
@@ -1277,18 +1273,18 @@ G4int G4HEVector::FillQuarkContent()
     // check charge 
     G4double totalCharge = 0.0;
     for (G4int flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
-      totalCharge += (-1./3.)*eplus*theQuarkContent[flavor];
-      totalCharge += 1./3.*eplus*theAntiQuarkContent[flavor];
-      totalCharge += 2./3.*eplus*theQuarkContent[flavor+1];
-      totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
+      totalCharge += (-1./3.)*echarge*theQuarkContent[flavor];
+      totalCharge += 1./3.*echarge*theAntiQuarkContent[flavor];
+      totalCharge += 2./3.*echarge*theQuarkContent[flavor+1];
+      totalCharge += (-2./3.)*echarge*theAntiQuarkContent[flavor+1];
     }
-    if (std::abs(totalCharge-charge)>0.1*eplus) { 
-      tempPDGcode = 0;
-    }
+    if (std::abs(totalCharge - charge) > 0.1*echarge) tempPDGcode = 0;
+
   } else {
   }
   return tempPDGcode;
 }
+
 
 void G4HEVector::Print(G4int L) const
 {

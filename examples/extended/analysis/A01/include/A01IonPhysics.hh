@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.hh,v 1.8 2009-11-21 01:00:19 perl Exp $
+/// \file analysis/A01/include/A01IonPhysics.hh
+/// \brief Definition of the A01IonPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 // 05-Jan-2004 Add G4ionIonisation T. Koi
 //
@@ -58,7 +61,6 @@ class A01IonPhysics : public G4VPhysicsConstructor
     A01IonPhysics(const G4String& name="ion");
     virtual ~A01IonPhysics();
 
-  public:
     // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
     virtual void ConstructParticle(){;};
@@ -67,10 +69,7 @@ class A01IonPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
-  protected:
 };
-
 
 #endif
 

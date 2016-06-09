@@ -35,6 +35,7 @@
 #include "G4MIRDLeftLegBone.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4HumanPhantomMaterial.hh"

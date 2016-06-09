@@ -19,24 +19,46 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-2012 G. Cosmo Tag: XrayFluo-V09-05-06
+- Fixed cases of variable shadowing.
+
+06-11-2012 L. Pandola Tag: XrayFluo-V09-05-05
+- Fix syntax in CMakeLists.txt
+
+26-10-2012 L. Pandola Tag: XrayFluo-V09-05-04
+- Replace CMakeLists.txt to deal with UI/VIS
+
+12-10-2012 G. Cosmo  Tag: XrayFluo-V09-05-03
+- Explicit inclusion of units and constants headers.
+
+13-06-2012 G. Cosmo  Tag: XrayFluo-V09-05-02
+- Fixed compilation warnings for extra parenthesis from MacOSX/clang.
+
+15-12-2011 P. Mato  Tag: XrayFluo-V09-05-01
+- XrayFluoNistMaterials.cc 
+  Fixed the induced memory corruption problem only intermittently visible
+  on MacOSX. The vectors to define materials needed to be cleared properly.
+
+08-12-2011 P. Mato  Tag: XrayFluo-V09-05-00
+- Added CMakeLists.txt file.
+
 25-11-2011 G.Folger  Tag: XrayFluo-V09-04-05
-fix compilation error on Windows.
+- Fix compilation error on Windows.
 
 16-11-2011 G.Folger  Tag: XrayFluo-V09-04-04
-migrate to new G4Exception
+- Migrated to new G4Exception.
 
 03-11-2011 A.Mantero Tag: XrayFluo-V09-04-03
-update for README file
+- Update for README file.
 
 03-11-2011 A.Mantero Tag: XrayFluo-V09-04-02
-Updates for 9.5
-- Migrated PhysicsList to all pre-built PL generating deexcitation products
-- Added example for macro (livermore.mac)
-- removed old macros
-- Removed XrayFluoPhysListEmStandardFLUO.cc
+- Migrated PhysicsList to all pre-built PL generating deexcitation products.
+- Added example for macro (livermore.mac).
+- removed old macros.
+- Removed XrayFluoPhysListEmStandardFLUO.cc.
 
 27-03-2011 A.Mantero Tag: XrayFluo-V09-04-01
-  Re commit of the previous tag.
+- Re commit of the previous tag.
 
 07-02-2011 A.Mantero Tag: XrayFluo-V09-04-00
 - migrated physicslist to standard EM+Fluo (with PIXE)

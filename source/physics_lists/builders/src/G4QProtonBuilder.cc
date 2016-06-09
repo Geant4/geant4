@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QProtonBuilder.cc,v 1.4 2009-11-16 19:12:10 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -39,6 +38,7 @@
 //-----------------------------------------------------------------------------
 //
 #include "G4QProtonBuilder.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QProtonBuilder::G4QProtonBuilder(): wasActivated(false)  
 {

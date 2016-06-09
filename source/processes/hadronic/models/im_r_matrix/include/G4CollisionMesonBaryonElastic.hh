@@ -53,6 +53,11 @@ public:
   virtual G4String GetName() const;
   virtual G4bool IsInCharge(const G4KineticTrack& trk1, 
 			    const G4KineticTrack& trk2) const;
+
+private:
+  G4CollisionMesonBaryonElastic(const G4CollisionMesonBaryonElastic &);
+  G4CollisionMesonBaryonElastic & operator= (const G4CollisionMesonBaryonElastic &);
+
 protected:
 
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const 

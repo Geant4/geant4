@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/field01.cc
+/// \brief Main program of the field/field01 example
 //
-// $Id: field01.cc,v 1.9 2010-05-12 16:30:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -47,7 +49,6 @@
 #include "F01PrimaryGeneratorAction.hh"
 #include "F01RunAction.hh"
 #include "F01EventAction.hh"
-#include "F01SteppingAction.hh"
 #include "F01SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -95,9 +96,6 @@ int main(int argc,char** argv)
   F01EventAction* eventAction = new F01EventAction(runAction);
 
   runManager->SetUserAction(eventAction);
-
-  F01SteppingAction* steppingAction = new F01SteppingAction();
-  runManager->SetUserAction(steppingAction);
   
   // Initialize G4 kernel, physics tables ...
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.8 2010-11-17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -34,6 +33,7 @@
 //J. M. Quesada (30.10.09): retuning for IAEA spallation data
 
 #include "G4FissionParameters.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.cc,v 1.6 2008-07-25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -88,7 +87,7 @@ G4StatMFMicroManager::~G4StatMFMicroManager()
 
 // Initialization method
 
-void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4int m, 
+void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4int im, 
 				      const G4double FreeIntE, const G4double SCompNuc) 
 {
     G4int i;
@@ -119,25 +118,25 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
     // FragmentAtomicNumbers[m-1]>FragmentAtomicNumbers[m-2]>...>FragmentAtomicNumbers[0]
     // Our initial distribution is 
     // FragmentAtomicNumbers[m-1]=A, FragmentAtomicNumbers[m-2]=0, ..., FragmentAtomicNumbers[0]=0
-    FragmentAtomicNumbers[m-1] = static_cast<G4int>(A);
-    for (i = 0; i <  (m - 1); i++) FragmentAtomicNumbers[i] = 0;
+    FragmentAtomicNumbers[im-1] = static_cast<G4int>(A);
+    for (i = 0; i <  (im - 1); i++) FragmentAtomicNumbers[i] = 0;
 
     // We try to distribute A nucleons in partitions of m fragments
     // MakePartition return true if it is possible 
     // and false if it is not	
-    while (MakePartition(m,FragmentAtomicNumbers)) {
+    while (MakePartition(im,FragmentAtomicNumbers)) {
 	// Allowed partitions are stored and its probability calculated
 			
 	G4StatMFMicroPartition * aPartition = new G4StatMFMicroPartition(static_cast<G4int>(A),
 									 static_cast<G4int>(Z));
 	G4double PartitionProbability = 0.0;
 			
-	for (i = m-1; i >= 0; i--) aPartition->SetPartitionFragment(FragmentAtomicNumbers[i]);
+	for (i = im-1; i >= 0; i--) aPartition->SetPartitionFragment(FragmentAtomicNumbers[i]);
 	PartitionProbability = aPartition->CalcPartitionProbability(U,FreeIntE,SCompNuc);
 	_Partition.push_back(aPartition);
 			
 	_WW += PartitionProbability;
-	_MeanMultiplicity += m*PartitionProbability;
+	_MeanMultiplicity += im*PartitionProbability;
 	_MeanTemperature += aPartition->GetTemperature() * PartitionProbability;
 	if (PartitionProbability > 0.0) 
 	    _MeanEntropy += PartitionProbability * aPartition->GetEntropy();

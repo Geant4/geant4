@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.27 2009-07-23 09:15:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -48,6 +47,8 @@
 // --------------------------------------------------------------
 
 #include "G4VeLowEnergyLoss.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProductionCutsTable.hh"
 
 G4double     G4VeLowEnergyLoss::ParticleMass ;

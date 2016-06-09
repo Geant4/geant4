@@ -24,14 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.hh,v 1.3 2006-06-29 21:20:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  27th March 1996
 // OpenInventor graphics system factory.
-
-#if defined (G4VIS_BUILD_OIX_DRIVER) || defined (G4VIS_USE_OIX)
 
 #ifndef G4OPENINVENTORXT_HH
 #define G4OPENINVENTORXT_HH
@@ -48,7 +45,5 @@ private:
 private:
   bool fInited;
 };
-
-#endif
 
 #endif

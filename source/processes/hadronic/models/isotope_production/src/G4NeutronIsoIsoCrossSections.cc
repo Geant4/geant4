@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4NeutronIsoIsoCrossSections.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPDataUsed.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
@@ -36,6 +37,8 @@ G4NeutronIsoIsoCrossSections()
   theNumberOfProducts = 0;
   theZ = 0;
   theA = 0;
+  G4cout << "WARNING: G4NeutronIsoIsoCrossSections is deprecated and will be removed with Geant4 version 10"
+         << G4endl;
 }
 
 G4NeutronIsoIsoCrossSections::
@@ -154,7 +157,6 @@ Init(G4int A, G4int Z, G4double frac)
     }
     theCrossSection.Times(frac);
   }
-//  theCrossSection.Dump();
   
   // now isotope-production cross-sections
   theNames.SetMaxOffSet(1);
@@ -170,10 +172,10 @@ Init(G4int A, G4int Z, G4double frac)
     theProductionData = new G4IsoProdCrossSections * [theNumberOfProducts];
     for(G4int i=0; i<theNumberOfProducts; i++)
     {
-      G4String aName;
-      aDataSet >> aName;
+      G4String dName;
+      aDataSet >> dName;
       aDataSet >> dummy >> dummy;
-      theProductionData[i] = new G4IsoProdCrossSections(aName);
+      theProductionData[i] = new G4IsoProdCrossSections(dName);
       theProductionData[i]->Init(aDataSet);
     }
   }

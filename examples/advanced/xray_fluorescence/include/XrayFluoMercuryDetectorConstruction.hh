@@ -39,13 +39,14 @@
 #ifndef XrayFluoMercuryDetectorConstruction_hh
 #define XrayFluoMercuryDetectorConstruction_hh 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4RotationMatrix.hh"
 #include "XrayFluoSiLiDetectorType.hh"
 #include "XrayFluoHPGeDetectorType.hh"
 #include "XrayFluoSD.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4RotationMatrix.hh"
-
 
 class G4Box;
 class G4Tubs;
@@ -84,7 +85,7 @@ public:
   inline void SetOribitHeight(G4double size)
   {distDe = size;};
   inline void SetLatitude(G4double lat)
-  {ThetaHPGe = 180.* deg - lat;};
+  {ThetaHPGe = 180.* CLHEP::deg - lat;};
 
   void PrintApparateParameters(); 
 
@@ -250,7 +251,7 @@ public:
 
   //Inclinaton of the orbit respect Mercury respect the equator (latitude)
 
-  G4double GetOrbitInclination()   {return 180 * deg - ThetaHPGe;}; 
+  G4double GetOrbitInclination()   {return 180 * CLHEP::deg - ThetaHPGe;}; 
   G4double GetOrbitDistance()      {return distDe;};
   G4double GetOpticAperture()      {return opticAperture;};  
 
@@ -274,29 +275,23 @@ inline void XrayFluoMercuryDetectorConstruction::ComputeApparateParameters()
   
   DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
 
-  ///G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+  ///G4cout << "DeviceThickness(cm): "<< DeviceThickness/CLHEP::cm << G4endl;
 
   DeviceSizeY =(NbOfPixelRows * std::max(ContactSizeXY,PixelSizeXY));
   DeviceSizeX =(NbOfPixelColumns * std::max(ContactSizeXY,PixelSizeXY));
 
   screenSizeXY = opticDia;
 
-  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
-  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
+  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/CLHEP::cm <<G4endl;
+  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/CLHEP::cm << G4endl;
 
   //*********************************************************************
   //**  Astronomical distances reduce by a factor 10^-7 due to G4 Bug  **
   //*********************************************************************
 
   WorldSizeZ = 2 * mercurySunDistance ; 
-  WorldSizeXY = (2 * distDe) + 2000 * km ;
+  WorldSizeXY = (2 * distDe) + 2000 * CLHEP::km ;
   //WorldSizeZ = WorldSizeXY;
 }
 
 #endif
-
-
-
-
-
-

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4IT.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -58,24 +59,28 @@ G4IT* GetIT(const G4Track& track)
 // Constructors / Destructors
 ///
 G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
-    fTrack (0),
-    fPreviousIT(0), fNextIT(0), fTrackingInformation(new G4TrackingInformation())
+    fpTrack (0),
+    fpPreviousIT(0), fpNextIT(0),
+    fTrackingInformation()
+//    fpTrackingInformation(new G4TrackingInformation())
 {
-    fITBox=0;
-    fKDNode = 0 ;
-    fTrackNode = 0;
+    fpITBox=0;
+    fpKDNode = 0 ;
+    fpTrackNode = 0;
     fParentID_A = 0;
     fParentID_B = 0;
 }
 
 // Use only by inheriting classes
 G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
-    fTrack (0),
-    fPreviousIT(0), fNextIT(0), fTrackingInformation(new G4TrackingInformation())
+    fpTrack (0),
+    fpPreviousIT(0), fpNextIT(0),
+    fTrackingInformation()
+//    fpTrackingInformation(new G4TrackingInformation())
 {
-    fITBox=0;
-    fKDNode = 0 ;
-    fTrackNode = 0;
+    fpITBox=0;
+    fpKDNode = 0 ;
+    fpTrackNode = 0;
     fParentID_A = 0;
     fParentID_B = 0;
 }
@@ -83,27 +88,35 @@ G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
 // Should not be used
 G4IT& G4IT::operator=(const G4IT& right)
 {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "The assignment operator of G4IT should not be used, this feature is not supported."
+                         << "If really needed, please contact the developers.";
+    G4Exception("G4IT::operator=(const G4IT& right)","G4IT001",FatalException,exceptionDescription);
+
     if(this == &right) return *this;
 
-    fTrack = 0;
-    fPreviousIT = 0;
-    fNextIT = 0;
-    fTrackingInformation = 0;
-    fITBox = 0;
-    fKDNode = 0 ;
-    fTrackNode = 0;
+    fpTrack = 0;
+    fpITBox = 0;
+    fpPreviousIT = 0;
+    fpNextIT = 0;
+    fpKDNode = 0 ;
     fParentID_A = 0;
     fParentID_B = 0;
+//    fpTrackingInformation = 0;
+    fpTrackNode = 0;
+
     return *this;
 }
 
 G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
-    fPreviousIT(0), fNextIT(0), fTrackingInformation(new G4TrackingInformation())
+    fpPreviousIT(0), fpNextIT(0),
+    fTrackingInformation()
+//    fpTrackingInformation(new G4TrackingInformation())
 {
-    fITBox = 0;
-    fTrack = aTrack;
-    fKDNode = 0 ;
-    fTrackNode = 0;
+    fpITBox = 0;
+    fpTrack = aTrack;
+    fpKDNode = 0 ;
+    fpTrackNode = 0;
     fParentID_A = 0;
     fParentID_B = 0;
     RecordCurrentPositionNTime();
@@ -111,15 +124,15 @@ G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
 
 void G4IT::TakeOutBox()
 {
-    if(fITBox)
+    if(fpITBox)
     {
-        fITBox->Extract(this);
+        fpITBox->Extract(this);
     }
 
-    if(fKDNode)
+    if(fpKDNode)
     {
-        InactiveNode(fKDNode);
-        fKDNode = 0;
+        InactiveNode(fpKDNode);
+        fpKDNode = 0;
     }
 }
 
@@ -127,11 +140,11 @@ G4IT::~G4IT()
 {
     TakeOutBox();
 
-    if(fTrackingInformation)
-    {
-        delete fTrackingInformation;
-        fTrackingInformation = 0;
-    }
+//    if(fpTrackingInformation)
+//    {
+//        delete fpTrackingInformation;
+//        fpTrackingInformation = 0;
+//    }
 
     // Note :
     // G4ITTrackingManager will delete fTrackNode.
@@ -143,9 +156,9 @@ G4IT::~G4IT()
 ///
 void G4IT::RecordCurrentPositionNTime()
 {
-    if(fTrack)
+    if(fpTrack)
     {
-        fTrackingInformation->RecordCurrentPositionNTime(fTrack);
+        fTrackingInformation.RecordCurrentPositionNTime(fpTrack);
     }
 }
 

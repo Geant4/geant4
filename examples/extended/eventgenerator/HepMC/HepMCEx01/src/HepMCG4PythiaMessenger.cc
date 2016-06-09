@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaMessenger.cc
+/// \brief Implementation of the HepMCG4PythiaMessenger class
+//
 // ====================================================================
 //
 //   HepMCG4PythiaMessenger.cc
-//   $Id: HepMCG4PythiaMessenger.cc,v 1.6 2006-07-05 11:06:36 gcosmo Exp $
+//   $Id$
 //
 // ====================================================================
 
@@ -139,7 +142,7 @@ HepMCG4PythiaMessenger::~HepMCG4PythiaMessenger()
 
 //////////////////////////////////////////////////////////////
 void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command, 
-					 G4String newValues)
+                                         G4String newValues)
 //////////////////////////////////////////////////////////////
 {
   if(command == verbose) {  // /verbose ...

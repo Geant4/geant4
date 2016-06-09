@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ParRunManager.hh,v 1.4 2006-06-29 17:36:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file parallel/ParN04/include/ParRunManager.hh
+/// \brief Definition of the ParRunManager class
+//
+// $Id$
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4

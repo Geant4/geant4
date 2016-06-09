@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc,v 1.4 2006-10-24 10:06:21 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,25 +52,26 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   SetVerboseLevel(1);
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   // cuts
-  currentDefaultCut   = 1.0*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
+  fCurrentDefaultCut   = 1.0*mm;
+  fCutForGamma         = fCurrentDefaultCut;
+  fCutForElectron      = fCurrentDefaultCut;
+  fCutForPositron      = fCurrentDefaultCut;
   
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  fEmName = G4String("standard");
+  fEmPhysicsList = new PhysListEmStandard(fEmName);
 
-  muNuclPhysicsList = 0;
+  fMuNuclPhysicsList = 0;
   
   // instanciate EnergyLossTable
   G4LossTableManager::Instance();
@@ -78,7 +81,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,8 +117,8 @@ void PhysicsList::ConstructProcess()
   
   // electromagnetic Physics List
   //
-  emPhysicsList->ConstructProcess();
-  if(muNuclPhysicsList) muNuclPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
+  if(fMuNuclPhysicsList) fMuNuclPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,16 +129,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == fEmName) return;
 
-  if (name == "standard" && name != emName) {
+  if (name == "standard" && name != fEmName) {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
 
   } else if (name == "muNucl") {
-    muNuclPhysicsList = new MuNuclearBuilder(name);
+    fMuNuclPhysicsList = new MuNuclearBuilder(name);
 
   } else {
 
@@ -157,9 +160,9 @@ void PhysicsList::SetCuts()
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");   
     
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -172,24 +175,24 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

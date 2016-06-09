@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel93.hh,v 1.5 2010-12-29 18:56:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -58,8 +57,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VMscModel.hh"
-#include "G4PhysicsTable.hh"
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleChangeForMSC;
@@ -79,6 +79,8 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  void StartTracking(G4Track*);
+
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 				      G4double KineticEnergy,
 				      G4double AtomicNumber,
@@ -86,12 +88,10 @@ public:
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
 
-  void SampleScattering(const G4DynamicParticle*,
-			G4double safety);
+  G4ThreeVector& SampleScattering(const G4DynamicParticle*, G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
-				      G4PhysicsTable* theLambdaTable,
-				      G4double currentMinimalStep);
+				      G4double& currentMinimalStep);
 
   G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -110,8 +110,6 @@ private:
 
   G4double LatCorrelation();
 
-  inline G4double GetLambda(G4double kinEnergy);
-
   inline void SetParticle(const G4ParticleDefinition*);
 
   inline void UpdateCache();
@@ -123,7 +121,6 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
 
-  G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
 
@@ -173,7 +170,7 @@ private:
   G4double coeffc1,coeffc2;
   G4double scr1ini,scr2ini,scr1,scr2;
 
-  G4bool   isInitialized;
+  G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
 };
@@ -182,28 +179,12 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4double G4UrbanMscModel93::GetLambda(G4double e)
-{
-  G4double x;
-  if(theLambdaTable) {
-    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
-  } else {
-    x = CrossSection(couple,particle,e);
-  }
-  if(x > DBL_MIN) { x = 1./x; }
-  else            { x = DBL_MAX; }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
 void G4UrbanMscModel93::SetParticle(const G4ParticleDefinition* p)
 {
   if (p != particle) {
     particle = p;
     mass = p->GetPDGMass();
-    charge = p->GetPDGCharge()/eplus;
+    charge = p->GetPDGCharge()/CLHEP::eplus;
     ChargeSquare = charge*charge;
   }
 }

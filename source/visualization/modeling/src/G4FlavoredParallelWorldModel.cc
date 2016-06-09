@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlavoredParallelWorldModel.cc,v 1.7 2006-06-29 21:32:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
 // Model for flavored parallel world volumes.
@@ -48,6 +47,7 @@ G4FlavoredParallelWorldModel::G4FlavoredParallelWorldModel
 			   mp),
     theFlavoredParallelWorld (FPW) 
 {
+  fType = "G4FlavoredParallelWorldModel";
   FPW -> GetThePhysicalVolumeWorld () ->
     GetLogicalVolume () -> SetVisAttributes (G4VisAttributes::GetInvisible());
 }

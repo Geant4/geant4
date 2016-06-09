@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.cc,v 1.5 2006-09-25 17:06:29 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/src/StackingMessenger.cc
+/// \brief Implementation of the StackingMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,32 +40,32 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:stackAction(stack)
+:fStackAction(stack)
 {
-  stackDir = new G4UIdirectory("/testem/stack/");
-  stackDir->SetGuidance("stacking control");
+  fStackDir = new G4UIdirectory("/testem/stack/");
+  fStackDir->SetGuidance("stacking control");
    
-  killCmd = new G4UIcmdWithAnInteger("/testem/stack/killSecondaries",this);
-  killCmd->SetGuidance(" Choice: 0=no kill; 1=kill and record; 2=kill only");
-  killCmd->SetParameterName("choice",true);
-  killCmd->SetRange("choice>=0");
-  killCmd->SetDefaultValue(1);
+  fKillCmd = new G4UIcmdWithAnInteger("/testem/stack/killSecondaries",this);
+  fKillCmd->SetGuidance(" Choice: 0=no kill; 1=kill and record; 2=kill only");
+  fKillCmd->SetParameterName("choice",true);
+  fKillCmd->SetRange("choice>=0");
+  fKillCmd->SetDefaultValue(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::~StackingMessenger()
 {
-  delete killCmd;
-  delete stackDir;
+  delete fKillCmd;
+  delete fStackDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
-  if(command == killCmd)
-    {stackAction->SetKillStatus(killCmd->GetNewIntValue(newValue));}               
+  if(command == fKillCmd)
+    {fStackAction->SetKillStatus(fKillCmd->GetNewIntValue(newValue));}               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

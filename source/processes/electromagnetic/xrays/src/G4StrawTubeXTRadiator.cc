@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.7 2010-06-16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4StrawTubeXTRadiator.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 

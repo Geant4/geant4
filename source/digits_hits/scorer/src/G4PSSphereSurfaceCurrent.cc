@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.6 2010-07-23 04:35:38 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"

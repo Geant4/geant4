@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.4 2006-06-29 16:47:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,25 +45,25 @@ class PhysicsList: public G4VUserPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList();
+ ~PhysicsList();
 
   // Construct particles
-  void ConstructParticle();
+  virtual void ConstructParticle();
   void ConstructBosons();
   void ConstructLeptons();
 
-  void SetCuts();
-  void SetAnalyticSR(G4bool val) {SRType = val;};
+  virtual void SetCuts();
+  void SetAnalyticSR(G4bool val) {fSRType = val;};
 
   // Construct processes and register them
-  void ConstructProcess();
+  virtual void ConstructProcess();
   void ConstructGeneral();
   void ConstructEM();
 
 private:
 
-  G4bool                 SRType;
-  PhysicsListMessenger*  pMes;
+  G4bool                 fSRType;
+  PhysicsListMessenger*  fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

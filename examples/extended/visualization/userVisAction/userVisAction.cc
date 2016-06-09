@@ -23,24 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/userVisAction/userVisAction.cc
+/// \brief Main program of the visualization/userVisAction example
 //
-// $Id: userVisAction.cc,v 1.3 2009-12-22 15:07:19 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "UVA_DetectorConstruction.hh"
-#include "UVA_PhysicsList.hh"
-#include "UVA_PrimaryGeneratorAction.hh"
-#include "UVA_RunAction.hh"
-#include "UVA_EventAction.hh"
-#include "UVA_SteppingAction.hh"
-#include "UVA_SteppingVerbose.hh"
+#include "B1DetectorConstruction.hh"
+#include "B1PrimaryGeneratorAction.hh"
+#include "B1RunAction.hh"
+#include "B1EventAction.hh"
+#include "B1SteppingAction.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "QGSP_BIC_EMY.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -51,20 +52,18 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new UVA_SteppingVerbose);
-  
   // Run manager
   G4RunManager * runManager = new G4RunManager;
 
   // UserInitialization classes (mandatory)
-  UVA_DetectorConstruction* UVA_detector = new UVA_DetectorConstruction;
-  runManager->SetUserInitialization(UVA_detector);
-  runManager->SetUserInitialization(new UVA_PhysicsList);
+  runManager->SetUserInitialization(new B1DetectorConstruction);
+  runManager->SetUserInitialization(new QGSP_BIC_EMY);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
@@ -72,16 +71,14 @@ int main(int argc,char** argv) {
   visManager->Initialize();
   // Set User Vis Action...
   visManager->SetUserAction
-    (new UVA_VisAction, G4VisExtent(-1*m,1*m,-2*m,0,3.5*m,5.5*m));
-  // 2nd argument optional - overridden by /vis/scene/add/userAction
-  // arguments, if any.
+    (new UVA_VisAction, G4VisExtent(-20*cm,-10*cm,-25*cm,-15*cm,20*cm,40*cm));
 #endif
    
   // UserAction classes
-  runManager->SetUserAction(new UVA_PrimaryGeneratorAction(UVA_detector));
-  runManager->SetUserAction(new UVA_RunAction);  
-  runManager->SetUserAction(new UVA_EventAction);
-  runManager->SetUserAction(new UVA_SteppingAction);
+  runManager->SetUserAction(new B1PrimaryGeneratorAction);
+  runManager->SetUserAction(new B1RunAction);  
+  runManager->SetUserAction(new B1EventAction);
+  runManager->SetUserAction(new B1SteppingAction);
 
   //Initialize G4 kernel
   runManager->Initialize();

@@ -22,8 +22,8 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
-/Physics/addPhysics Em_extra_physics			
+/Physics/addPhysics standard_opt3                     # Electromagnetic model
+#/Physics/addPhysics Em_extra_physics			
 #/Physics/addPhysics Elastic                             # Hadronic elastic model
 #/Physics/addPhysics decay
 #/Physics/addPhysics radioactive_decay
@@ -50,7 +50,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLI
+/vis/open OGL
 /vis/viewer/flush
 #/vis/viewer/set/style solid 
 /vis/viewer/set/auxiliaryEdge true
@@ -109,6 +109,8 @@
 #/ProtectionDisc1/InnerRadiusDisc1      # default -> 0*mm
 #/ProtectionDisc1/HeightDisc1             # default -> 2*mm
 #/ProtectionDisc1/XPositionDisc1 -11.0  # default -> -11*mm   R90 (10.1 MeV) -> -10.68 mm from detector centre (24mm)
+#/ProtectionDisc1/YPositionDisc1  5.0      # default -> 0.0*mm
+#/ProtectionDisc1/ZPositionDisc1  5.0      # default -> 0.0*mm
 #/ProtectionDisc1/material G4_Al        # default -> G4_WATER ;
 
 #/ProtectionDisc2/OuterRadiusDisc2 30   # default -> 40*mm ; 30(coll40);35(coll50);45(coll70);50(coll40);60(coll100)
@@ -116,6 +118,8 @@
 #/ProtectionDisc2/HeightDisc2            # default -> 1*mm
 #/ProtectionDisc2/XPositionDisc2 -8.0  # default -> -8*mm
 #/ProtectionDisc2/material G4_Pb        # default -> G4_WATER ;
+
+#/ChangeTiltAngleDisc1-2/TiltAngleDisc1-2 110.0 # default -> 90.0*deg around Y
 
 #/InsertProtectionDisc/insert
 

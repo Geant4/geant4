@@ -58,137 +58,140 @@ CML2PrimaryGenerationAction* CML2PrimaryGenerationAction::GetInstance(void)
     }
   return instance;
 }
-void CML2PrimaryGenerationAction::inizialize(SPrimaryParticle *primaryParticleData)
+void CML2PrimaryGenerationAction::inizialize(SPrimaryParticle *pData)
 {
-	this->rm=new G4RotationMatrix();
-	this->PrimaryGenerationActionMessenger=new CML2PrimaryGenerationActionMessenger(this);
-	this->particle=new Sparticle;
-	this->nParticle=this->nPhSpParticles=this->nRandomParticles=0;
+	rm=new G4RotationMatrix();
+	PrimaryGenerationActionMessenger=new CML2PrimaryGenerationActionMessenger(this);
+	particle=new Sparticle;
+	nParticle=nPhSpParticles=nRandomParticles=0;
 
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 
-	this->gamma=particleTable->FindParticle("gamma");
-	this->electron=particleTable->FindParticle("e-");
-	this->positron=particleTable->FindParticle("e+");
-	this->particleGun=new G4ParticleGun();
+	gamma=particleTable->FindParticle("gamma");
+	electron=particleTable->FindParticle("e-");
+	positron=particleTable->FindParticle("e+");
+	particleGun=new G4ParticleGun();
 
-	this->primaryParticleData=primaryParticleData;
-	this->primaryParticleData->nPrimaryParticle=0;
-	this->primaryParticleData->partPDGE=0;
+	primaryParticleData=pData;
+	primaryParticleData->nPrimaryParticle=0;
+	primaryParticleData->partPDGE=0;
 }
-void CML2PrimaryGenerationAction::design(G4double accTargetZPosition)
+
+void CML2PrimaryGenerationAction::design(G4double aTZ)
 {
-	this->accTargetZPosition=accTargetZPosition;
-	switch (this->idParticleSource)
+	accTargetZPosition=aTZ;
+	switch (idParticleSource)
 	{
 	case id_randomTarget:
-		this->setGunRandom();
+		setGunRandom();
 		break;
 	case id_phaseSpace:
-		this->setGunCalculatedPhaseSpace();
+		setGunCalculatedPhaseSpace();
 		break;
 	}
 }
+
 void CML2PrimaryGenerationAction::setGunRandom()
 {
-	this->particleGun->SetParticleDefinition(this->electron);
-	this->particleGun->SetNumberOfParticles(1);
-	this->idCurrentParticleSource=this->idParticleSource;
+	particleGun->SetParticleDefinition(electron);
+	particleGun->SetNumberOfParticles(1);
+	idCurrentParticleSource=idParticleSource;
 }
+
 void CML2PrimaryGenerationAction::setGunCalculatedPhaseSpace()
 {
-	this->particles=new Sparticle[this->nMaxParticlesInRamPhaseSpace];
-	this->particleGun->SetNumberOfParticles(1);
-	this->idCurrentParticleSource=this->idParticleSource;
+	particles=new Sparticle[nMaxParticlesInRamPhaseSpace];
+	particleGun->SetNumberOfParticles(1);
+	idCurrentParticleSource=idParticleSource;
 }
 
 CML2PrimaryGenerationAction::~CML2PrimaryGenerationAction(void)
 {
-	delete this->particleGun;
-	delete [] this->particles;
-	delete this->particles;
+	delete particleGun;
+	delete [] particles;
+	delete particles;
 }
 void CML2PrimaryGenerationAction::GeneratePrimaries(G4Event *anEvent)
 {
-	static int currentRecycle=this->nRecycling;
+	static int currentRecycle=nRecycling;
 	static G4ThreeVector pos0, dir0;
-	if (currentRecycle==this->nRecycling)
+	if (currentRecycle==nRecycling)
 	{
 		currentRecycle=0;
-		switch (this->idCurrentParticleSource)
+		switch (idCurrentParticleSource)
 		{
 		case id_randomTarget:
-				this->GenerateFromRandom();
+				GenerateFromRandom();
 			break;
 		case id_phaseSpace:
-				this->GenerateFromCalculatedPhaseSpace();
+				GenerateFromCalculatedPhaseSpace();
 			break;
 		}
-		pos0=this->pos;
-		dir0=this->dir;
+		pos0=pos;
+		dir0=dir;
 	}
 	currentRecycle++;
-	this->pos=pos0;
-	this->dir=dir0;
-	this->applySourceRotation(); // to follow the accelerator rotation
+	pos=pos0;
+	dir=dir0;
+	applySourceRotation(); // to follow the accelerator rotation
 
-	this->primaryParticleData->partPDGE=this->particleGun->GetParticleDefinition()->GetPDGEncoding();
-	this->primaryParticleData->nPrimaryParticle++;
+	primaryParticleData->partPDGE=particleGun->GetParticleDefinition()->GetPDGEncoding();
+	primaryParticleData->nPrimaryParticle++;
 
-	this->particleGun->SetParticleEnergy(this->ek*MeV);
-	this->particleGun->SetParticlePosition(this->pos*mm);
-	this->particleGun->SetParticleMomentumDirection((G4ParticleMomentum)this->dir);
-	this->particleGun->GeneratePrimaryVertex(anEvent);
+	particleGun->SetParticleEnergy(ek*MeV);
+	particleGun->SetParticlePosition(pos*mm);
+	particleGun->SetParticleMomentumDirection((G4ParticleMomentum)dir);
+	particleGun->GeneratePrimaryVertex(anEvent);
 }
 void CML2PrimaryGenerationAction::GenerateFromRandom()
 {
-	this->sinTheta=RandGauss::shoot(0., 0.003);
-	this->cosTheta=std::sqrt(1 - this->sinTheta*this->sinTheta);
-	this->phi=twopi*G4UniformRand();
-	this->dir.set(this->sinTheta*std::cos(this->phi), this->sinTheta*std::sin(this->phi), this->cosTheta);
+	sinTheta=RandGauss::shoot(0., 0.003);
+	cosTheta=std::sqrt(1 - sinTheta*sinTheta);
+	phi=twopi*G4UniformRand();
+	dir.set(sinTheta*std::cos(phi), sinTheta*std::sin(phi), cosTheta);
 
-	this->ro=G4UniformRand()*this->GunRadious; 
-	this->alfa=G4UniformRand()*twopi;
+	ro=G4UniformRand()*GunRadious; 
+	alfa=G4UniformRand()*twopi;
 
-	this->pos.setX(this->ro*std::sin(this->alfa));
-	this->pos.setY(this->ro*std::cos(this->alfa));
-	this->pos.setZ(-(this->accTargetZPosition +5.)*mm); // the primary electrons are generated 5 mm before the target
-	this->ek=RandGauss::shoot(this->GunMeanEnegy, this->GunStdEnegy);
-	this->nRandomParticles++;
+	pos.setX(ro*std::sin(alfa));
+	pos.setY(ro*std::cos(alfa));
+	pos.setZ(-(accTargetZPosition +5.)*mm); // the primary electrons are generated 5 mm before the target
+	ek=RandGauss::shoot(GunMeanEnegy, GunStdEnegy);
+	nRandomParticles++;
 }
 void CML2PrimaryGenerationAction::GenerateFromCalculatedPhaseSpace()
 {
 	static bool bFirstTime=true;
 	if (bFirstTime)
-	{bFirstTime=false;this->fillParticlesContainer();}
-	if (this->nParticle==this->nMaxParticlesInRamPhaseSpace) // once all the particles stored in RAM hae been processed a new set is loaded
+	{bFirstTime=false;fillParticlesContainer();}
+	if (nParticle==nMaxParticlesInRamPhaseSpace) // once all the particles stored in RAM hae been processed a new set is loaded
 	{
-		this->fillParticlesContainer();
-		this->nParticle=0;
+		fillParticlesContainer();
+		nParticle=0;
 	}
 
-	this->pos=this->particles[this->nParticle].pos;
-	this->dir=this->particles[this->nParticle].dir;
-	this->ek=this->particles[this->nParticle].kinEnergy;
-	switch (this->particles[this->nParticle].partPDGE)
+	pos=particles[nParticle].pos;
+	dir=particles[nParticle].dir;
+	ek=particles[nParticle].kinEnergy;
+	switch (particles[nParticle].partPDGE)
 	{
 	case -11:
-		this->particleGun->SetParticleDefinition(this->positron);
+		particleGun->SetParticleDefinition(positron);
 		break;
 	case 11:
-		this->particleGun->SetParticleDefinition(this->electron);
+		particleGun->SetParticleDefinition(electron);
 		break;
 	case 22:
-		this->particleGun->SetParticleDefinition(this->gamma);
+		particleGun->SetParticleDefinition(gamma);
 		break;
 	}
-	this->nPhSpParticles++;
-	this->nParticle++;
+	nPhSpParticles++;
+	nParticle++;
 }
 void CML2PrimaryGenerationAction::applySourceRotation()
 {
-	this->pos=*this->rm*this->pos;
-	this->dir=*this->rm*this->dir;
+	pos=*rm*pos;
+	dir=*rm*dir;
 }
 void CML2PrimaryGenerationAction::fillParticlesContainer()
 {
@@ -196,10 +199,10 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 	static int currentFileSize=0;
 	int startDataFilePosition;
 	std::ifstream in;
-	in.open(this->calculatedPhaseSpaceFileIN, std::ios::in);
+	in.open(calculatedPhaseSpaceFileIN, std::ios::in);
 	if (in==0)
 	{
-		std::cout <<"ERROR phase space file: "<< this->calculatedPhaseSpaceFileIN << " NOT found. Run abort "<< G4endl;
+		std::cout <<"ERROR phase space file: "<< calculatedPhaseSpaceFileIN << " NOT found. Run abort "<< G4endl;
 		G4RunManager::GetRunManager()->AbortRun(true);
 	}
 
@@ -221,41 +224,40 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 	int i;
 	G4double x,y,z;
 	G4int d;
-	G4String s;
 
 	static bool checkFileRewind=false;
 	static bool bRewindTheFile=false;
 	static int nPhSpFileRewind=0;
 
-	for (i=0;i<this->nMaxParticlesInRamPhaseSpace;i++)
+	for (i=0;i<nMaxParticlesInRamPhaseSpace;i++)
 	{
 		if (bRewindTheFile) // to read the phase space file again to fill the container
 		{
 			in.close();
-		 	in.open(this->calculatedPhaseSpaceFileIN, std::ios::in);
+		 	in.open(calculatedPhaseSpaceFileIN, std::ios::in);
 			in.seekg(startDataFilePosition, std::ios::beg);
 			checkFileRewind=true;
 			bRewindTheFile=false;
 			std::cout<<"\n################\nI have reached the end of the phase space file "<<++nPhSpFileRewind <<" times, I rewind the file\n" << G4endl;
-			std::cout <<"loaded " <<i <<"/"<< this->nMaxParticlesInRamPhaseSpace<<" particles" << G4endl;
+			std::cout <<"loaded " <<i <<"/"<< nMaxParticlesInRamPhaseSpace<<" particles" << G4endl;
 		}
 		in >> d; 
 		in >> x; in >>y; in >> z; 
 /*			std::cout <<"x:" <<x << G4endl;
 			std::cout <<"y:" <<y << G4endl;
 			std::cout <<"z:" <<z << G4endl;*/
-		this->particles[i].pos.set(x,y,z-this->accTargetZPosition);
+		particles[i].pos.set(x,y,z-accTargetZPosition);
 		in >> x; in >>y; in >> z; 
-		this->particles[i].dir.set(x,y,z);
+		particles[i].dir.set(x,y,z);
 		in >> x; 
-		this->particles[i].kinEnergy=x;
+		particles[i].kinEnergy=x;
 		in >> d; 
-		this->particles[i].partPDGE=d;
+		particles[i].partPDGE=d;
 		in >> d; in >> d; 
 		if (in.eof())	{bRewindTheFile=true;}
 		if (checkFileRewind)	{checkFileRewind=false;}
 	}
-	std::cout <<"loaded " <<i <<"/"<< this->nMaxParticlesInRamPhaseSpace<<" particles" << G4endl;
+	std::cout <<"loaded " <<i <<"/"<< nMaxParticlesInRamPhaseSpace<<" particles" << G4endl;
 	currentFilePosition=in.tellg(); // to remind the actual position in the phase space file
 	if (currentFilePosition>=currentFileSize) // to read the phase space file again
 	{currentFilePosition=startDataFilePosition;} 

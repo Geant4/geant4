@@ -27,14 +27,17 @@
 //   Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------
 
+#include <string.h>
+#include <cmath>
+#include <stdio.h>
+
 #include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
 #include "G4HadronicProcessStore.hh"
-#include <string.h>
-#include <cmath>
-#include <stdio.h>
+#include "G4HadronicDeprecate.hh"
  
 #define MAX_SECONDARIES 100
 
@@ -60,6 +63,7 @@ G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& p
   pdefTriton(G4Triton::Triton()),
   pdefAlpha(G4Alpha::Alpha())
 {
+  G4HadronicDeprecate("G4AntiProtonAnnihilationAtRest");
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
@@ -299,7 +303,7 @@ void G4AntiProtonAnnihilationAtRest::Poisso(G4float xav, G4int *iran)
 {
   static G4int i;
   static G4float r, p1, p2, p3;
-  static G4int mm;
+  static G4int fivex;
   static G4float rr, ran, rrr, ran1;
 
   // *** GENERATION OF POISSON DISTRIBUTION ***
@@ -317,14 +321,14 @@ void G4AntiProtonAnnihilationAtRest::Poisso(G4float xav, G4int *iran)
     }
   }
   else {
-    mm = G4int(xav * G4float(5.));
+    fivex = G4int(xav * G4float(5.));
     *iran = 0;
-    if (mm > 0) {
+    if (fivex > 0) {
       r = std::exp(-G4double(xav));
       ran1 = G4UniformRand();
       if (ran1 > r) {
 	rr = r;
-	for (i = 1; i <= mm; ++i) {
+	for (i = 1; i <= fivex; ++i) {
 	  ++(*iran);
 	  if (i <= 5) {
 	    rrr = std::pow(xav, G4float(i)) / NFac(i);
@@ -374,18 +378,18 @@ G4int G4AntiProtonAnnihilationAtRest::NFac(G4int n)
 {
   G4int ret_val;
 
-  static G4int i, m;
+  static G4int i, j;
 
   // *** NVE 16-MAR-1988 CERN GENEVA ***
   // ORIGIN : H.FESEFELDT (27-OCT-1983)
 
   ret_val = 1;
-  m = n;
-  if (m > 1) {
-    if (m > 10) {
-      m = 10;
+  j = n;
+  if (j > 1) {
+    if (j > 10) {
+      j = 10;
     }
-    for (i = 2; i <= m; ++i) {
+    for (i = 2; i <= j; ++i) {
       ret_val *= i;
     }
   }

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc,v 1.8 2010-06-25 09:46:09 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -44,6 +43,7 @@
 
 #include "G4UnstableFragmentBreakUp.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"
@@ -70,9 +70,6 @@ G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp()
 }
 
 G4UnstableFragmentBreakUp::~G4UnstableFragmentBreakUp()
-{}
-
-void G4UnstableFragmentBreakUp::Initialize(const G4Fragment&)
 {}
 
 G4Fragment* G4UnstableFragmentBreakUp::EmittedFragment(G4Fragment*)
@@ -159,7 +156,7 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUp(const G4Fragment&)
   return 0;
 }
 
-G4double G4UnstableFragmentBreakUp::GetEmissionProbability() const
+G4double G4UnstableFragmentBreakUp::GetEmissionProbability(G4Fragment*)
 {
   return 0.0;
 }

@@ -1,0 +1,20 @@
+# $Id: TestEm1.in,v 1.25 2008-09-12 16:32:25 maire Exp $
+#
+# Macro file for "Hadr14.cc"
+# (can be run in batch, without graphic)
+#
+# proton 10 MeV; all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setMat Molybdenum98 
+#
+/run/initialize
+#
+/process/list
+#
+/gun/particle proton
+/gun/energy 10 MeV
+#
+/run/beamOn 10000

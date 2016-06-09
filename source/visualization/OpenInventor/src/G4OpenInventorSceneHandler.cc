@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.56 2010-12-11 17:07:48 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -138,18 +137,16 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
   fStyleCache->unref();
 }
 
-void G4OpenInventorSceneHandler::ClearStore () {
-  G4VSceneHandler::ClearStore();
-
+void G4OpenInventorSceneHandler::ClearStore ()
+{
   fDetectorRoot->removeAllChildren();
   fSeparatorMap.clear();
 
   fTransientRoot->removeAllChildren();
 }
 
-void G4OpenInventorSceneHandler::ClearTransientStore () {
-  G4VSceneHandler::ClearTransientStore ();
-
+void G4OpenInventorSceneHandler::ClearTransientStore ()
+{
   fTransientRoot->removeAllChildren();
 }
 
@@ -186,7 +183,24 @@ void G4OpenInventorSceneHandler::BeginPrimitives
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
 {
-  AddProperties(line.GetVisAttributes());  // Transformation, colour, etc.
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline&)",
+	 "OpenInventor-0001", JustWarning,
+	 "2D polylines not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
+  
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   G4int nPoints = line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
@@ -228,7 +242,24 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
 
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
-  AddProperties(polymarker.GetVisAttributes()); // Transformation, colour, etc.
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker&)",
+	 "OpenInventor-0002", JustWarning,
+	 "2D polymarkers not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   G4int pointn = polymarker.size();
   if(pointn<=0) return;
@@ -324,21 +355,24 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   delete [] points;
 }
 
-// ********* NOTE ********* NOTE ********* NOTE ********* NOTE *********
-//
-//  This method (Text) has not been tested, as it is 
-//  innaccessible from the menu in the current configuration
-//
-//  Currently draws at the origin!  How do I get it to draw at
-//  text.GetPosition()?  JA
-//
-// ********* NOTE ********* NOTE ********* NOTE ********* NOTE *********
-//
 // Method for handling G4Text objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text)
 {
-  AddProperties(text.GetVisAttributes());  // Transformation, colour, etc.
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Text&)",
+	 "OpenInventor-0003", JustWarning,
+	 "2D text not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  AddProperties(text.GetVisAttributes());  // Colour, etc.
+  AddTransform(text.GetPosition());        // Transformation
 
   //
   // Color.  Note: text colour is worked out differently.  This
@@ -407,7 +441,24 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
 void G4OpenInventorSceneHandler::AddCircleSquare
 (G4OIMarker markerType, const G4VMarker& marker)
 {
-  AddProperties(marker.GetVisAttributes());  // Transformation, colour, etc.
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddCircleSquare",
+	 "OpenInventor-0004", JustWarning,
+	 "2D circles and squares not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (marker.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   MarkerSizeType sizeType;
   G4double screenSize = GetMarkerSize (marker, sizeType);
@@ -496,7 +547,24 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 {
   if (polyhedron.GetNoFacets() == 0) return;
 
-  AddProperties(polyhedron.GetVisAttributes()); // Transformation, colour, etc.
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron&)",
+	 "OpenInventor-0005", JustWarning,
+	 "2D polyhedra not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   SoG4Polyhedron* soPolyhedron = new SoG4Polyhedron(polyhedron);
 
@@ -523,7 +591,24 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
 
-  AddProperties(nurb.GetVisAttributes()); // Transformation, colour, etc.
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS&)",
+	 "OpenInventor-0006", JustWarning,
+	 "2D NURBS not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (nurb.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
@@ -808,12 +893,17 @@ void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
     fModelingSolid ? fStyleCache->getLightModelPhong() : 
     fStyleCache->getLightModelBaseColor();
   fCurrentSeparator->addChild(lightModel);
+}
 
-  // Set up the geometrical transformation for the coming 
+void G4OpenInventorSceneHandler::AddTransform(const G4Point3D& translation)
+{
+  // AddTransform takes fObjectTransformation and "adds" a translation.
+  // Set up the geometrical transformation for the coming
   fCurrentSeparator->addChild(fStyleCache->getResetTransform());
 
   SoMatrixTransform* matrixTransform = new SoMatrixTransform;
-  G4OpenInventorTransform3D oiTran(*fpObjectTransformation);
+  G4OpenInventorTransform3D oiTran
+  (fObjectTransformation * G4Translate3D(translation));
   SbMatrix* sbMatrix = oiTran.GetSbMatrix();
 
   const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();

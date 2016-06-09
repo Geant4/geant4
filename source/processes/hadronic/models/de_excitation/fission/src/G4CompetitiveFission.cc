@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.14 2010-11-17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -39,6 +38,8 @@
 #include "G4PairingCorrection.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
 {
@@ -66,11 +67,11 @@ G4CompetitiveFission::~G4CompetitiveFission()
     if (MyOwnLevelDensity) delete theLevelDensityPtr;
 }
 
-void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
+G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 {
-  G4int anA = fragment.GetA_asInt();
-  G4int aZ  = fragment.GetZ_asInt();
-  G4double ExEnergy = fragment.GetExcitationEnergy() - 
+  G4int anA = fragment->GetA_asInt();
+  G4int aZ  = fragment->GetZ_asInt();
+  G4double ExEnergy = fragment->GetExcitationEnergy() - 
     G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(anA,aZ);
   
 
@@ -82,13 +83,14 @@ void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
     LevelDensityParameter = 
       theLevelDensityPtr->LevelDensityParameter(anA,aZ,ExEnergy);
     FissionProbability = 
-      theFissionProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
+      theFissionProbabilityPtr->EmissionProbability(*fragment,MaximalKineticEnergy);
     }
   else {
     MaximalKineticEnergy = -1000.0*MeV;
     LevelDensityParameter = 0.0;
     FissionProbability = 0.0;
   }
+  return FissionProbability;
 }
 
 G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
@@ -296,14 +298,15 @@ G4CompetitiveFission::FissionAtomicNumber(G4int A,
   if (Mass5 > MassMax) MassMax = Mass5;
 
   // Sample a fragment mass number, which lies between C1 and C2
-  G4double m;
+  G4double xm;
   G4double Pm;
   do {
-    m = C1+G4UniformRand()*(C2-C1);
-    Pm = MassDistribution(m,A,theParam); 
+    xm = C1+G4UniformRand()*(C2-C1);
+    Pm = MassDistribution(xm,A,theParam); 
   } while (MassMax*G4UniformRand() > Pm);
+  G4int ires = G4lrint(xm);
 
-  return static_cast<G4int>(m+0.5);
+  return ires;
 }
 
 G4double 

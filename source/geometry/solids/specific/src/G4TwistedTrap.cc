@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.16 2010-10-20 08:54:19 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -41,6 +40,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrap.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
 
 G4TwistedTrap::G4TwistedTrap( const G4String &pName,

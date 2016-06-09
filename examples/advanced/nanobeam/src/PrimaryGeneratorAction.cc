@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.5 2010-10-06 12:16:59 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "PrimaryGeneratorAction.hh"
 #include "PrimaryGeneratorMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

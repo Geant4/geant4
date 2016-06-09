@@ -95,17 +95,19 @@ inline std::string tos(bool a_value){
 inline std::string tos(const std::string& a_value){return a_value;}
 
 template <class T>  
-inline std::string tos(const std::vector<T>& a_value,
-                       const std::string& a_sep = "\n" ) {
-  unsigned int number = a_value.size();
+inline std::string tos(const std::vector<T>& a_vals,
+                       const std::string& a_sep = "\n",
+                       bool a_sep_at_end = false) {
+  unsigned int number = a_vals.size();
   if(number<=0) return "";
   std::string result;
   number--;
   for(unsigned int index=0;index<number;index++) {
-    result += tos(a_value[index]);
+    result += tos(a_vals[index]);
     result += a_sep;
   }
-  result += tos(a_value[number]);
+  result += tos(a_vals[number]);
+  if(a_sep_at_end) result += a_sep;
   return result;
 }
 

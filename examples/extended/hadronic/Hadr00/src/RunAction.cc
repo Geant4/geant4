@@ -23,16 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/////////////////////////////////////////////////////////////////////////
+/// \file hadronic/Hadr00/src/RunAction.cc
+/// \brief Implementation of the RunAction class
 //
-// RunAction
+// $Id: RunAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Created: 21.06.2008 V.Ivanchenko
+// -------------------------------------------------------------
+//  
+//    GEANT4 class file
+//    RunAction
 //
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-// 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,8 +43,7 @@
 #include "HistoManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4Run.hh"
-#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,12 +59,9 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  HistoManager* manager = HistoManager::GetPointer(); 
   G4int id = aRun->GetRunID();
-  if(manager->GetVerbose()>0) {
-    G4cout << "### Run " << id << " start" << G4endl;
-  }
-  manager->BeginOfRun();
+  G4cout << "### Run " << id << " start" << G4endl;
+  (HistoManager::GetPointer())->BeginOfRun();
 
 #ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -82,16 +80,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  HistoManager* manager = HistoManager::GetPointer(); 
-  if(manager->GetVerbose()>0) {
-    G4cout << "RunAction: End of run actions are started" << G4endl;
-  }
-  manager->EndOfRun();
+
+  G4cout << "RunAction: End of run actions are started" << G4endl;
+  (HistoManager::GetPointer())->EndOfRun();
 
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 #endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02PSEnergyDeposit.cc
+/// \brief Implementation of the RE02PSEnergyDeposit class
 //
-// $Id: RE02PSEnergyDeposit.cc,v 1.3 2007-05-18 18:16:28 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // RE02PSEnergyDeposit
 #include "RE02PSEnergyDeposit.hh"
@@ -55,13 +57,17 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-RE02PSEnergyDeposit::RE02PSEnergyDeposit(G4String name,G4int nx, G4int ny, G4int nz)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE02PSEnergyDeposit::RE02PSEnergyDeposit(G4String name,
+                                         G4int nx, G4int ny, G4int nz)
   :G4PSEnergyDeposit(name),fNx(nx),fNy(ny),fNz(nz)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSEnergyDeposit::~RE02PSEnergyDeposit()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int RE02PSEnergyDeposit::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.15 2010-05-10 13:45:49 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm0/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,13 +40,15 @@
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
 #include "G4Electron.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:detector(det), primary(kin)
+:fDetector(det), fPrimary(kin)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,34 +68,34 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //  emCal.SetVerbose(2);
      
   // get particle 
-  G4ParticleDefinition* particle = primary->GetParticleGun()
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
   G4double charge   = particle->GetPDGCharge();    
-  G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy   = fPrimary->GetParticleGun()->GetParticleEnergy();
  
   // get material
-  G4Material* material = detector->GetMaterial();
+  G4Material* material = fDetector->GetMaterial();
   G4String matName     = material->GetName();
   G4double density     = material->GetDensity();
   G4double radl        = material->GetRadlen();  
 
   G4cout << "\n " << partName << " ("
          << G4BestUnit(energy,"Energy") << ") in " 
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ";   radiation length: "
-	 << G4BestUnit(radl,   "Length")       << ")" << G4endl;
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ";   radiation length: "
+         << G4BestUnit(radl,   "Length")       << ")" << G4endl;
 
-  // get cuts	 
+  // get cuts         
   GetCuts();
   if (charge != 0.) {
    G4cout << "\n  Range cuts : \t gamma "  
-                      << std::setw(8) << G4BestUnit(rangeCut[0],"Length")
-          << "\t e- " << std::setw(8) << G4BestUnit(rangeCut[1],"Length");
+                      << std::setw(8) << G4BestUnit(fRangeCut[0],"Length")
+          << "\t e- " << std::setw(8) << G4BestUnit(fRangeCut[1],"Length");
    G4cout << "\n Energy cuts : \t gamma " 
-                      << std::setw(8) << G4BestUnit(energyCut[0],"Energy")
-	  << "\t e- " << std::setw(8) << G4BestUnit(energyCut[1],"Energy")
-	  << G4endl;
+                      << std::setw(8) << G4BestUnit(fEnergyCut[0],"Energy")
+          << "\t e- " << std::setw(8) << G4BestUnit(fEnergyCut[1],"Energy")
+          << G4endl;
    }
    
   // max energy transfert
@@ -104,9 +108,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double range = emCal.GetCSDARange(Tmax,G4Electron::Electron(),material);
   
   G4cout << "\n  Max_energy _transferable  : " << G4BestUnit(Tmax,"Energy")
-         << " (" << G4BestUnit(range,"Length") << ")" << G4endl;   	    
+         << " (" << G4BestUnit(range,"Length") << ")" << G4endl;               
   }
-     	  
+               
   // get processList and extract EM processes (but not MultipleScattering)
   G4ProcessVector* plist = particle->GetProcessManager()->GetProcessList();
   G4String procName;
@@ -116,8 +120,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   size_t length = plist->size();
   for (size_t j=0; j<length; j++) {
      procName = (*plist)[j]->GetProcessName();
-     cut = energyCut[1];
-     if ((procName == "eBrem")||(procName == "muBrems")) cut = energyCut[0];
+     cut = fEnergyCut[1];
+     if ((procName == "eBrem")||(procName == "muBrems")) cut = fEnergyCut[0];
      if (((*plist)[j]->GetProcessType() == fElectromagnetic) &&
          (procName != "msc")) {
        emName.push_back(procName);
@@ -142,13 +146,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
     for (size_t j=0; j<emName.size();j++) {
       sig = emCal.ComputeCrossSectionPerAtom
                       (energy,particle,emName[j],Z,A,enerCut[j]);
-      sigtot += sig; 			     
-      sigma0.push_back(sig);	        
+      sigtot += sig;                              
+      sigma0.push_back(sig);                
     }
     sigma0.push_back(sigtot);
 
     G4cout << "\n \n  cross section per atom    : ";
-    for (size_t j=0; j<sigma0.size();j++) {	     
+    for (size_t j=0; j<sigma0.size();j++) {             
       G4cout << "\t" << std::setw(13) << G4BestUnit(sigma0[j], "Surface");
     }
     G4cout << G4endl;
@@ -168,26 +172,26 @@ void RunAction::BeginOfRunAction(const G4Run*)
     Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);      
     Sigtot += Sig;    
     sigma1.push_back(Sig);
-    sigma2.push_back(Sig/density);		        
+    sigma2.push_back(Sig/density);                        
   }
   sigma0.push_back(SigtotComp);
   sigma1.push_back(Sigtot);
-  sigma2.push_back(Sigtot/density);	  
+  sigma2.push_back(Sigtot/density);          
     
   //print cross sections
   G4cout << "\n \n  compCrossSectionPerVolume : ";
-  for (size_t j=0; j<sigma0.size();j++) {	     
+  for (size_t j=0; j<sigma0.size();j++) {             
     G4cout << "\t" << std::setw(13) << sigma0[j]*cm << " cm^-1";
   }
   G4cout << "\n  cross section per volume : ";
-  for (size_t j=0; j<sigma1.size();j++) {	     
+  for (size_t j=0; j<sigma1.size();j++) {             
     G4cout << "\t" << std::setw(13) << sigma1[j]*cm << " cm^-1";
   }
   
   G4cout << "\n  cross section per mass   : ";
   for (size_t j=0; j<sigma2.size();j++) {
     G4cout << "\t" << std::setw(13) 
-	   << G4BestUnit(sigma2[j], "Surface/Mass");
+           << G4BestUnit(sigma2[j], "Surface/Mass");
   }
    
   //print mean free path
@@ -205,7 +209,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "\n        (g/cm2)            : ";  
   for (size_t j=0; j<sigma2.size();j++) {
     lambda =  DBL_MAX;
-    if (sigma2[j] > 0.) lambda = 1/sigma2[j];   	            
+    if (sigma2[j] > 0.) lambda = 1/sigma2[j];                       
     G4cout << "\t" << std::setw(13) << G4BestUnit( lambda, "Mass/Surface");    
   }
   G4cout << G4endl;
@@ -225,15 +229,15 @@ void RunAction::BeginOfRunAction(const G4Run*)
   for (size_t j=0; j<emName.size();j++) {
     dedx = emCal.ComputeDEDX(energy,particle,emName[j],material,enerCut[j]);
     dedx1.push_back(dedx);
-    dedx2.push_back(dedx/density);		        
+    dedx2.push_back(dedx/density);                        
   }
   dedxtot = emCal.GetDEDX(energy,particle,material);
   dedx1.push_back(dedxtot);
-  dedx2.push_back(dedxtot/density);	  
+  dedx2.push_back(dedxtot/density);          
     
   //print stopping power
   G4cout << "\n \n  restricted dE/dx         : ";
-  for (size_t j=0; j<sigma1.size();j++) {	     
+  for (size_t j=0; j<sigma1.size();j++) {             
     G4cout << "\t" << std::setw(13) << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
@@ -254,11 +258,11 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "\n \n  range from restrict dE/dx: " 
          << "\t" << std::setw(8) << G4BestUnit(range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(range2,"Mass/Surface") << ")";
-	 
+         
   G4cout << "\n  range from full dE/dx    : " 
          << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
-	 
+         
   //get transport mean free path (for multiple scattering)
   G4double MSmfp1 = emCal.GetMeanFreePath(energy,particle,"msc",material);
   G4double MSmfp2 = MSmfp1*density;
@@ -269,7 +273,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
          << " (" << std::setw(8) << G4BestUnit(MSmfp2,"Mass/Surface") << ")";
 
   if (particle == G4Electron::Electron()) CriticalEnergy();
-  	 
+           
   G4cout << "\n-------------------------------------------------------------\n";
   G4cout << G4endl;
        
@@ -292,27 +296,27 @@ void RunAction::GetCuts()
 {  
   G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
-	
+        
   size_t numOfCouples = theCoupleTable->GetTableSize();
   const G4MaterialCutsCouple* couple = 0;
   G4int index = 0;
   for (size_t i=0; i<numOfCouples; i++) {
      couple = theCoupleTable->GetMaterialCutsCouple(i);
-     if (couple->GetMaterial() == detector->GetMaterial()) {index = i; break;}
+     if (couple->GetMaterial() == fDetector->GetMaterial()) {index = i; break;}
   }
   
-  rangeCut[0] =
+  fRangeCut[0] =
          (*(theCoupleTable->GetRangeCutsVector(idxG4GammaCut)))[index];
-  rangeCut[1] =      
+  fRangeCut[1] =      
          (*(theCoupleTable->GetRangeCutsVector(idxG4ElectronCut)))[index];
-  rangeCut[2] =      
+  fRangeCut[2] =      
          (*(theCoupleTable->GetRangeCutsVector(idxG4PositronCut)))[index]; 
 
-  energyCut[0] =
+  fEnergyCut[0] =
          (*(theCoupleTable->GetEnergyCutsVector(idxG4GammaCut)))[index];
-  energyCut[1] =      
+  fEnergyCut[1] =      
          (*(theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut)))[index];
-  energyCut[2] =      
+  fEnergyCut[2] =      
          (*(theCoupleTable->GetEnergyCutsVector(idxG4PositronCut)))[index];
 
 }
@@ -326,7 +330,7 @@ void RunAction::CriticalEnergy()
   //
   G4EmCalculator emCal;
     
-  const G4Material* material = detector->GetMaterial();
+  const G4Material* material = fDetector->GetMaterial();
   const G4double radl = material->GetRadlen();
   G4double ekin = 5*MeV;
   G4double deioni;
@@ -341,7 +345,7 @@ void RunAction::CriticalEnergy()
   }
   G4cout << "\n \n  critical energy (Rossi)  : " 
          << "\t" << std::setw(8) << G4BestUnit(ekin,"Energy");
-	 
+         
   //Pdg formula (only for single material)
   G4double pdga[2] = { 610*MeV, 710*MeV };
   G4double pdgb[2] = { 1.24, 0.92 };
@@ -361,12 +365,12 @@ void RunAction::CriticalEnergy()
  G4cout << "\n  Moliere radius           : "
         << "\t" << std::setw(8) << rMolier1 << " X0 "   
         << "= " << std::setw(8) << G4BestUnit(rMolier2,"Length");
-	
+        
  if (material->GetNumberOfElements() == 1) {
     G4double rMPdg = radl*Es/EcPdg;
     G4cout << "\t (from Pdg formula : " 
            << std::setw(8) << G4BestUnit(rMPdg,"Length") << ")";    
-  }	 
+  }         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

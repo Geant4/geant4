@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.6 2010-11-19 18:50:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Geant4 Header : G4HadronElastic
 //
@@ -32,6 +31,7 @@
 //  
 
 #include "G4HadronElastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
@@ -122,9 +122,9 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	   << G4endl;
   }
 
-  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
   G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv(0.0,0.0,0.0,m2);   
+  G4LorentzVector lv(0.0,0.0,0.0,mass2);   
   lv += lv1;
 
   G4ThreeVector bst = lv.boostVector();
@@ -146,7 +146,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << "G4HadronElastic WARNING (1 - cost)= " << 1 - cost
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
-	     << " p(GeV/c)= " << plab
+	     << " p(GeV/c)= " << plab/GeV
 	     << " on an ion Z= " << Z << " A= " << A
 	     << G4endl;
       //}
@@ -158,8 +158,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     sint = std::sqrt((1.0-cost)*(1.0+cost));
   }    
   if (verboseLevel>1) {
-    G4cout << " t= " << t << " tmax= " << tmax 
-	   << " Pcms= " << momentumCMS << " cos(t)=" << cost 
+    G4cout << " t= " << t << " tmax(GeV^2)= " << tmax/(GeV*GeV) 
+	   << " Pcms(GeV)= " << momentumCMS/GeV << " cos(t)=" << cost 
 	   << " sin(t)=" << sint << G4endl;
   }
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
@@ -180,7 +180,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << "G4HadronElastic WARNING Efinal= " << eFinal
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
-	     << " p(GeV/c)= " << plab
+	     << " p(GeV/c)= " << plab/GeV
 	     << " on an ion Z= " << Z << " A= " << A
 	     << G4endl;
     }
@@ -193,9 +193,9 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }  
 
   lv -= nlv1;
-  G4double erec =  lv.e() - m2;
+  G4double erec =  lv.e() - mass2;
   if (verboseLevel > 1) {
-    G4cout << "Recoil: " <<" m= " << m2 << " Erec(MeV)= " << erec
+    G4cout << "Recoil: " <<" m= " << mass2 << " Erec(MeV)= " << erec
 	   << " 4-mom: " << lv 
 	   << G4endl;
   }

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/src/G4MonopoleFieldMessenger.cc
+/// \brief Implementation of the G4MonopoleFieldMessenger class
+//
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,33 +44,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleFieldMessenger::G4MonopoleFieldMessenger(G4MonopoleFieldSetup * fld)
-:Field(fld)
+:fField(fld)
 { 
-  fieldDir = new G4UIdirectory("/testex/fld/");
-  fieldDir->SetGuidance("field setup commands");
+  fFieldDir = new G4UIdirectory("/testex/fld/");
+  fFieldDir->SetGuidance("field setup commands");
       
-  SetFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/fld/setField",this);
-  SetFieldCmd->SetGuidance("Define magnetic field.");
-  SetFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  SetFieldCmd->SetParameterName("Bz",false);
-  SetFieldCmd->SetUnitCategory("Magnetic flux density");
-  SetFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/fld/setField",this);
+  fSetFieldCmd->SetGuidance("Define magnetic field.");
+  fSetFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fSetFieldCmd->SetParameterName("Bz",false);
+  fSetFieldCmd->SetUnitCategory("Magnetic flux density");
+  fSetFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleFieldMessenger::~G4MonopoleFieldMessenger()
 {
-  delete SetFieldCmd;
-  delete fieldDir;  
+  delete fSetFieldCmd;
+  delete fFieldDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopoleFieldMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == SetFieldCmd )
-   { Field->SetMagField(SetFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fSetFieldCmd )
+   { fField->SetMagField(fSetFieldCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -34,7 +34,6 @@
 #include <boost/python.hpp>
 #include "MyMaterials.hh"
 #include "MyDetectorConstruction.hh"
-#include "MyPhysicsList.hh"
 #include "G4VSensitiveDetector.hh"
 
 using namespace boost::python;
@@ -53,11 +52,5 @@ BOOST_PYTHON_MODULE(demo_wp) {
     ("MyDetectorConstruction", "my detector")
     .def("SetSDtoScoreVoxel", &MyDetectorConstruction::SetSDtoScoreVoxel)
     ;
-
-  class_<MyPhysicsList, MyPhysicsList*,
-    bases<G4VUserPhysicsList> >
-    ("MyPhysicsList", "my physics list")
-    ;
-
 }
 

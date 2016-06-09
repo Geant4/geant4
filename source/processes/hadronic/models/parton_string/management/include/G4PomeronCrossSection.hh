@@ -26,8 +26,7 @@
 #ifndef G4PomeronCrossSection_h
 #define G4PomeronCrossSection_h 1
 //
-// $Id: G4PomeronCrossSection.hh,v 1.3 2006-06-29 20:55:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -119,14 +118,14 @@ class G4PomeronCrossSection
         inline G4double Lambda(const G4double s);
         inline G4double Eikonal(const G4double s,const G4double impactsquare);
         
-        G4double pomeron_S;
-	G4double pomeron_Gamma;
-	G4double pomeron_C;
-	G4double pomeron_Rsquare;
 	G4double pomeron_Alpha;
-	G4double pomeron_Alphaprime;
-        G4double pomeron_Gamma_Hard;
         G4double pomeron_Alpha_Hard;
+	G4double pomeron_Alphaprime;
+	G4double pomeron_C;
+	G4double pomeron_Gamma;
+        G4double pomeron_Gamma_Hard;
+	G4double pomeron_Rsquare;
+        G4double pomeron_S;
 	
 
 };

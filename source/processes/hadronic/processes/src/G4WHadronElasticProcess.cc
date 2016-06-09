@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WHadronElasticProcess.cc,v 1.5 2010-11-19 18:50:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -42,27 +41,29 @@
 // 24.02.11 V.Ivanchenko use particle name in IfApplicable, 
 //                       added anti particles for light ions
 // 07.09.11 M.Kelsey: Follow chanhe to G4HadFinalState interface
+// 14.09.12 M.Kelsey: Pass subType code to base ctor
 //
 
+#include <iostream>
+#include <typeinfo>
+
 #include "G4WHadronElasticProcess.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4ProcessManager.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
-#include <iostream>
-#include <typeinfo>
-
+#include "G4HadronicDeprecate.hh"
 
 G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
-  : G4HadronicProcess(pName) 
-{
-  SetProcessSubType(fHadronElastic);
+  : G4HadronicProcess(pName, fHadronElastic) {
   AddDataSet(new G4HadronElasticDataSet);
   theNeutron  = G4Neutron::Neutron();
   lowestEnergy = 1.*keV;
   lowestEnergyNeutron = 1.e-6*eV;
+  G4HadronicDeprecate("G4WHadronElasticProcess");
 }
 
 G4WHadronElasticProcess::~G4WHadronElasticProcess()
@@ -94,32 +95,37 @@ void G4WHadronElasticProcess::Description() const
 }
 
 
-G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
-				  const G4Track& track, 
-				  const G4Step& step)
+G4VParticleChange* 
+G4WHadronElasticProcess::PostStepDoIt(const G4Track& track, 
+				      const G4Step& /*step*/)
 {
-  aParticleChange.Initialize(track);
+  theTotalResult->Clear();
+  theTotalResult->Initialize(track);
+  G4double weight = track.GetWeight();
+  theTotalResult->ProposeWeight(weight);
+
+  // For elastic scattering, _any_ result is considered an interaction
+  ClearNumberOfInteractionLengthLeft();
+
   G4double kineticEnergy = track.GetKineticEnergy();
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
 
-  // protection against numerical problems
-  // primary energy cannot be very low
-  if(part == theNeutron) {
-    if(kineticEnergy <= lowestEnergyNeutron) 
-      { return G4VDiscreteProcess::PostStepDoIt(track,step); }
-  } else if(kineticEnergy <= lowestEnergy)
-      { return G4VDiscreteProcess::PostStepDoIt(track,step); }
+  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
+  //        in earlier releases; these limits have not been changed since.
+  if (part == theNeutron) {
+    if(kineticEnergy <= lowestEnergyNeutron) return theTotalResult;
+  } else if(kineticEnergy <= lowestEnergy)   return theTotalResult;
 
   G4Material* material = track.GetMaterial();
-  G4Nucleus* targetNucleus = GetTargetNucleusPointer();
+  G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
   // Select element
   G4Element* elm = 0;
   try
     {
       elm = GetCrossSectionDataStore()->SampleZandA(dynParticle, material, 
-						    *targetNucleus);
+						    *targNucleus);
     }
   catch(G4HadronicException & aR)
     {
@@ -138,8 +144,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
     {
       G4ExceptionDescription ed;
       ed << "Target element "<< elm->GetName()<<"  Z= " 
-	 << targetNucleus->GetZ_asInt() << "  A= " 
-	 << targetNucleus->GetA_asInt() << G4endl;
+	 << targNucleus->GetZ_asInt() << "  A= " 
+	 << targNucleus->GetA_asInt() << G4endl;
       DumpState(track,"ChooseHadronicInteraction",ed);
       ed << " No HadronicInteraction found out" << G4endl;
       G4Exception("G4WHadronElasticProcess::PostStepDoIt", "had005", 
@@ -153,33 +159,37 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 
   // Initialize the hadronic projectile from the track
   //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
-  G4HadProjectile thePro(track);
+  G4HadProjectile theProj(track);
   if(verboseLevel>1) {
     G4cout << "G4WHadronElasticProcess::PostStepDoIt for " 
 	   << part->GetParticleName()
 	   << " in " << material->GetName() 
-	   << " Target Z= " << targetNucleus->GetZ_asInt() 
-	   << " A= " << targetNucleus->GetA_asInt() << G4endl; 
+	   << " Target Z= " << targNucleus->GetZ_asInt() 
+	   << " A= " << targNucleus->GetA_asInt() << G4endl; 
   }
 
   G4HadFinalState* result = 0;
   try
     {
-      result = hadi->ApplyYourself( thePro, *targetNucleus);
+      result = hadi->ApplyYourself( theProj, *targNucleus);
     }
   catch(G4HadronicException aR)
     {
       G4ExceptionDescription ed;
       ed << "Call for " << hadi->GetModelName() << G4endl;
       ed << "Target element "<< elm->GetName()<<"  Z= " 
-	 << targetNucleus->GetZ_asInt() 
-	 << "  A= " << targetNucleus->GetA_asInt() << G4endl;
+	 << targNucleus->GetZ_asInt() 
+	 << "  A= " << targNucleus->GetA_asInt() << G4endl;
       DumpState(track,"ApplyYourself",ed);
       ed << " ApplyYourself failed" << G4endl;
       G4Exception("G4WHadronElasticProcess::PostStepDoIt", "had006", 
 		  FatalException, ed);
     }
-  hadi->ApplyYourself(thePro, *targetNucleus);
+
+  // Check the result for catastrophic energy non-conservation
+  // cannot be applied because is not guranteed that recoil 
+  // nucleus is created
+  // result = CheckResult(theProj, targNucleus, result);
 
   // directions
   G4ThreeVector indir = track.GetMomentumDirection();
@@ -201,7 +211,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   if(efinal < 0.0) { efinal = 0.0; }
   if(edep < 0.0)   { edep = 0.0; }
 
-  // protection against numerical problems
+  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
+  //        in earlier releases; these limits have not been changed since.
   if((part == theNeutron && efinal <= lowestEnergyNeutron) || 
      (part != theNeutron && efinal <= lowestEnergy)) {
     edep += efinal;
@@ -209,29 +220,30 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   }
 
   // primary change
-  aParticleChange.ProposeEnergy(efinal);
+  theTotalResult->ProposeEnergy(efinal);
 
   G4TrackStatus status = track.GetTrackStatus();
   if(efinal > 0.0) {
     outdir.rotate(phi, it);
     outdir.rotateUz(indir);
-    aParticleChange.ProposeMomentumDirection(outdir);
+    theTotalResult->ProposeMomentumDirection(outdir);
   } else {
     if(part->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
          { status = fStopButAlive; }
     else { status = fStopAndKill; }
-    aParticleChange.ProposeTrackStatus(status);
+    theTotalResult->ProposeTrackStatus(status);
   }
 
   //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
 
+  theTotalResult->SetNumberOfSecondaries(0);
+
   // recoil
-  aParticleChange.SetNumberOfSecondaries(0);
   if(result->GetNumberOfSecondaries() > 0) {
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
 
     if(p->GetKineticEnergy() > lowestEnergy) {
-      aParticleChange.SetNumberOfSecondaries(1);
+      theTotalResult->SetNumberOfSecondaries(1);
       G4ThreeVector pdir = p->GetMomentumDirection();
       // G4cout << "recoil " << pdir << G4endl;
       //!! is not needed for models inheriting G4HadronElastic
@@ -239,13 +251,22 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
       pdir.rotateUz(indir);
       // G4cout << "recoil rotated " << pdir << G4endl;
       p->SetMomentumDirection(pdir);
-      aParticleChange.AddSecondary(p);
+
+      // in elastic scattering time and weight are not changed
+      G4Track* t = new G4Track(p, track.GetGlobalTime(), 
+			       track.GetPosition());
+      t->SetWeight(weight);
+      t->SetTouchableHandle(track.GetTouchableHandle());
+      theTotalResult->AddSecondary(t);
+
+    } else {
+      edep += p->GetKineticEnergy();
+      delete p;
     }
   }
-  aParticleChange.ProposeLocalEnergyDeposit(edep);
-  aParticleChange.ProposeNonIonizingEnergyDeposit(edep);
+  theTotalResult->ProposeLocalEnergyDeposit(edep);
+  theTotalResult->ProposeNonIonizingEnergyDeposit(edep);
   result->Clear();
 
-  return G4VDiscreteProcess::PostStepDoIt(track,step);
+  return theTotalResult;
 }
-

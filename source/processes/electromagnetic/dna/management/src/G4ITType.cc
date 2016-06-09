@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITType.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -34,7 +35,7 @@
 
 #include "G4ITType.hh"
 
-G4ITTypeManager* G4ITTypeManager::fInstance = 0;
+G4ITTypeManager* G4ITTypeManager::fgInstance = 0;
 
 // static method
 size_t G4ITType::size()
@@ -51,16 +52,16 @@ G4ITType& G4ITType::operator=(const G4ITType & rhs)
 
 G4ITTypeManager*  G4ITTypeManager::Instance()
 {
-    if(fInstance == 0)
+    if(fgInstance == 0)
     {
-        fInstance =  new G4ITTypeManager();
+        fgInstance =  new G4ITTypeManager();
     }
-    return fInstance;
+    return fgInstance;
 }
 
 void G4ITTypeManager::DeleteInstance()
 {
-    delete fInstance ;
+    delete fgInstance ;
 }
 
 G4ITTypeManager::G4ITTypeManager()

@@ -50,6 +50,8 @@ public:
   
   G4NucleonNuclearCrossSection();
   virtual ~G4NucleonNuclearCrossSection();
+    
+  static const char* Default_Name() {return "G4NucleonNuclearCrossSection";}
 
   virtual G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
 				     G4int Z, 

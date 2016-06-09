@@ -39,6 +39,8 @@
 #ifndef G4QMDParticipant_hh
 #define G4QMDParticipant_hh
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
@@ -59,7 +61,7 @@ class G4QMDParticipant
       void SetMomentum( G4ThreeVector p ) { momentum = p; };
       G4ThreeVector GetMomentum() { return momentum; };
 
-      G4double GetMass() { return definition->GetPDGMass()/GeV; };
+      G4double GetMass() { return definition->GetPDGMass()/CLHEP::GeV; };
 
       G4LorentzVector Get4Momentum();
 
@@ -68,7 +70,7 @@ class G4QMDParticipant
       G4int GetBaryonNumber() { return definition->GetBaryonNumber(); };
       G4int GetNuc() { return definition->GetBaryonNumber(); };
 
-      G4int GetChargeInUnitOfEplus() { return int ( definition->GetPDGCharge()/eplus ); };
+      G4int GetChargeInUnitOfEplus() { return int ( definition->GetPDGCharge()/CLHEP::eplus ); };
 
       void UnsetInitialMark() { projectile = false; target = false; }
       void UnsetHitMark() { hit = false; }

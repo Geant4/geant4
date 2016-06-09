@@ -23,32 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02NestedPhantomParameterisation.hh
+/// \brief Definition of the RE02NestedPhantomParameterisation class
 //
-// $Id: RE02NestedPhantomParameterisation.hh,v 1.4 2010-11-09 19:46:30 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4VNestedParameterisation
+// $Id$
 //
-// Class description:
-//
-// Base class for parameterisations that use information from the parent
-// volume to compute the material of a copy/instance of this volume. 
-// This is in addition to using the current replication number.
-// 
-// Notes:
-//  - Such a volume can be nested inside a placement volume or a parameterised  
-//    volume.
-//  - The user can modify the solid type, size or transformation using only
-//    the replication number of this parameterised volume.
-//    He/she is NOT allowed to change these attributes using information of
-//    parent volumes - otherwise incorrect results will occur.
-//  Also note that the usual restrictions apply: 
-//   - the mother volume, in which these copies are placed, must always be
-//     of the same dimensions
-
-// History:
-// 24.02.05 - J.Apostolakis - First created version.
-// --------------------------------------------------------------------
 #ifndef RE02NESTEDPARAMETERISATION_HH
 #define RE02NESTEDPARAMETERISATION_HH
 
@@ -77,19 +57,50 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
+//
+/// A nested parameterisation class for a phantom
+///
+///  (Description)
+///     This parameterisation handles material and transfomation of voxles.
+///
+/// - G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+///                               const G4int repNo,
+///                               const G4VTouchable *parentTouch=0)
+///     returns material.
+///       if ix%2==0 && iy%2==0 && iz%2==0 then fMat[0]
+///       else fMat[1]
+///
+/// - G4int GetNumberOfMaterials() const
+///     returns the number of material defined in fMat
+///
+/// - G4Material* GetMaterial(G4int idx) const
+///     returns the i-th material of fMat
+///
+/// - void ComputeTransformation(const G4int no,
+///                              G4VPhysicalVolume *currentPV) const
+///     returns a transformation with the physical volume of the 2nd argument
+///     according to copyNo
+///     Its position is defined as G4ThreeVector(0.,0.,fpZ[copyNo]).
+///
+/// - void ComputeDimensions(G4Box &, const G4int, 
+///                          const G4VPhysicalVolume *) const
+///     returns dimensions of this parameterized volume with the physical 
+///     volume of the 3rd argument.
+///
+//
 class RE02NestedPhantomParameterisation: public G4VNestedParameterisation
 {
   public:  // with description
 
     RE02NestedPhantomParameterisation(const G4ThreeVector& voxelSize,
-				      G4int nz,
-				      std::vector<G4Material*>& mat);
+                                      G4int nz,
+                                      std::vector<G4Material*>& mat);
     virtual ~RE02NestedPhantomParameterisation(); 
 
     // Methods required in derived classes
     // -----------------------------------
     virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
-					const G4int repNo, 
+                                        const G4int repNo, 
                                         const G4VTouchable *parentTouch=0
                                         );
   // Required method, as it is the reason for this class.
@@ -115,27 +126,27 @@ class RE02NestedPhantomParameterisation: public G4VNestedParameterisation
                                    const G4VPhysicalVolume *) const;
 
 private:  // Dummy declarations to get rid of warnings ...
-  void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*)
+  virtual void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*)
     const {}
-  void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
+  virtual void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
     const {}
 //  G4Material* ComputeMaterial(const G4int repNo,
 //                              G4VPhysicalVolume* currentVol,
@@ -148,7 +159,7 @@ private:
   G4int fNz;
   //
   std::vector<G4double>  fpZ;
-  std::vector<G4Material*> fmat;
+  std::vector<G4Material*> fMat;
 };
 
 #endif

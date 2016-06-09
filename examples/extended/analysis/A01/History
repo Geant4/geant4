@@ -11,6 +11,28 @@ $Id: History,v 1.50 2010-06-06 04:21:04 perl Exp $
 
 ---------------------------------------------------------------------------  
 
+16 November 2012 Ivana Hrivnacova (exampleA01-V09-05-03)
+- Fixed .README file for artefacts from Markdown support
+
+31 August 2012 Ivana Hrivnacova (exampleA01-V09-05-02)
+- Minor fixes in CMakeList.txt
+
+24 August 2012 Ivana Hrivnacova (exampleA01-V09-05-01)
+- README.JAIDA replaced with more general README.AIDA (revised 
+  by Guy Barrand)
+- Added README.OpenScientist (previously AnaEx03/UseOpenScientist.txt) 
+- Added .README files for Doxygen documentation
+- Added file descriptions for all .hh and .cc
+- Fixed functions names in A01AnalysisManager (to get example 
+  compiling)
+- Adding support for building example with AIDA in CMake build   
+
+19 June 2012  Joseph Perl (exampleA01-V09-05-00)
+- Corrected order of filling x and y for Cloud2D
+
+20 April 2012  Joseph Perl
+- Apply coding guidelines
+
 28 October 2011  Joseph Perl (exampleA01-V09-04-00)
 - Corrected order of filling x and y for Cloud2D
 

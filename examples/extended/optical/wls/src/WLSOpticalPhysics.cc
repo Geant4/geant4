@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSOpticalPhysics.cc
+/// \brief Implementation of the WLSOpticalPhysics class
+//
 //
 //
 //
@@ -97,9 +100,6 @@ void WLSOpticalPhysics::ConstructProcess()
 
   //pManager->AddDiscreteProcess(theRayleighScattering);
   //pManager->AddDiscreteProcess(theMieHGScatteringProcess);
-
-  theBoundaryProcess->SetModel(glisur);
-  //theBoundaryProcess->SetModel(unified);
 
   pManager->AddDiscreteProcess(theBoundaryProcess);
 

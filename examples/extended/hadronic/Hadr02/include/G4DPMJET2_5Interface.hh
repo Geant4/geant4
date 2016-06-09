@@ -33,18 +33,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4DPMJET2_5Interface.hh
+/// \brief Definition of the G4DPMJET2_5Interface class
+//
 #ifndef G4DPMJET2_5Interface_hh
 #define G4DPMJET2_5Interface_hh 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5Interface.hh
 //
-// Version:		0.B
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.B
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -65,9 +68,9 @@ const int mxnfbk =    10;
 const int mxzfbk =     9;
 const int mxpsst =   300;
 const int mxpsfb = 41000;
-const int nxafbk =    17;			// NXAFBK = MXAFBK + 1 
-const int nxnfbk =    15;			// NXNFBK = MXNFBK + MXFFBK / 3
-const int nxzfbk =    14;			// NXZFBK = MXZFBK + MXFFBK / 3
+const int nxafbk =    17;                        // NXAFBK = MXAFBK + 1 
+const int nxnfbk =    15;                        // NXNFBK = MXNFBK + MXFFBK / 3
+const int nxzfbk =    14;                        // NXZFBK = MXZFBK + MXFFBK / 3
 const int nmxhkk = 89998;
 const int neb    =    50;
 //

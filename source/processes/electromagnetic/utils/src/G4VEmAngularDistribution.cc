@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.cc,v 1.1 2010-10-14 16:34:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -53,7 +52,9 @@
 
 G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name) 
   : fName(name)
-{}
+{
+  fLocalDirection.set(0.0,0.0,1.0);
+}
 
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}

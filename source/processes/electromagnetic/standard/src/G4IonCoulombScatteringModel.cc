@@ -56,8 +56,9 @@
 
 
 #include "G4IonCoulombScatteringModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-//#include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Proton.hh"
 #include "G4ProductionCutsTable.hh"
@@ -134,8 +135,8 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   	SetupParticle(p);
  
-  	G4double xsec =0.0;
-	if(kinEnergy < lowEnergyLimit) return xsec;
+  	G4double cross =0.0;
+	if(kinEnergy < lowEnergyLimit) return cross;
 
   	DefineMaterial(CurrentCouple());
 
@@ -147,10 +148,10 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
         ioncross->SetupTarget(Z, kinEnergy, heavycorr);
 
-  	xsec = ioncross->NuclearCrossSection();
+  	cross = ioncross->NuclearCrossSection();
 
-//cout<< "..........xsec "<<G4BestUnit(xsec,"Surface") <<endl;
-  return xsec;
+//cout<< "..........cross "<<G4BestUnit(cross,"Surface") <<endl;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -177,18 +178,18 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 	G4double Z  = currentElement->GetZ();
   	G4int iz          = G4int(Z);
   	G4int ia = SelectIsotopeNumber(currentElement);
-  	G4double m2 = G4NucleiProperties::GetNuclearMass(ia, iz);
+  	G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
 
 
-	G4double xsec= ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
+	G4double cross= ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
                                 kinEnergy, cutEnergy, kinEnergy) ;
-	if(xsec == 0.0)return;
+	if(cross == 0.0) { return; }
     
 	//scattering angle, z1 == (1-cost)
   	G4double z1 = ioncross->SampleCosineTheta(); 
-
-  	if(z1 <= 0.0) { return; }
+        if(z1 > 2.0)      { z1 = 2.0; }
+        else if(z1 < 0.0) { z1 = 0.0; }
 
   	G4double cost = 1.0 - z1;
   	G4double sint = sqrt(z1*(1.0 + cost));
@@ -201,7 +202,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   	G4double ptot = sqrt(mom2);
 
 	//CM particle 1
-  	G4double bet  = ptot/(etot + m2);
+  	G4double bet  = ptot/(etot + mass2);
   	G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
 
 	//CM 	
@@ -222,17 +223,23 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   
 	fParticleChange->ProposeMomentumDirection(newDirection);   
   
+	// V.Ivanchenko fix of final energies after scattering
 	// recoil.......................................
-	G4double trec =(1.0 - cost)* m2*(etot*etot - mass*mass )/
-				(mass*mass + m2*m2+ 2.*m2*etot);
+	//G4double trec =(1.0 - cost)* mass2*(etot*etot - mass*mass )/
+	//			(mass*mass + mass2*mass2+ 2.*mass2*etot);
+        //G4double finalT = kinEnergy - trec;
 
-        G4double finalT = kinEnergy - trec;
-
+	// new computation
+        G4double finalT = gam*(eCM + bet*pzCM) - mass;
+        G4double trec = kinEnergy - finalT;
 
   	if(finalT <= lowEnergyLimit) { 
-    		trec = kinEnergy;  
-    		finalT = 0.0;
-  		} 
+	  trec = kinEnergy;  
+	  finalT = 0.0;
+	} else if(trec < 0.0) {
+	  trec = 0.0;  
+	  finalT = kinEnergy;
+	}
     
   	fParticleChange->SetProposedKineticEnergy(finalT);
 

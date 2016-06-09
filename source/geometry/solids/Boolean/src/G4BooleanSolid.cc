@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.24 2010-09-22 14:57:59 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -49,7 +48,7 @@
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
                                 G4VSolid* pSolidB   ) :
-  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
   fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
   fpPolyhedron(0), createdDisplacedSolid(false)
 {
@@ -66,7 +65,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidB ,
                                       G4RotationMatrix* rotMatrix,
                                 const G4ThreeVector& transVector    ) :
-  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
   fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
   fpPolyhedron(0), createdDisplacedSolid(true)
 {
@@ -82,7 +81,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidA ,
                                       G4VSolid* pSolidB ,
                                 const G4Transform3D& transform    ) :
-  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
   fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
   fpPolyhedron(0), createdDisplacedSolid(true)
 {
@@ -96,7 +95,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4BooleanSolid::G4BooleanSolid( __void__& a )
-  : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0),
+  : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0), fAreaRatio(0.),
     fStatistics(1000000), fCubVolEpsilon(0.001), 
     fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
     fpPolyhedron(0), createdDisplacedSolid(false)
@@ -122,6 +121,7 @@ G4BooleanSolid::~G4BooleanSolid()
 
 G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
   : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
+    fAreaRatio(rhs.fAreaRatio),
     fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
     fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
     fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0),
@@ -146,6 +146,7 @@ G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs)
   // Copy data
   //
   fPtrSolidA= rhs.fPtrSolidA; fPtrSolidB= rhs.fPtrSolidB;
+  fAreaRatio= rhs.fAreaRatio;
   fStatistics= rhs.fStatistics; fCubVolEpsilon= rhs.fCubVolEpsilon;
   fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
   fSurfaceArea= rhs.fSurfaceArea; fpPolyhedron= 0;
@@ -236,19 +237,17 @@ std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
 
 G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
 {
-  G4bool condition = true;
   G4double rand;
   G4ThreeVector p;
 
-  while(condition)
+  do
   {
     rand = G4UniformRand();
 
-    if(rand > 0.5) { p = fPtrSolidA->GetPointOnSurface(); }
-    else           { p = fPtrSolidB->GetPointOnSurface(); }
+    if (rand < GetAreaRatio()) { p = fPtrSolidA->GetPointOnSurface(); }
+    else                       { p = fPtrSolidB->GetPointOnSurface(); }
+  } while (Inside(p) != kSurface);
 
-    if(Inside(p) == kSurface)  { break; }
-  }
   return p;
 }
 

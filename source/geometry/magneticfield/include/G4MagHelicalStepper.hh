@@ -25,8 +25,7 @@
 //
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.15 2007-08-21 08:48:28 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //
@@ -43,6 +42,8 @@
 
 #ifndef G4MagHelicalStepper_hh
 #define G4MagHelicalStepper_hh
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4Types.hh"
 #include "G4MagIntegratorStepper.hh"

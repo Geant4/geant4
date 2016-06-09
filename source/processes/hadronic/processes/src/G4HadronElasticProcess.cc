@@ -23,83 +23,255 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4 Process: Low-energy Elastic scattering
-// F.W. Jones, TRIUMF, 04-JUN-96
+// $Id$
+//
+// Geant4 Hadron Elastic Scattering Process 
 // 
-// This is a prototype of a low-energy elastic scattering process.
-// At present it just uses some GEANT3.21/GHEISHA code, translated
-// to C++ methods, to calculate cross sections and scattering events.
-// Eventually these methods will be replaced by ones that are more 
-// accurate in the low-energy region (< 3GeV).
+// Created 26 July 2012 V.Ivanchenko from G4WHadronElasticProcess
+//  
+// Modified:
+// 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 
-// Modified by FWJ 03-DEC-96: uses G4LCrossSectionData
-// Modified by FWJ    FEB-97: adapted to new tracking design
-// Modified by FWJ    MAR-97: newer new tracking design
-//
-// Modified by FWJ 27-MAR-97: first version for Alpha release
-// 20-JUN-97 FWJ: added check for zero cross section
-//
-// 14-APR-98 FWJ: variant G4HadronElastic process for
-// G4CrossSectionDataSet/DataStore class design.
-// 29-JUN-98 FWJ: default data set G4HadronCrossSections
-// design re-done JPW 2003.
-// 01-SEP-2008 V.Ivanchenko: use methods from the base class
-
+#include <iostream>
+#include <typeinfo>
 
 #include "G4HadronElasticProcess.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Nucleus.hh"
+#include "G4ProcessManager.hh"
+#include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
-#include <iostream>
+#include "G4ProductionCutsTable.hh"
+#include "G4HadronicException.hh"
+#include "G4HadronicDeprecate.hh"
 
- 
-G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) : 
-  G4HadronicProcess(processName)
+G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
+  : G4HadronicProcess(pName, fHadronElastic), isInitialised(false)
 {
-  SetProcessSubType(fHadronElastic);
-  AddDataSet(new G4HadronElasticDataSet());
+  AddDataSet(new G4HadronElasticDataSet);
+  lowestEnergy = 1.*keV;
 }
-
 
 G4HadronElasticProcess::~G4HadronElasticProcess()
 {}
 
- 
-G4bool 
-G4HadronElasticProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
+void G4HadronElasticProcess::Description() const
 {
-  return (aParticleType == *(G4PionPlus::PionPlus()) ||
-          aParticleType == *(G4PionZero::PionZero()) ||
-          aParticleType == *(G4PionMinus::PionMinus()) ||
-          aParticleType == *(G4KaonPlus::KaonPlus()) ||
-          aParticleType == *(G4KaonZeroShort::KaonZeroShort()) ||
-          aParticleType == *(G4KaonZeroLong::KaonZeroLong()) ||
-          aParticleType == *(G4KaonMinus::KaonMinus()) ||
-          aParticleType == *(G4Proton::Proton()) ||
-          aParticleType == *(G4AntiProton::AntiProton()) ||
-          aParticleType == *(G4Neutron::Neutron()) ||
-          aParticleType == *(G4AntiNeutron::AntiNeutron()) ||
-          aParticleType == *(G4Lambda::Lambda()) ||
-          aParticleType == *(G4AntiLambda::AntiLambda()) ||
-          aParticleType == *(G4SigmaPlus::SigmaPlus()) ||
-          aParticleType == *(G4SigmaZero::SigmaZero()) ||
-          aParticleType == *(G4SigmaMinus::SigmaMinus()) ||
-          aParticleType == *(G4AntiSigmaPlus::AntiSigmaPlus()) ||
-          aParticleType == *(G4AntiSigmaZero::AntiSigmaZero()) ||
-          aParticleType == *(G4AntiSigmaMinus::AntiSigmaMinus()) ||
-          aParticleType == *(G4XiZero::XiZero()) ||
-          aParticleType == *(G4XiMinus::XiMinus()) ||
-          aParticleType == *(G4AntiXiZero::AntiXiZero()) ||
-          aParticleType == *(G4AntiXiMinus::AntiXiMinus()) ||
-          aParticleType == *(G4Deuteron::Deuteron()) ||
-          aParticleType == *(G4Triton::Triton()) ||
-          aParticleType == *(G4Alpha::Alpha()) ||
-          aParticleType == *(G4OmegaMinus::OmegaMinus()) ||
-          aParticleType == *(G4AntiOmegaMinus::AntiOmegaMinus()));
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetProcessName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4HadronElasticProcess</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HadronElasticProcess handles the elastic scattering of\n"
+            << "hadrons by invoking one or more hadronic models and one or\n"
+            << "more hadronic cross sections.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
 }
 
-
-void G4HadronElasticProcess::ProcessDescription(std::ostream& outFile) const
+G4VParticleChange* 
+G4HadronElasticProcess::PostStepDoIt(const G4Track& track, 
+				     const G4Step& /*step*/)
 {
-  outFile << "This process handles the elastic scattering of hadrons by\n"
-          << "invoking one or more hadronic models and one or more hadronic\n"
-          << "cross sections.\n";
+  theTotalResult->Clear();
+  theTotalResult->Initialize(track);
+  G4double weight = track.GetWeight();
+  theTotalResult->ProposeWeight(weight);
+
+  // For elastic scattering, _any_ result is considered an interaction
+  ClearNumberOfInteractionLengthLeft();
+
+  G4double kineticEnergy = track.GetKineticEnergy();
+  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  const G4ParticleDefinition* part = dynParticle->GetDefinition();
+
+  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
+  //        in earlier releases; these limits have not been changed since.
+  if (kineticEnergy <= lowestEnergy)   return theTotalResult;
+
+  G4Material* material = track.GetMaterial();
+  G4Nucleus* targNucleus = GetTargetNucleusPointer();
+
+  // Select element
+  G4Element* elm = 0;
+  try
+    {
+      elm = GetCrossSectionDataStore()->SampleZandA(dynParticle, material, 
+						    *targNucleus);
+    }
+  catch(G4HadronicException & aR)
+    {
+      G4ExceptionDescription ed;
+      DumpState(track,"SampleZandA",ed); 
+      ed << " PostStepDoIt failed on element selection" << G4endl;
+      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had003", 
+		  FatalException, ed);
+    }
+  G4HadronicInteraction* hadi = 0;
+  try
+    {
+      hadi = ChooseHadronicInteraction( kineticEnergy, material, elm );
+    }
+  catch(G4HadronicException & aE)
+    {
+      G4ExceptionDescription ed;
+      ed << "Target element "<< elm->GetName()<<"  Z= " 
+	 << targNucleus->GetZ_asInt() << "  A= " 
+	 << targNucleus->GetA_asInt() << G4endl;
+      DumpState(track,"ChooseHadronicInteraction",ed);
+      ed << " No HadronicInteraction found out" << G4endl;
+      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had005", 
+		  FatalException, ed);
+    }
+
+  size_t idx = track.GetMaterialCutsCouple()->GetIndex();
+  G4double tcut = (*(G4ProductionCutsTable::GetProductionCutsTable()
+		     ->GetEnergyCutsVector(3)))[idx];
+  hadi->SetRecoilEnergyThreshold(tcut);
+
+  // Initialize the hadronic projectile from the track
+  //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
+  G4HadProjectile theProj(track);
+  if(verboseLevel>1) {
+    G4cout << "G4HadronElasticProcess::PostStepDoIt for " 
+	   << part->GetParticleName()
+	   << " in " << material->GetName() 
+	   << " Target Z= " << targNucleus->GetZ_asInt() 
+	   << " A= " << targNucleus->GetA_asInt() << G4endl; 
+  }
+
+  G4HadFinalState* result = 0;
+  try
+    {
+      result = hadi->ApplyYourself( theProj, *targNucleus);
+    }
+  catch(G4HadronicException aR)
+    {
+      G4ExceptionDescription ed;
+      ed << "Call for " << hadi->GetModelName() << G4endl;
+      ed << "Target element "<< elm->GetName()<<"  Z= " 
+	 << targNucleus->GetZ_asInt() 
+	 << "  A= " << targNucleus->GetA_asInt() << G4endl;
+      DumpState(track,"ApplyYourself",ed);
+      ed << " ApplyYourself failed" << G4endl;
+      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had006", 
+		  FatalException, ed);
+    }
+
+  // Check the result for catastrophic energy non-conservation
+  // cannot be applied because is not guranteed that recoil 
+  // nucleus is created
+  // result = CheckResult(theProj, targNucleus, result);
+
+  // directions
+  G4ThreeVector indir = track.GetMomentumDirection();
+  G4double phi = CLHEP::twopi*G4UniformRand();
+  G4ThreeVector it(0., 0., 1.);
+  G4ThreeVector outdir = result->GetMomentumChange();
+
+  if(verboseLevel>1) {
+    G4cout << "Efin= " << result->GetEnergyChange()
+	   << " de= " << result->GetLocalEnergyDeposit()
+	   << " nsec= " << result->GetNumberOfSecondaries()
+	   << " dir= " << outdir
+	   << G4endl;
+  }
+
+  // energies  
+  G4double edep = result->GetLocalEnergyDeposit();
+  G4double efinal = result->GetEnergyChange();
+  if(efinal < 0.0) { efinal = 0.0; }
+  if(edep < 0.0)   { edep = 0.0; }
+
+  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
+  //        in earlier releases; these limits have not been changed since.
+  if(efinal <= lowestEnergy) {
+    edep += efinal;
+    efinal = 0.0;
+  }
+
+  // primary change
+  theTotalResult->ProposeEnergy(efinal);
+
+  G4TrackStatus status = track.GetTrackStatus();
+  if(efinal > 0.0) {
+    outdir.rotate(phi, it);
+    outdir.rotateUz(indir);
+    theTotalResult->ProposeMomentumDirection(outdir);
+  } else {
+    if(part->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
+         { status = fStopButAlive; }
+    else { status = fStopAndKill; }
+    theTotalResult->ProposeTrackStatus(status);
+  }
+
+  //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
+
+  theTotalResult->SetNumberOfSecondaries(0);
+
+  // recoil
+  if(result->GetNumberOfSecondaries() > 0) {
+    G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
+
+    if(p->GetKineticEnergy() > tcut) {
+      theTotalResult->SetNumberOfSecondaries(1);
+      G4ThreeVector pdir = p->GetMomentumDirection();
+      // G4cout << "recoil " << pdir << G4endl;
+      //!! is not needed for models inheriting G4HadronElastic
+      pdir.rotate(phi, it);
+      pdir.rotateUz(indir);
+      // G4cout << "recoil rotated " << pdir << G4endl;
+      p->SetMomentumDirection(pdir);
+
+      // in elastic scattering time and weight are not changed
+      G4Track* t = new G4Track(p, track.GetGlobalTime(), 
+			       track.GetPosition());
+      t->SetWeight(weight);
+      t->SetTouchableHandle(track.GetTouchableHandle());
+      theTotalResult->AddSecondary(t);
+
+    } else {
+      edep += p->GetKineticEnergy();
+      delete p;
+    }
+  }
+  theTotalResult->ProposeLocalEnergyDeposit(edep);
+  theTotalResult->ProposeNonIonizingEnergyDeposit(edep);
+  result->Clear();
+
+  return theTotalResult;
 }
+
+void 
+G4HadronElasticProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
+{
+  if(!isInitialised) {
+    isInitialised = true;
+    if(G4Neutron::Neutron() == &part) { lowestEnergy = 1.e-6*eV; }
+  }
+  G4HadronicProcess::PreparePhysicsTable(part);
+}
+
+void G4HadronElasticProcess::SetLowestEnergy(G4double val)
+{
+  lowestEnergy = val;
+}
+
+void 
+G4HadronElasticProcess::SetLowestEnergyNeutron(G4double val)
+{
+  lowestEnergy = val;
+  G4HadronicDeprecate("G4HadronElasticProcess::SetLowestEnergyNeutron()");
+}
+

@@ -38,12 +38,13 @@
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Cons.hh" 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "globals.hh"
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -383,27 +384,26 @@ void Collimator60BeamLine::IortBeamLineVacuumSource()
    G4RotationMatrix rm1;               
    rm1.rotateY(phi1);
 
-  const G4double OuterRadiusVSIORT = 44.75 *mm;
-  const G4double innerRadiusVSIORT = 0.*mm;
+  const G4double outRadiusVSIORT = 44.75 *mm;
+  const G4double innRadiusVSIORT = 0.*mm;
   const G4double hightVSIORT = 1. *mm;
   const G4double startAngleVSIORT = 0.*deg;
   const G4double spanningAngleVSIORT = 360.*deg;
   const G4double XPositionVSIORT = -862.797 *mm;
     
-  solidVSIORT = new G4Tubs("VSIORT", innerRadiusVSIORT, 
-				    OuterRadiusVSIORT,
+  solidVSIORT = new G4Tubs("VSIORT", innRadiusVSIORT, 
+				    outRadiusVSIORT,
 				    hightVSIORT, 
 				    startAngleVSIORT, 
 				    spanningAngleVSIORT);
 
-  G4LogicalVolume* logicVSIORT = new G4LogicalVolume(solidVSIORT, 
+  G4LogicalVolume* logVSIORT = new G4LogicalVolume(solidVSIORT, 
 							      VSIORTMaterialIORT, "VSIORT", 0, 0, 0);
 
   physiVSIORT = new G4PVPlacement(G4Transform3D(rm1, G4ThreeVector((XPositionVSIORT),0.,0.)),
-					   "VSIORT", logicVSIORT, physicalTreatmentRoom, false, 0); 
+					   "VSIORT", logVSIORT, physicalTreatmentRoom, false, 0); 
 
-
-    logicVSIORT -> SetVisAttributes(green);
+  logVSIORT -> SetVisAttributes(green);
 
 }
 
@@ -419,29 +419,26 @@ void Collimator60BeamLine::IortBeamLineTitaniumWindows()
    G4RotationMatrix rm2;               
    rm2.rotateY(phi2);
 
-
-  const G4double OuterRadiusFTIORT = 44.75 *mm;
-  const G4double innerRadiusFTIORT = 8.5 *mm;
+  const G4double outRadiusFTIORT = 44.75 *mm;
+  const G4double innRadiusFTIORT = 8.5 *mm;
   const G4double hightFTIORT = 0.006 *mm;
   const G4double startAngleFTIORT = 0.*deg;
   const G4double spanningAngleFTIORT = 360.*deg;
   const G4double XPositionFTIORT = -861.791 *mm;
-    
-  
-  solidFTIORT = new G4Tubs("FTIORT", innerRadiusFTIORT, 
-				    OuterRadiusFTIORT,
+
+  solidFTIORT = new G4Tubs("FTIORT", innRadiusFTIORT, 
+				    outRadiusFTIORT,
 				    hightFTIORT, 
 				    startAngleFTIORT, 
 				    spanningAngleFTIORT);
 
-  G4LogicalVolume* logicFTIORT = new G4LogicalVolume(solidFTIORT, 
+  G4LogicalVolume* logFTIORT = new G4LogicalVolume(solidFTIORT, 
 							      FTIORTMaterialIORT, "FTIORT", 0, 0, 0);
 
   physiFTIORT = new G4PVPlacement(G4Transform3D(rm2, G4ThreeVector((XPositionFTIORT),0.,0.)),
-					   "FTIORT", logicFTIORT, physicalTreatmentRoom, false, 0); 
+					   "FTIORT", logFTIORT, physicalTreatmentRoom, false, 0); 
 
-
-  logicFTIORT -> SetVisAttributes(yellow);
+  logFTIORT -> SetVisAttributes(yellow);
 }
 
 void Collimator60BeamLine::IortBeamLineMonitorChambers()
@@ -463,221 +460,204 @@ void Collimator60BeamLine::IortBeamLineMonitorChambers()
   //             Superior Final Part Monitor Chambers   3      //
   // ---------------------------------------------------------------//
 
-  const G4double OuterRadiusPFS3IORT = 44.75 *mm;
-  const G4double innerRadiusPFS3IORT = 17.5 *mm;
+  const G4double outRadiusPFS3IORT = 44.75 *mm;
+  const G4double innRadiusPFS3IORT = 17.5 *mm;
   const G4double hightPFS3IORT = 3.03 *mm;
   const G4double startAnglePFS3IORT = 0.*deg;
   const G4double spanningAnglePFS3IORT = 360.*deg;
   const G4double XPositionPFS3IORT = -848.755 *mm;
-    
-  
-  solidPFS3IORT = new G4Tubs("PFS3IORT", innerRadiusPFS3IORT, 
-				    OuterRadiusPFS3IORT,
+
+  solidPFS3IORT = new G4Tubs("PFS3IORT", innRadiusPFS3IORT, 
+				    outRadiusPFS3IORT,
 				    hightPFS3IORT, 
 				    startAnglePFS3IORT, 
 				    spanningAnglePFS3IORT);
 
-  G4LogicalVolume* logicPFS3IORT = new G4LogicalVolume(solidPFS3IORT, 
+  G4LogicalVolume* logPFS3IORT = new G4LogicalVolume(solidPFS3IORT, 
 							      PFS3IORTMaterialIORT, "PFS3IORT", 0, 0, 0);
 
   physiPFS3IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionPFS3IORT),0.,0.)),
-					   "PFS3IORT", logicPFS3IORT, physicalTreatmentRoom, false, 0); 
+					   "PFS3IORT", logPFS3IORT, physicalTreatmentRoom, false, 0); 
 
-
-    logicPFS3IORT -> SetVisAttributes(white);
+  logPFS3IORT -> SetVisAttributes(white);
 
   
   // ---------------------------------------------------------------//
   //             Superior Final Part Monitor Chambers   2       //
   // ---------------------------------------------------------------//
 
-  const G4double OuterRadiusPFS2IORT = 44.75 *mm;
-  const G4double innerRadiusPFS2IORT = 10. *mm;
+  const G4double outRadiusPFS2IORT = 44.75 *mm;
+  const G4double innRadiusPFS2IORT = 10. *mm;
   const G4double hightPFS2IORT = 1.47 *mm;
   const G4double startAnglePFS2IORT = 0.*deg;
   const G4double spanningAnglePFS2IORT = 360.*deg;
   const G4double XPositionPFS2IORT = -844.255 *mm;
-    
-  
-  solidPFS2IORT = new G4Tubs("PFS2IORT", innerRadiusPFS2IORT, 
-				    OuterRadiusPFS2IORT,
+
+  solidPFS2IORT = new G4Tubs("PFS2IORT", innRadiusPFS2IORT, 
+				    outRadiusPFS2IORT,
 				    hightPFS2IORT, 
 				    startAnglePFS2IORT, 
 				    spanningAnglePFS2IORT);
 
-  G4LogicalVolume* logicPFS2IORT = new G4LogicalVolume(solidPFS2IORT, 
+  G4LogicalVolume* logPFS2IORT = new G4LogicalVolume(solidPFS2IORT, 
 							      PFS2IORTMaterialIORT, "PFS2IORT", 0, 0, 0);
 
   physiPFS2IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionPFS2IORT),0.,0.)),
-					   "PFS2IORT", logicPFS2IORT, physicalTreatmentRoom, false, 0); 
+					   "PFS2IORT", logPFS2IORT, physicalTreatmentRoom, false, 0); 
 
-
-    logicPFS2IORT -> SetVisAttributes(green);
+  logPFS2IORT -> SetVisAttributes(green);
 
   // ---------------------------------------------------------------//
   //             Superior Final Part Monitor Chambers   1       //
   // ---------------------------------------------------------------//
 
-  const G4double OuterRadiusPFS1IORT = 35. *mm;
-  const G4double innerRadiusPFS1IORT = 10. *mm;
+  const G4double outRadiusPFS1IORT = 35. *mm;
+  const G4double innRadiusPFS1IORT = 10. *mm;
   const G4double hightPFS1IORT = 0.88 *mm;
   const G4double startAnglePFS1IORT = 0.*deg;
   const G4double spanningAnglePFS1IORT = 360.*deg;
   const G4double XPositionPFS1IORT = -841.905 *mm;
-    
-  
-  solidPFS1IORT = new G4Tubs("PFS1IORT", innerRadiusPFS1IORT, 
-				    OuterRadiusPFS1IORT,
+
+  solidPFS1IORT = new G4Tubs("PFS1IORT", innRadiusPFS1IORT, 
+				    outRadiusPFS1IORT,
 				    hightPFS1IORT, 
 				    startAnglePFS1IORT, 
 				    spanningAnglePFS1IORT);
 
-  G4LogicalVolume* logicPFS1IORT = new G4LogicalVolume(solidPFS1IORT, 
+  G4LogicalVolume* logPFS1IORT = new G4LogicalVolume(solidPFS1IORT, 
 							      PFS1IORTMaterialIORT, "PFS1IORT", 0, 0, 0);
 
   physiPFS1IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionPFS1IORT),0.,0.)),
-					   "PFS1IORT", logicPFS1IORT, physicalTreatmentRoom, false, 0); 
+					   "PFS1IORT", logPFS1IORT, physicalTreatmentRoom, false, 0); 
 
-
-     logicPFS1IORT -> SetVisAttributes(green);
+  logPFS1IORT -> SetVisAttributes(green);
 
   // ------------------------------------------------//
   //           Monitor Chambers Cylinder               //
   // ------------------------------------------------//
 
-  const G4double OuterRadiusCCMIORT = 35. *mm;
-  const G4double innerRadiusCCMIORT = 10. *mm;
+  const G4double outRadiusCCMIORT = 35. *mm;
+  const G4double innRadiusCCMIORT = 10. *mm;
   const G4double hightCCMIORT = 4.0125 *mm;
   const G4double startAngleCCMIORT = 0.*deg;
   const G4double spanningAngleCCMIORT = 360.*deg;
   const G4double XPositionCCMIORT = -837.0125 *mm;
-    
-  
-  solidCCMIORT = new G4Tubs("CCMIORT", innerRadiusCCMIORT, 
-				    OuterRadiusCCMIORT,
+
+  solidCCMIORT = new G4Tubs("CCMIORT", innRadiusCCMIORT, 
+				    outRadiusCCMIORT,
 				    hightCCMIORT, 
 				    startAngleCCMIORT, 
 				    spanningAngleCCMIORT);
 
-  G4LogicalVolume* logicCCMIORT = new G4LogicalVolume(solidCCMIORT, 
+  G4LogicalVolume* logCCMIORT = new G4LogicalVolume(solidCCMIORT, 
 							      CCMIORTMaterialIORT, "CCMIORT", 0, 0, 0);
 
   physiCCMIORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionCCMIORT),0.,0.)),
-					   "CCMIORT", logicCCMIORT, physicalTreatmentRoom, false, 0); 
+					   "CCMIORT", logCCMIORT, physicalTreatmentRoom, false, 0); 
 
-
-     logicCCMIORT -> SetVisAttributes(green);
+  logCCMIORT -> SetVisAttributes(green);
 
 
   // ------------------------------------------------//
   //        Second Monitor Chamber Lamina Al 2 of 2  //
   // ------------------------------------------------//
 
-  const G4double OuterRadiusCM2_2_2IORT = 20. *mm;
-  const G4double innerRadiusCM2_2_2IORT = 0. *mm;
+  const G4double outRadiusCM2_2_2IORT = 20. *mm;
+  const G4double innRadiusCM2_2_2IORT = 0. *mm;
   const G4double hightCM2_2_2IORT = 0.025 *mm;
   const G4double startAngleCM2_2_2IORT = 0.*deg;
   const G4double spanningAngleCM2_2_2IORT = 360.*deg;
   const G4double XPositionCM2_2_2IORT = -841. *mm;
-    
-  
-  solidCM2_2_2IORT = new G4Tubs("CM2_2_2IORT", innerRadiusCM2_2_2IORT, 
-				    OuterRadiusCM2_2_2IORT,
+
+  solidCM2_2_2IORT = new G4Tubs("CM2_2_2IORT", innRadiusCM2_2_2IORT, 
+				    outRadiusCM2_2_2IORT,
 				    hightCM2_2_2IORT, 
 				    startAngleCM2_2_2IORT, 
 				    spanningAngleCM2_2_2IORT);
 
-  G4LogicalVolume* logicCM2_2_2IORT = new G4LogicalVolume(solidCM2_2_2IORT, 
+  G4LogicalVolume* logCM2_2_2IORT = new G4LogicalVolume(solidCM2_2_2IORT, 
 							      CM2_2_2IORTMaterialIORT, "CM2_2_2IORT", 0, 0, 0);
 
   physiCM2_2_2IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionCM2_2_2IORT),0.,0.)),
-					   "CM2_2_2ORT", logicCM2_2_2IORT, physicalTreatmentRoom, false, 0); 
+					   "CM2_2_2ORT", logCM2_2_2IORT, physicalTreatmentRoom, false, 0); 
 
-
-  logicCM2_2_2IORT -> SetVisAttributes(green);  
+  logCM2_2_2IORT -> SetVisAttributes(green);  
 
 
 // ------------------------------------------------//
   //        Second Monitor Chamber Lamina Al 1 of 2  //
   // ------------------------------------------------//
 
-  const G4double OuterRadiusCM2_1_2IORT = 20. *mm;
-  const G4double innerRadiusCM2_1_2IORT = 0. *mm;
+  const G4double outRadiusCM2_1_2IORT = 20. *mm;
+  const G4double innRadiusCM2_1_2IORT = 0. *mm;
   const G4double hightCM2_1_2IORT = 0.025 *mm;
   const G4double startAngleCM2_1_2IORT = 0.*deg;
   const G4double spanningAngleCM2_1_2IORT = 360.*deg;
   const G4double XPositionCM2_1_2IORT = -839. *mm;
-    
-  
-  solidCM2_1_2IORT = new G4Tubs("CM2_1_2IORT", innerRadiusCM2_1_2IORT, 
-				    OuterRadiusCM2_1_2IORT,
+
+  solidCM2_1_2IORT = new G4Tubs("CM2_1_2IORT", innRadiusCM2_1_2IORT, 
+				    outRadiusCM2_1_2IORT,
 				    hightCM2_1_2IORT, 
 				    startAngleCM2_1_2IORT, 
 				    spanningAngleCM2_1_2IORT);
 
-  G4LogicalVolume* logicCM2_1_2IORT = new G4LogicalVolume(solidCM2_1_2IORT, 
+  G4LogicalVolume* logCM2_1_2IORT = new G4LogicalVolume(solidCM2_1_2IORT, 
 							      CM2_1_2IORTMaterialIORT, "CM2_1_2IORT", 0, 0, 0);
 
   physiCM2_1_2IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionCM2_1_2IORT),0.,0.)),
-					   "CM2_1_2ORT", logicCM2_1_2IORT, physicalTreatmentRoom, false, 0); 
+					   "CM2_1_2ORT", logCM2_1_2IORT, physicalTreatmentRoom, false, 0); 
 
-
-  logicCM2_1_2IORT -> SetVisAttributes(yellow); 
+  logCM2_1_2IORT -> SetVisAttributes(yellow); 
 
   // ------------------------------------------------//
   //        First Monitor Chamber Lamina Al 2 of 2    //
   // ------------------------------------------------//
 
-  const G4double OuterRadiusCM1_2_2IORT = 20. *mm;
-  const G4double innerRadiusCM1_2_2IORT = 0. *mm;
+  const G4double outRadiusCM1_2_2IORT = 20. *mm;
+  const G4double innRadiusCM1_2_2IORT = 0. *mm;
   const G4double hightCM1_2_2IORT = 0.025 *mm;
   const G4double startAngleCM1_2_2IORT = 0.*deg;
   const G4double spanningAngleCM1_2_2IORT = 360.*deg;
   const G4double XPositionCM1_2_2IORT = -837. *mm;
-    
-  
-  solidCM1_2_2IORT = new G4Tubs("CM1_2_2IORT", innerRadiusCM1_2_2IORT, 
-				    OuterRadiusCM1_2_2IORT,
+
+  solidCM1_2_2IORT = new G4Tubs("CM1_2_2IORT", innRadiusCM1_2_2IORT, 
+				    outRadiusCM1_2_2IORT,
 				    hightCM1_2_2IORT, 
 				    startAngleCM1_2_2IORT, 
 				    spanningAngleCM1_2_2IORT);
 
-  G4LogicalVolume* logicCM1_2_2IORT = new G4LogicalVolume(solidCM1_2_2IORT, 
+  G4LogicalVolume* logCM1_2_2IORT = new G4LogicalVolume(solidCM1_2_2IORT, 
 							  CM1_2_2IORTMaterialIORT, "CM1_2_2IORT", 0, 0, 0);
 
   physiCM1_2_2IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionCM1_2_2IORT),0.,0.)),
-					   "CM1_2_2ORT", logicCM1_2_2IORT, physicalTreatmentRoom, false, 0); 
+					   "CM1_2_2ORT", logCM1_2_2IORT, physicalTreatmentRoom, false, 0); 
 
-
-   logicCM1_2_2IORT -> SetVisAttributes(yellow);
+  logCM1_2_2IORT -> SetVisAttributes(yellow);
   
   // ------------------------------------------------//
   //        First Monitor Chamber Lamina Al 1 of 2         //
   // ------------------------------------------------//
 
-  const G4double OuterRadiusCM1_1_2IORT = 20. *mm;
-  const G4double innerRadiusCM1_1_2IORT = 0. *mm;
+  const G4double outRadiusCM1_1_2IORT = 20. *mm;
+  const G4double innRadiusCM1_1_2IORT = 0. *mm;
   const G4double hightCM1_1_2IORT = 0.025 *mm;
   const G4double startAngleCM1_1_2IORT = 0.*deg;
   const G4double spanningAngleCM1_1_2IORT = 360.*deg;
   const G4double XPositionCM1_1_2IORT = -835. *mm;
-  
-  
 
-  solidCM1_1_2IORT = new G4Tubs("CM1_1_2IORT", innerRadiusCM1_1_2IORT, 
-				    OuterRadiusCM1_1_2IORT,
+  solidCM1_1_2IORT = new G4Tubs("CM1_1_2IORT", innRadiusCM1_1_2IORT, 
+				    outRadiusCM1_1_2IORT,
 				    hightCM1_1_2IORT, 
 				    startAngleCM1_1_2IORT, 
 				    spanningAngleCM1_1_2IORT);
 
-  G4LogicalVolume* logicCM1_1_2IORT = new G4LogicalVolume(solidCM1_1_2IORT, 
+  G4LogicalVolume* logCM1_1_2IORT = new G4LogicalVolume(solidCM1_1_2IORT, 
 							      CM1_1_2IORTMaterialIORT, "CM1_1_2IORT", 0, 0, 0);
 
   physiCM1_1_2IORT = new G4PVPlacement(G4Transform3D(rm3, G4ThreeVector((XPositionCM1_1_2IORT),0.,0.)),
-					   "CM1_1_2ORT", logicCM1_1_2IORT, physicalTreatmentRoom, false, 0); 
+					   "CM1_1_2ORT", logCM1_1_2IORT, physicalTreatmentRoom, false, 0); 
 
-
-      logicCM1_1_2IORT -> SetVisAttributes(yellow);
+  logCM1_1_2IORT -> SetVisAttributes(yellow);
 }
 
 void Collimator60BeamLine::IortBeamLineBlocks()
@@ -699,111 +679,104 @@ void Collimator60BeamLine::IortBeamLineBlocks()
   //        Block 4       //
   // ------------------------------------------------//
 
-  const G4double OuterRadiusBlocco20mmIORT = 36.5 *mm;
-  const G4double innerRadiusBlocco20mmIORT = 10. *mm;
+  const G4double outRadiusBlocco20mmIORT = 36.5 *mm;
+  const G4double innRadiusBlocco20mmIORT = 10. *mm;
   const G4double hightBlocco20mmIORT = 3. *mm;
   const G4double startAngleBlocco20mmIORT = 0.*deg;
   const G4double spanningAngleBlocco20mmIORT = 360.*deg;
   const G4double XPositionBlocco20mmIORT = -830. *mm;
-    
-  
-  solidBlocco20mmIORT = new G4Tubs("Blocco20mmIORT", innerRadiusBlocco20mmIORT, 
-				    OuterRadiusBlocco20mmIORT,
+
+  solidBlocco20mmIORT = new G4Tubs("Blocco20mmIORT", innRadiusBlocco20mmIORT, 
+				    outRadiusBlocco20mmIORT,
 				    hightBlocco20mmIORT, 
 				    startAngleBlocco20mmIORT, 
 				    spanningAngleBlocco20mmIORT);
 
-  G4LogicalVolume* logicBlocco20mmIORT = new G4LogicalVolume(solidBlocco20mmIORT, 
+  G4LogicalVolume* logBlocco20mmIORT = new G4LogicalVolume(solidBlocco20mmIORT, 
 							      Blocco20mmIORTMaterialIORT, "Blocco20mmIORT", 0, 0, 0);
 
   physiBlocco20mmIORT = new G4PVPlacement(G4Transform3D(rm4, G4ThreeVector((XPositionBlocco20mmIORT),0.,0.)),
-					   "Blocco20mmORT", logicBlocco20mmIORT, physicalTreatmentRoom, false, 0); 
+					   "Blocco20mmORT", logBlocco20mmIORT, physicalTreatmentRoom, false, 0); 
 
-
-    logicBlocco20mmIORT -> SetVisAttributes(green);
+  logBlocco20mmIORT -> SetVisAttributes(green);
 
 
   // -----------------------//
   //        Block 3        //
   // -----------------------//
 
-  const G4double OuterRadiusBlocco3IORT = 36.5 *mm;
-  const G4double innerRadiusBlocco3IORT = 15. *mm;
+  const G4double outRadiusBlocco3IORT = 36.5 *mm;
+  const G4double innRadiusBlocco3IORT = 15. *mm;
   const G4double hightBlocco3IORT = 3.5 *mm;
   const G4double startAngleBlocco3IORT = 0.*deg;
   const G4double spanningAngleBlocco3IORT = 360.*deg;
   const G4double XPositionBlocco3IORT = -823.5 *mm;
     
   
-  solidBlocco3IORT = new G4Tubs("Blocco3IORT", innerRadiusBlocco3IORT, 
-				    OuterRadiusBlocco3IORT,
+  solidBlocco3IORT = new G4Tubs("Blocco3IORT", innRadiusBlocco3IORT, 
+				    outRadiusBlocco3IORT,
 				    hightBlocco3IORT, 
 				    startAngleBlocco3IORT, 
 				    spanningAngleBlocco3IORT);
 
-  G4LogicalVolume* logicBlocco3IORT = new G4LogicalVolume(solidBlocco3IORT, 
+  G4LogicalVolume* logBlocco3IORT = new G4LogicalVolume(solidBlocco3IORT, 
 							      Blocco3IORTMaterialIORT, "Blocco3IORT", 0, 0, 0);
 
   physiBlocco3IORT = new G4PVPlacement(G4Transform3D(rm4, G4ThreeVector((XPositionBlocco3IORT),0.,0.)),
-					   "Blocco3ORT", logicBlocco3IORT, physicalTreatmentRoom, false, 0); 
+					   "Blocco3ORT", logBlocco3IORT, physicalTreatmentRoom, false, 0); 
 
-
-   logicBlocco3IORT -> SetVisAttributes(yellow);
+  logBlocco3IORT -> SetVisAttributes(yellow);
 
  // -----------------------//
   //        Block 2        //
   // -----------------------//
 
-  const G4double OuterRadiusBlocco2IORT = 41.5 *mm;
-  const G4double innerRadiusBlocco2IORT = 15. *mm;
+  const G4double outRadiusBlocco2IORT = 41.5 *mm;
+  const G4double innRadiusBlocco2IORT = 15. *mm;
   const G4double hightBlocco2IORT = 8. *mm;
   const G4double startAngleBlocco2IORT = 0.*deg;
   const G4double spanningAngleBlocco2IORT = 360.*deg;
   const G4double XPositionBlocco2IORT = -812. *mm;
     
   
-  solidBlocco2IORT = new G4Tubs("Blocco2IORT", innerRadiusBlocco2IORT, 
-				    OuterRadiusBlocco2IORT,
+  solidBlocco2IORT = new G4Tubs("Blocco2IORT", innRadiusBlocco2IORT, 
+				    outRadiusBlocco2IORT,
 				    hightBlocco2IORT, 
 				    startAngleBlocco2IORT, 
 				    spanningAngleBlocco2IORT);
 
-  G4LogicalVolume* logicBlocco2IORT = new G4LogicalVolume(solidBlocco2IORT, 
+  G4LogicalVolume* logBlocco2IORT = new G4LogicalVolume(solidBlocco2IORT, 
 							      Blocco2IORTMaterialIORT, "Blocco2IORT", 0, 0, 0);
 
   physiBlocco2IORT = new G4PVPlacement(G4Transform3D(rm4, G4ThreeVector((XPositionBlocco2IORT),0.,0.)),
-					   "Blocco2IORT", logicBlocco2IORT, physicalTreatmentRoom, false, 0); 
+					   "Blocco2IORT", logBlocco2IORT, physicalTreatmentRoom, false, 0); 
 
-
-   logicBlocco2IORT -> SetVisAttributes(red);
+  logBlocco2IORT -> SetVisAttributes(red);
 
   // ----------------------- //
   //       Block 1          //
   // ----------------------- //
 
-  const G4double OuterRadiusBlocco1IORT = 52.0 *mm;
-  const G4double innerRadiusBlocco1IORT = 15. *mm;
+  const G4double outRadiusBlocco1IORT = 52.0 *mm;
+  const G4double innRadiusBlocco1IORT = 15. *mm;
   const G4double hightBlocco1IORT = 8.5 *mm;
   const G4double startAngleBlocco1IORT = 0.*deg;
   const G4double spanningAngleBlocco1IORT = 360.*deg;
   const G4double XPositionBlocco1IORT = -795.5*mm;
-    
-  
-  solidBlocco1IORT = new G4Tubs("Blocco1IORT", innerRadiusBlocco1IORT, 
-				    OuterRadiusBlocco1IORT,
+
+  solidBlocco1IORT = new G4Tubs("Blocco1IORT", innRadiusBlocco1IORT, 
+				    outRadiusBlocco1IORT,
 				    hightBlocco1IORT, 
 				    startAngleBlocco1IORT, 
 				    spanningAngleBlocco1IORT);
 
-  G4LogicalVolume* logicBlocco1IORT = new G4LogicalVolume(solidBlocco1IORT, 
+  G4LogicalVolume* logBlocco1IORT = new G4LogicalVolume(solidBlocco1IORT, 
 							      Blocco1IORTMaterialIORT, "Blocco1IORT", 0, 0, 0);
 
   physiBlocco1IORT = new G4PVPlacement(G4Transform3D(rm4, G4ThreeVector((XPositionBlocco1IORT),0.,0.)),
-					   "Blocco1IORT", logicBlocco1IORT, physicalTreatmentRoom, false, 0); 
+					   "Blocco1IORT", logBlocco1IORT, physicalTreatmentRoom, false, 0); 
 
-
-    logicBlocco1IORT -> SetVisAttributes(white);
- 
+  logBlocco1IORT -> SetVisAttributes(white);
 }
 
 void Collimator60BeamLine::IortBeamLineJunctions()
@@ -815,59 +788,56 @@ void Collimator60BeamLine::IortBeamLineJunctions()
             
    G4RotationMatrix rm5;               
    rm5.rotateY(phi5);
-// --------------------------------- //
+
+  // --------------------------------- //
   // Junction 5 FINAL COLLIMATOR IORT //
   // --------------------------------- //
 
-  const G4double OuterRadiusGiunz5FinalCollIORT = 48.25 *mm;
-  const G4double innerRadiusGiunz5FinalCollIORT = 13.75 *mm;
+  const G4double outRadiusGiunz5FinalCollIORT = 48.25 *mm;
+  const G4double innRadiusGiunz5FinalCollIORT = 13.75 *mm;
   const G4double hightGiunz5FinalCollIORT = 3.5 *mm;
   const G4double startAngleGiunz5FinalCollIORT = 0.*deg;
   const G4double spanningAngleGiunz5FinalCollIORT = 360.*deg;
   const G4double Giunz5FinalCollXPositionIORT = -783.5 *mm;
-    
-  
-   
-  solidGiunz5FinalCollIORT = new G4Tubs("Giunz5FinalCollIORT", innerRadiusGiunz5FinalCollIORT, 
-				    OuterRadiusGiunz5FinalCollIORT,
+
+  solidGiunz5FinalCollIORT = new G4Tubs("Giunz5FinalCollIORT", innRadiusGiunz5FinalCollIORT, 
+				    outRadiusGiunz5FinalCollIORT,
 				    hightGiunz5FinalCollIORT, 
 				    startAngleGiunz5FinalCollIORT, 
 				    spanningAngleGiunz5FinalCollIORT);
 
-  G4LogicalVolume* logicGiunz5FinalCollIORT = new G4LogicalVolume(solidGiunz5FinalCollIORT, 
+  G4LogicalVolume* logGiunz5FinalCollIORT = new G4LogicalVolume(solidGiunz5FinalCollIORT, 
 							      Giunz5FinalCollMaterialIORT, "Giunz5FinalCollIORT", 0, 0, 0);
 
   physiGiunz5FinalCollIORT = new G4PVPlacement(G4Transform3D(rm5, G4ThreeVector((Giunz5FinalCollXPositionIORT),0.,0.)),
-					   "Giunz5FinalCollIORT", logicGiunz5FinalCollIORT, physicalTreatmentRoom, false, 0); 
+					   "Giunz5FinalCollIORT", logGiunz5FinalCollIORT, physicalTreatmentRoom, false, 0); 
 
-    logicGiunz5FinalCollIORT -> SetVisAttributes(yellow);
+  logGiunz5FinalCollIORT -> SetVisAttributes(yellow);
 
 // --------------------------------- //
   // Junction 4 FINAL COLLIMATOR IORT //
   // --------------------------------- //
 
-  const G4double OuterRadiusGiunz4FinalCollIORT = 42. *mm;
-  const G4double innerRadiusGiunz4FinalCollIORT = 13.75 *mm;
+  const G4double outRadiusGiunz4FinalCollIORT = 42. *mm;
+  const G4double innRadiusGiunz4FinalCollIORT = 13.75 *mm;
   const G4double hightGiunz4FinalCollIORT = 8.5 *mm;
   const G4double startAngleGiunz4FinalCollIORT = 0.*deg;
   const G4double spanningAngleGiunz4FinalCollIORT = 360.*deg;
   const G4double Giunz4FinalCollXPositionIORT = -771.5 *mm;
-    
- 
-   
-  solidGiunz4FinalCollIORT = new G4Tubs("Giunz4FinalCollIORT", innerRadiusGiunz4FinalCollIORT, 
-				    OuterRadiusGiunz4FinalCollIORT,
+
+  solidGiunz4FinalCollIORT = new G4Tubs("Giunz4FinalCollIORT", innRadiusGiunz4FinalCollIORT, 
+				    outRadiusGiunz4FinalCollIORT,
 				    hightGiunz4FinalCollIORT, 
 				    startAngleGiunz4FinalCollIORT, 
 				    spanningAngleGiunz4FinalCollIORT);
 
-  G4LogicalVolume* logicGiunz4FinalCollIORT = new G4LogicalVolume(solidGiunz4FinalCollIORT, 
+  G4LogicalVolume* logGiunz4FinalCollIORT = new G4LogicalVolume(solidGiunz4FinalCollIORT, 
 							      Giunz4FinalCollMaterialIORT, "Giunz4FinalCollIORT", 0, 0, 0);
 
   physiGiunz4FinalCollIORT = new G4PVPlacement(G4Transform3D(rm5, G4ThreeVector((Giunz4FinalCollXPositionIORT),0.,0.)),
-					   "Giunz4FinalCollIORT", logicGiunz4FinalCollIORT, physicalTreatmentRoom, false, 0); 
+					   "Giunz4FinalCollIORT", logGiunz4FinalCollIORT, physicalTreatmentRoom, false, 0); 
 
-    logicGiunz4FinalCollIORT -> SetVisAttributes(blue); 
+  logGiunz4FinalCollIORT -> SetVisAttributes(blue); 
 
 
   
@@ -875,16 +845,16 @@ void Collimator60BeamLine::IortBeamLineJunctions()
   // Junction 3 FINAL COLLIMATOR IORT //
   // --------------------------------- //
    
-  const G4double OuterRadiusGiunz3FinalCollIORT = 42. *mm;
-  const G4double innerRadiusGiunz3FinalCollIORT = 0. *mm;
+  const G4double outRadiusGiunz3FinalCollIORT = 42. *mm;
+  const G4double innRadiusGiunz3FinalCollIORT = 0. *mm;
   const G4double hightGiunz3FinalCollIORT = 4.25 *mm;
   const G4double startAngleGiunz3FinalCollIORT = 0.*deg;
   const G4double spanningAngleGiunz3FinalCollIORT = 360.*deg;
   const G4double Giunz3FinalCollXPositionIORT = -758.75 *mm;
     
      
-  solidGiunz3FinalCollIORT = new G4Tubs("Giunz3FinalCollIORT", innerRadiusGiunz3FinalCollIORT, 
-				    OuterRadiusGiunz3FinalCollIORT,
+  solidGiunz3FinalCollIORT = new G4Tubs("Giunz3FinalCollIORT", innRadiusGiunz3FinalCollIORT, 
+				    outRadiusGiunz3FinalCollIORT,
 				    hightGiunz3FinalCollIORT, 
 				    startAngleGiunz3FinalCollIORT, 
 				    spanningAngleGiunz3FinalCollIORT);
@@ -895,7 +865,7 @@ void Collimator60BeamLine::IortBeamLineJunctions()
   physiGiunz3FinalCollIORT = new G4PVPlacement(G4Transform3D(rm5, G4ThreeVector((Giunz3FinalCollXPositionIORT),0.,0.)),
 					   "Giunz3FinalCollIORT", logicsolidGiunz3FinalCollIORT, physicalTreatmentRoom, false, 0); 
 
- logicsolidGiunz3FinalCollIORT -> SetVisAttributes(yellow);
+  logicsolidGiunz3FinalCollIORT -> SetVisAttributes(yellow);
  //  logicsolidGiunz3FinalCollIORT -> SetVisAttributes (G4VisAttributes::Invisible);
 
 
@@ -920,56 +890,51 @@ void Collimator60BeamLine::IortBeamLineJunctions()
   // Junction 2 FINAL COLLIMATOR IORT //
   // --------------------------------- //
 
-  const G4double OuterRadiusGiunz2FinalCollIORT = 42. *mm;
-  const G4double innerRadiusGiunz2FinalCollIORT = 22.25 *mm;
+  const G4double outRadiusGiunz2FinalCollIORT = 42. *mm;
+  const G4double innRadiusGiunz2FinalCollIORT = 22.25 *mm;
   const G4double hightGiunz2FinalCollIORT = 5.75 *mm;
   const G4double startAngleGiunz2FinalCollIORT = 0.*deg;
   const G4double spanningAngleGiunz2FinalCollIORT = 360.*deg;
   const G4double Giunz2FinalCollXPositionIORT = -748.75 *mm;
-    
-  
-   
-  solidGiunz2FinalCollIORT = new G4Tubs("Giunz2FinalCollIORT", innerRadiusGiunz2FinalCollIORT, 
-				    OuterRadiusGiunz2FinalCollIORT,
+
+  solidGiunz2FinalCollIORT = new G4Tubs("Giunz2FinalCollIORT", innRadiusGiunz2FinalCollIORT, 
+				    outRadiusGiunz2FinalCollIORT,
 				    hightGiunz2FinalCollIORT, 
 				    startAngleGiunz2FinalCollIORT, 
 				    spanningAngleGiunz2FinalCollIORT);
 
-  G4LogicalVolume* logicGiunz2FinalCollIORT = new G4LogicalVolume(solidGiunz2FinalCollIORT, 
+  G4LogicalVolume* logGiunz2FinalCollIORT = new G4LogicalVolume(solidGiunz2FinalCollIORT, 
 							      Giunz2FinalCollMaterialIORT, "Giunz2FinalCollIORT", 0, 0, 0);
 
   physiGiunz2FinalCollIORT = new G4PVPlacement(G4Transform3D(rm5, G4ThreeVector((Giunz2FinalCollXPositionIORT),0.,0.)),
-					   "Giunz2FinalCollIORT", logicGiunz2FinalCollIORT, physicalTreatmentRoom, false, 0); 
+					   "Giunz2FinalCollIORT", logGiunz2FinalCollIORT, physicalTreatmentRoom, false, 0); 
 
-   logicGiunz2FinalCollIORT -> SetVisAttributes(red); 
+  logGiunz2FinalCollIORT -> SetVisAttributes(red); 
  
 // --------------------------------- //
   // Junction 1 FINAL COLLIMATOR IORT //
   // --------------------------------- //
 
-  const G4double OuterRadiusGiunz1FinalCollIORT = 45. *mm;
-  const G4double innerRadiusGiunz1FinalCollIORT = 22.25 *mm;
+  const G4double outRadiusGiunz1FinalCollIORT = 45. *mm;
+  const G4double innRadiusGiunz1FinalCollIORT = 22.25 *mm;
   const G4double hightGiunz1FinalCollIORT = 10. *mm;
   const G4double startAngleGiunz1FinalCollIORT = 0.*deg;
   const G4double spanningAngleGiunz1FinalCollIORT = 360.*deg;
   const G4double Giunz1FinalCollXPositionIORT = -733.*mm;
-    
-  
-   
-  solidGiunz1FinalCollIORT = new G4Tubs("Giunz1FinalCollIORT", innerRadiusGiunz1FinalCollIORT, 
-				    OuterRadiusGiunz1FinalCollIORT,
+
+  solidGiunz1FinalCollIORT = new G4Tubs("Giunz1FinalCollIORT", innRadiusGiunz1FinalCollIORT, 
+				    outRadiusGiunz1FinalCollIORT,
 				    hightGiunz1FinalCollIORT, 
 				    startAngleGiunz1FinalCollIORT, 
 				    spanningAngleGiunz1FinalCollIORT);
 
-  G4LogicalVolume* logicGiunz1FinalCollIORT = new G4LogicalVolume(solidGiunz1FinalCollIORT, 
+  G4LogicalVolume* logGiunz1FinalCollIORT = new G4LogicalVolume(solidGiunz1FinalCollIORT, 
 							      Giunz1FinalCollMaterialIORT, "Giunz1FinalCollIORT", 0, 0, 0);
 
   physiGiunz1FinalCollIORT = new G4PVPlacement(G4Transform3D(rm5, G4ThreeVector((Giunz1FinalCollXPositionIORT),0.,0.)),
-					   "Giunz1FinalCollIORT", logicGiunz1FinalCollIORT, physicalTreatmentRoom, false, 0); 
+					   "Giunz1FinalCollIORT", logGiunz1FinalCollIORT, physicalTreatmentRoom, false, 0); 
 
-   logicGiunz1FinalCollIORT -> SetVisAttributes(gray); 
-
+  logGiunz1FinalCollIORT -> SetVisAttributes(gray);
 }
 
 void Collimator60BeamLine::IortBeamLineFinalCollimator()
@@ -1001,15 +966,14 @@ void Collimator60BeamLine::IortBeamLineFinalCollimator()
 				    startAngleFinalCollimatorIORT, 
 				    spanningAngleFinalCollimatorIORT);
 
-  G4LogicalVolume* logicFinalCollimatorIORT = new G4LogicalVolume(solidFinalCollimatorIORT, 
+  G4LogicalVolume* logFinalCollimatorIORT = new G4LogicalVolume(solidFinalCollimatorIORT, 
 							      finalCollimatorMaterialIORT, "FinalCollimatorIORT", 0, 0, 0);
 
   physiFinalCollimatorIORT = new G4PVPlacement(G4Transform3D(rm6, G4ThreeVector((finalCollimatorXPositionIORT),0.,0.)),
-					   "FinalCollimatorIORT", logicFinalCollimatorIORT, physicalTreatmentRoom, false, 0); 
+					   "FinalCollimatorIORT", logFinalCollimatorIORT, physicalTreatmentRoom, false, 0); 
 
-  //  logicFinalCollimatorIORT -> SetVisAttributes(G4VisAttributes::Invisible); 
-   logicFinalCollimatorIORT -> SetVisAttributes(blue); 
-
+  //  logFinalCollimatorIORT -> SetVisAttributes(G4VisAttributes::Invisible); 
+  logFinalCollimatorIORT -> SetVisAttributes(blue);
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.21 2010-11-11 01:13:42 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.
@@ -47,6 +46,7 @@
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "G4FRConst.hh"
 #include "G4DAWNFILE.hh"
@@ -190,7 +190,7 @@ void G4DAWNFILEViewer::ShowView( void )
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
 			G4cout << "  is generated." << G4endl;
 			G4cout << GetG4PrimViewerInvocation() << G4endl;
-			system( GetG4PrimViewerInvocation() );
+			(void) system( GetG4PrimViewerInvocation() );
 
 		} else { // no view, i.e., only file generation
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ; 
@@ -214,23 +214,24 @@ void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( std::ostream& out )
 
 	G4int  style = fVP.GetDrawingStyle();
 
-	enum {	FR_WIREFRAME = 1, FR_WF_STORED = 2, FR_HID =3  , \
-		FR_HID2      = 4, FR_HID3      = 5, FR_DRAWING_MODE_END = 6 };
+	enum {	FR_WIREFRAME_STYLE = 1, FR_WF_STORED_STYLE = 2,
+		FR_HID_STYLE       = 3,	FR_HID2_STYLE      = 4,
+		FR_HID3_STYLE      = 5, FR_DRAWING_MODE_END_STYLE = 6 };
 
 	switch( style )
 	{
 	  case G4ViewParameters::wireframe: 
-		out <<  FR_WIREFRAME << G4endl;
+		out <<  FR_WIREFRAME_STYLE << G4endl;
 		break;
 	  case G4ViewParameters::hlr:
-		out <<  FR_HID2      << G4endl; // LINE
+		out <<  FR_HID2_STYLE      << G4endl; // LINE
 		break;
 	  case G4ViewParameters::hsr:
 	  case G4ViewParameters::hlhsr:
-		out <<  FR_HID       << G4endl; // SURFACE
+		out <<  FR_HID_STYLE       << G4endl; // SURFACE
 		break;
 	  default:
-		out <<  FR_WIREFRAME << G4endl;
+		out <<  FR_WIREFRAME_STYLE << G4endl;
 		break;
 	}
 

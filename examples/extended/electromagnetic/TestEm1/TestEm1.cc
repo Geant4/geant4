@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/TestEm1.cc
+/// \brief Main program of the electromagnetic/TestEm1 example
 //
-// $Id: TestEm1.cc,v 1.16 2010-04-06 11:11:24 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -43,7 +45,7 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "HistoManager.hh"
+#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -72,18 +74,17 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList(det));
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
- 
-  HistoManager*  histo = new HistoManager();
       
   // set user action classes
   RunAction*   run;
   EventAction* event;
   
-  runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
-  runManager->SetUserAction(event = new EventAction);
-  runManager->SetUserAction(new TrackingAction(prim,run,histo));
-  runManager->SetUserAction(new SteppingAction(run,event,histo));
-   
+  runManager->SetUserAction(run = new RunAction(det,prim)); 
+  runManager->SetUserAction(event = new EventAction());
+  runManager->SetUserAction(new TrackingAction(prim,run));
+  runManager->SetUserAction(new SteppingAction(run,event));
+  runManager->SetUserAction(new StackingAction());
+     
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -114,7 +115,6 @@ int main(int argc,char** argv) {
 
   // job termination 
   //
-  delete histo;  
   delete runManager;
 
   return 0;

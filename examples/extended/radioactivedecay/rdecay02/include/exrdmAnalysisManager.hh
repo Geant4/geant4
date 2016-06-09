@@ -23,6 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmAnalysisManager.hh
+/// \brief Definition of the exrdmAnalysisManager class
+//
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef exrdmAnalysisManager_h
 #define exrdmAnalysisManager_h 1
 
@@ -40,13 +48,11 @@
 //----------------------------------------------------------------------------
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "globals.hh"
 #include "exrdmEnergyDeposition.hh"
 #include <vector>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class exrdmHisto;
 
@@ -56,8 +62,8 @@ class exrdmAnalysisManager
 public:
   // With description
 
-  static exrdmAnalysisManager* getInstance();
-  static void dispose();
+  static exrdmAnalysisManager* GetInstance();
+  static void Dispose();
 
 private:
 
@@ -66,7 +72,7 @@ private:
 
 public: // Without description
 
-  void bookHisto();
+  void BookHisto();
 
   void BeginOfRun();
   void EndOfRun(G4int);
@@ -77,60 +83,55 @@ public: // Without description
   void AddParticle(G4double, G4double, G4double, G4double);
   void AddIsotope(G4double, G4double, G4double);
   void AddEnergy(G4double, G4double, G4double);
+  void AddDecayProduct(G4double pid,G4int Z, G4int A,
+                             G4double energy, G4double time,G4double weight);
 
-  void SetVerbose(G4int val) {verbose = val;};
-  G4int GetVerbose() const {return verbose;};
+  void SetVerbose(G4int val) {fVerbose = val;};
+  G4int GetVerbose() const {return fVerbose;};
 
-  void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
-  G4int FirstEventToDebug() const {return nEvt1;};
-  void SetLastEventToDebug(G4int val) {nEvt2 = val;};
-  G4int LastEventToDebug() const {return nEvt2;};
+  void SetFirstEventToDebug(G4int val) {fNEvt1 = val;};
+  G4int FirstEventToDebug() const {return fNEvt1;};
+  void SetLastEventToDebug(G4int val) {fNEvt2 = val;};
+  G4int LastEventToDebug() const {return fNEvt2;};
 
-  void SetMaxEnergyforHisto(G4double val) {histEMax = val;};
-  G4double  GetMaxEnergyforHisto() const {return histEMax;};
-  void SetMinEnergyforHisto(G4double val) {histEMin = val;};
-  G4double  GetMinEnergyforHisto() const {return histEMin;};
-  void SetNumBinforHisto(G4int val) {histNBin = val;};
-  G4int  GeNumBinforHisto() const {return histNBin;};
+  void SetMaxEnergyforHisto(G4double val) {fHistEMax = val;};
+  G4double  GetMaxEnergyforHisto() const {return fHistEMax;};
+  void SetMinEnergyforHisto(G4double val) {fHistEMin = val;};
+  G4double  GetMinEnergyforHisto() const {return fHistEMin;};
+  void SetNumBinforHisto(G4int val) {fHistNBin = val;};
+  G4int  GeNumBinforHisto() const {return fHistNBin;};
 
-  void SetThresholdEnergyforTarget(G4double val) {targetThresE = val;};
-  G4double GetThresholdEnergyforTarget () const {return targetThresE;};
-  void SetThresholdEnergyforDetector(G4double val) {detectorThresE = val;};
-  G4double GetThresholdEnergyforDetector () const {return detectorThresE;};
-  void SetPulseWidth(G4double val) {pulseWidth = val;};
-  G4double GetPulseWidth () const {return pulseWidth;};
+  void SetThresholdEnergyforTarget(G4double val) {fTargetThresE = val;};
+  G4double GetThresholdEnergyforTarget () const {return fTargetThresE;};
+  void SetThresholdEnergyforDetector(G4double val) {fDetectorThresE = val;};
+  G4double GetThresholdEnergyforDetector () const {return fDetectorThresE;};
+  void SetPulseWidth(G4double val) {fPulseWidth = val;};
+  G4double GetPulseWidth () const {return fPulseWidth;};
 
 private:
 
   // MEMBERS
   static exrdmAnalysisManager* fManager;
 
-  G4int verbose;
-  G4int nEvt1;
-  G4int nEvt2; 
+  G4int fVerbose;
+  G4int fNEvt1;
+  G4int fNEvt2; 
 
-  G4double histEMax;
-  G4double histEMin;
-  G4int histNBin;
-  /*
-  G4bool histTarget;
-  G4bool histDetector;
-  G4bool histCoin;
-  G4bool histAntiCD;
-  G4bool histAntiCT;
-  G4bool histEmission;
-  G4bool ntupleEmission;
-  G4bool ntupleIsotope;
-  */
-  G4double targetThresE;
-  G4double detectorThresE;
-  G4double pulseWidth;
+  G4double fHistEMax;
+  G4double fHistEMin;
+  G4int fHistNBin;
+
+  G4double fTargetThresE;
+  G4double fDetectorThresE;
+  G4double fPulseWidth;
 
   // energy depositions for an event
-  std::vector <exrdmEnergyDeposition> Edepo;
+  std::vector <exrdmEnergyDeposition> fEdepo;
   //
-  exrdmHisto*  histo;
+  exrdmHisto*  fHisto;
   
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

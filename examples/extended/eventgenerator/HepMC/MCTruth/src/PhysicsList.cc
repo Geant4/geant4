@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/MCTruth/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc,v 1.2 2010-12-02 15:37:20 witoldp Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -41,6 +43,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
 {

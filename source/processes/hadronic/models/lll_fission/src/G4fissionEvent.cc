@@ -52,7 +52,7 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4fissionEvent.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
+// $Id$
 //
 
 #include "G4fissionEvent.hh"
@@ -63,15 +63,19 @@ G4int G4fissionEvent::nudistoption=3;
 G4int G4fissionEvent::Cf252ndistoption=0;
 G4int G4fissionEvent::Cf252nengoption=0;
 
-G4fissionEvent::G4fissionEvent(G4int isotope, G4double time, G4double nubar, G4double eng) {
+G4fissionEvent::G4fissionEvent(G4int isotope, G4double time,
+                               G4double nubar, G4double eng)
+ :neutronNu(0), neutronEnergies(0), neutronVelocities(0), neutronDircosu(0),
+  neutronDircosv(), neutronDircosw(), neutronAges(0),
+  photonNu(0), photonEnergies(0), photonVelocities(0), photonDircosu(0),
+  photonDircosv(0), photonDircosw(0), photonAges(0)
+{
    /*
     * Constructs a fission event with neutronNu neutrons and photonNu
     * photons.
     */
    G4int i;
 
-   neutronNu = 0;
-   photonNu = 0;
    if (nubar == -1.) {
       /* spontaneous fission */
       neutronNu = G4SmpSpNuDistData(isotope, Cf252ndistoption);

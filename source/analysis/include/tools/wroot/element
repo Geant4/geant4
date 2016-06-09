@@ -6,6 +6,7 @@
 
 #include "buffer"
 #include "named"
+#include "../snpf"
 
 namespace tools {
 namespace wroot {
@@ -68,11 +69,8 @@ public:
 public:
   virtual void out(std::ostream& aOut) const {
     char s[128];
-#ifdef WIN32
-    _snprintf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",fTypeName.c_str(),fullName().c_str(),fOffset,fType,fTitle.c_str());
-#else
-    ::snprintf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",fTypeName.c_str(),fullName().c_str(),fOffset,fType,fTitle.c_str());
-#endif
+    snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",
+      fTypeName.c_str(),fullName().c_str(),fOffset,fType,fTitle.c_str());
     aOut << s << std::endl;
   }
 public:
@@ -134,11 +132,7 @@ public:
     std::string s = fName;
     for (int i=0;i<fArrayDim;i++) {
       char cdim[32];
-#ifdef WIN32
-      _snprintf(cdim,sizeof(cdim),"[%d]",fMaxIndex[i]);
-#else
-      ::snprintf(cdim,sizeof(cdim),"[%d]",fMaxIndex[i]);
-#endif
+      snpf(cdim,sizeof(cdim),"[%d]",fMaxIndex[i]);
       s += cdim;
     }
     return s;

@@ -24,18 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.12 2006-06-29 20:48:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
 #include <cmath>
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEDis.hh"
 
 //     #include <nag.h> @
@@ -59,9 +60,9 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   {
     theFractionalProb.Init(aDataFile);
     aDataFile>> theAvarageKineticPerNucleonForLightFragments;
-    theAvarageKineticPerNucleonForLightFragments*=eV;
+    theAvarageKineticPerNucleonForLightFragments*=CLHEP::eV;
     aDataFile>> theAvarageKineticPerNucleonForHeavyFragments;
-    theAvarageKineticPerNucleonForHeavyFragments*=eV;
+    theAvarageKineticPerNucleonForHeavyFragments*=CLHEP::eV;
     theMaxTemp.Init(aDataFile);
   }
   
@@ -87,11 +88,11 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   inline G4double Gamma05(G4double aValue)
   {
     G4double result;
-    // gamma(1.2,x*X) = std::sqrt(pi)*Erf(x)
+    // gamma(1.2,x*X) = std::sqrt(CLHEP::pi)*Erf(x)
     G4double x = std::sqrt(aValue);
     G4double t = 1./(1+0.47047*x);
     result = 1- (0.3480242*t - 0.0958798*t*t + 0.7478556*t*t*t)*std::exp(-aValue); // @ check
-    result *= std::sqrt(pi);
+    result *= std::sqrt(CLHEP::pi);
     return result;
   }
   

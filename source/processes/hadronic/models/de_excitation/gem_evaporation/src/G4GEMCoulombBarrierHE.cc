@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMCoulombBarrierHE.cc,v 1.7 2009-09-15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -32,6 +31,8 @@
 #include "G4GEMCoulombBarrierHE.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4GEMCoulombBarrierHE::G4GEMCoulombBarrierHE(G4int anA, G4int aZ) :
   G4VCoulombBarrier(anA,aZ) 

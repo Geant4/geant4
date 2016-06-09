@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.12 2010-08-25 06:09:57 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include <stdlib.h>
@@ -47,6 +46,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
 {
   controlDirectory = new G4UIdirectory("/control/");
   controlDirectory->SetGuidance("UI control commands.");
+
+  macroPathCommand = new G4UIcmdWithAString("/control/macroPath",this);
+  macroPathCommand->SetGuidance("Set macro search path" 
+                                "with colon-separated list.");
+  macroPathCommand->SetParameterName("path",false);
 
   ExecuteCommand = new G4UIcmdWithAString("/control/execute",this);
   ExecuteCommand->SetGuidance("Execute a macro file.");
@@ -233,6 +237,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
 {
+  delete macroPathCommand;
   delete ExecuteCommand;
   delete suppressAbortionCommand;
   delete verboseCommand;
@@ -262,10 +267,14 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
 void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
   G4UImanager * UI = G4UImanager::GetUIpointer();
-  
+
+  if( command == macroPathCommand) {
+    UI-> SetMacroSearchPath(newValue);
+    UI-> ParseMacroSearchPath();
+  }  
   if(command==ExecuteCommand)
   {
-    UI->ExecuteMacroFile(newValue);
+    UI-> ExecuteMacroFile(UI-> FindMacroPath(newValue));
   }
   if(command==suppressAbortionCommand)
   {
@@ -417,6 +426,9 @@ G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand * command)
   G4UImanager * UI = G4UImanager::GetUIpointer();
   G4String currentValue;
   
+  if( command == macroPathCommand ) {
+    currentValue = UI-> GetMacroSearchPath();
+  }
   if(command==verboseCommand)
   {
     currentValue = verboseCommand->ConvertToString(UI->GetVerboseLevel());

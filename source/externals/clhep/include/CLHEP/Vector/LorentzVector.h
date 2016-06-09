@@ -84,7 +84,7 @@ public:
   inline HepLorentzVector(double x, double y, double z);
   // Constructor giving the components x, y, z with t-component set to 0.0.
 
-  inline HepLorentzVector(double t);
+  explicit HepLorentzVector(double t);
   // Constructor giving the t-component with x, y and z set to 0.0.
 
   inline HepLorentzVector();
@@ -202,7 +202,7 @@ public:
 
   inline double mag() const;
   inline double m() const;
-  // Invariant mass. If m2() is negative then -std::sqrt(-m2()) is returned.
+  // Invariant mass. If m2() is negative then -sqrt(-m2()) is returned.
 
   inline double mt2() const;
   // Transverse mass squared.
@@ -228,7 +228,7 @@ public:
 
   inline void setVectMag(const Hep3Vector & spatial, double magnitude);
   inline void setVectM(const Hep3Vector & spatial, double mass);
-  // Copy spatial coordinates, and set energy = std::sqrt(mass^2 + spatial^2)
+  // Copy spatial coordinates, and set energy = sqrt(mass^2 + spatial^2)
 
   inline double plus() const;
   inline double minus() const;
@@ -251,7 +251,7 @@ public:
   // Returns the rapidity, i.e. 0.5*ln((E+pz)/(E-pz))
 
   inline double pseudoRapidity() const;
-  // Returns the pseudo-rapidity, i.e. -ln(std::tan(theta/2))
+  // Returns the pseudo-rapidity, i.e. -ln(tan(theta/2))
 
   inline bool isTimelike() const;
   // Test if the 4-vector is timelike
@@ -304,7 +304,7 @@ public:
 
 // 0 - Flexible metric convention 
 
-  static ZMpvMetric_t setMetric( ZMpvMetric_t m );
+  static ZMpvMetric_t setMetric( ZMpvMetric_t met );
   static ZMpvMetric_t getMetric();
 
 // 1 - Construct and set 4-vectors in various ways 
@@ -393,7 +393,7 @@ public:
   // The same tolerance is used for determining isLightlike, and isParallel
 
   double deltaR(const HepLorentzVector & v) const;
-  // std::sqrt ( (delta eta)^2 + (delta phi)^2 ) of space part
+  // sqrt ( (delta eta)^2 + (delta phi)^2 ) of space part
 
 // 4 - Intrinsic properties 
 
@@ -417,7 +417,7 @@ public:
 
   inline double restMass() const;
   inline double invariantMass() const; 
-  // Same as m().  If m2() is negative then -std::sqrt(-m2()) is returned.
+  // Same as m().  If m2() is negative then -sqrt(-m2()) is returned.
 
 // The following properties are rest-frame related, 
 // and are applicable only to non-spacelike 4-vectors

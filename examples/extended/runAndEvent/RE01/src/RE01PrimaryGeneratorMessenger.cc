@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01PrimaryGeneratorMessenger.cc,v 1.2 2006-06-29 17:44:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the RE01PrimaryGeneratorMessenger class
 //
-
+// $Id$
+//
 
 #include "RE01PrimaryGeneratorMessenger.hh"
 #include "RE01PrimaryGeneratorAction.hh"
@@ -34,39 +35,45 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
 
-RE01PrimaryGeneratorMessenger::RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction * mpga)
-:myAction(mpga)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+RE01PrimaryGeneratorMessenger
+::RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction * mpga)
+  :G4UImessenger(),fMyAction(mpga)
 {
-  mydetDirectory = new G4UIdirectory("/mydet/");
-  mydetDirectory->SetGuidance("RE01 detector control commands.");
+  fMydetDirectory = new G4UIdirectory("/mydet/");
+  fMydetDirectory->SetGuidance("RE01 detector control commands.");
 
-  genCmd = new G4UIcmdWithAString("/mydet/generator",this);
-  genCmd->SetGuidance("Select primary generator.");
-  genCmd->SetGuidance(" Available generators : PYTHIA, particleGun");
-  genCmd->SetParameterName("generator",true);
-  genCmd->SetDefaultValue("PYTHIA");
-  genCmd->SetCandidates("PYTHIA particleGun");
+  fGenCmd = new G4UIcmdWithAString("/mydet/generator",this);
+  fGenCmd->SetGuidance("Select primary generator.");
+  fGenCmd->SetGuidance(" Available generators : PYTHIA, particleGun");
+  fGenCmd->SetParameterName("generator",true);
+  fGenCmd->SetDefaultValue("PYTHIA");
+  fGenCmd->SetCandidates("PYTHIA particleGun");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorMessenger::~RE01PrimaryGeneratorMessenger()
 {
-  delete genCmd;
-  delete mydetDirectory;
+  delete fGenCmd;
+  delete fMydetDirectory;
 }
 
-void RE01PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+void RE01PrimaryGeneratorMessenger
+::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==genCmd )
-  { myAction->SetHEPEvtGenerator(newValue=="PYTHIA"); }
+  if( command==fGenCmd )
+  { fMyAction->SetHEPEvtGenerator(newValue=="PYTHIA"); }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 G4String RE01PrimaryGeneratorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String cv;
   
-  if( command==genCmd )
+  if( command==fGenCmd )
   {
-    if(myAction->GetHEPEvtGenerator())
+    if(fMyAction->GetHEPEvtGenerator())
     { cv = "PYTHIA"; }
     else
     { cv = "particleGun"; }

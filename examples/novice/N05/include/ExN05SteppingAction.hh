@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SteppingAction.hh,v 1.6 2006-06-29 17:52:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef ExN05SteppingAction_h

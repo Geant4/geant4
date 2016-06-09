@@ -1,3 +1,8 @@
+# File menu :
+/gui/addMenu file File
+/gui/addButton file Quit exit
+
+# Run menu :
 /gui/addMenu run Run
 /gui/addButton run "Collect all events" "/control/execute mac/setup_all_events.mac"
 /gui/addButton run "Collect interaction events" "/control/execute mac/setup_interaction_events.mac"
@@ -7,6 +12,7 @@
 /gui/addButton run "Run 10 events" "/run/beamOn 10"
 /gui/addButton run "Run 100 events" "/run/beamOn 100"
 
+# Viewer menu :
 /gui/addMenu viewer Viewer
 /gui/addButton viewer "Draw world" "/control/execute mac/visQt.mac"
 #/gui/addButton viewer "Draw world (OI)" "/control/execute mac/visOI.mac"
@@ -15,3 +21,6 @@
 /gui/addButton viewer "Highlight inner crystals" "/cexmc/vis/hlIC"
 /gui/addButton viewer "Unhighlight inner crystals" "/cexmc/vis/hlIC false"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+
+#Add an icon toolbar
+/control/execute mac/icons.mac

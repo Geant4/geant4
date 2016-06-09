@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.11 2006-06-29 21:32:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  7th June 1997

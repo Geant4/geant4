@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4PythiaInterface.hh
+/// \brief Definition of the HepMCG4PythiaInterface class
+//
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.hh
-//   $Id: HepMCG4PythiaInterface.hh,v 1.5 2006-06-29 17:05:24 gunter Exp $
+//   $Id$
 //
 //   A generic interface class with Pythia event generator via HepMC.
 //
@@ -64,7 +67,7 @@ public:
 
   // call pyxxx
   void CallPyinit(G4String frame, G4String beam, G4String target, 
-		  G4double win);
+                  G4double win);
   void CallPystat(G4int istat);
 
   // random numbers operations

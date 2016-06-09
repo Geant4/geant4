@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.11 2008-09-06 06:18:12 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 
-#include "G4ios.hh"
 #include "G4ParallelWorldScoringProcess.hh"
+
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Step.hh"
 #include "G4Navigator.hh"
 #include "G4VTouchable.hh"

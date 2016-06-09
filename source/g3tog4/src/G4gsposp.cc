@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsposp.cc,v 1.16 2006-06-29 18:14:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -34,6 +33,7 @@
 #include "G3VolTable.hh"
 #include "G3toG4MakeSolid.hh"
 #include "G3Division.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
 
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.hh,v 1.22 2010-09-16 05:21:00 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
@@ -43,10 +42,12 @@
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
 
-#include "G4DynamicParticle.hh"
-#include "G4LorentzVector.hh"
-#include "globals.hh"
 #include <iosfwd>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4LorentzVector.hh"
+#include "G4DynamicParticle.hh"
 
 class G4InuclParticle {
 public:
@@ -73,7 +74,7 @@ public:
     : pDP(dynPart), modelId(model) {}
 
   G4InuclParticle(const G4LorentzVector& mom, Model model=DefaultModel)
-    : modelId(model) { pDP.Set4Momentum(mom*GeV/MeV); }	// Bertini to G4 units
+    : modelId(model) { pDP.Set4Momentum(mom*CLHEP::GeV/CLHEP::MeV); }	// Bertini to G4 units
 
   virtual ~G4InuclParticle() {}
 
@@ -98,12 +99,12 @@ public:
   // These are call-throughs to G4DynamicParticle
   void setMomentum(const G4LorentzVector& mom);
 
-  void setKineticEnergy(G4double ekin) { pDP.SetKineticEnergy(ekin*GeV/MeV); }
+  void setKineticEnergy(G4double ekin) { pDP.SetKineticEnergy(ekin*CLHEP::GeV/CLHEP::MeV); }
 
-  void setMass(G4double mass) { pDP.SetMass(mass*GeV/MeV); }
+  void setMass(G4double mass) { pDP.SetMass(mass*CLHEP::GeV/CLHEP::MeV); }
 
   G4double getMass() const {
-    return pDP.GetMass()*MeV/GeV;		// From G4 to Bertini units
+    return pDP.GetMass()*CLHEP::MeV/CLHEP::GeV;	// From G4 to Bertini units
   }
 
   G4double getCharge() const {
@@ -111,19 +112,19 @@ public:
   }
 
   G4double getKineticEnergy() const {
-    return pDP.GetKineticEnergy()*MeV/GeV;	// From G4 to Bertini units
+    return pDP.GetKineticEnergy()*CLHEP::MeV/CLHEP::GeV; // From G4 to Bertini units
   }
 
   G4double getEnergy() const {
-    return pDP.GetTotalEnergy()*MeV/GeV;	// From G4 to Bertini units
+    return pDP.GetTotalEnergy()*CLHEP::MeV/CLHEP::GeV; // From G4 to Bertini units
   }
 
   G4double getMomModule() const {
-    return pDP.GetTotalMomentum()*MeV/GeV;	// From G4 to Bertini units
+    return pDP.GetTotalMomentum()*CLHEP::MeV/CLHEP::GeV; // From G4 to Bertini units
   }
 
   G4LorentzVector getMomentum() const {
-    return pDP.Get4Momentum()*MeV/GeV;		// From G4 to Bertini units
+    return pDP.Get4Momentum()*CLHEP::MeV/CLHEP::GeV; // From G4 to Bertini units
   }
 
   virtual void print(std::ostream& os) const;
@@ -153,7 +154,7 @@ protected:
   // NOTE:  Momentum forced along Z direction
   G4InuclParticle(G4ParticleDefinition* pd, G4double ekin,
 		  Model model=DefaultModel)
-    : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*GeV/MeV), modelId(model) {}
+    : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*CLHEP::GeV/CLHEP::MeV), modelId(model) {}
 
   void setDefinition(G4ParticleDefinition* pd);
 

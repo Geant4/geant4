@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PrimaryGeneratorMessenger.cc,v 1.4 2006-06-29 16:33:07 gunter Exp $
+/// \file analysis/A01/src/A01PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the A01PrimaryGeneratorMessenger class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01PrimaryGeneratorMessenger.hh"
@@ -33,68 +36,68 @@
 #include "G4ios.hh"
 
 A01PrimaryGeneratorMessenger::A01PrimaryGeneratorMessenger(A01PrimaryGeneratorAction * mpga)
-:target(mpga)
+:fTarget(mpga)
 {
-  momentumCmd = new G4UIcmdWithADoubleAndUnit("/mydet/momentum",this);
-  momentumCmd->SetGuidance("Mean momentum of primaries");
-  momentumCmd->SetParameterName("p",true);
-  momentumCmd->SetRange("p>=0.");
-  momentumCmd->SetDefaultValue(1.);
-  momentumCmd->SetDefaultUnit("GeV");
+  fMomentumCmd = new G4UIcmdWithADoubleAndUnit("/mydet/momentum",this);
+  fMomentumCmd->SetGuidance("Mean momentum of primaries");
+  fMomentumCmd->SetParameterName("p",true);
+  fMomentumCmd->SetRange("p>=0.");
+  fMomentumCmd->SetDefaultValue(1.);
+  fMomentumCmd->SetDefaultUnit("GeV");
 
-  sigmaMomCmd = new G4UIcmdWithADoubleAndUnit("/mydet/sigmaMomentum",this);
-  sigmaMomCmd->SetGuidance("Sigma momentum of primaries");
-  sigmaMomCmd->SetParameterName("p",true);
-  sigmaMomCmd->SetRange("p>=0.");
-  sigmaMomCmd->SetDefaultValue(1.);
-  sigmaMomCmd->SetDefaultUnit("GeV");
+  fSigmaMomCmd = new G4UIcmdWithADoubleAndUnit("/mydet/sigmaMomentum",this);
+  fSigmaMomCmd->SetGuidance("Sigma momentum of primaries");
+  fSigmaMomCmd->SetParameterName("p",true);
+  fSigmaMomCmd->SetRange("p>=0.");
+  fSigmaMomCmd->SetDefaultValue(1.);
+  fSigmaMomCmd->SetDefaultUnit("GeV");
 
-  sigmaAngCmd = new G4UIcmdWithADoubleAndUnit("/mydet/sigmaAngle",this);
-  sigmaAngCmd->SetGuidance("sigma angle divergence of primaries");
-  sigmaAngCmd->SetParameterName("t",true);
-  sigmaAngCmd->SetRange("t>=0.");
-  sigmaAngCmd->SetDefaultValue(1.);
-  sigmaAngCmd->SetDefaultUnit("deg");
+  fSigmaAngCmd = new G4UIcmdWithADoubleAndUnit("/mydet/sigmaAngle",this);
+  fSigmaAngCmd->SetGuidance("sigma angle divergence of primaries");
+  fSigmaAngCmd->SetParameterName("t",true);
+  fSigmaAngCmd->SetRange("t>=0.");
+  fSigmaAngCmd->SetDefaultValue(1.);
+  fSigmaAngCmd->SetDefaultUnit("deg");
 
-  randomCmd = new G4UIcmdWithABool("/mydet/randomizePrimary",this);
-  randomCmd->SetGuidance("Boolean flag for randomizing primary particle types.");
-  randomCmd->SetGuidance("In case this flag is false, you can select the primary particle");
-  randomCmd->SetGuidance("  with /gun/particle command.");
-  randomCmd->SetParameterName("flg",true);
-  randomCmd->SetDefaultValue(true);
+  fRandomCmd = new G4UIcmdWithABool("/mydet/randomizePrimary",this);
+  fRandomCmd->SetGuidance("Boolean flag for randomizing primary particle types.");
+  fRandomCmd->SetGuidance("In case this flag is false, you can select the primary particle");
+  fRandomCmd->SetGuidance("  with /gun/particle command.");
+  fRandomCmd->SetParameterName("flg",true);
+  fRandomCmd->SetDefaultValue(true);
 }
 
 A01PrimaryGeneratorMessenger::~A01PrimaryGeneratorMessenger()
 {
-  delete momentumCmd;
-  delete sigmaMomCmd;
-  delete sigmaAngCmd;
-  delete randomCmd;
+  delete fMomentumCmd;
+  delete fSigmaMomCmd;
+  delete fSigmaAngCmd;
+  delete fRandomCmd;
 }
 
 void A01PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==momentumCmd )
-  { target->SetMomentum(momentumCmd->GetNewDoubleValue(newValue)); }
-  if( command==sigmaMomCmd )
-  { target->SetSigmaMomentum(sigmaMomCmd->GetNewDoubleValue(newValue)); }
-  if( command==sigmaAngCmd )
-  { target->SetSigmaAngle(sigmaAngCmd->GetNewDoubleValue(newValue)); }
-  if( command==randomCmd )
-  { target->SetRandomize(randomCmd->GetNewBoolValue(newValue)); }
+  if( command==fMomentumCmd )
+  { fTarget->SetMomentum(fMomentumCmd->GetNewDoubleValue(newValue)); }
+  if( command==fSigmaMomCmd )
+  { fTarget->SetSigmaMomentum(fSigmaMomCmd->GetNewDoubleValue(newValue)); }
+  if( command==fSigmaAngCmd )
+  { fTarget->SetSigmaAngle(fSigmaAngCmd->GetNewDoubleValue(newValue)); }
+  if( command==fRandomCmd )
+  { fTarget->SetRandomize(fRandomCmd->GetNewBoolValue(newValue)); }
 }
 
 G4String A01PrimaryGeneratorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String cv;
-  if( command==momentumCmd )
-  { cv = momentumCmd->ConvertToString(target->GetMomentum(),"GeV"); }
-  if( command==sigmaMomCmd )
-  { cv = sigmaMomCmd->ConvertToString(target->GetSigmaMomentum(),"GeV"); }
-  if( command==sigmaAngCmd )
-  { cv = sigmaAngCmd->ConvertToString(target->GetSigmaAngle(),"deg"); }
-  if( command==randomCmd )
-  { cv = randomCmd->ConvertToString(target->GetRandomize()); }
+  if( command==fMomentumCmd )
+  { cv = fMomentumCmd->ConvertToString(fTarget->GetMomentum(),"GeV"); }
+  if( command==fSigmaMomCmd )
+  { cv = fSigmaMomCmd->ConvertToString(fTarget->GetSigmaMomentum(),"GeV"); }
+  if( command==fSigmaAngCmd )
+  { cv = fSigmaAngCmd->ConvertToString(fTarget->GetSigmaAngle(),"deg"); }
+  if( command==fRandomCmd )
+  { cv = fRandomCmd->ConvertToString(fTarget->GetRandomize()); }
 
   return cv;
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTableEntry.hh,v 1.6 2006-06-29 18:11:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:
@@ -53,7 +52,7 @@ class G3MatTableEntry
     virtual ~G3MatTableEntry();
     
     // operators
-    const G3MatTableEntry& operator=(const G3MatTableEntry& right);
+    G3MatTableEntry& operator=(const G3MatTableEntry& right);
     G4int operator==(const G3MatTableEntry& right) const;
     G4int operator!=(const G3MatTableEntry& right) const;
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryNeutronBuilder.cc,v 1.3 2009-04-02 08:11:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -38,6 +37,7 @@
 //----------------------------------------------------------------------------
 //
 #include "G4BinaryNeutronBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
@@ -47,7 +47,7 @@ G4BinaryNeutronBuilder()
  {
    theMin = 0;
    theMax = 9.9*GeV;
-   theModel = new G4BinaryCascade;
+   theModel = new G4BinaryCascade();
  }
 
  void G4BinaryNeutronBuilder::

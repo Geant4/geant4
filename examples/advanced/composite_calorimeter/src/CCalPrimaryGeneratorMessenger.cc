@@ -31,13 +31,14 @@
 #include "CCalPrimaryGeneratorMessenger.hh"
 #include "CCalPrimaryGeneratorAction.hh"
 
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4UImanager.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
 
 CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGeneratorAction* myGun) : myAction(myGun) {
 

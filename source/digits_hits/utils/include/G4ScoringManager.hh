@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.23 2007-11-14 20:41:17 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4ScoringManager_h
@@ -83,14 +82,19 @@ class G4ScoringManager
 
   public:
       void Accumulate(G4VHitsCollection* map);
-      G4VScoringMesh* FindMesh(G4String);
+      G4VScoringMesh* FindMesh(const G4String&);
       void List() const;
       void Dump() const;
-      void DrawMesh(G4String meshName,G4String psName,G4String colorMapName,G4int axflg=111);
-      void DrawMesh(G4String meshName,G4String psName,G4int idxPlane,G4int iColumn,G4String colorMapName);
-      void DumpQuantityToFile(G4String meshName, G4String psName,G4String fileName, G4String option = "");
-      void DumpAllQuantitiesToFile(G4String meshName, G4String fileName, G4String option = "");
-      G4VScoreColorMap* GetScoreColorMap(G4String mapName);
+      void DrawMesh(const G4String& meshName, const G4String& psName,
+                    const G4String& colorMapName, G4int axflg=111);
+      void DrawMesh(const G4String& meshName, const G4String& psName,
+                    G4int idxPlane, G4int iColumn, const G4String& colorMapName);
+      void DumpQuantityToFile(const G4String& meshName, const G4String& psName,
+                              const G4String& fileName, const G4String& option = "");
+      void DumpAllQuantitiesToFile(const G4String& meshName,
+                                   const G4String& fileName,
+                                   const G4String& option = "");
+      G4VScoreColorMap* GetScoreColorMap(const G4String& mapName);
       void ListScoreColorMaps();
 
   private: 
@@ -108,8 +112,8 @@ class G4ScoringManager
       ColorMapDict * fColorMapDict;
 
   public:
-      inline void SetCurrentMesh(G4VScoringMesh* cm)
-      { fCurrentMesh = cm; }
+      inline void SetCurrentMesh(G4VScoringMesh* scm)
+      { fCurrentMesh = scm; }
       inline G4VScoringMesh* GetCurrentMesh() const
       { return fCurrentMesh; }
       inline void CloseCurrentMesh()
@@ -126,11 +130,11 @@ class G4ScoringManager
       { return verboseLevel; }
       inline size_t GetNumberOfMesh() const
       { return fMeshVec.size(); }
-      inline void RegisterScoringMesh(G4VScoringMesh * sm)
+      inline void RegisterScoringMesh(G4VScoringMesh * scm)
       {
-        sm->SetVerboseLevel(verboseLevel);
-        fMeshVec.push_back(sm);
-        SetCurrentMesh(sm);
+        scm->SetVerboseLevel(verboseLevel);
+        fMeshVec.push_back(scm);
+        SetCurrentMesh(scm);
       }
       inline G4VScoringMesh* GetMesh(G4int i) const
       { return fMeshVec[i]; }

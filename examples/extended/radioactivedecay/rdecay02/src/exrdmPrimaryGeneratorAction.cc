@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmPrimaryGeneratorAction.cc
+/// \brief Implementation of the exrdmPrimaryGeneratorAction class
+//
 
 // **********************************************************************
 
@@ -35,17 +38,17 @@
 
 exrdmPrimaryGeneratorAction::exrdmPrimaryGeneratorAction()
 {
-  particleGun = new G4GeneralParticleSource ();
+  fParticleGun = new G4GeneralParticleSource ();
 }
 
 exrdmPrimaryGeneratorAction::~exrdmPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 void exrdmPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 

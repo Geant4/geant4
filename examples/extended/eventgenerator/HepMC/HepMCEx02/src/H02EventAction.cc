@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/H02EventAction.cc
+/// \brief Implementation of the H02EventAction class
+//
 // ====================================================================
 //
 //   H02EventAction.cc
-//   $Id: H02EventAction.cc,v 1.4 2006-06-29 17:10:23 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #include "H02EventAction.hh"

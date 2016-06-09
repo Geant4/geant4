@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.18 2010-09-07 16:05:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -48,8 +47,10 @@
 //
 
 #include "G4VMscModel.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
+#include "G4LossTableBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,6 +74,8 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   dedx       = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
   localrange = DBL_MAX;
   localtkin  = 0.0;
+  man = G4LossTableManager::Instance();
+  currentPart = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +85,8 @@ G4VMscModel::~G4VMscModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
+G4ParticleChangeForMSC* 
+G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 {
   if(!safetyHelper) {
     safetyHelper = G4TransportationManager::GetTransportationManager()
@@ -95,54 +99,43 @@ G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
   } else {
     change = new G4ParticleChangeForMSC();
   }
+  if(p) {
+
+    // table is never built for GenericIon 
+    if(p->GetParticleName() == "GenericIon") {
+      if(xSectionTable) {
+	xSectionTable->clearAndDestroy();
+	delete xSectionTable;
+	xSectionTable = 0;
+      }
+
+      // table is always built for low mass particles 
+    } else if(p->GetPDGMass() < 4.5*GeV || ForceBuildTableFlag()) {
+      G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
+      G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
+      emin = std::max(emin, man->MinKinEnergy());
+      emax = std::min(emax, man->MaxKinEnergy());
+      G4LossTableBuilder* builder = man->GetTableBuilder();
+      xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
+						  emin, emax, true);
+      theDensityFactor = builder->GetDensityFactors();
+      theDensityIdx = builder->GetCoupleIndexes();
+    }
+  }
   return change;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,  
-				      const G4ThreeVector& dir,
-				      G4double displacement,
-				      G4double postsafety)
+G4ThreeVector& 
+G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
 {
-  if(displacement <= geomMin) { return; }
-  const G4ThreeVector* pos = fParticleChange->GetProposedPosition();
-
-  // displaced point is definitely within the volume
-  if(displacement < postsafety) {
-
-    // compute new endpoint of the Step
-    G4ThreeVector newPosition = *pos + displacement*dir;
-    safetyHelper->ReLocateWithinVolume(newPosition);
-    fParticleChange->ProposePosition(newPosition);
-    return;
-  }
-
-  // displaced point may be outside the volume
-  G4double newsafety = safetyHelper->ComputeSafety(*pos);
-
-  // add a factor which ensure numerical stability
-  G4double r = std::min(displacement, newsafety*0.99); 
-
-  if(r > geomMin) {
-
-    // compute new endpoint of the Step
-    G4ThreeVector newPosition = *pos + r*dir;
-    safetyHelper->ReLocateWithinVolume(newPosition);
-    fParticleChange->ProposePosition(newPosition);
-  }
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, 
-						 G4PhysicsTable*, 
-						 G4double)
+G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, G4double&)
 {
   return DBL_MAX;
 }

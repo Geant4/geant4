@@ -32,9 +32,8 @@
 /tracking/verbose 1
 /run/beamOn 5
 #
-###/testem/histo/setFileName std.1km
-###/testem/histo/setFileType hbook
-###/testem/histo/setHisto 1 200 0 2000 um		# csda range
-###/testem/histo/setHisto 1 250 0 5000 um
+###/analysis/setFileName std.1km
+###/analysis/h1/set 1 200 0 2000 um		# csda range
+###/analysis/h1/set 1 250 0 5000 um
 #
 ###/run/beamOn 20000

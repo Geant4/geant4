@@ -23,73 +23,75 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeEventMessenger.cc
+/// \brief Implementation of the LXeEventMessenger class
+//
+//
 #include "LXeEventMessenger.hh"
 #include "LXeEventAction.hh"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeEventMessenger::LXeEventMessenger(LXeEventAction* event)
-:LXeEvent(event)
+ : fLXeEvent(event)
 {
-  saveThresholdCmd = new G4UIcmdWithAnInteger("/LXe/saveThreshold",this);
-  saveThresholdCmd->SetGuidance("Set the photon count threshold for saving the random number seed for an event.");
-  saveThresholdCmd->SetParameterName("photons",true);
-  saveThresholdCmd->SetDefaultValue(4500);
-  saveThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSaveThresholdCmd = new G4UIcmdWithAnInteger("/LXe/saveThreshold",this);
+  fSaveThresholdCmd->SetGuidance("Set the photon count threshold for saving the random number seed for an event.");
+  fSaveThresholdCmd->SetParameterName("photons",true);
+  fSaveThresholdCmd->SetDefaultValue(4500);
+  fSaveThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  verboseCmd = new G4UIcmdWithAnInteger("/LXe/eventVerbose",this);
-  verboseCmd->SetGuidance("Set the verbosity of event data.");
-  verboseCmd->SetParameterName("verbose",true);
-  verboseCmd->SetDefaultValue(1);
+  fVerboseCmd = new G4UIcmdWithAnInteger("/LXe/eventVerbose",this);
+  fVerboseCmd->SetGuidance("Set the verbosity of event data.");
+  fVerboseCmd->SetParameterName("verbose",true);
+  fVerboseCmd->SetDefaultValue(1);
 
-  pmtThresholdCmd = new G4UIcmdWithAnInteger("/LXe/pmtThreshold",this);
-  pmtThresholdCmd->SetGuidance("Set the pmtThreshold (in # of photons)");
+  fPmtThresholdCmd = new G4UIcmdWithAnInteger("/LXe/pmtThreshold",this);
+  fPmtThresholdCmd->SetGuidance("Set the pmtThreshold (in # of photons)");
 
-  forceDrawPhotonsCmd=new G4UIcmdWithABool("/LXe/forceDrawPhotons",this);
-  forceDrawPhotonsCmd->SetGuidance("Force drawing of photons.");
-  forceDrawPhotonsCmd
+  fForceDrawPhotonsCmd=new G4UIcmdWithABool("/LXe/forceDrawPhotons",this);
+  fForceDrawPhotonsCmd->SetGuidance("Force drawing of photons.");
+  fForceDrawPhotonsCmd
     ->SetGuidance("(Higher priority than /LXe/forceDrawNoPhotons)");
 
-  forceDrawNoPhotonsCmd=new G4UIcmdWithABool("/LXe/forceDrawNoPhotons",this);
-  forceDrawNoPhotonsCmd->SetGuidance("Force no drawing of photons.");
-  forceDrawNoPhotonsCmd
+  fForceDrawNoPhotonsCmd=new G4UIcmdWithABool("/LXe/forceDrawNoPhotons",this);
+  fForceDrawNoPhotonsCmd->SetGuidance("Force no drawing of photons.");
+  fForceDrawNoPhotonsCmd
     ->SetGuidance("(Lower priority than /LXe/forceDrawPhotons)");
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeEventMessenger::~LXeEventMessenger(){
-  delete saveThresholdCmd;
-  delete verboseCmd;
-  delete pmtThresholdCmd;
-  delete forceDrawPhotonsCmd;
-  delete forceDrawNoPhotonsCmd;
+  delete fSaveThresholdCmd;
+  delete fVerboseCmd;
+  delete fPmtThresholdCmd;
+  delete fForceDrawPhotonsCmd;
+  delete fForceDrawNoPhotonsCmd;
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeEventMessenger::SetNewValue(G4UIcommand* command, G4String newValue){ 
-  if( command == saveThresholdCmd ){ 
-    LXeEvent->SetSaveThreshold(saveThresholdCmd->GetNewIntValue(newValue));
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeEventMessenger::SetNewValue(G4UIcommand* command, G4String newValue){
+  if( command == fSaveThresholdCmd ){
+    fLXeEvent->SetSaveThreshold(fSaveThresholdCmd->GetNewIntValue(newValue));
   }
-  else if( command == verboseCmd ){
-    LXeEvent->SetEventVerbose(verboseCmd->GetNewIntValue(newValue));
+  else if( command == fVerboseCmd ){
+    fLXeEvent->SetEventVerbose(fVerboseCmd->GetNewIntValue(newValue));
   }
-  else if( command == pmtThresholdCmd ){
-    LXeEvent->SetPMTThreshold(pmtThresholdCmd->GetNewIntValue(newValue));
+  else if( command == fPmtThresholdCmd ){
+    fLXeEvent->SetPMTThreshold(fPmtThresholdCmd->GetNewIntValue(newValue));
   }
-  else if(command == forceDrawPhotonsCmd){
-    LXeEvent->SetForceDrawPhotons(forceDrawPhotonsCmd
-				  ->GetNewBoolValue(newValue));
+  else if(command == fForceDrawPhotonsCmd){
+    fLXeEvent->SetForceDrawPhotons(fForceDrawPhotonsCmd
+                                  ->GetNewBoolValue(newValue));
   }
-  else if(command == forceDrawNoPhotonsCmd){
-    LXeEvent->SetForceDrawNoPhotons(forceDrawNoPhotonsCmd
-				  ->GetNewBoolValue(newValue));
+  else if(command == fForceDrawNoPhotonsCmd){
+    fLXeEvent->SetForceDrawNoPhotons(fForceDrawNoPhotonsCmd
+                                  ->GetNewBoolValue(newValue));
     G4cout<<"TEST"<<G4endl;
   }
 }
-
-
-
-
-

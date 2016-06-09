@@ -47,6 +47,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
+
+#include "G4GeneralParticleSourceMessenger.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Geantino.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
@@ -62,7 +67,6 @@
 #include "G4ios.hh"
 
 #include "G4Tokenizer.hh"
-#include "G4GeneralParticleSourceMessenger.hh"
 #include "G4SingleParticleSource.hh"
 #include "G4GeneralParticleSource.hh"
 

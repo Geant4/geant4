@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/src/exGPSEventAction.cc
+/// \brief Implementation of the exGPSEventAction class
+//
 
 #include "exGPSEventAction.hh"
 
@@ -37,19 +40,20 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #include "G4ThreeVector.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 exGPSEventAction::exGPSEventAction()
-:drawFlag("all"), printModulo(1000), eventMessenger(NULL) 
+:fDrawFlag("all"), fPrintModulo(1000), fEventMessenger(NULL) 
 {
-  eventMessenger = new exGPSEventActionMessenger(this);
+  fEventMessenger = new exGPSEventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSEventAction::~exGPSEventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -58,7 +62,7 @@ void exGPSEventAction::BeginOfEventAction(const G4Event* evt)
 {
   
   G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0)
+  if (evtNb%fPrintModulo == 0)
     { 
       G4cout << "\n---> Begin of event: " << evtNb << G4endl;
       //  HepRandom::showEngineStatus();
@@ -81,14 +85,16 @@ void exGPSEventAction::EndOfEventAction(const G4Event*)
     G4int nPart =  evt->GetPrimaryVertex(j)->GetNumberOfParticle(); 
     for ( G4int i = 0; i < nPart; i++) {
       G4ThreeVector position=evt->GetPrimaryVertex(j)->GetPosition();
-      G4ThreeVector direction=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetMomentum();
+      G4ThreeVector direction=evt->GetPrimaryVertex(j)->GetPrimary(i)
+                                 ->GetMomentum();
       G4double P=direction.mag();
       G4double E=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetMass();
-      G4double E0=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetPDGMass();
+      G4double E0=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()
+                                 ->GetPDGMass();
       E=std::sqrt(P*P+E0*E0);   
       E -= E0;
-//      G4String pname = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetParticleName();
-      G4double pid = G4double(evt->GetPrimaryVertex(j)->GetPrimary(i)->GetPDGcode());
+      G4double pid = G4double(evt->GetPrimaryVertex(j)->GetPrimary(i)
+                                 ->GetPDGcode());
       //
       direction=direction*(1./direction.mag());                
       direction = -direction;  // reverse the direction
@@ -101,11 +107,10 @@ void exGPSEventAction::EndOfEventAction(const G4Event*)
       z=position.z();
       w = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetWeight();
 //      exGPSAnalysisManager::getInstance()->Fill(pname,E,x,y,z,Theta,Phi,w);
-     exGPSAnalysisManager::getInstance()->Fill(pid,E,x,y,z,Theta,Phi,w);
+     exGPSAnalysisManager::GetInstance()->Fill(pid,E,x,y,z,Theta,Phi,w);
     }
   }   
 #endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

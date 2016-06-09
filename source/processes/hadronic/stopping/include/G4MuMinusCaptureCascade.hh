@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCaptureCascade.hh,v 1.10 2007-07-05 18:19:14 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   G4MuMinusCaptureCascade physics process --------
 //   Vladimir Ivanchenko, April 2000
@@ -36,6 +35,8 @@
 
 #ifndef G4MuMinusCaptureCascade_h
 #define G4MuMinusCaptureCascade_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
 #include "Randomize.hh" 
@@ -114,7 +115,7 @@ inline G4ThreeVector& G4MuMinusCaptureCascade::GetRandomVec()
   //
   G4double cost = 2.0 * G4UniformRand() - 1.0;
   G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
-  G4double Phi  = twopi * G4UniformRand();
+  G4double Phi  = CLHEP::twopi * G4UniformRand();
   randomVect = G4ThreeVector(sint * std::cos(Phi), sint * std::sin(Phi), cost);
   return randomVect;
 }

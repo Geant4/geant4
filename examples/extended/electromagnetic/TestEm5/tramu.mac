@@ -24,9 +24,8 @@
 /gun/particle mu+ 
 /gun/energy 1 TeV
 #
-/testem/histo/setFileName tramu/local
-/testem/histo/setFileType root
-/testem/histo/setHisto 10  100  950 1000 GeV	#energy at exit  
+/analysis/setFileName tramu/local
+/analysis/h1/set 10  100  950 1000 GeV	#energy at exit  
 #
 /testem/stack/killSecondaries
 #

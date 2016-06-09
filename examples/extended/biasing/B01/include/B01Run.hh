@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/include/B01Run.hh
+/// \brief Definition of the B01Run class
 //
-// $Id: B01Run.hh,v 1.4 2007-06-21 15:03:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //---------------------------------------------------------------------
 // (Purpose) 
@@ -67,7 +69,7 @@ public:
   //   and by collection name with full path.
   G4THitsMap<G4double>* GetHitsMap(G4int i){return theRunMap[i];}
   G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
-				  const G4String& colName);
+                                  const G4String& colName);
   G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
   // - Dump All HitsMap of this RUN.
   //   This method calls G4THisMap::PrintAll() for individual HitsMap.

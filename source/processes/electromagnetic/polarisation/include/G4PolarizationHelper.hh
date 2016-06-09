@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.hh,v 1.2 2007-11-01 17:30:25 schaelic Exp $
-// tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 Class header file
 //

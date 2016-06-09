@@ -441,9 +441,8 @@ G4KineticTrack::~G4KineticTrack()
 
 
 
-const G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
+G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
 {
- G4int i;
  if (this != &right)
     {
      theDefinition = right.GetDefinition();
@@ -457,7 +456,7 @@ const G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      if (theActualWidth != 0) delete [] theActualWidth;
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
-     for (i = 0; i < nChannels; i++) 
+     for ( G4int i = 0; i < nChannels; i++)
         {
          theActualWidth[i] = right.theActualWidth[i];
         }
@@ -527,6 +526,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
      G4double r = theTotalActualWidth * G4UniformRand();
      G4VDecayChannel* theDecayChannel(0);
+     G4int chosench=-1;
      for (index = nChannels - 1; index >= 0; index--)
         {
          if (r < theCumActualWidth[index])

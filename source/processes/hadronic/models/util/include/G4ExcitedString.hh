@@ -62,14 +62,18 @@ class G4ExcitedString
       G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Direction=PROJECTILE);
       G4ExcitedString(G4KineticTrack * atrack);
      
-      G4ExcitedString(const G4ExcitedString &right);
 
       ~G4ExcitedString();
 
-      int operator==(const G4ExcitedString &right) const;
+private:
+      G4ExcitedString(const G4ExcitedString &right);
+      G4ExcitedString& operator= (const G4ExcitedString &right);
 
+public:
+      int operator==(const G4ExcitedString &right) const;
       int operator!=(const G4ExcitedString &right) const;
 
+public:
       G4double GetTimeOfCreation() const;               // Uzhi 15.05.08
 
       void  SetTimeOfCreation(G4double aTime);          // Uzhi 15.05.08

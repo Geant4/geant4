@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.27 2010-10-20 00:47:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -47,11 +46,13 @@
 // 30.08.2011 M.Kelsey - Skip CalculateProbability if no excitons
 
 #include "G4PreCompoundTransitions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4Pow.hh"
 #include "G4HadronicException.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4Proton.hh"
-#include "Randomize.hh"
-#include "G4Pow.hh"
 
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {

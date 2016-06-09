@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,6 +53,18 @@ namespace G4INCL {
     FinalState* getFinalState();
 
   private:
+    /** \brief Sine^2 of the smallest acceptable reflection angle / 4
+     *
+     * Particles impinging almost tangentially on the surface generate a large
+     * number of reflections. If the impinging angle is larger than a certain
+     * limit, we move the particle a bit towards the inside of the nucleus.
+     * The limit angle is arbitrarily chosen to correspond to 100 reflections
+     * per orbit. The position scaling factor is given by the
+     * positionScalingFactor member.
+     */
+    static const G4double sinMinReflectionAngleSquaredOverFour;
+    /// \brief Scaling factor for excessively tangential reflection
+    static const G4double positionScalingFactor;
     Nucleus *theNucleus;
     Particle *theParticle;
   };

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.hh,v 1.2 2009-04-17 10:29:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //         on base of G4LowEnergyBremsstrahlung developed by A.Forti and V.Ivanchenko
@@ -51,7 +50,7 @@
 class G4ParticleDefinition;
 class G4MaterialCutsCouple;
 class G4Material;
-class G4VBremAngularDistribution;
+//class G4VBremAngularDistribution;
 class G4BremsstrahlungCrossSectionHandler;
 class G4VEnergySpectrum;
 
@@ -91,10 +90,10 @@ public:
                                 const G4MaterialCutsCouple*);
 
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
-
+  /*
   void SetAngularGenerator(G4VBremAngularDistribution* distribution);
   void SetAngularGenerator(const G4String& name);
-
+  */
 protected:
   G4ParticleChangeForLoss* fParticleChange;
 
@@ -117,9 +116,9 @@ private:
   G4VEnergySpectrum* energySpectrum;
   G4DataVector energyBins;
 
-  G4VBremAngularDistribution* angularDistribution;
-  G4VBremAngularDistribution* TsaiAngularDistribution;
-  G4String generatorName;
+  //G4VBremAngularDistribution* angularDistribution;
+  // G4VBremAngularDistribution* TsaiAngularDistribution;
+  //G4String generatorName;
 };
 
 #endif

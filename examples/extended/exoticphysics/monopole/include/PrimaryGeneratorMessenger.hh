@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/PrimaryGeneratorMessenger.hh
+/// \brief Definition of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,17 +45,18 @@ class G4UIcmdWithADoubleAndUnit;
 
 class PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
-   ~PrimaryGeneratorMessenger();
+public:
+
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+  ~PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    PrimaryGeneratorAction*    Action;
-    G4UIdirectory*             testexDir;
-    G4UIdirectory*             gunDir;         
-    G4UIcmdWithADoubleAndUnit* RndmCmd;
+private:
+  PrimaryGeneratorAction*    Action;
+  G4UIdirectory*             testexDir;
+  G4UIdirectory*             gunDir;         
+  G4UIcmdWithADoubleAndUnit* RndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,7 +32,9 @@
 // design and code review.
 //
 #include "G4MIRDLowerLargeIntestine.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4EllipticalTube.hh"
@@ -45,6 +47,7 @@
 #include "G4Torus.hh"
 #include "G4HumanPhantomMaterial.hh"
 #include "G4HumanPhantomColour.hh"
+
 G4MIRDLowerLargeIntestine::G4MIRDLowerLargeIntestine()
 {
 }

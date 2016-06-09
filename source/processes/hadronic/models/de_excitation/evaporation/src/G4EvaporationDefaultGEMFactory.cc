@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationDefaultGEMFactory.cc,v 1.2 2010-04-27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code
@@ -34,6 +33,11 @@
 // new hybrid Default-GEM evaoration model:
 //      - default evaporation for n,p,d,t and alpha particles
 //      - GEM evaporation for light nuclei evaporation (2<Z<13,4<A<29) 
+//
+//
+// Modifications:
+//
+// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
 #include "G4EvaporationDefaultGEMFactory.hh"
 
@@ -106,22 +110,21 @@
 #include "G4Mg28GEMChannel.hh"
 
 #include "G4CompetitiveFission.hh"
-#include "G4PhotonEvaporation.hh"
 
-G4EvaporationDefaultGEMFactory::G4EvaporationDefaultGEMFactory()
+G4EvaporationDefaultGEMFactory::G4EvaporationDefaultGEMFactory(G4VEvaporationChannel* ptr)
+  : G4VEvaporationFactory(ptr)
 {}
 
 G4EvaporationDefaultGEMFactory::~G4EvaporationDefaultGEMFactory()
 {}
 
-std::vector<G4VEvaporationChannel*> * 
-G4EvaporationDefaultGEMFactory::CreateChannel()
+std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(68);
 
-  theChannel->push_back( new G4PhotonEvaporation() );          // Photon Channel
+  theChannel->push_back( thePhotonEvaporation );          // Photon Channel
   theChannel->push_back( new G4CompetitiveFission() );         // Fission Channel
 
   // JMQ 220709 standard particle evaporation channels (Z<3,A<5)

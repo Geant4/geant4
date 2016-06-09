@@ -1,4 +1,4 @@
-$Id: History 50792 2011-06-16 07:34:36Z gcosmo $
+$Id: History 65827 2012-11-29 10:21:47Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,7 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-12 G. Cosmo (AnaEx02-V09-05-04)      
+- Fixed cases of variable shadowing.
+
+31-08-12 I. Hrivnacova (AnaEx02-V09-05-03)      
+- Updated CMakeLists.tx:
+  adding install target, minor fixes
+- Adding .README  
+
+21-06-12 Ivana Hrivnacova (AnaEx02-V09-05-02)
+- G4ANALYSIS_USE flag removed from both GNUmakefile and HistoManager.cc
+- ROOT support added in CMakeLists.txt
      
+20-06-12 Gabriele Cosmo (AnaEx02-V09-05-01)
+- GNUmakefile: protect ROOT setup by G4ANALYSIS_USE flag.
+
+20-06-12 Ivana Hrivnacova
+- Added Doxygen comments.
+
+10-04-12 mma (AnaEx02-V09-05-00)      
+- AnaEx02.cc : change order of UI and Vis 
+    
 07-06-11 mma (AnaEx02-V09-04-02)     
 PhysicsList migrated to new scheme G4PhysListHelper
 

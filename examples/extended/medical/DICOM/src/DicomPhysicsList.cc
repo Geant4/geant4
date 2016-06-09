@@ -23,38 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: DicomPhysicsList.cc,v 1.11 2009-10-26 11:20:49 chauvie Exp $
-// -------------------------------------------------------------------
+/// \file medical/DICOM/src/DicomPhysicsList.cc
+/// \brief Implementation of the DicomPhysicsList class
+//
+// $Id$
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4StepLimiter.hh"
-#include "G4BaryonConstructor.hh"	              
-#include "G4IonConstructor.hh"	 
-#include "G4MesonConstructor.hh"	 
+#include "G4BaryonConstructor.hh"                      
+#include "G4IonConstructor.hh"         
+#include "G4MesonConstructor.hh"         
+#include "G4SystemOfUnits.hh"
 
 #include "DicomPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 DicomPhysicsList::DicomPhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 0.01*micrometer;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
   SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 DicomPhysicsList::~DicomPhysicsList()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void DicomPhysicsList::ConstructParticle()
 {
   ConstructBosons();
@@ -63,7 +62,6 @@ void DicomPhysicsList::ConstructParticle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void DicomPhysicsList::ConstructBosons()
 { 
   // gamma
@@ -72,8 +70,8 @@ void DicomPhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void DicomPhysicsList::ConstructLeptons()
 {
   // leptons
@@ -82,7 +80,6 @@ void DicomPhysicsList::ConstructLeptons()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void DicomPhysicsList::ConstructBaryons()
 {
   //  baryons
@@ -97,7 +94,6 @@ void DicomPhysicsList::ConstructBaryons()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void DicomPhysicsList::ConstructProcess()
 {
   AddTransportation();
@@ -162,7 +158,6 @@ void DicomPhysicsList::ConstructProcess()
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DicomPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
@@ -213,7 +208,7 @@ void DicomPhysicsList::ConstructEM()
       // Bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
-      pmanager->AddProcess(eBrem, 		  -1,-3, 3);
+      pmanager->AddProcess(eBrem,                   -1,-3, 3);
 
       pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
       
@@ -266,7 +261,6 @@ void DicomPhysicsList::ConstructEM()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "G4HadronElasticProcess.hh"
 #include "G4LElastic.hh"
 
@@ -291,40 +285,40 @@ void DicomPhysicsList::ConstructHad()
     if (particle->GetParticleName() == "alpha") 
        { 
 
- 	  // INELASTIC SCATTERING
-	  // Binary Cascade
-  	  G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
-  	  theBC -> SetMinEnergy(80.*MeV);
-  	  theBC -> SetMaxEnergy(40.*GeV);
+           // INELASTIC SCATTERING
+          // Binary Cascade
+            G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
+            theBC -> SetMinEnergy(80.*MeV);
+            theBC -> SetMaxEnergy(40.*GeV);
   
-  	  // TRIPATHI CROSS SECTION
-  	  // Implementation of formulas in analogy to NASA technical paper 3621 by 
-  	  // Tripathi, et al. Cross-sections for ion ion scattering
-  	  G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
+            // TRIPATHI CROSS SECTION
+            // Implementation of formulas in analogy to NASA technical paper 3621 by 
+            // Tripathi, et al. Cross-sections for ion ion scattering
+            G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
   
-  	  // IONS SHEN CROSS SECTION
-  	  // Implementation of formulas 
-  	  // Shen et al. Nuc. Phys. A 491 130 (1989) 
-  	  // Total Reaction Cross Section for Heavy-Ion Collisions
-  	  G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
+            // IONS SHEN CROSS SECTION
+            // Implementation of formulas 
+            // Shen et al. Nuc. Phys. A 491 130 (1989) 
+            // Total Reaction Cross Section for Heavy-Ion Collisions
+            G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
   
-  	  // Final state production model for Alpha inelastic scattering below 20 GeV
-  	  G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
-  	  theAIModel -> SetMaxEnergy(100.*MeV);
+            // Final state production model for Alpha inelastic scattering below 20 GeV
+            G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
+            theAIModel -> SetMaxEnergy(100.*MeV);
 
-	  G4AlphaInelasticProcess * theIPalpha = new G4AlphaInelasticProcess;		  
-	  theIPalpha->AddDataSet(TripathiCrossSection);
-	  theIPalpha->AddDataSet(aShen);
+          G4AlphaInelasticProcess * theIPalpha = new G4AlphaInelasticProcess;                  
+          theIPalpha->AddDataSet(TripathiCrossSection);
+          theIPalpha->AddDataSet(aShen);
 
-	  // Register the Alpha Inelastic and Binary Cascade Model
-	  theIPalpha->RegisterMe(theAIModel);
-	  theIPalpha->RegisterMe(theBC);
-	  
-	  // Activate the alpha inelastic scattering using the alpha inelastic and binary cascade model
-	  pManager -> AddDiscreteProcess(theIPalpha);
-	  
-	  // Activate the Hadron Elastic Process
-	  pManager -> AddDiscreteProcess(theElasticProcess); 
+          // Register the Alpha Inelastic and Binary Cascade Model
+          theIPalpha->RegisterMe(theAIModel);
+          theIPalpha->RegisterMe(theBC);
+          
+          // Activate the alpha inelastic scattering using the alpha inelastic and binary cascade model
+          pManager -> AddDiscreteProcess(theIPalpha);
+          
+          // Activate the Hadron Elastic Process
+          pManager -> AddDiscreteProcess(theElasticProcess); 
             
        }
   }
@@ -332,12 +326,10 @@ void DicomPhysicsList::ConstructHad()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DicomPhysicsList::ConstructGeneral()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void DicomPhysicsList::SetCuts()
 {
   if (verboseLevel >0){
@@ -347,9 +339,9 @@ void DicomPhysicsList::SetCuts()
   
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
   
   if (verboseLevel>0) DumpCutValuesTable();
 

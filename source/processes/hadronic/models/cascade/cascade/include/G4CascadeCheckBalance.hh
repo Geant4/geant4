@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_CHECK_BALANCE_HH
 #define G4CASCADE_CHECK_BALANCE_HH
-// $Id: G4CascadeCheckBalance.hh,v 1.12 2010-12-15 07:39:30 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
@@ -46,6 +45,7 @@
 // 20100923  M. Kelsey -- Baryon and charge deltas should have been integer
 // 20110328  M. Kelsey -- Add default ctor and explicit limit setting
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
+// 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -99,14 +99,16 @@ public:
 	       G4CollisionOutput& output,
 	       const std::vector<G4CascadParticle>& cparticles);
 
-  // Checks on conservation laws (kinematics, baryon number, charge)
+  // Checks on conservation laws (kinematics, baryon number, charge, hyperons)
   G4bool energyOkay() const;
   G4bool ekinOkay() const;
   G4bool momentumOkay() const;
   G4bool baryonOkay() const;
   G4bool chargeOkay() const;
+  G4bool strangeOkay() const;
 
   // Global check, used by G4CascadeInterface validation loop
+  // NOTE:  Strangeness is not required to be conserved in final state
   G4bool okay() const { return (energyOkay() && momentumOkay() &&
 				baryonOkay() && chargeOkay()); }
 
@@ -132,9 +134,10 @@ public:
 
   G4LorentzVector deltaLV() const { return final - initial; }
 
-  // Baryon number and charge are discrete; no bounds and no "relative" scale
+  // Baryon number, charge, S are discrete; no bounds and no "relative" scale
   G4int deltaB() const { return (finalBaryon - initialBaryon); }
   G4int deltaQ() const { return (finalCharge - initialCharge); }
+  G4int deltaS() const { return (finalStrange- initialStrange); }
 
 protected:
   // Utility function for kinetic energy
@@ -152,6 +155,9 @@ private:
 
   G4int initialCharge;		// Total charge
   G4int finalCharge;
+
+  G4int initialStrange;		// Total strangeness (s-quark content)
+  G4int finalStrange;
 
   G4CollisionOutput tempOutput;		// Buffer for direct-list interfaces
 };

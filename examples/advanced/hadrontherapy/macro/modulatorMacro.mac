@@ -42,7 +42,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLI
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 50 130 deg
 /vis/viewer/zoom 3.5
@@ -55,11 +55,29 @@
 # Set the primary particle type,
 # energy and position along the X direction
 #
-/gun/particle proton
 
-/beam/energy/meanEnergy 62 MeV
-/beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -3000 mm
+#---------------------------gps-----------------
+/gps/pos/shape Circle
+/gps/pos/centre -300. 0. 0. cm
+/gps/pos/radius 3. mm
+/gps/pos/sigma_r 0. mm
+/gps/particle proton
+/gps/pos/type Beam
+
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/energy 62 MeV
+/gps/ene/sigma 400 keV
+/gps/direction 1 0 0
+
 
 ##########################
 # Set here the cut and the step max for the tracking. 

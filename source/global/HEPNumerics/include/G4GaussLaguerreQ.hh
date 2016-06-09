@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLaguerreQ.hh,v 1.6 2006-06-29 18:59:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class description:
 //

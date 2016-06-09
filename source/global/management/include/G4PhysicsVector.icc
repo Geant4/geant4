@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.30 2010-09-20 16:22:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //---------------------------------------------------------------
@@ -58,6 +57,15 @@ inline void* G4PhysicsVector::operator new(size_t)
 inline void G4PhysicsVector::operator delete(void* aVector)
 {
   aPVAllocator.FreeSingle((G4PhysicsVector*)aVector);
+}
+
+inline G4double G4PhysicsVector::Value(G4double theEnergy) 
+{
+  // Use cache for speed up - check if the value 'theEnergy' is same as the 
+  // last call. If it is same, then use the last value, if not - recompute
+
+  if( theEnergy != cache->lastEnergy ) { ComputeValue(theEnergy); }
+  return cache->lastValue;
 }
 
 inline
@@ -98,6 +106,14 @@ inline
  G4double G4PhysicsVector::Energy(const size_t binNumber) const
 {
   return binVector[binNumber];
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::GetMaxEnergy() const
+{
+  return edgeMax;
 }
 
 //---------------------------------------------------------------
@@ -192,22 +208,6 @@ inline
 
   if(numberOfNodes > 0) { status=true; }
   return status;
-}
-
-//---------------------------------------------------------------
-
-inline 
- void G4PhysicsVector::PutComment(const G4String& theComment)
-{
-  comment = theComment;
-}
-
-//---------------------------------------------------------------
-
-inline 
- const G4String& G4PhysicsVector::GetComment() const
-{
-  return comment;
 }
 
 //---------------------------------------------------------------

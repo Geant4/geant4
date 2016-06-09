@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VErrorLimitProcess.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class description:
@@ -87,6 +86,8 @@ class G4VErrorLimitProcess : public G4VDiscreteProcess
   G4double theStepLimit;  // limit set by the user
   G4double theStepLength; // step length extracted from the user step limit,
                           // with the algorithms of each concrete class
+
+  G4VParticleChange theParticleChange;
 };
   
 #endif

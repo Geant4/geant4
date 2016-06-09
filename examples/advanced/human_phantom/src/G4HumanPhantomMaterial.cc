@@ -32,15 +32,16 @@
 // design and code review.
 //
 
+#include "G4HumanPhantomMaterial.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4MaterialPropertyVector.hh"
-#include "globals.hh"
 #include "G4MaterialTable.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
-#include "G4HumanPhantomMaterial.hh"
 
 G4HumanPhantomMaterial::G4HumanPhantomMaterial(): 
   soft(0),  skeleton(0),lung(0), adipose(0), glandular(0),

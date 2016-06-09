@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.cc,v 1.5 2006-06-29 18:10:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4TrajectoryContainer.hh"

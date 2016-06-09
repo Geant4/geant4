@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorTrackLengthTarget.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -124,9 +123,8 @@ GetMeanFreePath(const class G4Track & track, G4double, enum G4ForceCondition *)
 G4VParticleChange* G4ErrorTrackLengthTarget::
 PostStepDoIt(const G4Track& aTrack, const G4Step& )
 {
-  G4ParticleChange* aParticleChange = new G4ParticleChange;
-  aParticleChange->Initialize(aTrack);
-  return aParticleChange;
+  theParticleChange.Initialize(aTrack);
+  return &theParticleChange;
 }
 
 

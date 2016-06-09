@@ -23,22 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01TrackingAction.cc,v 1.2 2006-06-29 17:44:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01TrackingAction.cc
+/// \brief Implementation of the RE01TrackingAction class
+//
+// $Id$
 //
 
-
-
 #include "RE01TrackingAction.hh"
-#include "G4TrackingManager.hh"
-#include "G4Track.hh"
 #include "RE01Trajectory.hh"
 #include "RE01TrackInformation.hh"
+
+#include "G4TrackingManager.hh"
+#include "G4Track.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+RE01TrackingAction::RE01TrackingAction()
+:G4UserTrackingAction()
+{;}
 
 void RE01TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   // Create trajectory only for track in tracking region
-  RE01TrackInformation* trackInfo = (RE01TrackInformation*)(aTrack->GetUserInformation());
+  RE01TrackInformation* trackInfo = 
+    (RE01TrackInformation*)(aTrack->GetUserInformation());
 
   if(trackInfo->GetTrackingStatus() > 0)
   {
@@ -49,12 +56,14 @@ void RE01TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   { fpTrackingManager->SetStoreTrajectory(false); }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
   if(secondaries)
   {
-    RE01TrackInformation* info = (RE01TrackInformation*)(aTrack->GetUserInformation());
+    RE01TrackInformation* info = 
+      (RE01TrackInformation*)(aTrack->GetUserInformation());
     size_t nSeco = secondaries->size();
     if(nSeco>0)
     {

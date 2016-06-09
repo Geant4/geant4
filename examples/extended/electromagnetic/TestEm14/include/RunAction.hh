@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2010-04-05 18:02:39 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm14/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,30 +50,30 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void CountProcesses(G4String procName) 
-                  {procCounter[procName]++;};
+                {fProcCounter[procName]++;};
     void SumTrack (G4double track) 
-                  {totalCount++; sumTrack += track; sumTrack2 += track*track;};
+                {fTotalCount++; fSumTrack += track; fSumTrack2 += track*track;};
     void SumeTransf (G4double energy) 
-                  {eTransfer += energy;};	 
+                {fEnTransfer += energy;};         
                     
   private:
-    DetectorConstruction*      detector;
-    PrimaryGeneratorAction*    primary;
-    HistoManager*              histoManager;
+    DetectorConstruction*      fDetector;
+    PrimaryGeneratorAction*    fPrimary;
+    HistoManager*              fHistoManager;
         
-    std::map<G4String,G4int>   procCounter;            
-    G4int totalCount;      //all processes counter
-    G4double sumTrack;     //sum of trackLength
-    G4double sumTrack2;    //sum of trackLength*trackLength
-    G4double eTransfer;    //energy transfered to charged secondaries
+    std::map<G4String,G4int>   fProcCounter;            
+    G4int fTotalCount;      //all processes counter
+    G4double fSumTrack;     //sum of trackLength
+    G4double fSumTrack2;    //sum of trackLength*trackLength
+    G4double fEnTransfer;   //energy transfered to charged secondaries
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

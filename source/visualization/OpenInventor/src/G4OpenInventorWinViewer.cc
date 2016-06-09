@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.27 2010-11-10 17:53:22 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation
@@ -179,7 +178,7 @@ void G4OpenInventorWinViewer::Initialise() {
     int ch = crect.bottom-crect.top;
     // Compell client rect to be width height :
     MoveWindow((HWND)fShell,wrect.left,wrect.top,width+ww-cw,height+wh-ch,TRUE);
-    ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(this));
+    ::SetWindowLongPtr((HWND)fShell,GWLP_USERDATA,LONG(this));
     ::SetWindowText((HWND)fShell,shellName.c_str());
     parent = fShell;
     fInteractorManager->AddShell(fShell);
@@ -214,7 +213,7 @@ G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {
     delete fViewer;
   }
   if(fShell) {
-    ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(0));
+    ::SetWindowLongPtr((HWND)fShell,GWLP_USERDATA,LONG(0));
     ::DestroyWindow((HWND)fShell);
   }
 }
@@ -264,7 +263,7 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     int height = HIWORD(aLParam);
     //printf("debug : G4SoWindow : WMS_SIZE : %d %d\n",width,height);
     G4OpenInventorWinViewer* This = 
-      (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+      (G4OpenInventorWinViewer*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
     if(This && This->fViewer) {
       This->fViewer->sizeChanged(SbVec2s(width,height));
     }
@@ -275,12 +274,12 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
   }return 0;
   case WM_DESTROY:{
     //G4OpenInventorWinViewer* This = 
-    //  (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    //  (G4OpenInventorWinViewer*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
     //::PostQuitMessage(0);
   }return 0;
   case WM_COMMAND:{
     G4OpenInventorWinViewer* This = 
-      (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+      (G4OpenInventorWinViewer*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
     if(This) {
       if(aLParam==0) { //From menu.
         // File :

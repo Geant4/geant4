@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/include/WLSTrajectoryPoint.hh
+/// \brief Definition of the WLSTrajectoryPoint class
+//
 //
 //
 //
@@ -91,11 +94,7 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<WLSTrajectoryPoint> WLSTrajPointAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<WLSTrajectoryPoint> WLSTrajPointAllocator;
-#endif
+extern G4Allocator<WLSTrajectoryPoint> WLSTrajPointAllocator;
 
 inline void* WLSTrajectoryPoint::operator new(size_t)
 {

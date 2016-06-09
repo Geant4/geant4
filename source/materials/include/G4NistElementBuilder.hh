@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.19 2010-10-25 13:00:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -55,8 +54,10 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
 #include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,9 +73,6 @@ public:
   G4NistElementBuilder(G4int vb);
   ~G4NistElementBuilder();
 
-  // Get atomic number by element symbol
-  G4int GetZ(const G4String& symb);
-
   // Find or build a G4Element by atomic number
   G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
 
@@ -87,15 +85,22 @@ public:
   // Access to the vector of Geant4 predefined element names 
   const std::vector<G4String>& GetElementNames() const;
 
-  // Get the mass of the element in amu for the natuaral isotope composition
-  // with electron shell 
-  inline G4double GetA (G4int Z);
+  // Get atomic number by element symbol
+  G4int GetZ(const G4String& symb);
 
-  // Get the mass of the isotope in G4 units (without electron shell)
-  inline G4double GetIsotopeMass (G4int Z, G4int N);
+  // Get atomic weight in atomic units by element symbol
+  G4double GetAtomicMassAmu(const G4String& symb);
 
-  // Get the atomic mass of the isotope in G4 units (with electron shell)
-  inline G4double GetAtomicMass  (G4int Z, G4int N);
+  // Get atomic weight in atomic units - mean mass in units of amu of an atom 
+  // with electron shell for the natural isotope composition 
+  inline G4double GetAtomicMassAmu(G4int Z);
+
+  // Get mass of isotope without electron shell in Geant4 energy units 
+  inline G4double GetIsotopeMass(G4int Z, G4int N);
+
+  // Get mass in Geant4 energy units of an atom of a particular isotope 
+  // with the electron shell  
+  inline G4double GetAtomicMass(G4int Z, G4int N);
 
   // Get total ionisation energy of an atom
   inline G4double GetTotalElectronBindingEnergy(G4int Z) const;
@@ -109,6 +114,7 @@ public:
   // Get number of natural isotopes
   inline G4int GetNumberOfNistIsotopes(G4int Z);
 
+  // Get max Z in the Geant4 element database
   inline G4int GetMaxNumElements(); 
 
   inline void SetVerbose(G4int);
@@ -152,7 +158,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistElementBuilder::GetA(G4int Z)
+inline G4double G4NistElementBuilder::GetAtomicMassAmu(G4int Z)
 {
   G4double a = 0.0;
   if(Z>0 && Z<maxNumElements) { a = atomicMass[Z]; }
@@ -163,22 +169,22 @@ inline G4double G4NistElementBuilder::GetA(G4int Z)
 
 inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
 {
-  G4double m = 0.0;
+  G4double mass = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {m = massIsotopes[i + idxIsotopes[Z]];}
-  return m;
+  if(i >= 0 && i <nIsotopes[Z]) {mass = massIsotopes[i + idxIsotopes[Z]];}
+  return mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N)
 {
-  G4double m = 0.0;
+  G4double mass = 0.0;
   G4int i = N - nFirstIsotope[Z];
   if(i >= 0 && i <nIsotopes[Z]) {
-    m = massIsotopes[i + idxIsotopes[Z]] + Z*electron_mass_c2 - bindingEnergy[Z]; 
+    mass = massIsotopes[i + idxIsotopes[Z]] + Z*CLHEP::electron_mass_c2 - bindingEnergy[Z]; 
   }
-  return m;
+  return mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

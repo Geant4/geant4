@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/OlapSteppingAction.cc
+/// \brief Implementation of the OlapSteppingAction class
 //
-// $Id: OlapSteppingAction.cc,v 1.3 2006-06-29 17:23:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -44,6 +46,7 @@
 #include "G4NavigationHistory.hh"
 #include "G4Step.hh"
 #include "G4VSolid.hh"
+#include "G4SystemOfUnits.hh"
 #include "SolidAnalyser.hh"
 
 std::ostream&
@@ -84,40 +87,40 @@ operator << (std::ostream& os, const OlapStepInfo& aStepInfo)
         c='s';
       os << " ins=[" << c << "] " ; // << "lok.pt.=" << locP;
       if( aStepInfo.theHist.GetVolume(i) != 0 ) {
-	 os   << " PVName=["<< aStepInfo.theHist.GetVolume(i)->GetName() << ":"
-	      << aStepInfo.theHist.GetVolume(i)->GetCopyNo() 
-	      << "] Type=[";
-	 switch(aStepInfo.theHist.GetVolumeType(i))
-	   {
-	   case kNormal:
-	     os <<"N";
-	     break;
-	   case kReplica:
-	     os <<"R" << aStepInfo.theHist.GetReplicaNo(i);
-	     break;
-	   case kParameterised:
-	     os <<"P" << aStepInfo.theHist.GetReplicaNo(i);
-	     break;
-	   }
-	 os << "] ";
+         os   << " PVName=["<< aStepInfo.theHist.GetVolume(i)->GetName() << ":"
+              << aStepInfo.theHist.GetVolume(i)->GetCopyNo() 
+              << "] Type=[";
+         switch(aStepInfo.theHist.GetVolumeType(i))
+           {
+           case kNormal:
+             os <<"N";
+             break;
+           case kReplica:
+             os <<"R" << aStepInfo.theHist.GetReplicaNo(i);
+             break;
+           case kParameterised:
+             os <<"P" << aStepInfo.theHist.GetReplicaNo(i);
+             break;
+           }
+         os << "] ";
       }else{
-	 os << "Phys = <Null>";
+         os << "Phys = <Null>";
       }
       
       const G4AffineTransform & trans =
          aStepInfo.theHist.GetTransform(i).Inverse();
       
-      os << "P=" << trans.NetTranslation() 
+      os << "P="   << trans.NetTranslation() 
          << " R=[" << trans.NetRotation().phiX()/degree << "," 
-	            << trans.NetRotation().thetaX()/degree << ","  
-	            << trans.NetRotation().phiY()/degree << "," 
-		    << trans.NetRotation().thetaY()/degree << ","
-		    << trans.NetRotation().phiZ()/degree << "," 
-		    << trans.NetRotation().thetaZ()/degree << "] "; 
-      	    
+                   << trans.NetRotation().thetaX()/degree << ","  
+                   << trans.NetRotation().phiY()/degree << "," 
+                   << trans.NetRotation().thetaY()/degree << ","
+                   << trans.NetRotation().phiZ()/degree << "," 
+                   << trans.NetRotation().thetaZ()/degree << "] "; 
+                  
       // solid specification
       
-      os << " " << solid->GetEntityType() << ": "; 		  
+      os << " " << solid->GetEntityType() << ": ";                   
       std::vector< std::pair<G4String,G4double> >::iterator it =
          param.begin();
       while ( it != param.end() )
@@ -150,12 +153,12 @@ void OlapSteppingAction::UserSteppingAction(const G4Step * aStep)
   G4int aStepNo = aTrack->GetCurrentStepNumber();
   //G4cout << "Stepping: " << aTrack->GetVolume()->GetName() 
   //       << " CpNr: " << aTrack->GetVolume()->GetCopyNo() << G4endl;
-	 
-   if (aStepNo>999) {
+         
+  if (aStepNo>999) {
       G4cerr << "OlapSteppingAction(): to many steps, killing track" << G4endl
              << "      pv=[" << aTrack->GetVolume()->GetName() 
-	     << "] cpnr=[" << aTrack->GetVolume()->GetCopyNo() 
-	     << "] pos=" << aTrack->GetPosition()
+             << "] cpnr=[" << aTrack->GetVolume()->GetCopyNo() 
+             << "] pos=" << aTrack->GetPosition()
              << G4endl;
       //G4EventManager::GetEventManager()->AbortCurrentEvent();
       //G4RunManager::GetRunManager()->AbortRun();

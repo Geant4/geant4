@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.2 2006-06-29 16:48:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm17/src/EventActionMessenger.cc
+/// \brief Implementation of the EventActionMessenger class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,32 +41,32 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:eventAction(EvAct)
+:fEventAction(EvAct)
 { 
-  eventDir = new G4UIdirectory("/testem/event/");
-  eventDir ->SetGuidance("physics list");
+  fEventDir = new G4UIdirectory("/testem/event/");
+  fEventDir ->SetGuidance("physics list");
       
-  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);      
+  fPrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
+  fPrintCmd->SetGuidance("Print events modulo n");
+  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetRange("EventNb>0");
+  fPrintCmd->AvailableForStates(G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete PrintCmd;
-  delete eventDir;   
+  delete fPrintCmd;
+  delete fEventDir;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
+  if (command == fPrintCmd)
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

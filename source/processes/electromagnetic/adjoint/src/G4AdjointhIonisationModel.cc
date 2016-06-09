@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhIonisationModel.cc,v 1.4 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4AdjointhIonisationModel.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
@@ -373,18 +375,18 @@ G4double G4AdjointhIonisationModel::DiffCrossSectionPerAtomPrimToSecond(
       			f += f1;
     	 	}
 		G4double x1 = 1.0 + x;
-    		G4double g  = 1.0/(x1*x1);
+    		G4double gg  = 1.0/(x1*x1);
     		if( 0.5 == spin ) {
       			G4double x2 = 0.5*electron_mass_c2*deltaKinEnergy/(mass*mass);
-      			g *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
+      			gg *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
     		}
-    		if(g > 1.0) {
+    		if(gg > 1.0) {
       			G4cout << "### G4BetheBlochModel in Adjoint Sim WARNING: g= " << g
 	     			<< G4endl;
-			g=1.;
+			gg=1.;
 		}
-		//G4cout<<"g"<<g<<G4endl;
-		dSigmadEprod*=g;		
+		//G4cout<<"gg"<<gg<<G4endl;
+		dSigmadEprod*=gg;		
     	 }
 	 
   }

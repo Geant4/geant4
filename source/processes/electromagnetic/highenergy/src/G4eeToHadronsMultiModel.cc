@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.9 2010-10-26 14:15:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeToHadronsMultiModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4eeToTwoPiModel.hh"
 #include "G4eeTo3PiModel.hh"
 #include "G4eeToPGammaModel.hh"
@@ -61,8 +62,8 @@
 
 using namespace std;
 
-G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& name)
-  : G4VEmModel(name),
+G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& mname)
+  : G4VEmModel(mname),
     csFactor(1.0),
     nModels(0),
     verbose(ver),

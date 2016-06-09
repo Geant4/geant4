@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.icc,v 1.3 2010-12-15 07:39:34 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
 //		string to report output
@@ -35,6 +34,7 @@
 // 20110728  M. Kelsey -- Fix Coverity #22954, recursive #include.
 // 20110923  M. Kelsey -- Add optional ostream& argument to print() fns,
 //		drop all "inline" keywords
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #ifndef G4_CASCADE_DATA_ICC
 #define G4_CASCADE_DATA_ICC
@@ -52,13 +52,13 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
   index[8] = N29;
 
   // Initialize multiplicity array
-  for (G4int m = 0; m < NM; m++) {
-    G4int start = index[m];
-    G4int stop = index[m+1];
+  for (G4int im = 0; im < NM; im++) {
+    G4int start = index[im];
+    G4int stop = index[im+1];
     for (G4int k = 0; k < NE; k++) {
-      multiplicities[m][k] = 0.0;
+      multiplicities[im][k] = 0.0;
       for (G4int i = start; i < stop; i++) {
- 	multiplicities[m][k] += crossSections[i][k];
+ 	multiplicities[im][k] += crossSections[i][k];
       }
     }
   }
@@ -66,8 +66,8 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
   // Initialize total cross section arrays
   for (G4int k = 0; k < NE; k++) {
     sum[k] = 0.0;
-    for (G4int m = 0; m < NM; m++) {
-      sum[k] += multiplicities[m][k];
+    for (G4int im = 0; im < NM; im++) {
+      sum[k] += multiplicities[im][k];
     }
   }
 
@@ -95,7 +95,7 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(std::ostream& os) const {
   printXsec(inelastic, os);
   os << "\n Individual channel cross sections" << G4endl;
   
-  for (int m=2; m<NM+2; m++) print(m, os);
+  for (int im=2; im<NM+2; im++) print(im, os);
   return;
 }
 

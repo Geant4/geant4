@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/include/G4BlineEquation.hh
+/// \brief Definition of the G4BlineEquation class
 //
-// $Id: G4BlineEquation.hh,v 1.2 2006-06-29 17:14:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -52,10 +54,10 @@ class G4BlineEquation : public G4Mag_EqRhs
   public:  // with description
 
     G4BlineEquation( G4MagneticField* MagField );
-    ~G4BlineEquation();
+    virtual ~G4BlineEquation();
       // Constructor and destructor.
 
-    void EvaluateRhsGivenB( const G4double y[],
+    virtual void EvaluateRhsGivenB( const G4double y[],
                             const G4double B[3],
                                   G4double dydx[] ) const;
       // Given the value of the magnetic field B, this function 
@@ -65,8 +67,8 @@ class G4BlineEquation : public G4Mag_EqRhs
 
   private:
 
-    G4bool backward_direction;
-    G4double direction;
+    G4bool fBackward_direction;
+    G4double fDirection;
 };
 
 #endif 

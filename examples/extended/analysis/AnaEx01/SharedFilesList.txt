@@ -1,0 +1,17 @@
+EXAMPLE extended/analysis/AnaEx01
+
+COMMON_CLASSES_PATH ../../common
+COMMON_CLASSES_LIST
+g4hbook.hh
+g4hbook_defs.hh
+ExG4HbookAnalysisManager
+
+SHARED_CLASSES_PATH ../shared
+SHARED_CLASSES_LIST
+DetectorConstruction
+DetectorMessenger
+EventAction
+PhysicsList
+PrimaryGeneratorAction
+RunAction
+SteppingAction

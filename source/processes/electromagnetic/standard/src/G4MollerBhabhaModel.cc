@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.38 2010-04-06 17:10:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +60,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MollerBhabhaModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "Randomize.hh"
@@ -138,10 +139,10 @@ G4MollerBhabhaModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* 
     //Moller (e-e-) scattering
     if (isElectron) {
 
-      G4double g     = (2.0*gam - 1.0)/gamma2;
-      cross = ((xmax - xmin)*(1.0 - g + 1.0/(xmin*xmax)
+      G4double gg = (2.0*gam - 1.0)/gamma2;
+      cross = ((xmax - xmin)*(1.0 - gg + 1.0/(xmin*xmax)
 			      + 1.0/((1.0-xmin)*(1.0 - xmax)))
-            - g*log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
+            - gg*log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
 
     //Bhabha (e+e-) scattering
     } else {
@@ -311,15 +312,15 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
   //Moller (e-e-) scattering
   if (isElectron) {
 
-    G4double g = (2.0*gam - 1.0)/gamma2;
+    G4double gg = (2.0*gam - 1.0)/gamma2;
     G4double y = 1.0 - xmax;
-    grej = 1.0 - g*xmax + xmax*xmax*(1.0 - g + (1.0 - g*y)/(y*y));
+    grej = 1.0 - gg*xmax + xmax*xmax*(1.0 - gg + (1.0 - gg*y)/(y*y));
 
     do {
       q = G4UniformRand();
       x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
       y = 1.0 - x;
-      z = 1.0 - g*x + x*x*(1.0 - g + (1.0 - g*y)/(y*y));
+      z = 1.0 - gg*x + x*x*(1.0 - gg + (1.0 - gg*y)/(y*y));
       /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "

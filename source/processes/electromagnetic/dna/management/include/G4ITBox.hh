@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITBox.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -84,11 +85,11 @@ private :
     const G4ITBox & operator=
     (const G4ITBox &right);
     G4int  fNbIT;
-    G4IT * fFirstIT;
-    G4IT * fLastIT;
+    G4IT * fpFirstIT;
+    G4IT * fpLastIT;
 
-    G4ITBox* fPreviousBox;
-    G4ITBox* fNextBox;
+    G4ITBox* fpPreviousBox;
+    G4ITBox* fpNextBox;
 };
 
 inline G4bool G4ITBox::Empty() const
@@ -102,40 +103,40 @@ inline G4int G4ITBox::GetNTrack() const
 }
 inline G4IT* G4ITBox::GetFirstIT()
 {
-    return fFirstIT ;
+    return fpFirstIT ;
 }
 inline G4IT* G4ITBox::GetLastIT()
 {
-    return fLastIT ;
+    return fpLastIT ;
 }
 
 inline const G4IT* G4ITBox::GetFirstIT() const
 {
-    return fFirstIT ;
+    return fpFirstIT ;
 }
 inline const G4IT* G4ITBox::GetLastIT() const
 {
-    return fLastIT ;
+    return fpLastIT ;
 }
 
 inline void G4ITBox::SetNextBox(G4ITBox* box)
 {
-    fNextBox = box;
+    fpNextBox = box;
 }
 
 inline G4ITBox* G4ITBox::GetNextBox()
 {
-    return fNextBox ;
+    return fpNextBox ;
 }
 
 inline void G4ITBox::SetPreviousBox(G4ITBox* box)
 {
-    fPreviousBox = box;
+    fpPreviousBox = box;
 }
 
 inline G4ITBox* G4ITBox::GetPreviousBox()
 {
-    return fPreviousBox ;
+    return fpPreviousBox ;
 }
 
 #endif

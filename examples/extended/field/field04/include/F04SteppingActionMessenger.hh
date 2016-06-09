@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04SteppingActionMessenger.hh
+/// \brief Definition of the F04SteppingActionMessenger class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04SteppingActionMessenger_h
 #define F04SteppingActionMessenger_h 1
 
@@ -43,15 +40,15 @@ class F04SteppingActionMessenger: public G4UImessenger
   public:
 
     F04SteppingActionMessenger(F04SteppingAction* );
-    ~F04SteppingActionMessenger();
+    virtual ~F04SteppingActionMessenger();
 
-    void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-    F04SteppingAction* steppingAction;
+    F04SteppingAction* fSteppingAction;
 
-    G4UIdirectory*     steppingDir;
+    G4UIdirectory*     fSteppingDir;
 
 };
 

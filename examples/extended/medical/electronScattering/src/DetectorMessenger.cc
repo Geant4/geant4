@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,53 +43,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance("UI commands specific to this example.");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance("UI commands specific to this example.");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction commands");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction commands");
       
-  MaterCmd = new G4UIcmdWithAString("/testem/det/setMaterial",this);
-  MaterCmd->SetGuidance("Select Material of the Scatter Foil");
-  MaterCmd->SetParameterName("material",false);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMaterial",this);
+  fMaterCmd->SetGuidance("Select Material of the Scatter Foil");
+  fMaterCmd->SetParameterName("material",false);
   
-  ThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setThickness",this);
-  ThickCmd->SetGuidance("Set Thickness of the Scatter Foil");
-  ThickCmd->SetParameterName("thickness",false);  
-  ThickCmd->SetRange("thickness>0.");
-  ThickCmd->SetUnitCategory("Length");  
+  fThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setThickness",this);
+  fThickCmd->SetGuidance("Set Thickness of the Scatter Foil");
+  fThickCmd->SetParameterName("thickness",false);  
+  fThickCmd->SetRange("thickness>0.");
+  fThickCmd->SetUnitCategory("Length");  
   
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd; 
-  delete ThickCmd; 
-  delete UpdateCmd;
-  delete detDir;  
-  delete testemDir;
+  delete fMaterCmd; 
+  delete fThickCmd; 
+  delete fUpdateCmd;
+  delete fDetDir;  
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if ( command == MaterCmd )
-   {Detector->SetMaterialScatter(newValue);}
+  if ( command == fMaterCmd )
+   {fDetector->SetMaterialScatter(newValue);}
    
-  if ( command == ThickCmd )
-   {Detector->SetThicknessScatter(ThickCmd->GetNewDoubleValue(newValue));}
+  if ( command == fThickCmd )
+   {fDetector->SetThicknessScatter(fThickCmd->GetNewDoubleValue(newValue));}
    
-  if  ( command == UpdateCmd )
-   {Detector->UpdateGeometry(); }
+  if  ( command == fUpdateCmd )
+   {fDetector->UpdateGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -114,7 +114,6 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetMaxBetaChangePerStep(G4double );
     void SetScintillationYieldFactor(G4double );
     void SetScintillationExcitationRatio(G4double );
-    void SetOpticalSurfaceModel(G4OpticalSurfaceModel );
 
     void SetWLSTimeProfile(G4String );
     void SetScintillationByParticleType(G4bool );
@@ -168,9 +167,6 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     /// scintillation excitation ratio
     G4double                    fExcitationRatio;
-
-    /// the optical surface model (glisur or unified)
-    G4OpticalSurfaceModel       fSurfaceModel;
 
     /// the WLS process time profile
     G4String                    fProfile;

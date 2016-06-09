@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// --------------------------------------------------------------------
+/// \file DicomPhantomParameterisationColour.cc
+/// \brief Implementation of the DicomPhantomParameterisationColour class
 
 #include "DicomPhantomParameterisationColour.hh"
 
@@ -33,19 +34,18 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
-//------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomParameterisationColour::DicomPhantomParameterisationColour()
 {
   ReadColourData();
 }
 
-
-//------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomParameterisationColour::~DicomPhantomParameterisationColour()
 {
 }
 
-//------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomPhantomParameterisationColour::ReadColourData()
 {
   //----- Add a G4VisAttributes for materials not defined in file;
@@ -68,8 +68,7 @@ void DicomPhantomParameterisationColour::ReadColourData()
 
 }
        
-
-//------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomPhantomParameterisationColour::
 ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol, const G4VTouchable *) 
 { 

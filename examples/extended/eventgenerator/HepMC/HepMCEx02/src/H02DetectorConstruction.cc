@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/H02DetectorConstruction.cc
+/// \brief Implementation of the H02DetectorConstruction class
+//
 // ====================================================================
 //    H02DetectorConstruction.cc
-//    $Id: H02DetectorConstruction.cc,v 1.5 2006-06-29 17:10:18 gunter Exp $
+//    $Id$
 //
 // ====================================================================
 #include "H02DetectorConstruction.hh"
@@ -47,6 +50,8 @@
 #include "G4TransportationManager.hh"
 #include "G4ChordFinder.hh"
 #include "H02Field.hh"
+
+#include "G4SystemOfUnits.hh"
 
 // ====================================================================
 //
@@ -155,7 +160,7 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   expHallLV-> SetVisAttributes(expHallVisAtt);
 
   G4PVPlacement* expHall= new G4PVPlacement(0, G4ThreeVector(), "EXP_HALL_PV",
-					    expHallLV, 0, FALSE, 0);
+                                            expHallLV, 0, FALSE, 0);
   //            ...                                    MV, MANY, copy#
 
   // ==============================================================
@@ -164,11 +169,11 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   // calorimeter system
   G4Tubs* barrelCalSolid= 
     new G4Tubs("BARREL_CAL", RIN_BARREL_CAL, ROUT_BARREL_CAL, 
-	       DZ_BARREL_CAL, 0., 360.*deg);
+               DZ_BARREL_CAL, 0., 360.*deg);
 
   G4Tubs* endcapCalSolid= 
     new G4Tubs("ENDCAP_CAL", RIN_ENDCAP_CAL, ROUT_ENDCAP_CAL, 
-	       DZ_ENDCAP_CAL, 0., 360.*deg);
+               DZ_ENDCAP_CAL, 0., 360.*deg);
 
   G4LogicalVolume* barrelCalLV= 
     new G4LogicalVolume(barrelCalSolid, Lead, "BARREL_CAL_LV");
@@ -183,23 +188,23 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
 
   // G4PVPlacement* barrelCal= 
     new G4PVPlacement(0, G4ThreeVector(), "BARREL_CAL_PV",
-		      barrelCalLV, expHall, FALSE, 0);
+                      barrelCalLV, expHall, FALSE, 0);
 
   G4ThreeVector posCal(0.,0.,6.*m);
   // G4PVPlacement* endcapCal1= 
     new G4PVPlacement(0, posCal, "ENDCAP_CAL_PV",
-		      endcapCalLV, expHall, FALSE, 0);
+                      endcapCalLV, expHall, FALSE, 0);
 
   //G4PVPlacement* endcapCal2= 
     new G4PVPlacement(0, -posCal, "ENDCAP_CAL_PV",
-		      endcapCalLV, expHall, FALSE, 1);
+                      endcapCalLV, expHall, FALSE, 1);
 
   // muon system
   G4Box* barrelMuonSolid= new G4Box("BARREL_MUON", DX_BARREL_MUON, 
-				     DY_BARREL_MUON,  DZ_BARREL_MUON);
+                                     DY_BARREL_MUON,  DZ_BARREL_MUON);
   G4Tubs* endcapMuonSolid= 
     new G4Tubs("ENDCAP_MUON", RIN_ENDCAP_MUON, ROUT_ENDCAP_MUON, 
-	       DZ_ENDCAP_MUON, 0., 360.*deg);
+               DZ_ENDCAP_MUON, 0., 360.*deg);
 
   G4LogicalVolume* barrelMuonLV= 
     new G4LogicalVolume(barrelMuonSolid, Ar, "BARREL_MUON_LV");
@@ -221,7 +226,7 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   for (G4int k=0; k<8; k++) {
     G4Transform3D transformM(*rotM, posM);
     new G4PVPlacement(transformM, "BARREL_MUON_PV",
-		      barrelMuonLV, expHall, FALSE, k);
+                      barrelMuonLV, expHall, FALSE, k);
     rotM->rotateZ(dangle);
     posM.rotateZ(dangle);
   }
@@ -229,11 +234,11 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   G4ThreeVector posMuon(0.,0.,8.*m);
   // G4PVPlacement* endcapMuon1= 
     new G4PVPlacement(0, posMuon, "ENDCAP_MUON_PV",
-		      endcapMuonLV, expHall, FALSE, 0);
+                      endcapMuonLV, expHall, FALSE, 0);
 
   // G4PVPlacement* endcapMuon2= 
     new G4PVPlacement(0, -posMuon, "ENDCAP_MUON_PV",
-		      endcapMuonLV, expHall, FALSE, 1);
+                      endcapMuonLV, expHall, FALSE, 1);
 
 
   // sensitive Detectors

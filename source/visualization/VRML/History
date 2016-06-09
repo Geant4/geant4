@@ -20,6 +20,29 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+8th August 2012  John Allison  (VRML-V09-05-05)
+- G4VRML1/2SceneHandlerFunc.icc;
+  o Intercepted 2D primitives - JustWarning printed.
+
+5th July 2012  Gabriele Cosmo  (VRML-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+23rd May 2012  John Allison  (VRML-V09-05-03)
+- Health Check 2012: Migrated (see management/History):
+  o G4VRML1/2SCENEHANDLER::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
+28th March 2012  John Allison  (VRML-V09-05-02)
+- G4VRML1FileViewer.cc: Protect debug statement.
+
+28th February 2012  John Allison  (VRML-V09-05-01)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
+13th January 2012  John Allison  (VRML-V09-05-00)
+- G4VRML1/2FileSceneHandler.cc
+  o Fixed Ubuntu warning about ignoring return value of system call.
+
 27th December 2010  John Allison  (VRML-V09-04-00)
 - Tagged.
 

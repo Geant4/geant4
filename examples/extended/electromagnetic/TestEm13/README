@@ -8,7 +8,7 @@ $Id: README,v 1.5 2010-04-02 15:46:31 maire Exp $
                             TestEm13
                             --------
 
-	How to compute cross sections from the tramsmition coefficient
+	How to compute cross sections from the transmition coefficient
 	( see below, item Physics).
 	
  1- GEOMETRY DEFINITION
@@ -67,10 +67,6 @@ $Id: README,v 1.5 2010-04-02 15:46:31 maire Exp $
 	
  7- HOW TO START ?
  
-	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm13
- 		% gmake
- 		
 	execute TestEm13 in 'batch' mode from macro files :
  		% TestEm13   compt.mac
  		

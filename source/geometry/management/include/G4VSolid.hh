@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.30 2010-10-19 15:19:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4VSolid
@@ -191,6 +190,7 @@ class G4VSolid
 
     virtual G4ThreeVector GetPointOnSurface() const;
       // Returns a random point located on the surface of the solid.
+      // Points returned are not necessarily uniformly distributed.
 
     virtual G4VSolid* Clone() const;
       // Returns a pointer of a dynamically allocated copy of the solid.

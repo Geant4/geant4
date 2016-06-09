@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.28 2009-02-23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.

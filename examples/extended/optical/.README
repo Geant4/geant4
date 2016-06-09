@@ -1,0 +1,23 @@
+//$Id$
+
+///\file "optical/.README"
+///\brief Examples optical README page
+
+/*! \page Examples_optical Category "optical"
+
+This directory includes examples demonstrating the use of optical processes
+in the simulation.
+
+\link ExampleLXe LXe \endlink
+
+Multi-purpose detector setup implementing:
+-# scintillation inside a bulk scintillator with PMTs
+-# large wall of small PMTs opposite a Cerenkov slab to show the cone
+-# plastic scintillator with wave-length-shifting fiber readout.
+
+\link Examplewls wls \endlink
+
+This application simulates the propagation of photons inside a Wave Length
+Shifting (WLS) fiber.
+
+*/

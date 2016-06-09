@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/OlapGenerator.cc
+/// \brief Implementation of the OlapGenerator class
 //
-// $Id: OlapGenerator.cc,v 1.4 2006-06-29 17:22:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -109,14 +111,14 @@ void OlapGenerator::GeneratePrimaries(G4Event * anEvent)
   dirBA[grid.axis] = -1;
   
   #ifdef OLAPDEBUG1
-    G4int runID = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
-    G4int evtID = anEvent->GetEventID();
-    G4cout << "generator: " 
-           << "run=" << runID << " evt=" << evtID
-           << " axis=" << grid.axis << " out=" << grid.count[out]
-           << " in=" << grid.count[in] 
-           << " posAB=" << posAB 
-	   << " posBA=" << posBA << G4endl;
+  G4int runID = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
+  G4int evtID = anEvent->GetEventID();
+  G4cout << "generator: " 
+         << "run=" << runID << " evt=" << evtID
+         << " axis=" << grid.axis << " out=" << grid.count[out]
+         << " in=" << grid.count[in] 
+         << " posAB=" << posAB 
+         << " posBA=" << posBA << G4endl;
   #endif
   
   // now generator 2 geantinos flying in opposite direction from A->B and B->A

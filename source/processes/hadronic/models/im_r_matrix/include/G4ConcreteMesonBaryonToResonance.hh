@@ -59,7 +59,7 @@ public:
 
   virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
-    throw G4HadronicException(__FILE__, __LINE__, "Tried to call G4ConcreteNNToNDelta::GetListOfColliders. Please find out why!");
+    throw G4HadronicException(__FILE__, __LINE__, "Tried to call G4ConcreteMesonBaryonToResonance::GetListOfColliders. Please find out why!");
     std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 
@@ -72,6 +72,9 @@ public:
   G4bool operator==(const G4ConcreteMesonBaryonToResonance &right) const;
   G4bool operator!=(const G4ConcreteMesonBaryonToResonance &right) const;
 
+private:
+  G4ConcreteMesonBaryonToResonance(const G4ConcreteMesonBaryonToResonance &);
+  G4ConcreteMesonBaryonToResonance & operator= (const G4ConcreteMesonBaryonToResonance &);
 
 protected:
 

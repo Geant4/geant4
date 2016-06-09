@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.5 2008-10-24 14:00:03 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4MultiNavigator
@@ -106,7 +105,7 @@ class G4MultiNavigator : public G4Navigator
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
+   void LocateGlobalPointWithinVolume(const G4ThreeVector& position); 
     // Relocate in all geometries for point that has not changed volume
     // (ie is within safety  in all geometries or is distance less that 
     // along the direction of a computed step.

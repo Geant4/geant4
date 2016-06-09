@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,87 +42,87 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
+  :fDetector(det)
 { 
-  detDir = new G4UIdirectory("/testex/det/");
-  detDir->SetGuidance("detector construction commands");
+  fDetDir = new G4UIdirectory("/testex/det/");
+  fDetDir->SetGuidance("detector construction commands");
       
-  MaterCmd = new G4UIcmdWithAString("/testex/det/setMat",this);
-  MaterCmd->SetGuidance("Select material of the box.");
-  MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd = new G4UIcmdWithAString("/testex/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the box.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeXCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeX",this);
-  SizeXCmd->SetGuidance("Set sizeX of the absorber");
-  SizeXCmd->SetParameterName("SizeX",false);
-  SizeXCmd->SetRange("SizeX>0.");
-  SizeXCmd->SetUnitCategory("Length");
-  SizeXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeXCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeX",this);
+  fSizeXCmd->SetGuidance("Set sizeX of the absorber");
+  fSizeXCmd->SetParameterName("SizeX",false);
+  fSizeXCmd->SetRange("SizeX>0.");
+  fSizeXCmd->SetUnitCategory("Length");
+  fSizeXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeYZ",this);
-  SizeYZCmd->SetGuidance("Set sizeYZ of the absorber");
-  SizeYZCmd->SetParameterName("SizeYZ",false);
-  SizeYZCmd->SetRange("SizeYZ>0.");
-  SizeYZCmd->SetUnitCategory("Length");
-  SizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeYZ",this);
+  fSizeYZCmd->SetGuidance("Set sizeYZ of the absorber");
+  fSizeYZCmd->SetParameterName("SizeYZ",false);
+  fSizeYZCmd->SetRange("SizeYZ>0.");
+  fSizeYZCmd->SetUnitCategory("Length");
+  fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  StepSizeCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setStepSize",this);
-  StepSizeCmd->SetGuidance("Set maxStepSize in the absorber");
-  StepSizeCmd->SetParameterName("StepSize",false);
-  StepSizeCmd->SetRange("StepSize>0.");
-  StepSizeCmd->SetUnitCategory("Length");
-  StepSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fStepSizeCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setStepSize",this);
+  fStepSizeCmd->SetGuidance("Set maxStepSize in the absorber");
+  fStepSizeCmd->SetParameterName("StepSize",false);
+  fStepSizeCmd->SetRange("StepSize>0.");
+  fStepSizeCmd->SetUnitCategory("Length");
+  fStepSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setField",this);
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setField",this);
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/testex/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testex/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete SizeXCmd;
-  delete SizeYZCmd;
-  delete StepSizeCmd;
-  delete MagFieldCmd;
-  delete UpdateCmd;
-  delete detDir;  
+  delete fMaterCmd;
+  delete fSizeXCmd;
+  delete fSizeYZCmd;
+  delete fStepSizeCmd;
+  delete fMagFieldCmd;
+  delete fUpdateCmd;
+  delete fDetDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == MaterCmd )
-   { Detector->SetMaterial(newValue);}
+  if( command == fMaterCmd )
+   { fDetector->SetMaterial(newValue);}
    
-  if( command == SizeXCmd )
-   { Detector->SetSizeX(SizeXCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeXCmd )
+   { fDetector->SetSizeX(fSizeXCmd->GetNewDoubleValue(newValue));}
    
-  if( command == SizeYZCmd )
-   { Detector->SetSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeYZCmd )
+   { fDetector->SetSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}
       
-  if( command == MagFieldCmd )
-   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fMagFieldCmd )
+   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
 
-  if( command == StepSizeCmd )
-   { Detector->SetMaxStepSize(StepSizeCmd->GetNewDoubleValue(newValue));}
+  if( command == fStepSizeCmd )
+   { fDetector->SetMaxStepSize(fStepSizeCmd->GetNewDoubleValue(newValue));}
               
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

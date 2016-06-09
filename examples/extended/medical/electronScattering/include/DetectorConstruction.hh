@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,54 +64,54 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void PrintGeometry();
 
-     G4double    GetThicknessWorld()         {return thickness_World;};
-     G4double    GetRadiusWorld()            {return radius_World;};     
-     G4double    GetThicknessFrame()         {return thickness_Frame;};     
+     G4double    GetThicknessWorld()         {return fThickness_World;};
+     G4double    GetRadiusWorld()            {return fRadius_World;};     
+     G4double    GetThicknessFrame()         {return fThickness_Frame;};     
   
-     G4Material* GetMaterialScatter()        {return material_ScatterFoil;};
-     G4double    GetThicknessScatter()       {return thickness_ScatterFoil;};
+     G4Material* GetMaterialScatter()        {return fMaterial_ScatterFoil;};
+     G4double    GetThicknessScatter()       {return fThickness_ScatterFoil;};
           
-     const G4VPhysicalVolume* GetpvolWorld() {return pvol_World;};
-     const G4VPhysicalVolume* GetpvolFrame() {return pvol_Frame;};
+     const G4VPhysicalVolume* GetpvolWorld() {return fPvol_World;};
+     const G4VPhysicalVolume* GetpvolFrame() {return fPvol_Frame;};
 
   private:
   
-     G4Material*        material_World;
-     G4double           radius_World;     
-     G4double           thickness_World;
+     G4Material*        fMaterial_World;
+     G4double           fRadius_World;     
+     G4double           fThickness_World;
 
-     G4Material*        material_Frame;
-     G4double           thickness_Frame;
-     G4double           zfront_Frame;
+     G4Material*        fMaterial_Frame;
+     G4double           fThickness_Frame;
+     G4double           fZfront_Frame;
      
-     G4Material*        material_ExitWindow;
-     G4double           thickness_ExitWindow;
-     G4double           zfront_ExitWindow;
+     G4Material*        fMaterial_ExitWindow;
+     G4double           fThickness_ExitWindow;
+     G4double           fZfront_ExitWindow;
 
-     G4Material*        material_ScatterFoil;
-     G4double           thickness_ScatterFoil;
-     G4double           zfront_ScatterFoil;
+     G4Material*        fMaterial_ScatterFoil;
+     G4double           fThickness_ScatterFoil;
+     G4double           fZfront_ScatterFoil;
 
-     G4Material*        material_MonitorChbr;
-     G4double           thickness_MonitorChbr;
-     G4double           zfront_MonitorChbr;
+     G4Material*        fMaterial_MonitorChbr;
+     G4double           fThickness_MonitorChbr;
+     G4double           fZfront_MonitorChbr;
 
-     G4Material*        material_Bag;
-     G4double           thickness_Bag;
-     G4double           zfront_Bag;
+     G4Material*        fMaterial_Bag;
+     G4double           fThickness_Bag;
+     G4double           fZfront_Bag;
 
-     G4Material*        material_Gas;
-     G4double           thickness_Gas;
+     G4Material*        fMaterial_Gas;
+     G4double           fThickness_Gas;
 
-     G4Material*        material_Ring;
-     G4double           thickness_Ring;
-     G4double           inneradius_Ring;
+     G4Material*        fMaterial_Ring;
+     G4double           fThickness_Ring;
+     G4double           fInnerRadius_Ring;
      
 
-     G4VPhysicalVolume* pvol_World;
-     G4VPhysicalVolume* pvol_Frame;
+     G4VPhysicalVolume* fPvol_World;
+     G4VPhysicalVolume* fPvol_Frame;
      
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger* fDetectorMessenger;
       
   private:
     

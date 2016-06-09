@@ -32,7 +32,7 @@
 #############################
 # 
 /vis/scene/create
-/vis/open OGLI
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /tracking/storeTrajectory 1

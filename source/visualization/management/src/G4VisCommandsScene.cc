@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.71 2010-12-11 16:53:20 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -49,9 +48,142 @@ G4VVisCommandScene::~G4VVisCommandScene () {}
 
 G4String G4VVisCommandScene::CurrentSceneName () {
   const G4Scene* pScene = fpVisManager -> GetCurrentScene ();
-  G4String currentSceneName;
+  G4String currentSceneName = "none";
   if (pScene) currentSceneName = pScene -> GetName ();
   return currentSceneName;
+}
+
+////////////// /vis/scene/activateModel ////////////////////////////
+
+G4VisCommandSceneActivateModel::G4VisCommandSceneActivateModel () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/activateModel", this);
+  fpCommand -> SetGuidance
+    ("Activate or de-activate model.");
+  fpCommand -> SetGuidance
+    ("Attempts to match search string to name of model - use unique sub-string.");
+  fpCommand -> SetGuidance
+    ("Use \"/vis/scene/list\" to see model names.");
+  fpCommand -> SetGuidance
+    ("If name == \"all\" (default), all models are activated.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("search-string", 's', omitable = true);
+  parameter -> SetDefaultValue ("all");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("activate", 'b', omitable = true);
+  parameter -> SetDefaultValue (true);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneActivateModel::~G4VisCommandSceneActivateModel () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneActivateModel::GetCurrentValue(G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
+						     G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String searchString, activateString;
+  std::istringstream is (newValue);
+  is >> searchString >> activateString;
+  G4bool activate = G4UIcommand::ConvertToBool(activateString);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  if (searchString == "all" && !activate) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: You are not allowed to de-activate all models."
+	"\n  Command ignored."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4bool any = false;
+
+  std::vector<G4Scene::Model>& runDurationModelList =
+    pScene->SetRunDurationModelList();
+  for (size_t i = 0; i < runDurationModelList.size(); i++) {
+    const G4String& modelName =
+      runDurationModelList[i].fpModel->GetGlobalDescription();
+    if (searchString == "all" || modelName.find(searchString)
+	!= std::string::npos) {
+      any = true;
+      runDurationModelList[i].fActive = activate;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Model \"" << modelName;
+	if (activate) G4cout << "\" activated.";
+	else  G4cout << "\" de-activated.";
+	G4cout << G4endl;
+      }
+    }
+  }
+
+  std::vector<G4Scene::Model>& endOfEventModelList =
+    pScene->SetEndOfEventModelList();
+  for (size_t i = 0; i < endOfEventModelList.size(); i++) {
+    const G4String& modelName =
+      endOfEventModelList[i].fpModel->GetGlobalDescription();
+    if (searchString == "all" || modelName.find(searchString)
+	!= std::string::npos) {
+      any = true;
+      endOfEventModelList[i].fActive = activate;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Model \"" << modelName;
+	if (activate) G4cout << "\" activated.";
+	else  G4cout << "\" de-activated.";
+	G4cout << G4endl;
+      }
+    }
+  }
+
+  std::vector<G4Scene::Model>& endOfRunModelList =
+    pScene->SetEndOfRunModelList();
+  for (size_t i = 0; i < endOfRunModelList.size(); i++) {
+    const G4String& modelName =
+      endOfRunModelList[i].fpModel->GetGlobalDescription();
+    if (searchString == "all" || modelName.find(searchString)
+	!= std::string::npos) {
+      any = true;
+      endOfRunModelList[i].fActive = activate;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Model \"" << modelName;
+	if (activate) G4cout << "\" activated.";
+	else  G4cout << "\" de-activated.";
+	G4cout << G4endl;
+      }
+    }
+  }
+
+  if (!any) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No match found." << G4endl;
+    }
+    return;
+  }
+
+  const G4String& currentSceneName = pScene -> GetName ();
+  UpdateVisManagerScene (currentSceneName);
 }
 
 ////////////// /vis/scene/create ///////////////////////////////////////
@@ -393,7 +525,7 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << "           ";
     }
     G4cout << " scene \"" << iName << "\"";
-    if (verbosity >= G4VisManager::confirmations) {
+    if (verbosity >= G4VisManager::warnings) {
       G4int i;
       G4cout << "\n  Run-duration models:";
       G4int nRunModels = pScene -> GetRunDurationModelList ().size ();
@@ -401,8 +533,11 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
 	G4cout << " none.";
       }
       for (i = 0; i < nRunModels; i++) {
-	G4VModel* pModel = pScene -> GetRunDurationModelList () [i];
-	G4cout << "\n    " << pModel -> GetGlobalDescription ();
+	if (pScene -> GetRunDurationModelList()[i].fActive)
+	  G4cout << "\n   Active:   ";
+	else G4cout << "\n   Inactive: ";
+	G4VModel* pModel = pScene -> GetRunDurationModelList()[i].fpModel;
+	G4cout << pModel -> GetGlobalDescription ();
       }
       G4cout << "\n  End-of-event models:";
       G4int nEOEModels = pScene -> GetEndOfEventModelList ().size ();
@@ -410,8 +545,23 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
 	G4cout << " none.";
       }
       for (i = 0; i < nEOEModels; i++) {
-	G4VModel* pModel = pScene -> GetEndOfEventModelList () [i];
-	G4cout << "\n    " << pModel -> GetGlobalDescription ();
+	if (pScene -> GetEndOfEventModelList()[i].fActive)
+	  G4cout << "\n   Active:   ";
+	else G4cout << "\n   Inactive: ";
+	G4VModel* pModel = pScene -> GetEndOfEventModelList()[i].fpModel;
+	G4cout << pModel -> GetGlobalDescription ();
+      }
+      G4cout << "\n  End-of-run models:";
+      G4int nEORModels = pScene -> GetEndOfRunModelList ().size ();
+      if (nEORModels == 0) {
+	G4cout << " none.";
+      }
+      for (i = 0; i < nEORModels; i++) {
+	if (pScene -> GetEndOfRunModelList()[i].fActive)
+	  G4cout << "\n   Active:   ";
+	else G4cout << "\n   Inactive: ";
+	G4VModel* pModel = pScene -> GetEndOfRunModelList()[i].fpModel;
+	G4cout << pModel -> GetGlobalDescription ();
       }
     }
     if (verbosity >= G4VisManager::parameters) {
@@ -525,6 +675,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     }
     return;
   }
+
   G4VisManager::Verbosity currentVerbosity = fpVisManager -> GetVerbosity();
 
   // Suppress messages during this process (only print errors)...
@@ -540,6 +691,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     if (aScene) {
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
+	aScene->CalculateExtent();  // Check and recalculate extent
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
@@ -552,17 +704,6 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	    fpVisManager -> SetCurrentViewer(aViewer);
 	    fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
 	    fpVisManager -> SetCurrentScene(aScene);
-	    // ClearTransientStore.  This clears the transient, e.g.,
-	    // trajectories part of the store/graphical database but
-	    // also re-draws the permanent part (detector) and thus
-	    // has the effect of clearing trajectories from the view.
-	    // This should not be necessary since NeedKernelVisit,
-	    // ClearView and DrawView should have the effect of
-	    // deleting the whole store and re-creating it, then
-	    // clearing and re-drawing.  But ClearView does not seem
-	    // to work for all viewers.  If it's a problem for you,
-	    // uncomment the next line.
-	    //aSceneHandler->ClearTransientStore();
 	    aViewer -> SetView ();
 	    aViewer -> ClearView ();
 	    aViewer -> DrawView ();
@@ -577,8 +718,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 		     << "\"." << G4endl;
 	    }
 	  } else {
-	    if (verbosity >= G4VisManager::warnings) {
-	      G4cout << "WARNING: The scene, \""
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "NOTE: The scene, \""
 		     << sceneName
 		     << "\", of viewer \""
 		     << aViewer -> GetName ()

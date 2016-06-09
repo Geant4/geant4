@@ -35,7 +35,10 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4SigmaPlusField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
@@ -51,29 +54,6 @@ G4SigmaPlusField::G4SigmaPlusField(G4V3DNucleus * nucleus, G4double coeff)
 
 G4SigmaPlusField::~G4SigmaPlusField()
 { }
-
-
-const G4SigmaPlusField & G4SigmaPlusField::operator=(const G4SigmaPlusField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaPlusField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4SigmaPlusField::operator==(const G4SigmaPlusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaPlusField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4SigmaPlusField::operator!=(const G4SigmaPlusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaPlusField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 
 G4double G4SigmaPlusField::GetField(const G4ThreeVector & aPosition)
 {
@@ -93,7 +73,6 @@ G4double G4SigmaPlusField::GetField(const G4ThreeVector & aPosition)
 
   return -2.*pi*hbarc*hbarc/reducedMass*(2.0)*theCoeff*density+GetBarrier();
 }
-
 
 G4double G4SigmaPlusField::GetBarrier()
 {

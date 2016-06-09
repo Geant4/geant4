@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01Hodoscope.hh,v 1.4 2006-06-29 16:31:17 gunter Exp $
+/// \file analysis/A01/include/A01Hodoscope.hh
+/// \brief Definition of the A01Hodoscope class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01Hodoscope_h
@@ -37,7 +40,6 @@ class G4TouchableHistory;
 
 class A01Hodoscope : public G4VSensitiveDetector
 {
-
   public:
       A01Hodoscope(G4String name);
       virtual ~A01Hodoscope();
@@ -47,12 +49,9 @@ class A01Hodoscope : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      A01HodoscopeHitsCollection* hitsCollection;
-      G4int HCID;
+      A01HodoscopeHitsCollection* fHitsCollection;
+      G4int fHCID;
 };
-
-
-
 
 #endif
 

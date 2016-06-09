@@ -1,0 +1,215 @@
+//$Id$
+
+///\file "eventgenerator/exgps/.README"
+///\brief Example exgps README page
+
+/*! \page Exampleexgps Example exgps 
+
+  exgps is created to demonstrate the usage of G4GeneralParticleSource for generating 
+  primary incident particle according to user defined distributions. These range from simple 
+  monocromatic point source to complicated mutiple sources with various biasing schemes. 
+  
+  More detailed information on the usage of GPS are available on its home site: 
+	http://reat.space.qinetiq.com/gps
+
+
+   \section exgps_s1 GEOMETRY
+
+     Simple geometry consists of a "Vacuum" world and, in it with two other components:	     
+ 
+       - An alunimium box : 20 x 20 x 20 cm in size, cerntered at the origin.
+		  
+       - A SiO2 sphere: 5 cm in radius and is placed in the centre of the aluminium box. 
+
+   \section exgps_s2 PHYSICS
+
+	Tranportation process only for all particles.
+
+  \section exgps_s3 EVENT:
+
+     The event generator is the G4GeneralParticleSource (GPS). The instantiation of G4GeneralParticleSource
+     is same as that for G4ParticleGun. See the exGPSPrimaryGeneratorAction.cc file for details .  
+  
+  \section exgps_s4 VISUALIZATION:
+ 
+     Visualisation of the geometry and the tracks is possible with many of the G4 visualisation packages. An
+     example of displaying the geometry and tracks using VRML is given in the macro file vis.mac.  
+
+  \section exgps_s5 ANALYSIS:
+
+     This example implements an AIDA-compliant analysis manager which creates histograms and ntuples. 
+     If user has an AIDA-compliant tool such as AIDAJNI, ANAPHE, OpenScientist or PI installed on his/her system. Some URLs :
+       - http://aida.freehep.org/
+       - http://java.freehep.org/aidajni
+       - http://www.cern.ch/PI   
+       - http://OpenScientist.lal.in2p3.fr
+ 
+     The analysis part of this example can be activated by doing a "source 
+     aida-setup" of the AIDA compliant tool (to activate the aida-config
+     program) and by raising some environment variabless so that the 
+     G4 GNUmakefile system can take into account the AIDA tool.
+     This can be done, for example on a UNIX under a csh like shell, with : 
+        - csh> source <path_where_the_AIDA_tool_is_installed>/aida-setup.csh
+        - csh> aida-config # to check that this program is up and running
+     
+    G4 related part :
+	- csh> setenv G4ANALYSIS_USE 1
+	- csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --include`
+        - csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --lib`
+
+     (It may be usefull to note that in the G4 GNUmakefile system,
+     the upper variables are used in the file config/analysis.gmk).
+
+     This needs to be done before building the executable.  
+
+     At the end of an excution, an xml file "exgps.aida" is created by default which contains 
+     histograms and ntuples. User can change the name and format of this output file with the commands
+	
+	- /analysis/filetype new-type
+	- /analysis/fileName new-filename
+    \verbatim
+	e.g.
+      	  /analysis/filetype root
+	  /analysis/filename myfile.root 
+     \endverbatim
+     these change the output file format to ROOT and output file name to "myfile.root". There are three file 
+     formats to choose from: xml, root or hbook.
+
+     The output file contains 6 histograms and one ntuple:
+
+	- histogram 1: The energy spectrum of the primary particles.
+	- histogram 2: 2d histogram of primary particle incident position distribution in the X-Y plane.
+	- histogram 3: 2d histogram of primary particle incident position distribution in the X-Z plane.
+	- histogram 4: 2d histogram of primary particle incident position distribution in the Y-Z plane.
+	- histogram 5: 2d histogram of primary particle incident angle distribution in terms of Phi/Cos(Theta).
+	- histogram 6: 2d histogram of primary particle incident angle distribution in terms of Phi/Theta.
+
+     The binnings of the histograms can be changed with the UI commands available under the 
+     /analysis directory.
+ 
+     In the ntuple the following data are recorded for each incident particle:  
+
+	- Particle ID
+	- Incident Position (x,y,z);
+	- Incident Angle (theta,phi);
+	- Particle weight;
+
+  \section exgps_s6 GETTING STARTED:
+
+- i) If you have an AIDA-compliant analysis package installed, then you should switch on the analysis 
+     part of the example by declaring the  G4ANALYSIS_USE 
+       \verbatim
+	setenv G4ANALYSIS_USE 1 (csh shell)
+	export G4ANALYSIS_USE=1 (bash shell) 
+	\endverbatim
+     To switch of the analysis part of the code you should unset the  environement variable  G4ANALYSIS_USE 
+  	\verbatim
+	unsetenv G4ANALYSIS_USE(csh shell)
+	unset G4ANALYSIS_USE=1 (bash shell) 
+        \endverbatim
+    
+- ii) Build the exgps executable:
+     \verbatim
+         cd to exgps
+         gmake clean
+         gmake
+     \endverbatim
+     gmake will create tmp and bin directories in your $G4TMP and $G4BIN directories. 
+     The executable, named exgps, will be created in the $G4BIN/$G4SYSTEM/ directory.
+    
+- iii) Run the executable: 
+      while in the exgps directory do 
+\verbatim
+         $G4BIN/$G4SYSTEM/exgps exrgps.in
+\endverbatim
+
+     If G4ANALYSIS_USE is defined, and depending on the particular AIDA system used, e.g. JAIDA, one could see 
+     a display window of the six histograms. It may be neccessary to close the plotter window in order to 
+     terminate the execution. After the termination one will find the "exgps.aida", as well as a vrml file 
+     "g4_00.wrl" in the directory.
+
+ \section exgps_s7 FURTHER EXAMPLES of MACRO FILES:
+
+    There are a number of g4mac files in the ./macros subdirectory, to show the various features of GPS. 
+    Most of them will lead to the creation of an aida/root file in the same name as the macro file. 
+    These aida/root files can be looked at  and analysed with an analysis tool such as JAS3 or ROOT.
+The list of macro examples and their functionality are given below  (see also http://reat.space.qinetiq.com/gps): 
+- test1.g4mac\n
+point source, isotropic radiation, monoenergetic
+- test2.g4mac\n
+square plane source, cosine-law radiation, linear energy
+- test3.g4mac\n
+rectangular plane source, isotropic radiation, power-law energy
+- test4.g4mac\n
+circular plane source, cosine-law radiation, exponential energy
+- test5.g4mac\n
+elliptical plane source, isotropic radiation, bremsstrahlung energy
+- test6.g4mac\n
+spherical surface source, isotropic radiation, black-body energy
+- test7.g4mac\n
+cylindrical surface source, cosine-law radiation, Cosmic diffuse energy
+- test8.g4mac\n
+elliptical surface source, isotropic radiation, linear energy
+- test9.g4mac\n
+parallepiped surface source, isotropic radiation, linear energy
+- test10.g4mac\n
+spherical volume source, isotropic radiation, linear energy
+- test11.g4mac\n
+cylindrical volume source, isotropic radiation, power-law energy
+- test12.g4mac\n
+elliptical volume source, isotropic radiation, power-law energy
+- test13.g4mac\n
+parallelepiped volume source, cosine-law radiation, exponential energy
+- test14.g4mac\n
+rotated circular plane source, isotropic radiation, exponential energy
+- test15.g4mac\n
+rotated surface cylinder source, isotropic radiation, bremsstrahlung energy
+- test16.g4mac\n
+rotated parallelepiped volume source, isotropic radiation, bremsstrahlung energy
+- test17.g4mac\n
+confined spherical volume source, isotropic radiation, exponential energy
+- test18.g4mac\n
+square plane source, cosine-law radiation, user-defined energy histogram
+- test19.g4mac\n
+square plane source, cosine-law radiation, arbitrary point-wise energy function with linear interpolation.
+- test20.g4mac\n
+square plane source, cosine-law radiation, arbitrary point-wise energy function with logarithmic interpolation.
+- test21.g4mac\n
+square plane source, cosine-law radiation, arbitrary point-wise energy function with exponential interpolation.
+- test22.g4mac\n
+square plane source, cosine-law radiation, arbitrary point-wise energy function with spline interpolation.
+- test23.g4mac\n
+square plane source with x and y biasing, user-defined theta and phi distributions, user-defined EPN energy distribution.
+- test24.g4mac\n
+spherical volume source with z biasing, isotropic radiation with theta and phi biasing, arbitrary point-wise energy function with linear interpolation.
+- test25.g4mac\n
+spherical volume source, isotropic radiation with theta and phi biasing, user-defined energy histogram
+- test26.g4mac\n
+square plane source, cosine-law radiation with lower and upper theta and phi limits, linear energy with biasing.
+- test27.g4mac\n
+square plane source, user-defined theta, arbitrary point-wise energy function with linear interpolation.
+- test28.g4mac\n
+particle=ion, square plane source, isotropic radiation, monoenergetic energy.
+- test29.g4mac\n
+plane source of type annulus, cosine-law radiation, exponential energy
+- test30.g4mac\n
+rotated 1d beam source, Gaussian beam energy 
+- test31.g4mac\n
+two-beam incidence, i.e. multiple sources with relative intensities.
+- test32.g4mac\n
+Sphere volume source, with biasing in theta and phi
+Isotropic directional distribution with theta and phi biasing
+- test33.g4mac\n
+Focused angular distribution.
+- test34.g4mac\n
+Two simultaneous sources, both fired at the same time. 
+- test35.g4mac\n
+automatic biasing of the energy distribution sampling, original in power-law
+- test36.g4mac\n
+automatic biasing of the energy distribution sampling, original in arbitrary data points
+- test37.g4mac\n
+automatic biasing of the energy distribution sampling, original in exponetial form
+- test38.g4mac\n
+arbitrary energy distribution, defined using the ascii (spectrum.dat) file input. 
+*/
+

@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.cc,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 
 #include "G4GNASHTransitions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4HadronicException.hh"
 
@@ -55,12 +56,12 @@ CalculateProbability(const G4Fragment & aFragment)
   else if ( x < 15.0*MeV ) ;
   else x *= std::sqrt(15.0*MeV/x);
 
-  // g = (6.0/pi2)*a*A
-  G4double g =  (6.0/pi2)*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*A;
+  // gg = (6.0/pi2)*a*A
+  G4double gg =  (6.0/pi2)*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*A;
 
   G4double Epauli = ((P+1.0)*(P+1.0) + (H+1.0)*(H+1.0) + (P+1.0) - 3.0*(H-1.0))/4.0;
 
-  G4double Probability = g*g*g *(E-Epauli)*(E-Epauli);
+  G4double Probability = gg*gg*gg *(E-Epauli)*(E-Epauli);
   Probability /= 2.0*(N+1.0)*h_Planck;
   Probability *= theMatrixElement;
 

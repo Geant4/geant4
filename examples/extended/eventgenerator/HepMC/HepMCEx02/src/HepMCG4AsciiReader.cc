@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/HepMCG4AsciiReader.cc
+/// \brief Implementation of the HepMCG4AsciiReader class
+//
 // ====================================================================
 //
 //   HepMCG4AsciiReader.cc
-//   $Id: HepMCG4AsciiReader.cc,v 1.6 2010-05-24 05:29:44 kmura Exp $
+//   $Id$
 //
 // ====================================================================
 #include "HepMCG4AsciiReader.hh"
@@ -40,7 +43,7 @@ HepMCG4AsciiReader::HepMCG4AsciiReader()
   :  filename("xxx.dat"), verbose(0)
 ////////////////////////////////////////
 {
-  asciiInput= new HepMC::IO_AsciiParticles(filename.c_str(), std::ios::in);
+  asciiInput= new HepMC::IO_GenEvent(filename.c_str(), std::ios::in);
 
   messenger= new HepMCG4AsciiReaderMessenger(this);
 }
@@ -59,8 +62,7 @@ void HepMCG4AsciiReader::Initialize()
 {
   delete asciiInput;
 
-  asciiInput= new HepMC::IO_AsciiParticles(filename.c_str(), std::ios::in);
-  asciiInput-> print();
+  asciiInput= new HepMC::IO_GenEvent(filename.c_str(), std::ios::in);
 }
 
 /////////////////////////////////////////////////////////
@@ -74,4 +76,3 @@ HepMC::GenEvent* HepMCG4AsciiReader::GenerateHepMCEvent()
     
   return evt;
 }
-

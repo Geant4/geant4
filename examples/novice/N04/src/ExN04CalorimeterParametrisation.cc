@@ -29,6 +29,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation()
 {

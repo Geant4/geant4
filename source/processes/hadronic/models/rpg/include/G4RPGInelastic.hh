@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.hh,v 1.4 2009-05-25 19:06:59 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: D. H. Wright
 // Date:   26 May 2007
@@ -37,8 +36,9 @@
 //
 // Base class for re-parameterized Gheisha-style models.
 
-#include "globals.hh"
 #include <vector>
+
+#include "globals.hh"
 #include "G4FastVector.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ReactionProduct.hh"

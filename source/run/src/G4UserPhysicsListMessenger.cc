@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.30 2009-10-20 07:07:51 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //---------------------------------------------------------------
@@ -39,8 +38,11 @@
 //        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
 // ------------------------------------------------------------
 
+#include <sstream>
 
 #include "G4UserPhysicsListMessenger.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4UIdirectory.hh"
@@ -51,8 +53,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"           
-
-#include <sstream>
 
 G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
 {
@@ -242,17 +242,15 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   } else if( command==setCutRCmd ){
     std::istringstream is(newValue);
-    char regName[50];
+    G4String regName;
+    G4String uniName;
     G4double cVal = -1.0;
-    char uniName[10];
     is >> regName >> cVal >> uniName;
     if (is.fail()) {
       G4cout << "illegal arguments : try again " << G4endl;
       return;
     }
-    G4String regN = regName;
-    G4String uniN = uniName;
-    thePhysicsList->SetCutsForRegion(cVal*(setCutRCmd->ValueOf(uniN)),regN);
+    thePhysicsList->SetCutsForRegion(cVal*(setCutRCmd->ValueOf(uniName)),regName);
 
   } else if( command==verboseCmd ) {
     thePhysicsList->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 

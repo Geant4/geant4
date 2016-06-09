@@ -29,12 +29,12 @@
 /// \brief Implementation of the B4aEventAction class
 
 #include "B4aEventAction.hh"
-#include "B4aEventActionMessenger.hh"
 #include "B4RunAction.hh"
 #include "B4Analysis.hh"
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -44,19 +44,29 @@
 
 B4aEventAction::B4aEventAction()
  : G4UserEventAction(),
-   fMessenger(this),
+   fMessenger(0),
    fEnergyAbs(0.),
    fEnergyGap(0.),
    fTrackLAbs(0.),
    fTrackLGap(0.),
    fPrintModulo(1)
 {
+  // Define /B4/event commands using generic messenger class
+  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
+
+  // Define /B4/event/setPrintModulo command
+  G4GenericMessenger::Command& setPrintModulo 
+    = fMessenger->DeclareProperty("setPrintModulo", 
+                                  fPrintModulo, 
+                                 "Print events modulo n");
+  setPrintModulo.SetRange("value>0");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4aEventAction::~B4aEventAction()
 {
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

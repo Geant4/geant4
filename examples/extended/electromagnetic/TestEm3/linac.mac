@@ -20,9 +20,8 @@
 #
 /run/initialize
 #
-/testem/histo/setFileName linac
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 3 100   0.   20.  MeV	#edep in absor3
+/analysis/setFileName linac
+/analysis/h1/set 3 100   0.   20.  MeV	#edep in absor3
 #
 /gun/particle gamma
 /gun/energy 1 GeV

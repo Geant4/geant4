@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.7 2010-10-13 13:42:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm14/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,9 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(PrimaryGeneratorAction* prim,
-                               RunAction* RuAct, HistoManager* Hist)
-:primary(prim),runAction(RuAct), histoManager(Hist)
+SteppingAction::SteppingAction(PrimaryGeneratorAction* prim, RunAction* RuAct)
+:fPrimary(prim),fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,28 +55,29 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();     
   G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
-  if (transmit) { runAction->CountProcesses(procName); }
+  if (transmit) { fRunAction->CountProcesses(procName); }
   else {                         
     //count real processes and sum track length
     G4double stepLength = aStep->GetStepLength();
-    runAction->CountProcesses(procName);  
-    runAction->SumTrack(stepLength);
+    fRunAction->CountProcesses(procName);  
+    fRunAction->SumTrack(stepLength);
   }
   
-  //plot final state (only if continuous energy loss is small enough)
+  //plot final state
   //
-   
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+     
   //scattered primary particle
   //
   G4int id = 1;
   if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
     G4double energy = endPoint->GetKineticEnergy();      
-    histoManager->FillHisto(id,energy);
+    analysisManager->FillH1(id,energy);
 
     id = 2;
     G4ThreeVector direction = endPoint->GetMomentumDirection();
     G4double costeta = direction.x();
-    histoManager->FillHisto(id,costeta);     
+    analysisManager->FillH1(id,costeta);     
   }  
   
   //secondaries
@@ -85,15 +87,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
     if (charge != 0.) { id = 3; } else { id = 5; }
     G4double energy = (*secondary)[lp]->GetKineticEnergy();
-    histoManager->FillHisto(id,energy);
+    analysisManager->FillH1(id,energy);
 
     ++id;
     G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
     G4double costeta = direction.x();
-    histoManager->FillHisto(id,costeta);
+    analysisManager->FillH1(id,costeta);
       
     //energy tranferred to charged secondaries
-    if (charge != 0.) { runAction->SumeTransf(energy); }         
+    if (charge != 0.) { fRunAction->SumeTransf(energy); }         
   }
          
   // kill event after first interaction

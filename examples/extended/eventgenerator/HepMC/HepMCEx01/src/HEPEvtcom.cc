@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: HEPEvtcom.cc,v 1.3 2006-06-29 17:06:35 gunter Exp $
+/// \file eventgenerator/HepMC/HepMCEx01/src/HEPEvtcom.cc
+/// \brief Implementation of the HEPEvtcom class
+//
+//$Id$
 // ======================================================================
 //      PARAMETER (NMXHEP=4000) 
 //      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP), 

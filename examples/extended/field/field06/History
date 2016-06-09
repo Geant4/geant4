@@ -1,0 +1,28 @@
+// $Id$
+// ------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    field06 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 15th, 2012 Ivana Hrivnacova - fieldex06-V09-05-02
+------------------------------------
+- Synchronized .README with changes in README
+
+November 14th, 2012 Ivana Hrivnacova - fieldex06-V09-05-01
+------------------------------------
+- In vis.mac: replaced OGLIX with OGL
+
+November 6th, 2012 Peter Gumplinger - fieldex06-V09-05-00
+------------------------------------
+- own Tag and History.

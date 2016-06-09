@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.hh,v 1.12 2010-10-27 07:21:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -35,75 +34,29 @@
 #ifndef G4StackedTrack_h
 #define G4StackedTrack_h 1
 
-#include "G4Track.hh"
-#include "globals.hh"
-#include "G4Allocator.hh"
 class G4VTrajectory;
+class G4Track;
 
 // class description:
 //
-//  This class is exclusively used by G4StackManager and G4TrackStack
-// classes for storing a G4Track object in the form of bi-directional
-// linked list.
+// This class is exclusively used by G4StackManager and G4TrackStack
+// classes for storing a G4Track object.
 
-class G4StackedTrack 
+class G4StackedTrack
 {
-  public:
-      inline void *operator new(size_t);
-      inline void operator delete(void *aStackedTrack);
-
-      G4StackedTrack();
-      G4StackedTrack(G4Track * aTrack, G4VTrajectory * aTrajectory = 0);
-      ~G4StackedTrack();
-
-      G4StackedTrack & operator=(const G4StackedTrack &right);
-      G4int operator==(const G4StackedTrack &right) const;
-      G4int operator!=(const G4StackedTrack &right) const;
-
-  private:
-      G4double priorityWeight;
-      G4Track * track;
-      G4VTrajectory * trajectory;
-      G4StackedTrack * previousStackedTrack;
-      G4StackedTrack * nextStackedTrack;
-
-  public:
-      inline G4double GetPriorityWeight() const
-      { return priorityWeight; }
-      inline void SetPriorityWeight(const G4double value)
-      { priorityWeight = value; }
-      inline G4Track * GetTrack() const
-      { return track; }
-      inline G4VTrajectory * GetTrajectory() const
-      { return trajectory; }
-      inline G4StackedTrack * GetPrevious() const
-      { return previousStackedTrack; }
-      inline G4StackedTrack * GetNext() const
-      { return nextStackedTrack; }
-      inline void SetPrevious(G4StackedTrack * value)
-      { previousStackedTrack = value; }
-      inline void SetNext(G4StackedTrack * value)
-      { nextStackedTrack = value; }
+public:
+  G4StackedTrack() : track(0), trajectory(0) {}
+  G4StackedTrack(G4Track* aTrack, G4VTrajectory* aTraj = 0) : track(aTrack), trajectory(aTraj) {}
+  ~G4StackedTrack() {}
+  
+private:
+  G4Track* track;
+  G4VTrajectory* trajectory;
+  
+public:
+  G4Track* GetTrack() const { return track; }
+  G4VTrajectory* GetTrajectory() const { return trajectory; }
 };
-
-#if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4StackedTrack> aStackedTrackAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4StackedTrack> aStackedTrackAllocator;
-#endif
-
-inline void * G4StackedTrack::operator new(size_t)
-{
-  void * aStackedTrack;
-  aStackedTrack = (void *) aStackedTrackAllocator.MallocSingle();
-  return aStackedTrack;
-}
-
-inline void G4StackedTrack::operator delete(void * aStackedTrack)
-{
-  aStackedTrackAllocator.FreeSingle((G4StackedTrack *) aStackedTrack);
-}
-
 
 #endif
 

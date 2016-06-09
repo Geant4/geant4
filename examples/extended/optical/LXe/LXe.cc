@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/LXe.cc
+/// \brief Main program of the optical/LXe example
+//
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4String.hh"
@@ -37,7 +40,7 @@
 #include "LXeRunAction.hh"
 #include "LXeSteppingVerbose.hh"
 
-#include "RecorderBase.hh"
+#include "LXeRecorderBase.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -47,7 +50,6 @@
 #include "G4UIExecutive.hh"
 #endif
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 int main(int argc, char** argv)
 {
   G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose);
@@ -62,11 +64,11 @@ int main(int argc, char** argv)
   visManager->Initialize();
 #endif
 
-  RecorderBase* recorder = NULL;//No recording is done in this example
+  LXeRecorderBase* recorder = NULL;//No recording is done in this example
 
   runManager->SetUserAction(new LXePrimaryGeneratorAction);
   runManager->SetUserAction(new LXeStackingAction);
-  
+
   runManager->SetUserAction(new LXeRunAction(recorder));
   runManager->SetUserAction(new LXeEventAction(recorder));
   runManager->SetUserAction(new LXeTrackingAction(recorder));
@@ -76,12 +78,12 @@ int main(int argc, char** argv)
  
   // get the pointer to the UI manager and set verbosities
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
   if(argc==1){
 #ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");     
+    UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
     ui->SessionStart();
     delete ui;
@@ -103,5 +105,3 @@ int main(int argc, char** argv)
   delete runManager;
   return 0;
 }
-
-

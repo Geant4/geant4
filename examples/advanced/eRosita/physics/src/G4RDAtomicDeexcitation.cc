@@ -40,6 +40,8 @@
 
 #include "G4RDAtomicDeexcitation.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4RDAtomicTransitionManager.hh"

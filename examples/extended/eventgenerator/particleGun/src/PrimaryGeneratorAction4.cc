@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction4.cc
+/// \brief Implementation of the PrimaryGeneratorAction4 class
 //
-// $Id: PrimaryGeneratorAction4.cc,v 1.2 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -37,26 +39,28 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction4::PrimaryGeneratorAction4(G4ParticleGun* gun)
-: particleGun(gun)
+: fParticleGun(gun)
 {
   // vertex volume
   //  
   G4double Rmin = 2.*mm; 
   G4double Rmax = 8.*mm;
-  Rmin3 = Rmin*Rmin*Rmin;
-  Rmax3 = Rmax*Rmax*Rmax;
+  fRmin3 = Rmin*Rmin*Rmin;
+  fRmax3 = Rmax*Rmax*Rmax;
   
   //opening angle
   //
   G4double alphaMin =  0.*deg;
   G4double alphaMax = 10.*deg;
-  cosAlphaMin = std::cos(alphaMin);
-  cosAlphaMax = std::cos(alphaMax);  
+  fCosAlphaMin = std::cos(alphaMin);
+  fCosAlphaMax = std::cos(alphaMax);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,36 +74,36 @@ void PrimaryGeneratorAction4::GeneratePrimaries(G4Event* anEvent)
 {  
   //vertex position uniform in spherical shell
   //
-  G4double cosTheta = 2*G4UniformRand() - 1;	//cosTheta uniform in [0, pi]
+  G4double cosTheta = 2*G4UniformRand() - 1;  //cosTheta uniform in [0, pi]
   G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
-  G4double phi      = twopi*G4UniformRand();	//phi uniform in [0, 2*pi]
+  G4double phi      = twopi*G4UniformRand();  //phi uniform in [0, 2*pi]
   G4ThreeVector ur(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
   
-  G4double R3 = Rmin3 + G4UniformRand()*(Rmax3 - Rmin3);
+  G4double R3 = fRmin3 + G4UniformRand()*(fRmax3 - fRmin3);
   G4double R  = std::pow(R3, 1./3);  
         
-  particleGun->SetParticlePosition(R*ur);
+  fParticleGun->SetParticlePosition(R*ur);
 
   //particle direction uniform around ur 
   //    
   //1- in World frame
   //cosAlpha uniform in [cos(alphaMin), cos(alphaMax)]
-  G4double cosAlpha = cosAlphaMin - G4UniformRand()*(cosAlphaMin - cosAlphaMax); 
+  G4double cosAlpha = fCosAlphaMin - G4UniformRand()*(fCosAlphaMin - fCosAlphaMax); 
   G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
-  G4double psi      = twopi*G4UniformRand();	//psi uniform in (0,2*pi)  
+  G4double psi      = twopi*G4UniformRand();  //psi uniform in (0,2*pi)  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
   
   //2- rotate dir   (rotateUz transforms uz to ur)
-  dir.rotateUz(ur);	   
+  dir.rotateUz(ur);           
 
-  particleGun->SetParticleMomentumDirection(dir);
+  fParticleGun->SetParticleMomentumDirection(dir);
   
   //energy
   //  
-  particleGun->SetParticleEnergy(1*MeV);
+  fParticleGun->SetParticleEnergy(1*MeV);
   
   //create vertex
   //   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

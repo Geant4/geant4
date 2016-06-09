@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.31 2010-10-16 06:04:51 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -279,18 +278,6 @@ inline G4int G4IonTable::size() const
 {
   return fIonList->size();
 }
-
-inline void G4IonTable::clear()
-{
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>2) {
-      G4cout << "G4IonTable::Clear() : number of Ion regsitered =  "; 
-      G4cout << fIonList->size() <<  G4endl;
-    }
-#endif
-  fIonList->clear();
-}
-
 
 
 #endif

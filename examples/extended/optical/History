@@ -1,0 +1,26 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Optical Examples History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+15 November 2012  Ivana Hrivnacova (exOptical-V09-05-01)
+- Minor fixes in .README files
+
+18 September 2012 Ivana Hrivnacova (exOptical-V09-05-00)
+- Updated CMakeLists.txt files
+  adding visualization, copying macros, install target and comment lines
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Replaced tabulators with space characters  

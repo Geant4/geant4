@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_CHIPS.icc,v 1.7 2010-11-23 15:09:30 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -36,11 +35,14 @@
 // Modified:
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Renamed the physics classes used
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -48,13 +50,11 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4EmQExtraPhysics.hh"
+#include "G4IonLHEPPhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
@@ -64,24 +64,24 @@
 
 #include "G4WarnPLStatus.hh"
 
+
 template<class T> TQGSP_BERT_CHIPS<T>::TQGSP_BERT_CHIPS(G4int ver):  T()
 {
-
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_CHIPS 2.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_CHIPS 2.1"<<G4endl;
   G4cout <<G4endl;
 
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
-  G4WarnPLStatus exp;
-  exp.Experimental("QGSP_BERT_CHIPS");
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSP_BERT_CHIPS", "FTFP_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+  this->RegisterPhysics( new G4EmQExtraPhysics(ver) );
 
   // Decays
   this->RegisterPhysics( new G4DecayPhysics(ver) );
@@ -96,7 +96,7 @@ template<class T> TQGSP_BERT_CHIPS<T>::TQGSP_BERT_CHIPS(G4int ver):  T()
   this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  this->RegisterPhysics( new G4IonLHEPPhysics(ver));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut(ver));

@@ -15,7 +15,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
- 
+
+Oct. 15, 2012 M.Asai (exRunAndEvent-V09-05-01)
+- Update of RE01, RE03 by T.Aso (see RE01,RE03/History) to be compliant to 
+the example coding rule.
+
+Oct. 08, 2012 I.Hrivnacova (exRunAndEvent-V09-05-00)
+- Updated CMakeLists.txt files:
+  adding visualization, copying macros, install target and comment lines
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters
+- Update of RE02, RE04 by A.Kimura (see RE02,RE04/History)
+
 Nov. 09, 2011 M.Asai (example_RandE-V09-04-01)
 - Correcting banner of RE04 files.
 - README updated.

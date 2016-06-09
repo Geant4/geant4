@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronGilbertShellCorrections.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #ifndef G4CameronGilbertShellCorrections_h
 #define G4CameronGilbertShellCorrections_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 
@@ -59,7 +60,7 @@ public:
 
   G4double GetShellZ(const G4int Z) const
   {
-    if (IsInTableThisZ(Z)) return ShellZTable[Z-ZTableMin]*MeV;
+    if (IsInTableThisZ(Z)) return ShellZTable[Z-ZTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CameronGilbertShellCorrections: out of table for Z = " << Z << G4endl;
@@ -77,7 +78,7 @@ public:
 	
   G4double GetShellN(const G4int N) const 
   {
-    if (IsInTableThisN(N)) return ShellNTable[N-NTableMin]*MeV;
+    if (IsInTableThisN(N)) return ShellNTable[N-NTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CameronGilbertShellCorrections: out of table for N = " << N << G4endl;

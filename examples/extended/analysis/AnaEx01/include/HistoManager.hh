@@ -23,54 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file analysis/AnaEx01/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
 //
+//
+// $Id$
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
 #include "globals.hh"
 
+#include "g4root.hh"
+////#include "g4xml.hh"
+////#include "g4hbook.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
- class ITuple;
-} 
-  const G4int MaxHisto = 5;
+const G4int MaxHisto = 5;
+const G4int MaxNtCol = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
   public:
-  
+
     HistoManager();
    ~HistoManager();
-   
+
     void book();
     void save();
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
+    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void Normalize(G4int id, G4double fac);    
 
-    void FillNtuple(G4int column, G4double value);
-    void AddRowNtuple();
+    void FillNtuple(G4double EnergyAbs, G4double EnergyGap,
+                    G4double TrackLAbs, G4double TrackLGap);
     
-    void PrintStatistic();
-        
+    void PrintStatistic();        
+
   private:
-  
-    AIDA::IAnalysisFactory*  af;        
-    AIDA::ITree*             tree;
-    
-    AIDA::IHistogram1D*      histo[MaxHisto];            
-    AIDA::ITuple*      	     ntupl;    
+
+    G4String      fileName[2];
+    G4bool        factoryOn;    
+
+    G4int         fHistId[MaxHisto];
+    G4AnaH1*      fHistPt[MaxHisto];
+    G4int         fNtColId[MaxNtCol];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

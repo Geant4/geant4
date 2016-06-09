@@ -52,6 +52,9 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4UnitsMessenger.hh
         G4VFlavoredParallelWorld.hh
         G4VGlobalFastSimulationManager.hh
+        G4GenericMessenger.hh
+        G4AnyType.hh
+        G4AnyMethod.hh
     SOURCES
         G4UIaliasList.cc
         G4UIbatch.cc
@@ -73,6 +76,8 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4UIsession.cc
         G4UnitsMessenger.cc
         G4VGlobalFastSimulationManager.cc
+        G4GenericMessenger.cc
+        G4AnyType.cc
     GRANULAR_DEPENDENCIES
         G4globman
     GLOBAL_DEPENDENCIES

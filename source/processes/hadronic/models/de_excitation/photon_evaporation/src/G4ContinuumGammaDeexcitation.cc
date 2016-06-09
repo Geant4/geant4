@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaDeexcitation.cc,v 1.8 2010-11-17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -79,14 +78,17 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
   G4double excitation = nucleus->GetExcitationEnergy();
 
   if (_nucleusA != A || _nucleusZ != Z)
-    {
-      _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(Z,A);
-      _nucleusA = A;
-      _nucleusZ = Z;
-    }
+  {
+    _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(Z,A);
+    _nucleusA = A;
+    _nucleusZ = Z;
+  }
 
   if (_verbose > 1) {
-    G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << G4endl;
+    G4cout << "G4ContinuumGammaDeexcitation::CreateTransition "
+	   << " Z= " << Z << "  A= " << A << " Eex= " << excitation
+	   << "  "  << _levelManager
+	   << G4endl;
   }
   G4VGammaTransition* gt =  
     new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );

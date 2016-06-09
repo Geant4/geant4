@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadronPhysics.hh,v 1.7 2009-11-21 01:00:19 perl Exp $
+/// \file analysis/A01/include/A01HadronPhysics.hh
+/// \brief Definition of the A01HadronPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 //  10-Oct-2003 Full Hadron Processes with Parameterization Model  T. Koi
@@ -136,7 +139,6 @@ class A01HadronPhysics : public G4VPhysicsConstructor
     A01HadronPhysics(const G4String& name="hadron");
     virtual ~A01HadronPhysics();
 
-  public: 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
     virtual void ConstructParticle(){;};
@@ -145,11 +147,7 @@ class A01HadronPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
     virtual void ConstructProcess();
-
-  protected:
-
 };
-
 
 #endif
 

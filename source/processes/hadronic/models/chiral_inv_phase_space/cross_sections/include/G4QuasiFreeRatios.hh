@@ -29,7 +29,7 @@
 //
 // GEANT4 physics class: G4QuasiFreeRatios -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 28-Oct-2011
 // ----------------------------------------------------------------------
 // Short description: Provides percentage of quasi-free and quasi-elastic
 // reactions in the inelastic reactions.
@@ -44,6 +44,7 @@
 #include <vector>
 #include "G4QPDGCode.hh"
 #include "G4QHadron.hh"
+#include "G4QFreeScattering.hh"
 #include "G4QProtonElasticCrossSection.hh"
 #include "G4QNeutronElasticCrossSection.hh"
 
@@ -84,18 +85,16 @@ class G4QuasiFreeRatios
   // For hadron PDG with momentum Mom (GeV/c) on F(p/n) calculate <sig_el,sig_tot> pair(mb)
   // F=true corresponds to the Nroton target, F=false corresponds to the Proton target
   std::pair<G4double,G4double> GetElTotXS(G4double Mom, G4int PDG, G4bool F);//<sigEl,sigT>
-  std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//<E,T>fromAMDB
 
  private:
   // These working member functions are in CHIPS units and must not be used externally
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
   G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)
-  std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigEl,sigTot)(Index)
 
  // Body
  private:
+  G4QFreeScattering* QFreeScat;         // Source of quasi-free scattering XS
   static std::vector<G4double*> vT;     // Vector of pointers to LinTable
   static std::vector<G4double*> vL;     // Vector of pointers to LogTable
-  static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
 };
 #endif

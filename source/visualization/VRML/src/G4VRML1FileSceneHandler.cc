@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.cc,v 1.13 2010-11-11 00:14:50 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -208,7 +207,7 @@ void G4VRML1FileSceneHandler::closePort()
 	  }
 	} else {
 		sprintf( command, "%s %s", viewer, fVRMLFileName  );   
-		system( command );
+		(void) system( command );
 	}
 }
 

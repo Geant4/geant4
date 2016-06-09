@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmDetectorMessenger.cc
+/// \brief Implementation of the exrdmDetectorMessenger class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "exrdmDetectorMessenger.hh"
@@ -36,79 +39,82 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmDetectorMessenger::exrdmDetectorMessenger(exrdmDetectorConstruction* myDet)
-:myDetector(myDet)
+:fMyDetector(myDet)
 { 
-  exrdmDir = new G4UIdirectory("/exrdm/");
-  exrdmDir->SetGuidance("UI commands specific to this example.");
+  fExrdmDir = new G4UIdirectory("/exrdm/");
+  fExrdmDir->SetGuidance("UI commands specific to this example.");
   
-  detDir = new G4UIdirectory("/exrdm/det/");
-  detDir->SetGuidance("detector control.");
+  fDetDir = new G4UIdirectory("/exrdm/det/");
+  fDetDir->SetGuidance("detector control.");
   
-  TargMatCmd = new G4UIcmdWithAString("/exrdm/det/setTargetMate",this);
-  TargMatCmd->SetGuidance("Select Material of the Target.");
-  TargMatCmd->SetParameterName("choice",false);
-  TargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargMatCmd = new G4UIcmdWithAString("/exrdm/det/setTargetMate",this);
+  fTargMatCmd->SetGuidance("Select Material of the Target.");
+  fTargMatCmd->SetParameterName("choice",false);
+  fTargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  TargRadiusCmd = new G4UIcmdWithADoubleAndUnit("/exrdm/det/setTargetRadius",this);
-  TargRadiusCmd->SetGuidance("Set the Target Radius.");
-  TargRadiusCmd->SetUnitCategory("Length");
-  TargRadiusCmd->SetParameterName("choice",false);
-  TargRadiusCmd->AvailableForStates(G4State_PreInit);
+  fTargRadiusCmd = new G4UIcmdWithADoubleAndUnit("/exrdm/det/setTargetRadius", this);
+  fTargRadiusCmd->SetGuidance("Set the Target Radius.");
+  fTargRadiusCmd->SetUnitCategory("Length");
+  fTargRadiusCmd->SetParameterName("choice",false);
+  fTargRadiusCmd->AvailableForStates(G4State_PreInit);
   
-  TargLengthCmd = new G4UIcmdWithADoubleAndUnit("/exrdm/det/setTargetLength",this);
-  TargLengthCmd->SetGuidance("Set the Target Length.");
-  TargLengthCmd->SetUnitCategory("Length");
-  TargLengthCmd->SetParameterName("choice",false);
-  TargLengthCmd->AvailableForStates(G4State_PreInit);
+  fTargLengthCmd = new G4UIcmdWithADoubleAndUnit("/exrdm/det/setTargetLength", this);
+  fTargLengthCmd->SetGuidance("Set the Target Length.");
+  fTargLengthCmd->SetUnitCategory("Length");
+  fTargLengthCmd->SetParameterName("choice",false);
+  fTargLengthCmd->AvailableForStates(G4State_PreInit);
 
-  DetectMatCmd = new G4UIcmdWithAString("/exrdm/det/setDetectorMate",this);
-  DetectMatCmd->SetGuidance("Select Material of the Detector.");
-  DetectMatCmd->SetParameterName("choice",false);
-  DetectMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fDetectMatCmd = new G4UIcmdWithAString("/exrdm/det/setDetectorMate",this);
+  fDetectMatCmd->SetGuidance("Select Material of the Detector.");
+  fDetectMatCmd->SetParameterName("choice",false);
+  fDetectMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  DetectThicknessCmd = new G4UIcmdWithADoubleAndUnit("/exrdm/det/setDetectorThickness",this);
-  DetectThicknessCmd->SetGuidance("Set the Detector Thickness.");
-  DetectThicknessCmd->SetUnitCategory("Length");
-  DetectThicknessCmd->SetParameterName("choice",false);
-  DetectThicknessCmd->AvailableForStates(G4State_PreInit);
+  fDetectThicknessCmd =
+                 new G4UIcmdWithADoubleAndUnit("/exrdm/det/setDetectorThickness",this);
+  fDetectThicknessCmd->SetGuidance("Set the Detector Thickness.");
+  fDetectThicknessCmd->SetUnitCategory("Length");
+  fDetectThicknessCmd->SetParameterName("choice",false);
+  fDetectThicknessCmd->AvailableForStates(G4State_PreInit);
 
-  DetectLengthCmd = new G4UIcmdWithADoubleAndUnit("/exrdm/det/setDetectorLength",this);
-  DetectLengthCmd->SetGuidance("Set the Detector Length.");
-  DetectLengthCmd->SetUnitCategory("Length");
-  DetectLengthCmd->SetParameterName("choice",false);
-  DetectLengthCmd->AvailableForStates(G4State_PreInit);
+  fDetectLengthCmd =
+                 new G4UIcmdWithADoubleAndUnit("/exrdm/det/setDetectorLength",this);
+  fDetectLengthCmd->SetGuidance("Set the Detector Length.");
+  fDetectLengthCmd->SetUnitCategory("Length");
+  fDetectLengthCmd->SetParameterName("choice",false);
+  fDetectLengthCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmDetectorMessenger::~exrdmDetectorMessenger()
 {
-  delete TargMatCmd;
-  delete DetectMatCmd;
-  delete TargRadiusCmd;
-  delete DetectThicknessCmd;
-  delete TargLengthCmd;
-  delete DetectLengthCmd;
-  delete detDir;
-  delete exrdmDir;
+  delete fTargMatCmd;
+  delete fDetectMatCmd;
+  delete fTargRadiusCmd;
+  delete fDetectThicknessCmd;
+  delete fTargLengthCmd;
+  delete fDetectLengthCmd;
+  delete fDetDir;
+  delete fExrdmDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void exrdmDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void exrdmDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if( command == TargMatCmd )
-    { myDetector->setTargetMaterial(newValue);}
-  else if ( command == TargLengthCmd ) 
-    { myDetector->setTargetLength(TargLengthCmd->GetNewDoubleValue(newValue));}
-  else if ( command == TargRadiusCmd ) 
-    { myDetector->setTargetRadius(TargLengthCmd->GetNewDoubleValue(newValue));}
-  else if( command == DetectMatCmd )
-    { myDetector->setDetectorMaterial(newValue);} 
-  else if (command == DetectLengthCmd ) 
-    { myDetector->setDetectorLength(DetectLengthCmd->GetNewDoubleValue(newValue));}
-  else if (command == DetectThicknessCmd ) 
-    { myDetector->setDetectorThickness(DetectThicknessCmd->GetNewDoubleValue(newValue));}
+  if( command == fTargMatCmd )fMyDetector->SetTargetMaterial(newValue);
+  else if ( command == fTargLengthCmd ) 
+    fMyDetector->SetTargetLength(fTargLengthCmd->GetNewDoubleValue(newValue));
+  else if ( command == fTargRadiusCmd ) 
+    fMyDetector->SetTargetRadius(fTargLengthCmd->GetNewDoubleValue(newValue));
+  else if( command == fDetectMatCmd )
+    fMyDetector->SetDetectorMaterial(newValue);
+  else if (command == fDetectLengthCmd ) 
+    fMyDetector->SetDetectorLength(
+                     fDetectLengthCmd->GetNewDoubleValue(newValue));
+  else if (command == fDetectThicknessCmd ) 
+    fMyDetector->SetDetectorThickness(
+                              fDetectThicknessCmd->GetNewDoubleValue(newValue));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

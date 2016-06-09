@@ -15,6 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 Spetember 2012, Ivana Hrivnacova (exampleES2-V09-05-05)
+ - Added CMakeLists.txt:
+ - Added .README  
+   
+20 April 2012, Joseph Perl
+- Apply coding guideline 2.1
+     
+19 April 2012, Joseph Perl
+- Correct area calculation in ElectronRun
+- Apply new examples coding guidelines
+
+09-02-12 V.Ivanchenko (exampleES2-V09-05-04)
+- PhysListEmStandardSS, PhysListEmStandardWVI - more correct order
+    and fixed initialisation        
+     
 29 October 2011, Joseph Perl (exampleES2-V09-04-03)
 - Updated PhysListEmStandard.cc to match version in electronScattering
 

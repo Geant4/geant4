@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2006-11-17 11:44:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file polarisation/Pol01/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +55,7 @@ class RunAction : public G4UserRunAction
     ~ParticleStatistics();
     void EventFinished();
     void FillData(G4double kinEnergy, G4double costheta,
-		  G4double longitudinalPolarization);
+                  G4double longitudinalPolarization);
     void PrintResults(G4int totalNumberOfEvents);
     void Clear();
   private:
@@ -75,10 +77,10 @@ public:
   void CountProcesses(G4String);
 
   void FillData(const G4String & particleName,
-		G4double kinEnergy, G4double costheta, G4double phi,
-		G4double longitudinalPolarization);
+                G4double kinEnergy, G4double costheta, G4double phi,
+                G4double longitudinalPolarization);
   void EventFinished();
-	 	 	           
+                                     
 private:
   DetectorConstruction*   detector;
   PrimaryGeneratorAction* primary;

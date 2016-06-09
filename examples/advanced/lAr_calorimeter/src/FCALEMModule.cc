@@ -35,6 +35,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <fstream>
+#include <cstdlib>
+
 #include "FCALEMModule.hh"
 
 #include "FCALMaterialConsultant.hh"
@@ -42,6 +45,8 @@
 #include "G4SDManager.hh"
 #include "FCALEMModuleSD.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -52,9 +57,6 @@
 #include "G4ThreeVector.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
-#include <fstream>
-#include <cstdlib>
 
 FCALEMModule::FCALEMModule() : 
   FcalEmModuleSD(0)

@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWt.hh,v 1.2 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // OpenGLImmediateWt graphics system factory.
-
-#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
 
 #ifndef G4OPENGLIMMEDIATEWT_HH
 #define G4OPENGLIMMEDIATEWT_HH
@@ -43,7 +40,5 @@ public:
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

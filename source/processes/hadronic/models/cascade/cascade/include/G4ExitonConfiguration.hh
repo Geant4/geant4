@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExitonConfiguration.hh,v 1.8 2010-12-15 07:39:50 gunter Exp $
+// $Id$
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
 // 20110922  M. Kelsey -- Replace print() with stream operator<<(), put
 //		implementation into new .cc file.
+// 20121009  M. Kelsey -- Add empty() test for no excitons, fix constness
 
 #ifndef G4EXITON_CONFIGURATION_HH
 #define G4EXITON_CONFIGURATION_HH
@@ -52,7 +53,12 @@ public:
     protonHoles = neutronHoles = 0;
   }
 
-  bool operator==(const G4ExitonConfiguration& right) {
+  bool empty() const {
+    return (protonQuasiParticles==0 && neutronQuasiParticles==0 &&
+	    protonHoles==0 && neutronHoles==0);
+  }
+
+  bool operator==(const G4ExitonConfiguration& right) const {
     return ( (&right == this) ||
 	     (protonQuasiParticles == right.protonQuasiParticles &&
 	      neutronQuasiParticles == right.neutronQuasiParticles &&
@@ -60,7 +66,7 @@ public:
 	      neutronHoles == right.neutronHoles) );
   }
 
-  bool operator!=(const G4ExitonConfiguration& right) {
+  bool operator!=(const G4ExitonConfiguration& right) const {
     return !operator==(right);
   }
 

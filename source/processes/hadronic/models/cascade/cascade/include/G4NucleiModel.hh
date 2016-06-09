@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.hh,v 1.34 2010/10/20 23:51:07 mkelsey Exp $
+// $Id$
 // GEANT4 tag: $Name:  $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -59,15 +59,22 @@
 // 20110808  M. Kelsey -- Pass buffer into generateParticleFate instead of
 //		returning a vector to be copied.
 // 20110823  M. Kelsey -- Remove local cross-section tables entirely
+// 20120125  M. Kelsey -- Add special case for photons to have zero potential.
+// 20120307  M. Kelsey -- Add zone volume array for use with quasideuteron
+//		density, functions to identify projectile, compute interaction
+//		distance.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
+#include <algorithm>
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
-#include <algorithm>
-#include <vector>
+#include "G4LorentzConvertor.hh"
 
 class G4InuclNuclei;
 class G4ElementaryParticleCollider;
@@ -102,6 +109,7 @@ public:
   G4double getFermiKinetic(G4int ip, G4int izone) const;
 
   G4double getPotential(G4int ip, G4int izone) const {
+    if (ip == 9) return 0.0;		// Special case for photons
     G4int ip0 = ip < 3 ? ip - 1 : 2;
     if (ip > 10 && ip < 18) ip0 = 3;
     if (ip > 20) ip0 = 4;
@@ -109,12 +117,16 @@ public:
   }
 
   // Factor to convert GEANT4 lengths to internal units
-  G4double getRadiusUnits() const { return radiusUnits*fermi; }
+  G4double getRadiusUnits() const { return radiusUnits*CLHEP::fermi; }
 
   G4double getRadius() const { return nuclei_radius; }
   G4double getRadius(G4int izone) const {
-    return ( (izone<0) ? 0 
+    return ( (izone<0) ? 0.
 	     : (izone<number_of_zones) ? zone_radii[izone] : nuclei_radius);
+  }
+  G4double getVolume(G4int izone) const {
+    return ( (izone<0) ? 0.
+	     : (izone<number_of_zones) ? zone_volumes[izone] : nuclei_volume);
   }
 
   G4int getNumberOfZones() const { return number_of_zones; }
@@ -151,6 +163,7 @@ public:
 			    G4ElementaryParticleCollider* theEPCollider,
 			    std::vector<G4CascadParticle>& cascade); 
 
+  G4bool isProjectile(const G4CascadParticle& cparticle) const;
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
   G4InuclElementaryParticle generateNucleon(G4int type, G4int zone) const;
@@ -199,9 +212,23 @@ private:
   G4double zoneIntegralGaussian(G4double ur1, G4double ur2,
 				G4double nuclearRadius) const; 
 
-  G4double getRatio(G4int ip) const;
+  G4double getRatio(G4int ip) const;	// Fraction of nucleons still available
+
+  // Scale nuclear density with interactions so far
+  G4double getCurrentDensity(G4int ip, G4int izone) const;
+
+  // Average path length for any interaction of projectile and target
+  //	= 1. / (density * cross-section)
+  G4double inverseMeanFreePath(const G4CascadParticle& cparticle,
+			       const G4InuclElementaryParticle& target);
+  // NOTE:  Function is non-const in order to use dummy_converter
+
+  // Use path-length and MFP (above) to throw random distance to collision
+  G4double generateInteractionLength(const G4CascadParticle& cparticle,
+				     G4double path, G4double invmfp) const;
 
   // Buffers for processing interactions on each cycle
+  G4LorentzConvertor dummy_convertor;	// For getting collision frame
   G4CollisionOutput EPCoutput;		// For N-body inelastic collisions
 
   std::vector<G4InuclElementaryParticle> qdeutrons;	// For h+(NN) trials
@@ -226,8 +253,10 @@ private:
   std::vector<std::vector<G4double> > zone_potentials;
   std::vector<std::vector<G4double> > fermi_momenta;
   std::vector<G4double> zone_radii;
+  std::vector<G4double> zone_volumes;
   std::vector<G4double> binding_energies;
   G4double nuclei_radius;
+  G4double nuclei_volume;
   G4int number_of_zones;
 
   G4int A;

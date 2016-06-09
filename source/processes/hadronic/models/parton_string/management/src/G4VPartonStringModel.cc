@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.8 2010-12-07 10:42:40 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -42,42 +41,22 @@
 #include "G4ios.hh"
 #include "G4ShortLivedConstructor.hh"
 
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
-G4VPartonStringModel::G4VPartonStringModel() : G4VHighEnergyGenerator(),
-stringFragmentationModel(0), theThis(0)
+
+G4VPartonStringModel::G4VPartonStringModel(const G4String& modelName)
+    : G4VHighEnergyGenerator(modelName),
+      stringFragmentationModel(0),
+      theThis(0)
 {
 //  Make shure Shotrylived partyicles are constructed.
 	G4ShortLivedConstructor ShortLived;
 	ShortLived.ConstructParticle();
 }
 
-G4VPartonStringModel::G4VPartonStringModel(const G4VPartonStringModel &) : G4VHighEnergyGenerator(), 
-stringFragmentationModel(0), theThis(0)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::copy ctor not accessible");
-}
-
-
 G4VPartonStringModel::~G4VPartonStringModel()
 {
-}
-
-
-const G4VPartonStringModel & G4VPartonStringModel::operator=(const G4VPartonStringModel &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::operator= meant to not be accessable");
-  return *this;
-}
-
-
-int G4VPartonStringModel::operator==(const G4VPartonStringModel &) const
-{
- return 0;
-}
-
-int G4VPartonStringModel::operator!=(const G4VPartonStringModel &) const
-{
-  return 1;
 }
 
 G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus, 
@@ -122,28 +101,34 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   G4double InvMass=SumStringMom.mag();   
 
 //#define debug_PartonStringModel
-  #ifdef debug_PartonStringModel
-  G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
+#ifdef debug_PartonStringModel
+
+     G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
   
        // loop over wounded nucleus
-     G4int hits(0);
+     G4int hits(0), charged_hits(0);
+     G4ThreeVector hitNucleonMomentum(0.,0.,0.);
      G4Nucleon * theCurrentNucleon = fancynucleus->StartLoop() ? fancynucleus->GetNextNucleon() : NULL;
-     while(theCurrentNucleon != NULL)
+     while( theCurrentNucleon )
      {
        if(theCurrentNucleon->AreYouHit()) 
        {
          hits++;
+         hitNucleonMomentum += theCurrentNucleon->Get4Momentum().vect();
+         if ( theCurrentNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hits;
        }
        theCurrentNucleon = fancynucleus->GetNextNucleon();
      }
      
-     G4cout << "G4VPSM: strE, nucleons,SumStringE,  inE "
-            << stringEnergy << " "    
-	    << hits << " "
-	    << Ptmp.e() << " " 
-	    << SumStringMom.e() << " "
-	    << Ptmp.e() + 939.*hits - stringEnergy  << G4endl;
-  #endif
+     G4int initialZ=fancynucleus->GetCharge();
+     G4int initialA=fancynucleus->GetMassNumber();
+     G4double initial_mass=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(initialZ,initialA);
+     G4double final_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(initialZ-charged_hits, initialA-hits);
+     G4cout << "G4VPSM: strE, hit nucleons, Primary, SumStringE, nucleus intial, nucleus final, excitation estimate "
+            << stringEnergy << " "    << hits << ", " << Ptmp.e() << ", "<< SumStringMom.e() << ", "
+	        << initial_mass<< ", " << final_mass<< ", "  << Ptmp.e() + initial_mass - final_mass - stringEnergy  << G4endl;
+     G4cout << "momentum balance " <<  thePrimary.GetMomentum() + hitNucleonMomentum - SumStringMom.vect()<< G4endl;
+#endif
 
 //  Fragment strings
 
@@ -183,3 +168,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   return theResult;
 }
 
+void G4VPartonStringModel::ModelDescription(std::ostream& outFile) const
+{
+	outFile << GetModelName() << " has no description yet.\n";
+}

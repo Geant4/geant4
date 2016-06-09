@@ -10,6 +10,7 @@
 #include "directory"
 
 #include "infos"
+#include "free_seg"
 
 #include "../platform"
 
@@ -21,12 +22,15 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#if defined(WIN32) && !defined(__GNUC__)
+#ifdef WIN32
+#ifndef __GNUC__
 #include <direct.h>
-#define ssize_t int
 #include <io.h>
 // disable the warning about the usage of "this" in the constructor.
 #pragma warning(disable:4355)
+#endif
+#else
+#include <unistd.h>
 #endif
 
 namespace tools {
@@ -80,6 +84,9 @@ public: //ifile
 
   virtual bool write_buffer(const char* a_buffer,uint32 a_length) {
     // Write a buffer to the file. This is the basic low level write operation.
+#ifdef WIN32
+    typedef int ssize_t;
+#endif
     ssize_t siz;
     while ((siz = ::write(m_file,a_buffer,a_length)) < 0 && 
             error_number() == EINTR) reset_error_number();
@@ -148,7 +155,7 @@ public: //ifile
     uint32 nbytes = a_buffer.length();
     uint32 cxlevel = m_compress;
     if(cxlevel && (nbytes>256)) {
-      ifile::zip_func func;
+      tools::zip_func func;
       if(!ziper('Z',func)) {
         //m_out << "tools::wroot::directory::write_object :" 
         //      << " zlib ziper not found."
@@ -190,9 +197,7 @@ public: //ifile
     }
   }
 public:
-  file(std::ostream& a_out,
-              const std::string& a_path,
-              bool a_verbose = false)
+  file(std::ostream& a_out,const std::string& a_path,bool a_verbose = false)
   :m_out(a_out)
   ,m_path(a_path)
   ,m_verbose(a_verbose)
@@ -241,8 +246,11 @@ public:
     }
 
     //initialize :
+
     m_BEGIN = kBegin();  // First used word in file following the file header.
     m_END = m_BEGIN;   // Pointer to end of file.
+
+    m_free_segs.push_back(new free_seg(m_out,m_BEGIN,START_BIG_FILE()));
 
     // Write Directory info :
     uint32 namelen = 
@@ -333,9 +341,34 @@ public:
     if(m_compress>9) m_compress = 9;
   }
 
+  bool is_open() const {
+    return (m_file==not_open()?false:true);
+  }
+
   void close() {
     if(m_file==not_open()) return;
     m_root_directory.close();
+
+    if(m_free_segs.size()) {
+      if(!write_free_segments()) {
+        m_out << "tools::wroot::file::close :"
+              << " can't write free segments."
+              << std::endl;
+      }
+      if(!write_header())  { // Now write file header
+        m_out << "tools::wroot::file::close :"
+              << " can't write file header."
+              << std::endl;
+      }
+    }
+
+   {std::list<free_seg*>::iterator it;
+    for(it=m_free_segs.begin();
+        it!=m_free_segs.end();
+        it = m_free_segs.erase(it)) {
+      delete (*it);
+    }}
+
     ::close(m_file);
     m_file = not_open();
   }
@@ -372,7 +405,12 @@ public:
       return false;
     }
 
-    //if(!writeFreeSegments()) return false; // Write free segments.
+    if(!write_free_segments()) {
+      m_out << "tools::wroot::file::write :"
+            << " can't write free segments."
+            << std::endl;
+      return false;
+    }
 
     if(!write_header()) { //write 45 bytes at BOF.
       m_out << "tools::wroot::file::write :"
@@ -386,7 +424,7 @@ public:
   }
 
   bool add_ziper(char a_key,zip_func a_func){
-    std::map<char,zip_func>::iterator it = m_zipers.find(a_key);
+    std::map<char,zip_func>::const_iterator it = m_zipers.find(a_key);
     if(it!=m_zipers.end()) {
       //(*it).second = a_func; //override ?
       return false;
@@ -446,17 +484,17 @@ protected:
     const char* eob = psave + kBegin();
     char* pos = psave;
     ::memcpy(pos,root,4); pos += 4;
-    uint32 version = m_version;
+    uint32 vers = m_version;
     if((m_END>START_BIG_FILE())        ||
        (m_seek_free>START_BIG_FILE())  ||
        (m_seek_info>START_BIG_FILE())  ){
-      version += 1000000;
+      vers += 1000000;
       m_units = 8;
     }
     wbuf wb(m_out,byte_swap(),eob,pos);
-    if(!wb.write(version)) return false;
+    if(!wb.write(vers)) return false;
     if(!wb.write((seek32)m_BEGIN)) return false;
-    if(version>1000000) {
+    if(vers>1000000) {
       if(!wb.write(m_END)) return false;
       if(!wb.write(m_seek_free)) return false;
     } else {
@@ -470,7 +508,7 @@ protected:
     if(!wb.write(m_nbytes_name)) return false;
     if(!wb.write(m_units)) return false;
     if(!wb.write(m_compress)) return false;
-    if(version>1000000) {
+    if(vers>1000000) {
       if(!wb.write(m_seek_info)) return false;
     } else {
       if(!wb.write((seek32)m_seek_info)) return false;
@@ -523,6 +561,94 @@ protected:
     m_nbytes_info = key.number_of_bytes();
     //FIXME sumBuffer(key.objectSize());
 
+    uint32 n;
+    if(!key.write_file(n)) return false;
+    if(!n) return false;
+
+    return true;
+  }
+
+  bool make_free_seg(seek a_first,seek a_last) {
+    // Mark unused bytes on the file :
+    //  The list of free segments is in the m_free_segs list
+    //  When an object is deleted from the file, the freed space is added
+    //  into the FREE linked list (m_free_segs). The FREE list consists
+    //  of a chain  of consecutive free segments on the file. At the same
+    //  time, the first 4 bytes of the freed record on the file
+    //  are overwritten by GAPSIZE where
+    //    GAPSIZE = -(Number of bytes occupied by the record).
+
+    if(m_free_segs.empty()) return false; //FIXME : is the return value ok ?
+    free_seg* newfree = new free_seg(m_out,a_first,a_last);
+    if(!newfree) return false;
+    m_free_segs.insert(m_free_segs.begin(),newfree);
+    seek nfirst = newfree->first();
+    seek nlast = newfree->last();
+
+    seek _nbytes = nlast-nfirst+1;
+    if(_nbytes>START_BIG_FILE()) _nbytes = START_BIG_FILE();
+    int nbytes = -int(_nbytes);
+
+    int nb = sizeof(int);
+
+    char psave[128];
+    const char* eob = psave + nb;
+    char* pos = psave;
+
+    wbuf wb(m_out,byte_swap(),eob,pos);
+    if(!wb.write(nbytes)) return false;
+
+    if(nlast == (m_END-1)) m_END = nfirst;
+    if(!set_pos(nfirst)) return false;
+    if(!write_buffer(psave,nb)) return false;
+    if(!synchronize()) return false;
+    return true;
+  }
+
+  bool write_free_segments(){
+    //  The linked list of FREE segments (fFree) is written as a single data
+    //  record.
+
+    // Delete old record if it exists :
+    if(m_seek_free){
+      if(!make_free_seg(m_seek_free, m_seek_free + m_nbytes_free -1)) 
+        return false;
+    }
+
+    uint32 nbytes = 0;
+   {std::list<free_seg*>::iterator it;
+    for(it=m_free_segs.begin();it!=m_free_segs.end();++it) {
+      nbytes += (*it)->record_size();
+    }}
+    if(!nbytes) return true;
+
+    wroot::key key(*this,
+                   m_root_directory.seek_directory(),
+                   m_path,m_title,"TFile",
+                   nbytes); //set m_END
+    if(!key.seek_key()) return false;
+
+   {char* pos = key.data_buffer();
+    wbuf wb(m_out,byte_swap(),key.eob(),pos);
+    std::list<free_seg*>::iterator it;
+    for(it=m_free_segs.begin();it!=m_free_segs.end();++it) {
+      if(!(*it)->fill_buffer(wb)) return false;
+    }}
+
+    //key.set_cycle(1);
+    if(!key.write_self()) {
+      m_out << "tools::wroot::file::write_free_segments :" 
+            << " key.write_self() failed."
+            << std::endl;
+      return false;
+    }
+
+    m_seek_free = key.seek_key();
+    m_nbytes_free = key.number_of_bytes();
+    if(m_verbose) {
+      m_out << "tools::wroot::file::write_free_segments :"
+            << " write key." << std::endl;
+    }
 
     uint32 n;
     if(!key.write_file(n)) return false;
@@ -532,7 +658,7 @@ protected:
   }
 
   static bool zip(std::ostream& a_out,
-                         ifile::zip_func a_func,
+                         tools::zip_func a_func,
                          int a_level,
                          uint32 a_srcsize,char* a_src,
                          uint32 a_tgtsize,char* a_tgt,
@@ -611,6 +737,7 @@ protected:
   std::string m_title; //must be before the below.
   directory m_root_directory;
   std::map<char,zip_func> m_zipers;
+  std::list<free_seg*> m_free_segs; //Free segments linked list table
   // begin of record :
   // "root"
   uint32 m_version;       //File format version

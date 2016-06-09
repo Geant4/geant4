@@ -35,11 +35,11 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.15 2010-11-24 15:56:19 cirrone Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "BrachyPhysicsList.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"

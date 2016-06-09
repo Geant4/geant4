@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.cc,v 1.2 2008-10-24 14:00:03 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -72,7 +71,7 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
     const G4ErrorTarget* target = g4edata->GetTarget();
     if( target != 0 )
     {
-      G4double StepPlane(target->GetDistanceFromPoint(pGlobalPoint,pDirection));
+      G4double StepPlane= target->GetDistanceFromPoint(pGlobalPoint,pDirection);
 
       if( StepPlane < 0. ) // Negative means target is crossed, will not be found
       {

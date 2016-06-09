@@ -18,6 +18,10 @@
 # 20110922  M. Kelsey -- Add G4ExitonConfiguration, G4FissionConfiguration
 # 20110923  M. Kelsey -- Add G4CascadeChannel.cc
 # 20111007  M. Kelsey -- Add new gamma-nucleon tables
+# 20120822  M. Kelsey -- Add G4CascadeParameters
+# 20120831  M. Kelsey -- Replace G4CascadeT1NNChannel with T1pp and T1nn
+# 20120907  M. Kelsey -- Renamed *T1xxChannel.cc to *XXChannel.cc (PP,NN,NP)
+# 20120912  M. Kelsey -- Add G4CascadeParamMessenger, dependencies
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -30,6 +34,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
@@ -94,6 +99,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeLambdaPChannel.hh
         G4CascadeNNChannel.hh
         G4CascadeNPChannel.hh
+        G4CascadeOmegaMinusNChannel.hh
+        G4CascadeOmegaMinusPChannel.hh
+	G4CascadeParameters.hh
+	G4CascadeParamMessenger.hh
+	G4CascadeParamMessenger.icc
         G4CascadePiMinusNChannel.hh
         G4CascadePiMinusPChannel.hh
         G4CascadePiPlusNChannel.hh
@@ -149,14 +159,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4VCascadeDeexcitation.hh
         G4WatcherGun.hh
     SOURCES
-        bindingEnergyAsymptotic.cc
-        bindingEnergy.cc
+	G4CascadeCoalescence.cc
+	G4CascadeParameters.cc
+	G4CascadeParamMessenger.cc
         G4Analyser.cc
         G4BigBanger.cc
+        G4CascadParticle.cc
         G4CascadeChannel.cc
         G4CascadeChannelTables.cc
         G4CascadeCheckBalance.cc
-	G4CascadeCoalescence.cc
         G4CascadeColliderBase.cc
         G4CascadeDeexcitation.cc
         G4CascadeInterface.cc
@@ -170,6 +181,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeKzeroPChannel.cc
         G4CascadeLambdaNChannel.cc
         G4CascadeLambdaPChannel.cc
+        G4CascadeNNChannel.cc
+        G4CascadeNPChannel.cc
+        G4CascadeOmegaMinusNChannel.cc
+        G4CascadeOmegaMinusPChannel.cc
+        G4CascadePPChannel.cc
         G4CascadeRecoilMaker.cc
         G4CascadeSigmaMinusNChannel.cc
         G4CascadeSigmaMinusPChannel.cc
@@ -177,17 +193,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeSigmaPlusPChannel.cc
         G4CascadeSigmaZeroNChannel.cc
         G4CascadeSigmaZeroPChannel.cc
-        G4CascadeT0npChannel.cc
         G4CascadeT11pizNChannel.cc
         G4CascadeT1GamNChannel.cc
-        G4CascadeT1NNChannel.cc
         G4CascadeT31piNChannel.cc
         G4CascadeT33piNChannel.cc
         G4CascadeXiMinusNChannel.cc
         G4CascadeXiMinusPChannel.cc
         G4CascadeXiZeroNChannel.cc
         G4CascadeXiZeroPChannel.cc
-        G4CascadParticle.cc
         G4CollisionOutput.cc
         G4Dineutron.cc
         G4Diproton.cc
@@ -196,8 +209,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4EvaporationInuclCollider.cc
         G4ExitonConfiguration.cc
         G4FissionConfiguration.cc
-        G4Fissioner.cc
         G4FissionStore.cc
+        G4Fissioner.cc
         G4InteractionCase.cc
         G4IntraNucleiCascader.cc
         G4InuclCollider.cc
@@ -209,14 +222,16 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4KaonHypSampler.cc
         G4LorentzConvertor.cc
         G4NonEquilibriumEvaporator.cc
-        G4NucleiModel.cc
         G4NuclWatcher.cc
+        G4NucleiModel.cc
         G4PionNucSampler.cc
         G4PreCompoundDeexcitation.cc
         G4RegionModel.cc
         G4UnboundPN.cc
         G4VCascadeCollider.cc
         G4WatcherGun.cc
+        bindingEnergy.cc
+        bindingEnergyAsymptotic.cc
         nucleiLevelDensity.cc
         paraMaker.cc
     GRANULAR_DEPENDENCIES
@@ -241,6 +256,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4hadronic_util
         G4hadronic_xsect
         G4hepnumerics
+	G4intercoms
         G4ions
         G4leptons
         G4materials
@@ -253,6 +269,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global
+	G4intercoms
         G4materials
         G4particles
         G4track

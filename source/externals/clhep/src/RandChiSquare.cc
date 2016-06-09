@@ -17,7 +17,7 @@
 
 #include "CLHEP/Random/RandChiSquare.h"
 #include "CLHEP/Random/DoubConv.h"
-#include <cmath>	// for log()
+#include <cmath>	// for std::log()
 
 namespace CLHEP {
 

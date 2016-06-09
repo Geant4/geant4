@@ -39,8 +39,6 @@
 #include "G4ExcitedString.hh"
 #include <algorithm>
 
-//G4ExcitedString::G4ExcitedString(const G4ExcitedString &right)
-//{}
 
 G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Direction)
     {

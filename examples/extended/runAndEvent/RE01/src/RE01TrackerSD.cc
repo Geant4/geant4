@@ -23,39 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01TrackerSD.cc,v 1.2 2006-06-29 17:44:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01TrackerSD.cc
+/// \brief Implementation of the RE01TrackerSD class
 //
-
-
+// $Id$
+//
 
 #include "RE01TrackerSD.hh"
 #include "RE01TrackerHit.hh"
+#include "RE01TrackInformation.hh"
+
 #include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
-#include "RE01TrackInformation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerSD::RE01TrackerSD(G4String name)
-:G4VSensitiveDetector(name)
+  :G4VSensitiveDetector(name),fTrackerCollection(0)
 {
   G4String HCname;
   collectionName.insert(HCname="trackerCollection");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerSD::~RE01TrackerSD(){;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  trackerCollection = new RE01TrackerHitsCollection
+  fTrackerCollection = new RE01TrackerHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,trackerCollection);
+  HCE->AddHitsCollection(HCID,fTrackerCollection);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 G4bool RE01TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -64,28 +69,17 @@ G4bool RE01TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   RE01TrackerHit* newHit = new RE01TrackerHit();
   newHit->SetEdep( edep );
   newHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  RE01TrackInformation* trackInfo = (RE01TrackInformation*)(aStep->GetTrack()->GetUserInformation());
+  RE01TrackInformation* trackInfo = 
+    (RE01TrackInformation*)(aStep->GetTrack()->GetUserInformation());
   if(trackInfo->GetTrackingStatus()>0)
   { newHit->SetTrackID( aStep->GetTrack()->GetTrackID() ); }
   else
   { newHit->SetTrackID( -1 ); }
-  trackerCollection->insert( newHit );
+  fTrackerCollection->insert( newHit );
 
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01TrackerSD::EndOfEvent(G4HCofThisEvent*)
-{
-}
-
-void RE01TrackerSD::clear()
-{
-} 
-
-void RE01TrackerSD::DrawAll()
-{
-} 
-
-void RE01TrackerSD::PrintAll()
-{
-} 
+{;}

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.cc,v 1.7 2006-06-29 18:10:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4UserEventAction.hh"
@@ -34,10 +33,9 @@
 #include "G4ParticleTable.hh"
 #include "globals.hh"
 
-
-void G4UserEventAction::BeginOfEventAction(const G4Event*)
+G4UserEventAction::G4UserEventAction()
 {
-  if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+ if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
  {
    G4String msg;
    msg =  " You are instantiating G4UserEventAction BEFORE your\n";
@@ -51,6 +49,11 @@ void G4UserEventAction::BeginOfEventAction(const G4Event*)
  }
 }
 
+G4UserEventAction::~G4UserEventAction()
+{;}
+
+void G4UserEventAction::BeginOfEventAction(const G4Event*)
+{;}
 
 void G4UserEventAction::EndOfEventAction(const G4Event*)
 {;}

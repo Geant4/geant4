@@ -77,7 +77,7 @@ protected:
   void UpdateScene();
   G4String Help(const G4String& topic = "controls");
 private:
-  static void SelectionCB(void*,SoPath*);
+  //static void SelectionCB(void*,SoPath*);
   //static void DeselectionCB(void*,SoPath*);
   static void GroupCameraSensorCB(void*,SoSensor*);
   static void CameraSensorCB(void*,SoSensor*);
@@ -90,6 +90,7 @@ private:
 private:
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 protected:
+  static void SelectionCB(void*,SoPath*);
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4VInteractorManager* fInteractorManager;
   SoSelection* fSoSelection;

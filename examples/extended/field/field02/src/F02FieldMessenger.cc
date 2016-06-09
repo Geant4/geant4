@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02FieldMessenger.cc
+/// \brief Implementation of the F02FieldMessenger class
 //
-// $Id: F02FieldMessenger.cc,v 1.8 2008-05-14 15:27:13 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 #include "F02FieldMessenger.hh"
-
 #include "F02ElectricFieldSetup.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -39,87 +39,78 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* pEMfield)
-  :fEFieldSetup(pEMfield)
+F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
+ : G4UImessenger(),
+   fElFieldSetup(fieldSetup),
+   fFieldDir(0),
+   fStepperCmd(0),
+   fElFieldCmd(0),
+   fMinStepCmd(0),
+   fUpdateCmd(0)
 { 
-  F02detDir = new G4UIdirectory("/field/");
-  F02detDir->SetGuidance("F02 field tracking control.");
+  fFieldDir = new G4UIdirectory("/field/");
+  fFieldDir->SetGuidance("F02 field tracking control.");
 
-  StepperCmd = new G4UIcmdWithAnInteger("/field/setStepperType",this);
-  StepperCmd->SetGuidance("Select stepper type for electric field");
-  StepperCmd->SetParameterName("choice",true);
-  StepperCmd->SetDefaultValue(4);
-  StepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  fStepperCmd = new G4UIcmdWithAnInteger("/field/setStepperType",this);
+  fStepperCmd->SetGuidance("Select stepper type for electric field");
+  fStepperCmd->SetParameterName("choice",true);
+  fStepperCmd->SetDefaultValue(4);
+  fStepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
  
-  UpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
       
-  ElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
-  ElFieldCmd->SetGuidance("Define uniform Electric field.");
-  ElFieldCmd->SetGuidance("Electric field will be in Z direction.");
-  ElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
-  ElFieldCmd->SetParameterName("Ez",false,false);
-  ElFieldCmd->SetDefaultUnit("volt/m");
-  ElFieldCmd->AvailableForStates(G4State_Idle); 
+  fElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
+  fElFieldCmd->SetGuidance("Define uniform Electric field.");
+  fElFieldCmd->SetGuidance("Electric field will be in Z direction.");
+  fElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
+  fElFieldCmd->SetParameterName("Ez",false,false);
+  fElFieldCmd->SetDefaultUnit("volt/m");
+  fElFieldCmd->AvailableForStates(G4State_Idle); 
  
-  MinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
-  MinStepCmd->SetGuidance("Define minimal step");
-  MinStepCmd->SetParameterName("min step",false,false);
-  MinStepCmd->SetDefaultUnit("mm");
-  MinStepCmd->AvailableForStates(G4State_Idle);  
-       
-  AbsMaterCmd = new G4UIcmdWithAString("/field/setAbsMat",this);
-  AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  AbsMaterCmd->SetParameterName("choice",true);
-  AbsMaterCmd->SetDefaultValue("Xe");
-  AbsMaterCmd->AvailableForStates(G4State_Idle);
-
-
+  fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
+  fMinStepCmd->SetGuidance("Define minimal step");
+  fMinStepCmd->SetParameterName("min step",false,false);
+  fMinStepCmd->SetDefaultUnit("mm");
+  fMinStepCmd->AvailableForStates(G4State_Idle);  
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02FieldMessenger::~F02FieldMessenger()
 {
-  delete StepperCmd;
-  delete ElFieldCmd;
-  delete MinStepCmd;
-  delete F02detDir;
-  delete UpdateCmd;
-
-  delete AbsMaterCmd; 
+  delete fStepperCmd;
+  delete fElFieldCmd;
+  delete fMinStepCmd;
+  delete fFieldDir;
+  delete fUpdateCmd;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F02FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 { 
-  if( command == StepperCmd )
+  if( command == fStepperCmd )
   { 
-    fEFieldSetup->SetStepperType(StepperCmd->GetNewIntValue(newValue));
+    fElFieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
   }  
-  if( command == UpdateCmd )
+  if( command == fUpdateCmd )
   { 
-    fEFieldSetup->UpdateField(); 
+    fElFieldSetup->UpdateField(); 
   }
-  if( command == ElFieldCmd )
+  if( command == fElFieldCmd )
   { 
-    fEFieldSetup->SetFieldValue(ElFieldCmd->GetNewDoubleValue(newValue));
+    fElFieldSetup->SetFieldValue(fElFieldCmd->GetNewDoubleValue(newValue));
   }
-  if( command == MinStepCmd )
+  if( command == fMinStepCmd )
   { 
-    fEFieldSetup->SetMinStep(MinStepCmd->GetNewDoubleValue(newValue));
+    fElFieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
   }
 }
 
-//
-//
 /////////////////////////////////////////////////////////////////////////

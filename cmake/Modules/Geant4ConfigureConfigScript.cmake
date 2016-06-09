@@ -13,14 +13,71 @@
 # {root,clehep}-config is the install itself is relocatable, otherwise
 # absolute paths are encoded.
 #
-# $Id: Geant4ConfigureConfigScript.cmake,v 1.4 2010-12-13 17:31:59 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
-#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+# function get_system_include_dirs
+#          return list of directories our C++ compiler searches
+#          by default.
+#
+#          The idea comes from CMake's inbuilt technique to do this
+#          for the Eclipse and CodeBlocks generators, but we implement
+#          our own function because the CMake functionality is internal
+#          so we can't rely on it.
+function(get_system_include_dirs _dirs)
+  # Only for GCC, Clang and Intel
+  if("${CMAKE_CXX_COMPILER_ID}" MATCHES GNU OR "${CMAKE_CXX_COMPILER_ID}" MATCHES Clang OR "${CMAKE_CXX_COMPILER_ID}" MATCHES Intel)
+    # Proceed
+    file(WRITE "${CMAKE_BINARY_DIR}/CMakeFiles/g4dummy" "\n")
+
+    # Save locale, them to "C" english locale so we can parse in English
+    set(_orig_lc_all      $ENV{LC_ALL})
+    set(_orig_lc_messages $ENV{LC_MESSAGES})
+    set(_orig_lang        $ENV{LANG})
+
+    set(ENV{LC_ALL}      C)
+    set(ENV{LC_MESSAGES} C)
+    set(ENV{LANG}        C)
+
+    execute_process(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -v -E -x c++ -dD g4dummy
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles
+      ERROR_VARIABLE _cxxOutput
+      OUTPUT_VARIABLE _cxxStdout 
+      )
+
+    file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/g4dummy")
+
+    # Parse and extract search dirs
+    set(_resultIncludeDirs )
+    if( "${_cxxOutput}" MATCHES "> search starts here[^\n]+\n *(.+ *\n) *End of (search) list" )
+      string(REGEX MATCHALL "[^\n]+\n" _includeLines "${CMAKE_MATCH_1}")
+      foreach(nextLine ${_includeLines})
+        string(REGEX REPLACE "\\(framework directory\\)" "" nextLineNoFramework "${nextLine}")
+        string(STRIP "${nextLineNoFramework}" _includePath)
+        list(APPEND _resultIncludeDirs "${_includePath}")
+      endforeach()
+    endif()
+   
+    # Restore original locale
+    set(ENV{LC_ALL}      ${_orig_lc_all})
+    set(ENV{LC_MESSAGES} ${_orig_lc_messages})
+    set(ENV{LANG}        ${_orig_lang})
+
+    set(${_dirs} ${_resultIncludeDirs} PARENT_SCOPE)
+  else()
+    set(${_dirs} "" PARENT_SCOPE)
+  endif()
+endfunction()
+
+
+
+#-----------------------------------------------------------------------
 # Only create script if we have a global library build...
 #
 if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
+  # Get implicit search paths
+  get_system_include_dirs(_cxx_compiler_dirs)
+
   # Setup variables needed for expansion in configuration file
   # - CLHEP
   if(GEANT4_USE_SYSTEM_CLHEP)
@@ -39,13 +96,37 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - GDML
   if(GEANT4_USE_GDML)
     set(G4_BUILTWITH_GDML "yes")
+    set(G4_XERCESC_INCLUDE_DIRS ${XERCESC_INCLUDE_DIRS})
+    list(REMOVE_DUPLICATES G4_XERCESC_INCLUDE_DIRS)
+    list(REMOVE_ITEM G4_XERCESC_INCLUDE_DIRS ${_cxx_compiler_dirs})
+
+    set(G4_XERCESC_CFLAGS )
+    foreach(_dir ${G4_XERCESC_INCLUDE_DIRS})
+      set(G4_XERCESC_CFLAGS "${G4_XERCESC_CFLAGS} -I${_dir}")
+    endforeach()
   else()
     set(G4_BUILTWITH_GDML "no")
+  endif()
+
+  # - G3ToG4
+  if(GEANT4_USE_G3TOG4)
+    set(G4_BUILTWITH_G3TOG4 "yes")
+  else()
+    set(G4_BUILTWITH_G3TOG4 "no")
   endif()
 
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
+    set(G4_QT_INCLUDE_DIRS ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+    list(REMOVE_DUPLICATES G4_QT_INCLUDE_DIRS)
+    list(REMOVE_ITEM G4_QT_INCLUDE_DIRS ${_cxx_compiler_dirs})
+
+    set(G4_QT_CFLAGS )
+    foreach(_dir ${G4_QT_INCLUDE_DIRS})
+      set(G4_QT_CFLAGS "${G4_QT_CFLAGS} -I${_dir}")
+    endforeach()
+
   else()
     set(G4_BUILTWITH_QT "no")
   endif()
@@ -81,14 +162,15 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_INVENTOR "no")
   endif()
 
-  # If we have a module that uses X11, We have to play with the X11 paths to 
-  # get a clean set suitable for inclusion
+  # If we have a module that uses X11, We have to play with the X11 
+  # paths to get a clean set suitable for inclusion
   if(G4_CONFIG_NEEDS_X11)
     set(_raw_x11_includes ${X11_INCLUDE_DIR})
     list(REMOVE_DUPLICATES _raw_x11_includes)
-    set(G4_X11_INCLUDE_STATEMENT )
+    list(REMOVE_ITEM _raw_x11_includes ${_cxx_compiler_dirs})
+    set(G4_X11_CFLAGS )
     foreach(_p ${_raw_x11_includes})
-      set(G4_X11_INCLUDE_STATEMENT "-I${_p} ${G4_X11_INCLUDE_STATEMENT}")
+      set(G4_X11_CFLAGS "-I${_p} ${G4_X11_CFLAGS}")
     endforeach()
   endif()
 

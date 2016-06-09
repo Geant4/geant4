@@ -1,0 +1,28 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Medical Examples History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17-11-12 I. Hrivnacova (exMedical-V09-05-02)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+13-10-12 A. Dotti (exMedical-V09-05-01)
+- Retagging: previous tag does not appear in tag database
+
+21-09-12 I. Hrivnacova (exMedical-V09-05-00)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters  

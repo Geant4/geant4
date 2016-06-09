@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.16 2010-09-28 16:09:00 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------
 //
@@ -55,8 +54,6 @@
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4NucleiProperties.hh"
-//#include "G4ParticleTable.hh"
-//#include "G4IonTable.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -91,7 +88,7 @@ public:
 
   // ============= OPERATORS ==================
     
-  const G4Fragment & operator=(const G4Fragment &right);
+  G4Fragment & operator=(const G4Fragment &right);
   G4bool operator==(const G4Fragment &right) const;
   G4bool operator!=(const G4Fragment &right) const;
 
@@ -152,6 +149,9 @@ public:
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
 
+  inline G4bool IsStable() const;
+  inline void SetStable(G4bool val);
+
   // ============= PRIVATE METHODS ==============================
 
 private:
@@ -197,6 +197,8 @@ private:
   G4ParticleDefinition * theParticleDefinition;
   
   G4double theCreationTime;
+
+  G4bool isStable;
 
 };
 
@@ -381,6 +383,16 @@ inline G4double G4Fragment::GetCreationTime() const
 inline void G4Fragment::SetCreationTime(G4double time)
 {
   theCreationTime = time;
+}
+
+inline G4bool G4Fragment::IsStable() const
+{
+  return isStable;
+}
+
+inline void G4Fragment::SetStable(G4bool val)
+{
+  isStable = val;
 }
 
 #endif

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.21 2010-06-03 10:17:44 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -39,6 +38,43 @@ class G4UIcmdWithAString;
 
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
+#include "G4Polyline.hh"
+#include "G4Text.hh"
+#include "G4Timer.hh"
+
+class G4VisCommandSceneAddArrow: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddArrow ();
+  virtual ~G4VisCommandSceneAddArrow ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddArrow (const G4VisCommandSceneAddArrow&);
+  G4VisCommandSceneAddArrow& operator = (const G4VisCommandSceneAddArrow&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddArrow2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddArrow2D ();
+  virtual ~G4VisCommandSceneAddArrow2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddArrow2D (const G4VisCommandSceneAddArrow2D&);
+  G4VisCommandSceneAddArrow2D& operator = (const G4VisCommandSceneAddArrow2D&);
+  struct Arrow2D {
+    Arrow2D(G4double x1, G4double y1,
+	    G4double x2, G4double y2,
+	    G4double width, const G4Colour& colour);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyline fShaftPolyline;
+    G4Polyline fHeadPolyline;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
 
 class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
 public:
@@ -49,6 +85,33 @@ public:
 private:
   G4VisCommandSceneAddAxes (const G4VisCommandSceneAddAxes&);
   G4VisCommandSceneAddAxes& operator = (const G4VisCommandSceneAddAxes&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddDate: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddDate ();
+  virtual ~G4VisCommandSceneAddDate ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddDate (const G4VisCommandSceneAddDate&);
+  G4VisCommandSceneAddDate& operator = (const G4VisCommandSceneAddDate&);
+  struct Date {
+    Date
+    (G4VisManager* vm, G4int size,
+     G4double x, G4double y, G4Text::Layout layout,
+     const G4String& date):
+      fpVisManager(vm), fSize(size),
+      fX(x), fY(y), fLayout(layout), fDate(date) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisManager* fpVisManager;
+    G4Timer fTimer;
+    G4int fSize;
+    G4double fX, fY;
+    G4Text::Layout fLayout;
+    G4String fDate;
+  };
   G4UIcommand* fpCommand;
 };
 
@@ -74,12 +137,35 @@ private:
   G4VisCommandSceneAddEventID (const G4VisCommandSceneAddEventID&);
   G4VisCommandSceneAddEventID& operator = (const G4VisCommandSceneAddEventID&);
   struct EventID {
-    EventID(G4VisManager* vm, G4int size, G4double x, G4double y):
-      fpVisManager(vm), fSize(size), fX(x), fY(y) {}
+    EventID(G4VisManager* vm, G4int size,
+	    G4double x, G4double y, G4Text::Layout layout):
+      fpVisManager(vm), fSize(size),
+      fX(x), fY(y), fLayout(layout) {}
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
     G4VisManager* fpVisManager;
     G4int fSize;
     G4double fX, fY;
+    G4Text::Layout fLayout;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddFrame: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddFrame ();
+  virtual ~G4VisCommandSceneAddFrame ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddFrame (const G4VisCommandSceneAddFrame&);
+  G4VisCommandSceneAddFrame& operator = (const G4VisCommandSceneAddFrame&);
+  struct Frame {
+    Frame(G4double size, G4double width, const G4Colour& colour):
+      fSize(size), fWidth(width), fColour(colour) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4double fSize;
+    G4double fWidth;
+    G4Colour fColour;
   };
   G4UIcommand* fpCommand;
 };
@@ -109,6 +195,48 @@ private:
   G4UIcmdWithoutParameter* fpCommand;
 };
 
+class G4VisCommandSceneAddLine: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLine ();
+  virtual ~G4VisCommandSceneAddLine ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLine (const G4VisCommandSceneAddLine&);
+  G4VisCommandSceneAddLine& operator = (const G4VisCommandSceneAddLine&);
+  struct Line {
+    Line(G4double x1, G4double y1, G4double z1,
+	 G4double x2, G4double y2, G4double z2,
+	 G4double width, const G4Colour& colour);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyline fPolyline;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLine2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLine2D ();
+  virtual ~G4VisCommandSceneAddLine2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLine2D (const G4VisCommandSceneAddLine2D&);
+  G4VisCommandSceneAddLine2D& operator = (const G4VisCommandSceneAddLine2D&);
+  struct Line2D {
+    Line2D(G4double x1, G4double y1,
+	 G4double x2, G4double y2,
+	 G4double width, const G4Colour& colour);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyline fPolyline;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneAddLogicalVolume: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddLogicalVolume ();
@@ -131,8 +259,9 @@ public:
 private:
   G4VisCommandSceneAddLogo (const G4VisCommandSceneAddLogo&);
   G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
-  class G4Logo {
-  public:
+  // Direction of outward-facing normal to front face of logo.
+  enum Direction {X, minusX, Y, minusY, Z, minusZ};
+  struct G4Logo {
     G4Logo(G4double height, const G4VisAttributes&);
     ~G4Logo();
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
@@ -140,6 +269,30 @@ private:
     G4double fHeight;
     G4VisAttributes fVisAtts;
     G4Polyhedron *fpG, *fp4;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLogo2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLogo2D ();
+  virtual ~G4VisCommandSceneAddLogo2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLogo2D (const G4VisCommandSceneAddLogo2D&);
+  G4VisCommandSceneAddLogo2D& operator = (const G4VisCommandSceneAddLogo2D&);
+  struct Logo2D {
+    Logo2D
+    (G4VisManager* vm, G4int size,
+     G4double x, G4double y, G4Text::Layout layout):
+      fpVisManager(vm), fSize(size),
+      fX(x), fY(y), fLayout(layout) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisManager* fpVisManager;
+    G4int fSize;
+    G4double fX, fY;
+    G4Text::Layout fLayout;
   };
   G4UIcommand* fpCommand;
 };
@@ -180,6 +333,24 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSceneAddText2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddText2D ();
+  virtual ~G4VisCommandSceneAddText2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddText2D (const G4VisCommandSceneAddText2D&);
+  G4VisCommandSceneAddText2D& operator = (const G4VisCommandSceneAddText2D&);
+  struct G4Text2D {
+    G4Text2D(const G4Text&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+  private:
+    G4Text fText;
+  };
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneAddTrajectories: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddTrajectories ();
@@ -202,7 +373,10 @@ public:
 private:
   G4VisCommandSceneAddUserAction (const G4VisCommandSceneAddUserAction&);
   G4VisCommandSceneAddUserAction& operator = (const G4VisCommandSceneAddUserAction&);
-  G4UIcommand* fpCommand;
+  enum ActionType {runDuration, endOfEvent, endOfRun};
+  void AddVisAction(const G4String& name,G4VUserVisAction*,
+		    G4Scene*,ActionType,G4VisManager::Verbosity);
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneAddVolume: public G4VVisCommandScene {

@@ -25,7 +25,6 @@
 /gun/energy 10 TeV
 #
 /testem/histo/setFileName munucl
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 4 100 -10. 0.
 #
 /testem/event/printModulo 10000

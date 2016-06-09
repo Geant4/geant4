@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GMocrenMessenger.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  

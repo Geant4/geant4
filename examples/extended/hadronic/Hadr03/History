@@ -1,0 +1,63 @@
+$Id: History,v 1.97 2010-11-09 21:00:43 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr03 History file
+                    -------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+ 23-11-12 mma (exhadr03-V09-05-15)
+- SteppingAction : add more protection for neutronHP
+     
+ 21-11-12 mma (exhadr03-V09-05-14)
+- PhysicsList: use QBBC instead of QGSP_BERT_HP
+     
+ 28-10-12 mma (exhadr03-V09-05-11)
+- update README and .README
+
+ 17-10-12 Ivana Hrivnacova (exhadr03-V09-05-10)
+- Adding missing explicit use of system of units 
+ 
+ 12-10-12 Andrea Dotti (exhadr03-V09-05-09)
+- Adding explicit use of system of units
+
+ 06-10-12 mma (exhadr03-V09-05-08)
+- SteppingAction, RunAction : print number of gamma
+- use G4Analysis
+    
+30-09-12 mma (exhadr03-V09-05-07)
+- SteppingAction : print number of particles in nuclear reaction (not gamma)
+     
+18-08-12 mma (exhadr03-V09-05-06)
+- SteppingAction : use GetTargetIsotope()
+     
+01-08-12 mma(exhadr03-V09-05-05) 
+- RunAction : use GetCrossSectionPerVolume()
+     
+20-07-12 mma(exhadr03-V09-05-04) 
+- GammaPhyics : rm crossSections
+- add histo Pbalance
+     
+27-06-12 mma (exhadr03-V09-05-03)
+- add .README
+     
+21-06-12 mma (exhadr03-V09-05-02)
+- GammaPhyics : add crossSections
+     
+19-06-12 mma (exhadr03-V09-05-01)
+- suppress local HadronPhysics and IonPhysics
+     
+15-06-12 mma (exhadr03-V09-05-00)
+- rename Hadr14
+     
+13-06-12 Michel Maire (exhadr14-V09-05-00)
+- created from TestEm14 and rdecay01

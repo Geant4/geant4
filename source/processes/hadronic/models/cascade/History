@@ -15,6 +15,306 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 October 2012  Michael Kelsey (hadr-casc-V09-05-26)
+-----------------------------------------------------
+- G4CascadePPChannel.cc, G4CascadeNNChannel.cc, G4CascadeNPChannel.cc:  For
+  continuous low-energy functions, add cutoff in K.E. to match zero-energy
+  cross-section value, and avoid divide-by-zero divergence.
+
+19 October 2012  Dennis Wright
+------------------------------
+- for classes G4CascadePPChannel, G4CascadeNNChannel, G4CascadeNPChannel
+  use Stepanov's functions to fill in total and elastic cross section arrays
+  at all energy bins from 10 to 320 MeV inclusive.  Below 10 MeV use
+  Stepanov's continuous functions to generate cross section.
+
+15 October 2012  Dennis Wright (hadr-casc-V09-05-25)
+----------------------------------------------------
+- replace SAID cross sections with in-medium cross sections of 
+  Li & Machleidt for incident energies below 420 MeV.  Classes
+  changed: G4CascadePPChannel, G4CascadeNNChannel, G4CascadeNPChannel.
+- method findCrossSection removed from G4CascadePPChannel and G4CascadeNPChannel
+  since no Coulomb is included in L&M cross sections 
+
+9 October 2012 Michael Kelsey (hadr-casc-V09-05-24)
+---------------------------------------------------
+- G4ExitonConfiguration: Add empty() function to test exciton state, reduce
+  printout to single line.
+
+- G4InuclNuclei.cc:  Report non-empty exciton configuration in print().
+
+- G4NonEquilibriumEvaporator.cc:  Add additional diagnostic messages.
+
+- G4EquilibriumEvaporator.cc:  Add additional diagnostic messages.
+
+- G4CascadeCollisionOutput:  Add calculations of net strangeness.
+
+- G4CascadeCheckBalance:  Add reporting of strangeness conservation (but do
+  not require validation).
+
+1 October 2012 Michael Kelsey (hadr-casc-V09-05-23)
+---------------------------------------------------
+- sources.cmake:  Add G4CascadeOmegaMinus*Channel.hh and .cc.
+
+1 October 2012 Dennis Wright, M. Kelsey (hadr-casc-V09-05-22)
+-------------------------------------------------------------
+- G4CascadeChannelTables.cc: Add "om*pro" and "om*neu" to LoadTables.
+
+- create classes G4CascadeOmegaMinusPChannel and G4CascadeOmegaMinusNChannel
+  containing partial cross sections for omega- p and omega- n reactions
+  
+25 September 2012 Gabriele Cosmo (hadr-casc-V09-05-21)
+------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+18 September 2012 Michael Kelsey (hadr-casc-V09-05-20)
+------------------------------------------------------
+- G4CascadeParamMessenger.cc:  Fix complier warning from ctor initializers.
+
+13 September 2012 Michael Kelsey (hadr-casc-V09-05-19)
+------------------------------------------------------
+- G4CascadeParamMessenger:  NEW class to define UI macro commands for
+  setting the G4CascadeParameters (string) values, as an alternative to
+  environment variables.
+
+- G4CascadeParameters:  Add new G4CascadeParamMessenger (with friendship)
+  to fill envvar-mapped parameters (const char*) from UI interface.
+
+- sources.cmake:  Add G4CascadeParamMessenger.hh,cc, add dependences on
+  G4intercoms (libraries and include dirs).
+
+- GNUmakefile:  Add -I.../intercoms/include.
+
+9 September 2012 Michael Kelsey (hadr-casc-V09-05-18)
+-----------------------------------------------------
+- G4CascadePPChannel.hh, G4CascadeNPChannel.hh: Replace 'typedef' with
+  subclass of templated base.  Declare overridden findCrossSection()
+  function.
+
+- G4CascadePPChannel.cc, G4CascadeNPChannel.cc: Implement overrrided
+  findCrossSection() function to apply analytic (parametrized) function for
+  very low energy projectiles, falling back to base interpolation otherwise.
+
+7 September 2012 Michael Kelsey (hadr-casc-V09-05-17)
+-----------------------------------------------------
+- sources.cmake:  Forgot to change list of source files to match renaming.
+
+4 September 2012 Michael Kelsey (hadr-casc-V09-05-16)
+-----------------------------------------------------
+Per Dennis, rename all three nucleon-nucleon channel files to remove the
+isospin designation.  Files now match corresponding .hh files:
+
+	G4CascadeT1ppChannel.cc -> G4CascadePPChannel.cc
+	G4CascadeT1nnChannel.cc -> G4CascadeNNChannel.cc
+	G4CascadeT0npChannel.cc -> G4CascadeNPChannel.cc
+
+4 September 2012 Michael Kelsey
+-------------------------------
+- G4CascadeT0npChannel.cc:  Fix misplaced semicolon in exclusive xsec list.
+
+3 September 2012 Dennis Wright
+------------------------------
+- G4CascadeT1ppChannel.cc, G4CascadeT1nnChannel.cc, G4CascadeT0npChannel.cc:
+  Use SAID calculations for total and elastic cross-sections up to 320 MeV.
+
+31 August 2012 Michael Kelsey
+-----------------------------
+- G4CascadeT1NNChannel.cc:  REMOVE.  Split into separate pp and nn files.
+- G4CascadeT1ppChannel.cc:  NEW.  Only proton-proton part of T1NNChannel.
+- G4CascadeT1nnChannel.cc:  NEW.  Only neutron-neutron part of T1NNChannel.
+- sources.cmake:  Remove T1NNChannel, add T1ppChannel and T1nnChannel.
+
+22 August 2012 Michael Kelsey (hadr-casc-V09-05-15)
+---------------------------------------------------
+Consolidate all user-configurable environment variables into singleton
+container class, instead of having them local to the code which uses them.
+This will provide a way to query and report on values in a consistent way.
+
+- G4CascadeParameters:  NEW singleton container class to hold and evaluate
+  any user-configured environment variables.  Default values for parameters
+  are provided, with code moved from original locations (see below).  Three
+  new envvars are also defined:
+
+  G4CASCADE_VERBOSE
+	Pre-set verbosity in G4CascadeInterface constructor,
+	passes down to all constituent modules.
+
+  G4CASCADE_USE_PRECOMPOUND
+	Select use of PreCompoundModel in G4CascadeInterface constructor.
+
+  G4NUCMODEL_USE_BEST
+	Pre-set all defaults for nuclear model with physical units.
+
+- G4CascadeInterface.hh: Add new function for dumping configuration.
+
+- G4CascadeInterface.cc: Replace environment variable usage with calls to
+  G4CascadeParameters.  Add pre-setting of verbosity and PreCompoundModel.
+  Implement configuration dump as call-through to G4CascadeParameters.
+
+- G4CascadeCoalescence.cc: Replace environment variable usage with calls to
+  G4CascadeParameters.
+
+- G4IntraNucleiCascader.cc: Replace environment variable usage with calls to
+  G4CascadeParameters.
+
+- G4NucleiModel.cc: Replace environment variable usage with calls to
+  G4CascadeParameters.
+
+- sources.cmake: Add G4CascadeParameters.hh,.cc.
+
+-----
+NOTE:  Tag hadr-casc-V09-05-14 and changes to G4CascadeInterface.cc were
+       lost due to SVN repository incident.
+-----
+
+3 July 2012 Michael Kelsey (hadr-casc-V09-05-13)
+------------------------------------------------
+- G4CascadeCoalescence.cc:  Bug fix: list of clusters already tried was not
+  cleared at start of new event, so entries from previous events prevented
+  formation of valid clusters.  Also improve diagnostic messages somewhat.
+
+8 June 2012 Michael Kelsey (hadr-casc-V09-05-12)
+------------------------------------------------
+Address compiler warnings about variable-shadowing (local variable has same
+name as data member or global variable) which appear when "-Wshadow" is used.
+
+	G4InuclSpecialFunctions.hh
+	G4CascadeSampler.icc
+	G4CascadeData.icc
+	G4InuclElementaryParticle.hh
+	G4InuclEvaporation.cc
+	G4EquilibriumEvaporator.cc
+	G4InuclElementaryParticle.cc
+	G4NonEquilibriumEvaporator.cc
+	G4NucleiModel.cc
+	G4CascadeInterface.cc
+	G4InuclSpecialFunctions.cc
+	G4ElementaryParticleCollider.cc
+	G4BigBanger.cc
+	(evaporation) G4BENeutronChannel.cc
+	(evaporation) G4BEChargedChannel.cc
+	(evaporation) G4BertiniEvaporationChannel.cc
+
+25 May 2012 Michael Kelsey (hadr-casc-V09-05-11)
+------------------------------------------------
+- G4Dineutron.cc, G4Diproton.cc, G4UnboundPN.cc:  Add code to protect
+  against warning messages from G4ParticleTable::Remove(), introduced with
+  particles-V09-05-03.
+
+- G4CascadeCheckBalance.cc:  Lower verbosity level for energy-conservation
+  reports, change violation rules to allow relative OR absolute passing,
+  consistent with new process-level checks.
+
+- G4CascadeInterface.cc:  Check for small negative projectile energy and
+  force to zero, to protect against occasional G4HadFinalState exceptions.
+
+23 May 2012 Michael Kelsey (hadr-casc-V09-05-10)
+------------------------------------------------
+- G4CascadeInterface:  Add local implementation of IsApplicable(), both the
+  base class (track,nucleus) and one using G4ParticleDefinition.  Returns
+  true only if interaction tables are defined for projectile.
+
+21 May 2012 Alberto Ribon (hadr-casc-V09-05-09)
+-----------------------------------------------
+- G4IntraNucleiCascader.cc:  Specify mass when decay trapped particle.
+  This fixes reproducibility violations when hyperons are forced to
+  decay inside the nucleus.
+
+17 May 2012 Alberto Ribon (hadr-casc-V09-05-08)
+-----------------------------------------------
+- G4Fissioner.cc:  Removed static in local vectors AL1 and BET1 in the
+  method G4Fissioner::collide, to ensure reproducibility.
+
+4 April 2012  Michael Kelsey (hadr-casc-V09-05-07)
+--------------------------------------------------
+- G4CascadeCoalescence.cc:  Use std::ostream_iterator<size_t> to report
+  cluster indices, to avoid compiler warning.
+
+21 March 2012  Michael Kelsey (hadr-casc-V09-05-06)
+---------------------------------------------------
+- G4NucleiModel.cc:  Add check in isProjectile() for single-zone nuclei, and
+  ignore "movingInward" flag in that case.
+
+20 March 2012  Michael Kelsey (hadr-casc-V09-05-05)
+---------------------------------------------------
+- G4NucleiModel.cc:  Fill zone_volumes buffer for single-zone case.
+
+14 March 2012  Michael Kelsey
+-----------------------------
+- test/: Tagged all existing, obsolete code as "OLD_Validation_Suite" for
+  future recovery if desired.  Remove all code and files from active use, to
+  be replaced with our separate "ppi4GeV" utility program, suitably renamed.
+
+9 March 2012  Michael Kelsey
+----------------------------
+- G4CascadeSigmaMinusPChannel.cc: Change zero-bin cross-sections for
+  Lambda-n and Sigma0-n, based on data from M. Goossens et al. measurements
+  of Sigma- capture (per J. Yarba).
+
+- G4NucleiModel.cc:  Add scale factor, set via envvar, for gamma absorption.
+
+8 March 2012  Michael Kelsey
+----------------------------
+- G4NucleiModel.cc:  In absorptionCrossSection() add binned spectrum derived
+  from Mikhail Kossov's gamma-D absorption data, for use with photons.
+
+- G4ElementaryParticleCollider.cc:  Modify sanity checks on dibaryon targets
+  to allow both photons and gamma to interact; gammas split the dibaryons
+  the same way pi0's do.
+
+7 March 2012  Michael Kelsey
+----------------------------
+- G4NucleiModel: In generateInteractionPartners() and
+  absorptionCrossSection(), allow photons to be absorbed via dibaryon
+  (quasideuteron) excitation.  Simplify and encapsulate path-length
+  computations in generateInteractionPartners(), with several new internal
+  functions, and a buffer to store the zone-by-zone shell volumes.
+
+5 March 2012  Michael Kelsey
+----------------------------
+- G4CascadParticle.hh:  Add public accessor for cumulative path length.
+
+- G4NucleiModel.cc:  In generateInteractionPartners(), check to see if
+  CParticle is incident projectile (inbound from outside nucleus, not
+  created in outer zone).  If so, force interaction to be attempted rather
+  than cutting on mean free path.
+
+- G4CascadeKminusPChannel.cc:  Modify two-body cross-section values in
+  zero-energy bin, to reflect stopping data from Julia Yarba.
+
+25 January 2012  Michael Kelsey (hadr-casc-V09-05-04)
+-----------------------------------------------------
+- G4CascadeInterface.cc: Check for no-interaction in retryInelasticProton,
+  both in return value and in debugging report.
+
+25 January 2012  Michael Kelsey (hadr-casc-V09-05-03)
+-----------------------------------------------------
+- G4NucleiModel.hh:  In getPotential() add test for ip==9 (photon) to return
+  zero potential.  Otherwise it will return the 7 MeV flat pion potential,
+  which is not correct.
+
+20 January 2012  Vladimir Ivantchenko (hadr-casc-V09-05-02)
+-----------------------------------------------------------
+- G4PreCompoundDeexcitation.cc: Do not delete pre-compound model and excitation
+  handler to avoid double deletion
+
+ 6 January 2012  Dennis Wright (hadr-casc-V09-05-01)
+----------------------------------------------------
+- G4ElementaryParticleCollider.cc:  add angular distributions for elastic and 
+  inelastic 2-body final states of gamma p and gamma n reactions.
+ 
+19 December 2011  Michael Kelsey (hadr-casc-V09-05-00)
+------------------------------------------------------
+- G4ElementaryParticle.cc:  Expand diagnostics in getMomModuleFor2toMany(),
+  in generateSCMfinalState(), defer "particles.resize()" action until after
+  final-state properties have been validated.  In case no final state can be
+  generated, this ensures that the failure propagates back up the calling
+  chain, instead of simply looping forever.
+
+- G4NucleiModel.cc:  If G4ElementaryParticle::collide() returns empty
+  output, stop propagating.
+
 7 November 2011  Michael Kelsey (hadr-casc-V09-04-41)
 -----------------------------------------------------
 - G4NucleiModel.cc:  Due to some validation discrepancies, revert structure

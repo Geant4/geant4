@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmate.cc,v 1.12 2006-06-29 18:14:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 27 Sep 99
 
 #include <cmath>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G3toG4.hh"
 #include "G3MatTable.hh"
 #include "G3EleTable.hh"
@@ -116,17 +117,17 @@ void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
   G4String sname = name.strip(G4String::both);
   if (sname == "AIR") {
     // handle the built in AIR mixture
-    G4double a[2], z[2], wmat[2];
-    a[0] = 14.01*g/mole;
-    a[1] = 16.00*g/mole;
-    z[0] = 7;
-    z[1] = 8;
+    G4double aa[2], zz[2], wmat[2];
+    aa[0] = 14.01*g/mole;
+    aa[1] = 16.00*g/mole;
+    zz[0] = 7;
+    zz[1] = 8;
     wmat[0] = 0.7;
     wmat[1] = 0.3;
     // G4double theDensity = 1.2931*mg/cm3;
     G4double theDensity = 0.0012931;
-    int n=2;
-    G4gsmixt(imate, sname, a, z, theDensity, n, wmat);
+    G4int n=2;
+    G4gsmixt(imate, sname, aa, zz, theDensity, n, wmat);
   } 
   else if ( z<1 || dens < G3_minimum_density ) {
     // define vacuum according to definition from N03 example

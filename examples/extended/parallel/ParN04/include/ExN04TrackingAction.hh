@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04TrackingAction.hh
+/// \brief Definition of the ExN04TrackingAction class
+//
 
 #ifndef ExN04TrackingAction_h
 #define ExN04TrackingAction_h 1

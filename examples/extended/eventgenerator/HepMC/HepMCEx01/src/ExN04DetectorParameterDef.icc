@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04DetectorParameterDef.icc
+/// \brief The file with detector paremeter definistions
 
   expHall_x = 600.*cm;
   expHall_y = 600.*cm;

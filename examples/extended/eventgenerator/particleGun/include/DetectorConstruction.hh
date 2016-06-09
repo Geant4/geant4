@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh,v 1.1 2010-06-09 01:55:38 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -47,12 +49,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
     G4VPhysicalVolume* Construct();
                         
-    G4double GetWorldSizeXY()     {return worldSizeXY;}; 
-    G4double GetWorldSizeZ()      {return worldSizeZ;};
+    G4double GetWorldSizeXY()     {return fWorldSizeXY;}; 
+    G4double GetWorldSizeZ()      {return fWorldSizeZ;};
 
   private:
   
-    G4double worldSizeXY, worldSizeZ;
+    G4double fWorldSizeXY, fWorldSizeZ;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

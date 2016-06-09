@@ -51,9 +51,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hZiegler1977Nuclear.hh"
-#include "G4UnitsTable.hh"
+
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -69,14 +71,14 @@ G4hZiegler1977Nuclear::~G4hZiegler1977Nuclear()
 
 G4double G4hZiegler1977Nuclear::NuclearStoppingPower(G4double kineticEnergy,
                                 G4double z1, G4double z2, 
-                                G4double m1, G4double m2) const
+                                G4double m1, G4double m2Local) const
 {  
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double ionloss ;
   
-  G4double rm = (m1 + m2) * std::sqrt( std::pow(z1, 0.667) + std::pow(z2, 0.667) ) ;
+  G4double rm = (m1 + m2Local) * std::sqrt( std::pow(z1, 0.667) + std::pow(z2, 0.667) ) ;
   
-  G4double er = 32.53 * m2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
+  G4double er = 32.53 * m2Local * energy / ( z1 * z2 * rm ) ;  // reduced energy
   
   if ( er < 0.01 ) {
     ionloss = std::sqrt(er) * 1.593 ; 
@@ -91,9 +93,9 @@ G4double G4hZiegler1977Nuclear::NuclearStoppingPower(G4double kineticEnergy,
 
   // Stragling
   if(lossFlucFlag) {
-    G4double sig = 4.0 * m1 * m2 * std::sqrt( (std::pow(z1, 0.23) + std::pow(z2, 0.23)) / 
+    G4double sig = 4.0 * m1 * m2Local * std::sqrt( (std::pow(z1, 0.23) + std::pow(z2, 0.23)) / 
                                          (std::pow(z1, 0.667) + std::pow(z2, 0.667)) ) 
-                 / ((m1 +m2)*(m1 + m2)*
+                 / ((m1 +m2Local)*(m1 + m2Local)*
                     (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
 
     ionloss *= G4RandGauss::shoot(1.0,sig) ;

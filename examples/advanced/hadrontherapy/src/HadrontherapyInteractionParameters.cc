@@ -32,10 +32,18 @@
 // Institute in the framework of the MC-INFN Group
 //
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <vector>
+
 #include "HadrontherapyInteractionParameters.hh"
 #include "HadrontherapyParameterMessenger.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
@@ -46,18 +54,7 @@
 #include "G4ParticleTable.hh"
 #include "G4NistManager.hh"
 #include "G4Element.hh"
-
 #include "G4StateManager.hh"
-
-#include "globals.hh"
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <math.h>
-
-
-#include <vector>
-
 
 HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(G4bool wantMessenger): 
     nistEle(new G4NistElementBuilder(0)),										  
@@ -80,13 +77,13 @@ HadrontherapyInteractionParameters::~HadrontherapyInteractionParameters()
     delete nistEle; 
 }
 
-G4double HadrontherapyInteractionParameters::GetStopping (G4double energy, 
+G4double HadrontherapyInteractionParameters::GetStopping (G4double ene, 
 	                                                  const G4ParticleDefinition* pDef, 
 						          const G4Material* pMat,
-							  G4double density)
+							  G4double dens)
 {
-    if (density) return ComputeTotalDEDX(energy, pDef, pMat)/density;
-    return ComputeTotalDEDX(energy, pDef, pMat);
+    if (dens) return ComputeTotalDEDX(ene, pDef, pMat)/dens;
+    return ComputeTotalDEDX(ene, pDef, pMat);
 }
 bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg)
 {
@@ -189,9 +186,9 @@ void HadrontherapyInteractionParameters::PlotStopping(const G4String& filetype)
 #endif
 
 // Search for user material choice inside G4NistManager database
-G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String material)
+G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String mat)
 {
-    Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(material);
+    Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(mat);
     if (Pmaterial) density = Pmaterial -> GetDensity(); 
     return Pmaterial;
 }

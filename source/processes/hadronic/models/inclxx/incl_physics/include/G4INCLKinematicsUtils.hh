@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,6 +42,7 @@
 #include "G4INCLThreeVector.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLParticleSpecies.hh"
 
 namespace G4INCL {
 
@@ -61,8 +62,8 @@ namespace G4INCL {
      * where \f$z\f$ is the scalar product of the momentum four-vectors:
      * \f[ z = E_1 E_2 - \vec{p}_1\cdot\vec{p}_2 \f]
      *
-     * \param p1 poG4inter to particle 1
-     * \param p2 poG4inter to particle 2
+     * \param p1 pointer to particle 1
+     * \param p2 pointer to particle 2
      * \return the absolute value of the momentum of any of the two particles in
      * the CM frame, in MeV/c.
      */
@@ -77,8 +78,8 @@ namespace G4INCL {
      * The formula is the following:
      * \f[ p_{lab}^2 = \frac{s^2 - 2 s (m_1^2 + m_2^2) + {(m_1^2 - m_2^2)}^2}{4 m_2^2} \f]
      *
-     * \param p1 poG4inter to particle 1
-     * \param p2 poG4inter to particle 2
+     * \param p1 pointer to particle 1
+     * \param p2 pointer to particle 2
      * \return the absolute value of the momentum of particle 1 in the lab frame,
      * in MeV/c
      */
@@ -88,6 +89,7 @@ namespace G4INCL {
     static ThreeVector sumMomenta(const ParticleList &);
     static G4double energy(const ThreeVector &p, const G4double m);
     static G4double invariantMass(const G4double E, const ThreeVector & p);
+    static G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin);
   };
 }
 

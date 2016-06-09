@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.12 2006-06-29 19:06:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -33,8 +32,10 @@
 // Tubesector builder implementation
 // OC 290896
 
-#include "G4NURBStubesector.hh"
 #include <sstream>
+
+#include "G4NURBStubesector.hh"
+#include "G4PhysicalConstants.hh"
 
 G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
                                      G4double DZ, G4double PHI1, G4double PHI2)

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Hydrogen.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -33,6 +34,8 @@
 // -------------------------------------------------------------------
 
 #include "G4Hydrogen.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
@@ -43,7 +46,7 @@ G4Hydrogen* G4Hydrogen::theInstance = 0;
 G4Hydrogen* G4Hydrogen::Definition()
 {
     if (theInstance !=0) return theInstance;
-    const G4String name = "Hydrogen";
+    const G4String name = "H";
     // search in particle table]
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* anInstance = pTable->FindParticle(name);
@@ -65,7 +68,7 @@ G4Hydrogen* G4Hydrogen::Definition()
 
 
         G4double mass = 1.0079*g/Avogadro* c_squared;
-        anInstance = new G4MoleculeDefinition("H", mass,
+        anInstance = new G4MoleculeDefinition(name, mass,
                                               1, 1,
                                               7e-9*(m*m/s),
                                               1, 0.5*angstrom) ; //radius has to be checked

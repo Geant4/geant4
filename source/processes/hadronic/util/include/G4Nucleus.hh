@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
- // original by H.P. Wellisch
- // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
- // last modified: 27-Mar-1997
- // Chr. Volcker, 10-Nov-1997: new methods and class variables.
- // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum (original design was
- //                       the source of memory leaks)
- // G.Folger, spring 2010:  add integer A/Z interface
+// original by H.P. Wellisch
+// modified by J.L. Chuma, TRIUMF, 19-Nov-1996
+// last modified: 27-Mar-1997
+// Chr. Volcker, 10-Nov-1997: new methods and class variables.
+// M.G. Pia, 2 Oct 1998: modified GetFermiMomentum (original design was
+//                       the source of memory leaks)
+// G.Folger, spring 2010:  add integer A/Z interface
  
 #ifndef G4Nucleus_h
 #define G4Nucleus_h 1
@@ -49,44 +47,41 @@
 #include "G4ReactionProductVector.hh"
 #include "Randomize.hh"
  
- class G4Nucleus 
- {
- public:
+class G4Nucleus 
+{
+  public:
     
     G4Nucleus();
-    
-    G4Nucleus( const G4double A, const G4double Z );
-
-    G4Nucleus( const G4int A, const G4int Z );
-
-    G4Nucleus( const G4Material *aMaterial );
+    G4Nucleus(const G4double A, const G4double Z);
+    G4Nucleus(const G4int A, const G4int Z);
+    G4Nucleus(const G4Material* aMaterial);
     
     ~G4Nucleus();
     
     inline G4Nucleus( const G4Nucleus &right )
     { *this = right; }
     
-    inline G4Nucleus & operator=( const G4Nucleus &right )
-     {
-       if( this != &right )
-       {
-         theA=right.theA;  
-         theZ=right.theZ;  
-         aEff=right.aEff;  
-         zEff=right.zEff;  
-         pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
-         dtaBlackTrackEnergy=right.dtaBlackTrackEnergy;
-         pnBlackTrackEnergyfromAnnihilation =
-                      right.pnBlackTrackEnergyfromAnnihilation; 
-         dtaBlackTrackEnergyfromAnnihilation =
-                      right.dtaBlackTrackEnergyfromAnnihilation; 
-         theTemp = right.theTemp;
-	 excitationEnergy = right.excitationEnergy;
-	 momentum = right.momentum;
-	 fermiMomentum = right.fermiMomentum;
-       }
-       return *this;
-     }
+    inline G4Nucleus& operator = (const G4Nucleus& right)
+    {
+      if (this != &right) {
+        theA=right.theA;
+        theZ=right.theZ;
+        aEff=right.aEff;
+        zEff=right.zEff;
+        fIsotope = right.fIsotope;
+        pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
+        dtaBlackTrackEnergy=right.dtaBlackTrackEnergy;
+        pnBlackTrackEnergyfromAnnihilation =
+                     right.pnBlackTrackEnergyfromAnnihilation; 
+        dtaBlackTrackEnergyfromAnnihilation =
+                     right.dtaBlackTrackEnergyfromAnnihilation; 
+        theTemp = right.theTemp;
+        excitationEnergy = right.excitationEnergy;
+        momentum = right.momentum;
+        fermiMomentum = right.fermiMomentum;
+      }
+      return *this;
+    }
    
     inline G4bool operator==( const G4Nucleus &right ) const
     { return ( this == (G4Nucleus *) &right ); }
@@ -98,7 +93,8 @@
 
     void SetParameters( const G4double A, const G4double Z );
     void SetParameters( const G4int A, const G4int Z );
-    
+   
+/* 
 #ifndef G4Hadr_Nucleus_IntegerAZ 
 //deprecated Jan 2010, GF
     inline G4double GetN() const
@@ -108,6 +104,8 @@
     { return zEff; }
 #endif
 //to be replaced by new 
+*/
+
     inline G4int GetA_asInt() const
     { return theA; }   
     
@@ -117,6 +115,20 @@
     inline G4int GetZ_asInt() const
     { return theZ; }   
 //... \GF
+
+    inline const G4Isotope* GetIsotope()
+    { return fIsotope; }
+
+    inline void SetIsotope(const G4Isotope* iso)
+    { 
+      fIsotope = iso;
+      if(iso) { 
+	theZ = iso->GetZ();
+        theA = iso->GetN();
+        aEff = theA;
+        zEff = theZ;
+      }
+    }
 
     G4DynamicParticle *ReturnTargetParticle() const;
     
@@ -182,6 +194,8 @@
     G4int    theZ;
     G4double aEff;  // effective atomic weight
     G4double zEff;  // effective atomic number
+
+    const G4Isotope* fIsotope;
     
     G4double pnBlackTrackEnergy;  // the kinetic energy available for
                                   // proton/neutron black track particles

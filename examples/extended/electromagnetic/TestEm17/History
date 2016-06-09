@@ -15,6 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-12 G. Cosmo (testem17-V09-05-06)
+- Fixed cases of variable shadowing.
+
+12-10-12 V.Ivant (testem17-V09-05-05)
+- Migration to the updated analysis tool and inplicit units
+
+19-08-12 V.Ivanchenko (testem17-V09-05-04)
+- MuNuclearBuilder - use G4MuonNuclearProcess instead of 
+  G4MuNuclearInteraction (as in all reference Physics Lists)
+     
+16-04-12 mma (testem17-V09-05-03)
+- all classes : apply G4 coding conventions
+      
+25-03-12 mma (testem17-V09-05-02)
+- RunAction.cc : suppress plots of MC-theory comparison
+     
+22-03-12 mma (testem17-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+
 16-10-11 V.Ivanchenko (testem17-V09-04-02)
 - Fixed README (A.Bogdanov)
      

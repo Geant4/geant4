@@ -7,14 +7,78 @@ History file for  hadronic/models/chiral_inv_phase_space/body  directory.
 	
 Summarize all code modifications & keep track of all tags in this file.
 
-****************************************************************************
-*** Geant4 developers can not make changes in this directory or make the ***
-*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
-****************************************************************************
-
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
+
+14-Nov-2012 A.Ribon (hadr-chips-body-V09-05-11)
+--------------------------------------------------------------------------
+- Fixed memory leak in G4QFreeScattering.cc.
+
+28-Sep-2012 A.Ribon (hadr-chips-body-V09-05-10)
+--------------------------------------------------------------------------
+- Fixed warning in G4QPDGCode.cc.
+
+25-Sep-2012 G.Cosmo (hadr-chips-body-V09-05-09)
+--------------------------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+13-Aug-2012 A.Ribon (hadr-chips-body-V09-05-08)
+--------------------------------------------------------------------------
+- Fixed compilation error in G4QEnvironment.cc and G4Quasmon.cc when
+  the constructor of the Lorentz vector is made explicit.
+
+19-Jun-2012 A.Ribon (hadr-chips-body-V09-05-07)
+--------------------------------------------------------------------------
+- Fix memory leak in G4QEnvironment.cc .
+
+14-Jun-2012 A.Ribon (hadr-chips-body-V09-05-06)
+--------------------------------------------------------------------------
+- Fix mistake in G4QPDGCode.cc and G4QNucleus.cc introduced in previous tag
+
+14-Jun-2012 A.Ribon (hadr-chips-body-V09-05-05)
+--------------------------------------------------------------------------
+- Fix compilation warnings of shadowed variables.
+
+6-Mar-2012 V.Ivanchenko (hadr-chips-body-V09-05-04)
+--------------------------------------------------------------------------
+- In G4QFreeScattering.cc misprint for Omega- (3334) is corrected + one
+  p=0 warning is closed.
+- In G4QEnvironment.cc a worning of failed correction is closed, as anothe
+  correction makes job.
+
+14-Feb-2012 V.Ivanchenko (hadr-chips-body-V09-05-03)
+--------------------------------------------------------------------------
+- In G4QFreeScattering.cc class in methods FetchElTot() and CalcElTotXS() the
+  Fatal exceptions for wrong PDG code are substituted by JustWarning; the
+  reason - this class is not responsible for generation of wrong particle
+  type and return probability value for quasi-free scattering; the output
+  will be unchanged and QGSC Physics List will continue to run.
+
+13-Jan-2012 G.Cosmo (hadr-chips-body-V09-05-02)
+--------------------------------------------------------------------------
+- Workaround fix to a line of code in G4QFreeScattering.cc to allow
+  compilation on MacOSX-Lion.
+
+12-Jan-2012 G.Folger (hadr-chips-body-V09-05-01)
+-----------------------------------------------
+- Fix compilation warning on gcc46 in G4QFreeScattering::Scatter(...), 
+   Z and N used only within #ifdef ppdebug
+
+11-Jan-2012 G.Folger (hadr-chips-body-V09-05-00)
+-----------------------------------------------
+- Fix sources.cmake adding missing .hh (2) and .cc (1) files.
+- Fix compilation warning on gcc41 in G4QEnvironment.cc; EnvM on line 2167
+   changed from type g4int to type G4double.
+
+1-Nov-2011 M.Kosov (hadr-chips-body-V09-04-05)
+-----------------------------------------------
+Bug fix in G4QFreeScattering (charge nonconservation)
+
+31-Oct-2011 M.Kosov (hadr-chips-body-V09-04-04)
+-----------------------------------------------
+Rescattering is added for making resolution wider
 
 10-October-2011 Dennis Wright (hadr-chips-body-V09-04-03)
 ---------------------------------------------------------

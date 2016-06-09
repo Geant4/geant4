@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm13/src/PhysListEmPenelope.cc
+/// \brief Implementation of the PhysListEmPenelope class
 //
-// $Id: PhysListEmPenelope.cc,v 1.7 2010-04-02 15:46:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -73,6 +75,7 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -148,7 +151,7 @@ void PhysListEmPenelope::ConstructProcess()
       eBremModel->SetHighEnergyLimit(highEnergyLimit);
       eBrem->AddEmModel(0, eBremModel);
       pmanager->AddProcess(eBrem,                   -1,-1, 2);
-      	    
+                  
     } else if (particleName == "e+") {
       //positron
       G4eIonisation* eIoni = new G4eIonisation();
@@ -183,8 +186,8 @@ void PhysListEmPenelope::ConstructProcess()
       pmanager->AddProcess(new G4ionIonisation,     -1,-1, 1);
 
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hIonisation,       -1,-1, 1);
     }

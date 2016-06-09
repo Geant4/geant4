@@ -15,6 +15,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th Nov 2012 Ivana Hrivnacova (fieldex-V09-05-03)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+18th Sep 2012 Ivana Hrivnacova (fieldex-V09-05-02)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Replaced tabulators with space characters  
+
+17th Sep 2012 Peter Gumplinger (fieldex-V09-05-01)
+- remove G4TRACKING_ALLOC_EXPORT, G4DLLEXPORT and G4DLLIMPORT from
+  F04Trajectory and F04TrajectoryPoint.
+
+4th Sep 2012 Ivana Hrivnacova (fieldex-V09-05-00)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines
+- Added .README files   
+
 23rd Nov 2011 Peter Gumplinger (fieldex-V09-04-01)
 - Add README file to the new field example field06 and correct a small
   mistake in F06ExtraPhysics.cc

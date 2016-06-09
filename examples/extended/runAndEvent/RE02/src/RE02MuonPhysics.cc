@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02MuonPhysics.cc,v 1.3 2010-04-07 01:29:00 asaim Exp $
+/// \file runAndEvent/RE02/src/RE02MuonPhysics.cc
+/// \brief Implementation of the RE02MuonPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 
@@ -35,12 +38,13 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02MuonPhysics::RE02MuonPhysics(const G4String& name)
                    :  G4VPhysicsConstructor(name)
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02MuonPhysics::~RE02MuonPhysics()
 {
 }
@@ -55,6 +59,7 @@ RE02MuonPhysics::~RE02MuonPhysics()
 
 #include "G4ProcessManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02MuonPhysics::ConstructProcess()
 {
    G4ProcessManager * pManager = 0;
@@ -64,7 +69,7 @@ void RE02MuonPhysics::ConstructProcess()
    G4VProcess* thempMultipleScattering = new G4MuMultipleScattering();
    G4VProcess* thempBremsstrahlung     = new G4MuBremsstrahlung();
    G4VProcess* thempPairProduction     = new G4MuPairProduction();
-   G4VProcess* thempIonisation        = new G4MuIonisation();
+   G4VProcess* thempIonisation         = new G4MuIonisation();
    //
    // add processes
    pManager->AddProcess(thempIonisation);
@@ -74,13 +79,13 @@ void RE02MuonPhysics::ConstructProcess()
    //
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(thempMultipleScattering, idxAlongStep,1);
-   pManager->SetProcessOrdering(thempIonisation,        idxAlongStep,2);
+   pManager->SetProcessOrdering(thempIonisation,         idxAlongStep,2);
    pManager->SetProcessOrdering(thempBremsstrahlung,     idxAlongStep,3);
    pManager->SetProcessOrdering(thempPairProduction,     idxAlongStep,4);
 
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(thempMultipleScattering, idxPostStep,1);
-   pManager->SetProcessOrdering(thempIonisation,        idxPostStep,2);
+   pManager->SetProcessOrdering(thempIonisation,         idxPostStep,2);
    pManager->SetProcessOrdering(thempBremsstrahlung,     idxPostStep,3);
    pManager->SetProcessOrdering(thempPairProduction,     idxPostStep,4);
 
@@ -89,7 +94,7 @@ void RE02MuonPhysics::ConstructProcess()
    G4VProcess* themmMultipleScattering = new G4MuMultipleScattering();
    G4VProcess* themmBremsstrahlung     = new G4MuBremsstrahlung();
    G4VProcess* themmPairProduction     = new G4MuPairProduction();
-   G4VProcess* themmIonisation        = new G4MuIonisation();
+   G4VProcess* themmIonisation         = new G4MuIonisation();
    //
    // add processes
    pManager->AddProcess(themmIonisation);
@@ -99,19 +104,19 @@ void RE02MuonPhysics::ConstructProcess()
    //
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(themmMultipleScattering, idxAlongStep,1);
-   pManager->SetProcessOrdering(themmIonisation,        idxAlongStep,2);
+   pManager->SetProcessOrdering(themmIonisation,         idxAlongStep,2);
    pManager->SetProcessOrdering(themmBremsstrahlung,     idxAlongStep,3);
    pManager->SetProcessOrdering(themmPairProduction,     idxAlongStep,4);
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(themmMultipleScattering, idxPostStep,1);
-   pManager->SetProcessOrdering(themmIonisation,        idxPostStep,2);
+   pManager->SetProcessOrdering(themmIonisation,         idxPostStep,2);
    pManager->SetProcessOrdering(themmBremsstrahlung,     idxPostStep,3);
    pManager->SetProcessOrdering(themmPairProduction,     idxPostStep,4);
  
    // Tau+ Physics
    pManager = G4TauPlus::TauPlus()->GetProcessManager();
    G4VProcess* thetpMultipleScattering = new G4hMultipleScattering();
-   G4VProcess* thetpIonisation        = new G4hIonisation();
+   G4VProcess* thetpIonisation         = new G4hIonisation();
    //
    // add processes
    pManager->AddProcess(thetpIonisation);
@@ -119,16 +124,16 @@ void RE02MuonPhysics::ConstructProcess()
    //
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(thetpMultipleScattering, idxAlongStep,1);
-   pManager->SetProcessOrdering(thetpIonisation,        idxAlongStep,2);
+   pManager->SetProcessOrdering(thetpIonisation,         idxAlongStep,2);
    //
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(thetpMultipleScattering, idxPostStep,1);
-   pManager->SetProcessOrdering(thetpIonisation,        idxPostStep,2);
+   pManager->SetProcessOrdering(thetpIonisation,         idxPostStep,2);
 
    // Tau- Physics
    pManager = G4TauMinus::TauMinus()->GetProcessManager();
    G4VProcess* thetmMultipleScattering = new G4hMultipleScattering();
-   G4VProcess* thetmIonisation        = new G4hIonisation();
+   G4VProcess* thetmIonisation         = new G4hIonisation();
    //
    // add processes
    pManager->AddProcess(thetmIonisation);
@@ -136,10 +141,10 @@ void RE02MuonPhysics::ConstructProcess()
    //
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(thetmMultipleScattering, idxAlongStep,1);
-   pManager->SetProcessOrdering(thetmIonisation,        idxAlongStep,2);
+   pManager->SetProcessOrdering(thetmIonisation,         idxAlongStep,2);
    //
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(thetmMultipleScattering, idxPostStep,1);
-   pManager->SetProcessOrdering(thetmIonisation,        idxPostStep,2);
+   pManager->SetProcessOrdering(thetmIonisation,         idxPostStep,2);
 
 }

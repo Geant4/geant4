@@ -23,6 +23,7 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/common/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/GAG/include)
 
 #
 # Module has optional sources
@@ -33,13 +34,13 @@ include(Geant4MacroDefineModule)
 set(G4INTERFACES_BASIC_MODULE_HEADERS 
     G4UIArrayString.hh
     G4UIExecutive.hh
-    G4UIExecutive.icc
     G4UIcsh.hh
     G4UIterminal.hh
     G4VUIshell.hh)
 
 set(G4INTERFACES_BASIC_MODULE_SOURCES
     G4UIArrayString.cc
+    G4UIExecutive.cc
     G4UIcsh.cc
     G4UIterminal.cc
     G4VUIshell.cc)
@@ -65,7 +66,7 @@ if(MSVC)
     list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIWin32.cc)
 
     GEANT4_ADD_COMPILE_DEFINITIONS(
-        SOURCES G4UIWin32.cc
+        SOURCES G4UIWin32.cc G4UIExecutive.cc
         COMPILE_DEFINITIONS G4UI_BUILD_WIN32_SESSION;G4INTY_BUILD_WIN32
     )
 endif()
@@ -91,7 +92,7 @@ if(GEANT4_USE_QT)
 
     # Add the definitions
     # We have to also add in G4INTY_BUILD_QT 'cause G4QT header needs that...
-    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4UIQt.cc
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4UIQt.cc G4UIExecutive.cc
         COMPILE_DEFINITIONS G4UI_BUILD_QT_SESSION;G4INTY_BUILD_QT)
 
     # and for the moc file...
@@ -119,7 +120,7 @@ if(UNIX)
 
         # Add the compile definitions - also need INTY versions
         GEANT4_ADD_COMPILE_DEFINITIONS(
-            SOURCES G4UIXm.cc
+            SOURCES G4UIXm.cc G4UIExecutive.cc
             COMPILE_DEFINITIONS G4UI_BUILD_XM_SESSION;G4INTY_BUILD_XT
         )
 
@@ -129,9 +130,6 @@ if(UNIX)
         )
     endif()
 endif()
-
-
-
 
 
 #

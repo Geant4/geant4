@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPlane.cc,v 1.17 2010-07-07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,6 +42,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4FPlane.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CompositeCurve.hh"
 
 

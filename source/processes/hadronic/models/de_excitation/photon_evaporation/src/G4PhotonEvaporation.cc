@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.16 2010-11-23 18:03:21 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -59,6 +58,7 @@
 #include "G4PhotonEvaporation.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4LorentzVector.hh"
@@ -74,8 +74,15 @@ G4PhotonEvaporation::G4PhotonEvaporation()
    _eOccupancy(0), _vShellNumber(-1),_gammaE(0.)
 { 
   _probAlgorithm = new G4E1Probability;
+
+  G4double timeLimit = DBL_MAX;
+  char* env = getenv("G4AddTimeLimitToPhotonEvaporation"); 
+  if(env) { timeLimit = 1.e-16*second; }
+
   G4DiscreteGammaDeexcitation* p = new G4DiscreteGammaDeexcitation();
   p->SetICM(false);
+  p->SetTimeLimit(timeLimit);
+
   _discrDeexcitation = p;
   _contDeexcitation = new G4ContinuumGammaDeexcitation;
   _nucleus = 0;
@@ -86,11 +93,6 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
   if(_myOwnProbAlgorithm) delete _probAlgorithm;
   delete _discrDeexcitation;
   delete _contDeexcitation;
-}
-
-void G4PhotonEvaporation::Initialize(const G4Fragment& fragment)
-{
-  _nucleus = const_cast<G4Fragment*>(&fragment);
 }
 
 G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
@@ -287,8 +289,10 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   return products;
 }
 
-G4double G4PhotonEvaporation::GetEmissionProbability() const
+G4double 
+G4PhotonEvaporation::GetEmissionProbability(G4Fragment* theNucleus)
 {
+  _nucleus = theNucleus;
   G4double prob = 
     _probAlgorithm->EmissionProbability(*_nucleus,_nucleus->GetExcitationEnergy());
   return prob;
@@ -323,6 +327,11 @@ void G4PhotonEvaporation::SetICM(G4bool ic)
 void G4PhotonEvaporation::SetMaxHalfLife(G4double hl)
 {
  (static_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetHL(hl);
+}
+
+void G4PhotonEvaporation::SetTimeLimit(G4double val)
+{
+ _discrDeexcitation->SetTimeLimit(val);
 }
 
 void G4PhotonEvaporation::RDMForced(G4bool fromRDM)

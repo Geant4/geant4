@@ -9,11 +9,48 @@ $Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
 
                       ---------------------
 
+07.11.2012 - Gabriele Cosmo (DICOM-V09-05-10)
+           Fixed compilation warnings for shadowing of variables and unused
+           return flag from system calls.
+
+18.10.2012 - Ivana Hrivnacova (DICOM-V09-05-09)
+	   Updated CMakeLists.txt: added copying data files to the build
+           area as they are needed to run the tests. 
+
+13.10.2012 - Andrea Dotti (DICOM-V09-05-08)
+	   Removing previous tag modification (not needed)
+
+13.10.2012 - Andrea Dotti (DICOM-V09-05-07)
+	     Adding explicit use of system of units
+
+05.09.2012 - Ivana Hrivnacova (DICOM-V09-05-06)
+             Fixed compiler warning
+
+04.09.2012 - Pedro Arce    (DICOM-V09-05-05)
+             Remove old renamed files
+             Updated CMakeLists.txt (By I.Hrivnacova)
+             Adding visualization, copying macros, install target and 
+             comment lines 
+
+17.07.2012 - Ivana Hrivnacova (DICOM-V09-05-04)
+             Improved README files
+
+06.07.2012 - Pedro Arce    (DICOM-V09-05-03)
+             Reviewed examples according to coding guidelines
+
+13.06.2012 - Gabriele Cosmo   (DICOM-V09-05-02)
+             Assign return value for fread() and fscanf() calls in
+             DicomHandler. Fixes compilation warnings on Ubuntu.
+
+28.03.2012 - Pedro Arce   (DICOM-V09-05-01)
+             Corrections in materials Z/A. Addressing problem report #1287.
+
 13.11.2011 - Pedro Arce   (DICOM-V09-04-03)
+             Migration to new G4Exception scheme.
 
 03.10.2011 - G.Folger   (DICOM-V09-04-02)
              Fix gcc46 compilation warning in DicomHandler.cc 
-              and DicomPhantomParameterisationColour.cc
+             and DicomPhantomParameterisationColour.cc
 
 05.06.2011 - Pedro Arce (DICOM-V09-04-01)
              Corrected name for sensitive detector to be consistently

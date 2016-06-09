@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMolecularDecayDisplacer.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -36,6 +37,8 @@
 // -------------------------------------------------------------------
 
 #include "G4DNAMolecularDecayDisplacer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4H2O.hh"
 #include "G4H2.hh"
 #include "G4Hydrogen.hh"
@@ -52,6 +55,7 @@ const DisplacementType G4DNAMolecularDecayDisplacer::Ionisation_DissociationDeca
 const DisplacementType G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
 const DisplacementType G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
 const DisplacementType G4DNAMolecularDecayDisplacer::AutoIonisation = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAMolecularDecayDisplacer::DissociativeAttachment = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4DNAMolecularDecayDisplacer::G4DNAMolecularDecayDisplacer() :
     G4VMolecularDecayDisplacer()
@@ -82,6 +86,10 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const 
     {
         RMSMotherMoleculeDisplacement = 2.0 * nanometer ;
     }
+    else if(decayType == DissociativeAttachment)
+    {
+        RMSMotherMoleculeDisplacement = 0. * nanometer ;
+    }
 
     if(RMSMotherMoleculeDisplacement==0)
     {
@@ -99,7 +107,7 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
     G4int nbProducts = theDecayChannel -> GetNbProducts();
     vector<G4ThreeVector> theProductDisplacementVector (nbProducts);
 
-    typedef map<const G4MoleculeDefinition* const,G4double> RMSmap ;
+    typedef map<const G4MoleculeDefinition*,G4double> RMSmap ;
     RMSmap theRMSmap;
 
     G4int decayType = theDecayChannel -> GetDisplacementType();
@@ -241,6 +249,43 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
             }
         }
     }
+    else if(decayType == DissociativeAttachment)
+    {
+        if(fVerbose)
+            G4cout<<"DissociativeAttachment"<<G4endl;
+        G4double theRMSDisplacement = 0.8 * nanometer;
+        G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+
+        G4int NbOfOH = 0;
+        for(G4int i =0 ; i < nbProducts ; i++)
+        {
+            const G4Molecule* product = theDecayChannel->GetProduct(i);
+            if(product->GetDefinition() == G4H2::Definition())
+            {
+                theProductDisplacementVector[i] = -2./18.*RandDirection;
+            }
+            else if(product->GetDefinition() == G4OH::Definition())
+            {
+                G4ThreeVector OxygenDisplacement = +16./18.*RandDirection;
+                G4double OHRMSDisplacement = 1.1 * nanometer;
+
+                G4ThreeVector OHDisplacement = radialDistributionOfProducts(OHRMSDisplacement) ;
+
+                if(NbOfOH==0)
+                {
+                    OHDisplacement = 1./2.*OHDisplacement;
+                }
+                else
+                {
+                    OHDisplacement = -1./2.*OHDisplacement;
+                }
+
+                theProductDisplacementVector[i]  = OHDisplacement + OxygenDisplacement;
+
+                NbOfOH ++;
+            }
+        }
+    }
 
     return theProductDisplacementVector;
 }
@@ -346,4 +391,3 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::radialDistributionOfElectron() const
 
     return RandDirection;
 }
-

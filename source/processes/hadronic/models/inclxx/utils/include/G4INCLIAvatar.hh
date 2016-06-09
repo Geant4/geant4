@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * IAvatar.hh
  *
- *  Created on: 4 June 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 June 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef IAVATAR_HH_
@@ -53,7 +53,11 @@
 
 namespace G4INCL {
 
-  enum AvatarType {SurfaceAvatarType, CollisionAvatarType, DecayAvatarType};
+  enum AvatarType {SurfaceAvatarType,
+		   CollisionAvatarType,
+		   DecayAvatarType,
+		   ParticleEntryAvatarType,
+                   UnknownAvatarType};
 
   class IAvatar {
   public:
@@ -87,6 +91,7 @@ namespace G4INCL {
     G4double theTime;
   };
 
+  typedef std::list<IAvatar*> IAvatarList;
   typedef std::list<IAvatar*>::const_iterator IAvatarIter;
 }
 

@@ -15,6 +15,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 23th, 2012 I. Hrivnacova (exHepMC-V09-05-02)
+- Renamed hepmcEx0N.cc to HepMCEx0N.cc to match exactly with the example directory name
+  (this allows to configure CMake build in the same way on both case sensitive
+  and case insensitive platforms).
+- Fixed file descriptions 
+- Added copying data/example_MyPythia.dat in build area
+- Fixed messages in HepMCEx0N/data/CMakeLists.txt
+
+November 21th, 2012 K. Murakami (exHepMC-V09-05-01)
+- changed that AsciiReader uses IO_GenEvent instead of IO_AsciiParticles
+- migration to CMake. CMakeLists.txt, added link to -lgfortran/-lg2c
+- data files and outputs are updateds
+- physics list is changed to FTFP_BERT
+
+August 24th, 2012 I. Hrivnacova (exHepMC-V09-05-00)
+- Migration to "new" G4Exception  
+- Fixed building Pythia6 in HepMCEx01 so that it works without CERNLIB
+and updated documentation accordingly.
+- Adding .README files for Doxygen  
+
 December 10th 2010 K.Murakami (exHepMC-V09-03-03)
 - HepMCEx01: update for latest HepMC version (2.06.03)
 - HepMCEx01/02 : use QGSP_BERT physics list

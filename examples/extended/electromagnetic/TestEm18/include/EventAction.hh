@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +38,6 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 class EventMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,30 +45,29 @@ class EventMessenger;
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction* , HistoManager*);
+    EventAction(RunAction*);
    ~EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
-    void AddEnergyDeposit(G4double edep)   {EnergyDeposit  += edep;};
-    void AddSecondary(G4double ekin)     {EnergySecondary  += ekin;};
-    			           	  
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+    void AddEnergyDeposit(G4double edep)   {fEnergyDeposit  += edep;};
+    void AddSecondary(G4double ekin)     {fEnergySecondary  += ekin;};
+                                                 
+    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
+    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    RunAction*    runaction;
-    HistoManager* histoManager;
+    RunAction*    fRunAction;
     
-    G4double EnergyDeposit;
-    G4double EnergySecondary;
+    G4double      fEnergyDeposit;
+    G4double      fEnergySecondary;
     
-    G4String drawFlag;
-    G4int    printModulo;
+    G4String      fDrawFlag;
+    G4int         fPrintModulo;
     
-    EventMessenger* eventMessenger;                    
+    EventMessenger* fEventMessenger;                    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

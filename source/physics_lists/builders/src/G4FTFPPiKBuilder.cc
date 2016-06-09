@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPPiKBuilder.cc,v 1.7 2010-11-18 14:52:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +39,7 @@
 //----------------------------------------------------------------------------
 //
 #include "G4FTFPPiKBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
@@ -58,9 +58,8 @@ G4FTFPPiKBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface;
   thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -82,7 +81,7 @@ G4FTFPPiKBuilder::~G4FTFPPiKBuilder()
   delete theStringModel;
   delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theHandler;
+  //delete theHandler;
   delete theLund;
 }
 

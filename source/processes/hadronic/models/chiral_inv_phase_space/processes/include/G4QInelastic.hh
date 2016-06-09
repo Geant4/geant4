@@ -23,48 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.hh,v 1.2 2010-06-25 09:46:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QInelastic header ----------------
 //                 by Mikhail Kossov, December 2003.
-//  Header of G4QInelastic class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
-// -------------------------------------------------------------------------------
+//  Header of G4QInelastic class (all particles) of the CHIPS Physics Pachage in GEANT4
+// ------------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Hadron-Nuclear Inelastic Interaction Prosesses.
-// -------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 // At present (Dec.04) only pi+/-, K+/- proton, neutron, antiproton and antineutron
 // collisions with protons are implemented, which are fundamental for the in matter
 // simulation of hadronic reactions. The interactions of the same particles with
-// nuclei are implemented only for the low energy (below 1 GeV) nucle0n-nuclear
+// nuclei are implemented only for the low energy (below 1 GeV) nucleon-nuclear
 // reactions only. The collisions of nuclei with nuclei are planned for the near future.
 // The simulation is based on the G4QuasmonString class, which extends the CHIPS model
 // to the highest energyes, implementing the Quasmon string with the
 // String->Quasmons->Hadrons scenario of the quark-gluon string fragmentation
 // --> CHIPS is a SU(3) event generator, so it does not include reactions with the
-// heavy (c,b,t), which can be simulated only by the SU(6) QUIPS (QUark Invariant
+// heavy c,b,t-quarks, which can be simulated only by the SU(6) QUIPS (QUark Invariant
 // Phase Space) model which is an expantion of the CHIPS.- May 2009, M.Kossov.-
-// -------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
 // Algorithms: the vacuum interactions in CHIPS are described by the quark exchange (QE)
 // process. The first step is the low energy quark exchange. If as a result of the QE one
 // or both secondary hadrons are below the pi0 threshold (roughly) they are pushed to the
 // Ground State (GS) value(s). The excited (above the pi0 production threshold) hadronic
 // state is considered as a Quasmon, which is filled in the G4QuasmonVector of the
 // G4QuasmonString class. On the second step all G4Quasmons are decayed by the
-// G4Quasmon class and fiill the G4QHadronVector output. If the exchange quark is too far
+// G4Quasmon class and fill the G4QHadronVector output. If the exchange quark is too far
 // in the rapidity space (a parameter of the G4QuasmonString class) from any of the quarks
 // of the other hadron it creates a string with the nearest in the rapidity space quark.
 // This string is converted into a Quasmon. This forces the coalescence of the residuals
 // to create another Quasmon, while the possibility exists to create more residual
 // Quasmons instead of one - one per each target-quark+projectile-antiquark(diquark) pair.
 // This possibility is tuned by the Drell-Yan pair production process. If the target (or
-// pojectile) is nucleus, then the Quasmons are created not only in vacuum, where they
+// pojectile) is a nucleus, then the Quasmons are created not only in vacuum, where they
 // can be fragmented by the G4Quasmon class, but in nuclear matter of the residual target
-// (or projectile). If the Quasmons are crated in nuclear matter, they are fragmented by
+// (or projectile). If the Quasmons are created in nuclear matter, they are fragmented by
 // the G4QEnvironment class with the subsequent Quark Exchange nuclear fragmentation.
-// This is the general scenario.- May 2009, Mikhail Kossov.-
+// This is the present general scenario.- May 2009, Mikhail Kossov.-
 // --------------------------------------------------------------------------------
 // ****************************************************************************************
-// This Header is a part of the CHIPS physics package (author: M. Kosov)
+// This Header is a part of the CHIPS Physics Package (author: M. Kosov)
 // ****************************************************************************************
 // Short description: This is a universal class for the incoherent (inelastic)
 // nuclear interactions within the framework of the CHIPS model.
@@ -77,6 +76,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh" 
+#include "G4QThd.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"

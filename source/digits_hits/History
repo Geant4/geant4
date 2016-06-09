@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 14, 2012, G.Cosmo (digits_hits-V09-05-05)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+Jun 01, 2012, T.Aso (digits_hits-V09-05-04)
+- Support weighted/dividedByArea options in flatCurrent and flutFlux
+  command-line scorers.
+
+May 24, 2012, G.Cosmo (digits_hits-V09-05-03, digits_hits-V09-05-02)
+- Use 'const G4String&' as argument instead of plain copy of strings
+  in G4ScoringManager, G4VScoreWriter and G4VScoringMesh.
+- Fixed trivial cases of variable shadowing.
+
+Apr 17, 2012, T.Aso (digits_hits-V09-05-01)
+- G4VScoringMesh.cc : Avoid updating size and segment in command-line scoring
+  and print warning when SetSize() or SetNumberOfSegments is called more then
+  once.
+
 Oct 31, 2011, M.Asai (digits_hits-V09-04-08)
 - G4THitsMap.hh : removed the print-out of total value, avoiding the problem
   caused by a class <T> which does not have += or cannot be initilized by = 0.

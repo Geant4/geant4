@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGenerator.cc,v 1.2 2009-11-18 17:57:59 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -35,6 +34,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "G4AdjointPrimaryGenerator.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Event.hh"
 #include "G4SingleParticleSource.hh"
 #include "G4ParticleDefinition.hh"

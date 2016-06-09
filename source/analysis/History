@@ -17,6 +17,100 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 26, 2012 I.Hrivnacova (analysis-V09-05-15)
+- Updated to g4tools 1.4.3 (by G. Barrand) - see History_tools;
+  includes bug correction for histo/h3::fill
+
+October 14, 2012 I.Hrivnacova (analysis-V09-05-14)
+- Adding function  G4VAnalysisManager::SetActivation(..) 
+  for setting activation to all histograms of one type
+- Adding commands to activate/inactivate 1D, 2D histograms
+- Fixed GetH1[2]Width: return the correct value also when histogram is
+  inactive.
+
+October 10, 2012 I.Hrivnacova (analysis-V09-05-13)
+- Adding commands for handling h2d histograms.
+- Adding functions for accessing h1d, h2d by name
+- Splitting verbose level 1 in 2 levels and shifting the upper levels
+
+September 28, 2012 I.Hrivnacova (analysis-V09-05-12)
+- Fixed loops in G4Root/XmlAnalysisManager::WriteOnAscii;
+  (causing compilation warning for shadowing)
+
+September 4, 2012 I.Hrivnacova (analysis-V09-05-11)
+- Adding missing header file in CMakeLists.txt
+
+August 28, 2012 I.Hrivnacova (analysis-V09-05-10)
+- Adding SetH2Title() in all managers
+- Minor fixes
+
+August 22, 2012 I.Hrivnacova (analysis-V09-05-09)
+- Updated to g4tools 1.4.1 (by G. Barrand) - see History_tools
+- Adding setters/getters for histogram axis titles 
+  and commands for setting histogram title and axis titles
+
+August 20, 2012 I.Hrivnacova (analysis-V09-05-08)
+- Updated to g4tools 1.3.2 (by G. Barrand) - see History_tools
+- Adding a possibility to fill h1, h2 with values with automatically 
+  applied function (eg. log10, exp)
+- Pass units via a name instead of value
+- Adding getters for many h1, h2 attributes 
+- Adding ScaleH1(), ScaleH2()
+- Fixed warning in G4RootAnalysisManager when trying to fill inactivated
+  histogram
+- Adding W013, W014 in exception classification
+
+July 27, 2012 I.Hrivnacova (analysis-V09-05-07)
+- Updated to g4tools 1.3.1 (by G. Barrand) - see History_tools
+- Messages from Fill functions only in verbose level 3
+- Fixes in memory management: 
+  delete file before opening a new one (all);
+  delete ntuple before closing a file (csv, xml)
+
+July 25, 2012 I.Hrivnacova (analysis-V09-05-06)
+- Fix returned values in newly added functions for accessing additional 
+ information. (This fixes compiler warnings.)
+
+July 24, 2012 I.Hrivnacova (analysis-V09-05-05)
+- Fix CMake build once more - adding new source files in
+  and dependence on G4intercoms library
+
+July 24, 2012 I.Hrivnacova (analysis-V09-05-04)
+- Fix CMake build - adding intercoms to include path
+  (now needed for the messenger class)
+
+July 24, 2012 I.Hrivnacova (analysis-V09-05-03)
+- Updated to g4tools-1.3.0 (G. Barrand) - see History_tools
+- Adding an additional information to the analysis objects
+  (defined in G4HnInformation.hh):
+  units, activation, ascii output
+- Implemented a possibility to book histograms/ntuples 
+  before opening a file
+- Adding a messenger class allowing to configure file and directories
+  names, verbosity level and histogram parameters interactively.
+
+June 5, 2012 I.Hrivnacova (analysis-V09-05-02)
+- Updated to g4tools-1.2.0 (G. Barrand) - see History_tools
+
+February 23, 2012 I.Hrivnacova (analysis-V09-05-01)
+- Adding locks for functions which define directory names,
+  setting Ids etc. so that these parameters cannot be changed once
+  they were used
+- Changed return type for the functions with locks to G4bool
+- Renamed FirstNtupleId data member and its setter to FirstNtupleColumnId 
+  to better reflect its meaning  
+- Adding W009-W012 warning in exception_classification.txt
+
+February 14, 2012 I.Hrivnacova (analysis-V09-05-00)
+- Updated to g4tools-1.1.0 (G. Barrand) - see History_tools
+- Adding defs include files per manager type
+- Adding GetNtuple() function to specific managers
+- Adding GetType() function  to G4VAnalysisManager
+- Increased granularity of verbose levels (now 3 levels are available)
+- Adding test for result of openning file in Root manager
+  (which was not provided in previous versions of g4tools)
+- Making creating directories optional
+
 November 30th 2011 B.Morgan (analysis-V09-04-15)
 - CMakeLists.txt : Updated to build G4analysis in granular as well as global
   mode.

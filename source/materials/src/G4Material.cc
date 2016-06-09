@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc,v 1.44 2010-10-25 10:35:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -65,16 +64,20 @@
 // 27-07-07, improve destructor (V.Ivanchenko) 
 // 18-10-07, move definition of material index to InitialisePointers (V.Ivanchenko) 
 // 13-08-08, do not use fixed size arrays (V.Ivanchenko)
-// 26-10-11, new scheme for G4Exception  (mma) 
+// 26-10-11, new scheme for G4Exception  (mma)
+// 13-04-12, map<G4Material*,G4double> fMatComponents, filled in AddMaterial()
+// 21-04-12, fMassOfMolecule, computed for AtomsCount (mma)
 // 
-
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
 #include "G4Pow.hh"
-#include <iomanip>
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4MaterialTable G4Material::theMaterialTable;
 
@@ -113,6 +116,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   theElementVector->push_back( new G4Element(name, " ", z, a));  
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
+  fMassOfMolecule        = a/Avogadro;
   
   (*theElementVector)[0] -> increaseCountUse();
   
@@ -193,6 +197,7 @@ G4Material::G4Material(const G4String& name, G4double density,
 
   fBaseMaterial = bmat;
   fChemicalFormula = fBaseMaterial->GetChemicalFormula();
+  fMassOfMolecule  = fBaseMaterial->GetMassOfMolecule();
 
   fNumberOfElements = fBaseMaterial->GetNumberOfElements();     
   maxNbComponents = fNumberOfElements;
@@ -265,6 +270,7 @@ void G4Material::InitializePointers()
   TotNbOfElectPerVolume = 0; 
   fRadlen = 0.0;
   fNuclInterLen = 0.0;
+  fMassOfMolecule = 0.0;
 
   // Store in the static Table of Materials
   theMaterialTable.push_back(this);
@@ -325,6 +331,7 @@ void G4Material::CopyPointersOfBaseMaterial()
   fIonisation  = new G4IonisParamMat(this);
 
   fSandiaTable = fBaseMaterial->GetSandiaTable();
+  fIonisation->SetMeanExcitationEnergy(fBaseMaterial->GetIonisation()->GetMeanExcitationEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -365,6 +372,7 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
       fMassFractionVector[i] /= Amol;
     }
 
+    fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
 }
@@ -486,7 +494,10 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 	  element->increaseCountUse();
         }
       } 
-    ++fNumberOfComponents;  
+    ++fNumberOfComponents;
+    ///store massFraction of material component
+    fMatComponents[material] = fraction;
+      
   } else {
     G4cout << "G4Material::AddMaterial ERROR for " << fName << " nElement= " 
 	   <<  fNumberOfElements << G4endl;
@@ -644,6 +655,8 @@ const G4Material& G4Material::operator=(const G4Material& right)
 
       fMaterialPropertiesTable = right.fMaterialPropertiesTable;
       fBaseMaterial = right.fBaseMaterial;
+      fMassOfMolecule= right.fMassOfMolecule;
+      fMatComponents= right.fMatComponents;
 
       if(fBaseMaterial) {
         CopyPointersOfBaseMaterial();
@@ -709,11 +722,12 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
   for (size_t i=0; i<material->fNumberOfElements; i++) {
     flux 
       << "\n   ---> " << (*(material->theElementVector))[i] 
-      << "  ElmMassFraction: " << std::setw(6)<< std::setprecision(2) 
+      << "\n          ElmMassFraction: " 
+      << std::setw(6)<< std::setprecision(2) 
       << (material->fMassFractionVector[i])/perCent << " %" 
       << "  ElmAbundance "     << std::setw(6)<< std::setprecision(2) 
       << 100*(material->VecNbOfAtomsPerVolume[i])/(material->TotNbOfAtomsPerVolume)
-      << " %";
+      << " % \n";
   }
   flux.precision(prec);    
   flux.setf(mode,std::ios::floatfield);

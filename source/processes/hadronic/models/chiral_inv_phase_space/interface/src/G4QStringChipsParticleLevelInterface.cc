@@ -29,11 +29,13 @@
 //#define debug
 //#define pdebug
 
-#include "G4QStringChipsParticleLevelInterface.hh"
-#include "globals.hh"
 #include <utility>
 #include <list>
 #include <vector>
+
+#include "G4QStringChipsParticleLevelInterface.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4Proton.hh"
@@ -419,7 +421,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       G4cerr << " The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
       G4cerr << " The target momentum = "<<1./MeV*targ4Mom<<G4endl<<G4endl;
       G4cerr << " Dumping the information in the pojectile list"<<G4endl;
-      for(size_t i=0; i< projHV.size(); i++)
+      for(i=0; i< projHV.size(); i++)
       {
         G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
         <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;

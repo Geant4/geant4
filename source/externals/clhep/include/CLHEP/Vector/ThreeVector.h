@@ -142,11 +142,11 @@ public:
   // |v1 - v2|**2 <= epsilon**2 * |v1.dot(v2)| 
 
   double howNear(const Hep3Vector & v ) const;
-  // std::sqrt ( |v1-v2|**2 / v1.dot(v2) ) with a maximum of 1.
+  // sqrt ( |v1-v2|**2 / v1.dot(v2) ) with a maximum of 1.
   // If v1.dot(v2) is negative, will return 1.
 
   double deltaR(const Hep3Vector & v) const;
-  // std::sqrt( pseudorapity_difference**2 + deltaPhi **2 )
+  // sqrt( pseudorapity_difference**2 + deltaPhi **2 )
 
   inline Hep3Vector & operator += (const Hep3Vector &);
   // Addition.
@@ -179,7 +179,7 @@ public:
   // The angle w.r.t. another 3-vector.
 
   double pseudoRapidity() const;
-  // Returns the pseudo-rapidity, i.e. -ln(std::tan(theta/2))
+  // Returns the pseudo-rapidity, i.e. -ln(tan(theta/2))
 
   void setEta  ( double p );
   // Set pseudo-rapidity, keeping magnitude and phi fixed.  (ZOOM)
@@ -307,7 +307,7 @@ public:
   // relativistic gamma (considering v as a velocity vector with c=1)
 
   double coLinearRapidity() const;
-  // inverse std::tanh (beta)
+  // inverse tanh (beta)
 
 // 5 - Properties relative to Z axis and to an arbitrary direction
 
@@ -333,11 +333,11 @@ public:
   // vector minus its projection along a direction.
 
   double rapidity () const;
-  // inverse std::tanh(v.z())
+  // inverse tanh(v.z())
 
   double rapidity (const Hep3Vector & v2) const;
   // rapidity with respect to specified direction:  
-  // inverse std::tanh (v.dot(u)) where u is a unit in the direction of v2
+  // inverse tanh (v.dot(u)) where u is a unit in the direction of v2
 
   double eta(const Hep3Vector & v2) const;
   // - ln tan of the angle beween the vector and the ref direction.
@@ -347,7 +347,7 @@ public:
   // Decomposition of an angle within reference defined by a direction:
 
   double polarAngle (const Hep3Vector & v2) const;
-  // The reference direction is Z: the polarAngle is std::abs(v.theta()-v2.theta()).
+  // The reference direction is Z: the polarAngle is abs(v.theta()-v2.theta()).
 
   double deltaPhi (const Hep3Vector & v2) const;
   // v.phi()-v2.phi(), brought into the range (-PI,PI]
@@ -358,7 +358,7 @@ public:
   double polarAngle (const Hep3Vector & v2, 
 					const Hep3Vector & ref) const;
   // For arbitrary reference direction, 
-  // 	polarAngle is std::abs(v.angle(ref) - v2.angle(ref)).
+  // 	polarAngle is abs(v.angle(ref) - v2.angle(ref)).
 
   double azimAngle  (const Hep3Vector & v2, 
 					const Hep3Vector & ref) const;

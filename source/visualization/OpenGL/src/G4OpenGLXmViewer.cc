@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.31 2009-05-13 10:28:00 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -329,7 +328,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   } else {
     G4Exception
       ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl0014", FatalException,
+       "opengl2014", FatalException,
        "Invalid Representation style");
   }
   XmStringFree (polyhedron_str);
@@ -388,7 +387,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   } else {
     G4Exception
       ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl0015", FatalException,
+       "opengl2015", FatalException,
        "Invalid Drawing style in G4OpenGLXmViewer::CreateContext");
   }
 
@@ -554,7 +553,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   } else {
     G4Exception
       ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl0016", FatalException,
+       "opengl2016", FatalException,
        "transparency_enabled in G4OpenGLXmViewer is neither true nor false!!");
   }
 
@@ -589,7 +588,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   } else {
     G4Exception
       ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl0017", FatalException,
+       "opengl2017", FatalException,
        "antialiasing_enabled in G4OpenGLXmViewer is neither true nor false!!");
   }
 
@@ -624,7 +623,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   } else {
     G4Exception
       ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl0018", FatalException,
+       "opengl2018", FatalException,
        "haloing_enabled in G4OpenGLXmViewer is neither true nor false!!");
   }
 

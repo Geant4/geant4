@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.4 2007-01-18 09:07:20 hbu Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,23 +50,23 @@ class DetectorMessenger: public G4UImessenger
 public:
 
   DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
+ ~DetectorMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
 
-  DetectorConstruction*   Detector;
+  DetectorConstruction*      fDetector;
 
-  G4UIdirectory*             testemDir;
-  G4UIdirectory*             detDir;
-  G4UIdirectory*             trackdir;
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWithADoubleAndUnit* SizeCmd;
-  G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-  G4UIcmdWithADoubleAndUnit* MaxStepCmd;
-  G4UIcmdWithADoubleAndUnit* MaxStepLength;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIdirectory*             fTestemDir;
+  G4UIdirectory*             fDetDir;
+  G4UIdirectory*             fTrackdir;
+  G4UIcmdWithAString*        fMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fSizeCmd;
+  G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+  G4UIcmdWithADoubleAndUnit* fMaxStepCmd;
+  G4UIcmdWithADoubleAndUnit* fMaxStepLength;
+  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

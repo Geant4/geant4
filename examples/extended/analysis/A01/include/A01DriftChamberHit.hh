@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DriftChamberHit.hh,v 1.5 2006-06-29 16:30:55 gunter Exp $
+/// \file analysis/A01/include/A01DriftChamberHit.hh
+/// \brief Definition of the A01DriftChamberHit class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01DriftChamberHit_h
@@ -43,7 +46,6 @@ class G4AttValue;
 class A01DriftChamberHit : public G4VHit
 {
   public:
-
       A01DriftChamberHit();
       A01DriftChamberHit(G4int z);
       virtual ~A01DriftChamberHit();
@@ -54,8 +56,8 @@ class A01DriftChamberHit : public G4VHit
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
-	  inline float x();
-	  inline float y();
+      inline float x();
+      inline float y();
 
       virtual void Draw();
       virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
@@ -63,20 +65,20 @@ class A01DriftChamberHit : public G4VHit
       virtual void Print();
 
   private:
-      G4int layerID;
-      G4double time;
-      G4ThreeVector localPos;
-      G4ThreeVector worldPos;
+      G4int fLayerID;
+      G4double fTime;
+      G4ThreeVector fLocalPos;
+      G4ThreeVector fWorldPos;
 
   public:
-      inline void SetLayerID(G4int z) { layerID = z; }
-      inline G4int GetLayerID() const { return layerID; }
-      inline void SetTime(G4double t) { time = t; }
-      inline G4double GetTime() const { return time; }
-      inline void SetLocalPos(G4ThreeVector xyz) { localPos = xyz; }
-      inline G4ThreeVector GetLocalPos() const { return localPos; }
-      inline void SetWorldPos(G4ThreeVector xyz) { worldPos = xyz; }
-      inline G4ThreeVector GetWorldPos() const { return worldPos; }
+      inline void SetLayerID(G4int z) { fLayerID = z; }
+      inline G4int GetLayerID() const { return fLayerID; }
+      inline void SetTime(G4double t) { fTime = t; }
+      inline G4double GetTime() const { return fTime; }
+      inline void SetLocalPos(G4ThreeVector xyz) { fLocalPos = xyz; }
+      inline G4ThreeVector GetLocalPos() const { return fLocalPos; }
+      inline void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
+      inline G4ThreeVector GetWorldPos() const { return fWorldPos; }
 };
 
 typedef G4THitsCollection<A01DriftChamberHit> A01DriftChamberHitsCollection;

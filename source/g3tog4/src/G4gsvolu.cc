@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsvolu.cc,v 1.10 2006-06-29 18:15:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -50,14 +49,14 @@ void PG4gsvolu(G4String *tokens) {
 }
 
 G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
-                             G4double Rpar[], G4int npar)
+                             G4double rpar[], G4int npar)
 {    
   // create the solid
   G4bool hasNegPars;
   G4bool deferred;   
   G4bool okAxis[3];
   G4VSolid* solid
-    = G3toG4MakeSolid(vname, shape, Rpar, npar, hasNegPars, deferred, okAxis);  
+    = G3toG4MakeSolid(vname, shape, rpar, npar, hasNegPars, deferred, okAxis);  
 
   // if solid has been deferred 
   // VTE is created with hasNegPars = true  
@@ -65,19 +64,19 @@ G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
 
   // create VTE
   G3VolTableEntry* vte 
-     = new G3VolTableEntry(vname, shape, Rpar, npar, nmed, solid, hasNegPars);
+     = new G3VolTableEntry(vname, shape, rpar, npar, nmed, solid, hasNegPars);
   G3Vol.PutVTE(vte);
   
   return vte;
 }
 
-void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
+void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* rpar,
               G4int npar)
 {
   /*
   G4cout << "Creating logical volume " << vname << " shape " << shape
   	 << " nmed " << nmed << " #pars "<< npar << " parameters (cm): ";
-  for (int ipar=0; ipar< npar; ipar++) G4cout << std::setw(8) << Rpar[ipar];
+  for (int ipar=0; ipar< npar; ipar++) G4cout << std::setw(8) << rpar[ipar];
   G4cout << G4endl;
   */
   if (G3Vol.GetVTE(vname)) {
@@ -87,6 +86,6 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
     return;
   }
   else {  
-    G4CreateVTE(vname, shape, nmed, Rpar, npar);
+    G4CreateVTE(vname, shape, nmed, rpar, npar);
   }  
 }

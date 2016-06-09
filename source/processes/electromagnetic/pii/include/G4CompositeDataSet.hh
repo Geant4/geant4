@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeDataSet.hh,v 1.3 2010-11-19 17:18:21 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -45,9 +44,11 @@
 #ifndef G4COMPOSITEDATASET_HH
 #define G4COMPOSITEDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4IDataSet.hh"
-#include <vector>
 
 class G4IInterpolator;
 
@@ -55,8 +56,8 @@ class G4CompositeDataSet : public G4IDataSet
 {
 public:
   G4CompositeDataSet(G4IInterpolator* argAlgorithm, 
-		     G4double eUnit=MeV, 
-		     G4double dataUnit=barn, 
+		     G4double eUnit=CLHEP::MeV, 
+		     G4double dataUnit=CLHEP::barn, 
 		     G4int zMin=1, 
 		     G4int zMax=99); 
 

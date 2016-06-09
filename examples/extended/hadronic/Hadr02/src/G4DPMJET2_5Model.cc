@@ -33,16 +33,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/G4DPMJET2_5Model.cc
+/// \brief Implementation of the G4DPMJET2_5Model class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5Model.cc
 //
-// Version:		0.B
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.B
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
@@ -443,14 +446,14 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   G4double M          = definitionP->GetPDGMass();
   G4ThreeVector pP    = theTrack.Get4Momentum().vect();
   G4double T          = theTrack.GetKineticEnergy()/G4double(AP);   // Units are MeV/nuc 
-  G4double E          = theTrack.GetTotalEnergy()/G4double(AP);	    // Units are MeV/nuc
+  G4double E          = theTrack.GetTotalEnergy()/G4double(AP);            // Units are MeV/nuc
   G4int AT         = theTarget.GetA_asInt();
   G4int ZT         = theTarget.GetZ_asInt();
   G4double mpnt  = theTarget.AtomicMass(AT, ZT);
   G4double TotalEPre  = theTrack.GetTotalEnergy() + mpnt;
     //    theTarget.AtomicMass(AT, ZT) + theTarget.GetEnergyDeposit();
 //  G4LorentzRotation transformToLab =
-//  	(const_cast <G4HadProjectile*> (&theTrack))->GetTrafoToLab();
+//          (const_cast <G4HadProjectile*> (&theTrack))->GetTrafoToLab();
 //
 //
 // Output relevant information on initial conditions if verbose.  Note that
@@ -506,23 +509,23 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   }
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
-  nucc_.ibproj   = 1;				// IBPROJ = 1
-  nucc_.ijproj   = 1;				// IJPROJ = 1
-  collis_.ijprox = 1;				// IJPROX = 1
-  nucc_.ip       = AP1;				// IP     = IP_P
-  nucc_.ipz      = ZP1;				// IPZ    = IPZ_P
-  nucc_.it       = AT1;				// IT     = IT_P
-  nucc_.itz      = ZT1;				// ITZ    = ITZ_P
-  collis_.ijtar  = 1;				// IJTAR=1
+  nucc_.ibproj   = 1;                           // IBPROJ = 1
+  nucc_.ijproj   = 1;                           // IJPROJ = 1
+  collis_.ijprox = 1;                           // IJPROX = 1
+  nucc_.ip       = AP1;                         // IP     = IP_P
+  nucc_.ipz      = ZP1;                         // IPZ    = IPZ_P
+  nucc_.it       = AT1;                         // IT     = IT_P
+  nucc_.itz      = ZT1;                         // ITZ    = ITZ_P
+  collis_.ijtar  = 1;                           // IJTAR=1
 //
 //
 // Note that epn is deliberately given units of GeV/nuc, because of the units
 // used in DPMJET-II.5.
 //
   G4double epn   = E / GeV;
-  G4double mpn   = M / (GeV*AP);		// Projectile mass per nucleon in GeV/(c2*nuc)
+  G4double mpn   = M / (GeV*AP);                // Projectile mass per nucleon in GeV/(c2*nuc)
 //  G4double gamma = epn / mpn;
-//  G4double elab  = epn * M / GeV;		// ELAB   = EPN * AMPRO_P
+//  G4double elab  = epn * M / GeV;             // ELAB   = EPN * AMPRO_P
 
   diffra_.isingd = ISINGD;
   user2_.isingx  = ISINGX;
@@ -531,8 +534,8 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 
 //  G4double amu_c2GeV = amu_c2 / GeV;
   G4double ppn   = std::sqrt((epn-mpn)*(epn+mpn));
-						// Units of GeV/(c*nuc)
-						// PPN    = SQRT( (EPN-AMPROJ)*(EPN+AMPROJ) )
+                                                // Units of GeV/(c*nuc)
+                                                // PPN    = SQRT( (EPN-AMPROJ)*(EPN+AMPROJ) )
 //
 //
 // Before setting the remainder of the variables for DPMJET-II.5, check for
@@ -553,172 +556,172 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 //
 // Set the remainder of the variables for DPMJET-II.5 FORTRAN.
 //
-  nncms_.pproj   = ppn;				// PPROJ  = PPN
-  nncms_.eproj   = epn;				// EPROJ  = EPN
-  mpnt          /= (AT * GeV);			// Mass per nuclon of target in GeV/(c2*nuc)
+  nncms_.pproj   = ppn;                         // PPROJ  = PPN
+  nncms_.eproj   = epn;                         // EPROJ  = EPN
+  mpnt          /= (AT * GeV);                  // Mass per nuclon of target in GeV/(c2*nuc)
   nncms_.umo     = std::sqrt(mpn*mpn + mpnt*mpnt + 2.0*mpnt*epn);
-						// UMO    = SQRT( AMPROJ**2 + AMTAR**2 +2.D0*AMTAR*EPROJ )
-						// Note I believe this equation is only correct
-						// if the subsequent equations (for pTthr) 
-						// needs the Ecm for the NUCLEON-NUCLEON system 
-  user2_.cmener  = nncms_.umo;			// CMENER = UMO
+                                                // UMO    = SQRT( AMPROJ**2 + AMTAR**2 +2.D0*AMTAR*EPROJ )
+                                                // Note I believe this equation is only correct
+                                                // if the subsequent equations (for pTthr) 
+                                                // needs the Ecm for the NUCLEON-NUCLEON system 
+  user2_.cmener  = nncms_.umo;                  // CMENER = UMO
   collis_.s      = nncms_.umo * nncms_.umo;
-						// SS     = UMO**2
+                                                // SS     = UMO**2
   collis_.ptthr  = 3.0;
   if (strufu_.istrut == 1)
   {
     collis_.ptthr = 2.1 + 0.15*std::pow(std::log10(user2_.cmener/50.),3.0);
-						// PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
+                                                // PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
   }
   else if (strufu_.istrut == 2)
   {
     collis_.ptthr = 2.5 + 0.12*std::pow(std::log10(user2_.cmener/50.),3.0);
-						// PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
+                                                // PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
   }
-  collis_.ptthr2 = collis_.ptthr;		// PTTHR2 = PTTHR
+  collis_.ptthr2 = collis_.ptthr;               // PTTHR2 = PTTHR
   nncms_.gamcm   = (epn + mpnt) / nncms_.umo;
-						// GAMCM  = (EPROJ+AMTAR)/UMO
-						// Note I believe this equation is only correct
-						// if the subsequent equations (for pTthr)
-						// need the Ecm for the NUCLEON-NUCLEON system 
-  nncms_.bgcm    = ppn / nncms_.umo;		// PPROJ/UMO
+                                                // GAMCM  = (EPROJ+AMTAR)/UMO
+                                                // Note I believe this equation is only correct
+                                                // if the subsequent equations (for pTthr)
+                                                // need the Ecm for the NUCLEON-NUCLEON system 
+  nncms_.bgcm    = ppn / nncms_.umo;                // PPROJ/UMO
   nncms_.pcm     = nncms_.gamcm*ppn - nncms_.bgcm*epn;
-						// PCM    = GAMCM*PPROJ - BGCM*EPROJ
+                                                // PCM    = GAMCM*PPROJ - BGCM*EPROJ
   sigma_.sigsof  = 37.8 * std::pow(collis_.s,0.076);
-						// ALFA   = 1.076D0
+                                                // ALFA   = 1.076D0
                                                 // A      = 37.8D0
                                                 // SIGSOF = A * SS**(ALFA-1.D0)
-  seasu3_.seasq  = SEASQ;			// SEASQ  = 0.50D0
-  xseadi_.ssmima = SSMIMA;			// SSMIMA = 1.201D0
+  seasu3_.seasq  = SEASQ;                       // SEASQ  = 0.50D0
+  xseadi_.ssmima = SSMIMA;                      // SSMIMA = 1.201D0
   xseadi_.ssmimq = xseadi_.ssmima * xseadi_.ssmima;
-						// SSMIMQ = SSMIMA**2
+                                                // SSMIMQ = SSMIMA**2
   taufo_.taufor  = TAUFOR;
   taufo_.ktauge  = KTAUGE;
   
   if ( theInitType == DEFAULT ) {
-    final_.ifinal  = 0;				// IFINAL = 1
-    evappp_.ievap  = 0;				// IEVAP  = 0
-    parevt_.levprt = LTRUE;			// LEVPRT = .FALSE.
-    parevt_.ilvmod = 1;				// ILVMOD = 1
-    parevt_.ldeexg = LFALSE;			// LDEEXG = .FALSE.
-    parevt_.lheavy = LFALSE;			// LHEAVY = .FALSE.
-    frbkcm_.lfrmbk = LFALSE;			// LFRMBK = .FALSE.
-    inpflg_.ifiss  = 0;				// IFISS  = 0
+    final_.ifinal  = 0;                         // IFINAL = 1
+    evappp_.ievap  = 0;                         // IEVAP  = 0
+    parevt_.levprt = LTRUE;                     // LEVPRT = .FALSE.
+    parevt_.ilvmod = 1;                         // ILVMOD = 1
+    parevt_.ldeexg = LFALSE;                    // LDEEXG = .FALSE.
+    parevt_.lheavy = LFALSE;                    // LHEAVY = .FALSE.
+    frbkcm_.lfrmbk = LFALSE;                    // LFRMBK = .FALSE.
+    inpflg_.ifiss  = 0;                         // IFISS  = 0
   } else if ( theInitType == CORSIKA ) {
-    final_.ifinal  = 0;				// IFINAL = 1
-    evappp_.ievap  = 0;				// IEVAP  = 0
-    parevt_.levprt = LTRUE;			// LEVPRT = .FALSE.
-    parevt_.ilvmod = 1;				// ILVMOD = 1
-    parevt_.ldeexg = LFALSE;			// LDEEXG = .FALSE.
-    parevt_.lheavy = LTRUE;			// LHEAVY = .FALSE.
-    frbkcm_.lfrmbk = LFALSE;			// LFRMBK = .FALSE.
-    inpflg_.ifiss  = 0;				// IFISS  = 0
+    final_.ifinal  = 0;                         // IFINAL = 1
+    evappp_.ievap  = 0;                         // IEVAP  = 0
+    parevt_.levprt = LTRUE;                     // LEVPRT = .FALSE.
+    parevt_.ilvmod = 1;                         // ILVMOD = 1
+    parevt_.ldeexg = LFALSE;                    // LDEEXG = .FALSE.
+    parevt_.lheavy = LTRUE;                     // LHEAVY = .FALSE.
+    frbkcm_.lfrmbk = LFALSE;                    // LFRMBK = .FALSE.
+    inpflg_.ifiss  = 0;                         // IFISS  = 0
   }
   else if ( theInitType == DPM2_5 ) {
-    final_.ifinal  = 0;				// IFINAL = 0
-    evappp_.ievap  = 0;				// IEVAP  = 0
-    parevt_.levprt = LTRUE;			// LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, BUT IF NOT SET, ALL EVENTS GET REJECTED.
-    parevt_.ilvmod = 1;				// ILVMOD = 1
-    parevt_.ldeexg = LFALSE;			// LDEEXG = .FALSE.
-    parevt_.lheavy = LFALSE;			// LHEAVY = .FALSE.
-    frbkcm_.lfrmbk = LFALSE;			// LFRMBK = .FALSE.
-    inpflg_.ifiss  = 0;				// IFISS  = 0
+    final_.ifinal  = 0;                         // IFINAL = 0
+    evappp_.ievap  = 0;                         // IEVAP  = 0
+    parevt_.levprt = LTRUE;                     // LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, BUT IF NOT SET, ALL EVENTS GET REJECTED.
+    parevt_.ilvmod = 1;                         // ILVMOD = 1
+    parevt_.ldeexg = LFALSE;                    // LDEEXG = .FALSE.
+    parevt_.lheavy = LFALSE;                    // LHEAVY = .FALSE.
+    frbkcm_.lfrmbk = LFALSE;                    // LFRMBK = .FALSE.
+    inpflg_.ifiss  = 0;                         // IFISS  = 0
   }
   else if ( theInitType == DPM3 ) {
-    final_.ifinal  = 0;				// IFINAL = 0
-    evappp_.ievap  = 0;				// IEVAP  = 0
-    parevt_.levprt = LTRUE;			// LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, BUT IF NOT SET, ALL EVENTS GET REJECTED.
-    parevt_.ilvmod = 1;				// ILVMOD = 1
-    parevt_.ldeexg = LFALSE;			// LDEEXG = .FALSE.
-    parevt_.lheavy = LFALSE;			// LHEAVY = .FALSE.
-    frbkcm_.lfrmbk = LFALSE;			// LFRMBK = .FALSE.
-    inpflg_.ifiss  = 0;				// IFISS  = 0
+    final_.ifinal  = 0;                         // IFINAL = 0
+    evappp_.ievap  = 0;                         // IEVAP  = 0
+    parevt_.levprt = LTRUE;                     // LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, BUT IF NOT SET, ALL EVENTS GET REJECTED.
+    parevt_.ilvmod = 1;                         // ILVMOD = 1
+    parevt_.ldeexg = LFALSE;                    // LDEEXG = .FALSE.
+    parevt_.lheavy = LFALSE;                    // LHEAVY = .FALSE.
+    frbkcm_.lfrmbk = LFALSE;                    // LFRMBK = .FALSE.
+    inpflg_.ifiss  = 0;                         // IFISS  = 0
   }
-  xsecpt_.ptcut  = collis_.ptthr;		// PTCUT = PTTHR
+  xsecpt_.ptcut  = collis_.ptthr;               // PTCUT = PTTHR
   
   G4double dsig1[maxpro+1];
-  csj1mi_ (&xsecpt_.ptcut, &dsig1[0]);		// CALL CSJ1MI(PTCUT,DSIG1)
-  xsecpt_.dsigh   = dsig1[0];			// SIG1  = DSIG1(0)
-						// DSIGH = SIG1
+  csj1mi_ (&xsecpt_.ptcut, &dsig1[0]);          // CALL CSJ1MI(PTCUT,DSIG1)
+  xsecpt_.dsigh   = dsig1[0];                   // SIG1  = DSIG1(0)
+                                                // DSIGH = SIG1
   G4int i         = 0;
   G4double pt     = 0.0;
-  samppt_ (&i,&pt);				// SAMPPT(0,PT)
-  collap_.s3      = collis_.s;			// S3      = SS
-  collap_.ijproj1 = collis_.ijprox;		// IJPROJ1 = IJPROX
-  collap_.ijtar1  = collis_.ijtar;		// IJTAR1  = IJTAR
-  collap_.ptthr1  = collis_.ptthr;		// PTTHR1  = PTTHR
-  collap_.iophrd1 = collis_.iophrd;		// IOPHRD1 = IOPHRD
-  collap_.ijprlu1 = collis_.ijprlu;		// IJPRLU1 = IJPRLU
-  collap_.ijtalu1 = collis_.ijtalu;		// IJTALU1 = IJTALU
-  collap_.ptthr3  = collis_.ptthr2;		// PTTHR3  = PTTHR2
+  samppt_ (&i,&pt);                             // SAMPPT(0,PT)
+  collap_.s3      = collis_.s;                  // S3      = SS
+  collap_.ijproj1 = collis_.ijprox;             // IJPROJ1 = IJPROX
+  collap_.ijtar1  = collis_.ijtar;              // IJTAR1  = IJTAR
+  collap_.ptthr1  = collis_.ptthr;              // PTTHR1  = PTTHR
+  collap_.iophrd1 = collis_.iophrd;             // IOPHRD1 = IOPHRD
+  collap_.ijprlu1 = collis_.ijprlu;             // IJPRLU1 = IJPRLU
+  collap_.ijtalu1 = collis_.ijtalu;             // IJTALU1 = IJTALU
+  collap_.ptthr3  = collis_.ptthr2;             // PTTHR3  = PTTHR2
 
-  G4int iiipro          = nucc_.ijproj;		// IIPROJ = IJPROJ & IIIPRO = IIPROJ
-  G4int iiitar          = nucc_.ijtarg;		// IITARG = IJTARG
+  G4int iiipro          = nucc_.ijproj;         // IIPROJ = IJPROJ & IIIPRO = IIPROJ
+  G4int iiitar          = nucc_.ijtarg;         // IITARG = IJTARG
   G4int kkmat           = 1;
-  G4int nhkkh1          = 1;			// NHKKH1 = 1
+  G4int nhkkh1          = 1;                    // NHKKH1 = 1
   
   for (i=0; i<8; i++) user1_.projty[i] = paname_.btype[iiipro][i];
-						// PROJTY=BTYPE(IPROJ)
+                                                // PROJTY=BTYPE(IPROJ)
   G4int irej   = 1;
   G4int evtcnt = 0;
   
   do {
-/*    bufueh_.annvv   = 0.001;			// ANNVV = 0.001
-    bufueh_.annss   = 0.001;			// ANNSS = 0.001
-    bufueh_.annsv   = 0.001;			// ANNSV = 0.001
-    bufueh_.annvs   = 0.001;			// ANNVS = 0.001
-    bufueh_.anncc   = 0.001;			// ANNCC = 0.001
-    bufueh_.anndv   = 0.001;			// ANNDV = 0.001
-    bufueh_.annvd   = 0.001;			// ANNVD = 0.001
-    bufueh_.annds   = 0.001;			// ANNDS = 0.001
-    bufueh_.annsd   = 0.001;			// ANNSD = 0.001
-    bufueh_.annhh   = 0.001;			// ANNHH = 0.001
-    bufueh_.annzz   = 0.001;			// ANNZZ = 0.001
-    bufueh_.anndi   = 0.001;			// ANNDI = 0.001
-    bufueh_.annzd   = 0.001;			// ANNZD = 0.001
-    bufueh_.anndz   = 0.001;			// ANNDZ = 0.001
-    bufueh_.ptvv    = 0.0;			// PTVV = 0.
-    bufueh_.ptss    = 0.0;			// PTSS = 0.
-    bufueh_.ptsv    = 0.0;			// PTSV = 0.
-    bufueh_.ptvs    = 0.0;			// PTVS = 0.
-    bufueh_.ptcc    = 0.0;			// PTCC = 0.
-    bufueh_.ptdv    = 0.0;			// PTDV = 0.
-    bufueh_.ptvd    = 0.0;			// PTVD = 0.
-    bufueh_.ptds    = 0.0;			// PTDS = 0.
-    bufueh_.ptsd    = 0.0;			// PTSD = 0.
-    bufueh_.pthh    = 0.0;			// PTHH = 0.
-    bufueh_.ptzz    = 0.0;			// PTZZ = 0.
-    bufueh_.ptdi    = 0.0;			// PTDI = 0.
-    bufueh_.ptzd    = 0.0;			// PTZD = 0.
-    bufueh_.ptdz    = 0.0;			// PTDZ = 0.
-    bufueh_.eevv    = 0.0;			// EEVV = 0.
-    bufueh_.eess    = 0.0;			// EESS = 0.
-    bufueh_.eesv    = 0.0;			// EESV = 0.
-    bufueh_.eevs    = 0.0;			// EEVS = 0.
-    bufueh_.eecc    = 0.0;			// EECC = 0.
-    bufueh_.eedv    = 0.0;			// EEDV = 0.
-    bufueh_.eevd    = 0.0;			// EEVD = 0.
-    bufueh_.eeds    = 0.0;			// EEDS = 0.
-    bufueh_.eesd    = 0.0;			// EESD = 0.
-    bufueh_.eehh    = 0.0;			// EEHH = 0.
-    bufueh_.eezz    = 0.0;			// EEZZ = 0.
-    bufueh_.eedi    = 0.0;			// EEDI = 0.
-    bufueh_.eezd    = 0.0;			// EEZD = 0.
-    bufueh_.eedz    = 0.0;			// EEDZ = 0.
-    ncouch_.acouvv  = 0.0;			// ACOUVV = 0.
-    ncouch_.acouss  = 0.0;			// ACOUSS = 0.
-    ncouch_.acousv  = 0.0;			// ACOUSV = 0.
-    ncouch_.acouvs  = 0.0;			// ACOUVS = 0.
-    ncouch_.acouzz  = 0.0;			// ACOUZZ = 0.
-    ncouch_.acouhh  = 0.0;			// ACOUHH = 0.
-    ncouch_.acouds  = 0.0;			// ACOUDS = 0.
-    ncouch_.acousd  = 0.0;			// ACOUSD = 0.
-    ncouch_.acoudz  = 0.0;			// ACOUDZ = 0.
-    ncouch_.acouzd  = 0.0;			// ACOUZD = 0.
-    ncouch_.acoudi  = 0.0;			// ACOUDI = 0.
-    ncouch_.acoudv  = 0.0;			// ACOUDV = 0.
-    ncouch_.acouvd  = 0.0;			// ACOUVD = 0.
-    ncouch_.acoucc  = 0.0;			// ACOUCC = 0.*/
+/*    bufueh_.annvv   = 0.001;                   // ANNVV = 0.001
+    bufueh_.annss   = 0.001;                    // ANNSS = 0.001
+    bufueh_.annsv   = 0.001;                    // ANNSV = 0.001
+    bufueh_.annvs   = 0.001;                    // ANNVS = 0.001
+    bufueh_.anncc   = 0.001;                    // ANNCC = 0.001
+    bufueh_.anndv   = 0.001;                    // ANNDV = 0.001
+    bufueh_.annvd   = 0.001;                    // ANNVD = 0.001
+    bufueh_.annds   = 0.001;                    // ANNDS = 0.001
+    bufueh_.annsd   = 0.001;                    // ANNSD = 0.001
+    bufueh_.annhh   = 0.001;                    // ANNHH = 0.001
+    bufueh_.annzz   = 0.001;                    // ANNZZ = 0.001
+    bufueh_.anndi   = 0.001;                    // ANNDI = 0.001
+    bufueh_.annzd   = 0.001;                    // ANNZD = 0.001
+    bufueh_.anndz   = 0.001;                    // ANNDZ = 0.001
+    bufueh_.ptvv    = 0.0;                      // PTVV = 0.
+    bufueh_.ptss    = 0.0;                      // PTSS = 0.
+    bufueh_.ptsv    = 0.0;                      // PTSV = 0.
+    bufueh_.ptvs    = 0.0;                      // PTVS = 0.
+    bufueh_.ptcc    = 0.0;                      // PTCC = 0.
+    bufueh_.ptdv    = 0.0;                      // PTDV = 0.
+    bufueh_.ptvd    = 0.0;                      // PTVD = 0.
+    bufueh_.ptds    = 0.0;                      // PTDS = 0.
+    bufueh_.ptsd    = 0.0;                      // PTSD = 0.
+    bufueh_.pthh    = 0.0;                      // PTHH = 0.
+    bufueh_.ptzz    = 0.0;                      // PTZZ = 0.
+    bufueh_.ptdi    = 0.0;                      // PTDI = 0.
+    bufueh_.ptzd    = 0.0;                      // PTZD = 0.
+    bufueh_.ptdz    = 0.0;                      // PTDZ = 0.
+    bufueh_.eevv    = 0.0;                      // EEVV = 0.
+    bufueh_.eess    = 0.0;                      // EESS = 0.
+    bufueh_.eesv    = 0.0;                      // EESV = 0.
+    bufueh_.eevs    = 0.0;                      // EEVS = 0.
+    bufueh_.eecc    = 0.0;                      // EECC = 0.
+    bufueh_.eedv    = 0.0;                      // EEDV = 0.
+    bufueh_.eevd    = 0.0;                      // EEVD = 0.
+    bufueh_.eeds    = 0.0;                      // EEDS = 0.
+    bufueh_.eesd    = 0.0;                      // EESD = 0.
+    bufueh_.eehh    = 0.0;                      // EEHH = 0.
+    bufueh_.eezz    = 0.0;                      // EEZZ = 0.
+    bufueh_.eedi    = 0.0;                      // EEDI = 0.
+    bufueh_.eezd    = 0.0;                      // EEZD = 0.
+    bufueh_.eedz    = 0.0;                      // EEDZ = 0.
+    ncouch_.acouvv  = 0.0;                      // ACOUVV = 0.
+    ncouch_.acouss  = 0.0;                      // ACOUSS = 0.
+    ncouch_.acousv  = 0.0;                      // ACOUSV = 0.
+    ncouch_.acouvs  = 0.0;                      // ACOUVS = 0.
+    ncouch_.acouzz  = 0.0;                      // ACOUZZ = 0.
+    ncouch_.acouhh  = 0.0;                      // ACOUHH = 0.
+    ncouch_.acouds  = 0.0;                      // ACOUDS = 0.
+    ncouch_.acousd  = 0.0;                      // ACOUSD = 0.
+    ncouch_.acoudz  = 0.0;                      // ACOUDZ = 0.
+    ncouch_.acouzd  = 0.0;                      // ACOUZD = 0.
+    ncouch_.acoudi  = 0.0;                      // ACOUDI = 0.
+    ncouch_.acoudv  = 0.0;                      // ACOUDV = 0.
+    ncouch_.acouvd  = 0.0;                      // ACOUVD = 0.
+    ncouch_.acoucc  = 0.0;                      // ACOUCC = 0.*/
     if (evtcnt > 0)
       G4cout <<"REJECTED KKINC EVENT.  RETRY # = " <<evtcnt <<G4endl;
 //
@@ -731,8 +734,8 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
     //G4cout << "Call to kkinc_" << G4endl;
     kkinc_ (&epn, &AT1, &ZT1, &AP1, &ZP1, &iiipro, &kkmat, &iiitar, &nhkkh1,
       &irej);
-			//      CALL KKINC(EPN,IIT,IITZ,IIP,IIPZ,IIPROJ,KKMAT,
-			//     * IITARG,NHKKH1,IREJ)
+                        //      CALL KKINC(EPN,IIT,IITZ,IIP,IIPZ,IIPROJ,KKMAT,
+                        //     * IITARG,NHKKH1,IREJ)
 //    dpmevt_ (&elabt, &iiipro, &AP1, &ZP1, &AT1, &ZT1, &kkmat, &nhkkh1);
   } while (irej == 1 && ++evtcnt <100);
   //G4cout << "Call to reset G-data" << G4endl;
@@ -1164,32 +1167,32 @@ void G4DPMJET2_5Model::Initialise ()
   g4dpmjet_initialise_block_data_ ();
 //
 //
-  dpar_.aam[4]   = 0.001;			// AAM(5)=0.001D0
-  dpar_.aam[5]   = 0.001;			// AAM(6)=0.001D0
-  dpar_.aam[132] = 0.001;			// AAM(133)=0.001D0
-  dpar_.aam[133] = 0.001;			// AAM(134)=0.001D0
-  dpar_.aam[134] = 0.001;			// AAM(135)=0.001D0
-  dpar_.aam[135] = 0.001;			// AAM(136)=0.001D0
+  dpar_.aam[4]   = 0.001;                        // AAM(5)=0.001D0
+  dpar_.aam[5]   = 0.001;                        // AAM(6)=0.001D0
+  dpar_.aam[132] = 0.001;                        // AAM(133)=0.001D0
+  dpar_.aam[133] = 0.001;                        // AAM(134)=0.001D0
+  dpar_.aam[134] = 0.001;                        // AAM(135)=0.001D0
+  dpar_.aam[135] = 0.001;                        // AAM(136)=0.001D0
 
-  vxsvd_.nxsp  = 0;				// NXSP=0
-  vxsvd_.nxst  = 0;				// NXST=0
-  vxsvd_.nxsap = 0;				// NXSAP=0
-  vxsvd_.nxsat = 0;				// NXSAT=0
-  vxsvd_.nxvp  = 0;				// NXVP=0
-  vxsvd_.nxvt  = 0;				// NXVT=0
-  vxsvd_.nxdp  = 0;				// NXDP=0
-  vxsvd_.nxdt  = 0;				// NXDT=0
+  vxsvd_.nxsp  = 0;                                // NXSP=0
+  vxsvd_.nxst  = 0;                                // NXST=0
+  vxsvd_.nxsap = 0;                                // NXSAP=0
+  vxsvd_.nxsat = 0;                                // NXSAT=0
+  vxsvd_.nxvp  = 0;                                // NXVP=0
+  vxsvd_.nxvt  = 0;                                // NXVT=0
+  vxsvd_.nxdp  = 0;                                // NXDP=0
+  vxsvd_.nxdt  = 0;                                // NXDT=0
 
   for (G4int i=0; i<50; i++)
   {
-    vxsvd_.vxsp[i]  = 1.0E-08;			// VXSP(II)=1.D-8
-    vxsvd_.vxst[i]  = 1.0E-08;			// VXST(II)=1.D-8
-    vxsvd_.vxsap[i] = 1.0E-08;			// VXSAP(II)=1.D-8
-    vxsvd_.vxsat[i] = 1.0E-08;			// VXSAT(II)=1.D-8
-    vxsvd_.vxvp[i]  = 1.0E-08;			// VXVP(II)=1.D-8
-    vxsvd_.vxvt[i]  = 1.0E-08;			// VXVT(II)=1.D-8
-    vxsvd_.vxdp[i]  = 1.0E-08;			// VXDP(II)=1.D-8
-    vxsvd_.vxst[i]  = 1.0E-08;			// VXST(II)=1.D-8
+    vxsvd_.vxsp[i]  = 1.0E-08;                        // VXSP(II)=1.D-8
+    vxsvd_.vxst[i]  = 1.0E-08;                        // VXST(II)=1.D-8
+    vxsvd_.vxsap[i] = 1.0E-08;                        // VXSAP(II)=1.D-8
+    vxsvd_.vxsat[i] = 1.0E-08;                        // VXSAT(II)=1.D-8
+    vxsvd_.vxvp[i]  = 1.0E-08;                        // VXVP(II)=1.D-8
+    vxsvd_.vxvt[i]  = 1.0E-08;                        // VXVT(II)=1.D-8
+    vxsvd_.vxdp[i]  = 1.0E-08;                        // VXDP(II)=1.D-8
+    vxsvd_.vxst[i]  = 1.0E-08;                        // VXST(II)=1.D-8
   }
 
   if (debug)
@@ -1199,23 +1202,23 @@ void G4DPMJET2_5Model::Initialise ()
       G4cout <<"AT G4DPMJET2_5Model::Initialise:"  <<G4endl;
     }
 #endif
-    dprin_.ipri      = debug_level;		// IPRI  = LEVLDB
-    dprin_.ipev      = debug_level;		// IPEV  = LEVLDB
-    dprin_.ippa      = debug_level;		// IPPA  = LEVLDB
-    dprin_.ipco      = debug_level;		// IPCO  = LEVLDB
-    dprin_.init      = debug_level;		// INIT  = LEVLDB
-    dprin_.iphkk     = debug_level;		// IPHKK = LEVLDB
-    pydat1_.mstu[25] = 10;			// MSTU(26) = 10
+    dprin_.ipri      = debug_level;              // IPRI  = LEVLDB
+    dprin_.ipev      = debug_level;              // IPEV  = LEVLDB
+    dprin_.ippa      = debug_level;              // IPPA  = LEVLDB
+    dprin_.ipco      = debug_level;              // IPCO  = LEVLDB
+    dprin_.init      = debug_level;              // INIT  = LEVLDB
+    dprin_.iphkk     = debug_level;              // IPHKK = LEVLDB
+    pydat1_.mstu[25] = 10;                       // MSTU(26) = 10
   }
   else
   {
-    dprin_.ipri      = 0;			// IPRI  = 0
-    dprin_.ipev      = 0;			// IPEV  = 0
-    dprin_.ippa      = 0;			// IPPA  = 0
-    dprin_.ipco      =-2;			// IPCO  = -2
-    dprin_.init      = 0;			// INIT  = 0
-    dprin_.iphkk     = 0;			// IPHKK = 0
-    pydat1_.mstu[25] = 0;			// MSTU(26) = 10
+    dprin_.ipri      = 0;                        // IPRI  = 0
+    dprin_.ipev      = 0;                        // IPEV  = 0
+    dprin_.ippa      = 0;                        // IPPA  = 0
+    dprin_.ipco      =-2;                        // IPCO  = -2
+    dprin_.init      = 0;                        // INIT  = 0
+    dprin_.iphkk     = 0;                        // IPHKK = 0
+    pydat1_.mstu[25] = 0;                        // MSTU(26) = 10
   }
 
   for (G4int i=0; i<7; i++)
@@ -1234,48 +1237,48 @@ void G4DPMJET2_5Model::Initialise ()
     diqrej_.izdre[i] = 0;
   }
   
-  diqsum_.ndvuu  = 0;				// NDVUU     = 0
-  diqsum_.ndvus  = 0;				// NDVUS     = 0
-  diqsum_.ndvss  = 0;				// NDVSS     = 0
-  diqsum_.nvduu  = 0;				// NVDUU     = 0
-  diqsum_.nvdus  = 0;				// NVDUS     = 0
-  diqsum_.nvdss  = 0;				// NVDSS     = 0
-  diqsum_.ndsuu  = 0;				// NDSUU     = 0
-  diqsum_.ndsus  = 0;				// NDSUS     = 0
-  diqsum_.ndsss  = 0;				// NDSSS     = 0
-  diqsum_.nsduu  = 0;				// NSDUU     = 0
-  diqsum_.nsdus  = 0;				// NSDUS     = 0
-  diqsum_.nsdss  = 0;				// NSDSS     = 0
-  diqsum_.ndzuu  = 0;				// NDZUU     = 0
-  diqsum_.ndzus  = 0;				// NDZUS     = 0
-  diqsum_.ndzss  = 0;				// NDZSS     = 0
-  diqsum_.nzduu  = 0;				// NZDUU     = 0
-  diqsum_.nzdus  = 0;				// NZDUS     = 0
-  diqsum_.nzdss  = 0;				// NZDSS     = 0
-  diqsum_.nadvuu = 0;				// NADVUU    = 0
-  diqsum_.nadvus = 0;				// NADVUS    = 0
-  diqsum_.nadvss = 0;				// NADVSS    = 0
-  diqsum_.navduu = 0;				// NAVDUU    = 0
-  diqsum_.navdus = 0;				// NAVDUS    = 0
-  diqsum_.navdss = 0;				// NAVDSS    = 0
-  diqsum_.nadsuu = 0;				// NADSUU    = 0
-  diqsum_.nadsus = 0;				// NADSUS    = 0
-  diqsum_.nadsss = 0;				// NADSSS    = 0
-  diqsum_.nasduu = 0;				// NASDUU    = 0
-  diqsum_.nasdus = 0;				// NASDUS    = 0
-  diqsum_.nasdss = 0;				// NASDSS    = 0
-  diqsum_.nadzuu = 0;				// NADZUU    = 0
-  diqsum_.nadzus = 0;				// NADZUS    = 0
-  diqsum_.nadzss = 0;				// NADZSS    = 0
-  diqsum_.nazduu = 0;				// NAZDUU    = 0
-  diqsum_.nazdus = 0;				// NAZDUS    = 0
-  diqsum_.nazdss = 0;				// NAZDSS    = 0
-  hdjase_.nhse1  = 0;				// NHSE1     = 0
-  hdjase_.nhse2  = 0;				// NHSE2     = 0
-  hdjase_.nhse3  = 0;				// NHSE3     = 0
-  hdjase_.nhase1 = 0;				// NHASE1    = 0
-  hdjase_.nhase2 = 0;				// NHASE2    = 0
-  hdjase_.nhase3 = 0;				// NHASE3    = 0
+  diqsum_.ndvuu  = 0;                            // NDVUU     = 0
+  diqsum_.ndvus  = 0;                            // NDVUS     = 0
+  diqsum_.ndvss  = 0;                            // NDVSS     = 0
+  diqsum_.nvduu  = 0;                            // NVDUU     = 0
+  diqsum_.nvdus  = 0;                            // NVDUS     = 0
+  diqsum_.nvdss  = 0;                            // NVDSS     = 0
+  diqsum_.ndsuu  = 0;                            // NDSUU     = 0
+  diqsum_.ndsus  = 0;                            // NDSUS     = 0
+  diqsum_.ndsss  = 0;                            // NDSSS     = 0
+  diqsum_.nsduu  = 0;                            // NSDUU     = 0
+  diqsum_.nsdus  = 0;                            // NSDUS     = 0
+  diqsum_.nsdss  = 0;                            // NSDSS     = 0
+  diqsum_.ndzuu  = 0;                            // NDZUU     = 0
+  diqsum_.ndzus  = 0;                            // NDZUS     = 0
+  diqsum_.ndzss  = 0;                            // NDZSS     = 0
+  diqsum_.nzduu  = 0;                            // NZDUU     = 0
+  diqsum_.nzdus  = 0;                            // NZDUS     = 0
+  diqsum_.nzdss  = 0;                            // NZDSS     = 0
+  diqsum_.nadvuu = 0;                            // NADVUU    = 0
+  diqsum_.nadvus = 0;                            // NADVUS    = 0
+  diqsum_.nadvss = 0;                            // NADVSS    = 0
+  diqsum_.navduu = 0;                            // NAVDUU    = 0
+  diqsum_.navdus = 0;                            // NAVDUS    = 0
+  diqsum_.navdss = 0;                            // NAVDSS    = 0
+  diqsum_.nadsuu = 0;                            // NADSUU    = 0
+  diqsum_.nadsus = 0;                            // NADSUS    = 0
+  diqsum_.nadsss = 0;                            // NADSSS    = 0
+  diqsum_.nasduu = 0;                            // NASDUU    = 0
+  diqsum_.nasdus = 0;                            // NASDUS    = 0
+  diqsum_.nasdss = 0;                            // NASDSS    = 0
+  diqsum_.nadzuu = 0;                            // NADZUU    = 0
+  diqsum_.nadzus = 0;                            // NADZUS    = 0
+  diqsum_.nadzss = 0;                            // NADZSS    = 0
+  diqsum_.nazduu = 0;                            // NAZDUU    = 0
+  diqsum_.nazdus = 0;                            // NAZDUS    = 0
+  diqsum_.nazdss = 0;                            // NAZDSS    = 0
+  hdjase_.nhse1  = 0;                            // NHSE1     = 0
+  hdjase_.nhse2  = 0;                            // NHSE2     = 0
+  hdjase_.nhse3  = 0;                            // NHSE3     = 0
+  hdjase_.nhase1 = 0;                            // NHASE1    = 0
+  hdjase_.nhase2 = 0;                            // NHASE2    = 0
+  hdjase_.nhase3 = 0;                            // NHASE3    = 0
 //
 //
 // Parton pt distribution.
@@ -1285,35 +1288,35 @@ void G4DPMJET2_5Model::Initialise ()
   G4double pt2 = 0.0;
   G4int ipt    = 0;
   G4int nevt   = 0;
-  parpt_ (&i,&pt1,&pt2,&ipt,&nevt);		// CALL PARPT(1,PT1,PT2,IPT,NEVT)
+  parpt_ (&i,&pt1,&pt2,&ipt,&nevt);              // CALL PARPT(1,PT1,PT2,IPT,NEVT)
 //
 //
 // Initialise BAMJET, DECAY and HADRIN.
 //
-  ddatar_ ();					// CALL DDATAR
-  dhadde_ ();					// CALL DHADDE
-  dchant_ ();					// CALL DCHANT
-  dchanh_ ();					// CALL DCHANH
+  ddatar_ ();                                    // CALL DDATAR
+  dhadde_ ();                                    // CALL DHADDE
+  dchant_ ();                                    // CALL DCHANT
+  dchanh_ ();                                    // CALL DCHANH
 
   G4double epn = 0.0;
   G4double ppn = 0.0;
-  defaul_ (&epn,&ppn);				// CALL DEFAUL(EPN,PPN)
-  defaux_ (&epn,&ppn);				// CALL DEFAUX(EPN,PPN)
+  defaul_ (&epn,&ppn);                           // CALL DEFAUL(EPN,PPN)
+  defaux_ (&epn,&ppn);                           // CALL DEFAUX(EPN,PPN)
 
-  coulo_.icoul   = 1;				// ICOUL  = 1
-  nuclea_.icoull = 1;				// ICOULL = 1
-  edens_.ieden   = 0;				// IEDEN = 0
-  dprin_.itopd   = 0;				// ITOPD = 0
+  coulo_.icoul   = 1;                            // ICOUL  = 1
+  nuclea_.icoull = 1;                            // ICOULL = 1
+  edens_.ieden   = 0;                            // IEDEN = 0
+  dprin_.itopd   = 0;                            // ITOPD = 0
 
   if ( theInitType == DEFAULT ) {
     TAUFOR  = 5.0E+00;
     KTAUGE  = 25;
   } else if ( theInitType == CORSIKA ) {
-    TAUFOR  = 5.0E+00;				// TAUFOR = 5.D0
-    KTAUGE  = 25;				// KTAUGE = 25
+    TAUFOR  = 5.0E+00;                           // TAUFOR = 5.D0
+    KTAUGE  = 25;                                // KTAUGE = 25
   } else if ( theInitType == DPM2_5 ) {
-    TAUFOR  = 105.0E+00;			// TAUFOR = 105.D0
-    KTAUGE  = 10;				// KTAUGE = 10
+    TAUFOR  = 105.0E+00;                         // TAUFOR = 105.D0
+    KTAUGE  = 10;                                // KTAUGE = 10
   } else if ( theInitType == DPM3 ) {
     TAUFOR  = 3.5E+00;
     KTAUGE  = 10;
@@ -1321,15 +1324,15 @@ void G4DPMJET2_5Model::Initialise ()
   taufo_.taufor = TAUFOR;
   taufo_.ktauge = KTAUGE;
 
-  ITAUVE        = 1;				// ITAUVE = 1
+  ITAUVE        = 1;                             // ITAUVE = 1
   taufo_.itauve = ITAUVE;
-  taufo_.incmod = 1;				// INCMOD = 1
+  taufo_.incmod = 1;                             // INCMOD = 1
 //
 //
 // Definition of soft quark distributions, Fermi, Pauli
 //
-  G4double xseaco = 1.0;			// XSEACO = 1.00D0
-  xseadi_.xseacu  = 1.05 - xseaco;		// XSEACU = 1.05D0-XSEACO
+  G4double xseaco = 1.0;                         // XSEACO = 1.00D0
+  xseadi_.xseacu  = 1.05 - xseaco;               // XSEACU = 1.05D0-XSEACO
 
   if ( theInitType == DEFAULT ) {
     UNON           = 3.50;
@@ -1338,17 +1341,17 @@ void G4DPMJET2_5Model::Initialise ()
     droppt_.fermp  = LTRUE;
     nucimp_.fermod = 0.6;
   } else if ( theInitType == CORSIKA ) {
-    UNON           = 3.50;			// UNON   = 3.50D0
-    UNOM           = 1.11;			// UNOM   = 1.11D0
-    UNOSEA         = 5.0;			// UNOSEA = 5.0D0
-    droppt_.fermp  = LTRUE;			// FERMP  = .TRUE.
-    nucimp_.fermod = 0.6;			// FERMOD = 0.6D0
+    UNON           = 3.50;                       // UNON   = 3.50D0
+    UNOM           = 1.11;                       // UNOM   = 1.11D0
+    UNOSEA         = 5.0;                        // UNOSEA = 5.0D0
+    droppt_.fermp  = LTRUE;                      // FERMP  = .TRUE.
+    nucimp_.fermod = 0.6;                        // FERMOD = 0.6D0
   } else if ( theInitType == DPM2_5 ) { 
-    UNON           = 3.50;			// UNON   = 3.50D0
-    UNOM           = 1.11;			// UNOM   = 1.11D0
-    UNOSEA         = 5.0;			// UNOSEA = 5.0D0
-    droppt_.fermp  = LTRUE;			// FERMP  = .TRUE.
-    nucimp_.fermod = 0.6;			// FERMOD = 0.6D0
+    UNON           = 3.50;                       // UNON   = 3.50D0
+    UNOM           = 1.11;                       // UNOM   = 1.11D0
+    UNOSEA         = 5.0;                        // UNOSEA = 5.0D0
+    droppt_.fermp  = LTRUE;                      // FERMP  = .TRUE.
+    nucimp_.fermod = 0.6;                        // FERMOD = 0.6D0
   } else if ( theInitType == DPM3 ) { 
     UNON           = 2.00;
     UNOM           = 1.5;
@@ -1360,10 +1363,10 @@ void G4DPMJET2_5Model::Initialise ()
   xseadi_.unom   = UNOM;
   xseadi_.unosea = UNOSEA;
   
-  nuclea_.fermdd = 0.6;				// FERMDD = 0.6D0
-  ferfor_.iferfo = 1;				// IFERFO = 1
-  dprin_.ipaupr  = 0;				// IPAUPR = 0
-  droppt_.lpauli = LTRUE;			// LPAULI = .TRUE.
+  nuclea_.fermdd = 0.6;                          // FERMDD = 0.6D0
+  ferfor_.iferfo = 1;                            // IFERFO = 1
+  dprin_.ipaupr  = 0;                            // IPAUPR = 0
+  droppt_.lpauli = LTRUE;                        // LPAULI = .TRUE.
 //
 //
 // Definition of cuts for x-sampling.
@@ -1374,15 +1377,15 @@ void G4DPMJET2_5Model::Initialise ()
     CSEA   = 0.5;
     SSMIMA = 0.9;
   } else if ( theInitType == CORSIKA ) {
-    CVQ    = 1.8;				// CVQ  = 1.8D0
-    CDQ    = 2.0;				// CDQ  = 2.0D0
-    CSEA   = 0.5;				// CSEA = 0.5D0
-    SSMIMA = 0.901;				// SSMIMA = 0.901D0
+    CVQ    = 1.8;                                // CVQ  = 1.8D0
+    CDQ    = 2.0;                                // CDQ  = 2.0D0
+    CSEA   = 0.5;                                // CSEA = 0.5D0
+    SSMIMA = 0.901;                              // SSMIMA = 0.901D0
   } else if ( theInitType == DPM2_5 ) {
-    CVQ    = 1.8;				// CVQ  = 1.8D0
-    CDQ    = 2.0;				// CDQ  = 2.0D0
-    CSEA   = 0.5;				// CSEA = 0.5D0
-    SSMIMA = 1.201;				// SSMIMA = 1.201D0
+    CVQ    = 1.8;                                // CVQ  = 1.8D0
+    CDQ    = 2.0;                                // CDQ  = 2.0D0
+    CSEA   = 0.5;                                // CSEA = 0.5D0
+    SSMIMA = 1.201;                              // SSMIMA = 1.201D0
   } else if ( theInitType == DPM3 ) {
     CVQ    = 1.0;
     CDQ    = 2.0;
@@ -1395,13 +1398,13 @@ void G4DPMJET2_5Model::Initialise ()
   xseadi_.ssmima = SSMIMA;
   
   xseadi_.ssmimq = xseadi_.ssmima * xseadi_.ssmima;
-						// SSMIMQ = SSMIMA**2
+                                                 // SSMIMQ = SSMIMA**2
   if ( theInitType == DEFAULT ) {
     VVMTHR = 0.0;  
   } else if ( theInitType == CORSIKA ) {
-    VVMTHR = 0.0;				// VVMTHR = 0.D0
+    VVMTHR = 0.0;                                // VVMTHR = 0.D0
   } else if ( theInitType == DPM2_5 ) {
-    VVMTHR = 0.0;				// VVMTHR = 0.D0
+    VVMTHR = 0.0;                                // VVMTHR = 0.D0
   } else if ( theInitType == DPM3 ) {
     VVMTHR = 2.0;
   }
@@ -1410,22 +1413,22 @@ void G4DPMJET2_5Model::Initialise ()
 //
 // There is a final call.  Set recombin, seasu3, coninpt, allpart and interdpm
 //
-  final_.ifinal  = 0;				// IFINAL = 0
-  recom_.irecom  = 0;				// IRECOM = 0
-  seadiq_.lseadi = LTRUE;			// LSEADI = .TRUE.
+  final_.ifinal  = 0;                            // IFINAL = 0
+  recom_.irecom  = 0;                            // IRECOM = 0
+  seadiq_.lseadi = LTRUE;                        // LSEADI = .TRUE.
 
   if ( theInitType == DEFAULT ) {
     SEASQ  = 0.5;
     MKCRON = 1;
     CRONCO = 0.64;
   } else if ( theInitType == CORSIKA ) {
-    SEASQ  = 0.5;				// SEASQ  = 0.50D0
-    MKCRON = 0;					// MKCRON = 0
-    CRONCO = 0.0;				// CRONCO = 0.00D0
+    SEASQ  = 0.5;                                // SEASQ  = 0.50D0
+    MKCRON = 0;                                  // MKCRON = 0
+    CRONCO = 0.0;                                // CRONCO = 0.00D0
   } else if ( theInitType == DPM2_5 ) {
-    SEASQ  = 0.5;				// SEASQ  = 0.50D0
-    MKCRON = 1;					// MKCRON = 1
-    CRONCO = 0.64;				// CRONCO = 0.64D0
+    SEASQ  = 0.5;                                // SEASQ  = 0.50D0
+    MKCRON = 1;                                  // MKCRON = 1
+    CRONCO = 0.64;                               // CRONCO = 0.64D0
   } else if ( theInitType == DPM3 ) {
     SEASQ  = 1.0;
     MKCRON = 1;
@@ -1435,93 +1438,93 @@ void G4DPMJET2_5Model::Initialise ()
   cronin_.mkcron = MKCRON;
   cronin_.cronco = CRONCO;
   
-  droppt_.ihada  = LTRUE;			// IHADA  = .TRUE.
+  droppt_.ihada  = LTRUE;                        // IHADA  = .TRUE.
   
-//  inxdpm_.intdpm = 0;				// INTDPM = 0
+//  inxdpm_.intdpm = 0;                          // INTDPM = 0
 // Note FORTRAN initialises the variable IROEH  = 0, but this isn't used
 // nor is it contained within a common block.
 //
 //
 // Definition for popcork, casadiqu, popcorse
 //
-  popcck_.pdbck  = 0.0;				// PDBCK  = 0.D0
-  popcck_.ijpock = 0;				// IJPOCK = 0
-  casadi_.icasad = 1;				// ICASAD = 1
-  casadi_.casaxx = 0.05;			// CASAXX = 0.05D0             ! corrected Nov. 2001
-  popcck_.pdbse  = 0.45;			// PDBSE  = 0.45D0             ! with baryon stopping
-  popcck_.pdbseu = 0.45;			// PDBSEU = 0.45D0             ! with baryon stopping
-//						C     PDBSE  = 0.D0               ! without baryon stopping
-//						C     PDBSEU = 0.D0               ! without baryon stopping
-  popcck_.irejck = 0;				// IREJCK = 0
-  popcck_.irejse = 0;				// IREJSE = 0
-  popcck_.irejs3 = 0;				// IREJS3 = 0
-  popcck_.irejs0 = 0;				// IREJS0 = 0
-  popcck_.ick4   = 0;				// ICK4   = 0
-  popcck_.ise4   = 0;				// ISE4   = 0
-  popcck_.ise43  = 0;				// ISE43  = 0
-  popcck_.ihad4  = 0;				// IHAD4  = 0
-  popcck_.ick6   = 0;				// ICK6   = 0
-  popcck_.ise6   = 0;				// ISE6   = 0
-  popcck_.ise63  = 0;				// ISE63  = 0
-  popcck_.ihad6  = 0;				// IHAD6  = 0
-  popcck_.irejsa = 0;				// IREJSA = 0
-  popcck_.ireja3 = 0;				// IREJA3 = 0
-  popcck_.ireja0 = 0;				// IREJA0 = 0
-  popcck_.isea4  = 0;				// ISEA4  = 0
-  popcck_.isea43 = 0;				// ISEA43 = 0
-  popcck_.ihada4 = 0;				// IHADA4 = 0
-  popcck_.isea6  = 0;				// ISEA6  = 0
-  popcck_.isea63 = 0;				// ISEA63 = 0
-  popcck_.ihada6 = 0;				// IHADA6 = 0
+  popcck_.pdbck  = 0.0;                         // PDBCK  = 0.D0
+  popcck_.ijpock = 0;                           // IJPOCK = 0
+  casadi_.icasad = 1;                           // ICASAD = 1
+  casadi_.casaxx = 0.05;                        // CASAXX = 0.05D0             ! corrected Nov. 2001
+  popcck_.pdbse  = 0.45;                        // PDBSE  = 0.45D0             ! with baryon stopping
+  popcck_.pdbseu = 0.45;                        // PDBSEU = 0.45D0             ! with baryon stopping
+//                                                C     PDBSE  = 0.D0               ! without baryon stopping
+//                                                C     PDBSEU = 0.D0               ! without baryon stopping
+  popcck_.irejck = 0;                           // IREJCK = 0
+  popcck_.irejse = 0;                           // IREJSE = 0
+  popcck_.irejs3 = 0;                           // IREJS3 = 0
+  popcck_.irejs0 = 0;                           // IREJS0 = 0
+  popcck_.ick4   = 0;                           // ICK4   = 0
+  popcck_.ise4   = 0;                           // ISE4   = 0
+  popcck_.ise43  = 0;                           // ISE43  = 0
+  popcck_.ihad4  = 0;                           // IHAD4  = 0
+  popcck_.ick6   = 0;                           // ICK6   = 0
+  popcck_.ise6   = 0;                           // ISE6   = 0
+  popcck_.ise63  = 0;                           // ISE63  = 0
+  popcck_.ihad6  = 0;                           // IHAD6  = 0
+  popcck_.irejsa = 0;                           // IREJSA = 0
+  popcck_.ireja3 = 0;                           // IREJA3 = 0
+  popcck_.ireja0 = 0;                           // IREJA0 = 0
+  popcck_.isea4  = 0;                           // ISEA4  = 0
+  popcck_.isea43 = 0;                           // ISEA43 = 0
+  popcck_.ihada4 = 0;                           // IHADA4 = 0
+  popcck_.isea6  = 0;                           // ISEA6  = 0
+  popcck_.isea63 = 0;                           // ISEA63 = 0
+  popcck_.ihada6 = 0;                           // IHADA6 = 0
 
   if ( theInitType == DEFAULT || theInitType == CORSIKA ) {
-    popcor_.pdb    = 0.1;			// PDB    = 0.10D0
+    popcor_.pdb    = 0.1;                       // PDB    = 0.10D0
   } else if ( theInitType == DPM2_5 ) {
-    popcor_.pdb    = 0.1;			// PDB    = 0.10D0
+    popcor_.pdb    = 0.1;                       // PDB    = 0.10D0
   } else if ( theInitType == DPM3 ) {
     popcor_.pdb    = 0.15;
   }
-  popcor_.ajsdef = 0.0;				// AJSDEF = 0.D0
+  popcor_.ajsdef = 0.0;                         // AJSDEF = 0.D0
 //
 //
 // Definition of fluctuat, intpt, hadroniz, diquarks, singlech, evapor
 // (Charmed particles set to decay : IHADRINZ>=2
 //
-  fluctu_.ifluct = 0;				// IFLUCT = 0
-  droppt_.intpt  = LTRUE;			// INTPT  = .TRUE.
-  colle_.ihadrz  = 2;				// IHADRZ = 2
-  ifragm_.ifrag  = 1;				// IFRAG  = 1
-  promu_.ipromu  = 1;				// IPROMU = 1
+  fluctu_.ifluct = 0;                           // IFLUCT = 0
+  droppt_.intpt  = LTRUE;                       // INTPT  = .TRUE.
+  colle_.ihadrz  = 2;                           // IHADRZ = 2
+  ifragm_.ifrag  = 1;                           // IFRAG  = 1
+  promu_.ipromu  = 1;                           // IPROMU = 1
   if (colle_.ihadrz >= 2)
   {
     ifragm_.ifrag  = colle_.ihadrz - 1;
-						// IFRAG = IHADRZ-1
-    lundin_ ();					// CALL LUNDIN
+                                                // IFRAG = IHADRZ-1
+    lundin_ ();                                 // CALL LUNDIN
   }
-  diquax_.idiqua  = 1;				// IDIQUA = 1
-  diquax_.idiquu  = 1;				// IDIQUU = 1
-  diquax_.amedd   = 0.9;			// AMEDD  = 0.9D0
-  sincha_.isicha  = 0;				// ISICHA = 0
-  evappp_.ievap   = 0;				// IEVAP = 0
-  seaqxx_.seaqx   = 0.5;			// SEAQX = 0.5D0
-  seaqxx_.seaqxn  = 0.5;			// SEAQXN = 0.5D0
-  kglaub_.jglaub  = 2;				// JGLAUB = 2
-  hadthr_.ehadth  = 5.0;			// EHADTH = 5.D0
+  diquax_.idiqua  = 1;                          // IDIQUA = 1
+  diquax_.idiquu  = 1;                          // IDIQUU = 1
+  diquax_.amedd   = 0.9;                        // AMEDD  = 0.9D0
+  sincha_.isicha  = 0;                          // ISICHA = 0
+  evappp_.ievap   = 0;                          // IEVAP = 0
+  seaqxx_.seaqx   = 0.5;                        // SEAQX = 0.5D0
+  seaqxx_.seaqxn  = 0.5;                        // SEAQXN = 0.5D0
+  kglaub_.jglaub  = 2;                          // JGLAUB = 2
+  hadthr_.ehadth  = 5.0;                        // EHADTH = 5.D0
 //
 //
 // Definitions for hbook, pomtable, cmhisto, central, strucfun
 //
-  hboo_.ihbook    = 1;				// IHBOOK = 1
-  pomtab_.ipomta  = 1;				// IPOMTA = 1
-  cmhico_. cmhis  = 0.0;			// CMHIS = 0.0D+00           !   Lab System
-  zentra_.icentr  = 0;				// ICENTR = 0
-  user2_.istruf   = 222;			// ISTRUF = 222
-  strufu_.istrum  = 0;				// ISTRUM = 0
+  hboo_.ihbook    = 1;                          // IHBOOK = 1
+  pomtab_.ipomta  = 1;                          // IPOMTA = 1
+  cmhico_. cmhis  = 0.0;                        // CMHIS = 0.0D+00           !   Lab System
+  zentra_.icentr  = 0;                          // ICENTR = 0
+  user2_.istruf   = 222;                        // ISTRUF = 222
+  strufu_.istrum  = 0;                          // ISTRUM = 0
   strufu_.istrut  = user2_.istruf / 100;
-						// ISTRUT = ISTRUF/100
+                                                // ISTRUT = ISTRUF/100
   user2_.istruf   = user2_.istruf - strufu_.istrut*100;
-						// ISTRUF = ISTRUF-ISTRUT*100
-  strufu_.istrum  = user2_.istruf;		// ISTRUM = ISTRUF
+                                                // ISTRUF = ISTRUF-ISTRUT*100
+  strufu_.istrum  = user2_.istruf;              // ISTRUM = ISTRUF
 
   if ( theInitType == DEFAULT ) {
     ISINGD = 1;
@@ -1529,15 +1532,15 @@ void G4DPMJET2_5Model::Initialise ()
     IDUBLD = 0;
     SDFRAC = 1.0;
   } else if ( theInitType == CORSIKA ) {
-    ISINGD  = 0;				// ISINGD = 0
-    ISINGX  = 0;				// ISINGX = 0
-    IDUBLD  = 0;				// IDUBLD = 0
-    SDFRAC  = 0.0;				// SDFRAC = 0.
+    ISINGD  = 0;                                // ISINGD = 0
+    ISINGX  = 0;                                // ISINGX = 0
+    IDUBLD  = 0;                                // IDUBLD = 0
+    SDFRAC  = 0.0;                              // SDFRAC = 0.
   } else if ( theInitType == DPM2_5 ) {
-    ISINGD  = 1;				// ISINGD = 1
-    ISINGX  = 1;				// ISINGX = 1
-    IDUBLD  = 0;				// IDUBLD = 0
-    SDFRAC  = 1.0;				// SDFRAC = 1.
+    ISINGD  = 1;                                // ISINGD = 1
+    ISINGX  = 1;                                // ISINGX = 1
+    IDUBLD  = 0;                                // IDUBLD = 0
+    SDFRAC  = 1.0;                              // SDFRAC = 1.
   } else if ( theInitType == DPM3 ) {
     ISINGD  = 0;
     ISINGX  = 1;
@@ -1553,49 +1556,49 @@ void G4DPMJET2_5Model::Initialise ()
 // Definitions for start, inforeje, gluxplit, partev, sampt
 //  NEVNTS passed to DTMAI as argument, NEVHAD in COMMON
 //
-  colle_.nfile    = 0;				// NFILE  = 0
-  nstari_.nstart  = 1;				// NSTART = 1
-  stars_.istar2   = 0;				// ISTAR2 = 0
-  stars_.istar3   = 0;				// ISTAR3 = 0
-  user2_.ptlar    = 2.0;			// PTLAR  = 2.D0
+  colle_.nfile    = 0;                          // NFILE  = 0
+  nstari_.nstart  = 1;                          // NSTART = 1
+  stars_.istar2   = 0;                          // ISTAR2 = 0
+  stars_.istar3   = 0;                          // ISTAR3 = 0
+  user2_.ptlar    = 2.0;                        // PTLAR  = 2.D0
 
-//  G4int iglaub    = 0;			// IGLAUB = 0 !! Note that this is just a local variable
+//  G4int iglaub    = 0;                        // IGLAUB = 0 !! Note that this is just a local variable
 
-//  infore_.ifrej   = 0;			// IFREJ  = 0  Note rejection diagnostics not required
-  gluspl_.nugluu  = 1;				// NUGLUU = 1
-  gluspl_.nsgluu  = 0;				// NSGLUU = 0
-  colle_.nvers    = 1;				// NVERS  = 1
-  ptsamp_.isampt  = 4;				// ISAMPT = 4
+//  infore_.ifrej   = 0;                        // IFREJ  = 0  Note rejection diagnostics not required
+  gluspl_.nugluu  = 1;                          // NUGLUU = 1
+  gluspl_.nsgluu  = 0;                          // NSGLUU = 0
+  colle_.nvers    = 1;                          // NVERS  = 1
+  ptsamp_.isampt  = 4;                          // ISAMPT = 4
 //
 //
 // Definitions for selhard, sigmapom, pshow, secinter.
 //
-  dropjj_.dropjt  = 0.0;			// DROPJT = 0.D0
-  collis_.iophrd  = 2;				// IOPHRD = 2
-  collis_.ptthr   = 3.0;			// PTTHR  = 3.D0
-//  collis_.ptthr2  = collis_.ptthr;		// PTTHR2 = PTTHR
-  user2_.cmener   = 100.0;			// CMENER = 100.D0
+  dropjj_.dropjt  = 0.0;                        // DROPJT = 0.D0
+  collis_.iophrd  = 2;                          // IOPHRD = 2
+  collis_.ptthr   = 3.0;                        // PTTHR  = 3.D0
+//  collis_.ptthr2  = collis_.ptthr;            // PTTHR2 = PTTHR
+  user2_.cmener   = 100.0;                      // CMENER = 100.D0
   if (strufu_.istrut == 1)
   {
     collis_.ptthr = 2.1 + 0.15*std::pow(std::log10(user2_.cmener/50.),3.0);
-						// PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
+                                                // PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
   }
   else if (strufu_.istrut == 2)
   {
     collis_.ptthr = 2.5 + 0.12*std::pow(std::log10(user2_.cmener/50.),3.0);
-						// PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
+                                                // PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
   }
-  collis_.ptthr2  = collis_.ptthr;  		// PTTHR2 = PTTHR
-  pomtyp_.ipim    = 2;				// IPIM   = 2
-  pomtyp_.icon    = 48;				// ICON   = 48
-  pomtyp_.isig    = 10;				// ISIG   = 10
-  pomtyp_.lmax    = 30;				// LMAX   = 30
-  pomtyp_.mmax    = 100;			// MMAX   = 100
-  pomtyp_.nmax    = 2;				// NMAX   = 2
-  pomtyp_.difel   = 0.0;			// DIFEL  = 0.D0
-  pomtyp_.difnu   = 1.0;			// DIFNU  = 1.D0
-  pshow_.ipshow   = 1;				// IPSHOW = 1
-  secint_.isecin  = 0;				// ISECIN = 0
+  collis_.ptthr2  = collis_.ptthr;              // PTTHR2 = PTTHR
+  pomtyp_.ipim    = 2;                          // IPIM   = 2
+  pomtyp_.icon    = 48;                         // ICON   = 48
+  pomtyp_.isig    = 10;                         // ISIG   = 10
+  pomtyp_.lmax    = 30;                         // LMAX   = 30
+  pomtyp_.mmax    = 100;                        // MMAX   = 100
+  pomtyp_.nmax    = 2;                          // NMAX   = 2
+  pomtyp_.difel   = 0.0;                        // DIFEL  = 0.D0
+  pomtyp_.difnu   = 1.0;                        // DIFNU  = 1.D0
+  pshow_.ipshow   = 1;                          // IPSHOW = 1
+  secint_.isecin  = 0;                          // ISECIN = 0
 //
 //
 // This next bit is associated with evaporation.  I'm not sure if it's needed
@@ -1609,19 +1612,19 @@ void G4DPMJET2_5Model::Initialise ()
     frbkcm_.lfrmbk  = LFALSE;
     inpflg_.ifiss   = 0;
   } else if ( theInitType == CORSIKA ) {
-    parevt_.levprt  = LTRUE;			// LEVPRT = .TRUE.
-    parevt_.ilvmod  = 1;			// ILVMOD = 1
-    parevt_.ldeexg  = LTRUE;			// LDEEXG = .TRUE.
-    parevt_.lheavy  = LTRUE;			// LHEAVY = .TRUE.
-    frbkcm_.lfrmbk  = LTRUE;			// LFRMBK = .TRUE.
-    inpflg_.ifiss   = 0;			// IFISS  = 0
+    parevt_.levprt  = LTRUE;                    // LEVPRT = .TRUE.
+    parevt_.ilvmod  = 1;                        // ILVMOD = 1
+    parevt_.ldeexg  = LTRUE;                    // LDEEXG = .TRUE.
+    parevt_.lheavy  = LTRUE;                    // LHEAVY = .TRUE.
+    frbkcm_.lfrmbk  = LTRUE;                    // LFRMBK = .TRUE.
+    inpflg_.ifiss   = 0;                        // IFISS  = 0
   } else if ( theInitType == DPM2_5 ) {
-    parevt_.levprt  = LFALSE;			// LEVPRT = .FALSE.
-    parevt_.ilvmod  = 1;			// ILVMOD = 1
-    parevt_.ldeexg  = LFALSE;			// LDEEXG = .FALSE.
-    parevt_.lheavy  = LFALSE;			// LHEAVY = .FALSE.
-    frbkcm_.lfrmbk  = LFALSE;			// LFRMBK = .FALSE.
-    inpflg_.ifiss   = 0;			// IFISS  = 0
+    parevt_.levprt  = LFALSE;                   // LEVPRT = .FALSE.
+    parevt_.ilvmod  = 1;                        // ILVMOD = 1
+    parevt_.ldeexg  = LFALSE;                   // LDEEXG = .FALSE.
+    parevt_.lheavy  = LFALSE;                   // LHEAVY = .FALSE.
+    frbkcm_.lfrmbk  = LFALSE;                   // LFRMBK = .FALSE.
+    inpflg_.ifiss   = 0;                        // IFISS  = 0
   } else if ( theInitType == DPM3 ) {
     parevt_.levprt  = LFALSE;
     parevt_.ilvmod  = 1;
@@ -1631,7 +1634,7 @@ void G4DPMJET2_5Model::Initialise ()
     inpflg_.ifiss   = 0;
   }
 
-  hettp_.nbertp   = lunber;			// NBERTP = LUNBER
+  hettp_.nbertp   = lunber;                     // NBERTP = LUNBER
 
   verboseFortranFile = "fort.6";
   G4int namelen      = verboseFortranFile.length();
@@ -1685,7 +1688,7 @@ void G4DPMJET2_5Model::Initialise ()
     G4cout <<"AT G4DPMJET2_5Model::Initialise: after NUCLEAR.BIN"  <<G4endl;
 #endif
   G4cout << "CALL BERTTP" << G4endl;
-  berttp_ ();					// CALL BERTTP
+  berttp_ ();                                        // CALL BERTTP
   G4cout << "CALL BERTTP done" << G4endl;
   if (evappp_.ievap == 1)
   {
@@ -1693,7 +1696,7 @@ void G4DPMJET2_5Model::Initialise ()
     if (GetVerboseLevel()>0)
       G4cout <<"AT G4DPMJET2_5Model::Initialise: before INCINI"  <<G4endl;
 #endif
-    incini_ ();					// CALL INCINI
+    incini_ ();                                      // CALL INCINI
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0)
       G4cout <<"AT G4DPMJET2_5Model::Initialise: after INCINI"  <<G4endl;
@@ -1705,8 +1708,8 @@ void G4DPMJET2_5Model::Initialise ()
     G4cout <<"AT G4DPMJET2_5Model::Initialise: NUCLEAR.BIN closed"  <<G4endl;
 #endif
 
-  ptlarg_.xsmax = 0.8;				// XSMAX  = 0.8D0
-  dprin_.itopd  = 0;				// ITOPD  = 0
+  ptlarg_.xsmax = 0.8;                              // XSMAX  = 0.8D0
+  dprin_.itopd  = 0;                                // ITOPD  = 0
 
   G4int iseed1 = 0;
   G4int iseed2 = 0;
@@ -1791,62 +1794,62 @@ void G4DPMJET2_5Model::Initialise ()
   }
 #endif
 
-  bufues_.bnnvv   = 0.001;			// BNNVV=0.001
-  bufues_.bnnss   = 0.001;			// BNNSS=0.001
-  bufues_.bnnsv   = 0.001;			// BNNSV=0.001
-  bufues_.bnnvs   = 0.001;			// BNNVS=0.001
-  bufues_.bnncc   = 0.001;			// BNNCC=0.001
-  bufues_.bnndv   = 0.001;			// BNNDV=0.001
-  bufues_.bnnvd   = 0.001;			// BNNVD=0.001
-  bufues_.bnnds   = 0.001;			// BNNDS=0.001
-  bufues_.bnnsd   = 0.001;			// BNNSD=0.001
-  bufues_.bnnhh   = 0.001;			// BNNHH=0.001
-  bufues_.bnnzz   = 0.001;			// BNNZZ=0.001
-  bufues_.bnndi   = 0.001;			// BNNDI=0.001
-  bufues_.bnnzd   = 0.001;			// BNNZD=0.001
-  bufues_.bnndz   = 0.001;			// BNNDZ=0.001
-  bufues_.bptvv   = 0.0;			// BPTVV=0.
-  bufues_.bptss   = 0.0;			// BPTSS=0.
-  bufues_.bptsv   = 0.0;			// BPTSV=0.
-  bufues_.bptvs   = 0.0;			// BPTVS=0.
-  bufues_.bptcc   = 0.0;			// BPTCC=0.
-  bufues_.bptdv   = 0.0;			// BPTDV=0.
-  bufues_.bptvd   = 0.0;			// BPTVD=0.
-  bufues_.bptds   = 0.0;			// BPTDS=0.
-  bufues_.bptsd   = 0.0;			// BPTSD=0.
-  bufues_.bpthh   = 0.0;			// BPTHH=0.
-  bufues_.bptzz   = 0.0;			// BPTZZ=0.
-  bufues_.bptdi   = 0.0;			// BPTDI=0.
-  bufues_.bptzd   = 0.0;			// BPTZD=0.
-  bufues_.bptdz   = 0.0;			// BPTDZ=0.
-  bufues_.beevv   = 0.0;			// BEEVV=0.
-  bufues_.beess   = 0.0;			// BEESS=0.
-  bufues_.beesv   = 0.0;			// BEESV=0.
-  bufues_.beevs   = 0.0;			// BEEVS=0.
-  bufues_.beecc   = 0.0;			// BEECC=0.
-  bufues_.beedv   = 0.0;			// BEEDV=0.
-  bufues_.beevd   = 0.0;			// BEEVD=0.
-  bufues_.beeds   = 0.0;			// BEEDS=0.
-  bufues_.beesd   = 0.0;			// BEESD=0.
-  bufues_.beehh   = 0.0;			// BEEHH=0.
-  bufues_.beezz   = 0.0;			// BEEZZ=0.
-  bufues_.beedi   = 0.0;			// BEEDI=0.
-  bufues_.beezd   = 0.0;			// BEEZD=0.
-  bufues_.beedz   = 0.0;			// BEEDZ=0.
-  ncoucs_.bcouvv  = 0.0;			// BCOUVV=0.
-  ncoucs_.bcouss  = 0.0;			// BCOUSS=0.
-  ncoucs_.bcousv  = 0.0;			// BCOUSV=0.
-  ncoucs_.bcouvs  = 0.0;			// BCOUVS=0.
-  ncoucs_.bcouzz  = 0.0;			// BCOUZZ=0.
-  ncoucs_.bcouhh  = 0.0;			// BCOUHH=0.
-  ncoucs_.bcouds  = 0.0;			// BCOUDS=0.
-  ncoucs_.bcousd  = 0.0;			// BCOUSD=0.
-  ncoucs_.bcoudz  = 0.0;			// BCOUDZ=0.
-  ncoucs_.bcouzd  = 0.0;			// BCOUZD=0.
-  ncoucs_.bcoudi  = 0.0;			// BCOUDI=0.
-  ncoucs_.bcoudv  = 0.0;			// BCOUDV=0.
-  ncoucs_.bcouvd  = 0.0;			// BCOUVD=0.
-  ncoucs_.bcoucc  = 0.0;			// BCOUCC=0.
+  bufues_.bnnvv   = 0.001;                      // BNNVV=0.001
+  bufues_.bnnss   = 0.001;                      // BNNSS=0.001
+  bufues_.bnnsv   = 0.001;                      // BNNSV=0.001
+  bufues_.bnnvs   = 0.001;                      // BNNVS=0.001
+  bufues_.bnncc   = 0.001;                      // BNNCC=0.001
+  bufues_.bnndv   = 0.001;                      // BNNDV=0.001
+  bufues_.bnnvd   = 0.001;                      // BNNVD=0.001
+  bufues_.bnnds   = 0.001;                      // BNNDS=0.001
+  bufues_.bnnsd   = 0.001;                      // BNNSD=0.001
+  bufues_.bnnhh   = 0.001;                      // BNNHH=0.001
+  bufues_.bnnzz   = 0.001;                      // BNNZZ=0.001
+  bufues_.bnndi   = 0.001;                      // BNNDI=0.001
+  bufues_.bnnzd   = 0.001;                      // BNNZD=0.001
+  bufues_.bnndz   = 0.001;                      // BNNDZ=0.001
+  bufues_.bptvv   = 0.0;                        // BPTVV=0.
+  bufues_.bptss   = 0.0;                        // BPTSS=0.
+  bufues_.bptsv   = 0.0;                        // BPTSV=0.
+  bufues_.bptvs   = 0.0;                        // BPTVS=0.
+  bufues_.bptcc   = 0.0;                        // BPTCC=0.
+  bufues_.bptdv   = 0.0;                        // BPTDV=0.
+  bufues_.bptvd   = 0.0;                        // BPTVD=0.
+  bufues_.bptds   = 0.0;                        // BPTDS=0.
+  bufues_.bptsd   = 0.0;                        // BPTSD=0.
+  bufues_.bpthh   = 0.0;                        // BPTHH=0.
+  bufues_.bptzz   = 0.0;                        // BPTZZ=0.
+  bufues_.bptdi   = 0.0;                        // BPTDI=0.
+  bufues_.bptzd   = 0.0;                        // BPTZD=0.
+  bufues_.bptdz   = 0.0;                        // BPTDZ=0.
+  bufues_.beevv   = 0.0;                        // BEEVV=0.
+  bufues_.beess   = 0.0;                        // BEESS=0.
+  bufues_.beesv   = 0.0;                        // BEESV=0.
+  bufues_.beevs   = 0.0;                        // BEEVS=0.
+  bufues_.beecc   = 0.0;                        // BEECC=0.
+  bufues_.beedv   = 0.0;                        // BEEDV=0.
+  bufues_.beevd   = 0.0;                        // BEEVD=0.
+  bufues_.beeds   = 0.0;                        // BEEDS=0.
+  bufues_.beesd   = 0.0;                        // BEESD=0.
+  bufues_.beehh   = 0.0;                        // BEEHH=0.
+  bufues_.beezz   = 0.0;                        // BEEZZ=0.
+  bufues_.beedi   = 0.0;                        // BEEDI=0.
+  bufues_.beezd   = 0.0;                        // BEEZD=0.
+  bufues_.beedz   = 0.0;                        // BEEDZ=0.
+  ncoucs_.bcouvv  = 0.0;                        // BCOUVV=0.
+  ncoucs_.bcouss  = 0.0;                        // BCOUSS=0.
+  ncoucs_.bcousv  = 0.0;                        // BCOUSV=0.
+  ncoucs_.bcouvs  = 0.0;                        // BCOUVS=0.
+  ncoucs_.bcouzz  = 0.0;                        // BCOUZZ=0.
+  ncoucs_.bcouhh  = 0.0;                        // BCOUHH=0.
+  ncoucs_.bcouds  = 0.0;                        // BCOUDS=0.
+  ncoucs_.bcousd  = 0.0;                        // BCOUSD=0.
+  ncoucs_.bcoudz  = 0.0;                        // BCOUDZ=0.
+  ncoucs_.bcouzd  = 0.0;                        // BCOUZD=0.
+  ncoucs_.bcoudi  = 0.0;                        // BCOUDI=0.
+  ncoucs_.bcoudv  = 0.0;                        // BCOUDV=0.
+  ncoucs_.bcouvd  = 0.0;                        // BCOUVD=0.
+  ncoucs_.bcoucc  = 0.0;                        // BCOUCC=0.
 //
 //
 // Initialisation of
@@ -1856,12 +1859,12 @@ void G4DPMJET2_5Model::Initialise ()
 //   ACOUVV, ACOUSS, ... ACOUCC
 // now all moved to ApplyYourself member function.
 //
-//  droppt_.ipadis = LFALSE;			// IPADIS = .FALSE.
-//  droppt_.ihadvv = LFALSE;			// IHADVV = .FALSE.
-//  droppt_.ihadsv = LFALSE;			// IHADSV = .FALSE.
-//  droppt_.ihadvs = LFALSE;			// IHADVS = .FALSE.
+//  droppt_.ipadis = LFALSE;                        // IPADIS = .FALSE.
+//  droppt_.ihadvv = LFALSE;                        // IHADVV = .FALSE.
+//  droppt_.ihadsv = LFALSE;                        // IHADSV = .FALSE.
+//  droppt_.ihadvs = LFALSE;                        // IHADVS = .FALSE.
 
-  nucc_.ijtarg   = 1;				// IJTARG=1
+  nucc_.ijtarg   = 1;                               // IJTARG=1
 
 //
 //
@@ -1870,17 +1873,17 @@ void G4DPMJET2_5Model::Initialise ()
 //
 //  i = 1;
 //  G4int idummy;
-//  distr_ (&i,&nucc_.ijproj,&ppn,&idummy);	// CALL DISTR( 1,IJPROJ,PPN,IDUMMY )
+//  distr_ (&i,&nucc_.ijproj,&ppn,&idummy);        // CALL DISTR( 1,IJPROJ,PPN,IDUMMY )
   if (pomtyp_.ipim == 2) {prblm2_ (&user2_.cmener);}
 //
 //
 // Initialise hard scattering & transverse momentum for soft scattering
 //
   i = 0;
-  jtdtu_ (&i);					// CALL JTDTU( 0 )
+  jtdtu_ (&i);                                     // CALL JTDTU( 0 )
   i = 0;
   G4double pt;
-  samppt_ (&i,&pt);				// CALL SAMPPT(0,PT)
+  samppt_ (&i,&pt);                                // CALL SAMPPT(0,PT)
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

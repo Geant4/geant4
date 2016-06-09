@@ -23,18 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/include/side.hh
+/// \brief Definition of the side class
+//
 #ifndef side_h
 #define side_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              side.hh
 //
-// Version:		1.0
-// Date:		09/03/00
-// Author:		P R Truscott, F Lei
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/96/NL/JG Work Order No. 3
+// Version:                1.0
+// Date:                09/03/00
+// Author:                P R Truscott, F Lei
+// Organisation:        DERA UK
+// Customer:                ESA/ESTEC, NOORDWIJK
+// Contract:                12115/96/NL/JG Work Order No. 3
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

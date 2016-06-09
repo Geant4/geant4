@@ -16,6 +16,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th June 2012  John Allison  (exam-ext-vis-UVA-V09-05-04)
+- Improved README.
+- Added .README for doxygen.
+
+10th April 2012  John Allison  (exam-ext-vis-UVA-V09-05-03)
+- Fixed run1/2.mac and userVisAction.out.
+
+9th April 2012  John Allison  (exam-ext-vis-UVA-V09-05-02)
+- userVisAction.cc: Corrected vis user action extent.
+- README: Improved.
+
+7th April 2012  John Allison  (exam-ext-vis-UVA-V09-05-01)
+- Changed to using B1 as basis.
+- vis.mac: /vis/scene/add/scale: Removed parameters; no uses default,
+  which is to calculate length of axes automatically.
+
+21st March 2012  John Allison  (exam-ext-vis-UVA-V09-05-00)
+- Added README.
+
 11th November 2011  John Allison  (exam-ext-vis-UVA-V09-04-00)
 - Changed to new G4Exception.
 

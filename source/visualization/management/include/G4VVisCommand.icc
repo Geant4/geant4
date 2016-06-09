@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.icc,v 1.5 2006-06-29 21:28:20 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
-
-inline G4VVisCommand::G4VVisCommand () {}
 
 inline void G4VVisCommand::SetVisManager (G4VisManager* pVisManager) {
   fpVisManager = pVisManager;

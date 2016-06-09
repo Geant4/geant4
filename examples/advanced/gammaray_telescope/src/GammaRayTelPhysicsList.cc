@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPhysicsList.cc,v 1.9 2010-11-12 08:28:54 flongo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
+#include <iomanip>   
 
 #include "GammaRayTelPhysicsList.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -42,7 +43,6 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip>   
 
 #include "GammaRayTelParticles.hh"
 #include "GammaRayTelGeneralPhysics.hh"

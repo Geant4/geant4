@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/include/B02CellScorer.hh
+/// \brief Definition of the B02CellScorer class
 //
-// $Id: B02CellScorer.hh,v 1.3 2006-06-29 16:34:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class B02CellScorer
@@ -54,11 +56,11 @@ public:
   B02CellScorer(AIDA::IHistogram1D *h);
   virtual ~B02CellScorer();
   virtual void ScoreAnExitingStep(const G4Step &aStep, 
-				  const G4GeometryCell &gCell);
+                                  const G4GeometryCell &gCell);
   virtual void ScoreAnEnteringStep(const G4Step &aStep, 
-				   const G4GeometryCell &gCell);
+                                   const G4GeometryCell &gCell);
   virtual void ScoreAnInVolumeStep(const G4Step &aStep, 
-				   const G4GeometryCell &gCell);
+                                   const G4GeometryCell &gCell);
 
   G4CellScorer &GetG4CellScorer(){
     return fG4CellScorer;

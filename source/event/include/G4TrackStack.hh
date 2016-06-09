@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.8 2009-09-10 21:31:41 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -36,49 +35,51 @@
 #define G4TrackStack_h 1
 
 #include "G4StackedTrack.hh"
-#include "globals.hh"
+#include "G4Types.hh"
+#include <vector>
 
 class G4SmartTrackStack;
 
 // class description:
 //
-//  This is a stack class used by G4StackManager. This class object
+// This is a stack class used by G4StackManager. This class object
 // stores G4StackedTrack class objects in the form of bi-directional
 // linked list.
 
-class G4TrackStack 
+class G4TrackStack : public std::vector<G4StackedTrack>
 {
-  public:
-      G4TrackStack();
-      ~G4TrackStack();
-
-  private:
-      const G4TrackStack & operator=
-                          (const G4TrackStack &right);
-      G4int operator==(const G4TrackStack &right) const;
-      G4int operator!=(const G4TrackStack &right) const;
-
-  public:
-      void PushToStack(G4StackedTrack * aStackedTrack);
-      G4StackedTrack * PopFromStack();
-      void GrabFromStack(G4StackedTrack * aStackedTrack);
-      void clear();
-      void TransferTo(G4TrackStack * aStack);
-      void TransferTo(G4SmartTrackStack * aStack);
-
-  private:
-      G4int n_stackedTrack;
-      G4StackedTrack * firstStackedTrack;
-      G4StackedTrack * lastStackedTrack;
-      G4int maxNTracks;
-
-  public:
-      inline G4int GetNTrack() const
-      { return n_stackedTrack; }
-      inline G4int GetMaxNTrack() const
-      { return maxNTracks; }
-
+public:
+	G4TrackStack() : safetyValve1(0), safetyValve2(0), nstick(0) {}
+  G4TrackStack(size_t n) : safetyValve1(4*n/5), safetyValve2(4*n/5-100), nstick(100) { reserve(n);}
+  ~G4TrackStack();
+  
+private:
+	const G4TrackStack & operator=(const G4TrackStack &right);
+	G4int operator==(const G4TrackStack &right) const;
+	G4int operator!=(const G4TrackStack &right) const;
+  
+public:
+	void PushToStack(const G4StackedTrack& aStackedTrack) { push_back(aStackedTrack); }
+	G4StackedTrack PopFromStack() { G4StackedTrack st = back(); pop_back(); return st; }
+	void TransferTo(G4TrackStack* aStack);
+	void TransferTo(G4SmartTrackStack* aStack);
+  
+        void clearAndDestroy();
+private:
+	G4int safetyValve1;
+  G4int safetyValve2;
+	G4int nstick;
+  
+public:
+	G4int GetNTrack() const { return size(); }
+	G4int GetMaxNTrack() const { return max_size(); }
+  inline G4int GetSafetyValve1() const { return safetyValve1; }
+	inline G4int GetSafetyValve2() const { return safetyValve2; }
+	inline G4int GetNStick() const { return nstick; }
+  
+	G4double getTotalEnergy(void) const;
+	void SetSafetyValve2(int x) { safetyValve2 = x  < 0 ? 0 : x; }
+  
 };
 
 #endif
-

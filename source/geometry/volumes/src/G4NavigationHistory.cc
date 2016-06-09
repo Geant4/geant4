@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.17 2010-12-15 17:05:06 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4NavigationHistory Implementation

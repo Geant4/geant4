@@ -14,8 +14,26 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+14 November 2012 - Dennis Wright (hadr-emd-V09-05-03)
+-----------------------------------------------------
+- G4EMDissociation.hh : add protoype for copy ctor
+
+ 4 October 2012 - Dennis Wright (hadr-emd-V09-05-02)
+----------------------------------------------------
+- implemented user-reported bug fix (#1339) of double deletion of cross section
+  in dtor of G4EMDissociation
+
+25 Sep 2012 - Gabriele Cosmo (hadr-emd-V09-05-01)
+-------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+12 Jun 2012 - Dennis Wright (hadr-emd-V09-05-00)
+------------------------------------------------
+- Replaced shadowed variable m2 in G4EMDissociation.cc.
+
 27 Sep 2011 - Dennis Wright (hadr-emd-V09-04-00)
 ------------------------------------------------
-Migrate to integer Z and A.  Files affected:
-  G4EMDissociation.cc
+- Migrated to integer Z and A.
+  Files affected: G4EMDissociation.cc.
 

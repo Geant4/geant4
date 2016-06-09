@@ -34,7 +34,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
@@ -92,7 +91,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
-        G4emlowenergy
         G4emutils
         G4geometrymng
         G4globman

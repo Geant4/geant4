@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeDivision.cc,v 1.7 2010-10-13 07:56:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrVolumeDivision
@@ -35,6 +34,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrVolumeDivision.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrVolumeMgr.hh"
 #include "G4tgrPlace.hh"

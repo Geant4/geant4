@@ -38,11 +38,13 @@
 #include "globals.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 // Constructor
 
 G4StopDummyDeexcitation::G4StopDummyDeexcitation()  
 {
+  G4HadronicDeprecate("G4StopDummyDeexcitation");
   _products = 0;
 }
 

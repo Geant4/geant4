@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.9 2010-10-26 10:35:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +49,8 @@
 
 #ifndef G4PairProductionRelModel_h
 #define G4PairProductionRelModel_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
@@ -279,7 +280,7 @@ inline G4double G4PairProductionRelModel::DeltaMax() const
 
 inline G4double G4PairProductionRelModel::DeltaMin(G4double k) const
 {
-  return 4.*136./z13*(electron_mass_c2/k);
+  return 4.*136./z13*(CLHEP::electron_mass_c2/k);
 }
 
 

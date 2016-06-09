@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.3 2006-06-29 16:55:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/StepMax.hh
+/// \brief Definition of the StepMax class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,23 +50,23 @@ class StepMax : public G4VDiscreteProcess
      StepMax(const G4String& processName ="UserStepMax");
     ~StepMax();
 
-     G4bool   IsApplicable(const G4ParticleDefinition&);    
+     virtual G4bool   IsApplicable(const G4ParticleDefinition&);    
      void     SetMaxStep(G4double);
-     G4double GetMaxStep() {return MaxChargedStep;};
+     G4double GetMaxStep() {return fMaxChargedStep;};
      
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                     G4double   previousStepSize,
-			                     G4ForceCondition* condition);
+     virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                             G4double   previousStepSize,
+                                             G4ForceCondition* condition);
 
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+     virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+     virtual G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
        {return 0.;};     // it is not needed here !
 
   private:
 
-     G4double    MaxChargedStep;
-     StepMaxMessenger* pMess;
+     G4double    fMaxChargedStep;
+     StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

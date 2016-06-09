@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLevelDensityParameter.cc,v 1.6 2009-03-04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

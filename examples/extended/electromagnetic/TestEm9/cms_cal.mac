@@ -18,11 +18,6 @@
 /testem/phys/MuonCuts  10.0 mm
 /testem/stepMax          10 mm
 #
-#/process/eLoss/StepFunction 0.2 1 mm
-#/process/eLoss/preciseRange true
-#
-#/testem/tracking/stepMax 1 mum
-#
 #/random/setSavingFlag true
 #/random/resetEngineFrom first.rndm
 #

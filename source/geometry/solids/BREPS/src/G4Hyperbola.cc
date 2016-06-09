@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +34,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Hyperbola.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4CurvePoint.hh"
 #include "G4GeometryTolerance.hh"
 

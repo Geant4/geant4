@@ -1,5 +1,5 @@
 #================================================
-#     Macro file for hadr00
+#     Macro file for Hadr00
 #     14.04.2009 Ivanchneko
 #================================================
 /control/verbose 1
@@ -15,7 +15,7 @@
 #
 /gun/particle  neutron
 /gun/energy 100. MeV
-/testhadr/HistoName  nC
+/testhadr/histo/fileName  nC
 /testhadr/particle   neutron
 /testhadr/verbose 1
 /process/eLoss/verbose 0

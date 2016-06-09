@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.17 2010-11-23 15:14:51 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -441,7 +440,7 @@ void G4BezierSurface::ClipSurface()
     for(G4int l = 0; l < col_size - 1; l++)
     {
       ch_tmp=ch_ptr->GetNextHull();
-      for(G4int m = l+1; m < col_size; m++)
+      for(G4int q = l+1; q < col_size; q++)
       {
 	register G4double d, param1, param2;
 	param1 = ch_ptr->GetParam();

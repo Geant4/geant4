@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.4 2010-11-11 22:32:22 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNAScreenedRutherfordElasticModel_h
 #define G4DNAScreenedRutherfordElasticModel_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
@@ -67,8 +68,9 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  // Water density table
+  const std::vector<G4double>* fpWaterDensity;
 
-  G4Material* nistwater;
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
   G4double intermediateEnergyLimit;
@@ -106,7 +108,7 @@ private:
 inline void G4DNAScreenedRutherfordElasticModel::SetKillBelowThreshold (G4double threshold) 
 { 
     killBelowEnergy = threshold; 
-    if (threshold < 9*eV)
+    if (threshold < 9*CLHEP::eV)
      G4Exception ("*** WARNING : the G4DNAScreenedRutherfordElasticModel class is not validated below 9 eV !","",JustWarning,"") ;   
 }		 
 

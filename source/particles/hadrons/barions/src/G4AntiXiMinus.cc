@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiMinus.cc,v 1.15 2010-10-01 02:41:43 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +37,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiXiMinus.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.32 2010-06-23 13:29:23 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -35,7 +34,10 @@
 
 #include "G4OpenGLStoredQtViewer.hh"
 
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
+
+#include <qapplication.h>
 
 G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 (G4OpenGLStoredSceneHandler& sceneHandler,
@@ -50,6 +52,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
   fIsRepainting = false;
+
+  resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -67,7 +71,6 @@ void G4OpenGLStoredQtViewer::Initialise() {
 #endif
   fReadyToPaint = false;
   CreateMainWindow (this,QString(GetName()));
-  //  CreateFontLists ();
 
   glDrawBuffer (GL_BACK);
 
@@ -88,24 +91,87 @@ void G4OpenGLStoredQtViewer::initializeGL () {
     fHasToRepaint =true;
   }
 
+   // Set the component visible
+   setVisible(true) ;
+
+   // and update it immediatly before wait for SessionStart() (batch mode)
+  QCoreApplication::sendPostedEvents () ;
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::InitialiseGL  END\n");
 #endif
 }
 
-// Until tree is fixed use this
-G4bool G4OpenGLStoredQtViewer::POSelected(size_t)
+G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 {
-  return true;
+  // Identical to G4OpenGLStoredViewer::CompareForKernelVisit except
+  // for checking of VisAttributesModifiers, because
+  // G4OpenGLStoredQtViewer keeps track of its own touchable
+  // modifiers (fTreeItemModels, etc.).
+  if (
+      (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
+      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
+      (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
+      (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+      (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+      (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.IsSection ()          != fVP.IsSection ())          ||
+      // Section (DCUT) implemented locally.  But still need to visit
+      // kernel if status changes so that back plane culling can be
+      // switched.
+      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      // Cutaways implemented locally.  But still need to visit kernel
+      // if status changes so that back plane culling can be switched.
+      (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
+      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetDefaultVisAttributes()->GetColour() !=
+       fVP.GetDefaultVisAttributes()->GetColour())                ||
+      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
+       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.IsPicking ()          != fVP.IsPicking ())
+//      ||
+//      (lastVP.GetVisAttributesModifiers().size() !=
+//       fVP.GetVisAttributesModifiers().size())
+      )
+    return true;
+
+  if (lastVP.IsDensityCulling () &&
+      (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
+    return true;
+
+  /**************************************************************
+   Section (DCUT) implemented locally.  No need to visit kernel if
+   section plane itself changes.
+   if (lastVP.IsSection () &&
+   (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
+   return true;
+   ***************************************************************/
+
+  /**************************************************************
+   Cutaways implemented locally.  No need to visit kernel if cutaway
+   planes themselves change.
+   if (lastVP.IsCutaway ()) {
+   if (lastVP.GetCutawayPlanes ().size () !=
+   fVP.GetCutawayPlanes ().size ()) return true;
+   for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)
+   if (lastVP.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+   return true;
+   }
+   ***************************************************************/
+
+  if (lastVP.IsExplode () &&
+      (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    return true;
+
+  return false;
 }
 
-/***
-// When tree is fixed use this
 G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
 {
   return isTouchableVisible(POListIndex);
 }
-***/
 
 G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
 {
@@ -122,7 +188,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",getWinWidth(), getWinHeight());
 #endif
   makeCurrent();
-  G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
+  G4ViewParameters::DrawingStyle dstyle = GetViewParameters().GetDrawingStyle();
 
   //Make sure current viewer is attached and clean...
 
@@ -137,7 +203,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   ProcessView ();
    
 
-  if(style!=G4ViewParameters::hlr &&
+  if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLStoredQtViewer::ComputeView DANS LE IF\n");
@@ -216,6 +282,8 @@ void G4OpenGLStoredQtViewer::resizeGL(
  
 void G4OpenGLStoredQtViewer::paintGL()
 {
+  updateToolbarAndMouseContextMenu();
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL \n");
 #endif
@@ -261,7 +329,7 @@ void G4OpenGLStoredQtViewer::paintGL()
   fHasToRepaint = false;
 
   // update the view component tree
-  displayViewComponentTree();
+  displaySceneTreeComponent();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
@@ -339,16 +407,12 @@ void G4OpenGLStoredQtViewer::ShowView (
   glFlush();
 
 }
-void G4OpenGLStoredQtViewer::DrawText(const char * ,double /* x */,double /* y */,double /* z */, double /* size */){
-  static G4bool warned = false;
-  if (!warned) {
-    warned = true;
-    G4cerr <<
-      "Text is not implemented in Qt Stored mode, please use Immediate"
-      "\n  mode if you want to see it."
-	   << G4endl;
-  }
-}
 
+
+void G4OpenGLStoredQtViewer::DisplayTimePOColourModification (
+G4Colour& c,
+size_t poIndex) {
+  c = getColorForPoIndex(poIndex);
+}
 
 #endif

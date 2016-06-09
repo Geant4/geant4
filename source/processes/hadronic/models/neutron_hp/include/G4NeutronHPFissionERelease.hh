@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.12 2007-06-08 22:39:50 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 070606 fix for Valgrind by T. Koi
 //
 #ifndef G4NeutronHPFissionERelease_h
 #define G4NeutronHPFissionERelease_h 1
 
+#include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
 
 class G4NeutronHPFissionERelease
 {
@@ -67,23 +68,23 @@ class G4NeutronHPFissionERelease
               >>reducedTotalEnergy
               >>totalEnergy;
             
-    fragmentKinetic*=eV;
-    promptNeutronKinetic*=eV;
-    delayedNeutronKinetic*=eV;
-    promptGammaEnergy*=eV;
-    delayedGammaEnergy*=eV;
-    delayedBetaEnergy*=eV;
-    neutrinoEnergy*=eV;
-    reducedTotalEnergy*=eV;
-    totalEnergy*=eV;
+    fragmentKinetic*=CLHEP::eV;
+    promptNeutronKinetic*=CLHEP::eV;
+    delayedNeutronKinetic*=CLHEP::eV;
+    promptGammaEnergy*=CLHEP::eV;
+    delayedGammaEnergy*=CLHEP::eV;
+    delayedBetaEnergy*=CLHEP::eV;
+    neutrinoEnergy*=CLHEP::eV;
+    reducedTotalEnergy*=CLHEP::eV;
+    totalEnergy*=CLHEP::eV;
   }
   
   inline G4double GetTotalEnergy(G4double deltaNNeu, G4double anEnergy) 
   {
      G4double result, delta, energy;
-     energy = anEnergy/eV;
+     energy = anEnergy/CLHEP::eV;
      delta = -(1.057*energy - 8.07*deltaNNeu);
-     result = totalEnergy - delta*eV;
+     result = totalEnergy - delta*CLHEP::eV;
      return result;
   }
   inline G4double GetFragmentKinetic() 
@@ -93,9 +94,9 @@ class G4NeutronHPFissionERelease
   inline G4double GetPromptNeutronKinetic(G4double deltaNNeu, G4double anEnergy)
   {
      G4double result, delta, energy;
-     energy = anEnergy/eV;
+     energy = anEnergy/CLHEP::eV;
      delta = -(1.307*energy - 8.07*deltaNNeu);
-     result = totalEnergy - delta*eV;
+     result = totalEnergy - delta*CLHEP::eV;
      return result;
   }
   inline G4double GetDelayedNeutronKinetic()

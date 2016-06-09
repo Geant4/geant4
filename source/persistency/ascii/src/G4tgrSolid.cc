@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrSolid.cc,v 1.7 2010-10-13 07:56:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrSolid
@@ -34,13 +33,15 @@
 // - Created.                                 P.Arce, CIEMAT (November 2007)
 // -------------------------------------------------------------------------
 
+#include <map>
+#include <set>
+
 #include "G4tgrSolid.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrVolumeMgr.hh"
-
-#include <map>
-#include <set>
 
 // -------------------------------------------------------------------------
 G4tgrSolid::G4tgrSolid()
@@ -146,8 +147,8 @@ void G4tgrSolid::FillSolidParams( const std::vector<G4String>& wl )
        = angleParams.find(solidType);
     if( ite != angleParams.end() )
     {
-      std::set<G4int> apar = (*ite).second;
-      if( apar.find(ii) != apar.end() )
+      std::set<G4int> apar2 = (*ite).second;
+      if( apar2.find(ii) != apar2.end() )
       {
         isAngle = 1;
         vd->push_back( G4tgrUtils::GetDouble( wl[3+ii], deg ));

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.14 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -77,6 +76,8 @@
 // --------------------------------------------------------------------
 #ifndef G4EllipticalCone_HH
 #define G4EllipticalCone_HH
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
 

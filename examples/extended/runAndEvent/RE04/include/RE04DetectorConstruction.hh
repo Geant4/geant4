@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/include/RE04DetectorConstruction.hh
+/// \brief Definition of the RE04DetectorConstruction class
+//
+// $Id: $
+//
 #ifndef RE04DetectorConstruction_h
 #define RE04DetectorConstruction_h 1
 
@@ -35,6 +39,14 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Region;
 
+//
+/// User detector construction class
+///
+/// - void DefineMaterials()
+///     defines materials
+/// - void SetupGeometry()
+///     creates the world volume and detector geometries
+//
 class RE04DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
@@ -49,11 +61,11 @@ class RE04DetectorConstruction : public G4VUserDetectorConstruction
     void SetupGeometry();
 
   private:
-    G4Material* air;
-    G4Material* water;
-    G4Material* Pb;
-    G4VPhysicalVolume* worldPhys;
-    G4bool constructed;
+    G4Material* fAir;
+    G4Material* fWater;
+    G4Material* fPb;
+    G4VPhysicalVolume* fWorldPhys;
+    G4bool fConstructed;
 
 };
 

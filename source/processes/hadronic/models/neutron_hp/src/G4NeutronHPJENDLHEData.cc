@@ -31,6 +31,7 @@
 // 15-Nov-06 First Implementation is done by T. Koi (SLAC/SCCS)
 
 #include "G4NeutronHPJENDLHEData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
@@ -62,6 +63,7 @@ G4NeutronHPJENDLHEData::G4NeutronHPJENDLHEData()
 
 
 G4NeutronHPJENDLHEData::G4NeutronHPJENDLHEData( G4String reaction , G4ParticleDefinition* pd )
+:G4VCrossSectionDataSet( "JENDLHE"+reaction+"CrossSection" )
 {
    reactionName = reaction;
    BuildPhysicsTable( *pd );

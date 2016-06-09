@@ -49,6 +49,10 @@ class G4ChipsKaonBuilder
   public: 
     G4ChipsKaonBuilder(G4int verb=0);
     ~G4ChipsKaonBuilder();
+
+  private:
+    G4ChipsKaonBuilder(G4ChipsKaonBuilder &);
+    G4ChipsKaonBuilder& operator =(G4ChipsKaonBuilder &);
     
   public: 
     void Build();

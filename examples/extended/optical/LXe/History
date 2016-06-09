@@ -15,6 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 November 2012 Gunter Folger    (LXe-V09-05-02)
+- reduce size of LXe.out, and remove tracking/verbose 1, responsible for the 
+   size of the output
+
+14 November 2012 Ivana Hrivnacova (LXe-V09-05-01)
+- In vis.mac: OGLIX replaced with OGL
+
+18 September 2012 Ivana Hrivnacova
+- RecorderBase renamed to LXeRecorderBase (by P. Gumplinger)
+  See also ../History for general changes
+
+20 June 2012 Peter Gumplinger (LXe-V09-05-00)
+- add debugging which will help spot when a wrong normal may have been returned
+
 08 November 2011 Peter Gumplinger (LXe-V09-04-00)
 - exercise the optics_engine in LXe.in
 

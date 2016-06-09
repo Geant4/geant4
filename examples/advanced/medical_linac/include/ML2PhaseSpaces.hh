@@ -62,12 +62,15 @@ public:
 	~CML2PhaseSpaces(void);
 	bool createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4ThreeVector centre, G4ThreeVector halfSize);
 	bool createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4VPhysicalVolume  *PVWorld, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, G4ThreeVector centre, G4ThreeVector halfSize, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition);
-	G4int getCML2SensDetNParticle(){return this->sensDetParticle->getTotalNumberOfParticles();};
-	inline CML2SDWithParticle* getCML2SensitiveDetectorParticle(){return this->sensDetParticle->getCML2SensitiveDetectorParticle();};
-	inline void save(){this->sensDetParticle->save();}
+	G4int getCML2SensDetNParticle(){return sensDetParticle->getTotalNumberOfParticles();}
+	inline CML2SDWithParticle* getCML2SensitiveDetectorParticle(){return sensDetParticle->getCML2SensitiveDetectorParticle();}
+	inline void save(){sensDetParticle->save();}
 private:
 	CML2SDWithParticle *sensDetParticle;
 	G4int nParticles;
+
+        G4VPhysicalVolume *phVol;
+
 };
 
 

@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04PrimaryGeneratorMessenger.hh
+/// \brief Definition of the F04PrimaryGeneratorMessenger class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04PrimaryGeneratorMessenger_h
 #define F04PrimaryGeneratorMessenger_h 1
 
@@ -46,18 +43,18 @@ class F04PrimaryGeneratorMessenger : public G4UImessenger
   public:
 
     F04PrimaryGeneratorMessenger(F04PrimaryGeneratorAction*);
-   ~F04PrimaryGeneratorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    virtual ~F04PrimaryGeneratorMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
   private:
 
-    F04PrimaryGeneratorAction* Action; 
+    F04PrimaryGeneratorAction* fAction;
 
-    G4UIcmdWithAString*        RndmCmd;
-    G4UIcmdWithADoubleAndUnit* setxvertexCmd;
-    G4UIcmdWithADoubleAndUnit* setyvertexCmd;
-    G4UIcmdWithADoubleAndUnit* setzvertexCmd;
+    G4UIcmdWithAString*        fRndmCmd;
+    G4UIcmdWithADoubleAndUnit* fSetXvertexCmd;
+    G4UIcmdWithADoubleAndUnit* fSetYvertexCmd;
+    G4UIcmdWithADoubleAndUnit* fSetZvertexCmd;
 };
 
 #endif

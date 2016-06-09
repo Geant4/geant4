@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.30 2010-11-24 11:55:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by V. Lara
 //
@@ -43,8 +42,12 @@
 //                      - emission and transition classes created at initialisation
 //                      - options are set at initialisation
 //                      - do not use copy-constructors for G4Fragment  
+// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the 
+//                         constructor
 
 #include "G4PreCompoundModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PreCompoundEmission.hh"
 #include "G4PreCompoundTransitions.hh"
 #include "G4GNASHTransitions.hh"
@@ -60,12 +63,13 @@
 #include "G4ParticleTable.hh"
 #include "G4LorentzVector.hh"
 
-G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value) 
-  : G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
-    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true),
-    maxZ(3), maxA(5) 
+G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
+  : G4VPreCompoundModel(ptr,"PRECO"), useHETCEmission(false), 
+    useGNASHTransition(false), OPTxs(3), useSICB(false), 
+    useNGB(false), useSCO(false), useCEMtr(true), maxZ(3), maxA(5) 
 				      //maxZ(9), maxA(17)
 {
+  if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
   theParameters = G4PreCompoundParameters::GetAddress();
 
   theEmission = new G4PreCompoundEmission();
@@ -87,8 +91,31 @@ G4PreCompoundModel::~G4PreCompoundModel()
 {
   delete theEmission;
   delete theTransition;
+  delete GetExcitationHandler();
 }
 
+void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
+{
+	outFile << "The GEANT4 precompound model is considered as an extension of the\n"
+		<<	"hadron kinetic model. It gives a possibility to extend the low energy range\n"
+		<<	"of the hadron kinetic model for nucleon-nucleus inelastic collision and it \n"
+		<<	"provides a ”smooth” transition from kinetic stage of reaction described by the\n"
+		<<	"hadron kinetic model to the equilibrium stage of reaction described by the\n"
+		<<	"equilibrium deexcitation models.\n"
+		<<	"The initial information for calculation of pre-compound nuclear stage\n"
+		<<	"consists of the atomic mass number A, charge Z of residual nucleus, its\n"
+		<<	"four momentum P0 , excitation energy U and number of excitons n, which equals\n"
+		<<	"the sum of the number of particles p (from them p_Z are charged) and the number of\n"
+		<<	"holes h.\n"
+		<<	"At the preequilibrium stage of reaction, we follow the exciton model approach in ref. [1],\n"
+		<<	"taking into account the competition among all possible nuclear transitions\n"
+		<<	"with ∆n = +2, −2, 0 (which are deﬁned by their associated transition probabilities) and\n"
+		<<	"the emission of neutrons, protons, deutrons, thritium and helium nuclei (also defined by\n"
+		<<	"their associated emission  probabilities according to exciton model)\n"
+		<<	"\n"
+		<<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"
+		<< std::endl;
+}
 /////////////////////////////////////////////////////////////////////////////////////////
 
 G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
@@ -183,10 +210,10 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 
     theEmission->Initialize(aFragment);
     
-    G4double g = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
     
     G4int EquilibriumExcitonNumber = 
-      static_cast<G4int>(std::sqrt(2.0*g*aFragment.GetExcitationEnergy())+ 0.5);
+      G4lrint(std::sqrt(2*gg*aFragment.GetExcitationEnergy()));
     //   
     //    G4cout<<"Neq="<<EquilibriumExcitonNumber<<G4endl;
     //
@@ -343,7 +370,3 @@ void G4PreCompoundModel::UseCEMtr()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-

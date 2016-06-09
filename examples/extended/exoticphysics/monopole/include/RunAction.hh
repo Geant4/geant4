@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,62 +36,50 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-#include "QGSP.hh"
 
 class DetectorConstruction;
 class RunActionMessenger;
 class PrimaryGeneratorAction;
 class G4Run;
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
-} 
+class Histo;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
 public:
-  RunAction(DetectorConstruction* ,PrimaryGeneratorAction*);
+
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
-           
-  G4double GetBinLength() {return binLength;};
-  G4double GetOffsetX()   {return offsetX;} 
-  void     SetBinSize(G4double size);
-  void     FillHisto(G4int id, G4double x, G4double weight = 1.0);
+  void EndOfRunAction(const G4Run*);
 
-  void     SetVerbose(G4int verbose) {verboseLevel = verbose;}
-	void     SetHistoName(G4String name) {fname = name;}
-  void     SetHistoType(G4String type) {ftype = type;}
-  G4int    GetVerbose() {return verboseLevel;}
+  void FillHisto(G4int id, G4double x, G4double weight = 1.0);
+           
+  //  G4double GetBinLength() {return binLength;};
+  inline void SetBinSize(G4double size) { fBinLength =  size; }
+  inline G4double GetOffsetX()          { return fOffsetX;} 
+
+  inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose;}
+  inline G4int GetVerbose()             { return fVerboseLevel;}
     
-  void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
+  inline void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x; };
                    
 private:  
-  void bookHisto();
-  void saveHisto();
-    
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* kinematic;
 
-  RunActionMessenger*	  runActionMessenger;
+  Histo*                  fHisto;    
+  DetectorConstruction*   fDetector;
+  PrimaryGeneratorAction* fKinematic;
+  RunActionMessenger*     fRunActionMessenger;
 
-  G4int                   verboseLevel;
+  G4int                   fVerboseLevel;
 
-  G4double                binLength;
-  G4double                offsetX;
-  G4double                projRange, projRange2;
-	G4String 								ftype, fname;
+  G4double                fBinLength;
+  G4double                fOffsetX;
+  G4double                fProjRange; 
+  G4double                fProjRange2;
 
-             
-  AIDA::IAnalysisFactory* af;  
-  AIDA::ITree*            tree;
-  AIDA::IHistogram1D*     histo[5];        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

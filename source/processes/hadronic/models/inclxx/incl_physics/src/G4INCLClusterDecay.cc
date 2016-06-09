@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,54 +39,88 @@
 /** \file G4INCLClusterDecay.cc
  * \brief Static class for carrying out cluster decays
  *
- * Created on: 6th July 2011
- *     Author: Davide Mancusi
+ * \date 6th July 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLClusterDecay.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLRandom.hh"
-//#include <cassert>
+// #include <cassert>
+#include <algorithm>
 
 namespace G4INCL {
 
   ParticleList ClusterDecay::decay(Cluster * const c) {
     ParticleList decayProducts;
     recursiveDecay(c, &decayProducts);
+
+    // Correctly update the particle type
+    if(c->getA()==1) {
+// assert(c->getZ()==1 || c->getZ()==0);
+      if(c->getZ()==1)
+        c->setType(Proton);
+      else
+        c->setType(Neutron);
+      c->setTableMass();
+    }
+
     return decayProducts;
   }
 
   void ClusterDecay::recursiveDecay(Cluster * const c, ParticleList *decayProducts) {
     const G4int Z = c->getZ();
     const G4int A = c->getA();
+// assert(c->getExcitationEnergy()>-1.e-5);
+    if(c->getExcitationEnergy()<0.)
+      c->setExcitationEnergy(0.);
 
-    ParticleTable::ClusterDecayType theDecayMode = ParticleTable::clusterDecayMode[Z][A];
+    if(Z<ParticleTable::clusterTableZSize && A<ParticleTable::clusterTableASize) {
+      ParticleTable::ClusterDecayType theDecayMode = ParticleTable::clusterDecayMode[Z][A];
 
-    switch(theDecayMode) {
-      default:
-        ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
-            << c->prG4int());
-      case ParticleTable::StableCluster:
-        // For stable clusters, just return
-        return;
-        break;
-      case ParticleTable::ProtonDecay:
-      case ParticleTable::NeutronDecay:
-      case ParticleTable::AlphaDecay:
-        // Two-body decays
-        twoBodyDecay(c, theDecayMode, decayProducts);
-        break;
-      case ParticleTable::TwoProtonDecay:
-      case ParticleTable::TwoNeutronDecay:
-        // Three-body decays
-        threeBodyDecay(c, theDecayMode, decayProducts);
-        break;
+      switch(theDecayMode) {
+        default:
+          ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
+              << c->print());
+        case ParticleTable::StableCluster:
+          // For stable clusters, just return
+          return;
+          break;
+        case ParticleTable::ProtonDecay:
+        case ParticleTable::NeutronDecay:
+        case ParticleTable::AlphaDecay:
+          // Two-body decays
+          twoBodyDecay(c, theDecayMode, decayProducts);
+          break;
+        case ParticleTable::TwoProtonDecay:
+        case ParticleTable::TwoNeutronDecay:
+          // Three-body decays
+          threeBodyDecay(c, theDecayMode, decayProducts);
+          break;
+        case ParticleTable::ProtonUnbound:
+        case ParticleTable::NeutronUnbound:
+          // Phase-space decays
+          phaseSpaceDecay(c, theDecayMode, decayProducts);
+          break;
+      }
+
+      // Calls itself recursively in case the produced remnant is still unstable.
+      // Sneaky, isn't it.
+      recursiveDecay(c,decayProducts);
+
+    } else {
+      // The cluster is too large for our decay-mode table. Decompose it only
+      // if Z==0 || Z==A.
+      DEBUG("Cluster is outside the decay-mode table." << c->print() << std::endl);
+      if(Z==A) {
+        DEBUG("Z==A, will decompose it in free protons." << std::endl);
+        phaseSpaceDecay(c, ParticleTable::ProtonUnbound, decayProducts);
+      } else if(Z==0) {
+        DEBUG("Z==0, will decompose it in free neutrons." << std::endl);
+        phaseSpaceDecay(c, ParticleTable::NeutronUnbound, decayProducts);
+      }
     }
-
-    // Calls itself recursively in case the produced remnant is still unstable.
-    // Sneaky, isn't it.
-    recursiveDecay(c,decayProducts);
   }
 
   void ClusterDecay::twoBodyDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts) {
@@ -107,33 +141,36 @@ namespace G4INCL {
         break;
       default:
         ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << std::endl
-            << c->prG4int());
+            << c->print());
         return;
     }
     decayParticle->makeParticipant();
     decayParticle->setNumberOfDecays(1);
     decayParticle->setPosition(c->getPosition());
     decayParticle->setEmissionTime(c->getEmissionTime());
+    decayParticle->setTableMass();
 
     // Save some variables of the mother cluster
-    const G4double motherMass = c->getMass();
+    G4double motherMass = c->getMass();
     const ThreeVector velocity = -c->boostVector();
 
     // Characteristics of the daughter particle
     const G4int daughterZ = c->getZ() - decayParticle->getZ();
     const G4int daughterA = c->getA() - decayParticle->getA();
-    const G4double daughterMass = ParticleTable::getMass(daughterA,daughterZ);
+    const G4double daughterMass = ParticleTable::getTableMass(daughterA,daughterZ);
 
     // The mother cluster becomes the daughter
     c->setZ(daughterZ);
     c->setA(daughterA);
     c->setMass(daughterMass);
-
-    const G4double decayMass = decayParticle->getMass();
-    // assert(motherMass > daughterMass + decayMass); // Q-value should be >0
+    c->setExcitationEnergy(0.);
 
     // Decay kinematics in the mother rest frame
-    const G4double pCM = KinematicsUtils::momentumInCM(motherMass, daughterMass, decayMass);
+    const G4double decayMass = decayParticle->getMass();
+// assert(motherMass-daughterMass-decayMass>-1.e-5); // Q-value should be >0
+    G4double pCM = 0.;
+    if(motherMass-daughterMass-decayMass>0.)
+      pCM = KinematicsUtils::momentumInCM(motherMass, daughterMass, decayMass);
     const ThreeVector momentum = Random::normVector(pCM);
     c->setMomentum(momentum);
     c->adjustEnergyFromMomentum();
@@ -166,13 +203,15 @@ namespace G4INCL {
         break;
       default:
         ERROR("Unrecognized cluster-decay mode in three-body decay: " << theDecayMode << std::endl
-            << c->prG4int());
+            << c->print());
         return;
     }
     decayParticle1->makeParticipant();
     decayParticle2->makeParticipant();
     decayParticle1->setNumberOfDecays(1);
     decayParticle2->setNumberOfDecays(1);
+    decayParticle1->setTableMass();
+    decayParticle2->setTableMass();
 
     // Save some variables of the mother cluster
     const G4double motherMass = c->getMass();
@@ -189,11 +228,13 @@ namespace G4INCL {
     const G4int daughterA = c->getA() - decayA;
     const G4double decayMass1 = decayParticle1->getMass();
     const G4double decayMass2 = decayParticle2->getMass();
-    const G4double daughterMass = ParticleTable::getMass(daughterA,daughterZ);
+    const G4double daughterMass = ParticleTable::getTableMass(daughterA,daughterZ);
 
     // Q-values
-    const G4double qValue = motherMass - daughterMass - decayMass1 - decayMass2;
-    // assert(qValue > 0.); // Q-value should be >0
+    G4double qValue = motherMass - daughterMass - decayMass1 - decayMass2;
+// assert(qValue > -1e-5); // Q-value should be >0
+    if(qValue<0.)
+      qValue=0.;
     const G4double qValueB = qValue * Random::shoot();
 
     // The decay particles behave as if they had more mass until the second
@@ -206,6 +247,7 @@ namespace G4INCL {
     c->setZ(daughterZ);
     c->setA(daughterA);
     c->setMass(daughterMass);
+    c->setExcitationEnergy(0.);
 
     // Decay kinematics in the mother rest frame
     const G4double pCMA = KinematicsUtils::momentumInCM(motherMass, daughterMass, decayMass);
@@ -238,5 +280,152 @@ namespace G4INCL {
     decayProducts->push_back(decayParticle2);
   }
 
+  void ClusterDecay::phaseSpaceDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts) {
+    const G4int theA = c->getA();
+    const G4int theZ = c->getZ();
+    const ThreeVector mom(0.0, 0.0, 0.0);
+    const ThreeVector pos = c->getPosition();
+
+    G4int theZStep;
+    ParticleType theEjectileType;
+    switch(theDecayMode) {
+      case ParticleTable::ProtonUnbound:
+        theZStep = 1;
+        theEjectileType = Proton;
+        break;
+      case ParticleTable::NeutronUnbound:
+        theZStep = 0;
+        theEjectileType = Neutron;
+        break;
+      default:
+        ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << std::endl
+            << c->print());
+        return;
+    }
+
+    // Find the daughter cluster (first cluster which is not
+    // proton/neutron-unbound, in the sense of the table)
+    G4int finalDaughterZ, finalDaughterA;
+    if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
+      finalDaughterZ=theZ;
+      finalDaughterA=theA;
+      while(ParticleTable::clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
+        finalDaughterA--;
+        finalDaughterZ -= theZStep;
+      }
+    } else {
+      finalDaughterA = 1;
+      if(theDecayMode==ParticleTable::ProtonUnbound)
+        finalDaughterZ = 1;
+      else
+        finalDaughterZ = 0;
+    }
+// assert(finalDaughterZ<=theZ && finalDaughterA<theA && finalDaughterA>0 && finalDaughterZ>=0);
+    const G4double finalDaughterMass = ParticleTable::getTableMass(finalDaughterA, finalDaughterZ);
+
+    // Compute the available decay energy
+    const G4int nSplits = theA-finalDaughterA;
+    const G4double ejectileMass = ParticleTable::getTableMass(1, theZStep);
+    // c->getMass() can possibly contain some excitation energy, too
+    G4double availableEnergy = c->getMass() - finalDaughterMass - nSplits*ejectileMass;
+// assert(availableEnergy>-1.e-5);
+    if(availableEnergy<0.)
+      availableEnergy=0.;
+
+    // Compute an estimate of the maximum event weight
+    G4double maximumWeight = 1.;
+    G4double eMax = finalDaughterMass + availableEnergy;
+    G4double eMin = finalDaughterMass - ejectileMass;
+    for(G4int iSplit=0; iSplit<nSplits; ++iSplit) {
+      eMax += ejectileMass;
+      eMin += ejectileMass;
+      maximumWeight *= KinematicsUtils::momentumInCM(eMax, eMin, ejectileMass);
+    }
+
+    // Sample decays until the weight cutoff is satisfied
+    G4double weight;
+    std::vector<G4double> theCMMomenta;
+    std::vector<G4double> invariantMasses;
+    G4int nTries=0;
+    /* Maximum number of trials dependent on nSplits. 50 trials seems to be
+     * sufficient for small nSplits. For nSplits>=5, maximumWeight is a gross
+     * overestimate of the actual maximum weight, leading to unreasonably high
+     * rejection rates. For these cases, we set nSplits=1000, although the sane
+     * thing to do would be to improve the importance sampling (maybe by
+     * parametrising maximumWeight?).
+     */
+    G4int maxTries;
+    if(nSplits<5)
+      maxTries=50;
+    else
+      maxTries=1000;
+    do {
+      if(nTries++>maxTries) {
+        WARN("Phase-space decay exceeded the maximum number of rejections (" << maxTries
+            << "). Z=" << theZ << ", A=" << theA << ", E*=" << c->getExcitationEnergy()
+            << ", availableEnergy=" << availableEnergy
+            << ", nSplits=" << nSplits
+            << std::endl);
+        break;
+      }
+
+      // Construct a sorted vector of random numbers
+      std::vector<G4double> randomNumbers;
+      for(G4int iSplit=0; iSplit<nSplits-1; ++iSplit)
+        randomNumbers.push_back(Random::shoot0());
+      std::sort(randomNumbers.begin(), randomNumbers.end());
+
+      // Divide the available decay energy in the right number of steps
+      invariantMasses.clear();
+      invariantMasses.push_back(finalDaughterMass);
+      for(G4int iSplit=0; iSplit<nSplits-1; ++iSplit)
+        invariantMasses.push_back(finalDaughterMass + (iSplit+1)*ejectileMass + randomNumbers.at(iSplit)*availableEnergy);
+      invariantMasses.push_back(c->getMass());
+
+      weight = 1.;
+      theCMMomenta.clear();
+      for(G4int iSplit=0; iSplit<nSplits; ++iSplit) {
+        G4double motherMass = invariantMasses.at(nSplits-iSplit);
+        const G4double daughterMass = invariantMasses.at(nSplits-iSplit-1);
+// assert(motherMass-daughterMass-ejectileMass>-1.e-5);
+        G4double pCM = 0.;
+        if(motherMass-daughterMass-ejectileMass>0.)
+          pCM = KinematicsUtils::momentumInCM(motherMass, daughterMass, ejectileMass);
+        theCMMomenta.push_back(pCM);
+        weight *= pCM;
+      }
+    } while(maximumWeight*Random::shoot()>weight);
+
+    for(G4int iSplit=0; iSplit<nSplits; ++iSplit) {
+      ThreeVector const velocity = -c->boostVector();
+
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+      const G4double motherMass = c->getMass();
+#endif
+      c->setA(c->getA() - 1);
+      c->setZ(c->getZ() - theZStep);
+      c->setMass(invariantMasses.at(nSplits-iSplit-1));
+
+      Particle *ejectile = new Particle(theEjectileType, mom, pos);
+      ejectile->setTableMass();
+
+// assert(motherMass-c->getMass()-ejectileMass>-1.e-5);
+      ThreeVector momentum;
+      momentum = Random::normVector(theCMMomenta.at(iSplit));
+      c->setMomentum(momentum);
+      c->adjustEnergyFromMomentum();
+      ejectile->setMomentum(-momentum);
+      ejectile->adjustEnergyFromMomentum();
+
+      // Boost to the lab frame
+      c->boost(velocity);
+      ejectile->boost(velocity);
+
+      // Add the decay particle to the list of decay products
+      decayProducts->push_back(ejectile);
+    }
+// assert(std::abs(c->getTableMass()-c->getMass())<1.e-3);
+    c->setExcitationEnergy(0.);
+  }
 }
 

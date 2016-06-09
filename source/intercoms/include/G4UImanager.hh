@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.22 2010-05-19 14:50:30 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UImanager_h
@@ -47,7 +46,7 @@ class G4UIaliasList;
 // class description:
 //
 //  This is a singlton class which controls the command manipulation
-// and the user interface(s). The constructor of this class MUST NOT 
+// and the user interface(s). The constructor of this class MUST NOT
 // invoked by the user.
 //
 
@@ -89,9 +88,9 @@ class G4UImanager : public G4VStateDependent
       // Execute a macro file more than once with an aliased variable which takes
       // a value in the candidate list.
       G4int ApplyCommand(const char * aCommand);
-      G4int ApplyCommand(G4String aCommand);
+      G4int ApplyCommand(const G4String& aCommand);
       //  A command (and parameter(s)) given
-      // by the method's argument will be applied. Zero will be returned in 
+      // by the method's argument will be applied. Zero will be returned in
       // case the command is successfully executed. Positive non-zero value
       // will be returned if the command couldn't be executed. The meaning of
       // this non-zero value is the following.
@@ -101,7 +100,7 @@ class G4UImanager : public G4VStateDependent
       void StoreHistory(const char* fileName = "G4history.macro");
       void StoreHistory(G4bool historySwitch,
                         const char* fileName = "G4history.macro");
-      //  The executed commands will be stored in the defined file. If 
+      //  The executed commands will be stored in the defined file. If
       // "historySwitch" is false, saving will be suspended.
       void ListCommands(const char* direc);
       //  All commands registored under the given directory will be listed to
@@ -120,14 +119,14 @@ class G4UImanager : public G4VStateDependent
       //  Generate HTML files for defined UI commands
 
 
-  public: 
+  public:
       void LoopS(const char* valueList);
       void ForeachS(const char* valueList);
       //  These methods are used by G4UIcontrolMessenger to use Loop() and Foreach() methods.
       virtual G4bool Notify(G4ApplicationState requestedState);
       //  This method is exclusively invoked by G4StateManager and the user
       // must not use this method.
- 
+
   private:
       void PauseSession(const char* msg);
       void CreateMessenger();
@@ -156,21 +155,22 @@ class G4UImanager : public G4VStateDependent
       G4int maxHistSize;
       G4bool pauseAtBeginOfEvent;
       G4bool pauseAtEndOfEvent;
-
+      G4String searchPath;
+      std::vector<G4String> searchDirs;
 
   public: // with description
-      G4String GetCurrentStringValue(const char * aCommand, 
-	    G4int parameterNumber=1, G4bool reGet=true);
-      G4int GetCurrentIntValue(const char * aCommand, 
-	    G4int parameterNumber=1, G4bool reGet=true);
+      G4String GetCurrentStringValue(const char * aCommand,
+      G4int parameterNumber=1, G4bool reGet=true);
+      G4int GetCurrentIntValue(const char * aCommand,
+      G4int parameterNumber=1, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-	    G4int parameterNumber=1, G4bool reGet=true);
-      G4String GetCurrentStringValue(const char * aCommand, 
-	    const char * aParameterName, G4bool reGet=true);
-      G4int GetCurrentIntValue(const char * aCommand, 
-	    const char * aParameterName, G4bool reGet=true);
+      G4int parameterNumber=1, G4bool reGet=true);
+      G4String GetCurrentStringValue(const char * aCommand,
+      const char * aParameterName, G4bool reGet=true);
+      G4int GetCurrentIntValue(const char * aCommand,
+      const char * aParameterName, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-	    const char * aParameterName, G4bool reGet=true);
+      const char * aParameterName, G4bool reGet=true);
       //  These six methods returns the current value of a parameter of the
       // given command. For the first three methods, the ordering number of
       // the parameter (1 is the first parameter) can be given, whereas,
@@ -220,7 +220,7 @@ class G4UImanager : public G4VStateDependent
       inline G4int GetNumberOfHistory() const
       { return histVec.size(); }
       inline G4String GetPreviousCommand(G4int i) const
-      { 
+      {
         G4String st;
         if(i>=0 && i<G4int(histVec.size()))
         { st = histVec[i]; }
@@ -230,6 +230,13 @@ class G4UImanager : public G4VStateDependent
       { maxHistSize = mx; }
       inline G4int GetMaxHistSize() const
       { return maxHistSize; }
+
+      inline void SetMacroSearchPath(const G4String& path)
+      { searchPath = path; }
+      inline const G4String& GetMacroSearchPath() const
+      { return searchPath; }
+      void ParseMacroSearchPath();
+      G4String FindMacroPath(const G4String& fname) const;
 
   // Old methods kept for backward compatibility
   //    inline G4UIcommandTree * GetTree() const
@@ -242,4 +249,3 @@ class G4UImanager : public G4VStateDependent
 };
 
 #endif
-

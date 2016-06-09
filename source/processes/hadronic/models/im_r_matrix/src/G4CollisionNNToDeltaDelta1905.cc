@@ -32,9 +32,15 @@
 
 G4CollisionNNToDeltaDelta1905::G4CollisionNNToDeltaDelta1905()
 { 
-  MakeNNToDeltaDelta<Dm_1905PC, D0_1905PC, Dp_1905PC, Dpp_1905PC, 
-                     G4ConcreteNNToDeltaDeltastar>::Make(this);
+	components=0;
+	MakeNNToDeltaDelta<Dm_1905PC, D0_1905PC, Dp_1905PC, Dpp_1905PC,
+	                   G4ConcreteNNToDeltaDeltastar>::Make(this);
 }
 
+G4CollisionNNToDeltaDelta1905::~G4CollisionNNToDeltaDelta1905()
+{
+	if (components) delete components;
+	components=0;
+}
 
 

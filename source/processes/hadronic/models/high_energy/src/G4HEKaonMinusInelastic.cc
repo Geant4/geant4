@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEKaonMinusInelastic.cc,v 1.16 2010-11-29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-
-#include "globals.hh"
-#include "G4ios.hh"
 
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
@@ -39,7 +35,10 @@
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
  
 #include "G4HEKaonMinusInelastic.hh"
-
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4HEKaonMinusInelastic::ModelDescription(std::ostream& outFile) const
 {
@@ -204,12 +203,12 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
   static const G4int numMul = 1200;
   static const G4int numSec = 60;
@@ -228,101 +227,86 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
   static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
   // misc. local variables
-  // np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  // npos = number of pi+,  nneg = number of pi-,  nzero = number of pi0
 
-  G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, npos, nneg, nzero;
 
-   if( first ) 
-     {       // compute normalization constants, this will only be done once
-       first = false;
-       for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
-       counter = -1;
-       for( np=0; np<(numSec/3); np++ ) 
-          {
-            for( nm=Imax(0,np-1); nm<=np+1; nm++ ) 
+  if (first) {
+    // compute normalization constants, this will only be done once
+    first = false;
+    for (i = 0; i < numMul; i++) protmul[i]  = 0.0;
+    for (i = 0; i < numSec; i++) protnorm[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < (numSec/3); npos++) {
+            for( nneg=Imax(0,npos-1); nneg<=npos+1; nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
                               protmul[counter] =
-                                    pmltpc(np,nm,nz,nt,protb,c) ;
+                                    pmltpc(npos,nneg,nzero,nt,protb,c) ;
                               protnorm[nt-1] += protmul[counter];
                             }
                         }
                     }
                }
-          }
-       for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
-       counter = -1;
-       for( np=0; np<numSec/3; np++ ) 
-          {
-            for( nm=np; nm<=(np+2); nm++ ) 
-               {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+    }
+    for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
+    for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < numSec/3; npos++) {
+      for (nneg = npos; nneg <= (npos+2); nneg++) {
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
                                neutmul[counter] =
-                                      pmltpc(np,nm,nz,nt,neutb,c);
+                                      pmltpc(npos,nneg,nzero,nt,neutb,c);
                                neutnorm[nt-1] += neutmul[counter];
                             }
                         }
                     }
-               }
-          }
-       for( i=0; i<numSec; i++ ) 
-          {
-            if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
-            if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
-          }
-     }                                          // end of initialization
+      }
+    }
 
+    for (i = 0; i < numSec; i++) {
+      if (protnorm[i] > 0.0) protnorm[i] = 1.0/protnorm[i];
+      if (neutnorm[i] > 0.0) neutnorm[i] = 1.0/neutnorm[i];
+    }
+  }  // end of initialization
          
-                                              // initialize the first two places
-                                              // the same as beam and target                                    
-   pv[0] = incidentParticle;
-   pv[1] = targetParticle;
-   vecLen = 2;
+  pv[0] = incidentParticle;   // initialize the first two places
+  pv[1] = targetParticle;     // the same as beam and target
+  vecLen = 2;
 
-   if (!inElastic || (availableEnergy <= PionPlus.getMass())) 
-      return;
-
-                                        
-//                                            inelastic scattering
-
-   np = 0, nm = 0, nz = 0;
-   G4double cech[] = { 1., 1., 1., 0.70, 0.60, 0.55, 0.35, 0.25, 0.18, 0.15};
-   G4int iplab = G4int( incidentTotalMomentum*5.);
-   if( (iplab < 10) && (G4UniformRand() < cech[iplab])) 
-     {
-       G4int     iplab = Imin(19, G4int( incidentTotalMomentum*5.));
-       G4double cnk0[] = {0.17, 0.18, 0.17, 0.24, 0.26, 0.20, 0.22, 0.21, 0.34, 0.45,
-                          0.58, 0.55, 0.36, 0.29, 0.29, 0.32, 0.32, 0.33, 0.33, 0.33};
-       if( G4UniformRand() < cnk0[iplab] )
-         {
-           if( targetCode == protonCode )
-             {
-               pv[0] = AntiKaonZero;
-               pv[1] = Neutron;
-               return;
-             }
-           else
-             {
-               return;
-             }
-         }
-       G4double ran = G4UniformRand();
-       if( targetCode == protonCode )                    // target is a proton 
-         {
+  if (!inElastic || (availableEnergy <= PionPlus.getMass())) return;
+      
+  // inelastic scattering
+  npos = 0, nneg = 0, nzero = 0;
+  G4double cech[] = { 1., 1., 1., 0.70, 0.60, 0.55, 0.35, 0.25, 0.18, 0.15};
+  G4int iplab = G4int( incidentTotalMomentum*5.);
+  if ( (iplab < 10) && (G4UniformRand() < cech[iplab])) {
+    G4int ipl = Imin(19, G4int( incidentTotalMomentum*5.));
+    G4double cnk0[] = {0.17, 0.18, 0.17, 0.24, 0.26, 0.20, 0.22, 0.21, 0.34, 0.45,
+                       0.58, 0.55, 0.36, 0.29, 0.29, 0.32, 0.32, 0.33, 0.33, 0.33};
+    if (G4UniformRand() < cnk0[ipl]) {
+      if (targetCode == protonCode) {
+        pv[0] = AntiKaonZero;
+        pv[1] = Neutron;
+        return;
+      } else {
+        return;
+      }
+    }
+    G4double ran = G4UniformRand();
+    if (targetCode == protonCode) {   // target is a proton 
            if( ran < 0.25 )
              { 
                pv[0] = PionMinus;
@@ -343,9 +327,7 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
                pv[0] = PionZero;
                pv[1] = Lambda;
              }
-         } 
-       else 
-         {                                               // target is a neutron
+    } else {    // target is a neutron
            if( ran < 0.25 )
              { 
              } 
@@ -364,20 +346,17 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
                pv[0] = PionMinus;
                pv[1] = Lambda;
              }
-         }
-       return;
-     }
-   else
-     {
-//                    number of total particles vs. centre of mass Energy - 2*proton mass
+    }
+    return;
+  } else {
+    // number of total particles vs. centre of mass Energy - 2*proton mass
+    G4double aleab = std::log(availableEnergy);
+    G4double n = 3.62567+aleab*(0.665843+aleab*(0.336514
+                + aleab*(0.117712+0.0136912*aleab))) - 2.0;
    
-       G4double aleab = std::log(availableEnergy);
-       G4double n     = 3.62567+aleab*(0.665843+aleab*(0.336514
-                    + aleab*(0.117712+0.0136912*aleab))) - 2.0;
-   
-//                    normalization constant for kno-distribution.
-//                    calculate first the sum of all constants, check for numerical problems.   
-       G4double test, dum, anpn = 0.0;
+    // normalization constant for kno-distribution.
+    // calculate first the sum of all constants, check for numerical problems.   
+    G4double test, dum, anpn = 0.0;
 
        for (nt=1; nt<=numSec; nt++) {
          test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -394,13 +373,13 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
        if( targetCode == protonCode ) 
          {
            counter = -1;
-           for( np=0; np<numSec/3; np++ ) 
+           for( npos=0; npos<numSec/3; npos++ ) 
               {
-                for( nm=Imax(0,np-1); nm<=np+1; nm++ ) 
+                for( nneg=Imax(0,npos-1); nneg<=npos+1; nneg++ ) 
                    {
-                     for (nz=0; nz<numSec/3; nz++) {
+                     for (nzero=0; nzero<numSec/3; nzero++) {
                        if (++counter < numMul) {
-                         nt = np+nm+nz;
+                         nt = npos+nneg+nzero;
                          if ( (nt>0) && (nt<=numSec) ) {
                            test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                            dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
@@ -424,13 +403,13 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
        else   
          {                                         // target must be a neutron
            counter = -1;
-           for( np=0; np<numSec/3; np++ ) 
+           for( npos=0; npos<numSec/3; npos++ ) 
               {
-                for( nm=np; nm<=(np+2); nm++ ) 
+                for( nneg=npos; nneg<=(npos+2); nneg++ ) 
                    {
-                     for (nz=0; nz<numSec/3; nz++) {
+                     for (nzero=0; nzero<numSec/3; nzero++) {
                        if (++counter < numMul) {
-                         nt = np+nm+nz;
+                         nt = npos+nneg+nzero;
                          if ( (nt>=1) && (nt<=numSec) ) {
                            test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                            dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
@@ -454,11 +433,11 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
     
    if( targetCode == protonCode)
      {
-       if( np == (1+nm))
+       if( npos == (1+nneg))
          {
            pv[1] = Neutron;
          }
-       else if (np == nm)
+       else if (npos == nneg)
          {
            if( G4UniformRand() < 0.75)
              {
@@ -476,7 +455,7 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
      }  
    else
      {
-       if( np == (nm-1))
+       if( npos == (nneg-1))
          {
            if( G4UniformRand() < 0.5)
              {
@@ -487,7 +466,7 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
                pv[0] = AntiKaonZero;
              }
          } 
-       else if ( np == nm)
+       else if ( npos == nneg)
          {
          }
        else
@@ -571,34 +550,34 @@ G4HEKaonMinusInelastic::FirstIntInCasKaonMinus(G4bool& inElastic,
      }
                
 
-   nt = np + nm + nz;
+   nt = npos + nneg + nzero;
    while ( nt > 0)
        {
          G4double ran = G4UniformRand();
-         if ( ran < (G4double)np/nt)
+         if ( ran < (G4double)npos/nt)
             { 
-              if( np > 0 ) 
+              if( npos > 0 ) 
                 { pv[vecLen++] = PionPlus;
-                  np--;
+                  npos--;
                 }
             }
-         else if ( ran < (G4double)(np+nm)/nt)
+         else if ( ran < (G4double)(npos+nneg)/nt)
             {   
-              if( nm > 0 )
+              if( nneg > 0 )
                 { 
                   pv[vecLen++] = PionMinus;
-                  nm--;
+                  nneg--;
                 }
             }
          else
             {
-              if( nz > 0 )
+              if( nzero > 0 )
                 { 
                   pv[vecLen++] = PionZero;
-                  nz--;
+                  nzero--;
                 }
             }
-         nt = np + nm + nz;
+         nt = npos + nneg + nzero;
        } 
    if (verboseLevel > 1)
       {

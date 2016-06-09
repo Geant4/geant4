@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.hh,v 1.3 2006-06-29 20:55:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VPartonStringModel_h
 #define G4VPartonStringModel_h 1
@@ -53,7 +52,7 @@ class G4VPartonStringModel : public G4VHighEnergyGenerator
 
 {
   public:
-      G4VPartonStringModel();
+      G4VPartonStringModel(const G4String& modelName = "Parton String Model");
       virtual ~G4VPartonStringModel();
 
   private:
@@ -66,6 +65,8 @@ class G4VPartonStringModel : public G4VHighEnergyGenerator
       void SetFragmentationModel(G4VStringFragmentation * aModel);
       G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary);
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
+      virtual void ModelDescription(std::ostream& outFile) const;
+
 
   protected:
         

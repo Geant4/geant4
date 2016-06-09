@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWtViewer.hh,v 1.7 2010-03-10 11:03:46 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4OpenGLImmediateWtViewer : a class derived from

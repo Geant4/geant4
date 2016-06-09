@@ -39,6 +39,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04EventAction::ExN04EventAction()

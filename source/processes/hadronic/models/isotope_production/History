@@ -16,6 +16,31 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+14 November 2012 - Dennis Wright  (hadr-isopro-V09-05-04)
+---------------------------------------------------------
+- G4ElementIsoCrossSections.icc: fix coverity bug #15659: uninitialized
+   variable crossSectionBuffer, and removed recursive include of header
+
+24 October 2012 - Dennis Wright  (hadr-isopro-V09-05-03)
+--------------------------------------------------------
+- add deprecation messages
+ 
+26 September 2012 - Gabriele Cosmo (hadr-isopro-V09-05-02)
+----------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+12 June 2012 - Dennis Wright  (hadr-isopro-V09-05-01)
+-----------------------------------------------------
+- replace shadowed variable "aName" with "dName" in 
+  G4NeutronIsoIsoCrossSections.cc
+ 
+22 January 2012 - Dennis Wright  (hadr-isopro-V09-05-00)
+--------------------------------------------------------
+- change GetIsotope interface argument to use G4HadProjectile instead 
+  of G4Track.  Classes affected: G4NeutronIsotopeProduction,
+  G4ProtonIsotopeProduction
+
 21 November 2011 - V.Ivanchenko (hadr-isopro-V09-04-01)
 -------------------------------------------------------
 - G4NeutronIsoIsoCrossSections, G4ElementIsoCrossSections - fixed

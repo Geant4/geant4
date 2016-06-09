@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.5 2010-09-03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QNeutronCaptureRatio for N+A Diffraction Interactions
@@ -43,6 +42,7 @@
 //#define nandebug
 
 #include "G4QNeutronCaptureRatio.hh"
+#include "G4SystemOfUnits.hh"
 
 // Returns Pointer to the  class G4QNeutronCaptureRatio
 G4QNeutronCaptureRatio* G4QNeutronCaptureRatio::GetPointer()
@@ -64,7 +64,7 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
   static const G4double lpi=1.79;        // The min ln(p) logTabEl(p=5.99 < pma=6.)
   static const G4double lpa=8.;          // The max ln(p) logTabEl(p=5.99 - 2981 GeV)
   static const G4double mi=std::exp(lpi);// The min mom of logTabEl(~ 5.99 GeV)
-  static const G4double ms=std::exp(lpa);// The max mom of logTabEl(~ 2981 GeV)
+  static const G4double max_s=std::exp(lpa);// The max mom of logTabEl(~ 2981 GeV)
   static const G4double dl=(lpa-lpi)/nls;// Step of the logarithmic Table
   static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
   static const G4double toler=.0001;     // Tolarence (GeV) defining the same momentum
@@ -102,7 +102,7 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
   }
   G4int nDB=vZ.size();                   // A number of nuclei already initialized in AMDB
   if(nDB && lastZ==tgZ && lastN==tgN && std::fabs(pIU-lastP)<toler) return lastR;
-  if(pIU>ms)
+  if(pIU>max_s)
   {
     lastR=CalcCap2In_Ratio(s,tgZ,tgN);   //@@ Probably user ought to be notified about bigP
     return lastR;
@@ -168,19 +168,19 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
     lastK=vK[i];
     lastT=vT[i];
     lastL=vL[i];
-    if(s>lastM)                          // At least LinTab must be updated
+    if(s>lastH)                          // At least LinTab must be updated
     {
       G4int nextN=lastJ+1;               // The next bin to be initialized
       if(lastJ<npp)
       {
         lastJ = static_cast<int>(pIU/dp)+1;// MaxBin to be initialized
+        G4double pv=lastH;
         if(lastJ>npp)
         {
           lastJ=npp;
           lastH=pma;
         }
         else lastH = lastJ*dp;           // Calculate max initialized s for LinTab
-        G4double pv=lastM;
         for(G4int j=nextN; j<=lastJ; j++)// Calculate LogTab values
         {
           pv+=dp;

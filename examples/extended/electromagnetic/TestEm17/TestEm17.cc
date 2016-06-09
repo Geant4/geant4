@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/TestEm17.cc
+/// \brief Main program of the electromagnetic/TestEm17 example
 //
-// $Id: TestEm17.cc,v 1.3 2010-05-21 08:30:24 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -84,12 +86,12 @@ int main(int argc,char** argv) {
   
   // Start execution
   //      
-  if (argc > 1) {	// execute an argument macro file if exist
+  if (argc > 1) {        // execute an argument macro file if exist
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     G4UImanager::GetUIpointer()->ApplyCommand(command+fileName);
     
-  } else {		// start interactive session
+  } else {                // start interactive session
 #ifdef G4VIS_USE
    G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();

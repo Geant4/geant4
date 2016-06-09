@@ -56,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc_ci
         G4QInelastic.hh
         G4QIonIonElastic.hh
         G4QLowEnergy.hh
+        G4QNGamma.hh
         G4QPDGToG4Particle.hh
         G4QSynchRad.hh
     SOURCES
@@ -68,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc_ci
         G4QInelastic.cc
         G4QIonIonElastic.cc
         G4QLowEnergy.cc
+        G4QNGamma.cc
         G4QPDGToG4Particle.cc
         G4QSynchRad.cc
     GRANULAR_DEPENDENCIES

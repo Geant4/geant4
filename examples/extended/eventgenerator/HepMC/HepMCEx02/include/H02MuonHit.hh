@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/include/H02MuonHit.hh
+/// \brief Definition of the H02MuonHit class
+//
 // ====================================================================
 //
 //   H02MuonHit.hh
-//   $Id: H02MuonHit.hh,v 1.4 2006-06-29 17:09:53 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef H02_MUON_HIT_H
@@ -48,7 +51,7 @@ private:
 public:
   H02MuonHit();
   H02MuonHit(G4int imod, G4String aname, const G4ThreeVector& pxyz,
-	    const G4ThreeVector& xyz, G4double atof);
+            const G4ThreeVector& xyz, G4double atof);
   ~H02MuonHit();
 
   H02MuonHit(const H02MuonHit& right);

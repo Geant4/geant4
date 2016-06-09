@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4IsoProdCrossSections.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4IsoProdCrossSections::
 Init(std::ifstream & aDataSet)

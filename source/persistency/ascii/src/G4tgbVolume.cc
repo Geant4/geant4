@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.23 2010-11-05 08:58:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbVolume
@@ -35,6 +34,9 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbVolume.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgbRotationMatrixMgr.hh"
@@ -681,7 +683,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	{
 	  vertexType = ABSOLUTE;
 	} 
-	else if( solParam[jj+11] == 0 ) 
+	else if( solParam[jj+11] == 1 )  
 	{
 	  vertexType = RELATIVE;
 	} 
@@ -708,7 +710,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	{
 	  vertexType = ABSOLUTE;
 	}
-	else if( solParam[jj+14] == 0 ) 
+	else if( solParam[jj+14] == 1 )
 	{
 	  vertexType = RELATIVE;
 	} 

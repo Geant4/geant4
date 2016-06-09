@@ -35,6 +35,8 @@
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPElasticData.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
@@ -117,7 +119,11 @@ void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   size_t numberOfElements = G4Element::GetNumberOfElements();
 // TKDB
-   if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   //if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   if ( theCrossSections == NULL ) 
+      theCrossSections = new G4PhysicsTable( numberOfElements );
+   else
+      theCrossSections->clearAndDestroy();
 
   // make a PhysicsVector for each element
 

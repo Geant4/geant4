@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.12 2010-09-03 14:39:47 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QInelastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -44,6 +43,10 @@
 //#define qedebug
 
 #include "G4QInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 std::vector<G4int> G4QInelastic::ElementZ;            // Z of the element(i) in theLastCalc
@@ -54,6 +57,10 @@ std::vector<std::vector<G4double>*>G4QInelastic::IsoProbInEl;//SumProbabIsotopes
 G4QInelastic::G4QInelastic(const G4String& processName): 
  G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QInelastic");
+
+  EnMomConservation = G4LorentzVector(0.,0.,0.,0.);
+  nOfNeutrons       = 0;
 #ifdef debug
   G4cout<<"G4QInelastic::Constructor is called"<<G4endl;
 #endif
@@ -69,9 +76,9 @@ G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters ar
 G4double G4QInelastic::Temperature=140.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QInelastic::freeNuc=.5;       // Percentage of free nucleons on the surface
-G4double G4QInelastic::freeDib=.05;      // Percentage of free diBaryons on the surface
-G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
+G4double G4QInelastic::freeNuc=.04;       // Percentage of free nucleons on the surface
+G4double G4QInelastic::freeDib=.08;      // Percentage of free diBaryons on the surface
+G4double G4QInelastic::clustProb=4.;     // Nuclear clusterization parameter
 G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
 //G4int    G4QInelastic::nPartCWorld=152;// The#of particles initialized in CHIPS World
 //G4int    G4QInelastic::nPartCWorld=122;// The#of particles initialized in CHIPS World
@@ -166,7 +173,10 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #endif
   G4ParticleDefinition* incidentParticleDefinition=incidentParticle->GetDefinition();
   if( !IsApplicable(*incidentParticleDefinition))
+  {
     G4cout<<"-W-G4QInelastic::GetMeanFreePath called for not implemented particle"<<G4endl;
+    return DBL_MAX;
+  }
   // Calculate the mean Cross Section for the set of Elements(*Isotopes) in the Material
   G4double Momentum = incidentParticle->GetTotalMomentum(); // 3-momentum of the Particle
 #ifdef debug
@@ -182,12 +192,14 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   //G4bool leptoNuc=false; // By default the reaction is not lepto-nuclear *Growing point*
   G4VQCrossSection* CSmanager=0;
   G4VQCrossSection* CSmanager2=0;
+  G4QNeutronCaptureRatio* capMan=0;
   G4int pPDG=0;
   G4int pZ = incidentParticleDefinition->GetAtomicNumber();
   G4int pA = incidentParticleDefinition->GetAtomicMass();
-  if(incidentParticleDefinition == G4Neutron::Neutron()) // @@ make a switch
+  if(incidentParticleDefinition == G4Neutron::Neutron())
   {
     CSmanager=G4QNeutronNuclearCrossSection::GetPointer();
+    capMan=G4QNeutronCaptureRatio::GetPointer();
 #ifdef debug
     G4cout<<"G4QInelastic::GetMeanFreePath: CSmanager is defined for the neutron"<<G4endl;
 #endif
@@ -367,10 +379,12 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
     //leptoNuc=true;
     pPDG=-12;
   }
-  else G4cout<<"-Warning-G4QInelastic::GetMeanFreePath:Particle "
-             <<incidentParticleDefinition->GetPDGEncoding()
-             <<" isn't supported by CHIPS"<<G4endl;
-  
+  else
+  {
+    G4cout<<"-Warning-G4QInelastic::GetMeanFreePath:Particle "
+          <<incidentParticleDefinition->GetPDGEncoding()<<" isn't supported"<<G4endl;
+    return DBL_MAX;
+  }
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
   G4int IPIE=IsoProbInEl.size();            // How many old elements?
@@ -448,6 +462,7 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
       if(!pPDG) G4cout<<"-Warning-G4QInelastic::GetMeanFrP: (1) projectile PDG=0"<<G4endl;
       G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
       if(CSmanager2)CSI+=CSmanager2->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i)nu,nu
+      if(capMan) CSI*=(1.-capMan->GetRatio(Momentum, Z, N));
 #ifdef debug
       G4cout<<"GQC::GMF:X="<<CSI<<",M="<<Momentum<<",Z="<<Z<<",N="<<N<<",P="<<pPDG<<G4endl;
 #endif
@@ -769,12 +784,13 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     return 0;
   }
   nOfNeutrons=N;                           // Remember it for the energy-momentum check
-  G4double am=Z+N;
+  //G4double am=Z+N;
+  G4int am=Z+N;
   //G4double dd=0.025;
   //G4double sr=std::sqrt(am);
   //G4double dsr=0.01*(sr+sr);
   //if(dsr<dd)dsr=dd;
-  //G4double medRA=mediRatio*pow(am,third);
+  //G4double medRA=mediRatio*G4QThd(am);
   G4double medRA=mediRatio;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,medRA); // ManualP
   //else if(projPDG==-2212)G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,9.);//aP ClustPars
@@ -897,7 +913,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     G4double rndFraction = CSmanager->GetVirtualFactor(photonEnergy, photonQ2);
     if(sigNu*G4UniformRand()>sigK*rndFraction) 
     {
-      //Do NothingToDo Action insead of the reaction
+      //NothingToDo Action insead of the reaction
 #ifdef debug
       G4cout<<"-DoNoth-G4QInelastic::PostStepDoIt: probab. correction - DoNothing"<<G4endl;
 #endif
@@ -933,7 +949,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     //
     // Scatter the lepton ( @@ make the same thing for real photons)
     // At this point we have photonEnergy and photonQ2 (with notDefinedPhi)->SelectProjPart
-    G4double absEn = std::pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
+    G4double absEn = G4QThd(am)*GeV;     // @@(b) Mean Energy Absorbed by a Nucleus
+    //G4double absEn = std::pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
     if(am>1 && absEn < photonEnergy)     // --> the absorption of energy can happen
     //if(absEn < photonEnergy)             // --> the absorption of energy can happen
     {
@@ -1034,12 +1051,12 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   }
   else if (aProjPDG == 12 || aProjPDG == 14)
   {
-    G4double kinEnergy= projHadron->GetKineticEnergy()/MeV; // Total energy of the neutrino
+    kinEnergy= projHadron->GetKineticEnergy()/MeV; // Total energy of the neutrino
     G4double dKinE=kinEnergy+kinEnergy;  // doubled energy for s calculation
 #ifdef debug
     G4cout<<"G4QInelastic::PostStDoIt: 2*nuEnergy="<<dKinE<<"(MeV), PDG="<<projPDG<<G4endl;
 #endif
-    G4ParticleMomentum dir = projHadron->GetMomentumDirection(); // unit vector
+    dir = projHadron->GetMomentumDirection(); // unit vector
     G4double ml  = mu;
     G4double ml2 = mu2;
     //G4double mlN = muN;
@@ -1165,7 +1182,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       ml2=0.;
       mldM=0.;
       mlD2=mPPi2;
-      G4QPDGCode targQPDG(targPDG);
+      G4QPDGCode temporary_targQPDG(targPDG); 
+      targQPDG = temporary_targQPDG;
       G4double rM=targQPDG.GetMass();
       mIN=tM-rM;                                 // bounded in-mass of the neutron
       tM=rM;
@@ -1173,7 +1191,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     else if(nuanu)
     {
       targPDG-=1;                                // Neutrino -> subtract neutron
-      G4QPDGCode targQPDG(targPDG);
+      G4QPDGCode temporary_targQPDG(targPDG); 
+      targQPDG = temporary_targQPDG;
       G4double rM=targQPDG.GetMass();
       mIN=tM-rM;                                 // bounded in-mass of the neutron
       tM=rM;
@@ -1189,7 +1208,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(Z>1||N>0)                               // Calculate the splitted mass
       {
         targPDG-=1000;                           // Anti-Neutrino -> subtract proton
-        G4QPDGCode targQPDG(targPDG);
+        G4QPDGCode temporary_targQPDG(targPDG); 
+        targQPDG = temporary_targQPDG;
         G4double rM=targQPDG.GetMass();
         mIN=tM-rM;                               // bounded in-mass of the proton
         tM=rM;
@@ -1202,11 +1222,11 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       }
       projPDG=2112;                              // neutron is going out
     }
-    G4double s=mIN*(mIN+dKinE);                  // s=(M_cm)^2=m2+2mE (m=targetMass,E=E_nu)
+    G4double s_value=mIN*(mIN+dKinE);            // s_value=(M_cm)^2=m2+2mE (m=targetMass,E=E_nu)
 #ifdef debug
-    G4cout<<"G4QInelastic::PostStDoIt: s="<<s<<" >? OT="<<OT<<", mlD2="<<mlD2<<G4endl;
+    G4cout<<"G4QInelastic::PostStDoIt: s="<<s_value<<" >? OT="<<OT<<", mlD2="<<mlD2<<G4endl;
 #endif
-    if(s<=OT)                                    // *** Do nothing solution ***
+    if(s_value<=OT)                                    // *** Do nothing solution ***
     {
       //Do NothingToDo Action insead of the reaction (@@ Can we make it common?)
       G4cout<<"G4QInelastic::PostStepDoIt: tooSmallFinalMassOfCompound: DoNothing"<<G4endl;
@@ -1223,20 +1243,20 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeEnergy(0.);
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
     // There is no way back from here !
-    if ( ((secnu || !nuanu || N) && totCS*G4UniformRand() < qelCS) || s < mlD2 ) 
+    if ( ((secnu || !nuanu || N) && totCS*G4UniformRand() < qelCS) || s_value < mlD2 ) 
     {   // Quasi-Elastic interaction
       G4double Q2=0.;                           // Simulate transferred momentum, in MeV^2
       if(secnu) Q2=CSmanager2->GetQEL_ExchangeQ2();
       else      Q2=CSmanager->GetQEL_ExchangeQ2();
 #ifdef debug
-      G4cout<<"G4QInelastic::PostStDoIt:QuasiEl(nu="<<secnu<<"),s="<<s<<",Q2="<<Q2<<G4endl;
+      G4cout<<"G4QInelastic::PostStDoIt:QuasiEl(nu="<<secnu<<"),s="<<s_value<<",Q2="<<Q2<<G4endl;
 #endif
-      //G4double ds=s+s;                          // doubled s
-      G4double sqs=std::sqrt(s);                // M_cm
+      //G4double ds=s_value+s_value;              // doubled s_value
+      G4double sqs=std::sqrt(s_value);          // M_cm
       G4double dsqs=sqs+sqs;                    // 2*M_cm
-      G4double pi=(s-mIN*mIN)/dsqs;             // initial momentum in CMS (checked MK)
-      G4double dpi=pi+pi;                       // doubled initial momentum in CMS
-      G4double sd=s-mlsOT;                      // s-ml2-mOT2 (mlsOT=m^2_neut+m^2_lept)
+      G4double p_init=(s_value-mIN*mIN)/dsqs;   // initial momentum in CMS (checked MK)
+      G4double dpi=p_init+p_init;               // doubled initial momentum in CMS
+      G4double sd=s_value-mlsOT;                // s_value-ml2-mOT2 (mlsOT=m^2_neut+m^2_lept)
       G4double qo2=(sd*sd-mlOT)/dsqs;           // squared momentum of secondaries in CMS
       G4double qo=std::sqrt(qo2);               // momentum of secondaries in CMS
       G4double cost=(dpi*std::sqrt(qo2+ml2)-Q2-ml2)/dpi/qo; // cos(theta) in CMS (chck MK)
@@ -1262,7 +1282,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(secnu) Q2=CSmanager->GetNQE_ExchangeQ2();
       else      Q2=CSmanager2->GetNQE_ExchangeQ2();
 #ifdef debug
-      G4cout<<"G4QInel::PStDoIt: MultiPeriferal s="<<s<<",Q2="<<Q2<<",T="<<targPDG<<G4endl;
+      G4cout<<"G4QInel::PStDoIt: MultiPeriferal s="<<s_value<<",Q2="<<Q2<<",T="<<targPDG<<G4endl;
 #endif
       if(secnu) projPDG=CSmanager2->GetExchangePDGCode();// PDG Code of the effective gamma
       else      projPDG=CSmanager->GetExchangePDGCode(); // PDG Code of the effective pion
@@ -1326,11 +1346,11 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(fM2>=c4M.m2())                         // Elastic scattering should be done
       {
         G4LorentzVector tot4M=tg4M+proj4M+scat4M; // recover the total 4-momentum
-        s=tot4M.m2();
-        G4double fs=s-fM2-ml2;
+        s_value=tot4M.m2();
+        G4double fs=s_value-fM2-ml2;
         G4double fMl=fM2*ml2;
-        G4double hQ2max=(fs*fs/2-fMl-fMl)/s;    // Maximum possible Q2/2
-        G4double cost=1.-Q2/hQ2max;             // cos(theta) in CMS (use MultProd Q2)
+        G4double hQ2max=(fs*fs/2-fMl-fMl)/s_value; // Maximum possible Q2/2
+        cost=1.-Q2/hQ2max;                // cos(theta) in CMS (use MultProd Q2)
 #ifdef debug
         G4cout<<"G4QI::PSDI:ct="<<cost<<",Q2="<<Q2<<",hQ2="<<hQ2max<<",4M="<<tot4M<<G4endl;
 #endif
@@ -1392,28 +1412,24 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         delete output;
         return G4VDiscreteProcess::PostStepDoIt(track, step);
       }
-    }
+    } // End of non-quasi-elastic interaction
   //
   // quasi-elastic (& pickup process) for p+A(Z,N)
   //
   }
-  else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0)
-  //else if(2>3) 
+  //else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0) // Never (in Fragm!)
+  else if(2>3) // Possibility is closed as quasi-free scattering is made in fragmentation
   {
-    G4bool ncap = true; // As a prototype: the capture process have not happened
-    // @@ in the same way the fission reaction can be added for heavy nuclei
     if(momentum<500. && projPDG == 2112) // @@ It's reasonable to add proton capture too !
     {
-      G4QNeutronCaptureRatio* capMan=G4QNeutronCaptureRatio::GetPointer();
-      if(G4UniformRand() <= capMan->GetRatio(momentum, Z, N)) ncap = false; // Make capture
-      else if(momentum<100.) // Try the production threshold
+      G4LorentzVector tot4M=G4LorentzVector(0.,0.,0.,tgM)+proj4M;
+      G4double totM2=tot4M.m2();
+      G4int tZ=Z;
+      G4int tN=N;
+      if(projPDG == 2212) tZ++;
+      else                tN++; // @@ Now a neutron is the only alternative
+      if(momentum<100.)         // Try the production threshold (@@ Why 5 MeV?)
       {
-        G4int tZ=Z;
-        G4int tN=N;
-        if(projPDG == 2212) tZ++;
-        else                tN++; // @@ Now a neutron is the only alternative
-        G4LorentzVector tot4M=G4LorentzVector(0.,0.,0.,tgM)+proj4M;
-        G4double totM2=tot4M.m2();
         G4QPDGCode FakeP(2112);
         //G4int m1p=tZ-1;
         G4int m2n=tN-2;
@@ -1424,79 +1440,40 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         //G4double mR2N= FakeP.GetNuclMass(m1p,tN-1,0); // Residual to the p+n secondaries
         G4double minM=mR2N+mNeut+mNeut;
         // Compare with other possibilities (sciped for acceleration)
-        if(totM2 < minM*minM)           ncap = false; // Make capture (n,gamma)
-        if(!ncap)
+        if(totM2 < minM*minM) //  DoNothing (under reasonable threshold)
         {
-          G4int resPDG=targPDG;
-          if(projPDG == 2212) resPDG+=1000;
-          else                resPDG++;             // @@ Now neutron is theOnlyAlternative
-          G4double rM=G4QPDGCode(resPDG).GetMass(); // Mass of the residual nucleus
-          G4LorentzVector r4M=G4LorentzVector(0.,0.,0.,rM); // 4mom of the residual nucleus
-          G4LorentzVector g4M=G4LorentzVector(0.,0.,0.,0.); // 4mom of the gamma
-#ifdef qedebug
-          G4cout<<"G4QInelastic::PStDoIt: (n,gamma), tM="<<tM<<", R="<<rM<<G4endl;
-#endif
-          if(!G4QHadron(tot4M).DecayIn2(r4M, g4M))
-          {
-            G4cerr<<"G4QInelastic::PostStDoIt:tM="<<std::sqrt(totM2)<<" < rM="<<rM<<G4endl;
-            // throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec TotNuc->ResNuc+gam");
-            G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0001",
-                        FatalException, "Hadronize quasmon: Can't Dec TotNuc->ResNuc+gam");
-          }
-#ifdef qedebug
-          G4cout<<"G4QIn::PStDoIt:n->g, R="<<r4M.rho()<<r4M<<",G="<<g4M.rho()<<g4M<<G4endl;
-#endif
-          aParticleChange.ProposeEnergy(0.);   // @@ ??
-          aParticleChange.ProposeTrackStatus(fStopAndKill);// projectile nucleon is killed
-          aParticleChange.SetNumberOfSecondaries(2); 
-          // Fill gamma
-          G4ParticleDefinition* theDefinition = G4Gamma::Gamma();
-          G4DynamicParticle* theGam = new G4DynamicParticle(theDefinition,g4M);
-          G4Track* capGamma = new G4Track(theGam, localtime, position );
-          capGamma->SetWeight(weight);
-          capGamma->SetTouchableHandle(trTouchable);
-          aParticleChange.AddSecondary(capGamma);
-          // ----------------------------------------------------
-          // Fill residual nucleus
-          G4int tA=tZ+tN;
-          if     (resPDG==90000001) theDefinition = G4Neutron::Neutron();
-          else if(resPDG==90001000) theDefinition = G4Proton::Proton();
-          else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(tZ,tA,0,tZ);
-          G4DynamicParticle* theReN = new G4DynamicParticle(theDefinition,r4M);
-          G4Track* scatReN = new G4Track(theReN, localtime, position ); //    weighted
-          scatReN->SetWeight(weight);                                   //    residual
-          scatReN->SetTouchableHandle(trTouchable);                     //    recoil
-          aParticleChange.AddSecondary(scatReN);                        //    nucleus
-          delete output;
-          return G4VDiscreteProcess::PostStepDoIt(track, step);
+          aParticleChange.ProposeEnergy(kinEnergy);
+          aParticleChange.ProposeLocalEnergyDeposit(0.);
+          aParticleChange.ProposeMomentumDirection(dir);
+          aParticleChange.ProposeTrackStatus(fAlive);
+          return G4VDiscreteProcess::PostStepDoIt(track,step);
         }
       }
     }
-    if(ncap)
-    {
-     // Now the quasi-free and PickUp processes:
-     G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
-     std::pair<G4double,G4double> fief=qfMan->GetRatios(momentum, projPDG, Z, N);
-     G4double qepart=fief.first*fief.second; // @@ charge exchange is not included @@
-     // Keep QE part for the quasi-free nucleons
-     const G4int lCl=3; // The last clProb[lCl]==1. by definition, MUST be increasing
-     G4double clProb[lCl]={.65,.85,.95};// N/P,D,t/He3,He4, integroProbab for .65,.2,.1,.05
-     if(qepart>0.45) qepart=.45; // Quasielastic part is too large - shrink
-     //else qepart/=clProb[0];     // Add corresponding number of 2N, 3N, & 4N clusters
-     qepart=qepart/clProb[0]-qepart;// Add QE for 2N, 3N, & 4N clusters (N is made in G4QF)
-     G4double pickup=1.-qepart;  // Estimate the rest of the cross-section
-     G4double thresh=100.;
-     if(momentum > thresh) pickup*=50./momentum/std::pow(G4double(Z+N),third);// 50 is Par
-     // pickup = 0.;               // To exclude the pickup process
-     if (N) pickup+=qepart;
-     else   pickup =qepart;
-     G4double rnd=G4UniformRand();
+    // Now the quasi-free and PickUp processes should be done:
+    G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
+    std::pair<G4double,G4double> fief=qfMan->GetRatios(momentum, projPDG, Z, N);
+    G4double qepart=fief.first*fief.second; // @@ charge exchange is not included @@
+    // Keep QE part for the quasi-free nucleons
+    const G4int lCl=3; // The last clProb[lCl]==1. by definition, MUST be increasing
+    G4double clProb[lCl]={.65,.85,.95};// N/P,D,t/He3,He4, integroProbab for .65,.2,.1,.05
+    if(qepart>0.45) qepart=.45; // Quasielastic part is too large - shrink
+    //else qepart/=clProb[0];     // Add corresponding number of 2N, 3N, & 4N clusters
+    qepart=qepart/clProb[0]-qepart;// Add QE for 2N, 3N, & 4N clusters (N is made in G4QF)
+    G4double pickup=1.-qepart;  // Estimate the rest of the cross-section
+    G4double thresh=100.;
+    //if(momentum >thresh) pickup*=50./momentum/std::pow(G4double(Z+N),third);// 50 is Par
+    if(momentum > thresh) pickup*=50./momentum/G4QThd(Z+N);// 50 is Par
+    // pickup = 0.;               // To exclude the pickup process
+    if (N) pickup+=qepart;
+    else   pickup =qepart;
+    G4double rnd=G4UniformRand();
 #ifdef ldebug
-     G4cout<<"-->G4QInelastic::PSD:QE[p("<<proj4M<<")+(Z="<<Z<<",N="<<N<<")]="<<qepart
-           <<", pickup="<<pickup<<G4endl;
+    G4cout<<"-->G4QInelastic::PSD:QE[p("<<proj4M<<")+(Z="<<Z<<",N="<<N<<")]="<<qepart
+          <<", pickup="<<pickup<<G4endl;
 #endif
-     if(rnd<pickup) // Make a quasi free scattering (out:A-1,h,N) @@ KinLim,CoulBar,PauliBl
-     {
+    if(rnd<pickup) // Make a quasi free scattering (out:A-1,h,N) @@ KinLim,CoulBar,PauliBl
+    {
       G4double dmom=91.;  // Fermi momentum (proto default for a deuteron)
       G4double fmm=287.;  // @@ Can be A-dependent
       if(Z>1||N>1) dmom=fmm*std::pow(-std::log(G4UniformRand()),third);
@@ -1518,9 +1495,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
        G4double base=1.;  // Base for randomization (can be reduced by totZ & totN)
        G4int max=lCl;     // Number of boundaries (can be reduced by totZ & totN)
        // Take into account that at least one nucleon must be left !
-       if (Z<2 || N<2 || A < 6) base = clProb[--max]; // Alpha cluster is impossible
-       if ( (Z > 1 && N < 2) || (Z < 2 && N > 1) ) 
-         base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
+       if(Z<2 || N<2 || A < 6) base = clProb[--max]; // Alpha cluster is impossible
+       if((Z > 1 && N < 2) || (Z < 2 && N > 1)) base=(clProb[max]+clProb[max-1])/2;// t/He3
        if ( (Z < 2 && N < 2) || A < 5) base=clProb[--max];// He3&t clusters are impossible
        if(A<3)           base=clProb[--max]; // Deuteron cluster is impossible
        //G4int cln=0;                        // Cluster#0 (Default for the selectedNucleon)
@@ -1536,7 +1512,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
        G4ParticleDefinition* theDefinition=0;// Prototype for qfNucleon
        G4bool cp1 = cln+2==A;               // A=ClusterBN+1 condition
        if(!cln || cp1)                      // Split in nucleon + (A-1) with Fermi momentum
-       {
+       { 
         G4int nln=0;
         if(cln==2) nln=1;                   // @@ only for cp1: t/He3 choice from A=4
         // mass(A)=tM. Calculate masses of A-1 (rM) and mN (mNeut or mProt bounded mass)
@@ -1561,10 +1537,15 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #endif
         if(!G4QHadron(t4M).DecayIn2(r4M, n4M))
         {
-          G4cerr<<"G4QInel::PostStDoIt:M="<<tM<<"<rM="<<rM<<"+nM="<<nM<<"="<<rM+nM<<G4endl;
-          // throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec totNuc->QENuc+ResNuc");
-          G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0002",
-                      FatalException, "Hadronize quasmon: Can't Dec totNuc->QENuc+ResNuc");
+          //G4cerr<<"G4QInel::PostStDoIt:M="<<tM<<"<r="<<rM<<"+n="<<nM<<"="<<rM+nM<<G4endl;
+          //G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0002",
+          //           FatalException,"Hadronize quasmon: Can't Dec totNuc->QENuc+ResNuc");
+          G4cerr<<"-W-G4QInel::PoStDoI:M="<<tM<<"<rM="<<rM<<"+nM="<<nM<<"="<<rM+nM<<G4endl;
+          aParticleChange.ProposeEnergy(kinEnergy);
+          aParticleChange.ProposeLocalEnergyDeposit(0.);
+          aParticleChange.ProposeMomentumDirection(dir);
+          aParticleChange.ProposeTrackStatus(fAlive);
+          return G4VDiscreteProcess::PostStepDoIt(track,step);
         }
 #ifdef qedebug
         G4cout<<"G4QIn::PStDoIt:QE-N, RA="<<r4M.rho()<<r4M<<",QN="<<n4M.rho()<<n4M<<G4endl;
@@ -1597,7 +1578,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
           restPDG-=1001;
           // Recalculate dmom
           G4ThreeVector sumv=G4ThreeVector(0.,0.,dmom) +
-                      fmm*std::pow(-std::log(G4UniformRand()),third)*G4RandomDirection();
+                        fmm*std::pow(-std::log(G4UniformRand()),third)*G4RandomDirection();
           dmom=sumv.mag();
         }
         else if(cln==2)
@@ -1655,10 +1636,15 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #endif
         if(!G4QHadron(t4M).DecayIn2(r4M, n4M))
         {
-          G4cerr<<"G4QInel::PostStDoIt:M="<<tM<<"<rM="<<rM<<"+cM="<<nM<<"="<<rM+nM<<G4endl;
-          // throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec totNuc->QEClu+ResNuc");
-          G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0003",
-                      FatalException, "Hadronize quasmon: Can't Dec totNuc->QEClu+ResNuc");
+          //G4cerr<<"G4QInel::PostStDoIt:M="<<tM<<"<r="<<rM<<"+c="<<nM<<"="<<rM+nM<<G4endl;
+          //G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0003",
+          //           FatalException,"Hadronize quasmon: Can't Dec totNuc->QEClu+ResNuc");
+          G4cerr<<"-W-G4QInel::PoStDoI:M="<<tM<<"<rM="<<rM<<"+cM="<<nM<<"="<<rM+nM<<G4endl;
+          aParticleChange.ProposeEnergy(kinEnergy);
+          aParticleChange.ProposeLocalEnergyDeposit(0.);
+          aParticleChange.ProposeMomentumDirection(dir);
+          aParticleChange.ProposeTrackStatus(fAlive);
+          return G4VDiscreteProcess::PostStepDoIt(track,step);
         }
         // --- End of the moving cluster implementation ---
 #ifdef qedebug
@@ -1923,9 +1909,13 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         G4ThreeVector vedm=vx*dmom*cost+vy*tdom*std::sin(phi)+vz*tdom*std::cos(phi);// bQFN
         G4LorentzVector bqf(vedm,den);      // 4-mom of the bQF nucleon
         r4M=t4M-bqf;                         // 4mom of the residual nucleus
+#ifdef debug
         if(std::fabs(r4M.m()-rM)>.001) G4cout<<"G4QIn::PSD: rM="<<rM<<"#"<<r4M.m()<<G4endl;
+#endif
         G4LorentzVector f4M=proj4M+bqf;      // Prototype of 4-mom of Deuteron
+#ifdef debug
         if(std::fabs(f4M.m()-mPUF)>.001)G4cout<<"G4QI::PSD:m="<<mPUF<<"#"<<f4M.m()<<G4endl;
+#endif
         aParticleChange.ProposeEnergy(0.);   // @@ ??
         aParticleChange.ProposeTrackStatus(fStopAndKill);// projectile nucleon is killed
         aParticleChange.SetNumberOfSecondaries(2); 
@@ -1955,8 +1945,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         return G4VDiscreteProcess::PostStepDoIt(track, step);
 	 }
       }
-     } // end of the quasi-elastic decoupled process for the neucleon projectile
-    } // end the PickUp and quasi-elastic decoupled processes (capture is made before them)
+    } // end of the quasi-elastic decoupled process for the neucleon projectile
   }  // end lepto-nuclear, neutrino-nuclear, proton/neutron decoupled processes
   EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
   if(absMom) EnMomConservation+=lead4M;         // Add E/M of leading System
@@ -2240,7 +2229,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       }
       // --- End of the moving cluster implementation ---
 #ifdef qedebug
-      G4cout<<"G4QInel::PStDoIt:AND,B1="<<rM<<r4M<<",B2="<<rM<<s4M<",Pi="<<iM<<u4M<<G4endl;
+      G4cout<<"G4QInel::PStDoI:AND,B1="<<rM<<f4M<<",B2="<<rM<<s4M<<",Pi="<<iM<<u4M<<G4endl;
 #endif
       G4QHadron fH(rPDG,f4M);
       hadr->Set4Momentum(f4M);
@@ -2311,7 +2300,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   delete output; // instances of the G4QHadrons from the output are already deleted above +
   if(leadhs)     // To satisfy Valgrind ( How can that be?)
   {
-    G4int qNH=leadhs->size();
+    qNH=leadhs->size();
     if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
     delete leadhs;
     leadhs=0;
@@ -2339,10 +2328,10 @@ std::pair<G4double,G4double> G4QInelastic::Random2DDirection()
   G4double r2=2.;             // to enter the loop
   while(r2>1. || r2<.0001)    // pi/4 efficiency
   {
-    G4double s=G4UniformRand();
-    G4double c=G4UniformRand();
-    sp=1.-s-s;
-    cp=1.-c-c;
+    G4double sine=G4UniformRand();
+    G4double cosine=G4UniformRand();
+    sp=1.-sine-sine;
+    cp=1.-cosine-cosine;
     r2=sp*sp+cp*cp;
   }
   G4double norm=std::sqrt(r2);

@@ -16,6 +16,7 @@
 <class name="G4Element">
     <field name="fAtomicShells" comment="[fNbOfAtomicShells]" />
     <field name="fRelativeAbundanceVector" comment="[fNumberOfIsotopes]" />
+    <field name="fNbOfShellElectrons" comment="[fNbOfAtomicShells]" />
 </class>
 
 <class name="std::vector<G4Isotope*>"/>
@@ -124,10 +125,6 @@
 
 <class name="G4IntersectingCone"/>
 <class name="G4EnclosingCylinder"/>
-<!--
-<class name="G4ReduciblePolygon"/>
-<class name="G4ReduciblePolygon::ABVertex"/>
--->
 <class name="G4UnionSolid"/>
 <class name="G4SubtractionSolid"/>
 <class name="G4IntersectionSolid"/>
@@ -136,7 +133,6 @@
       <field name="fSensitiveDetector" transient="true"/>
       <field name="fVoxel" transient="true"/>
       <field name="fVisAttributes" transient="true"/>
-      <field name="fFastSimulationManager" transient="true"/>
 </class>
 
 <class name="std::vector<G4LogicalVolume*>"/>
@@ -145,6 +141,7 @@
 <class name="std::map<G4Material*,G4MaterialCutsCouple*>"/>
 <class name="G4Region">
       <field name="fFastSimulationManager" transient="true"/>
+      <field name="fFieldManager" transient="true"/>
       <field name="fRegionalSteppingAction" transient="true"/>
 </class>
 <class name="G4MaterialCutsCouple"/>

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file polarisation/Pol01/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,6 +48,7 @@
 
 #include "G4PolarizationManager.hh"
 #include "G4NistManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -84,45 +87,45 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // World
   //
   G4Box*
-  sWorld = new G4Box("World",					//name
-                   worldSize/2,worldSize/2,worldSize/2);	//dimensions
+  sWorld = new G4Box("World",                            //name
+                   worldSize/2,worldSize/2,worldSize/2); //dimensions
 
-  G4LogicalVolume*		   			                      
-  lWorld = new G4LogicalVolume(sWorld,			//shape
-                               wMaterial,		//material
-                              "World");			//name
+  G4LogicalVolume*                                                                 
+  lWorld = new G4LogicalVolume(sWorld,                   //shape
+                               wMaterial,                //material
+                              "World");                  //name
 
-  pWorld = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lWorld,			//logical volume
-			   "World",			//name
-                           0,	       		        //mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   			   
+  pWorld = new G4PVPlacement(0,                          //no rotation
+                             G4ThreeVector(),            //at (0,0,0)
+                             lWorld,                     //logical volume
+                             "World",                    //name
+                             0,                          //mother volume
+                             false,                      //no boolean operation
+                             0);                         //copy number
+                                                      
   // Box
-  //			   
+  //                           
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   boxSizeXY/2.,boxSizeXY/2.,boxSizeZ/2.);	//its dimensions
-		   
+  sBox = new G4Box("Container",                           //its name
+                   boxSizeXY/2.,boxSizeXY/2.,boxSizeZ/2.);//its dimensions
+                   
   G4LogicalVolume*
-  lBox = new G4LogicalVolume(sBox,			//its shape
-                             aMaterial,			//its material
-                             "theBox");	                //its name
+  lBox = new G4LogicalVolume(sBox,                        //its shape
+                             aMaterial,                   //its material
+                             "theBox");                   //its name
 
-  pBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume			   
-                           aMaterial->GetName(),	//its name
-                           lWorld,			//its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
+  pBox = new G4PVPlacement(0,                             //no rotation
+                           G4ThreeVector(),               //at (0,0,0)
+                           lBox,                          //its logical volume                           
+                           aMaterial->GetName(),          //its name
+                           lWorld,                        //its mother  volume
+                           false,                         //no boolean operation
+                           0);                            //copy number
 
   // register logical Volume in PolarizationManager with zero polarization
   G4PolarizationManager * polMgr = G4PolarizationManager::GetInstance();
   polMgr->SetVolumePolarization(lBox,G4ThreeVector(0.,0.,0.));
-			   
+                           
   PrintParameters();
   
   //always return the root volume
@@ -135,8 +138,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(boxSizeXY,"Length")
-	 << " x " << G4BestUnit(boxSizeXY,"Length")
-	 << " x " << G4BestUnit(boxSizeZ,"Length")
+         << " x " << G4BestUnit(boxSizeXY,"Length")
+         << " x " << G4BestUnit(boxSizeZ,"Length")
          << " of " << aMaterial->GetName() << G4endl;
 }
 

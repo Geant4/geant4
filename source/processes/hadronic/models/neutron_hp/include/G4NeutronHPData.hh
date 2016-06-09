@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPData.hh,v 1.9 2006-06-29 20:47:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -41,6 +40,8 @@
 #include "G4NeutronHPCaptureData.hh"
 #include "G4NeutronHPElementData.hh"
 
+#include <vector>
+
 class G4NeutronHPData
 {
 public:
@@ -51,21 +52,25 @@ public:
 
   inline G4PhysicsVector * MakePhysicsVector(G4Element * thE, G4NeutronHPFissionData * theP)
   {
-     return DoPhysicsVector(theData[thE->GetIndex()].GetData(theP));
+     if ( numEle <= (G4int)thE->GetIndex() ) addPhysicsVector(); 
+     return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
   }
   inline G4PhysicsVector * MakePhysicsVector(G4Element * thE, G4NeutronHPCaptureData * theP)
   {
-     return DoPhysicsVector(theData[thE->GetIndex()].GetData(theP));
+     if ( numEle <= (G4int)thE->GetIndex() ) addPhysicsVector(); 
+     return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
   }
   inline G4PhysicsVector * MakePhysicsVector(G4Element * thE, G4NeutronHPElasticData * theP)
   {
-     return DoPhysicsVector(theData[thE->GetIndex()].GetData(theP));
+     if ( numEle <= (G4int)thE->GetIndex() ) addPhysicsVector(); 
+     return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
   }
   inline G4PhysicsVector * MakePhysicsVector(G4Element * thE, G4NeutronHPInelasticData * theP)
   {
 //     G4cout << "entered G4NeutronHPData::MakePhysicsVector!!!"<<G4endl;
 //     G4cout << "thE->GetIndex()="<<thE->GetIndex()<<G4endl;
-     return DoPhysicsVector(theData[thE->GetIndex()].GetData(theP));
+     if ( numEle <= (G4int)thE->GetIndex() ) addPhysicsVector(); 
+     return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
   }
 
   G4PhysicsVector * DoPhysicsVector(G4NeutronHPVector * theVector);
@@ -74,8 +79,9 @@ public:
   
 private:
 
-  G4NeutronHPElementData * theData;
+  std::vector< G4NeutronHPElementData* > theData;
   G4int numEle;
+  void addPhysicsVector();
   
 };
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.11 2010-07-21 13:46:01 tnikitin Exp $ 
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$ 
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h
@@ -39,6 +38,7 @@
 // -------------------------------------------------------------------
 
 #include "G4ExactHelixStepper.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 

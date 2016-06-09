@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.cc,v 1.7 2007-08-27 15:51:54 gcosmo Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "MicrobeamDetectorConstruction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -182,20 +184,19 @@ void MicrobeamDetectorConstruction::DefineMaterials()
   Laiton->AddElement (Zn,1);
 
   // Phantom
-  densityPhantom = 1; // in g/cm3
+  densityPhantom = 1.; // in g/cm3
+
+  // Nucleus composition from Alard et al., Rad. Res. 158, 650 (2002)
 
   // Cytoplasm chemical composition
   densityCytoplasm = 1.; // in g/cm3
   density = densityCytoplasm*g/cm3;
-  G4Material* Cytoplasm1 = new G4Material(name="Cytoplasm1"  , density, ncomponents=5);
-  Cytoplasm1->AddElement(H, fractionmass=0.596);
-  Cytoplasm1->AddElement(O, fractionmass=0.2424);
-  Cytoplasm1->AddElement(C, fractionmass=0.1111);
-  Cytoplasm1->AddElement(N, fractionmass=0.0404);
-  Cytoplasm1->AddElement(P, fractionmass=0.0101);
+  G4Material* Cytoplasm1 = new G4Material(name="Cytoplasm1"  , density, ncomponents=2);
+  Cytoplasm1->AddElement(H, fractionmass=0.112);
+  Cytoplasm1->AddElement(O, fractionmass=0.888);
  
-  densityCytoplasm = 10.; 
-  // in g/cm3 (nucleoli are assumed to be ten times denser than water and have the same chemical comp. as nucleus)
+  densityCytoplasm = 1.; 
+  // in g/cm3 (nucleoli are assumed to have the same chemical comp. as nucleus)
   density = densityCytoplasm*g/cm3;
   G4Material* Cytoplasm2 = new G4Material(name="Cytoplasm2"  , density, ncomponents=5);
   Cytoplasm2->AddElement(H, fractionmass=0.1064);
@@ -207,12 +208,9 @@ void MicrobeamDetectorConstruction::DefineMaterials()
   // default 
   densityCytoplasm = 1.; // in g/cm3
   density = densityCytoplasm*g/cm3;
-  G4Material* Cytoplasm3 = new G4Material(name="Cytoplasm3"  , density, ncomponents=5);
-  Cytoplasm3->AddElement(H, fractionmass=0.596);
-  Cytoplasm3->AddElement(O, fractionmass=0.2424);
-  Cytoplasm3->AddElement(C, fractionmass=0.1111);
-  Cytoplasm3->AddElement(N, fractionmass=0.0404);
-  Cytoplasm3->AddElement(P, fractionmass=0.0101);
+  G4Material* Cytoplasm3 = new G4Material(name="Cytoplasm3"  , density, ncomponents=2);
+  Cytoplasm3->AddElement(H, fractionmass=0.112);
+  Cytoplasm3->AddElement(O, fractionmass=0.888);
  
   // Nucleus chemical composition
   densityNucleus = 1.; // in g/cm3
@@ -224,7 +222,7 @@ void MicrobeamDetectorConstruction::DefineMaterials()
   Nucleus1->AddElement(N, fractionmass=0.0321);
   Nucleus1->AddElement(P, fractionmass=0.0261);
  
-  densityNucleus = 1.1; // in g/cm3
+  densityNucleus = 1.; // in g/cm3
   density = densityNucleus*g/cm3;
   G4Material* Nucleus2 = new G4Material(name="Nucleus2"  , density, ncomponents=5);
   Nucleus2->AddElement(H, fractionmass=0.1064);

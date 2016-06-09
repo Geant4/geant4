@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.2 2006-06-29 16:43:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/src/PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the PrimaryGeneratorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,23 +41,23 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                                    PrimaryGeneratorAction* Gun)
-:Action(Gun)
+:fAction(Gun)
 { 
-  gunDir = new G4UIdirectory("/testem/gun/");
-  gunDir->SetGuidance("gun control");
+  fGunDir = new G4UIdirectory("/testem/gun/");
+  fGunDir->SetGuidance("gun control");
 
-  RndmCmd = new G4UIcmdWithABool("/testem/gun/rndm",this);
-  RndmCmd->SetGuidance("random direction on the beam");
-  RndmCmd->SetParameterName("rBeam",true);
-  RndmCmd->SetDefaultValue(true);
+  fRndmCmd = new G4UIcmdWithABool("/testem/gun/rndm",this);
+  fRndmCmd->SetGuidance("random direction on the beam");
+  fRndmCmd->SetParameterName("rBeam",true);
+  fRndmCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-  delete RndmCmd;
-  delete gunDir;
+  delete fRndmCmd;
+  delete fGunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,8 +65,8 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                                G4String newValue)
 { 
-  if (command == RndmCmd)
-   {Action->SetRndmBeam(RndmCmd->GetNewBoolValue(newValue));}   
+  if (command == fRndmCmd)
+   {fAction->SetRndmBeam(fRndmCmd->GetNewBoolValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -58,6 +58,8 @@
 
 enum { TSIZE=41, NPARTS=35, NELAB=17, NCNLW=15, NFISS=21 };
 
+class G4Pow;
+
 class G4HadronCrossSections
 {
   public:
@@ -99,6 +101,8 @@ class G4HadronCrossSections
                                      G4int /*ZZ*/, G4int /*AA*/);
 
     static G4HadronCrossSections* theInstance;
+
+    G4Pow* g4pow;
 
     G4double sigelastic;
     G4double siginelastic;

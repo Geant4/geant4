@@ -30,21 +30,22 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimMoonHabitat.hh,v 1.6 2006-06-29 16:22:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
 #ifndef RemSimMoonHabitat_h
 #define RemSimMoonHabitat_h 1
 
-class RemSimVGeometryComponent;
 class G4VPhysicalVolume;
 class G4Box;
 class G4LogicalVolume;
 class G4Material;
 class RemSimMaterial;
 class G4VisAttributes;
+
+#include "RemSimVGeometryComponent.hh"
+
 class RemSimMoonHabitat: public RemSimVGeometryComponent
 {
 public:

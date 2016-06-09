@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4TrackingInformation.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -34,26 +35,19 @@
 
 #include "G4TrackingInformation.hh"
 #include "G4VITProcess.hh"
-
-static const size_t SizeOfSelectedDoItVector=100;
+#include "G4ITNavigator.hh"
+//#include "G4Navigator.hh"
 
 G4TrackingInformation::G4TrackingInformation() :
     fStepLeader                     (false),
-    fStepStatus                     (fUndefined),
-    fPhysicalStep                   (-1.),
-    fTouchableHandle                (0),
-    fSelectedAtRestDoItVector       ((size_t)G4VITProcess::GetMaxProcessIndex(),0),
-    fSelectedAlongStepDoItVector    ((size_t)G4VITProcess::GetMaxProcessIndex(),0),
-    fSelectedPostStepDoItVector     ((size_t)G4VITProcess::GetMaxProcessIndex(),0),
     fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex(),0)
 {
     //ctor
-    fpTrajectory_Lock = 0;
-    fRecordedTrackGlobalTime = -1;
-    fRecordedTrackLocalTime = -1;
-    fSafety = -1;
-    fPreviousStepSize = -1;
-
+    fpTrajectory_Lock           = 0;
+    fRecordedTrackGlobalTime    = -1;
+    fRecordedTrackLocalTime     = -1;
+    fpStepProcessorState        = 0;
+    fNavigatorState = 0;
 }
 
 G4TrackingInformation::~G4TrackingInformation()
@@ -68,21 +62,22 @@ G4TrackingInformation::~G4TrackingInformation()
         }
     }
     fProcessState.clear();
+    if(fpStepProcessorState) delete fpStepProcessorState;
+    fpStepProcessorState = 0;
+    if(fNavigatorState) delete fNavigatorState;
+    fNavigatorState = 0;
 }
 
 // should not be used
 G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*other*/) :
     fStepLeader                     (false),
-    fStepStatus                     (fUndefined),
-    fPhysicalStep                   (-1.),
-    fTouchableHandle                (0)
+    fpStepProcessorState            (0)
 {
     //copy ctor
     fpTrajectory_Lock = 0;
     fRecordedTrackGlobalTime = -1;
     fRecordedTrackLocalTime = -1;
-    fSafety = -1;
-    fPreviousStepSize = -1;
+    fNavigatorState = 0;
 }
 
 // should not be used
@@ -93,9 +88,9 @@ G4TrackingInformation& G4TrackingInformation::operator=(const G4TrackingInformat
     return *this;
 }
 
-G4ProcessState_Lock* G4TrackingInformation::GetProcessState(G4int index)
+G4ProcessState_Lock* G4TrackingInformation::GetProcessState(size_t index)
 {
-    if(index> G4VITProcess::GetMaxProcessIndex() || index<0)
+    if(index> G4VITProcess::GetMaxProcessIndex())
     {
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "G4TrackingInformation::GetProcInfo : Wrong process subType : " ;

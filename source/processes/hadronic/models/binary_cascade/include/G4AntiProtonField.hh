@@ -39,14 +39,15 @@
 #ifndef G4AntiProtonField_h
 #define  G4AntiProtonField_h 1
 
-//#include "globals.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VNuclearField.hh"
 #include "G4V3DNucleus.hh"
 
 class G4AntiProtonField: public G4VNuclearField
 {
 public:
-  G4AntiProtonField(G4V3DNucleus * nucleus, G4double coeff = 1.53*fermi);
+  G4AntiProtonField(G4V3DNucleus * nucleus, G4double coeff = 1.53*CLHEP::fermi);
   virtual ~G4AntiProtonField();
 
 private:

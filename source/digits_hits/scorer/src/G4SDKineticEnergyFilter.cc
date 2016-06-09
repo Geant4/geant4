@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDKineticEnergyFilter.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VSensitiveDetector
 #include "G4SDKineticEnergyFilter.hh"

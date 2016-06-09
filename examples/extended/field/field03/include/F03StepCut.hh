@@ -23,59 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03StepCut.hh
+/// \brief Definition of the F03StepCut class
 //
-// $Id: F03StepCut.hh,v 1.5 2006-06-29 17:19:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 #ifndef F03StepCut_h
 #define F03StepCut_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4Step.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 class F03StepCut : public G4VDiscreteProcess
 {
   public:     
 
-     F03StepCut(const G4String& processName ="UserStepCut" );
+     F03StepCut(const G4String& processName ="UserStepCut");
      F03StepCut(F03StepCut &);
 
      ~F03StepCut();
 
-     G4double PostStepGetPhysicalInteractionLength(
+     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    );
-
-     G4VParticleChange* PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    );
-
-    void SetMaxStep(G4double);
-
-  protected:
-
-     // it is not needed here !
-     G4double GetMeanFreePath(const G4Track& aTrack,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
                             );
 
-			    
+     virtual G4VParticleChange* PostStepDoIt(
+                             const G4Track& ,
+                             const G4Step& 
+                            );
+
+     void SetMaxStep(G4double);
+
+  protected:
+
+     // it is not needed here !
+     virtual G4double GetMeanFreePath(const G4Track& aTrack,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
+
+                            
   private:
   
-  // hide assignment operator as private 
-      F03StepCut & operator=(const F03StepCut &right);
+     // hide assignment operator as private 
+     F03StepCut & operator=(const F03StepCut &right);
 
   private:
 
-     G4double MaxChargedStep ;
+     G4double fMaxChargedStep ;
 };
 
 // inlined function members implementation
@@ -95,15 +95,15 @@ inline G4double F03StepCut::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-   G4double ProposedStep = DBL_MAX;
+   G4double proposedStep = DBL_MAX;
 
-   if((MaxChargedStep > 0.) &&
+   if((fMaxChargedStep > 0.) &&
       (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
-        ProposedStep = MaxChargedStep ;
+        proposedStep = fMaxChargedStep ;
 
-   return ProposedStep;
+   return proposedStep;
 }
 
 inline G4VParticleChange* F03StepCut::PostStepDoIt(
@@ -124,4 +124,3 @@ inline G4double F03StepCut::GetMeanFreePath(const G4Track&,
 }
 
 #endif
-

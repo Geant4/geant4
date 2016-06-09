@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronInelasticDataSet.cc,v 1.2 2010-05-26 12:19:06 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 physics class: G4QHadronInelasticDataSet -- header file
 // Created by M. Kosov (Mikhail.Kossov@cern.ch) 11.11.09
@@ -37,19 +36,18 @@
 #include "G4QHadronInelasticDataSet.hh"
 #include <iostream>
 
-// Initialization of static vectors
-std::vector<G4int> G4QHadronInelasticDataSet::ElementZ;
-// Z of the element(i) in LastCalc
+//// Initialization of static vectors
+//std::vector<G4int> G4QHadronInelasticDataSet::ElementZ;
+//// Z of the element(i) in LastCalc
+//
+//std::vector<std::vector<G4int>*> G4QHadronInelasticDataSet::ElIsoN;
+//// N of iso(j) of El(i)
+//
+//std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;
+////SumProbIsoInEl
 
-std::vector<std::vector<G4int>*> G4QHadronInelasticDataSet::ElIsoN;
-// N of iso(j) of El(i)
-
-std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;
-//SumProbIsoInEl
-
-
-G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& input_name)
+ : G4VCrossSectionDataSet(input_name)
 {
   //CHIPSpAin    = G4QProtonNuclearCrossSection::GetPointer();
   //CHIPSnAin    = G4QNeutronNuclearCrossSection::GetPointer();
@@ -73,10 +71,9 @@ G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& name)
   ////CHIPSnunuAin = G4QNuNuNuclearCrossSection::GetPointer();
   ////CHIPSananAin = G4QANuANuNuclearCrossSection::GetPointer();
 
-  Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
+  //Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   Description();
 }
-
 
 void G4QHadronInelasticDataSet::Description() const
 {
@@ -104,52 +101,8 @@ void G4QHadronInelasticDataSet::Description() const
   }
 }
 
-
-G4bool G4QHadronInelasticDataSet::IsApplicable(const G4DynamicParticle* P,const G4Element*)
-{
-  G4ParticleDefinition* particle = P->GetDefinition();
-  if      (particle ==         G4Neutron::Neutron()        ) return true; 
-  else if (particle ==          G4Proton::Proton()         ) return true;
-  else if (particle ==       G4PionMinus::PionMinus()      ) return true;
-  else if (particle ==        G4PionPlus::PionPlus()       ) return true;
-  else if (particle ==        G4KaonPlus::KaonPlus()       ) return true;
-  else if (particle ==       G4KaonMinus::KaonMinus()      ) return true;
-  else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) return true;
-  else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) return true;
-  else if (particle ==          G4Lambda::Lambda()         ) return true;
-  else if (particle ==       G4SigmaPlus::SigmaPlus()      ) return true;
-  else if (particle ==      G4SigmaMinus::SigmaMinus()     ) return true;
-  else if (particle ==       G4SigmaZero::SigmaZero()      ) return true;
-  else if (particle ==         G4XiMinus::XiMinus()        ) return true;
-  else if (particle ==          G4XiZero::XiZero()         ) return true;
-  else if (particle ==      G4OmegaMinus::OmegaMinus()     ) return true;
-  else if (particle ==     G4AntiNeutron::AntiNeutron()    ) return true;
-  else if (particle ==      G4AntiProton::AntiProton()     ) return true;
-  else if (particle ==      G4AntiLambda::AntiLambda()     ) return true;
-  else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) return true;
-  else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) return true;
-  else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) return true;
-  else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) return true;
-  else if (particle ==      G4AntiXiZero::AntiXiZero()     ) return true;
-  else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) return true;
-  //else if (particle ==        G4MuonPlus::MuonPlus()       ) return true;
-  //else if (particle ==       G4MuonMinus::MuonMinus()      ) return true;
-  //else if (particle ==           G4Gamma::Gamma()          ) return true;
-  //else if (particle ==        G4Electron::Electron()       ) return true;
-  //else if (particle ==        G4Positron::Positron()       ) return true;
-  //else if (particle ==         G4TauPlus::TauPlus()        ) return true;
-  //else if (particle ==        G4TauMinus::TauMinus()       ) return true;
-  //else if (particle ==   G4AntiNeutrinoE::AntiNeutrinoE()  ) return true;
-  //else if (particle ==       G4NeutrinoE::NeutrinoE()      ) return true;
-  //else if (particle ==  G4AntiNeutrinoMu::AntiNeutrinoMu() ) return true;
-  //else if (particle ==      G4NeutrinoMu::NeutrinoMu()     ) return true;
-  //else if (particle == G4AntiNeutrinoTau::AntiNeutrinoTau()) return true;
-  //else if (particle ==     G4NeutrinoTau::NeutrinoTau()    ) return true;
-  return false;
-}
-
-G4bool G4QHadronInelasticDataSet::IsZAApplicable(const G4DynamicParticle* Pt,
-                                                 G4double, G4double)
+G4bool G4QHadronInelasticDataSet::IsIsoApplicable(const G4DynamicParticle* Pt, G4int,G4int,
+                                                  const G4Element*, const G4Material*)
 {
   G4ParticleDefinition* particle = Pt->GetDefinition();
   if      (particle ==         G4Neutron::Neutron()        ) return true; // @@ isotopes?
@@ -192,6 +145,8 @@ G4bool G4QHadronInelasticDataSet::IsZAApplicable(const G4DynamicParticle* Pt,
   return false;
 }
 
+// Now it is in G4VCrossSectionDataSet...
+/*
 G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
                                                     const G4Element* pElement, G4double)
 {
@@ -256,9 +211,11 @@ G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
   } // End of temporary initialization of the cross sections in the G4QIsotope singeltone
   return Isotopes->GetMeanCrossSection(Z,indEl); // MeanCS over isotopes
 }
+*/
 
-G4double G4QHadronInelasticDataSet::GetIsoZACrossSection(const G4DynamicParticle* Pt,
-                                                         G4double Z, G4double A, G4double)
+G4double G4QHadronInelasticDataSet::GetIsoCrossSection(const G4DynamicParticle* Pt,G4int Z,
+                                                       G4int A, const G4Isotope*,
+                                                       const G4Element*, const G4Material*)
 {
   G4ParticleDefinition* particle = Pt->GetDefinition();
   G4double Momentum=Pt->GetTotalMomentum();
@@ -439,8 +396,7 @@ G4double G4QHadronInelasticDataSet::GetIsoZACrossSection(const G4DynamicParticle
     //"G4QHadronInelasticDataSet::GetIsoZACrossSection: Particle not supported by CHIPS");
     return 0; 
   }
-  G4int tZ=(G4int)(Z);
-  G4int tN=(G4int)(A-Z);
-  G4double CSI=CSmanager->GetCrossSection(true, Momentum, tZ, tN, pPDG); // CS(j,i) basic
+  G4int N=A-Z;
+  G4double CSI=CSmanager->GetCrossSection(true, Momentum, Z, N, pPDG); // CS(j,i) basic
   return CSI;
 }

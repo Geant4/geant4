@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.hh,v 1.10 2008-09-22 16:41:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,7 +101,7 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      G4double fTrackerLength;          // Full length of Tracker
      G4int    NbOfChambers;            // Nb of chambers in the tracker region
      G4double ChamberWidth;            // width of the chambers
-     G4double ChamberSpacing;	       // distance between chambers
+     G4double ChamberSpacing;          // distance between chambers
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

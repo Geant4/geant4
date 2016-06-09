@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.hh,v 1.13 2006-06-29 18:12:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:

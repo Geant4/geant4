@@ -34,15 +34,15 @@ public:
    G4FieldPropagation() {}
    G4FieldPropagation(const G4FieldPropagation &) {}
 
-   virtual ~G4FieldPropagation() {}
+   virtual ~G4FieldPropagation();
 
-   // Operators
+private:   // Operators
    const G4FieldPropagation & operator=(const G4FieldPropagation &right);
 
    int operator==(const G4FieldPropagation &right) const;
    int operator!=(const G4FieldPropagation &right) const;
 
-    // Methods
+public:    // Methods
 
    // only theActive are propagated, nothing else
    // only theSpectators define the field, nothing else

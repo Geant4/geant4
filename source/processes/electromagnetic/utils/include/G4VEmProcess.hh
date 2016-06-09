@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.61 2010-08-17 17:36:59 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +65,8 @@
 
 #ifndef G4VEmProcess_h
 #define G4VEmProcess_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VDiscreteProcess.hh"
 #include "globals.hh"
@@ -129,6 +130,9 @@ public:
 
   void PrintInfoDefinition();
 
+  // Called before tracking of each new G4Track
+  void StartTracking(G4Track*);
+
   // implementation of virtual method, specific for G4VEmProcess
   G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -181,12 +185,15 @@ public:
   inline G4int LambdaBinning() const;
 
   // Min kinetic energy for tables
-  inline void SetMinKinEnergy(G4double e);
+  void SetMinKinEnergy(G4double e);
   inline G4double MinKinEnergy() const;
 
   // Max kinetic energy for tables
-  inline void SetMaxKinEnergy(G4double e);
+  void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
+
+  // Min kinetic energy for high energy table
+  inline void SetMinKinEnergyPrim(G4double e);
 
   // Cross section table pointer
   inline const G4PhysicsTable* LambdaTable() const;
@@ -215,12 +222,18 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
-  // Assign a model to a process
+  // Assign a model to a process - obsolete will be removed
   void SetModel(G4VEmModel*, G4int index = 1);
   
-  // return the assigned model
+  // return the assigned model - obsolete will be removed
   G4VEmModel* Model(G4int index = 1);
-    
+
+  // return the assigned model
+  G4VEmModel* EmModel(G4int index = 1);
+
+  // Assign a model to a process
+  void SetEmModel(G4VEmModel*, G4int index = 1);
+      
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
@@ -238,6 +251,10 @@ public:
   void ActivateForcedInteraction(G4double length = 0.0, 
 				 const G4String& r = "",
 				 G4bool flag = true);
+
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor,
+          G4double energyLimit);
+          
 
   // Single scattering parameters
   inline void SetPolarAngleLimit(G4double a);
@@ -281,6 +298,8 @@ protected:
 
   inline void SetStartFromNullFlag(G4bool val);
 
+  inline void SetSplineFlag(G4bool val);
+
 private:
 
   void Clear();
@@ -289,13 +308,13 @@ private:
 
   void FindLambdaMax();
 
-  inline void InitialiseStep(const G4Track&);
-
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
   inline void ComputeIntegralLambda(G4double kinEnergy);
 
   inline G4double GetLambdaFromTable(G4double kinEnergy);
+
+  inline G4double GetLambdaFromTablePrim(G4double kinEnergy);
 
   inline G4double GetCurrentLambda(G4double kinEnergy);
 
@@ -319,9 +338,11 @@ private:
   // ======== Parameters of the class fixed at initialisation =======
 
   std::vector<G4VEmModel*>     emModels;
+  G4int                        numberOfModels;
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;
+  G4PhysicsTable*              theLambdaTablePrim;
   std::vector<G4double>        theEnergyOfCrossSectionMax;
   std::vector<G4double>        theCrossSectionMax;
 
@@ -335,6 +356,7 @@ private:
   G4int                        nLambdaBins;
 
   G4double                     minKinEnergy;
+  G4double                     minKinEnergyPrim;
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
   G4double                     polarAngleLimit;
@@ -343,6 +365,7 @@ private:
   G4bool                       integral;
   G4bool                       applyCuts;
   G4bool                       startFromNull;
+  G4bool                       splineFlag;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -372,6 +395,8 @@ private:
   G4double                     fFactor;
   G4bool                       biasFlag;
   G4bool                       weightFlag;
+
+  G4int                        warn;
 };
 
 // ======== Run time inline methods ================
@@ -416,7 +441,9 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 inline 
 G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy, size_t index)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, index);
+  if(1 < numberOfModels) {
+    currentModel = modelManager->SelectModel(kinEnergy, index);
+  }
   currentModel->SetCurrentCouple(currentCouple);
   return currentModel;
 }
@@ -432,39 +459,35 @@ G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::InitialiseStep(const G4Track& track)
+inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  currentParticle = track.GetParticleDefinition();
-  preStepKinEnergy = track.GetKineticEnergy();
-  DefineMaterial(track.GetMaterialCutsCouple());
-  SelectModel(preStepKinEnergy, currentCoupleIndex);
-  if (theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
+  return ((*theLambdaTable)[basedCoupleIndex])->Value(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
+inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 {
-  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)/e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
-  return fFactor *
-    (currentModel->CrossSectionPerVolume(baseMaterial,currentParticle,
-					 e,(*theCuts)[currentCoupleIndex]));
+  return currentModel->CrossSectionPerVolume(baseMaterial,currentParticle,
+					     e,(*theCuts)[currentCoupleIndex]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 {
-  G4double x = 0.0;
-  if(theLambdaTable) { x = GetLambdaFromTable(e); }
-  else               { x = ComputeCurrentLambda(e); }
-  return x;
+  G4double x;
+  if(e >= minKinEnergyPrim) { x = GetLambdaFromTablePrim(e); }
+  else if(theLambdaTable)   { x = GetLambdaFromTable(e); }
+  else                      { x = ComputeCurrentLambda(e); }
+  return fFactor*x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -485,7 +508,7 @@ G4VEmProcess::RecalculateLambda(G4double e, const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   SelectModel(e, currentCoupleIndex);
-  return ComputeCurrentLambda(e);
+  return fFactor*ComputeCurrentLambda(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -527,13 +550,6 @@ inline G4int G4VEmProcess::LambdaBinning() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::SetMinKinEnergy(G4double e)
-{
-  minKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEmProcess::MinKinEnergy() const
 {
   return minKinEnergy;
@@ -541,16 +557,16 @@ inline G4double G4VEmProcess::MinKinEnergy() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::SetMaxKinEnergy(G4double e)
+inline G4double G4VEmProcess::MaxKinEnergy() const
 {
-  maxKinEnergy = e;
+  return maxKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::MaxKinEnergy() const
+inline void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
 {
-  return maxKinEnergy;
+  minKinEnergyPrim = e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -659,6 +675,13 @@ inline void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 inline void G4VEmProcess::SetStartFromNullFlag(G4bool val)
 {
   startFromNull = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetSplineFlag(G4bool val)
+{
+  splineFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

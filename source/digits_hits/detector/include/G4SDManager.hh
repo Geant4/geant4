@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.hh,v 1.4 2006-06-29 18:05:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4SDManager_h

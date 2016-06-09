@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_NOLEP.hh,v 1.2 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +33,7 @@
 //       created from HadronPhysicsQGSP_BERT
 // Modified:
 // 15.10.2005 G.Folger: first version
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4QGSPPiKBuilder.hh"
@@ -88,7 +88,7 @@ class HadronPhysicsQGSP_BERT_NOLEP : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro; 
     G4BertiniProtonBuilder * theBertiniPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscBuilder * theMisc;
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;

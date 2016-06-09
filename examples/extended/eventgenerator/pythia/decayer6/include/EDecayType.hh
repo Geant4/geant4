@@ -23,18 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EDecayType.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// According to EDecayType enum in TPythia6Decayer class in Root:
-// http://root.cern.ch/
-// see http://root.cern.ch/root/License.html
-// ----------------------------------------------------------------------------
+/// \file eventgenerator/pythia/decayer6/include/EDecayType.hh
+/// \brief Definition of the EDecayType enumeration
 
 #ifndef E_DECAY_TYPE_H
 #define E_DECAY_TYPE_H 
 
-// Enum of decay mode types
+/// Enum of decay mode types
+///
+/// According to EDecayType enum in TPythia6Decayer class in Root:
+/// http://root.cern.ch/
+/// see http://root.cern.ch/root/License.html
+/// ----------------------------------------------------------------------------
 
 enum EDecayType
 {

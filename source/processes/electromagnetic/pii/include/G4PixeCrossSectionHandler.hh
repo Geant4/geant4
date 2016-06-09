@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeCrossSectionHandler.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -45,10 +44,12 @@
 #ifndef G4PIXECROSSSECTIONHANDLER_HH
 #define G4PIXECROSSSECTIONHANDLER_HH 1
 
-#include "globals.hh"
-#include "G4DataVector.hh"
 #include <map>
 #include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4DataVector.hh"
 #include "G4MaterialCutsCouple.hh"
 
 class G4IInterpolator;
@@ -66,9 +67,11 @@ public:
 			    const G4String& modelK="ecpssr",
 			    const G4String& modelL="ecpssr",
 			    const G4String& modelM="ecpssr",
-			    G4double minE = 1*keV, G4double maxE = 0.1*GeV,
+			    G4double minE = 1*CLHEP::keV,
+                            G4double maxE = 0.1*CLHEP::GeV,
 			    G4int nBins = 200,
-			    G4double unitE = MeV, G4double unitData = barn,
+			    G4double unitE = CLHEP::MeV,
+                            G4double unitData = CLHEP::barn,
 			    G4int minZ = 6, G4int maxZ = 92);
   
   virtual ~G4PixeCrossSectionHandler();
@@ -77,9 +80,11 @@ public:
 		  const G4String& modelK="ecpssr",
 		  const G4String& modelL="ecpssr",
 		  const G4String& modelM="ecpssr",
-		  G4double minE = 1*keV, G4double maxE = 0.1*GeV,
+		  G4double minE = 1*CLHEP::keV,
+                  G4double maxE = 0.1*CLHEP::GeV,
 		  G4int nBins = 200,
-		  G4double unitE = MeV, G4double unitData = barn,
+		  G4double unitE = CLHEP::MeV,
+                  G4double unitData = CLHEP::barn,
 		  G4int minZ = 6, G4int maxZ = 92);
 
   G4int SelectRandomAtom(const G4Material* material, G4double e) const;

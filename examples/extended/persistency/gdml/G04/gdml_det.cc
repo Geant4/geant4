@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G04/gdml_det.cc
+/// \brief Main program of the persistency/gdml/G04 example
 //
-// $Id: gdml_det.cc,v 1.3 2010-11-09 10:34:35 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -42,10 +44,10 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 
-#include "PrimaryGeneratorAction.hh"
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "SensitiveDetector.hh"
+#include "G04PrimaryGeneratorAction.hh"
+#include "G04DetectorConstruction.hh"
+#include "G04PhysicsList.hh"
+#include "G04SensitiveDetector.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -77,10 +79,10 @@ int main(int argc,char **argv)
    
    G4RunManager* runManager = new G4RunManager;
 
-   runManager->SetUserInitialization(new DetectorConstruction(
+   runManager->SetUserInitialization(new G04DetectorConstruction(
                                      parser.GetWorldVolume()));
-   runManager->SetUserInitialization(new PhysicsList);
-   runManager->SetUserAction(new PrimaryGeneratorAction);
+   runManager->SetUserInitialization(new G04PhysicsList);
+   runManager->SetUserAction(new G04PrimaryGeneratorAction);
 
    runManager->Initialize();
 
@@ -93,7 +95,7 @@ int main(int argc,char **argv)
    G4SDManager* SDman = G4SDManager::GetSDMpointer();
    
    G4String trackerChamberSDname = "Tracker";
-   SensitiveDetector* aTrackerSD = new SensitiveDetector(trackerChamberSDname);
+   G04SensitiveDetector* aTrackerSD = new G04SensitiveDetector(trackerChamberSDname);
    SDman->AddNewDetector( aTrackerSD );
  
    ///////////////////////////////////////////////////////////////////////

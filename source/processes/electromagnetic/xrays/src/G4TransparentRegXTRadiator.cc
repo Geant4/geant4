@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.12 2010-06-16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include <complex>
 
 #include "G4TransparentRegXTRadiator.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"
@@ -70,7 +70,7 @@ G4TransparentRegXTRadiator::~G4TransparentRegXTRadiator()
 
 G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
 {
-  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC/*, aMa, bMb ,sigma*/;
+  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC, theta2, theta2k /*, aMa, bMb ,sigma*/;
   G4int k, kMax, kMin;
 
   //aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
@@ -86,6 +86,8 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
   cofMin += (fPlateThick*fSigma1 + fGasThick*fSigma2)/energy;
   cofMin /= cofPHC;
 
+  theta2 = cofPHC/(energy*(fPlateThick + fGasThick));
+
   //  if (fGamma < 1200) kMin = G4int(cofMin);  // 1200 ?
   // else               kMin = 1;
 
@@ -100,12 +102,16 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
   // kMax += kMin;
   
 
-  kMax = kMin + 19; //  9; // kMin + G4int(tmp);
+  kMax = kMin + 49; //  19; // kMin + G4int(tmp);
 
   // tmp /= fGamma;
   // if( G4int(tmp) < kMin ) kMin = G4int(tmp);
-  // G4cout<<"kMin = "<<kMin<<";    kMax = "<<kMax<<G4endl;
 
+  if(verboseLevel > 2)
+  {    
+    G4cout<<cof1<<"     "<<cof2<<"        "<<cofMin<<G4endl;
+    G4cout<<"kMin = "<<kMin<<";    kMax = "<<kMax<<G4endl;
+  }
   for( k = kMin; k <= kMax; k++ )
   {
     tmp    = pi*fPlateThick*(k + cof2)/(fPlateThick + fGasThick);
@@ -119,10 +125,14 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
     {
       sum   += std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
+    theta2k = std::sqrt(theta2*std::abs(k-cofMin));
+
     if(verboseLevel > 2)
     {    
-      G4cout<<"k = "<<k<<"; tmp = "<<std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
-              <<";    sum = "<<sum<<G4endl;  
+      // G4cout<<"k = "<<k<<"; sqrt(theta2k) = "<<theta2k<<"; tmp = "<<std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
+      //     <<";    sum = "<<sum<<G4endl;  
+      G4cout<<k<<"   "<<theta2k<<"     "<<std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
+              <<"      "<<sum<<G4endl;  
     }  
   }
   result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;

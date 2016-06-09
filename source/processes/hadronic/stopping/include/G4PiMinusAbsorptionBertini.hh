@@ -32,66 +32,21 @@
 // Process for pi- absorption at rest. 
 // To be used in your physics list in case you need this physics.
 
-#include "globals.hh"
-#include "Randomize.hh" 
-#include "G4VRestProcess.hh"
-#include "G4VParticleChange.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4CascadeInterface.hh"
-#include "G4HadronicProcessType.hh"
+#include "G4HadronicAbsorptionBertini.hh"
+#include "G4PionMinus.hh"
 
-class G4PiMinusAbsorptionBertini : public G4VRestProcess
 
-{ 
+class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
 private:
-    // hide assignment operator as private 
-    G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini &right);
-    G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini& );
-    
+  // hide assignment operator as private 
+  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
+  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
+  
 public:
-    
-    G4PiMinusAbsorptionBertini(const G4String& processName ="PiMinusAbsorptionBertini",
-                               G4ProcessType   aType = fHadronic);
-    
-    ~G4PiMinusAbsorptionBertini();
-    
-    G4bool IsApplicable(const G4ParticleDefinition&);
-    
-    void PreparePhysicsTable(const G4ParticleDefinition&);
-    
-    // null physics table
-    void BuildPhysicsTable(const G4ParticleDefinition&);
-    
-    G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
-    
-private:
-    
-    void GenerateSecondaries();
-    void PionMinusAbsorption( G4int* );
-    
-protected:                         
-    
-    // zero mean lifetime
-    G4double GetMeanLifeTime(const G4Track& aTrack,
-                             G4ForceCondition* ) 
-    {
-        G4double result = 0;
-        if(aTrack.GetMaterial()->GetNumberOfElements() == 1)
-            if(aTrack.GetMaterial()->GetZ()<1.5) result = DBL_MAX;
-        return result;
-    }
-    
-    
-private:
-    // atomic mass of target nucleus
-    G4float  currentN;
-    
-    // charge of target nucleus
-    G4float  targetZ;
-    
-    G4Nucleus targetNucleus;
-    G4CascadeInterface* cascade;
-    G4ParticleDefinition* pdefPionMinus;
+  G4PiMinusAbsorptionBertini()
+    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+
+  virtual ~G4PiMinusAbsorptionBertini() {}
 };
 
 #endif

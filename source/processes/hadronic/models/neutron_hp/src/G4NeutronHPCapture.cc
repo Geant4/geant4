@@ -30,10 +30,13 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
 #include "G4NeutronHPCapture.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4NeutronHPDeExGammas.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+
+#include "G4NeutronHPManager.hh"
 
   G4NeutronHPCapture::G4NeutronHPCapture()
    :G4HadronicInteraction("NeutronHPCapture")
@@ -49,14 +52,20 @@
     numEle = G4Element::GetNumberOfElements();
 //    G4cout << "+++++++++++++++++++++++++++++++++++++++++++++++++"<<G4endl;
 //    G4cout <<"Disname="<<dirName<<" numEle="<<numEle<<G4endl;
-    theCapture = new G4NeutronHPChannel[numEle];
+    //theCapture = new G4NeutronHPChannel[numEle];
 //    G4cout <<"G4NeutronHPChannel constructed"<<G4endl;
     G4NeutronHPCaptureFS * theFS = new G4NeutronHPCaptureFS;
-    for (G4int i=0; i<numEle; i++)
+    //for (G4int i=0; i<numEle; i++)
+    //{
+//  //    G4cout << "initializing theCapture "<<i<<" "<< numEle<<G4endl;
+    //  theCapture[i].Init((*(G4Element::GetElementTable()))[i], dirName);
+    //  theCapture[i].Register(theFS);
+    //}
+    for ( G4int i = 0 ; i < numEle ; i++ ) 
     {
-//      G4cout << "initializing theCapture "<<i<<" "<< numEle<<G4endl;
-      theCapture[i].Init((*(G4Element::GetElementTable()))[i], dirName);
-      theCapture[i].Register(theFS);
+       theCapture.push_back( new G4NeutronHPChannel );
+       (*theCapture[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+       (*theCapture[i]).Register(theFS);
     }
     delete theFS;
 //    G4cout << "-------------------------------------------------"<<G4endl;
@@ -65,13 +74,23 @@
   
   G4NeutronHPCapture::~G4NeutronHPCapture()
   {
-    delete [] theCapture;
+    //delete [] theCapture;
 //    G4cout << "Leaving G4NeutronHPCapture::~G4NeutronHPCapture"<<G4endl;
+     for ( std::vector<G4NeutronHPChannel*>::iterator 
+           ite = theCapture.begin() ; ite != theCapture.end() ; ite++ )
+     {
+        delete *ite;
+     }
+     theCapture.clear();
   }
   
   #include "G4NeutronHPThermalBoost.hh"
-  G4HadFinalState * G4NeutronHPCapture::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
+  G4HadFinalState * G4NeutronHPCapture::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
+
+    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+
+    G4NeutronHPManager::GetInstance()->OpenReactionWhiteBoard();
     if(getenv("NeutronHPCapture")) G4cout <<" ####### G4NeutronHPCapture called"<<G4endl;
     const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
@@ -88,7 +107,8 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = theCapture[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        //xSec[i] = theCapture[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = (*theCapture[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                     theMaterial->GetElement(i),
   								     theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -106,5 +126,31 @@
       if(i==n) i=std::max(0, n-1);
       delete [] xSec;
     }
-    return theCapture[index].ApplyYourself(aTrack);
+
+    //return theCapture[index].ApplyYourself(aTrack);
+    //G4HadFinalState* result = theCapture[index].ApplyYourself(aTrack);
+    G4HadFinalState* result = (*theCapture[index]).ApplyYourself(aTrack);
+    aNucleus.SetParameters(G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
+    G4NeutronHPManager::GetInstance()->CloseReactionWhiteBoard();
+    return result; 
   }
+
+const std::pair<G4double, G4double> G4NeutronHPCapture::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}
+
+void G4NeutronHPCapture::addChannelForNewElement()
+{
+   G4NeutronHPCaptureFS* theFS = new G4NeutronHPCaptureFS;
+   for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
+   {
+      G4cout << "G4NeutronHPCapture Prepairing Data for the new element of " << (*(G4Element::GetElementTable()))[i]->GetName() << G4endl;
+      theCapture.push_back( new G4NeutronHPChannel );
+      (*theCapture[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+      (*theCapture[i]).Register(theFS);
+   }
+   delete theFS;
+   numEle = (G4int)G4Element::GetNumberOfElements();
+}

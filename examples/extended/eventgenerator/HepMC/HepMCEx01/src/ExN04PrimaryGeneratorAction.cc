@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorAction.cc
+/// \brief Implementation of the ExN04PrimaryGeneratorAction class
+//
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.cc
-//   $Id: ExN04PrimaryGeneratorAction.cc,v 1.5 2006-07-05 11:06:36 gcosmo Exp $
+//   $Id$
 //
 // ====================================================================
 #include "ExN04PrimaryGeneratorAction.hh"
@@ -71,6 +74,8 @@ void ExN04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if(currentGenerator)
     currentGenerator-> GeneratePrimaryVertex(anEvent);
   else 
-    G4Exception("generator is not instanciated.");
+    G4Exception("ExN04PrimaryGeneratorAction::GeneratePrimaries", 
+                "PrimaryGeneratorAction001", FatalException,
+                "generator is not instanciated." );
 }
 

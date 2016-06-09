@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.21 2010-11-08 21:25:38 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -58,8 +57,8 @@
    { aTrackAllocator.FreeSingle((G4Track *) aTrack);}
       // Override "delete" for "G4Allocator".
 
-   inline G4bool G4Track::operator==( const G4Track& s)
-   { return (this==&s);  }
+   inline G4bool G4Track::operator==( const G4Track& trk)
+   { return (this==&trk);  }
       // Define "==" operator because "G4TrackVector" uses 
       // "RWPtrOrderdVector" which requires this.
 
@@ -126,8 +125,14 @@
    { return fVelocity; }
 
    inline void  G4Track::SetVelocity(G4double val)
-   { fVelocity = val; }
- 
+   { fVelocity = val; } 
+
+   inline G4bool   G4Track::UseGivenVelocity() const
+   { return  useGivenVelocity;}
+
+   inline void     G4Track::UseGivenVelocity(G4bool val)
+   { useGivenVelocity = val;}
+
 
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const

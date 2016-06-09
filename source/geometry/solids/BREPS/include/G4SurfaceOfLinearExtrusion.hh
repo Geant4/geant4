@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceOfLinearExtrusion.hh,v 1.5 2006-06-29 18:40:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4SurfaceOfLinearExtrusion

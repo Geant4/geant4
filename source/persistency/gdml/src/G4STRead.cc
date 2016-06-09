@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4STRead.cc,v 1.6 2010-11-02 10:39:27 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4STRead Implementation
 //
@@ -43,6 +42,8 @@
 #include "G4TessellatedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4AffineTransform.hh"
+#include "G4VoxelLimits.hh"
 
 void G4STRead::TessellatedRead(const std::string& line)
 {

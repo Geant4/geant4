@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.93 2010-10-14 16:27:35 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -173,6 +173,9 @@ public:
 
   // summary printout after initialisation
   void PrintInfoDefinition();
+
+  // Called before tracking of each new G4Track
+  void StartTracking(G4Track*);
 
   // Step limit from AlongStep 
   G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
@@ -637,6 +640,8 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
 
 inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
+  //G4cout << "G4VEnergyLossProcess::GetDEDX: Idx= " 
+  //	 << basedCoupleIndex << " E(MeV)= " << e << G4endl; 
   G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
@@ -674,6 +679,8 @@ G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 {
+  //G4cout << "G4VEnergyLossProcess::GetRange: Idx= " 
+  //	 << basedCoupleIndex << " E(MeV)= " << e << G4endl; 
   G4double x = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
@@ -699,6 +706,8 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 {
+  //G4cout << "G4VEnergyLossProcess::GetEnergy: Idx= " 
+  //	 << basedCoupleIndex << " R(mm)= " << r << G4endl; 
   G4PhysicsVector* v = (*theInverseRangeTable)[basedCoupleIndex];
   G4double rmin = v->Energy(0);
   G4double e = 0.0; 
@@ -731,7 +740,7 @@ G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
 
 inline G4double 
 G4VEnergyLossProcess::GetDEDXForSubsec(G4double& kineticEnergy,
-						const G4MaterialCutsCouple* couple)
+				       const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   return GetSubDEDXForScaledEnergy(kineticEnergy*massRatio);
@@ -744,7 +753,7 @@ G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 			       const G4MaterialCutsCouple* couple)
 {
   G4double x = fRange;
-  if(kineticEnergy != preStepKinEnergy || couple != currentCouple) { 
+  if(couple != currentCouple || kineticEnergy != preStepKinEnergy) { 
     DefineMaterial(couple);
     if(theCSDARangeTable) {
       x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
@@ -776,9 +785,9 @@ inline G4double
 G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 				      const G4MaterialCutsCouple* couple)
 {
-  DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  if(theRangeTableForLoss) {
+  G4double x = fRange;
+  if(couple != currentCouple || kineticEnergy != preStepKinEnergy) {
+    DefineMaterial(couple);
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
   }
   //  G4cout << "Range from " << GetProcessName() 
@@ -793,9 +802,7 @@ G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
 				       const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double r = range/reduceFactor;
-  G4double e = ScaledKinEnergyForLoss(r)/massRatio;
-  return e;
+  return ScaledKinEnergyForLoss(range/reduceFactor)/massRatio;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

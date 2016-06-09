@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITTrackingManager.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -37,194 +38,45 @@
 #include "G4ProcessManager.hh"
 #include "G4IT.hh"
 #include "G4TrackingInformation.hh"
-
-/***
-#include "G4UserTrackingAction.hh"
-#include "G4EventManager.hh"
-#include "G4Event.hh"
-#include "G4Trajectory.hh"
-#include "G4SmoothTrajectory.hh"
-#include "G4RichTrajectory.hh"
-***/
+#include "G4ITTrackingInteractivity.hh"
 
 G4ITTrackingManager::G4ITTrackingManager()
 {
-/***
-    G4TrackingManager* trackingManager = G4EventManager::GetEventManager()->GetTrackingManager();
-    fStoreTrajectory = trackingManager->GetStoreTrajectory();
-    fVerboseLevel = trackingManager->GetVerboseLevel();
-    fpUserTrackingAction = trackingManager->GetUserTrackingAction();
-    fSetNewUserTrackingAction = false;
-***/
-
-    // if you uncomment the above part, please comment the part below
-    fStoreTrajectory = 0;
-    fVerboseLevel = 0;
-    fSetNewUserTrackingAction = false;
+    fpTrackingInteractivity = 0;
 }
 //___________________________________________________
-void G4ITTrackingManager::Initialize()
-{
-/***
-    G4TrackingManager* trackingManager = G4EventManager::GetEventManager()->GetTrackingManager();
-    fStoreTrajectory = trackingManager->GetStoreTrajectory();
-    fVerboseLevel = trackingManager->GetVerboseLevel();
-    if(!fpUserTrackingAction)
-        fpUserTrackingAction = trackingManager->GetUserTrackingAction();
-***/
-}
-
-//___________________________________________________
-/***
-void G4ITTrackingManager::SetUserTrackingAction(G4UserTrackingAction* trackAct)
-{
-    G4TrackingManager* trackingManager = G4EventManager::GetEventManager()->GetTrackingManager();
-    G4UserTrackingAction* std_trackAct = trackingManager->GetUserTrackingAction();
-
-    if(trackAct != std_trackAct) fSetNewUserTrackingAction = true;
-    else fSetNewUserTrackingAction = false;
-
-    fpUserTrackingAction = trackAct;
-}***/
+//void G4ITTrackingManager::Initialize()
+//{
+//    if(fpTrackingInteractivity) fpTrackingInteractivity->Initialize();
+//}
 //___________________________________________________
 G4ITTrackingManager::~G4ITTrackingManager()
 {
-/***
-    if(fSetNewUserTrackingAction)
-        delete fpUserTrackingAction;
-**/
+    if(fpTrackingInteractivity) delete fpTrackingInteractivity;
 }
 //___________________________________________________
 void G4ITTrackingManager::StartTracking(G4Track* track)
 {
-#ifdef G4VERBOSE
-    if(fVerboseLevel)
-    {
-        TrackBanner(track, "G4ITTrackingManager::StartTracking : ");
-    }
-#endif
-
-/***
-    if(fVerboseLevel>0 && (G4VSteppingVerbose::GetSilent()!=1) ) TrackBanner(track);
-
-    // Pre tracking user intervention process.
-    if( fpUserTrackingAction != 0 ) {
-        fpUserTrackingAction->PreUserTrackingAction(track);
-    }
-#ifdef G4_STORE_TRAJECTORY
-    G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
-    G4Trajectory_Lock* trajectory_lock = trackingInfo->GetTrajectory_Lock();
-
-    // Construct a trajectory if it is requested
-    if(fStoreTrajectory&&(!trajectory_lock))
-    {
-        trajectory_lock = new G4Trajectory_Lock();
-        trackingInfo->SetTrajectory_Lock(trajectory_lock);
-        G4VTrajectory* trajectory = 0;
-        // default trajectory concrete class object
-        switch (fStoreTrajectory) {
-        default:
-        case 1: trajectory = new G4Trajectory(track); break;
-        case 2: trajectory = new G4SmoothTrajectory(track); break;
-        case 3: trajectory = new G4RichTrajectory(track); break;
-        }
-        trajectory_lock->fpTrajectory = trajectory;
-    }
-#endif
-***/
+    if(fpTrackingInteractivity) fpTrackingInteractivity->StartTracking(track);
 
     // Inform beginning of tracking to physics processes
     track->GetDefinition()->GetProcessManager()->StartTracking(track);
 }
 //___________________________________________________
-void G4ITTrackingManager::AppendTrajectory(G4Track* /***track***/, G4Step* /***step***/)
+void G4ITTrackingManager::AppendStep(G4Track* track, G4Step* step)
 {
-/***
-#ifdef G4_STORE_TRAJECTORY
-    if(fStoreTrajectory)
-    {
-        G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
-        G4Trajectory_Lock* trajectory_lock = trackingInfo->GetTrajectory_Lock();
-        trajectory_lock->fpTrajectory->AppendStep(step);
-    }
-#endif
-***/
+    if(fpTrackingInteractivity) fpTrackingInteractivity->AppendStep(track,step);
 }
+
+//___________________________________________________
+void G4ITTrackingManager::SetInteractivity(G4ITTrackingInteractivity* iteractivity)
+{
+    if(fpTrackingInteractivity && fpTrackingInteractivity!=iteractivity) delete fpTrackingInteractivity;
+    fpTrackingInteractivity = iteractivity;
+}
+
 //___________________________________________________
 void G4ITTrackingManager::EndTracking(G4Track* track)
 {
-#ifdef G4VERBOSE
-    if(fVerboseLevel)
-    {
-        TrackBanner(track, "G4ITTrackingManager::EndTracking : ");
-    }
-#endif
-    // Post tracking user intervention process.
-/***
-    if( fpUserTrackingAction != 0 ) {
-        fpUserTrackingAction->PostUserTrackingAction(track);
-    }
-
-#ifdef G4_STORE_TRAJECTORY
-    G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
-    G4Trajectory_Lock* trajectory_lock = trackingInfo->GetTrajectory_Lock();
-
-    if(trajectory_lock)
-    {
-        G4VTrajectory*& trajectory = trajectory_lock->fpTrajectory;
-
-        if(fStoreTrajectory && trajectory)
-        {
-
-#ifdef G4VERBOSE
-            if(fVerboseLevel>10) trajectory->ShowTrajectory();
-#endif
-            G4TrackStatus istop = track->GetTrackStatus();
-            if(trajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
-            {
-                G4Event* currentEvent = G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
-                G4TrajectoryContainer* trajectoryContainer = currentEvent->GetTrajectoryContainer();
-                if(!trajectoryContainer)
-                {
-                    trajectoryContainer = new G4TrajectoryContainer;
-                    currentEvent->SetTrajectoryContainer(trajectoryContainer);
-                }
-                trajectoryContainer->insert(trajectory);
-            }
-        }
-
-        // Destruct the trajectory if it was created
-        else if( (!fStoreTrajectory)&&trajectory ) {
-            delete trajectory;
-            trajectory = 0;
-        }
-
-        delete trajectory_lock;
-        trackingInfo->SetTrajectory_Lock(0);
-    }
-#endif
-***/
+    if(fpTrackingInteractivity) fpTrackingInteractivity->EndTracking(track);
 }
-
-
-void G4ITTrackingManager::TrackBanner(G4Track* track, const G4String& message)
-{
-    G4cout << G4endl;
-    G4cout << "*******************************************************"
-           << "**************************************************"
-           << G4endl;
-    if(message != "")
-        G4cout << message ;
-    G4cout << " * G4Track Information: "
-           << "   Particle : " << track->GetDefinition()->GetParticleName()
-           << ","
-           << "   Track ID : " << track->GetTrackID()
-           << ","
-           << "   Parent ID : " << track->GetParentID()
-           << G4endl;
-    G4cout << "*******************************************************"
-           << "**************************************************"
-           << G4endl;
-    G4cout << G4endl;
-}
-

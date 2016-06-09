@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10Materials.cc
+/// \brief Implementation of the Em10Materials class
+//
 //
 // 
 //      GEANT 4 class 
@@ -40,6 +43,7 @@
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4SystemOfUnits.hh"
 
 Em10Materials::Em10Materials()
 {
@@ -390,22 +394,22 @@ void Em10Materials::Initialise()
   ma  = new G4Material("Li",    3.,  6.941*g/mole, 1.*g/cm3);
   ma  = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma  = new G4Material("C",     6.,  12.00*g/mole, 2.0*g/cm3);
-	ma  = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+        ma  = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma->SetChemicalFormula("Graphite");
   ma  = new G4Material("Al",    13.,  26.98*g/mole,  2.7 *g/cm3);
-	ma  = new G4Material("Si",    14.,  29.055*g/mole, 2.33*g/cm3);
-	ma  = new G4Material("LAr",   18.,  39.95*g/mole,  1.393*g/cm3);
-	ma  = new G4Material("Zr",    40.,  91.224*g/mole, 4.0*g/cm3);
-	ma  = new G4Material("LXe",   54., 131.29*g/mole,  3.02*g/cm3);
-	ma  = new G4Material("Fe",    26.,  55.85*g/mole,  7.87*g/cm3);
-	ma  = new G4Material("Ni",    29.,  58.6934*g/mole,  8.00*g/cm3);
-	ma  = new G4Material("Cu",    29.,  63.55*g/mole,  8.96*g/cm3);
-	ma  = new G4Material("Au",    79., 196.97*g/mole, 19.32*g/cm3);
-	ma  = new G4Material("Ta",    73., 180.9479*g/mole, 16.67*g/cm3);
-	ma  = new G4Material("W",     74., 183.85*g/mole, 19.30*g/cm3);
-	ma  = new G4Material("Pb",    82., 207.19*g/mole, 11.35*g/cm3);
-	ma  = new G4Material("Bi",    83., 208.98*g/mole, 12.*g/cm3);
-	ma  = new G4Material("U",     92., 238.03*g/mole, 18.95*g/cm3);
+        ma  = new G4Material("Si",    14.,  29.055*g/mole, 2.33*g/cm3);
+        ma  = new G4Material("LAr",   18.,  39.95*g/mole,  1.393*g/cm3);
+        ma  = new G4Material("Zr",    40.,  91.224*g/mole, 4.0*g/cm3);
+        ma  = new G4Material("LXe",   54., 131.29*g/mole,  3.02*g/cm3);
+        ma  = new G4Material("Fe",    26.,  55.85*g/mole,  7.87*g/cm3);
+        ma  = new G4Material("Ni",    29.,  58.6934*g/mole,  8.00*g/cm3);
+        ma  = new G4Material("Cu",    29.,  63.55*g/mole,  8.96*g/cm3);
+        ma  = new G4Material("Au",    79., 196.97*g/mole, 19.32*g/cm3);
+        ma  = new G4Material("Ta",    73., 180.9479*g/mole, 16.67*g/cm3);
+        ma  = new G4Material("W",     74., 183.85*g/mole, 19.30*g/cm3);
+        ma  = new G4Material("Pb",    82., 207.19*g/mole, 11.35*g/cm3);
+        ma  = new G4Material("Bi",    83., 208.98*g/mole, 12.*g/cm3);
+        ma  = new G4Material("U",     92., 238.03*g/mole, 18.95*g/cm3);
 
   G4Element*   H  = new G4Element ("Hydrogen", "H",   1. ,  1.01*g/mole);
   G4Element*   N  = new G4Element ("Nitrigen", "N",   7. , 14.00*g/mole);
@@ -429,7 +433,7 @@ void Em10Materials::Initialise()
   ma->AddElement(I,1);
   ma->SetChemicalFormula("CsI");
   ma = new G4Material("Air"  , 1.290*mg/cm3, 2);
-	// use fraction in mass
+        // use fraction in mass
   ma->AddElement(N, 0.7);
   ma->AddElement(O, 0.3);
   */
@@ -444,11 +448,11 @@ G4Material* Em10Materials::GetMaterial(const G4String& name)
 
   //  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-	G4Material* ma = G4Material::GetMaterial(name);
-	
+        G4Material* ma = G4Material::GetMaterial(name);
+        
   G4cout << "Material is selected: " << ma->GetName() << G4endl;
   return ma;
-}	
+}        
 
   
 

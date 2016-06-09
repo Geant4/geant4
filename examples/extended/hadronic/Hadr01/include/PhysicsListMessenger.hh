@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh,v 1.4 2009-12-29 19:23:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -35,7 +37,7 @@
 // Created: 31.01.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -64,15 +66,15 @@ public:
     
 private:
   
-  PhysicsList* pPhysicsList;
+  PhysicsList* fPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* posCutCmd;
-  G4UIcmdWithADoubleAndUnit* pCutCmd;
-  G4UIcmdWithADoubleAndUnit* allCutCmd;
-  G4UIcmdWithAString*        pListCmd;
-  G4UIcmdWithoutParameter*   listCmd;  
+  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fPosCutCmd;
+  G4UIcmdWithADoubleAndUnit* fCutCmd;
+  G4UIcmdWithADoubleAndUnit* fAllCutCmd;
+  G4UIcmdWithAString*        fPListCmd;
+  G4UIcmdWithoutParameter*   fListCmd;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc,v 1.18 2010-11-11 11:30:45 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -43,7 +42,7 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
 
   G4String::size_type pos0= str.find_first_not_of(delimiter);
   G4String::size_type pos = str.find_first_of(delimiter, pos0);
-  
+
   while (pos != G4String::npos || pos0 != G4String::npos) {
     if (str[pos0] == '\"') {
       pos = str.find_first_of("\"", pos0+1);
@@ -67,14 +66,14 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
 // ====================================================================
 
 ////////////////////////////////////////////////////////////////////
-G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession) 
+G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
   : previousSession(prevSession), isOpened(false)
 ////////////////////////////////////////////////////////////////////
 {
   macroStream.open(fileName, std::ios::in);
   if(macroStream.fail()) {
-    G4cerr << "***** Can not open a macro file <" 
-           << fileName << ">" 
+    G4cerr << "***** Can not open a macro file <"
+           << fileName << ">"
            << G4endl;
   } else {
     isOpened= true;
@@ -85,7 +84,7 @@ G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
 
 
 ///////////////////////
-G4UIbatch::~G4UIbatch() 
+G4UIbatch::~G4UIbatch()
 ///////////////////////
 {
   if(isOpened) macroStream.close();
@@ -98,6 +97,7 @@ G4String G4UIbatch::ReadCommand()
 {
   enum { BUFSIZE= 4096 };
   static char linebuf[BUFSIZE];
+  const char ctrM = 0x0d;
 
   G4String cmdtotal= "";
   G4bool qcontinued= false;
@@ -114,6 +114,7 @@ G4String G4UIbatch::ReadCommand()
 
     // strip
     cmdline= cmdline.strip(G4String::both);
+    cmdline= cmdline.strip(G4String::trailing, ctrM);
 
     // skip null line if single line
     if(!qcontinued && cmdline.size()==0) continue;
@@ -190,7 +191,7 @@ G4int G4UIbatch::ExecCommand(const G4String& command)
 
 
 ///////////////////////////////////////
-G4UIsession * G4UIbatch::SessionStart() 
+G4UIsession * G4UIbatch::SessionStart()
 ///////////////////////////////////////
 {
   if(!isOpened) return previousSession;
@@ -198,14 +199,14 @@ G4UIsession * G4UIbatch::SessionStart()
   while(1) {
     G4String newCommand = ReadCommand();
 
-    if(newCommand == "exit") { 
+    if(newCommand == "exit") {
       break;
     }
 
     // just echo something
-    if( newCommand[(size_t)0] == '#') { 
+    if( newCommand[(size_t)0] == '#') {
       if(G4UImanager::GetUIpointer()-> GetVerboseLevel()==2) {
-        G4cout << newCommand << G4endl; 
+        G4cout << newCommand << G4endl;
       }
       continue;
     }
@@ -222,9 +223,9 @@ G4UIsession * G4UIbatch::SessionStart()
 }
 
 
-//////////////////////////////////////////////////
-void G4UIbatch::PauseSessionStart(G4String Prompt) 
-//////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+void G4UIbatch::PauseSessionStart(const G4String& Prompt)
+/////////////////////////////////////////////////////////
 {
   G4cout << "Pause session <" << Prompt << "> start." << G4endl;
 

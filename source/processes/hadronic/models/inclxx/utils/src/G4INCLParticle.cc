@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * Particle.cc
  *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
+ *  \date Jun 5, 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLParticle.hh"
@@ -52,16 +52,22 @@ namespace G4INCL {
 
   Particle::Particle()
     : theZ(0), theA(0),
-    participant(false),
+    theParticipantType(TargetSpectator),
+    theType(UnknownParticle),
     theEnergy(0.0),
+    thePropagationEnergy(&theEnergy),
+    theFrozenEnergy(theEnergy),
     theMomentum(ThreeVector(0.,0.,0.)),
+    thePropagationMomentum(&theMomentum),
+    theFrozenMomentum(theMomentum),
     thePosition(ThreeVector(0.,0.,0.)),
     nCollisions(0),
     nDecays(0),
     thePotentialEnergy(0.0),
     theHelicity(0.0),
     emissionTime(0.0),
-    outOfWell(false)
+    outOfWell(false),
+    theMass(0.)
   {
     ID = nextID;
     nextID++;
@@ -69,12 +75,18 @@ namespace G4INCL {
 
   Particle::Particle(ParticleType t, G4double energy,
       ThreeVector momentum, ThreeVector position)
-    : theEnergy(energy), theMomentum(momentum), thePosition(position),
+    : theEnergy(energy),
+    thePropagationEnergy(&theEnergy),
+    theFrozenEnergy(theEnergy),
+    theMomentum(momentum),
+    thePropagationMomentum(&theMomentum),
+    theFrozenMomentum(theMomentum),
+    thePosition(position),
     nCollisions(0), nDecays(0),
       thePotentialEnergy(0.), theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
-    participant = false;
+    theParticipantType = TargetSpectator;
     ID = nextID;
     nextID++;
     if(theEnergy <= 0.0) {
@@ -86,12 +98,16 @@ namespace G4INCL {
 
   Particle::Particle(ParticleType t,
       ThreeVector momentum, ThreeVector position)
-    : theMomentum(momentum), thePosition(position),
+    : thePropagationEnergy(&theEnergy),
+    theMomentum(momentum),
+    thePropagationMomentum(&theMomentum),
+    theFrozenMomentum(theMomentum),
+    thePosition(position),
     nCollisions(0), nDecays(0),
       thePotentialEnergy(0.), theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
-    participant = false;
+    theParticipantType = TargetSpectator;
     ID = nextID;
     nextID++;
     setType(t);
@@ -100,17 +116,14 @@ namespace G4INCL {
     }
     G4double energy = std::sqrt(theMomentum.mag2() + theMass*theMass);
     theEnergy = energy;
-  }
-
-  Particle::~Particle() {
-    // TODO Auto-generated destructor stub
+    theFrozenEnergy = theEnergy;
   }
 
   const ThreeVector &Particle::adjustMomentumFromEnergy() {
     const G4double p2 = theMomentum.mag2();
     G4double newp2 = theEnergy*theEnergy - theMass*theMass;
     if( newp2<0.0 ) {
-      ERROR("Particle has E^2 < m^2." << std::endl << prG4int());
+      ERROR("Particle has E^2 < m^2." << std::endl << print());
       newp2 = 0.0;
       theEnergy = theMass;
     }

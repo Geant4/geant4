@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/include/OlapRunAction.hh
+/// \brief Definition of the OlapRunAction class
 //
-// $Id: OlapRunAction.hh,v 1.3 2006-06-29 17:22:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

@@ -38,8 +38,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.18 2006-06-29 15:48:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "BrachyRunAction.hh"

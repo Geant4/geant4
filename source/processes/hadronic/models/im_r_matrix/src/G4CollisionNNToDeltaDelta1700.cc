@@ -32,6 +32,13 @@
 
 G4CollisionNNToDeltaDelta1700::G4CollisionNNToDeltaDelta1700()
 { 
-  MakeNNToDeltaDelta<Dm_1700PC, D0_1700PC, Dp_1700PC, Dpp_1700PC, 
-                     G4ConcreteNNToDeltaDeltastar>::Make(this);
+	components=0;
+	MakeNNToDeltaDelta<Dm_1700PC, D0_1700PC, Dp_1700PC, Dpp_1700PC,
+	G4ConcreteNNToDeltaDeltastar>::Make(this);
+}
+
+G4CollisionNNToDeltaDelta1700::~G4CollisionNNToDeltaDelta1700()
+{
+	if (components) delete components;
+	components=0;
 }

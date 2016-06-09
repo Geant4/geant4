@@ -14,6 +14,38 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+ 3 October 2012 - Dennis Wright (hadr-hep-V09-05-06)
+----------------------------------------------------
+- add deprecation warnings to ctors of model classes
+
+25 September 2012 - Gabriele Cosmo (hadr-hep-V09-05-05)
+-------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+30 August 2012 - Dennis Wright (hadr-hep-V09-05-04)
+---------------------------------------------------
+- fix MacOSX 10.8 warning "use of C99 hexadecimal floating constant"
+  by replacing std::log(MAXFLOAT) with 82.0 (as in Low Energy code)
+- in G4HEInelastic.cc, also replace MAXFLOAT with DBL_MAX
+
+12 June 2012 - Dennis Wright (hadr-hep-V09-05-03)
+-------------------------------------------------
+- replace shadowed variables nm, m, s, etc. in .cc files 
+
+12 April 2012 - Gunter Folger   (hadr-hep-V09-05-02)
+----------------------------------------------------
+- GetFatalEnergyCheckLevels() returns const std::pair<>
+
+22 March 2012 - Dennis Wright  (hadr-hep-V09-05-01)
+---------------------------------------------------
+- remove obsolete comment about comparison with Geant3 from G4HEInelastic.hh
+
+16 March 2012 - Gunter Folger   (hadr-hep-V09-05-00)
+----------------------------------------------------
+-  relax limits on check for "catastrophic" energy non-conservation,
+    allow deviation by the mass of heavy nucleus.
+
 25 October 2011 - Dennis Wright (hadr-hep-V09-04-03)
 ----------------------------------------------------
 - replace Description() with ModelDescription(std::ostream&) in all models.

@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.5 2006-11-15 14:58:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/include/HistoMessenger.hh
+/// \brief Definition of the HistoMessenger class
 //
-/////////////////////////////////////////////////////////////////////////
+// $Id$
 //
-// HistoMessenger
 //
-// Created: 31.01.2003 V.Ivanchenko
-//
-// Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
-//
-////////////////////////////////////////////////////////////////////////
-// 
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoMessenger_h
 #define HistoMessenger_h 1
@@ -48,9 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Histo;
+class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,18 +55,17 @@ public:
   HistoMessenger(Histo* );
   virtual ~HistoMessenger();
 
-  void SetNewValue(G4UIcommand* ,G4String );
+  virtual void SetNewValue(G4UIcommand* ,G4String );
 
 private:
 
-  Histo*                  histo;
+  Histo*                  fHisto;
    
-  G4UIcmdWithAString*     factoryCmd;
-  G4UIcmdWithAString*     fileCmd;
-  G4UIcmdWithAString*     optCmd;
-  G4UIcmdWithAnInteger*   printCmd;
-  G4UIcommand*            histoCmd;    
- 
+  G4UIdirectory*          fHistoDir;   
+  G4UIcmdWithAString*     fFactoryCmd;
+  G4UIcmdWithAString*     fFileCmd;
+  G4UIcommand*            fHistoCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

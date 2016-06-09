@@ -29,26 +29,7 @@ inline void fill_vec(List<StreamerInfo>& a_infos,
 }
 
 
-inline bool fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
-
-  const int size_DOUBLE = 8;
-  const int size_INT = 4;
-  const int size_POINTER = 4;
-  //const int size_OBJECT_POINTER = 4;
-  const int size_COUNTER = 4;
-  const int size_VIRTUAL = 4;
-
-  const int size_TNamed = 28;
-  const int size_TAttLine = 12;
-  const int size_TAttFill = 8;
-  const int size_TAttMarker = 12;
-  const int size_TObjArray = 40;
-  const int size_TArray = 8;
-  const int size_TArrayD = 12;
-
-  const int size_TString = 8;
-  const int size_TBranch = 256;
-  const int size_TLeaf = 64;
+inline void fill_infos_core(List<StreamerInfo>& a_infos,std::ostream&) {
 
   // sizeof(TString) = 8   (4 (virtual ~) + 1 + 3 (align))
   // sizeof(TObject) = 12
@@ -59,16 +40,19 @@ inline bool fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
   // sizeof(TArrayD) = 12
   // sizeof(TArrayF) = 12
 
-  ///////////////////////////////////////////////////////////
-  /// core //////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
+  //const int size_DOUBLE = 8;
+  const int size_INT = 4;
+  const int size_POINTER = 4;
+  //const int size_OBJECT_POINTER = 4;
+  //const int size_COUNTER = 4;
+  const int size_VIRTUAL = 4;
+
+  const int size_TArray = 8;
 
   short TObject_version = 1;
   short TNamed_version = 1;
   short TStreamerElement_version = 2;
   short TArray_version = 1;
-  short TArrayF_version = 1;
-  short TArrayD_version = 1;
 
  {unsigned int check = 0;  
   //this :
@@ -392,10 +376,10 @@ inline bool fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
   fill_vec(a_infos,"double",streamer_info::DOUBLE);
   fill_vec(a_infos,"bool",streamer_info::BOOL);
 
+}
 
-  ///////////////////////////////////////////////////////////
-  /// graf //////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
+inline void fill_infos_graf(List<StreamerInfo>& a_infos,std::ostream&) {
+
   //sizeof(Font_t) = 2
   //sizeof(Style_t) = 2
   //sizeof(Marker_t) = 2
@@ -477,9 +461,28 @@ inline bool fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
   //12
   }
 
-  ///////////////////////////////////////////////////////////
-  /// tree //////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
+}
+
+inline void fill_infos_tree(List<StreamerInfo>& a_infos,std::ostream& a_out) {
+
+  const int size_DOUBLE = 8;
+  const int size_INT = 4;
+  const int size_POINTER = 4;
+  const int size_COUNTER = 4;
+
+  const int size_TNamed = 28;
+  const int size_TAttLine = 12;
+  const int size_TAttFill = 8;
+  const int size_TAttMarker = 12;
+  const int size_TObjArray = 40;
+  const int size_TArrayD = 12;
+
+  const int size_TString = 8;
+  const int size_TBranch = 256;
+  const int size_TLeaf = 64;
+
+  short TNamed_version = 1;
+
   short TAttLine_version = 1;
   short TAttFill_version = 1;
   short TAttMarker_version = 1;
@@ -1219,9 +1222,18 @@ inline bool fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
   info->add(new streamer_basic_type("fType","leaf type",offset,streamer_info::INT,"Int_t"));
   offset += size_INT;}
 
-  ///////////////////////////////////////////////////////////
-  /// histo /////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
+}
+
+inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
+
+  short TNamed_version = 1;
+  short TArrayF_version = 1;
+  short TArrayD_version = 1;
+
+  short TAttLine_version = 1;
+  short TAttFill_version = 1;
+  short TAttMarker_version = 1;
+
   short TAttAxis_version = 4;
 
  {unsigned int check = 0;  
@@ -1549,7 +1561,15 @@ inline bool fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
 
   }
 
-  return true;
+}
+
+inline void fill_infos(List<StreamerInfo>& a_infos,std::ostream& a_out) {
+
+  fill_infos_core(a_infos,a_out);
+  fill_infos_graf(a_infos,a_out);
+  fill_infos_tree(a_infos,a_out);
+  fill_infos_histo(a_infos,a_out);
+
 }
 
 }}

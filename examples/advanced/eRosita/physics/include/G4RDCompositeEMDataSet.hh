@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDCompositeEMDataSet.hh,v 1.12 2008/03/17 13:45:25 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -46,9 +46,11 @@
 #ifndef G4RDCOMPOSITEEMDATASET_HH
 #define G4RDCOMPOSITEEMDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4RDVEMDataSet.hh"
-#include <vector>
 
 class G4RDVDataSetAlgorithm;
 
@@ -56,8 +58,8 @@ class G4RDCompositeEMDataSet : public G4RDVEMDataSet
 {
 public:
   G4RDCompositeEMDataSet(G4RDVDataSetAlgorithm* argAlgorithm, 
-		       G4double eUnit=MeV, 
-		       G4double dataUnit=barn, 
+		       G4double eUnit=CLHEP::MeV, 
+		       G4double dataUnit=CLHEP::barn, 
 		       G4int zMin=1, 
 		       G4int zMax=99); 
 
@@ -101,12 +103,3 @@ private:
   G4int maxZ;
 };
 #endif /* G4COMPOSITEEMDATASET_HH */
-
-
-
-
-
-
-
-
-

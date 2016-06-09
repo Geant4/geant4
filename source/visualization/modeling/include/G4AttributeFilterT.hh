@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttributeFilterT.hh,v 1.7 2010-12-11 16:41:11 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Generic attribute filter.
 //
@@ -213,7 +212,8 @@ G4AttributeFilterT<T>::AddInterval(const G4String& interval)
     G4ExceptionDescription ed;
     ed <<"Interval "<< interval <<" already exists";
     G4Exception
-      ("G4AttributeFilterT::AddInterval", "modeling0104", FatalErrorInArgument, ed);
+      ("G4AttributeFilterT::AddInterval", "modeling0104", JustWarning, ed);
+    return;
   }
 
   fConfigVect.push_back(myPair);
@@ -231,7 +231,8 @@ G4AttributeFilterT<T>::AddValue(const G4String& value)
     G4ExceptionDescription ed;
     ed <<"Single value "<< value <<" already exists";
     G4Exception
-      ("G4AttributeFilterT::AddValue", "modeling0105", FatalErrorInArgument, ed);
+      ("G4AttributeFilterT::AddValue", "modeling0105", JustWarning, ed);
+    return;
   }
   fConfigVect.push_back(myPair);
 }

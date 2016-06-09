@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGPrimaryGeneratorAction.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file persistency/P03/include/ExTGPrimaryGeneratorAction.hh
+/// \brief Definition of the ExTGPrimaryGeneratorAction class
 //
-// ---------------------------------------------------------------------------
+// $Id$
  
 #ifndef ExTGPrimaryGeneratorAction_h
 #define ExTGPrimaryGeneratorAction_h 1
@@ -36,8 +36,8 @@
 class G4ParticleGun;
 class G4Event;
 
-// ---------------------------------------------------------------------------
- 
+/// Example of primary generator action
+
 class ExTGPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
@@ -49,7 +49,7 @@ class ExTGPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
 
-    G4ParticleGun* particleGun;
+    G4ParticleGun* fParticleGun;
 };
 
 // ---------------------------------------------------------------------------

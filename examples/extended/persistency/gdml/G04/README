@@ -22,12 +22,12 @@ A simple GDML files is provided:
 
 HOW TO BUILD THE EXAMPLE ?
 
-- You need to have built the persistency/gdml plugin module by having
-  set G4LIB_BUILD_GDML variable in your environment.
-  It is also required you specify the path where the XercesC XML parser
-  package is installed in your system, through the variable XERCESCROOT.
-
-- Compile and link to generate the executable:
+- You need to have built the persistency/gdml module by having
+  set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+  as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+  the path where the XercesC XML parser package is installed in your system.
+ 
+- Compile and link to generate the executable (in your CMAKE build directory):
  	      % make
 
 - Execute the application.

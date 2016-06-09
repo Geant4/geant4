@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.14 2006-06-29 19:03:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // GEANT4 native types

@@ -25,7 +25,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.36 2006/06/29 19:40:17 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // 
@@ -52,6 +52,8 @@
 #include "G4LowEnergyGammaConversion.hh"
 
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"

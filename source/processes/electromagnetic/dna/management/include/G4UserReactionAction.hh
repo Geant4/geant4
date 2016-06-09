@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4UserReactionAction.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.

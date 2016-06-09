@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.5 2010-06-03 16:28:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -33,13 +32,16 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-//
+// 20120921  M. Kelsey -- Replace G4MuonMinusCaptureAtRest with new
+//		G4MuonMinusCapture.
 //----------------------------------------------------------------------------
 //
 
 #include "G4QStoppingPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4QCaptureAtRest.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -48,19 +50,27 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
-  :  G4VPhysicsConstructor("stopping"), verbose(ver), wasActivated(false) ,
-     useMuonMinusCaptureAtRest(true)
+  :  G4VPhysicsConstructor("stopping")
+    , muProcess(0), hProcess(0)
+, verbose(ver), wasActivated(false) ,
+     useMuonMinusCapture(true)
 {
+  G4HadronicDeprecate("G4QStoppingPhysics");
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
 
 G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
 		G4bool UseMuonMinusCapture)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false) ,
-     useMuonMinusCaptureAtRest(UseMuonMinusCapture)
+  :  G4VPhysicsConstructor(name)
+    , muProcess(0), hProcess(0)
+    , verbose(ver), wasActivated(false) ,
+     useMuonMinusCapture(UseMuonMinusCapture)
 {
+  G4HadronicDeprecate("G4QStoppingPhysics");
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
 
@@ -93,7 +103,7 @@ void G4QStoppingPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  if ( useMuonMinusCaptureAtRest )
+  if ( useMuonMinusCapture )
   {
      muProcess = new G4MuonMinusCaptureAtRest();
   } else {
@@ -113,7 +123,7 @@ void G4QStoppingPhysics::ConstructProcess()
     particle = theParticleIterator->value();
     pmanager = particle->GetProcessManager();
     if(particle == G4MuonMinus::MuonMinus()) {
-      if ( useMuonMinusCaptureAtRest ) 
+      if ( useMuonMinusCapture ) 
       {
 	 pmanager->AddRestProcess(muProcess);
          if(verbose > 1)

@@ -11,24 +11,14 @@
 /testem/det/setMat Aluminium 
 /testem/det/setSize 10 m
 #
+/testem/phys/addPhysics  emstandard_opt0
+###/testem/phys/addPhysics  local
+#
 /run/initialize
 #
 /testem/gun/setDefault 
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/testem/histo/setHisto 1 100 0   50 cm		#track length of primary
-/testem/histo/setHisto 2 100 0  300 none	#nb steps of primary
-/testem/histo/setHisto 3 200 0   20 mm		#step size of primary
-#
-/testem/histo/setFileType hbook
-#
 /testem/phys/setCuts 1 mm
-/testem/histo/setFileName run0 
-/run/beamOn 2000
-#
-/process/eLoss/verbose 0
-#
-/testem/phys/setCuts 10 um
-/testem/histo/setFileName run1
 /run/beamOn 2000

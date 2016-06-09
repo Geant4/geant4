@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.38 2010-11-22 07:07:27 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -45,6 +44,8 @@
 
 #include "G4RandomDirection.hh"
 #include "G4QuasmonVector.hh"
+#include "G4QFreeScattering.hh"
+#include "G4QThd.hh"
 
 class G4QEnvironment 
 {
@@ -124,10 +125,8 @@ private:
   G4int              totBaryoN;      // Total baryon number in the reaction (for cur.cont)
   G4QHadronVector    theProjectiles; // Vector of projectiles in the interaction
   G4int              theTargetPDG;   // PDG of the target nucleus in the interaction
+  G4QFreeScattering* theQFScat;      // Pointer to the CHIPS Quasi-Free Scatterer
 };
-
-//General function makes Random Unit 3D-Vector
-//G4ThreeVector RndmDir();
 
 // Inline functions
 inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const
@@ -135,4 +134,5 @@ inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const
 inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const
                                                                      {return this != &rhs;}
 inline G4QNucleus G4QEnvironment::GetEnvironment() const {return theEnvironment;}
+
 #endif

@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01CalorimeterSD.cc,v 1.3 2006-11-18 02:42:27 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01CalorimeterSD.cc
+/// \brief Implementation of the RE01CalorimeterSD class
 //
-
+// $Id$
+//
 
 #include "RE01CalorimeterSD.hh"
 #include "RE01CalorimeterHit.hh"
@@ -39,33 +40,44 @@
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01CalorimeterSD::RE01CalorimeterSD(G4String name)
-:G4VSensitiveDetector(name),
- numberOfCellsInZ(20),numberOfCellsInPhi(48)
+  :G4VSensitiveDetector(name), fCalCollection(0),
+   fNumberOfCellsInZ(20),fNumberOfCellsInPhi(48)
 {
+  // Initialize data member.
+  for(G4int j=0;j<fNumberOfCellsInZ;j++)
+  for(G4int k=0;k<fNumberOfCellsInPhi;k++)
+  {
+    fCellID[j][k] = -1;
+  }
+  //
   G4String HCname;
   collectionName.insert(HCname="calCollection");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01CalorimeterSD::~RE01CalorimeterSD()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01CalorimeterSD::Initialize(G4HCofThisEvent* HCE)
 {
-  CalCollection = new RE01CalorimeterHitsCollection
+  fCalCollection = new RE01CalorimeterHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
-  for(G4int j=0;j<numberOfCellsInZ;j++)
-  for(G4int k=0;k<numberOfCellsInPhi;k++)
+  for(G4int j=0;j<fNumberOfCellsInZ;j++)
+  for(G4int k=0;k<fNumberOfCellsInPhi;k++)
   {
-    CellID[j][k] = -1;
+    fCellID[j][k] = -1;
   }
 
   static G4int HCID = -1;
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection( HCID, CalCollection );
+  HCE->AddHitsCollection( HCID, fCalCollection );
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 {
   if(!ROhist) return false;
@@ -78,7 +90,7 @@ G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   G4int copyIDinZ = ROhist->GetReplicaNumber();
   G4int copyIDinPhi = ROhist->GetReplicaNumber(1);
 
-  if(CellID[copyIDinZ][copyIDinPhi]==-1)
+  if(fCellID[copyIDinZ][copyIDinPhi]==-1)
   {
     RE01CalorimeterHit* calHit
       = new RE01CalorimeterHit
@@ -89,16 +101,16 @@ G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     calHit->SetPos(aTrans.NetTranslation());
     calHit->SetRot(aTrans.NetRotation());
     calHit->SetTrackInformation(aStep->GetTrack());
-    G4int icell = CalCollection->insert( calHit );
-    CellID[copyIDinZ][copyIDinPhi] = icell - 1;
+    G4int icell = fCalCollection->insert( calHit );
+    fCellID[copyIDinZ][copyIDinPhi] = icell - 1;
     if(verboseLevel>0)
     { G4cout << " New Calorimeter Hit on CellID " 
            << copyIDinZ << " " << copyIDinPhi << G4endl; }
   }
   else
   { 
-    (*CalCollection)[CellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
-    (*CalCollection)[CellID[copyIDinZ][copyIDinPhi]]->SetTrackInformation(aStep->GetTrack());
+    (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
+    (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]->SetTrackInformation(aStep->GetTrack());
     if(verboseLevel>0)
     { G4cout << " Energy added to CellID " 
            << copyIDinZ << " " << copyIDinPhi << G4endl; }
@@ -106,20 +118,4 @@ G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 
   return true;
 }
-
-void RE01CalorimeterSD::EndOfEvent(G4HCofThisEvent*)
-{
-}
-
-void RE01CalorimeterSD::clear()
-{
-} 
-
-void RE01CalorimeterSD::DrawAll()
-{
-} 
-
-void RE01CalorimeterSD::PrintAll()
-{
-} 
 

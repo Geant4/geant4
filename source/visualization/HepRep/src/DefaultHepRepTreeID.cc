@@ -13,8 +13,8 @@ using namespace HEPREP;
  */
 namespace cheprep {
 
-DefaultHepRepTreeID::DefaultHepRepTreeID(string name, string version, string qualifier)
-    : name(name), version(version), qualifier(qualifier) {
+DefaultHepRepTreeID::DefaultHepRepTreeID(string aName, string aVersion, string aQualifier)
+    : name(aName), version(aVersion), qualifier(aQualifier) {
 }
 
 DefaultHepRepTreeID::~DefaultHepRepTreeID() {

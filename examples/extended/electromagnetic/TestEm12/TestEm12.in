@@ -9,7 +9,7 @@
 /testem/det/setRadius  3 cm
 /testem/det/setNbOfLayers 1
 #
-/testem/phys/addPhysics  local	# em physics
+/testem/phys/addPhysics  emstandard_opt0	# em physics
 #
 /run/initialize
 #
@@ -18,15 +18,14 @@
 /gun/particle e-
 /gun/energy 4 MeV
 #
-/testem/histo/setFileType root
-/testem/histo/setFileName testem12
-/testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
-/testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
-/testem/histo/setHisto 3 100  0.    3. cm	#true track length
-/testem/histo/setHisto 4 100  0.  500. um	#true step length
-/testem/histo/setHisto 5 200 -3.    3. cm	#proj range
-/testem/histo/setcsdaRange       2.037 cm
-/testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
+###/testem/histo/setFileName testem12
+###/testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
+###/testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
+###/testem/histo/setHisto 3 100  0.    3. cm	#true track length
+###/testem/histo/setHisto 4 100  0.  500. um	#true step length
+###/testem/histo/setHisto 5 200 -3.    3. cm	#proj range
+###/testem/histo/setcsdaRange       2.037 cm
+###/testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
 #
 /testem/event/printModulo 1000
 #

@@ -15,6 +15,30 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+21-10-12 mma (testem15-V09-05-05)
+- PhysListEmStandard: use msc model96
+     
+16-10-12 mma (testem15-V09-05-04)
+- use G4AnalysisManager
+- coding convention: virtual
+     
+29-09-12 mma (testem15-V09-05-03)
+- PhysicsList::AddPhysicsList() : add emstandard_opt3 (to allow muMsc WVI model)
+- SteppingAction : add procName = muMsc
+- add macro muon.mac     
+     
+28-04-12 mma (testem15-V09-05-02)
+- RunAction::EndOfRunAction() : printing corrections
+     
+12-04-12 mma (testem15-V09-05-01)
+- all classes : apply G4 coding conventions
+       
+08-03-12 mma (testem15-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+     
 08-11-11 mma (testem15-V09-04-01)
 - modify SteppingVerbose for OutOfWorld
           

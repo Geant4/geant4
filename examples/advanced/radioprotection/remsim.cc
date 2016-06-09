@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.16 2010-11-18 16:23:18 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc,v 1.7 2006/06/29 19:25:38 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -38,6 +38,8 @@
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 #include "G4NeutronBetaDecayChannel.hh"
@@ -161,16 +163,16 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   // calcurate electron energy
   G4double x;                    // Ee
   G4double p;                    // Pe
-  G4double m = daughtermass[0];  //Me
+  G4double dm = daughtermass[0]; //Me
   G4double w;                    // cosine of e-nu angle
   G4double r;  
   G4double r0;
   do {
       x = xmax*G4UniformRand();
-      p = std::sqrt(x*(x+2.0*m));
+      p = std::sqrt(x*(x+2.0*dm));
       w = 1.0-2.0*G4UniformRand();
-      r = p*(x+m)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+m)*w);
-      r0 = G4UniformRand()*(xmax+m)*(xmax+m)*xmax*xmax*(1.0+aENuCorr);
+      r = p*(x+dm)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+dm)*w);
+      r0 = G4UniformRand()*(xmax+dm)*(xmax+dm)*xmax*xmax*(1.0+aENuCorr);
   } while (r < r0);    
 
 
@@ -193,8 +195,8 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
 
   // daughter 1 (nutrino) in XZ plane
   G4double eNu;    // Enu
-  eNu = (parentmass-daughtermass[2])*(parentmass+daughtermass[2])+(m*m)-2.*parentmass*(x+m);
-  eNu /= 2.*(parentmass+p*w-(x+m));
+  eNu = (parentmass-daughtermass[2])*(parentmass+daughtermass[2])+(dm*dm)-2.*parentmass*(x+dm);
+  eNu /= 2.*(parentmass+p*w-(x+dm));
   G4double cosn = w;
   G4double sinn = std::sqrt((1.0-cosn)*(1.0+cosn));
 
@@ -206,7 +208,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
 
   // daughter 2 (proton) at REST
   G4double eP;     // Eproton
-  eP = parentmass-eNu-(x+m)-daughtermass[2];
+  eP = parentmass-eNu-(x+dm)-daughtermass[2];
   G4double pPx = -eNu*sinn;
   G4double pPz = -p-eNu*cosn;
   G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));

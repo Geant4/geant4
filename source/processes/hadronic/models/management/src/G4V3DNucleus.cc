@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.cc,v 1.5 2006-06-29 20:45:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4V3DNucleus.hh"
 #include "G4HadronicException.hh"

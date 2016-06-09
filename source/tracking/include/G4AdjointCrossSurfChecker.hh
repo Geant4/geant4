@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCrossSurfChecker.hh,v 1.2 2009-11-18 18:04:11 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker

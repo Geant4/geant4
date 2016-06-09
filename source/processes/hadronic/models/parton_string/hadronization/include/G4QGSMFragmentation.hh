@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh,v 1.6 2010-09-20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -45,13 +44,15 @@ public:
       ~G4QGSMFragmentation();
       virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
-      const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
-      int operator==(const G4QGSMFragmentation &right) const;
-      int operator!=(const G4QGSMFragmentation &right) const;
+  private:
+     // not implemented to protect/forbid use
+   G4QGSMFragmentation(const G4QGSMFragmentation &right);
+   const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
+   int operator==(const G4QGSMFragmentation &right) const;
+   int operator!=(const G4QGSMFragmentation &right) const;
 
   private:
    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py);      
-   G4QGSMFragmentation(const G4QGSMFragmentation &right);
 
    virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.13 2010-12-15 11:29:54 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrFileIn
@@ -220,13 +219,12 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
       tt++;
     } while((*tt != '\0') && (stemp.length()!=0));
 
-    G4String stempt (ltemp);
-    if(stempt.length() == 0)  { NoWords = 0; }
+    if(stemp.length() == 0)  { NoWords = 0; }
 
     //--------- Read words from istr_line and write them into wordlist
     for( ii=0; ii < NoWords; ii++)
     {
-      G4String stemp = "";
+      stemp = "";
       istr_line >> stemp;
       if ( stemp.length() == 0 )  { break; }
       G4int comment = stemp.find(G4String("//") );
@@ -276,13 +274,13 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
   std::vector<G4String> wordlist2;
   G4String wordq = "";
   unsigned int imerge = 0;
-  for( size_t ii = 0; ii < wordlist.size(); ii++)
+  for( size_t jj = 0; jj < wordlist.size(); jj++)
   {
-    if( wordlist[ii].substr(0,1) == "\"" )
+    if( wordlist[jj].substr(0,1) == "\"" )
     {
       imerge = 1;
     } 
-    if( wordlist[ii][ wordlist[ii].size()-1 ] == '\"' )
+    if( wordlist[jj][ wordlist[jj].size()-1 ] == '\"' )
     {
       if( imerge != 1 )
       {
@@ -295,17 +293,17 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
     }
     if( imerge == 0 )
     {
-      wordlist2.push_back( wordlist[ii] );
+      wordlist2.push_back( wordlist[jj] );
     }
     else if( imerge == 1 )
     {
       if( wordq == "" )
       {
-        wordq.append( wordlist[ii].substr(1,wordlist[ii].size()) );
+        wordq.append( wordlist[jj].substr(1,wordlist[jj].size()) );
       }
       else
       {
-        wordq.append( wordlist[ii].substr(0,wordlist[ii].size()) );
+        wordq.append( wordlist[jj].substr(0,wordlist[jj].size()) );
       }
       wordq.append(" ");
     }
@@ -313,11 +311,11 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
     {
       if( wordq == "" )
       {
-        wordq.append( wordlist[ii].substr(1,wordlist[ii].size()-2));
+        wordq.append( wordlist[jj].substr(1,wordlist[jj].size()-2));
       }
       else
       {
-        wordq.append( wordlist[ii].substr(0,wordlist[ii].size()-1) );
+        wordq.append( wordlist[jj].substr(0,wordlist[jj].size()-1) );
       } 
       wordlist2.push_back( wordq );
       wordq = "";

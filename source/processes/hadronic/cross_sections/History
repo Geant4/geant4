@@ -14,6 +14,256 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 November 2012 V.Ivanchenko   (hadr-cross-V09-05-43)
+-----------------------------------------------------
+- G4ComponentSAIDTotalXS - more extended exception printout
+
+07 November 2012 W.Pokorski   (hadr-cross-V09-05-42)
+---------------------------------------------------
+- making exception in G4CrossSectionDataSetRegistry::GetCrossSectionDataSet optional
+(returning null pointer)
+
+05 November 2012 V.Ivanchenko   (hadr-cross-V09-05-41)
+-----------------------------------------------------
+- G4BGGNucleonElasticXS, G4BGGPionElasticXS, G4UPiNuclearCrossSection
+    fixed Coverity complains - implemented initialisation of class 
+    members in constructors
+
+02 November 2012 W.Pokorski   (hadr-cross-V09-05-40)
+---------------------------------------------------
+- making two methods in CHIPS XS public for the use of quasi-elastic
+
+01 November 2012 V.Ivanchenko   (hadr-cross-V09-05-39)
+---------------------------------------------------
+- G4VCrossSectionDataSet - added virtual method SelectIsotope which is used
+    for element wise cross section allowing for the dataset to use isotope
+    wise cross section when isotope is selected; by default the old
+    method is used based on isotope abundancy, so no change of results
+    is expected
+- G4NeutronCaptureXS - implement isotope selection based on isotope cross
+    section
+
+26 October 2012 W.Pokorski   (hadr-cross-V09-05-38)
+---------------------------------------------------
+- setting min kin energy in G4GGNuclNuclCrossSection to 0
+
+25 October 2012 W.Pokorski   (hadr-cross-V09-05-37)
+---------------------------------------------------
+- (V. Grischine) removing Z > 1 condition from G4GGNuclNuclCrossSection
+
+- (V. Ivanchenko) G4UPiNuclearCrossSection - cosmetic modification - more clean destructor 
+    implementation 
+
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-36)
+---------------------------------------------------
+- fixing the static builds (adding references to factories)
+
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-35)
+---------------------------------------------------
+- fixing another bug (double deletion) from previous tag...
+
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-34)
+---------------------------------------------------
+- fixing bug (double deletion) from previous tag
+
+G4NucleonNuclearCrossSection and G4GGNuclNuclCrossSection
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-33)
+---------------------------------------------------
+- adding factory mechanism for G4GlauberGribovCrossSection, 
+G4NucleonNuclearCrossSection and G4GGNuclNuclCrossSection
+
+18 October 2012 V.Ivanchenko (hadr-cross-V09-05-32)
+---------------------------------------------------
+- G4NeutronCaptureXS - fixed compillation problem
+
+18 October 2012 W.Pokorski   (hadr-cross-V09-05-31)
+---------------------------------------------------
+- removing ChipsBaseXS class
+
+15 October 2012 V.Ivanchenko (hadr-cross-V09-05-30)
+---------------------------------------------------
+- G4NeutronCaptureXS - use G4ElementData for isotope x-sections
+- G4BGGNucleonInelastic, G4BGGNucleonElastic - use SAID data for scattering 
+    off hydrogen below 1.3 GeV for neutrons and below 2 GeV for protons
+- G4BGGPionInelastic, G4BGGPionElastic - use SAID data for scattering 
+    off hydrogen below 2.6 GeV
+- G4ComponentSAIDTotalXS - fixed cross section computation 
+
+20 September 2012 G.Cosmo (hadr-cross-V09-05-29)
+------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+22 August 2012 V.Ivanchenko (hadr-cross-V09-05-28)
+--------------------------------------------------
+- G4CrossSectionDataStore - Pere Mato fixed a bug in cash mechanism
+  for element cross section
+
+14 August 2012 A.Ribon (hadr-cross-V09-05-27)
+-----------------------------------------------
+- Fixed Coverity complain in G4CrossSectionDataStore.cc .
+
+31 July 2012 V.Ivanchenko (hadr-cross-V09-05-26)
+-----------------------------------------------
+- G4CrossSectionDataStore - introduced cash for material and element
+  cross sections in order to save CPU; cross section for material
+  is not recomputed if material, primary particle and kinetic
+  energy are the same; cross section for element is not recomputed
+  if material, element, primary particle and kinetic energy are the 
+  same; G4Nucleus is updated using new method SetIsotope
+
+20 July 2012 W.Pokorski (hadr-cross-V09-05-25)
+-----------------------------------------------
+- Removing unnecesary statics in all the Chips cross sections.
+
+20 July 2012 W.Pokorski (hadr-cross-V09-05-24)
+-----------------------------------------------
+- Removing check for equal momenta in following interactions for kaons.
+
+17 July 2012 W.Pokorski (hadr-cross-V09-05-23)
+-----------------------------------------------
+- Removing first bunch of statics from Chips XS.
+
+17 July 2012 G.Folger  (hadr-cross-V09-05-22)
+-----------------------------------------------
+- Correct order for initialising data members in ctor.
+
+17 July 2012 G.Folger  (hadr-cross-V09-05-21)
+-----------------------------------------------
+- Add missing headers and sources to sources.cmake.
+
+13 July 2012 G.Folger  (hadr-cross-V09-05-20)
+-----------------------------------------------
+- Fix coverity warning in G4CrossSectionPairGG.cc, where an invalid iterator 
+  could be used, beyond container.
+
+4 July 2012 W.Pokorski (hadr-cross-V09-05-19)
+-----------------------------------------------
+- Fixing double deletion in Chips cross sections
+
+2 July 2012 V.Ivanchenko (hadr-cross-V09-05-18)
+-----------------------------------------------
+- G4HadronCrossSections - fixed problem of compillation at Windows
+
+2 July 2012 V.Ivanchenko (hadr-cross-V09-05-17)
+-----------------------------------------------
+- Tagged.
+
+22 June 2012 W.Pokorski 
+-----------------------------------------------
+- Removing fix from hadr-cross-V09-05-16, which was wrong and not
+  needed. Sorry for the noise.
+
+22 June 2012 V.Ivanchenko  
+-----------------------------------------------
+- G4HadronCrossSections - use cache of previous x-section and G4Pow
+- G4CrossSectionDataStore - take into account that all elements 
+  should have isotopes 
+
+22 June 2012 W.Pokorski  (hadr-cross-V09-05-16)
+-----------------------------------------------
+- Fix to avoid double deletion on exit
+
+15 June 2012 P. Mato  (hadr-cross-V09-05-15)
+-----------------------------------------------
+- Minor changes in the references to also please Windows
+
+15 June 2012 P. Mato  (hadr-cross-V09-05-14)
+-----------------------------------------------
+- Add references to factories to make it work with static libraries
+
+12 June 2012 W.Pokorski  (hadr-cross-V09-05-13)
+-----------------------------------------------
+- Making Chips elastic cross sections to use factory mechanism
+
+11 June 2012 W.Pokorski  (hadr-cross-V09-05-12)
+-----------------------------------------------
+- Making Chips inelastic cross sections to use factory mechanism
+
+08 June 2012 V.Ivanchenko  (hadr-cross-V09-05-11)
+-----------------------------------------------
+- G4ComponentSAIDTotalXS - added new class
+
+08 June 2012 Gabriele Cosmo  (hadr-cross-V09-05-10)
+-----------------------------------------------
+- Fixed trivial cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
+03 June 2012 Witek Pokorski  (hadr-cross-V09-05-09)
+-----------------------------------------------
+- Extending the functionality of G4CrossSectionDataSetRegistry to allow
+  sharing of cross sections sets.
+
+11 May 2012 Witek Pokorski  (hadr-cross-V09-05-08)
+-----------------------------------------------
+- Making GetExchangeT method public to be used in coherent_elastic.
+
+11 May 2012 Witek Pokorski  (hadr-cross-V09-05-07)
+-----------------------------------------------
+- Further fixes for double deletion in the new Chips cross sections.
+
+10 May 2012 Witek Pokorski  (hadr-cross-V09-05-06)
+-----------------------------------------------
+- Removed double deletion in the new Chips cross sections.
+
+10 May 2012 Witek Pokorski  (hadr-cross-V09-05-05)
+-----------------------------------------------
+- Added elastic cross-sections extracted from CHIPS.
+
+4 May 2012 Witek Pokorski  (hadr-cross-V09-05-04)
+-----------------------------------------------
+- Added inelastic cross-sections extracted from CHIPS.
+
+4 May 2012 Vladimir Grichine 
+-----------------------------------------------
+- New class G4ComponentGGNuclNuclXsc based on G4GGNuclNuclCrossSection 
+  (Glauber-Gribov for ion-ion xsc) was added and component interface was
+  implemented
+- New class G4ComponentBarNucleonNucleusXsc based on
+  G4NucleonNuclearCrossSection (Barashenkov xsc) was added and component
+  interface was implemented.
+
+27 April 2012 Vladimir Grichine 
+-----------------------------------------------
+- New class G4ComponentGGHadronNucleusXsc based on G4GlauberGribovCrossSection 
+  was added and component interface was implemented
+
+24 April 2012 Alberto Ribon  (hadr-cross-V09-05-03)
+---------------------------------------------------
+- Fixed compilation error in G4GGNuclNuclCrossSection.
+
+24 April 2012 Alberto Ribon  (hadr-cross-V09-05-02)
+---------------------------------------------------
+- Include updates of Grichine's nucleus radii of light elements 
+  (see the next comment below).
+
+23 April 2012 Vladimir Grichine 
+-----------------------------------------------
+ G4GGNuclNuclCrossSection.cc updated to get nucleus radii of light elements - p, d, 
+t, He3, He4, Li7 and Be9.
+
+19 April 2012 Alberto Ribon  (hadr-cross-V09-05-01)
+---------------------------------------------------
+- Include updates of Grichine's Glauber Gribov hadron-nucleus 
+  and hadron-nucleon cross sections (see the two next two comments below).
+
+19 March 2012 Vladimir Grichine 
+-----------------------------------------------
+ G4GlauberGribovCrossSection.hh/.cc updated to get total 
+and inelastic xsc from G4HadronNucleonXsc.
+
+18 March 2012 Vladimir Grichine 
+-----------------------------------------------
+G4HadronNucleonXsc.hh/.cc update of p,n,pi-,pi+ xsc on p,n. New method 
+GetCoulombBarrier. G4GGNuclNuclCrossSection.hh/.cc updated to get total 
+and inelastic xsc from G4HadronNucleonXsc.
+
+
+1 March 2012 Vladimir Ivanchenko  (hadr-cross-V09-05-00)
+------------------------------------------------------------
+- Fixed Coverity reports in G4NeutronElasticXS, G4NeutronInelasticXS,
+  G4KokoulinMuonNuclearXS, G4HadronCrossSections, G4UPiNuclearCrossSection
+
 24 November 2011 Vladimir Uzhinsky  (hadr-cross-V09-04-34)
 - G4ComponentAntiNuclNuclearXS - Plab/baryon was introdused
 ------------------------------------------------------------

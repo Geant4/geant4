@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager
@@ -45,6 +48,10 @@
 #include "G4UnitsTable.hh"
 #include "Histo.hh"
 #include "EmAcceptance.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -64,84 +71,51 @@ HistoManager* HistoManager::GetPointer()
 
 HistoManager::HistoManager()
 {
-  verbose = 1;
-  nEvt1   = -1;
-  nEvt2   = -1;
-  nmax    = 3;
-  histo   = new Histo();
+  fVerbose = 1;
+  fEvt1    = -1;
+  fEvt2    = -1;
+  fNmax    = 3;
+  fMaxEnergy = 50.0*MeV;
+  fBeamEnergy= 1.*GeV;
+  fMaxEnergyAbs = 10.*MeV;
+  fBinsE = 100;
+  fBinsEA= 40;
+  fBinsED= 100;
+  fNHisto = 13;
+
+  fHisto   = new Histo();
   bookHisto();
+
+  fGamma = G4Gamma::Gamma();
+  fElectron = G4Electron::Electron();
+  fPositron = G4Positron::Positron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::~HistoManager()
 {
-  delete histo;
+  delete fHisto;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::bookHisto()
 {
-  maxEnergy = 50.0*MeV;
-  beamEnergy= 1.*GeV;
-  maxEnergyAbs = 10.*MeV;
-  thKinE    = 1.*MeV;
-  nBinsE = 100;
-  nBinsEA= 40;
-  nBinsED= 100;
-  nTuple = false;
-  nHisto = 13;
-
-  // initialise acceptance
-  for(G4int i=0; i<nmax; i++) {
-    edeptrue[i] = 1.0;
-    rmstrue[i]  = 1.0;
-    limittrue[i]= DBL_MAX;
-  }
-
-  histo->add1D("10",
-    "Evis/E0 in central crystal",nBinsED,0.0,1,1.0);
-
-  histo->add1D("11",
-    "Evis/E0 in 3x3",nBinsED,0.0,1.0,1.0);
-
-  histo->add1D("12",
-    "Evis/E0 in 5x5",nBinsED,0.0,1.0,1.0);
-
-  histo->add1D("13",
-    "Energy (MeV) of delta-electrons",nBinsE,0.0,maxEnergy,MeV);
-
-  histo->add1D("14",
-    "Energy (MeV) of gammas",nBinsE,0.0,maxEnergy,MeV);
-
-  histo->add1D("15",
-    "Energy (MeV) in abs1",nBinsEA,0.0,maxEnergyAbs,MeV);
-
-  histo->add1D("16",
-    "Energy (MeV) in abs2",nBinsEA,0.0,maxEnergyAbs,MeV);
-
-  histo->add1D("17",
-    "Energy (MeV) in abs3",nBinsEA,0.0,maxEnergyAbs,MeV);
-
-  histo->add1D("18",
-    "Energy (MeV) in abs4",nBinsEA,0.0,maxEnergyAbs,MeV);
-
-  histo->add1D("19",
-    "Number of vertex hits",20,-0.5,19.5,1.0);
-
-  histo->add1D("20",
-    "E1/E9 Ratio",nBinsED,0.0,1,1.0);
-
-  histo->add1D("21",
-    "E1/25 Ratio",nBinsED,0.0,1.0,1.0);
-
-  histo->add1D("22",
-    "E9/E25 Ratio",nBinsED,0.0,1.0,1.0);
-
-  if(nTuple) {
-    histo->addTuple( "100", "Dose deposite","float r, z, e" );
-  }
+  fHisto->Add1D("10","Evis/E0 in central crystal",fBinsED,0.0,1,1.0);
+  fHisto->Add1D("11","Evis/E0 in 3x3",fBinsED,0.0,1.0,1.0);
+  fHisto->Add1D("12","Evis/E0 in 5x5",fBinsED,0.0,1.0,1.0);
+  fHisto->Add1D("13","Energy (MeV) of delta-electrons",
+                fBinsE,0.0,fMaxEnergy,MeV);
+  fHisto->Add1D("14","Energy (MeV) of gammas",fBinsE,0.0,fMaxEnergy,MeV);
+  fHisto->Add1D("15","Energy (MeV) in abs1",fBinsEA,0.0,fMaxEnergyAbs,MeV);
+  fHisto->Add1D("16","Energy (MeV) in abs2",fBinsEA,0.0,fMaxEnergyAbs,MeV);
+  fHisto->Add1D("17","Energy (MeV) in abs3",fBinsEA,0.0,fMaxEnergyAbs,MeV);
+  fHisto->Add1D("18","Energy (MeV) in abs4",fBinsEA,0.0,fMaxEnergyAbs,MeV);
+  fHisto->Add1D("19","Number of vertex hits",20,-0.5,19.5,1.0);
+  fHisto->Add1D("20","E1/E9 Ratio",fBinsED,0.0,1,1.0);
+  fHisto->Add1D("21","E1/E25 Ratio",fBinsED,0.0,1.0,1.0);
+  fHisto->Add1D("22","E9/E25 Ratio",fBinsED,0.0,1.0,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,33 +123,44 @@ void HistoManager::bookHisto()
 void HistoManager::BeginOfRun()
 {
   // initilise scoring
-  n_evt  = 0;
-  n_elec = 0;
-  n_posit= 0;
-  n_gam  = 0;
-  n_step = 0;
-  n_lowe = 0;
+  fEvt  = 0;
+  fElec = 0;
+  fPosit= 0;
+  fGam  = 0;
+  fStep = 0;
+  fLowe = 0;
 
   for(G4int i=0; i<6; i++) {
-    stat[i] = 0;
-    edep[i] = 0.0;
-    erms[i] = 0.0;
+    fStat[i] = 0;
+    fEdep[i] = 0.0;
+    fErms[i] = 0.0;
     if(i < 3) {
-      edeptr[i] = 0.0;
-      ermstr[i] = 0.0;
+      fEdeptr[i] = 0.0;
+      fErmstr[i] = 0.0;
     }
   }
 
-  histo->book();
+  // initialise counters
+  fBrem.resize(93,0.0);
+  fPhot.resize(93,0.0);
+  fComp.resize(93,0.0);
+  fConv.resize(93,0.0);
 
-  brem.resize(93,0.0);
-  phot.resize(93,0.0);
-  comp.resize(93,0.0);
-  conv.resize(93,0.0);
+  // initialise acceptance - by default is not applied
+  for(G4int i=0; i<fNmax; i++) {
+    fEdeptrue[i] = 1.0;
+    fRmstrue[i]  = 1.0;
+    fLimittrue[i]= 10.;
+  }
 
-  if(verbose > 0) {
-    G4cout << "HistoManager: Histograms are booked and run has been started"
-           << G4endl;
+  if(fHisto->IsActive()) { 
+    for(G4int i=0; i<fNHisto; ++i) {fHisto->Activate(i, true); }
+    fHisto->Book();
+
+    if(fVerbose > 0) {
+      G4cout << "HistoManager: Histograms are booked and run has been started"
+	     << G4endl;
+    }
   }
 }
 
@@ -185,109 +170,113 @@ void HistoManager::EndOfRun(G4int runID)
 {
 
   G4cout << "HistoManager: End of run actions are started   RunID# " 
-	 << runID << G4endl;
+         << runID << G4endl;
   G4String nam[6] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25", "E9/E25"};
 
   // average
 
-  G4cout<<"================================================================="<<G4endl;
-  G4double x = (G4double)n_evt;
-  if(n_evt > 0) x = 1.0/x;
+  G4cout<<"================================================================="
+        <<G4endl;
+  G4double x = (G4double)fEvt;
+  if(fEvt > 0) x = 1.0/x;
   G4int j;
-  for(j=0; j<nmax; j++) {
+  for(j=0; j<fNmax; j++) {
 
     // total mean
-    edep[j] *= x;
-    G4double y = erms[j]*x - edep[j]*edep[j];
+    fEdep[j] *= x;
+    G4double y = fErms[j]*x - fEdep[j]*fEdep[j];
     if(y < 0.0) y = 0.0;
-    erms[j] = std::sqrt(y);
+    fErms[j] = std::sqrt(y);
 
     // trancated mean
-    G4double xx = G4double(stat[j]);
+    G4double xx = G4double(fStat[j]);
     if(xx > 0.0) xx = 1.0/xx;
-    edeptr[j] *= xx;
-    y = ermstr[j]*xx - edeptr[j]*edeptr[j];
+    fEdeptr[j] *= xx;
+    y = fErmstr[j]*xx - fEdeptr[j]*fEdeptr[j];
     if(y < 0.0) y = 0.0;
-    ermstr[j] = std::sqrt(y);
+    fErmstr[j] = std::sqrt(y);
   }
-  G4double xe = x*(G4double)n_elec;
-  G4double xg = x*(G4double)n_gam;
-  G4double xp = x*(G4double)n_posit;
-  G4double xs = x*n_step;
+  G4double xe = x*(G4double)fElec;
+  G4double xg = x*(G4double)fGam;
+  G4double xp = x*(G4double)fPosit;
+  G4double xs = x*fStep;
 
-  G4double f = 100.*std::sqrt(beamEnergy/GeV);
+  G4double f = 100.*std::sqrt(fBeamEnergy/GeV);
 
-  G4cout                         << "Number of events             " << n_evt <<G4endl;
+  G4cout                         << "Number of events             " << fEvt <<G4endl;
   G4cout << std::setprecision(4) << "Average number of e-         " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma      " << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e+         " << xp << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   
   for(j=0; j<3; j++) {
-    G4double e = edeptr[j];
-    G4double s = ermstr[j];
-    G4double xx= G4double(stat[j]);
+    G4double ex = fEdeptr[j];
+    G4double sx = fErmstr[j];
+    G4double xx= G4double(fStat[j]);
     if(xx > 0.0) xx = 1.0/xx;
-    G4double r = s*std::sqrt(xx);
-    G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
+    G4double r = sx*std::sqrt(xx);
+    G4cout << std::setprecision(4) << "Edep " << nam[j]
+           << " =                   " << ex
            << " +- " << r;
-    if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
+    if(ex > 0.1) G4cout << "  res=  " << f*sx/ex << " %   " << fStat[j];
     G4cout << G4endl;
   }
-  if(limittrue[0] != DBL_MAX || limittrue[1] != DBL_MAX || limittrue[2] != DBL_MAX) {
+  if(fLimittrue[0] < 10. || fLimittrue[1] < 10. || fLimittrue[2] < 10.) {
     G4cout<<"===========  Mean values without trancating ====================="<<G4endl;
-    for(j=0; j<nmax; j++) {
-      G4double e = edep[j];
-      G4double s = erms[j];
-      G4double r = s*std::sqrt(x);
-      G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-	     << " +- " << r;
-      if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
+    for(j=0; j<fNmax; j++) {
+      G4double ex = fEdep[j];
+      G4double sx = fErms[j];
+      G4double rx = sx*std::sqrt(x);
+      G4cout << std::setprecision(4) << "Edep " << nam[j]
+             << " =                   " << ex
+             << " +- " << rx;
+      if(ex > 0.0) G4cout << "  res=  " << f*sx/ex << " %";
       G4cout << G4endl;
     }
   }
   G4cout<<"===========  Ratios without trancating ==========================="<<G4endl;
   for(j=3; j<6; j++) {
-    G4double e = edep[j];
-    G4double xx= G4double(stat[j]);
+    G4double e = fEdep[j];
+    G4double xx= G4double(fStat[j]);
     if(xx > 0.0) xx = 1.0/xx;
     e *= xx;
-    G4double y = erms[j]*xx - e*e;
+    G4double y = fErms[j]*xx - e*e;
     G4double r = 0.0;
     if(y > 0.0) r = std::sqrt(y*xx);
     G4cout << "  " << nam[j] << " =                   " << e
            << " +- " << r;
     G4cout << G4endl;
   }
-  G4cout << std::setprecision(4) << "Beam Energy                  " << beamEnergy/GeV 
-	 << " GeV" << G4endl;
-  if(n_lowe > 0)          G4cout << "Number of events E/E0<0.8    " << n_lowe << G4endl; 
+  G4cout << std::setprecision(4) << "Beam Energy                  " << fBeamEnergy/GeV 
+         << " GeV" << G4endl;
+  if(fLowe > 0)          G4cout << "Number of events E/E0<0.8    " << fLowe << G4endl; 
   G4cout<<"=================================================================="<<G4endl;
   G4cout<<G4endl;
 
   // normalise histograms
-  for(G4int i=0; i<nHisto; i++) {
-    histo->scale(i,x);
+  if(fHisto->IsActive()) { 
+    for(G4int i=0; i<fNHisto; i++) {
+      fHisto->ScaleH1(i,x);
+    }
+    fHisto->Save();
   }
-
-  histo->save();
   if(0 < runID) { return; }
 
-  // Acceptance
+  // Acceptance only for the first run
   EmAcceptance acc;
   G4bool isStarted = false;
-  for (j=0; j<nmax; j++) {
+  for (j=0; j<fNmax; j++) {
 
-    G4double ltrue = limittrue[j];
+    G4double ltrue = fLimittrue[j];
     if (ltrue < DBL_MAX) {
       if (!isStarted) {
-        acc.BeginOfAcceptance("Crystal Calorimeter",n_evt);
+        acc.BeginOfAcceptance("Crystal Calorimeter",fEvt);
         isStarted = true;
       }
-      G4double etrue = edeptrue[j];
-      G4double rtrue = rmstrue[j];
-      acc.EmAcceptanceGauss("Edep"+nam[j],n_evt,edeptr[j],etrue,rtrue,ltrue);
-      acc.EmAcceptanceGauss("Erms"+nam[j],n_evt,ermstr[j],rtrue,rtrue,2.0*ltrue);
+      G4double etrue = fEdeptrue[j];
+      G4double rtrue = fRmstrue[j];
+      acc.EmAcceptanceGauss("Edep"+nam[j],fEvt,fEdeptr[j],etrue,rtrue,ltrue);
+      acc.EmAcceptanceGauss("Erms"+nam[j],fEvt,fErmstr[j],rtrue,rtrue,2.0*ltrue);
     }
   }
   if(isStarted) acc.EndOfAcceptance();
@@ -295,13 +284,13 @@ void HistoManager::EndOfRun(G4int runID)
   // atom frequency
   G4cout << "   Z  bremsstrahlung photoeffect  compton    conversion" << G4endl;
   for(j=1; j<93; ++j) {
-    G4int n1 = G4int(brem[j]*x);
-    G4int n2 = G4int(phot[j]*x);
-    G4int n3 = G4int(comp[j]*x);
-    G4int n4 = G4int(conv[j]*x);
+    G4int n1 = G4int(fBrem[j]*x);
+    G4int n2 = G4int(fPhot[j]*x);
+    G4int n3 = G4int(fComp[j]*x);
+    G4int n4 = G4int(fConv[j]*x);
     if(n1 + n2 + n3 + n4 > 0) {
       G4cout << std::setw(4) << j << std::setw(12) << n1 << std::setw(12) << n2
-	     << std::setw(12) << n3 << std::setw(12) << n4 << G4endl;
+             << std::setw(12) << n3 << std::setw(12) << n4 << G4endl;
     }
   }
 }
@@ -310,16 +299,16 @@ void HistoManager::EndOfRun(G4int runID)
 
 void HistoManager::BeginOfEvent()
 {
-  n_evt++;
+  ++fEvt;
 
-  Eabs1  = 0.0;
-  Eabs2  = 0.0;
-  Eabs3  = 0.0;
-  Eabs4  = 0.0;
-  Evertex.clear();
-  Nvertex.clear();
+  fEabs1  = 0.0;
+  fEabs2  = 0.0;
+  fEabs3  = 0.0;
+  fEabs4  = 0.0;
+  fEvertex.clear();
+  fNvertex.clear();
   for (G4int i=0; i<25; i++) {
-    E[i] = 0.0;
+    fE[i] = 0.0;
   }
 }
 
@@ -330,18 +319,18 @@ void HistoManager::EndOfEvent()
   G4double e9 = 0.0;
   G4double e25= 0.0;
   for (G4int i=0; i<25; i++) {
-    E[i] /= beamEnergy;
-    e25 += E[i];
-    if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
+    fE[i] /= fBeamEnergy;
+    e25 += fE[i];
+    if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += fE[i];
   }
 
-  if(1 < verbose && e25 < 0.8) {
-    n_lowe++;
-    G4cout << "### in the event# " << n_evt << "  E25= " << e25 << G4endl;
+  if(1 < fVerbose && e25 < 0.8) {
+    ++fLowe;
+    G4cout << "### in the event# " << fEvt << "  E25= " << e25 << G4endl;
   }
 
   // compute ratios
-  G4double e0 = E[12];
+  G4double e0 = fE[12];
   G4double e19  = 0.0;
   G4double e125 = 0.0;
   G4double e925 = 0.0;
@@ -349,56 +338,54 @@ void HistoManager::EndOfEvent()
     e19 = e0/e9;
     e125 = e0/e25;
     e925 = e9/e25;
-    edep[3] += e19;
-    erms[3] += e19*e19;
-    edep[4] += e125;
-    erms[4] += e125*e125;
-    edep[5] += e925;
-    erms[5] += e925*e925;
-    stat[3] += 1;
-    stat[4] += 1;
-    stat[5] += 1;
+    fEdep[3] += e19;
+    fErms[3] += e19*e19;
+    fEdep[4] += e125;
+    fErms[4] += e125*e125;
+    fEdep[5] += e925;
+    fErms[5] += e925*e925;
+    fStat[3] += 1;
+    fStat[4] += 1;
+    fStat[5] += 1;
   }
 
-  // fill histo
-  histo->fill(0,e0,1.0);
-  histo->fill(1,e9,1.0);
-  histo->fill(2,e25,1.0);
-  histo->fill(5,Eabs1,1.0);
-  histo->fill(6,Eabs2,1.0);
-  histo->fill(7,Eabs3,1.0);
-  histo->fill(8,Eabs4,1.0);
-  histo->fill(9,G4double(Nvertex.size()),1.0);
-  histo->fill(10,e19,1.0);
-  histo->fill(11,e125,1.0);
-  histo->fill(12,e925,1.0);
+  // Fill histo
+  fHisto->Fill(0,e0,1.0);
+  fHisto->Fill(1,e9,1.0);
+  fHisto->Fill(2,e25,1.0);
+  fHisto->Fill(5,fEabs1,1.0);
+  fHisto->Fill(6,fEabs2,1.0);
+  fHisto->Fill(7,fEabs3,1.0);
+  fHisto->Fill(8,fEabs4,1.0);
+  fHisto->Fill(9,G4double(fNvertex.size()),1.0);
+  fHisto->Fill(10,e19,1.0);
+  fHisto->Fill(11,e125,1.0);
+  fHisto->Fill(12,e925,1.0);
 
   // compute sums
-  edep[0] += e0;
-  erms[0] += e0*e0;
-  edep[1] += e9;
-  erms[1] += e9*e9;
-  edep[2] += e25;
-  erms[2] += e25*e25;
+  fEdep[0] += e0;
+  fErms[0] += e0*e0;
+  fEdep[1] += e9;
+  fErms[1] += e9*e9;
+  fEdep[2] += e25;
+  fErms[2] += e25*e25;
 
   // trancated mean
-  if(limittrue[0] == DBL_MAX || std::abs(e0-edeptrue[0])<rmstrue[0]*limittrue[0]) {
-    stat[0] += 1;
-    edeptr[0] += e0;
-    ermstr[0] += e0*e0;
+  if(std::abs(e0-fEdeptrue[0])<fRmstrue[0]*fLimittrue[0]) {
+    fStat[0] += 1;
+    fEdeptr[0] += e0;
+    fErmstr[0] += e0*e0;
   }
-  if(limittrue[1] == DBL_MAX || std::abs(e9-edeptrue[1])<rmstrue[1]*limittrue[1]) {
-    stat[1] += 1;
-    edeptr[1] += e9;
-    ermstr[1] += e9*e9;
+  if(std::abs(e9-fEdeptrue[1])<fRmstrue[1]*fLimittrue[1]) {
+    fStat[1] += 1;
+    fEdeptr[1] += e9;
+    fErmstr[1] += e9*e9;
   }
-  if(limittrue[2] == DBL_MAX || std::abs(e25-edeptrue[2])<rmstrue[2]*limittrue[2]) {
-    stat[2] += 1;
-    edeptr[2] += e25;
-    ermstr[2] += e25*e25;
+  if(std::abs(e25-fEdeptrue[2])<fRmstrue[2]*fLimittrue[2]) {
+    fStat[2] += 1;
+    fEdeptr[2] += e25;
+    fErmstr[2] += e25*e25;
   }
-  if(nTuple) histo->addRow();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -409,7 +396,7 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
   ResetTrackLength();
   const G4ParticleDefinition* particle = aTrack->GetDefinition();
   const G4DynamicParticle* dynParticle = aTrack->GetDynamicParticle();
-  G4String name = particle->GetParticleName();
+
   G4int pid = aTrack->GetParentID();
   G4double kinE = dynParticle->GetKineticEnergy();
   G4ThreeVector pos = aTrack->GetVertexPosition();
@@ -417,18 +404,13 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
   // primary
   if(0 == pid) {
 
-    beamEnergy = kinE;
-    histo->fillTuple("TKIN", kinE/MeV);
-
     G4double mass = 0.0;
     if(particle) {
       mass = particle->GetPDGMass();
-      histo->fillTuple("MASS", mass/MeV);
-      histo->fillTuple("CHAR",(particle->GetPDGCharge())/eplus);
     }
 
     G4ThreeVector dir = dynParticle->GetMomentumDirection();
-    if(1 < verbose) {
+    if(1 < fVerbose) {
       G4cout << "TrackingAction: Primary kinE(MeV)= " << kinE/MeV
            << "; m(MeV)= " << mass/MeV
            << "; pos= " << pos << ";  dir= " << dir << G4endl;
@@ -439,48 +421,52 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
     const G4VProcess* proc = aTrack->GetCreatorProcess();
     G4int type = proc->GetProcessSubType();
     if(type == fBremsstrahlung) {
-      const G4Element* elm = static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();
+      const G4Element* elm = 
+        static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4int(elm->GetZ());
-        if(Z > 0 && Z < 93) { brem[Z] += 1.0; }
+        G4int Z = G4lrint(elm->GetZ());
+        if(Z > 0 && Z < 93) { fBrem[Z] += 1.0; }
       }
     } else if(type == fPhotoElectricEffect) {
-      const G4Element* elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      const G4Element* elm = 
+        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4int(elm->GetZ());
-        if(Z > 0 && Z < 93) { phot[Z] += 1.0; }
+        G4int Z = G4lrint(elm->GetZ());
+        if(Z > 0 && Z < 93) { fPhot[Z] += 1.0; }
       }
     } else if(type == fGammaConversion) {
-      const G4Element* elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      const G4Element* elm = 
+        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4int(elm->GetZ());
-        if(Z > 0 && Z < 93) { conv[Z] += 1.0; }
+        G4int Z = G4lrint(elm->GetZ());
+        if(Z > 0 && Z < 93) { fConv[Z] += 1.0; }
       }
     } else if(type == fComptonScattering) {
-      const G4Element* elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      const G4Element* elm = 
+        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4int(elm->GetZ());
-        if(Z > 0 && Z < 93) { comp[Z] += 1.0; }
+        G4int Z = G4lrint(elm->GetZ());
+        if(Z > 0 && Z < 93) { fComp[Z] += 1.0; }
       }
     }
 
     // delta-electron
-    if (0 < pid && "e-" == name) {
-      if(1 < verbose) {
-	G4cout << "TrackingAction: Secondary electron " << G4endl;
+    if (particle == fElectron) {
+      if(1 < fVerbose) {
+        G4cout << "TrackingAction: Secondary electron " << G4endl;
       }
       AddDeltaElectron(dynParticle);
 
-    } else if (0 < pid && "e+" == name) {
-      if(1 < verbose) {
-	G4cout << "TrackingAction: Secondary positron " << G4endl;
+    } else if (particle == fPositron) {
+      if(1 < fVerbose) {
+        G4cout << "TrackingAction: Secondary positron " << G4endl;
       }
       AddPositron(dynParticle);
 
-    } else if (0 < pid && "gamma" == name) {
-      if(1 < verbose) {
-	G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
-	       << " E= " << kinE << G4endl;
+    } else if (particle == fGamma) {
+      if(1 < fVerbose) {
+        G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
+               << " E= " << kinE << G4endl;
       }
       AddPhoton(dynParticle);
     }
@@ -491,37 +477,37 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
 
 void HistoManager::AddEnergy(G4double edep, G4int volIndex, G4int copyNo)
 {
-  if(1 < verbose) {
+  if(1 < fVerbose) {
     G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
            << "; volIdx= " << volIndex
            << "; copyNo= " << copyNo
            << G4endl;
   }
   if(0 == volIndex) {
-    E[copyNo] += edep;
+    fE[copyNo] += edep;
   } else if (1 == volIndex) {
-    Eabs1 += edep;
+    fEabs1 += edep;
   } else if (2 == volIndex) {
-    Eabs2 += edep;
+    fEabs2 += edep;
   } else if (3 == volIndex) {
-    Eabs3 += edep;
+    fEabs3 += edep;
   } else if (4 == volIndex) {
-    Eabs4 += edep;
+    fEabs4 += edep;
   } else if (5 == volIndex) {
-    G4int n = Nvertex.size();
+    G4int n = fNvertex.size();
     G4bool newPad = true;
     if (n > 0) {
       for(G4int i=0; i<n; i++) {
-        if (copyNo == Nvertex[i]) {
+        if (copyNo == fNvertex[i]) {
           newPad = false;
-          Evertex[i] += edep;
+          fEvertex[i] += edep;
           break;
         }
       }
     }
     if(newPad) {
-      Nvertex.push_back(copyNo);
-      Evertex.push_back(edep);
+      fNvertex.push_back(copyNo);
+      fEvertex.push_back(edep);
     }
   }
 }
@@ -531,8 +517,8 @@ void HistoManager::AddEnergy(G4double edep, G4int volIndex, G4int copyNo)
 void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
 {
   G4double e = elec->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_elec++;
-  histo->fill(3,e,1.0);
+  if(e > 0.0) fElec++;
+  fHisto->Fill(3,e,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -540,18 +526,18 @@ void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
 void HistoManager::AddPhoton(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_gam++;
-  histo->fill(4,e,1.0);
+  if(e > 0.0) fGam++;
+  fHisto->Fill(4,e,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::SetEdepAndRMS(G4int i, G4ThreeVector val)
 {
-  if(i<nmax && i>=0) {
-    if(val[0] > 0.0) edeptrue[i] = val[0];
-    if(val[1] > 0.0) rmstrue[i] = val[1];
-    if(val[2] > 0.0) limittrue[i] = val[2];
+  if(i<fNmax && i>=0) {
+    if(val[0] > 0.0) fEdeptrue[i] = val[0];
+    if(val[1] > 0.0) fRmstrue[i] = val[1];
+    if(val[2] > 0.0) fLimittrue[i] = val[2];
   }
 }
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.hh,v 1.11 2010-05-11 11:21:52 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  26th August 1998.
@@ -43,7 +42,12 @@
 
 #include "G4VModel.hh"
 
+#include <vector>
+#include <map>
+
 class G4VTrajectory;
+class G4AttDef;
+class G4AttValue;
 
 class G4TrajectoriesModel: public G4VModel {
 
@@ -64,11 +68,15 @@ public: // With description
   const G4VTrajectory* GetCurrentTrajectory() const
   {return fpCurrentTrajectory;}
 
+  const std::map<G4String,G4AttDef>* GetAttDefs() const;
+  std::vector<G4AttValue>* CreateCurrentAttValues() const;
+  
 private:
 
   G4bool fDrawingModeSet;
   G4int fDrawingMode;
   const G4VTrajectory* fpCurrentTrajectory;
+  G4int fEventID;
 
 };
 

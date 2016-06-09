@@ -47,20 +47,18 @@
 // 14-02-03 Fix bugs in msc and hIon instanciation + cut per region
 // 16-08-10 Remove inclusion of obsolete class of G4ParticleWithCuts 
 // 20-10-10 Migrate LowEnergy process to Livermore models, LP
-// 
 // --------------------------------------------------------------
 
+#include <iomanip>  
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProductionCutsTable.hh"
-
-#include "G4ios.hh"
-#include <iomanip>  
 
 #include "G4UserLimits.hh"
 #include "G4DataQuestionaire.hh"
@@ -74,13 +72,13 @@ template<class T> TLBE<T>::TLBE() : G4VUserPhysicsList()
   G4DataQuestionaire it(photon, lowenergy, neutron, radioactive);
   G4cout << "You are using the simulation engine: LBE 5.3"<<G4endl;
   G4cout <<G4endl<<G4endl;
-  this->defaultCutValue     = 1.0*micrometer; //
+  this->defaultCutValue     = 1.0*CLHEP::micrometer; //
   cutForGamma         = this->defaultCutValue;
-  cutForElectron      = 1.0*nanometer;
+  cutForElectron      = 1.0*CLHEP::nanometer;
   cutForPositron      = this->defaultCutValue;
   cutForProton        = this->defaultCutValue;
-  cutForAlpha         = 1.0*nanometer;
-  cutForGenericIon    = 1.0*nanometer;
+  cutForAlpha         = 1.0*CLHEP::nanometer;
+  cutForGenericIon    = 1.0*CLHEP::nanometer;
 
   VerboseLevel = 1;
   OpVerbLevel = 0;
@@ -288,7 +286,7 @@ template<class T> TLBE<T>::~TLBE()
  // models & processes:
  // Use Livermore models up to 20 MeV, and standard 
  // models for higher energy
- G4double LivermoreHighEnergyLimit = 20*MeV;
+ G4double LivermoreHighEnergyLimit = 20*CLHEP::MeV;
  //
   this->theParticleIterator->reset();
   while( (*(this->theParticleIterator))() ){
@@ -342,9 +340,9 @@ template<class T> TLBE<T>::~TLBE()
        G4eIonisation* eIoni = new G4eIonisation();
        G4LivermoreIonisationModel* theIoniLivermore = new
         G4LivermoreIonisationModel();
-       theIoniLivermore->SetHighEnergyLimit(1*MeV); 
+       theIoniLivermore->SetHighEnergyLimit(1*CLHEP::MeV); 
        eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
-       eIoni->SetStepFunction(0.2, 100*um); //     
+       eIoni->SetStepFunction(0.2, 100*CLHEP::um); //     
        pmanager->AddProcess(eIoni,                 -1, 2, 2);
       
        // Bremsstrahlung
@@ -363,7 +361,7 @@ template<class T> TLBE<T>::~TLBE()
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
+      eIoni->SetStepFunction(0.2, 100*CLHEP::um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);      
       pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
@@ -385,7 +383,7 @@ template<class T> TLBE<T>::~TLBE()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 10*um);
+      ionIoni->SetStepFunction(0.1, 10*CLHEP::um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);	
     }
@@ -395,7 +393,7 @@ template<class T> TLBE<T>::~TLBE()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 20*um);
+      ionIoni->SetStepFunction(0.1, 20*CLHEP::um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
     }
@@ -410,7 +408,7 @@ template<class T> TLBE<T>::~TLBE()
        //MSC, h-ionisation, bremsstrahlung
        pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);      
        G4hIonisation* hIoni = new G4hIonisation();
-       hIoni->SetStepFunction(0.2, 50*um);
+       hIoni->SetStepFunction(0.2, 50*CLHEP::um);
        pmanager->AddProcess(hIoni,                     -1, 2, 2);      
        pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);    
       } 
@@ -436,6 +434,8 @@ template<class T> TLBE<T>::~TLBE()
  template<class T> void TLBE<T>::ConstructOp() 
 {
   // default scintillation process
+  //Coverity report: check that the process is actually used, if not must delete
+  G4bool theScintProcessDefNeverUsed = true;
   G4Scintillation* theScintProcessDef = new G4Scintillation("Scintillation");
   // theScintProcessDef->DumpPhysicsTable();
   theScintProcessDef->SetTrackSecondariesFirst(true);
@@ -444,6 +444,7 @@ template<class T> TLBE<T>::~TLBE()
   theScintProcessDef->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for alpha:
+  G4bool theScintProcessAlphaNeverUsed = true;
   G4Scintillation* theScintProcessAlpha = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessAlpha->SetTrackSecondariesFirst(true);
@@ -452,6 +453,7 @@ template<class T> TLBE<T>::~TLBE()
   theScintProcessAlpha->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for heavy nuclei
+  G4bool theScintProcessNucNeverUsed = true;  
   G4Scintillation* theScintProcessNuc = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessNuc->SetTrackSecondariesFirst(true);
@@ -460,16 +462,16 @@ template<class T> TLBE<T>::~TLBE()
   theScintProcessNuc->SetVerboseLevel(OpVerbLevel);
 
   // optical processes
+  G4bool theAbsorptionProcessNeverUsed = true;
   G4OpAbsorption* theAbsorptionProcess = new G4OpAbsorption();
   //  G4OpRayleigh* theRayleighScatteringProcess = new G4OpRayleigh();
+  G4bool theBoundaryProcessNeverUsed = true;
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   //  theAbsorptionProcess->DumpPhysicsTable();
   //  theRayleighScatteringProcess->DumpPhysicsTable();
   theAbsorptionProcess->SetVerboseLevel(OpVerbLevel);
   // theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
   theBoundaryProcess->SetVerboseLevel(OpVerbLevel);
-  G4OpticalSurfaceModel themodel = unified;
-  theBoundaryProcess->SetModel(themodel);
 
   this->theParticleIterator->reset();
   while( (*(this->theParticleIterator))() )
@@ -478,30 +480,41 @@ template<class T> TLBE<T>::~TLBE()
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
       if (theScintProcessDef->IsApplicable(*particle)) {
-	//      if(particle->GetPDGMass() > 5.0*GeV) 
+	//      if(particle->GetPDGMass() > 5.0*CLHEP::GeV) 
 	if(particle->GetParticleName() == "GenericIon") {
 	  pmanager->AddProcess(theScintProcessNuc); // AtRestDiscrete
 	  pmanager->SetProcessOrderingToLast(theScintProcessNuc,idxAtRest);
 	  pmanager->SetProcessOrderingToLast(theScintProcessNuc,idxPostStep);
+	  theScintProcessNucNeverUsed = false;
 	}	  
 	else if(particle->GetParticleName() == "alpha") {
 	  pmanager->AddProcess(theScintProcessAlpha);
 	  pmanager->SetProcessOrderingToLast(theScintProcessAlpha,idxAtRest);
 	  pmanager->SetProcessOrderingToLast(theScintProcessAlpha,idxPostStep);
+	  theScintProcessAlphaNeverUsed = false;
 	}
 	else {
 	  pmanager->AddProcess(theScintProcessDef);
 	  pmanager->SetProcessOrderingToLast(theScintProcessDef,idxAtRest);
 	  pmanager->SetProcessOrderingToLast(theScintProcessDef,idxPostStep);
+	  theScintProcessDefNeverUsed = false;
 	}	  
       }
       
       if (particleName == "opticalphoton") {
 	pmanager->AddDiscreteProcess(theAbsorptionProcess);
+	theAbsorptionProcessNeverUsed = false;
 	//	pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
+	theBoundaryProcessNeverUsed = false;
 	pmanager->AddDiscreteProcess(theBoundaryProcess);
       }
     }
+    if ( theScintProcessDefNeverUsed ) delete theScintProcessDef;
+    if ( theScintProcessAlphaNeverUsed ) delete theScintProcessAlpha;
+    if ( theScintProcessNucNeverUsed ) delete theScintProcessNuc;
+    if ( theBoundaryProcessNeverUsed ) delete theBoundaryProcess;
+    if ( theAbsorptionProcessNeverUsed ) delete theAbsorptionProcess;
+    if ( theBoundaryProcessNeverUsed ) delete theBoundaryProcess;
 }
 
 
@@ -707,7 +720,7 @@ template<class T> TLBE<T>::~TLBE()
 	G4LElastic* theElasticModel1 = new G4LElastic;
 	G4NeutronHPElastic * theElasticNeutron = new G4NeutronHPElastic;
 	theNeutronElasticProcess->RegisterMe(theElasticModel1);
-	theElasticModel1->SetMinEnergy(19*MeV);
+	theElasticModel1->SetMinEnergy(19*CLHEP::MeV);
 	theNeutronElasticProcess->RegisterMe(theElasticNeutron);
 	G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
 	theNeutronElasticProcess->AddDataSet(theNeutronData);
@@ -716,7 +729,7 @@ template<class T> TLBE<T>::~TLBE()
 	G4NeutronInelasticProcess* theInelasticProcess =
 	  new G4NeutronInelasticProcess("inelastic");
 	G4LENeutronInelastic* theInelasticModel = new G4LENeutronInelastic;
-	theInelasticModel->SetMinEnergy(19*MeV);
+	theInelasticModel->SetMinEnergy(19*CLHEP::MeV);
 	theInelasticProcess->RegisterMe(theInelasticModel);
 	G4NeutronHPInelastic * theLENeutronInelasticModel =
 	  new G4NeutronHPInelastic;
@@ -729,7 +742,7 @@ template<class T> TLBE<T>::~TLBE()
 	G4HadronCaptureProcess* theCaptureProcess =
 	  new G4HadronCaptureProcess;
 	G4LCapture* theCaptureModel = new G4LCapture;
-	theCaptureModel->SetMinEnergy(19*MeV);
+	theCaptureModel->SetMinEnergy(19*CLHEP::MeV);
 	theCaptureProcess->RegisterMe(theCaptureModel);
 	G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;
 	theCaptureProcess->RegisterMe(theLENeutronCaptureModel);
@@ -800,6 +813,7 @@ template<class T> TLBE<T>::~TLBE()
 
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
+  G4bool theDecayProcessNeverUsed = true; //Check if theDecayProcess will be used
   this->theParticleIterator->reset();
   while( (*(this->theParticleIterator))() )
     {
@@ -808,6 +822,7 @@ template<class T> TLBE<T>::~TLBE()
       
       if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 
 	{ 
+	  theDecayProcessNeverUsed = false;
 	  pmanager ->AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt
 	  pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
@@ -835,6 +850,9 @@ template<class T> TLBE<T>::~TLBE()
 	  pmanager ->SetProcessOrdering(theRadioactiveDecay, idxAtRest);
 	} 
     }
+    //If we actually never used the process, delete it
+    //From Coverity report
+    if ( theDecayProcessNeverUsed ) delete theDecayProcess;
 }
 
 // Cuts /////////////////////////////////////////////////////////////////////
@@ -851,9 +869,9 @@ template<class T> void TLBE<T>::SetCuts()
   }
 
   //special for low energy physics
-  G4double lowlimit=250*eV;  
+  G4double lowlimit=250*CLHEP::eV;  
   G4ProductionCutsTable * aPCTable = G4ProductionCutsTable::GetProductionCutsTable();
-  aPCTable->SetEnergyRange(lowlimit,100*GeV);
+  aPCTable->SetEnergyRange(lowlimit,100*CLHEP::GeV);
    
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 

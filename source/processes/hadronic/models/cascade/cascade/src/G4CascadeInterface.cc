@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.cc,v 1.105 2010-12-15 07:40:15 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -92,11 +91,20 @@
 // 20110802  M. Kelsey -- Use new decay handler for Propagate interface
 // 20110922  M. Kelsey -- Follow migration of G4InuclParticle::print(), use
 //		G4ExceptionDescription for reporting before throwing exception
+// 20120125  M. Kelsey -- In retryInelasticProton() check for empty output
+// 20120525  M. Kelsey -- In NoInteraction, check for Ekin<0., set to zero;
+//		use SetEnergyChange(0.) explicitly for good final states.
+// 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+
+#include <cmath>
+#include <iostream>
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DecayKineticTracks.hh"
 #include "G4DynamicParticle.hh"
@@ -115,9 +123,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4Track.hh"
 #include "G4V3DNucleus.hh"
-#include <cmath>
-#include <stdlib.h>
-#include <iostream>
 
 using namespace G4InuclParticleNames;
 
@@ -127,7 +132,7 @@ typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 // Filename to capture random seed, if specified by user at runtime
 
-const G4String G4CascadeInterface::randomFile(getenv("G4CASCADE_RANDOM_FILE")?getenv("G4CASCADE_RANDOM_FILE"):"");
+const G4String G4CascadeInterface::randomFile = G4CascadeParameters::randomFile();
 
 // Maximum number of iterations allowed for inelastic collision attempts
 
@@ -137,14 +142,15 @@ const G4int G4CascadeInterface::maximumTries = 20;
 // Constructor and destrutor
 
 G4CascadeInterface::G4CascadeInterface(const G4String& name)
-  : G4VIntraNuclearTransportModel(name),
-    verboseLevel(0), numberOfTries(0),
-    collider(new G4InuclCollider), 
-    balance(new G4CascadeCheckBalance(name)),
+  : G4VIntraNuclearTransportModel(name), numberOfTries(0),
+    collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)),
     bullet(0), target(0), output(new G4CollisionOutput) {
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
   // Description();                                // Model description
+
+  this->SetVerboseLevel(G4CascadeParameters::verbose());
+  if (G4CascadeParameters::usePreCompound()) usePreCompoundDeexcitation();
 }
 
 
@@ -169,6 +175,10 @@ void G4CascadeInterface::ModelDescription(std::ostream& outFile) const
           << "transmitted through shell boundaries.\n";
 }
 
+void G4CascadeInterface::DumpConfiguration(std::ostream& outFile) const {
+  G4CascadeParameters::DumpConfiguration(outFile);
+}
+
 
 void G4CascadeInterface::clear() {
   bullet=0;
@@ -188,13 +198,29 @@ void G4CascadeInterface::usePreCompoundDeexcitation() {
 }
 
 
-// Apply verbosity to all member objects
+// Apply verbosity to all member objects (overrides base class version)
 
-void G4CascadeInterface::setVerboseLevel(G4int verbose) {
-  verboseLevel = verbose;
+void G4CascadeInterface::SetVerboseLevel(G4int verbose) {
+  G4HadronicInteraction::SetVerboseLevel(verbose);
   collider->setVerboseLevel(verbose);
   balance->setVerboseLevel(verbose);
   output->setVerboseLevel(verbose);
+}
+
+
+// Test whether inputs are valid for this model
+
+G4bool G4CascadeInterface::IsApplicable(const G4HadProjectile& aTrack,
+					G4Nucleus& /* theNucleus */) {
+  return IsApplicable(aTrack.GetDefinition());  
+}
+
+G4bool G4CascadeInterface::IsApplicable(const G4ParticleDefinition* aPD) const {
+  if (aPD->GetAtomicMass() > 1) return true;		// Nuclei are okay
+
+  // Valid particle and have interactions available
+  G4int type = G4InuclElementaryParticle::type(aPD);
+  return (type>0 && G4CascadeChannelTables::GetTable(type));
 }
 
 
@@ -206,12 +232,18 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   if (verboseLevel)
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
 
+  if (aTrack.GetKineticEnergy() < 0.) {
+    G4cerr << " >>> G4CascadeInterface got negative-energy track: "
+	   << aTrack.GetDefinition()->GetParticleName() << " Ekin = "
+	   << aTrack.GetKineticEnergy() << G4endl;
+  }
+
 #ifdef G4CASCADE_DEBUG_INTERFACE
   static G4int counter(0);
   counter++;
   G4cerr << "Reaction number "<< counter << " "
 	 << aTrack.GetDefinition()->GetParticleName() << " "
-	 << aTrack.GetKineticEnergy() << G4endl;
+	 << aTrack.GetKineticEnergy() << " MeV" << G4endl;
 #endif
 
   if (!randomFile.empty()) {		// User requested random-seed capture
@@ -223,6 +255,12 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   theParticleChange.Clear();
   clear();
 
+  // Abort processing if no interaction is possible
+  if (!IsApplicable(aTrack, theNucleus)) {
+    if (verboseLevel) G4cerr << " No interaction possible " << G4endl;
+    return NoInteraction(aTrack, theNucleus);
+  }
+
   // Make conversion between native Geant4 and Bertini cascade classes.
   if (!createBullet(aTrack)) {
     if (verboseLevel) G4cerr << " Unable to create usable bullet" << G4endl;
@@ -233,20 +271,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     if (verboseLevel) G4cerr << " Unable to create usable target" << G4endl;
     return NoInteraction(aTrack, theNucleus);
   }
-
-  // Sanity check -- hadronic bullet must have interaction table
-  G4InuclElementaryParticle* hadBullet = 
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-
-  if (hadBullet && !G4CascadeChannelTables::GetTable(hadBullet->type())) {
-    if (verboseLevel) {
-      G4cerr << " G4CascadeInterface: "
-	     << bullet->getDefinition()->GetParticleName()
-	     << " has no interaction table" << G4endl;
-    }
-    return NoInteraction(aTrack, theNucleus);
-  }
-
 
   // Different retry conditions for proton target vs. nucleus
   const G4bool isHydrogen = (theNucleus.GetA_asInt() == 1);
@@ -378,7 +402,9 @@ G4CascadeInterface::NoInteraction(const G4HadProjectile& aTrack,
 
   theParticleChange.Clear();
   theParticleChange.SetStatusChange(isAlive);
-  theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+
+  G4double ekin = aTrack.GetKineticEnergy()>0. ? aTrack.GetKineticEnergy() : 0.;
+  theParticleChange.SetEnergyChange(ekin);	// Protect against rounding
 
   return &theParticleChange;
 }
@@ -508,6 +534,7 @@ void G4CascadeInterface::copyOutputToHadronicResult() {
   const std::vector<G4InuclElementaryParticle>& particles = output->getOutgoingParticles();
 
   theParticleChange.SetStatusChange(stopAndKill);
+  theParticleChange.SetEnergyChange(0.);
 
   // Get outcoming particles
   if (!particles.empty()) { 
@@ -631,19 +658,24 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
   // Report on all retry conditions, in order of return logic
   G4cout << " retryInelasticProton: number of Tries "
 	 << ((numberOfTries < maximumTries) ? "RETRY (t)" : "EXIT (f)")
-	 << "\n retryInelasticProton: AND collision type "
-	 << ((out.size() == 2) ? "ELASTIC (t)" : "INELASTIC (f)")
-	 << "\n retryInelasticProton: AND Leading particles bullet "
-	 << ((out[0].getDefinition() == bullet->getDefinition() ||
-	      out[1].getDefinition() == bullet->getDefinition())
-	     ? "YES (t)" : "NO (f)")
-	 << G4endl;
+	 << "\n retryInelasticProton: AND collision type ";
+  if (out.empty()) G4cout << "FAILED" << G4endl;
+  else {
+    G4cout << (out.size() == 2 ? "ELASTIC (t)" : "INELASTIC (f)")
+	   << "\n retryInelasticProton: AND Leading particles bullet "
+	   << (out.size() >= 2 &&
+	       (out[0].getDefinition() == bullet->getDefinition() ||
+		out[1].getDefinition() == bullet->getDefinition())
+	       ? "YES (t)" : "NO (f)")
+	   << G4endl;
+  }
 #endif
 
   return ( (numberOfTries < maximumTries) &&
-	   (out.size() == 2) &&
-	   (out[0].getDefinition() == bullet->getDefinition() ||
-	    out[1].getDefinition() == bullet->getDefinition())
+	   (out.empty() ||
+	    (out.size() == 2 &&
+	     (out[0].getDefinition() == bullet->getDefinition() ||
+	      out[1].getDefinition() == bullet->getDefinition())))
 	   );
 }
 

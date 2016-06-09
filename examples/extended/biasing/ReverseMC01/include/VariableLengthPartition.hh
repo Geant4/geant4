@@ -23,18 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/include/VariableLengthPartition.hh
+/// \brief Definition of the VariableLengthPartition class
+//
 #ifndef VariableLengthPartition_h
 #define VariableLengthPartition_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              VariableLengthParition.hh
 //
-// Version:		1.0
-// Date:		09/03/00
-// Author:		P R Truscott
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/96/NL/JG Work Order No. 3
+// Version:                1.0
+// Date:                09/03/00
+// Author:                P R Truscott
+// Organisation:        DERA UK
+// Customer:                ESA/ESTEC, NOORDWIJK
+// Contract:                12115/96/NL/JG Work Order No. 3
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

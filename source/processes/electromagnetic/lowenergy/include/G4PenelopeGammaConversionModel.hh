@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -99,7 +98,7 @@ private:
   //Use a quicker sampling algorithm if E < smallEnergy
   G4double fSmallEnergy; 
 
-  std::map<const G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
+  std::map<G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
   void ReadDataFile(const G4int Z);
 
   void InitializeScreeningRadii();

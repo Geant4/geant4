@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.9 2009-08-17 14:52:19 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -35,6 +34,8 @@
 //      30 May 1997 H.Kurashige
 // ------------------------------------------------------------
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"

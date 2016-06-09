@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.24 2010-10-06 10:15:38 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 

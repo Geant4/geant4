@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.11 2006-11-14 07:11:19 perl Exp $
+/// \file analysis/A01/src/A01HadCalorimeterHit.cc
+/// \brief Implementation of the A01HadCalorimeterHit class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -41,22 +44,23 @@
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 G4Allocator<A01HadCalorimeterHit> A01HadCalorimeterHitAllocator;
 
 A01HadCalorimeterHit::A01HadCalorimeterHit()
 {
-  columnID = -1;
-  rowID = -1;
-  edep = 0.;
+  fColumnID = -1;
+  fRowID = -1;
+  fEdep = 0.;
 }
 
 A01HadCalorimeterHit::A01HadCalorimeterHit(G4int iCol,G4int iRow)
 {
-  columnID = iCol;
-  rowID = iRow;
-  edep = 0.;
+  fColumnID = iCol;
+  fRowID = iRow;
+  fEdep = 0.;
 }
 
 A01HadCalorimeterHit::~A01HadCalorimeterHit()
@@ -64,40 +68,40 @@ A01HadCalorimeterHit::~A01HadCalorimeterHit()
 
 A01HadCalorimeterHit::A01HadCalorimeterHit(const A01HadCalorimeterHit &right)
     : G4VHit() {
-  columnID = right.columnID;
-  rowID = right.rowID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
+  fColumnID = right.fColumnID;
+  fRowID = right.fRowID;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fRot = right.fRot;
 }
 
 const A01HadCalorimeterHit& A01HadCalorimeterHit::operator=(const A01HadCalorimeterHit &right)
 {
-  columnID = right.columnID;
-  rowID = right.rowID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
+  fColumnID = right.fColumnID;
+  fRowID = right.fRowID;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fRot = right.fRot;
   return *this;
 }
 
 int A01HadCalorimeterHit::operator==(const A01HadCalorimeterHit &right) const
 {
-  return (columnID==right.columnID&&rowID==right.rowID);
+  return (fColumnID==right.fColumnID&&fRowID==right.fRowID);
 }
 
 void A01HadCalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager&&(edep>0.))
+  if(pVVisManager&&(fEdep>0.))
   {
     // Draw a calorimeter cell with depth propotional to the energy deposition
-    G4Transform3D trans(rot.inverse(),pos);
+    G4Transform3D trans(fRot.inverse(),fPos);
     G4VisAttributes attribs;
     G4Colour colour(1.,0.,0.);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
-    G4Box box("dummy",15.*cm,15.*cm,1.*m*edep/(0.1*GeV));
+    G4Box box("dummy",15.*cm,15.*cm,1.*m*fEdep/(0.1*GeV));
     pVVisManager->Draw(box,attribs,trans);
   }
 }
@@ -122,7 +126,7 @@ const std::map<G4String,G4AttDef>* A01HadCalorimeterHit::GetAttDefs() const
 
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+                      "Physics","G4BestUnit","G4ThreeVector");
   }
   return store;
 }
@@ -134,23 +138,23 @@ std::vector<G4AttValue>* A01HadCalorimeterHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","HadCalorimeterHit",""));
 
   values->push_back
-    (G4AttValue("Column",G4UIcommand::ConvertToString(columnID),""));
+    (G4AttValue("Column",G4UIcommand::ConvertToString(fColumnID),""));
 
   values->push_back
-    (G4AttValue("Row",G4UIcommand::ConvertToString(rowID),""));
+    (G4AttValue("Row",G4UIcommand::ConvertToString(fRowID),""));
 
   values->push_back
-    (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
+    (G4AttValue("Energy",G4BestUnit(fEdep,"Energy"),""));
 
   values->push_back
-    (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
+    (G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
 
   return values;
 }
 
 void A01HadCalorimeterHit::Print()
 {
-  G4cout << "  Cell[" << rowID << ", " << columnID << "] " << edep/MeV << " (MeV) " << pos << G4endl;
+  G4cout << "  Cell[" << fRowID << ", " << fColumnID << "] " << fEdep/MeV << " (MeV) " << fPos << G4endl;
 }
 
 

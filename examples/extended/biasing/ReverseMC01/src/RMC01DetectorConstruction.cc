@@ -23,16 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DetectorConstruction.cc,v 1.2 2010-11-11 14:39:42 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/src/RMC01DetectorConstruction.cc
+/// \brief Implementation of the RMC01DetectorConstruction class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01DetectorConstruction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//      Class Name:        RMC01DetectorConstruction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "RMC01DetectorConstruction.hh"
 #include "RMC01DetectorMessenger.hh"
 
@@ -51,44 +57,36 @@
 
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "RMC01SD.hh"
 
-/////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01DetectorConstruction::RMC01DetectorConstruction()
+ : fShield_Thickness(5.*mm),
+   fSensitive_cylinder_H (1.*mm),
+   fSensitive_cylinder_Rout (1.*mm)
 { 
-  // create commands for interactive definition of the calorimeter
-   detectorMessenger = new RMC01DetectorMessenger(this); 
-  
-  
-   sensitive_cylinder_H = 1.*mm;
-   sensitive_cylinder_Rout= 1.*mm;
-   
-   SetShieldingThickness(5.*mm);
-  
-  
- 
- /* //Sensitive detector
-   theSensitiveDetector  = new FORWARD_DOSESD("/ForwardDetecting");
-    
-   G4SDManager::GetSDMpointer()->AddNewDetector(theSensitiveDetector);
-   */
+   fDetectorMessenger = new RMC01DetectorMessenger(this);
 }
-/////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01DetectorConstruction::~RMC01DetectorConstruction()
-{ delete detectorMessenger;
+{ delete fDetectorMessenger;
 }
-/////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VPhysicalVolume* RMC01DetectorConstruction::Construct()
 {
-
   DefineMaterials();
   return ConstructSimpleGeometry();
 }
-/////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01DetectorConstruction::DefineMaterials()
 { 
  
@@ -112,7 +110,6 @@ void RMC01DetectorConstruction::DefineMaterials()
   new G4Material("Silicon", z=14., a=28.09*g/mole, density=2.33*g/cm3);
   new G4Material("Tantalum", z=73., a=180.9479*g/mole, density=16.654*g/cm3);
 
-   
   //
   // define air   
   //
@@ -121,169 +118,146 @@ void RMC01DetectorConstruction::DefineMaterials()
   Air->AddElement(N, fractionmass=0.7);
   Air->AddElement(O, fractionmass=0.3);
   
-  
   //
   //Example of Vacuum
   //
 
-
    new G4Material("Vacuum", z=1., a=1.01*g/mole,density= universe_mean_density,
                            kStateGas, 3.e-18*pascal, 2.73*kelvin);
 }
-/////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VPhysicalVolume* RMC01DetectorConstruction::ConstructSimpleGeometry()
 {
 
-  
   // Clean old geometry, if any
   
   G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-  
-  
-  
-  
+
   // World
   //-----------
   
-  
-  G4Box* solidWorld = new G4Box("World",15.*cm, 15.*cm, 15.*cm);	
-                         
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,		
-                                   G4Material::GetMaterial("Vacuum"),	
-                                   "World");		
+  G4Box* solidWorld = new G4Box("World",15.*cm, 15.*cm, 15.*cm);        
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,                
+                                   G4Material::GetMaterial("Vacuum"),        
+                                   "World");                
                                    
-  G4VPhysicalVolume* physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume				 
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);	
+  G4VPhysicalVolume* physiWorld = new G4PVPlacement(0,                        //no rotation
+                                   G4ThreeVector(),        //at (0,0,0)
+                 logicWorld,                //its logical volume
+                 "World",                //its name
+                 0,                        //its mother  volume
+                 false,                        //no boolean operation
+                 0);
+                                 
+  //Shielding Aluminum Sphere
+  //-------------------
   
- 
-				 
-   //Shielding Aluminum Sphere
-   //-------------------
+  G4double radiusShieldingSphere =10.*cm;
+    
+  G4Orb* solidShieldingSphere=new G4Orb("Shielding", radiusShieldingSphere);
+  G4LogicalVolume* logicShieldingSphere=
+                       new G4LogicalVolume(solidShieldingSphere,
+                                          G4Material::GetMaterial("Aluminum"),
+                                          "Shielding");        //its name;
+    
+  new G4PVPlacement(0,                        //no rotation
+                     G4ThreeVector(),        //at (0,0,0)
+                     logicShieldingSphere,        //its logical volume
+                     "Shielding",        //its name
+                      logicWorld,        //its mother  volume
+                     false,                //no boolean operation
+                     0);
+                                     
+  //Bulk Sphere
+  //-------------------
    
+  G4Orb* solidBulkSphere=new G4Orb("Bulk", radiusShieldingSphere-fShield_Thickness);
+  G4LogicalVolume* logicBulkSphere=new G4LogicalVolume(solidBulkSphere,        //its solid
+                                                  G4Material::GetMaterial("Air"),//its material
+                                                 "Bulk");        //its name;
     
-  
-    G4double radiusShieldingSphere =10.*cm;
-    
-    G4Orb* solidShieldingSphere=new G4Orb("Shielding", radiusShieldingSphere);
-    G4LogicalVolume* logicShieldingSphere=new G4LogicalVolume(solidShieldingSphere,	
-      				            G4Material::GetMaterial("Aluminum"),
-      				           "Shielding");	//its name;
-    
-    new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(),	//at (0,0,0)
-                                     logicShieldingSphere,	//its logical volume
-                                     "Shielding",	//its name
-                                     logicWorld,	//its mother  volume
-                                     false,		//no boolean operation
-                                     0);
-				     
-   //Bulk Sphere
-   //-------------------
+  new G4PVPlacement(0,                        //no rotation
+                      G4ThreeVector(),        //at (0,0,0)
+                      logicBulkSphere,        //its logical volume
+                      "Bulk",        //its name
+                      logicShieldingSphere,        //its mother  volume
+                      false,                //no boolean operation
+                      0);
    
-    G4Orb* solidBulkSphere=new G4Orb("Bulk", radiusShieldingSphere-shield_Thickness);
-    G4LogicalVolume* logicBulkSphere=new G4LogicalVolume(solidBulkSphere,	//its solid
-      				            G4Material::GetMaterial("Air"),//its material
-      				           "Bulk");	//its name;
+  //Detecting cylinder
+  //-------------------
     
-    new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(),	//at (0,0,0)
-                                     logicBulkSphere,	//its logical volume
-                                     "Bulk",	//its name
-                                     logicShieldingSphere,	//its mother  volume
-                                     false,		//no boolean operation
-                                     0);
-   
-   //Detecting cylinder
-   //-------------------
-   
+  G4Tubs* solidDetecting=new G4Tubs("SensitiveVolume",
+                                              0.,fSensitive_cylinder_Rout,fSensitive_cylinder_H/2.,
+                                              0.,twopi);
     
-   
+  G4LogicalVolume* logicDetectingCylinder=new G4LogicalVolume(solidDetecting,
+                                                  G4Material::GetMaterial("Silicon"),
+                                                 "SensitiveVolume");
     
-    G4Tubs* solidDetecting=new G4Tubs("SensitiveVolume",
-    					  0.,sensitive_cylinder_Rout,sensitive_cylinder_H/2.,0.,twopi);
+  new G4PVPlacement(0,                        //no rotation
+                      G4ThreeVector(0.,0.,0.),        //at (0,0,0)
+                      logicDetectingCylinder,        //its logical volume
+                      "SensitiveVolume",        //its name
+                      logicBulkSphere,        //its mother  volume
+                      false,                //no boolean operation
+                      0);
+                                     
     
+  RMC01SD* theSensitiveDetector  = new RMC01SD("/SensitiveCylinder");
     
-    G4LogicalVolume* logicDetectingCylinder=new G4LogicalVolume(solidDetecting,	//its solid
-      				            G4Material::GetMaterial("Silicon"),//its material
-      				           "SensitiveVolume");	//its name;
-    
-    new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(0.,0.,0.),	//at (0,0,0)
-                                     logicDetectingCylinder,	//its logical volume
-                                     "SensitiveVolume",	//its name
-                                     logicBulkSphere,	//its mother  volume
-                                     false,		//no boolean operation
-                                     0);
-				     
-    
-    RMC01SD* theSensitiveDetector  = new RMC01SD("/SensitiveCylinder");
-    
-    G4SDManager::GetSDMpointer()->AddNewDetector(theSensitiveDetector);				     
-    logicDetectingCylinder->SetSensitiveDetector(theSensitiveDetector);			     
-				     
- 	     
+  G4SDManager::GetSDMpointer()->AddNewDetector(theSensitiveDetector);
+  logicDetectingCylinder->SetSensitiveDetector(theSensitiveDetector);
+                                     
+  //Tantalum Plates on the top and beside
+  //-------------------------------------
+  G4Box* solidPlate=new G4Box("TantalumPlate",4.*cm,4.*cm,0.25*mm);
+  G4LogicalVolume* logicPlate=new G4LogicalVolume(solidPlate,        //its solid
+                                                G4Material::GetMaterial("Tantalum"),//its material
+                                                "TantalumPlate");        //its name;
    
    
-   
-   //Tantalum Plates on the top and beside
-   //-------------------------------------
-   G4Box* solidPlate=new G4Box("TantalumPlate",4.*cm,4.*cm,0.25*mm);
-   G4LogicalVolume* logicPlate=new G4LogicalVolume(solidPlate,	//its solid
-      				            G4Material::GetMaterial("Tantalum"),//its material
-      				           "TantalumPlate");	//its name;
-   
-   
-   new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(0.,0.,6.*cm),	//at (0,0,0)
-                                     logicPlate,	//its logical volume
-                                     "TantalumPlate1",	//its name
-                                     logicBulkSphere,	//its mother  volume
-                                     false,		//no boolean operation
+  new G4PVPlacement(0,                        //no rotation
+                                     G4ThreeVector(0.,0.,6.*cm),        //at (0,0,0)
+                                     logicPlate,        //its logical volume
+                                     "TantalumPlate1",        //its name
+                                     logicBulkSphere,        //its mother  volume
+                                     false,                //no boolean operation
                                      0); 
    
-   new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(0.,0.,-6.*cm),	//at (0,0,0)
-                                     logicPlate,	//its logical volume
-                                     "TantalumPlate2",	//its name
-                                     logicBulkSphere,	//its mother  volume
-                                     false,		//no boolean operation
-                                     0);				     			     
+  new G4PVPlacement(0,                        //no rotation
+                                     G4ThreeVector(0.,0.,-6.*cm),        //at (0,0,0)
+                                     logicPlate,        //its logical volume
+                                     "TantalumPlate2",        //its name
+                                     logicBulkSphere,        //its mother  volume
+                                     false,                //no boolean operation
+                                     0);                                                                  
    
-   
-   
-   
-   return physiWorld;
-    
-    
-  
-  
-  //G4cout<<"Geo construction finished"<<std::endl;
   return physiWorld;
+  
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
 void RMC01DetectorConstruction::SetSensitiveVolumeRadius(G4double r)
-{  sensitive_cylinder_Rout=r;
-}
-///////////////////////////////////////////////////////////////////////////////////////
-//
-void RMC01DetectorConstruction::SetSensitiveVolumeHeight(G4double h)
-{  sensitive_cylinder_H=h;
+{  fSensitive_cylinder_Rout=r;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-void RMC01DetectorConstruction::SetShieldingThickness(G4double d)
-{ shield_Thickness=d;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RMC01DetectorConstruction::SetSensitiveVolumeHeight(G4double h)
+{  fSensitive_cylinder_H=h;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RMC01DetectorConstruction::SetShieldingThickness(G4double d)
+{ fShield_Thickness=d;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

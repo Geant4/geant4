@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.cc,v 1.6 2010-11-25 17:32:05 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "globals.hh"
 
 #include "eRositaPhysicsList.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 

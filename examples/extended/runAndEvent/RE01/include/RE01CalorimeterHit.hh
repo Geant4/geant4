@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01CalorimeterHit.hh,v 1.3 2006-06-29 17:42:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01CalorimeterHit.hh
+/// \brief Definition of the RE01CalorimeterHit class
 //
-
-
+// $Id$
+//
 
 #ifndef RE01CalorimeterHit_h
 #define RE01CalorimeterHit_h 1
@@ -46,68 +46,53 @@ class G4AttValue;
 
 class RE01CalorimeterHit : public G4VHit
 {
-  public:
+public:
+  RE01CalorimeterHit(G4LogicalVolume* logVol,G4int z,G4int phi);
+  virtual ~RE01CalorimeterHit();
+  
+  inline void *operator new(size_t);
+  inline void operator delete(void *aHit);
 
-      RE01CalorimeterHit();
-      RE01CalorimeterHit(G4LogicalVolume* logVol,G4int z,G4int phi);
-      ~RE01CalorimeterHit();
-      RE01CalorimeterHit(const RE01CalorimeterHit &right);
-      const RE01CalorimeterHit& operator=(const RE01CalorimeterHit &right);
-      G4int operator==(const RE01CalorimeterHit &right) const;
+  virtual void Draw();
+  virtual void Print();
+  virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+  virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+  inline G4int GetZ() { return fZCellID; }
+  inline G4int GetPhi() { return fPhiCellID; }
+  inline void SetEdep(G4double de)
+  { fEdep = de; fEdepByATrack = de; }
+  inline void AddEdep(G4double de)
+  { fEdep += de; fEdepByATrack += de; }
+  inline G4double GetEdep()
+  { return fEdep; }
+  inline G4double GetEdepByATrack()
+  { return fEdepByATrack; }
+  inline void ClearEdepByATrack()
+  { fEdepByATrack = 0.; fTrackInfo = RE01TrackInformation(); }
+  inline void SetPos(G4ThreeVector xyz)
+  { fPos = xyz; }
+  inline void SetRot(G4RotationMatrix rmat)
+  { fRot = rmat; }
+  inline void SetTrackInformation(const G4Track* aTrack)
+  {
+    RE01TrackInformation* anInfo = 
+      (RE01TrackInformation*)(aTrack->GetUserInformation());
+    fTrackInfo = *anInfo;
+  }
+  inline RE01TrackInformation* GetTrackInformation()
+  { return &fTrackInfo; }
 
-      void Draw();
-      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      virtual std::vector<G4AttValue>* CreateAttValues() const;
-      void Print();
+private:
+  G4int fZCellID;
+  G4int fPhiCellID;
+  G4double fEdep;
+  G4ThreeVector fPos;
+  G4RotationMatrix fRot;
+  const G4LogicalVolume* fPLogV;
+  G4double fEdepByATrack;
+  RE01TrackInformation fTrackInfo;
 
-  private:
-      G4int ZCellID;
-      G4int PhiCellID;
-      G4double edep;
-      G4ThreeVector pos;
-      G4RotationMatrix rot;
-      const G4LogicalVolume* pLogV;
-      G4double edepByATrack;
-      RE01TrackInformation trackInfo;
-
-  public:
-      inline void SetCellID(G4int z,G4int phi)
-      {
-        ZCellID = z;
-        PhiCellID = phi;
-      }
-      inline G4int GetZ() { return ZCellID; }
-      inline G4int GetPhi() { return PhiCellID; }
-      inline void SetEdep(G4double de)
-      { edep = de; edepByATrack = de; }
-      inline void AddEdep(G4double de)
-      { edep += de; edepByATrack += de; }
-      inline G4double GetEdep()
-      { return edep; }
-      inline G4double GetEdepByATrack()
-      { return edepByATrack; }
-      inline void ClearEdepByATrack()
-      { edepByATrack = 0.; trackInfo = RE01TrackInformation(); }
-      inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
-      inline G4ThreeVector GetPos()
-      { return pos; }
-      inline void SetRot(G4RotationMatrix rmat)
-      { rot = rmat; }
-      inline G4RotationMatrix GetRot()
-      { return rot; }
-      inline const G4LogicalVolume * GetLogV()
-      { return pLogV; }
-      inline void SetTrackInformation(const G4Track* aTrack)
-      {
-        RE01TrackInformation* anInfo = (RE01TrackInformation*)(aTrack->GetUserInformation());
-        trackInfo = *anInfo;
-      }
-      inline RE01TrackInformation* GetTrackInformation()
-      { return &trackInfo; }
 };
 
 typedef G4THitsCollection<RE01CalorimeterHit> RE01CalorimeterHitsCollection;

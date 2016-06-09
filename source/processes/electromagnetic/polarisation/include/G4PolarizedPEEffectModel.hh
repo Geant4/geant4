@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPEEffectModel.hh,v 1.1 2007-11-01 17:29:09 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -56,19 +55,19 @@
 #ifndef G4PolarizedPEEffectModel_h
 #define G4PolarizedPEEffectModel_h 1
 
-#include "G4PEEffectModel.hh"
+#include "G4PEEffectFluoModel.hh"
 #include "G4StokesVector.hh"
 
 
 class G4PolarizedPEEffectCrossSection;
 
-class G4PolarizedPEEffectModel : public G4PEEffectModel
+class G4PolarizedPEEffectModel : public G4PEEffectFluoModel
 {
 
 public:
 
   G4PolarizedPEEffectModel(const G4ParticleDefinition* p = 0, 
-			const G4String& nam = "Polarized-PhotoElectric");
+			   const G4String& nam = "Polarized-PhotoElectric");
 
   void Initialise(const G4ParticleDefinition* pd, const G4DataVector& dv);
   virtual ~G4PolarizedPEEffectModel();

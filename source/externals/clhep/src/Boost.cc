@@ -24,42 +24,42 @@ HepBoost & HepBoost::set (double bx, double by, double bz) {
 //    std::cerr << "HepBoost::set() - "
 //      << "Boost Vector supplied to set HepBoost represents speed >= c." << std::endl;
 //  }    
-  double gamma = 1.0 / std::sqrt(1.0 - bp2);
-  double bgamma = gamma * gamma / (1.0 + gamma);
+  double ggamma = 1.0 / std::sqrt(1.0 - bp2);
+  double bgamma = ggamma * ggamma / (1.0 + ggamma);
   rep_.xx_ = 1.0 + bgamma * bx * bx;
   rep_.yy_ = 1.0 + bgamma * by * by;
   rep_.zz_ = 1.0 + bgamma * bz * bz;
   rep_.xy_ = bgamma * bx * by;
   rep_.xz_ = bgamma * bx * bz;
   rep_.yz_ = bgamma * by * bz;
-  rep_.xt_ = gamma * bx;
-  rep_.yt_ = gamma * by;
-  rep_.zt_ = gamma * bz;
-  rep_.tt_ = gamma;
+  rep_.xt_ = ggamma * bx;
+  rep_.yt_ = ggamma * by;
+  rep_.zt_ = ggamma * bz;
+  rep_.tt_ = ggamma;
   return *this;
 }
 
-HepBoost & HepBoost::set (const HepRep4x4Symmetric & m) {
-  rep_ = m;
+HepBoost & HepBoost::set (const HepRep4x4Symmetric & m1) {
+  rep_ = m1;
   return *this;
 }
 
-HepBoost & HepBoost::set (Hep3Vector direction, double beta) {
-  double length = direction.mag();
+HepBoost & HepBoost::set (Hep3Vector ddirection, double bbeta) {
+  double length = ddirection.mag();
   if (length <= 0) {				// Nan-proofing
     std::cerr << "HepBoost::set() - "
       << "Direction supplied to set HepBoost is zero." << std::endl;
     set (0,0,0);
     return *this;
   }    
-  set(beta*direction.x()/length,
-      beta*direction.y()/length,
-      beta*direction.z()/length);
+  set(bbeta*ddirection.x()/length,
+      bbeta*ddirection.y()/length,
+      bbeta*ddirection.z()/length);
   return *this;
 }
 
-HepBoost & HepBoost::set (const Hep3Vector & boost) {
-  return set (boost.x(), boost.y(), boost.z());
+HepBoost & HepBoost::set (const Hep3Vector & bboost) {
+  return set (bboost.x(), bboost.y(), bboost.z());
 }
 
 // ----------  Accessors:
@@ -69,8 +69,8 @@ HepBoost & HepBoost::set (const Hep3Vector & boost) {
 void HepBoost::decompose (HepRotation & rotation, HepBoost & boost) const {
   HepAxisAngle vdelta = HepAxisAngle();
   rotation = HepRotation(vdelta);
-  Hep3Vector beta = boostVector();
-  boost = HepBoost(beta);
+  Hep3Vector bbeta = boostVector();
+  boost = HepBoost(bbeta);
 }
 
 void HepBoost::decompose (HepAxisAngle & rotation, Hep3Vector & boost) const {
@@ -81,8 +81,8 @@ void HepBoost::decompose (HepAxisAngle & rotation, Hep3Vector & boost) const {
 void HepBoost::decompose (HepBoost & boost, HepRotation & rotation) const {
   HepAxisAngle vdelta = HepAxisAngle();
   rotation = HepRotation(vdelta);
-  Hep3Vector beta = boostVector();
-  boost = HepBoost(beta);
+  Hep3Vector bbeta = boostVector();
+  boost = HepBoost(bbeta);
 }
 
 void HepBoost::decompose (Hep3Vector & boost, HepAxisAngle & rotation) const {
@@ -177,53 +177,53 @@ void HepBoost::rectify() {
 // ---------- Operations in the group of 4-Rotations
 
 HepLorentzRotation
-HepBoost::matrixMultiplication(const HepRep4x4 & m) const {
+HepBoost::matrixMultiplication(const HepRep4x4 & m1) const {
   HepRep4x4Symmetric r = rep4x4Symmetric();
   return HepLorentzRotation( HepRep4x4 (
-    r.xx_*m.xx_ + r.xy_*m.yx_ + r.xz_*m.zx_ + r.xt_*m.tx_,
-    r.xx_*m.xy_ + r.xy_*m.yy_ + r.xz_*m.zy_ + r.xt_*m.ty_,
-    r.xx_*m.xz_ + r.xy_*m.yz_ + r.xz_*m.zz_ + r.xt_*m.tz_,
-    r.xx_*m.xt_ + r.xy_*m.yt_ + r.xz_*m.zt_ + r.xt_*m.tt_,
+    r.xx_*m1.xx_ + r.xy_*m1.yx_ + r.xz_*m1.zx_ + r.xt_*m1.tx_,
+    r.xx_*m1.xy_ + r.xy_*m1.yy_ + r.xz_*m1.zy_ + r.xt_*m1.ty_,
+    r.xx_*m1.xz_ + r.xy_*m1.yz_ + r.xz_*m1.zz_ + r.xt_*m1.tz_,
+    r.xx_*m1.xt_ + r.xy_*m1.yt_ + r.xz_*m1.zt_ + r.xt_*m1.tt_,
 
-    r.xy_*m.xx_ + r.yy_*m.yx_ + r.yz_*m.zx_ + r.yt_*m.tx_,
-    r.xy_*m.xy_ + r.yy_*m.yy_ + r.yz_*m.zy_ + r.yt_*m.ty_,
-    r.xy_*m.xz_ + r.yy_*m.yz_ + r.yz_*m.zz_ + r.yt_*m.tz_,
-    r.xy_*m.xt_ + r.yy_*m.yt_ + r.yz_*m.zt_ + r.yt_*m.tt_,
+    r.xy_*m1.xx_ + r.yy_*m1.yx_ + r.yz_*m1.zx_ + r.yt_*m1.tx_,
+    r.xy_*m1.xy_ + r.yy_*m1.yy_ + r.yz_*m1.zy_ + r.yt_*m1.ty_,
+    r.xy_*m1.xz_ + r.yy_*m1.yz_ + r.yz_*m1.zz_ + r.yt_*m1.tz_,
+    r.xy_*m1.xt_ + r.yy_*m1.yt_ + r.yz_*m1.zt_ + r.yt_*m1.tt_,
 
-    r.xz_*m.xx_ + r.yz_*m.yx_ + r.zz_*m.zx_ + r.zt_*m.tx_,
-    r.xz_*m.xy_ + r.yz_*m.yy_ + r.zz_*m.zy_ + r.zt_*m.ty_,
-    r.xz_*m.xz_ + r.yz_*m.yz_ + r.zz_*m.zz_ + r.zt_*m.tz_,
-    r.xz_*m.xt_ + r.yz_*m.yt_ + r.zz_*m.zt_ + r.zt_*m.tt_,
+    r.xz_*m1.xx_ + r.yz_*m1.yx_ + r.zz_*m1.zx_ + r.zt_*m1.tx_,
+    r.xz_*m1.xy_ + r.yz_*m1.yy_ + r.zz_*m1.zy_ + r.zt_*m1.ty_,
+    r.xz_*m1.xz_ + r.yz_*m1.yz_ + r.zz_*m1.zz_ + r.zt_*m1.tz_,
+    r.xz_*m1.xt_ + r.yz_*m1.yt_ + r.zz_*m1.zt_ + r.zt_*m1.tt_,
 
-    r.xt_*m.xx_ + r.yt_*m.yx_ + r.zt_*m.zx_ + r.tt_*m.tx_,
-    r.xt_*m.xy_ + r.yt_*m.yy_ + r.zt_*m.zy_ + r.tt_*m.ty_,
-    r.xt_*m.xz_ + r.yt_*m.yz_ + r.zt_*m.zz_ + r.tt_*m.tz_,
-    r.xt_*m.xt_ + r.yt_*m.yt_ + r.zt_*m.zt_ + r.tt_*m.tt_) );
+    r.xt_*m1.xx_ + r.yt_*m1.yx_ + r.zt_*m1.zx_ + r.tt_*m1.tx_,
+    r.xt_*m1.xy_ + r.yt_*m1.yy_ + r.zt_*m1.zy_ + r.tt_*m1.ty_,
+    r.xt_*m1.xz_ + r.yt_*m1.yz_ + r.zt_*m1.zz_ + r.tt_*m1.tz_,
+    r.xt_*m1.xt_ + r.yt_*m1.yt_ + r.zt_*m1.zt_ + r.tt_*m1.tt_) );
 }
 
 HepLorentzRotation
-HepBoost::matrixMultiplication(const HepRep4x4Symmetric & m) const {
+HepBoost::matrixMultiplication(const HepRep4x4Symmetric & m1) const {
   HepRep4x4Symmetric r = rep4x4Symmetric();
   return HepLorentzRotation( HepRep4x4 (
-    r.xx_*m.xx_ + r.xy_*m.xy_ + r.xz_*m.xz_ + r.xt_*m.xt_,
-    r.xx_*m.xy_ + r.xy_*m.yy_ + r.xz_*m.yz_ + r.xt_*m.yt_,
-    r.xx_*m.xz_ + r.xy_*m.yz_ + r.xz_*m.zz_ + r.xt_*m.zt_,
-    r.xx_*m.xt_ + r.xy_*m.yt_ + r.xz_*m.zt_ + r.xt_*m.tt_,
+    r.xx_*m1.xx_ + r.xy_*m1.xy_ + r.xz_*m1.xz_ + r.xt_*m1.xt_,
+    r.xx_*m1.xy_ + r.xy_*m1.yy_ + r.xz_*m1.yz_ + r.xt_*m1.yt_,
+    r.xx_*m1.xz_ + r.xy_*m1.yz_ + r.xz_*m1.zz_ + r.xt_*m1.zt_,
+    r.xx_*m1.xt_ + r.xy_*m1.yt_ + r.xz_*m1.zt_ + r.xt_*m1.tt_,
 
-    r.xy_*m.xx_ + r.yy_*m.xy_ + r.yz_*m.xz_ + r.yt_*m.xt_,
-    r.xy_*m.xy_ + r.yy_*m.yy_ + r.yz_*m.yz_ + r.yt_*m.yt_,
-    r.xy_*m.xz_ + r.yy_*m.yz_ + r.yz_*m.zz_ + r.yt_*m.zt_,
-    r.xy_*m.xt_ + r.yy_*m.yt_ + r.yz_*m.zt_ + r.yt_*m.tt_,
+    r.xy_*m1.xx_ + r.yy_*m1.xy_ + r.yz_*m1.xz_ + r.yt_*m1.xt_,
+    r.xy_*m1.xy_ + r.yy_*m1.yy_ + r.yz_*m1.yz_ + r.yt_*m1.yt_,
+    r.xy_*m1.xz_ + r.yy_*m1.yz_ + r.yz_*m1.zz_ + r.yt_*m1.zt_,
+    r.xy_*m1.xt_ + r.yy_*m1.yt_ + r.yz_*m1.zt_ + r.yt_*m1.tt_,
 
-    r.xz_*m.xx_ + r.yz_*m.xy_ + r.zz_*m.xz_ + r.zt_*m.xt_,
-    r.xz_*m.xy_ + r.yz_*m.yy_ + r.zz_*m.yz_ + r.zt_*m.yt_,
-    r.xz_*m.xz_ + r.yz_*m.yz_ + r.zz_*m.zz_ + r.zt_*m.zt_,
-    r.xz_*m.xt_ + r.yz_*m.yt_ + r.zz_*m.zt_ + r.zt_*m.tt_,
+    r.xz_*m1.xx_ + r.yz_*m1.xy_ + r.zz_*m1.xz_ + r.zt_*m1.xt_,
+    r.xz_*m1.xy_ + r.yz_*m1.yy_ + r.zz_*m1.yz_ + r.zt_*m1.yt_,
+    r.xz_*m1.xz_ + r.yz_*m1.yz_ + r.zz_*m1.zz_ + r.zt_*m1.zt_,
+    r.xz_*m1.xt_ + r.yz_*m1.yt_ + r.zz_*m1.zt_ + r.zt_*m1.tt_,
 
-    r.xt_*m.xx_ + r.yt_*m.xy_ + r.zt_*m.xz_ + r.tt_*m.xt_,
-    r.xt_*m.xy_ + r.yt_*m.yy_ + r.zt_*m.yz_ + r.tt_*m.yt_,
-    r.xt_*m.xz_ + r.yt_*m.yz_ + r.zt_*m.zz_ + r.tt_*m.zt_,
-    r.xt_*m.xt_ + r.yt_*m.yt_ + r.zt_*m.zt_ + r.tt_*m.tt_) );
+    r.xt_*m1.xx_ + r.yt_*m1.xy_ + r.zt_*m1.xz_ + r.tt_*m1.xt_,
+    r.xt_*m1.xy_ + r.yt_*m1.yy_ + r.zt_*m1.yz_ + r.tt_*m1.yt_,
+    r.xt_*m1.xz_ + r.yt_*m1.yz_ + r.zt_*m1.zz_ + r.tt_*m1.zt_,
+    r.xt_*m1.xt_ + r.yt_*m1.yt_ + r.zt_*m1.zt_ + r.tt_*m1.tt_) );
 }
 
 HepLorentzRotation

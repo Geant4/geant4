@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.84 2010-10-19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4Tubs
 //
 // History:
 //
+// 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
 // 02.08.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for negative value under sqrt
 //                      for the case: p on the surface and v is tangent to the surface
 // 11.05.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for phi < 2pi
@@ -42,7 +42,7 @@
 //                      simplified base on G4Box::CalculateExtent
 // 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
 // 28.11.00 V.Grichine: bug fixed in Inside(p)
-// 31.10.00 V.Grichine: assign sr, sphi in Distance ToOut(p,v,...)
+// 31.10.00 V.Grichine: assign srd, sphi in Distance ToOut(p,v,...)
 // 08.08.00 V.Grichine: more stable roots of 2-equation in DistanceToOut(p,v,..)
 // 02.08.00 V.Grichine: point is outside check in Distance ToOut(p)
 // 17.05.00 V.Grichine: bugs (#76,#91) fixed in Distance ToOut(p,v,...)
@@ -820,7 +820,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
   // Intersection point variables
   //
-  G4double Dist, s, xi, yi, zi, rho2, inum, iden, cosPsi, Comp ;
+  G4double Dist, sd, xi, yi, zi, rho2, inum, iden, cosPsi, Comp ;
   G4double t1, t2, t3, b, c, d ;     // Quadratic solver variables 
   
   // Calculate tolerant rmin and rmax
@@ -847,12 +847,12 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
   {
     if ( p.z()*v.z() < 0 )    // at +Z going in -Z or visa versa
     {
-      s = (std::fabs(p.z()) - fDz)/std::fabs(v.z()) ;   // Z intersect distance
+      sd = (std::fabs(p.z()) - fDz)/std::fabs(v.z()) ;  // Z intersect distance
 
-      if(s < 0.0)  { s = 0.0; }
+      if(sd < 0.0)  { sd = 0.0; }
 
-      xi   = p.x() + s*v.x() ;                // Intersection coords
-      yi   = p.y() + s*v.y() ;
+      xi   = p.x() + sd*v.x() ;                // Intersection coords
+      yi   = p.y() + sd*v.y() ;
       rho2 = xi*xi + yi*yi ;
 
       // Check validity of intersection
@@ -866,11 +866,11 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           inum   = xi*cosCPhi + yi*sinCPhi ;
           iden   = std::sqrt(rho2) ;
           cosPsi = inum/iden ;
-          if (cosPsi >= cosHDPhiIT)  { return s ; }
+          if (cosPsi >= cosHDPhiIT)  { return sd ; }
         }
         else
         {
-          return s ;
+          return sd ;
         }
       }
     }
@@ -911,34 +911,34 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
       if (d >= 0)  // If real root
       {
-        s = c/(-b+std::sqrt(d));
-        if (s >= 0)  // If 'forwards'
+        sd = c/(-b+std::sqrt(d));
+        if (sd >= 0)  // If 'forwards'
         {
-          if ( s>dRmax ) // Avoid rounding errors due to precision issues on
-          {              // 64 bits systems. Split long distances and recompute
-            G4double fTerm = s-std::fmod(s,dRmax);
-            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          if ( sd>dRmax ) // Avoid rounding errors due to precision issues on
+          {               // 64 bits systems. Split long distances and recompute
+            G4double fTerm = sd-std::fmod(sd,dRmax);
+            sd = fTerm + DistanceToIn(p+fTerm*v,v);
           } 
           // Check z intersection
           //
-          zi = p.z() + s*v.z() ;
+          zi = p.z() + sd*v.z() ;
           if (std::fabs(zi)<=tolODz)
           {
             // Z ok. Check phi intersection if reqd
             //
             if (fPhiFullTube)
             {
-              return s ;
+              return sd ;
             }
             else
             {
-              xi     = p.x() + s*v.x() ;
-              yi     = p.y() + s*v.y() ;
+              xi     = p.x() + sd*v.x() ;
+              yi     = p.y() + sd*v.y() ;
               cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMax ;
-              if (cosPsi >= cosHDPhiIT)  { return s ; }
+              if (cosPsi >= cosHDPhiIT)  { return sd ; }
             }
           }  //  end if std::fabs(zi)
-        }    //  end if (s>=0)
+        }    //  end if (sd>=0)
       }      //  end if (d>=0)
     }        //  end if (r>=fRMax)
     else 
@@ -961,7 +961,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
             // on surface was not taken in account, and returning 0.0 ...
             // New version: check the tangent for the point on surface and 
             // if no intersection, return kInfinity, if intersection instead
-            // return s.
+            // return sd.
             //
             c = t3-fRMax*fRMax; 
             if ( c<=0.0 )
@@ -992,7 +992,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           // on surface was not taken in account, and returning 0.0 ...
           // New version: check the tangent for the point on surface and 
           // if no intersection, return kInfinity, if intersection instead
-          // return s.
+          // return sd.
           //
           c = t3 - fRMax*fRMax; 
           if ( c<=0.0 )
@@ -1027,41 +1027,41 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         // Always want 2nd root - we are outside and know rmax Hit was bad
         // - If on surface of rmin also need farthest root
 
-        s =( b > 0. )? c/(-b - std::sqrt(d)) : (-b + std::sqrt(d));
-        if (s >= -halfCarTolerance)  // check forwards
+        sd =( b > 0. )? c/(-b - std::sqrt(d)) : (-b + std::sqrt(d));
+        if (sd >= -halfCarTolerance)  // check forwards
         {
           // Check z intersection
           //
-          if(s < 0.0)  { s = 0.0; }
-          if ( s>dRmax ) // Avoid rounding errors due to precision issues seen
-          {              // 64 bits systems. Split long distances and recompute
-            G4double fTerm = s-std::fmod(s,dRmax);
-            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          if(sd < 0.0)  { sd = 0.0; }
+          if ( sd>dRmax ) // Avoid rounding errors due to precision issues seen
+          {               // 64 bits systems. Split long distances and recompute
+            G4double fTerm = sd-std::fmod(sd,dRmax);
+            sd = fTerm + DistanceToIn(p+fTerm*v,v);
           } 
-          zi = p.z() + s*v.z() ;
+          zi = p.z() + sd*v.z() ;
           if (std::fabs(zi) <= tolODz)
           {
             // Z ok. Check phi
             //
             if ( fPhiFullTube )
             {
-              return s ; 
+              return sd ; 
             }
             else
             {
-              xi     = p.x() + s*v.x() ;
-              yi     = p.y() + s*v.y() ;
+              xi     = p.x() + sd*v.x() ;
+              yi     = p.y() + sd*v.y() ;
               cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMin ;
               if (cosPsi >= cosHDPhiIT)
               {
                 // Good inner radius isect
                 // - but earlier phi isect still possible
 
-                snxt = s ;
+                snxt = sd ;
               }
             }
           }        //    end if std::fabs(zi)
-        }          //    end if (s>=0)
+        }          //    end if (sd>=0)
       }            //    end if (d>=0)
     }              //    end if (fRMin)
   }
@@ -1087,16 +1087,16 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
       if ( Dist < halfCarTolerance )
       {
-        s = Dist/Comp ;
+        sd = Dist/Comp ;
 
-        if (s < snxt)
+        if (sd < snxt)
         {
-          if ( s < 0 )  { s = 0.0; }
-          zi = p.z() + s*v.z() ;
+          if ( sd < 0 )  { sd = 0.0; }
+          zi = p.z() + sd*v.z() ;
           if ( std::fabs(zi) <= tolODz )
           {
-            xi   = p.x() + s*v.x() ;
-            yi   = p.y() + s*v.y() ;
+            xi   = p.x() + sd*v.x() ;
+            yi   = p.y() + sd*v.y() ;
             rho2 = xi*xi + yi*yi ;
 
             if ( ( (rho2 >= tolIRMin2) && (rho2 <= tolIRMax2) )
@@ -1110,7 +1110,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
               // z and r intersections good
               // - check intersecting with correct half-plane
               //
-              if ((yi*cosCPhi-xi*sinCPhi) <= halfCarTolerance) { snxt = s; }
+              if ((yi*cosCPhi-xi*sinCPhi) <= halfCarTolerance) { snxt = sd; }
             }
           }
         }
@@ -1127,16 +1127,16 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
       if ( Dist < halfCarTolerance )
       {
-        s = Dist/Comp ;
+        sd = Dist/Comp ;
 
-        if (s < snxt)
+        if (sd < snxt)
         {
-          if ( s < 0 )  { s = 0; }
-          zi = p.z() + s*v.z() ;
+          if ( sd < 0 )  { sd = 0; }
+          zi = p.z() + sd*v.z() ;
           if ( std::fabs(zi) <= tolODz )
           {
-            xi   = p.x() + s*v.x() ;
-            yi   = p.y() + s*v.y() ;
+            xi   = p.x() + sd*v.x() ;
+            yi   = p.y() + sd*v.y() ;
             rho2 = xi*xi + yi*yi ;
             if ( ( (rho2 >= tolIRMin2) && (rho2 <= tolIRMax2) )
                 || ( (rho2 > tolORMin2)  && (rho2 < tolIRMin2)
@@ -1149,7 +1149,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
               // z and r intersections good
               // - check intersecting with correct half-plane
               //
-              if ( (yi*cosCPhi-xi*sinCPhi) >= 0 ) { snxt = s; }
+              if ( (yi*cosCPhi-xi*sinCPhi) >= 0 ) { snxt = sd; }
             }                         //?? >=-halfCarTolerance
           }
         }
@@ -1237,7 +1237,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
                                       G4ThreeVector *n    ) const
 {  
   ESide side=kNull , sider=kNull, sidephi=kNull ;
-  G4double snxt, sr=kInfinity, sphi=kInfinity, pdist ;
+  G4double snxt, srd=kInfinity, sphi=kInfinity, pdist ;
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
 
   static const G4double halfCarTolerance = kCarTolerance*0.5;
@@ -1312,7 +1312,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
   if ( t1 > 0 ) // Check not parallel
   {
-    // Calculate sr, r exit distance
+    // Calculate srd, r exit distance
      
     if ( (t2 >= 0.0) && (roi2 > fRMax*(fRMax + kRadTolerance)) )
     {
@@ -1328,8 +1328,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         b     = t2/t1 ;
         c     = deltaR/t1 ;
         d2    = b*b-c;
-        if( d2 >= 0 ) { sr = c/( -b - std::sqrt(d2)); }
-        else          { sr = 0.; }
+        if( d2 >= 0 ) { srd = c/( -b - std::sqrt(d2)); }
+        else          { srd = 0.; }
         sider = kRMax ;
       }
       else
@@ -1363,7 +1363,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
           if (deltaR > kRadTolerance*fRMin)
           {
-            sr = c/(-b+std::sqrt(d2)); 
+            srd = c/(-b+std::sqrt(d2)); 
             sider = kRMin ;
           }
           else
@@ -1379,7 +1379,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
           d2    = b*b-c;
           if( d2 >=0. )
           {
-            sr     = -b + std::sqrt(d2) ;
+            srd     = -b + std::sqrt(d2) ;
             sider  = kRMax ;
           }
           else // Case: On the border+t2<kRadTolerance
@@ -1403,7 +1403,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         d2     = b*b-c;
         if( d2 >= 0 )
         {
-          sr     = -b + std::sqrt(d2) ;
+          srd     = -b + std::sqrt(d2) ;
           sider  = kRMax ;
         }
         else // Case: On the border+t2<kRadTolerance
@@ -1560,9 +1560,9 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         side = sidephi ;
       }
     }
-    if (sr < snxt)  // Order intersections
+    if (srd < snxt)  // Order intersections
     {
-      snxt = sr ;
+      snxt = srd ;
       side = sider ;
     }
   }
@@ -1860,7 +1860,7 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
-  rRand  = RandFlat::shoot(fRMin,fRMax);
+  rRand  = GetRadiusInRing(fRMin,fRMax);
   
   if( (fSPhi == 0) && (fDPhi == twopi) ) { aFou = 0; }
   

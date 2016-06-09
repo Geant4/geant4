@@ -56,7 +56,6 @@
 G4NucleusLimits::G4NucleusLimits ()
   : aMin(1), aMax(250), zMin(0), zMax(100)
   //
-  //
   // Default constructor sets the limits to cover all nuclei with Z<100.
   //
 {;}
@@ -66,7 +65,6 @@ G4NucleusLimits::G4NucleusLimits
   (G4int aMin1, G4int aMax1, G4int zMin1, G4int zMax1)
 {
   //
-  //
   // check that aMin1 is within [1, 250].
   //
   if (aMin1 < 1) {aMin = 1;}
@@ -74,14 +72,12 @@ G4NucleusLimits::G4NucleusLimits
   else {aMin = aMin1;}
 
   //
-  //
   // check that aMax1 is within [1, 250].
   //
   if (aMax1 < 1) {aMax = 1;}
   //else if (aMax1 > 250) {aMax = 250;}
   else {aMax = aMax1;}
 
-  //
   //
   // If aMin > aMax then swap them.
   //
@@ -91,14 +87,12 @@ G4NucleusLimits::G4NucleusLimits
     aMax = t;
   }
   //
-  //
   // check that zMin1 is within [0, 100].
   //
   if (zMin1 < 0) {zMin = 0;}
   //else if (zMin1 > 100) {zMin = 100;}
   else {zMin = zMin1;}
 
-  //
   //
   // check that zMax1 is within [0, 100].
   //
@@ -107,7 +101,6 @@ G4NucleusLimits::G4NucleusLimits
   else {zMax = zMax1;}
 
   //
-  //
   // If zMin > zMax then swap them.
   //
   if (zMin > zMax) {
@@ -115,27 +108,19 @@ G4NucleusLimits::G4NucleusLimits
     zMin = zMax;
     zMax = t;
   }
-
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4NucleusLimits::~G4NucleusLimits ()
 {;}
-////////////////////////////////////////////////////////////////////////////////
-//
-std::ostream &operator << (std::ostream &s, const G4NucleusLimits &q)
-//
-//
-// Definition of the insertion operator << to provide the nucleus limits to
-// ostream.
-//
+
+
+std::ostream &operator << (std::ostream& strm, const G4NucleusLimits& q)
 {
-  s <<"Atomic weight: " <<q.GetAMin() <<"->" <<q.GetAMax()
-    <<"Atomic number: " <<q.GetZMin() <<"->" <<q.GetZMax();
-  return s;
+  // Definition of the insertion operator << to provide the nucleus limits to
+  // ostream
+  strm << "Atomic weight: " << q.GetAMin() << "->" << q.GetAMax()
+       << "Atomic number: " << q.GetZMin() << "->" << q.GetZMax();
+  return strm;
 }
-////////////////////////////////////////////////////////////////////////////////
-
-
-
 

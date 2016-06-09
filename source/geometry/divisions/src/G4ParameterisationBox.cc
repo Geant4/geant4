@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.12 2010-11-10 09:15:56 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4ParameterisationBox Implementation file
 //

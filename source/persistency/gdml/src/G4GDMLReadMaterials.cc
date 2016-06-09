@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.21 2010-10-14 16:19:40 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -35,6 +35,8 @@
 
 #include "G4GDMLReadMaterials.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
@@ -636,6 +638,7 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
       if (attName=="ref")  { matrix = GetMatrix(ref=attValue); }
    }
 
+   /*
    if (matrix.GetCols() != 2)
    {
      G4String error_msg = "Referenced matrix '" + ref
@@ -644,6 +647,8 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
      G4Exception("G4GDMLReadMaterials::PropertyRead()", "InvalidRead",
                  FatalException, error_msg);
    }
+   */
+
    if (matrix.GetRows() == 0) { return; }
 
    G4MaterialPropertiesTable* matprop=material->GetMaterialPropertiesTable();
@@ -658,7 +663,7 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
    }
    else  // build the material properties vector
    {
-     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
+     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector();
      for (size_t i=0; i<matrix.GetRows(); i++)
      {
        propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));

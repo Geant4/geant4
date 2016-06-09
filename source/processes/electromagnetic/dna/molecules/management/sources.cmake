@@ -38,6 +38,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-molman
         G4MolecularConfiguration.hh
         G4MolecularDecayChannel.hh
         G4MolecularDecayTable.hh
+        G4MoleculeCounter.hh
         G4MoleculeDefinition.hh
         G4MoleculeHandleManager.hh
         G4Molecule.hh
@@ -47,6 +48,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-molman
         G4MolecularConfiguration.cc
         G4MolecularDecayChannel.cc
         G4MolecularDecayTable.cc
+        G4MoleculeCounter.cc
         G4Molecule.cc
         G4MoleculeDefinition.cc
         G4MoleculeHandleManager.cc

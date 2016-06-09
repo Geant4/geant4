@@ -14,7 +14,34 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-12 V.Ivant (testem4-V09-05-07)
+- Migration to the updated analysis tool and inplicit units
+- RunAction - by default do not save random number for each event
+    -because it is a serious overhead in CPU performance    
      
+11-10-12 mma (testem4-V09-05-06)
+- coding conventions: virtual 
+     
+27-08-12 mma (testem4-V09-05-05)
+- add .README
+     
+27-03-12 mma (testem4-V09-05-04)
+- all classes : apply G4 coding conventions
+     
+07-03-12 mma (testem4-V09-05-03)   
+- Handling random numbers : copy rndmSeed.mac from N03
+     
+22-02-12 mma (testem4-V09-05-02)   
+- file G4HbookAnalysisManager renamed ExG4HbookAnalysisManager
+     
+16-02-12 mma (testem4-V09-05-01)
+- RunAction.hh : modif in handling namespace for histogram format
+     
+07-02-12 mma (testem4-V09-05-00)
+- RunAction.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE 
+      
 08-11-11 mma (testem4-V09-04-01)
 - modify SteppingVerbose for OutOfWorld
          

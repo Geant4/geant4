@@ -32,6 +32,8 @@
 // ====================================================================
 #include "MyMaterials.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 // ====================================================================
 //

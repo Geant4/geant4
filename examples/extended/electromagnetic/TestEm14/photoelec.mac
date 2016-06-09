@@ -19,17 +19,19 @@
 /process/inactivate conv
 /process/inactivate GammaToMuPair
 #
+###/process/em/deexcitation world true true true
+###/process/em/auger true
+#
 /gun/particle gamma
 /gun/energy 100 keV
 #
-/testem/histo/setFileName photoelec
-/testem/histo/setFileType root
-/testem/histo/setHisto 3  100 0. 100. keV	#energy  of ch. secondaries  
-/testem/histo/setHisto 4  200 -1. +1. none	#costeta of ch. secondaries
-/testem/histo/setHisto 5  100 0. 100. keV	#energy  of gamma  
-/testem/histo/setHisto 6  200 -1. +1. none	#costeta of gamma
+/analysis/setFileName photoelec
+/analysis/h1/set 3 100 0. 100. keV	#energy  of ch. secondaries  
+/analysis/h1/set 4  200 -1. +1. none	#costeta of ch. secondaries
+/analysis/h1/set 5  100 0. 100. keV	#energy  of gamma  
+/analysis/h1/set 6  200 -1. +1. none	#costeta of gamma
 #
-##/tracking/verbose 2
-##/run/beamOn 1
+###/tracking/verbose 2
+###/run/beamOn 1
 #
 /run/beamOn 100000

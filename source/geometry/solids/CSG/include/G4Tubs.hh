@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.24 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -69,6 +68,8 @@
 
 #ifndef G4TUBS_HH
 #define G4TUBS_HH
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
 

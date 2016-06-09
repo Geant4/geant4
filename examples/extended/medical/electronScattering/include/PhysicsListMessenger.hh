@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,14 +55,14 @@ class PhysicsListMessenger: public G4UImessenger
     
   private:
   
-    PhysicsList* pPhysicsList;
+    PhysicsList*               fPhysicsList;
     
-    G4UIdirectory*             physDir;    
-    G4UIcmdWithAString*        pListCmd;    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;        
+    G4UIdirectory*             fPhysDir;    
+    G4UIcmdWithAString*        fListCmd;    
+    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* fAllCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

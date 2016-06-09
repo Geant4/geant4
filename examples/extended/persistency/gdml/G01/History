@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 19th, 2012 Ben Morgan
+- Simplify CMake syntax to find Geant4 with gdml support
+
+July 25th, 2012 Witek Pokorski G01-V09-05-02
+- a few more cosmetic changes to comply to coding convetions
+
+July 25th, 2012 Witek Pokorski G01-V09-05-01
+- making a number of cosmetic changes to comply to coding conventions 
+
+April 4th, 2012 Witek Pokorski G01-V09-05-00
+- Added missing unit in opticalsurfaces.gdml 
 
 November 17th, 2010  Gabriele Cosmo  G01-V09-03-07
 - Added commented command for de-activating names stripping while reading.

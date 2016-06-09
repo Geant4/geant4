@@ -9,13 +9,38 @@ $Id: History,v 1.11 2010-11-11 17:43:55 gunter Exp $
                           History file
                           ------------
 
+07.11.2012   L. Pandola and F. Longo, Tag: gammaraytel-V09-05-05
+             Change the logic of the UI/GUI instantiation in the main(), 
+             to avoid problems observed in the STT when running in batch 
+             mode. Minor change in the CMakeLists.txt
+
+02.11.2012   L. Pandola, Tag: gammaraytel-V09-05-04
+	     Remove warnings due to two G4Regions without their own 
+             cut. Change physics list from QGSP_BIC to FTFP_BERT, to 
+	     avoid warnings due to the deprecated LEP models. 
+             Removed gammaraytel.err file.
+
+31.10.2012   L. Pandola and F. Longo, Tag: gammaraytel-V09-05-03
+             Edit the CMakeLists.txt file to fix the AIDA dependency
+             and to properly treat the G4STORE_DATA option
+
+30.10.2012   Luciano Pandola, Tag gammaraytel-V09-05-02
+	     Comment out /vis/viewer/update at the EndOfRun (avoids a warning)
+	     Comment out in gammaraytel.in a command which is no 
+             longer defined 
+
+25.10.2012   Luciano Pandola, Tag: gammaraytel-V09-05-01
+	     Replace CMakeLists.txt to deal with UI/VIS     
+
+11.10.2012   Gabriele Cosmo,  Tag: gammaraytel-V09-05-00
+             Explicit inclusion of units and constants headers.
+
 03.10.2011   Gunter Folger,   Tag: gammaraytel-V09-04-03
              Fix compilation warnings from gcc 4.6 in GammaRayTelEventAction.cc,
 	     GammaRayTelDetectorConstruction.cc and GammaRayTelTrackerROGeometry.cc
 
 16.09.2011   Pere Mato,  Tag: gammaraytel-V09-04-02
              Added SVN eol property to file gammaraytel.err to allow proper file comparissons
-
 
 16.09.2011   Pere Mato,  Tag: gammaraytel-V09-04-01
              Fixed the error introduced with G4USE_UI conditional code 

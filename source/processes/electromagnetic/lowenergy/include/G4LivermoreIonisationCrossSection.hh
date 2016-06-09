@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationCrossSection.hh,v 1.3 2009-10-23 09:28:37 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Author: Vladimir Ivanchenko
@@ -33,6 +32,7 @@
 // --------
 // 31 May 2011 V.Ivanchenko  The class is created  
 // 04 Jul 2011 L Pandola     Comment unused private member
+// 09 Mar 2012 L Pandola     Changed signature of methods
 // 
 // 
 // -------------------------------------------------------------------
@@ -65,18 +65,21 @@ public:
 
   G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
-			G4double mass = 0.0) const;
+			G4double mass = 0.0,
+			const G4Material* mat = 0);
 
   std::vector<G4double> GetCrossSection(G4int Z,
 					G4double incidentEnergy,
 					G4double mass = 0.0,
 					G4double deltaEnergy = 0.0,
-					G4bool testFlag = false) const;
+					const G4Material* mat = 0);
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
 				      G4double mass = 0.0,
-				      G4double deltaEnergy = 0) const;
+				      G4double deltaEnergy = 0,
+				      const G4Material* mat = 0);
+    
     
 private:
  

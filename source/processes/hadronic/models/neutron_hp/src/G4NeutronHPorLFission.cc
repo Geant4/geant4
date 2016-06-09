@@ -36,6 +36,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPorLFission.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPFissionFS.hh"
 
 G4NeutronHPorLFission::G4NeutronHPorLFission()
@@ -147,4 +148,9 @@ G4bool G4NeutronHPorLFission::IsThisElementOK( G4String name )
 void G4NeutronHPorLFission::createXSectionDataSet()
 {
    theDataSet = new G4NeutronHPorLFissionData ( theFission , &unavailable_elements );
+}
+const std::pair<G4double, G4double> G4NeutronHPorLFission::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }

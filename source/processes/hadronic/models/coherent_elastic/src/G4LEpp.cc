@@ -30,6 +30,8 @@
 // FWJ 27-AUG-2010: extended Coulomb-suppressed data to 5 GeV
 
 #include "G4LEpp.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 

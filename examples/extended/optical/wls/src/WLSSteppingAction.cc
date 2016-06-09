@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSSteppingAction.cc
+/// \brief Implementation of the WLSSteppingAction class
+//
 //
 //
 
@@ -52,6 +55,7 @@
 
 #include "G4ThreeVector.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include <sstream>
 
 // Purpose: Save relevant information into User Track Information
@@ -147,8 +151,8 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 //        G4double y  = theTrack->GetVertexPosition().y();
         G4double z  = theTrack->GetVertexPosition().z();
 //        G4double pz = theTrack->GetVertexMomentumDirection().z();
-	initTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
-	initZ = z;
+        initTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
+        initZ = z;
      }
   }
 
@@ -176,20 +180,20 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        (theStatus == TotalInternalReflection
         || theStatus == FresnelReflection
         || theStatus == FresnelRefraction)
-	&& trackInformation->isStatus(InsideOfFiber) ) {
+        && trackInformation->isStatus(InsideOfFiber) ) {
 
-	G4double px = theTrack->GetVertexMomentumDirection().x();
-	G4double py = theTrack->GetVertexMomentumDirection().y();
-	G4double x  = theTrack->GetPosition().x();
-	G4double y  = theTrack->GetPosition().y();
+        G4double px = theTrack->GetVertexMomentumDirection().x();
+        G4double py = theTrack->GetVertexMomentumDirection().y();
+        G4double x  = theTrack->GetPosition().x();
+        G4double y  = theTrack->GetPosition().y();
 
-	initGamma = x * px + y * py;
+        initGamma = x * px + y * py;
 
-	initGamma = initGamma / std::sqrt(px*px + py*py) / std::sqrt(x*x + y*y);
+        initGamma = initGamma / std::sqrt(px*px + py*py) / std::sqrt(x*x + y*y);
 
-	initGamma = std::acos(initGamma*rad);
+        initGamma = std::acos(initGamma*rad);
 
-	if ( initGamma / deg > 90.0)  { initGamma = 180 * deg - initGamma;}
+        if ( initGamma / deg > 90.0)  { initGamma = 180 * deg - initGamma;}
   }
   // Record Photons that missed the photon detector but escaped from readout
   if ( !thePostPV && trackInformation->isStatus(EscapedFromReadOut) ) {
@@ -215,30 +219,30 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        if ( isFiber ) {
 
            if (trackInformation->isStatus(OutsideOfFiber))
-	                       trackInformation->AddStatusFlag(InsideOfFiber);
+                               trackInformation->AddStatusFlag(InsideOfFiber);
 
        // Set the Exit flag when the photon refracted out of the fiber
        } else if (trackInformation->isStatus(InsideOfFiber)) {
 
-	   // EscapedFromReadOut if the z position is the same as fiber's end
-	   if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
+           // EscapedFromReadOut if the z position is the same as fiber's end
+           if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
            {
-	      trackInformation->AddStatusFlag(EscapedFromReadOut);
-	      counterEnd++;
-	   }
-	   else // Escaped from side
-	   {
-	      trackInformation->AddStatusFlag(EscapedFromSide);
+              trackInformation->AddStatusFlag(EscapedFromReadOut);
+              counterEnd++;
+           }
+           else // Escaped from side
+           {
+              trackInformation->AddStatusFlag(EscapedFromSide);
               trackInformation->SetExitPosition(theTrack->GetPosition());
 
 //              UpdateHistogramEscape(thePostPoint,theTrack);
 
               counterMid++;
               ResetCounters();
-	   }
+           }
 
-	   trackInformation->AddStatusFlag(OutsideOfFiber);
-	   trackInformation->SetExitPosition(theTrack->GetPosition());
+           trackInformation->AddStatusFlag(OutsideOfFiber);
+           trackInformation->SetExitPosition(theTrack->GetPosition());
 
        }
 
@@ -251,10 +255,10 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        if (bounceLimit > 0 && counterBounce >= bounceLimit)
        {
           theTrack->SetTrackStatus(fStopAndKill);
-	  trackInformation->AddStatusFlag(murderee);
-	  ResetCounters();
-	  G4cout << "\n Bounce Limit Exceeded" << G4endl;
-	  return;
+          trackInformation->AddStatusFlag(murderee);
+          ResetCounters();
+          G4cout << "\n Bounce Limit Exceeded" << G4endl;
+          return;
        }
  
      case FresnelReflection:
@@ -271,20 +275,20 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
        {
           if (!trackInformation->isStatus(ReflectedAtReadOut) &&
-	      trackInformation->isStatus(InsideOfFiber))
-	  {
+              trackInformation->isStatus(InsideOfFiber))
+          {
              trackInformation->AddStatusFlag(ReflectedAtReadOut);
 
-	     if (detector->IsPerfectFiber() &&
+             if (detector->IsPerfectFiber() &&
                  theStatus == TotalInternalReflection)
-	     {
-	        theTrack->SetTrackStatus(fStopAndKill);
-		trackInformation->AddStatusFlag(murderee);
+             {
+                theTrack->SetTrackStatus(fStopAndKill);
+                trackInformation->AddStatusFlag(murderee);
 //                UpdateHistogramReflect(thePostPoint,theTrack);
-	     	ResetCounters();
-		return;
-	     }
-	  }
+                     ResetCounters();
+                return;
+             }
+          }
        }
        return;
 
@@ -312,11 +316,11 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
           if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
 
-	  // Record Photons that escaped at the end
+          // Record Photons that escaped at the end
 //          if (trackInformation->isStatus(EscapedFromReadOut))
 //                              UpdateHistogramSuccess(thePostPoint,theTrack);
 
-	  // Stop Tracking when it hits the detector's surface
+          // Stop Tracking when it hits the detector's surface
           ResetCounters();
           theTrack->SetTrackStatus(fStopAndKill);
 

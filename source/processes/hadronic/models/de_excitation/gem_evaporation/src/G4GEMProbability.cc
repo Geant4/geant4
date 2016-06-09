@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.cc,v 1.15 2010-11-05 14:43:27 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------
 //
@@ -52,6 +51,8 @@
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
   theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0), 
@@ -71,12 +72,12 @@ G4GEMProbability::~G4GEMProbability()
 G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
                                                G4double MaximalKineticEnergy)
 {
-  G4double EmissionProbability = 0.0;
+  G4double probability = 0.0;
     
   if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
     G4double CoulombBarrier = GetCoulombBarrier(fragment);
       
-    EmissionProbability = 
+    probability = 
       CalcProbability(fragment,MaximalKineticEnergy,CoulombBarrier);
 
     // Next there is a loop over excited states for this channel 
@@ -93,7 +94,7 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
 	  //JMQ April 2010 added condition to prevent reported crash
 	  // update probability
 	  if (width > 0. && fPlanck < width*ExcitLifetimes[i]) {
-	    EmissionProbability += width;
+	    probability += width;
 	  }
 	}
       }
@@ -101,8 +102,8 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
       Spin = SavedSpin;
     }
   }
-  Normalization = EmissionProbability;
-  return EmissionProbability;
+  Normalization = probability;
+  return probability;
 }
 
 
@@ -164,18 +165,18 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     const G4double sqrt2 = std::sqrt(2.0);
 
     G4double tx = Ex/T;
-    G4double s = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));
+    G4double s0 = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));
     G4double sx = 2.0*std::sqrt(a*(Ex-delta0));
-    Width = I1(t,tx)*T/expE0T + I3(s,sx)*std::exp(s)/(sqrt2*a);
+    Width = I1(t,tx)*T/expE0T + I3(s0,sx)*std::exp(s0)/(sqrt2*a);
     // For charged particles (Beta+V) = 0 beacuse Beta = -V
     if (theZ == 0) {
-      Width += (Beta+V)*(I0(tx)/expE0T + 2.0*sqrt2*I2(s,sx)*std::exp(s));
+      Width += (Beta+V)*(I0(tx)/expE0T + 2.0*sqrt2*I2(s0,sx)*std::exp(s0));
     }
   }
   
   //JMQ 14/07/2009 BIG BUG : NuclearMass is in MeV => hbarc instead of hbar_planck must be used
   //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
-  G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbarc*hbarc);
+  G4double gg = (2.0*Spin+1.0)*NuclearMass/(pi2* hbarc*hbarc);
   
   //JMQ 190709 fix on Rb and  geometrical cross sections according to Furihata's paper 
   //                      (JAERI-Data/Code 2001-105, p6)
@@ -226,16 +227,16 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
 
   //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according 
   // to Furihata's report:
-  Width *= pi*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
+  Width *= pi*gg*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
    
   return Width;
 }
 
-G4double G4GEMProbability::I3(G4double s, G4double sx)
+G4double G4GEMProbability::I3(G4double s0, G4double sx)
 {
-  G4double s2 = s*s;
+  G4double s2 = s0*s0;
   G4double sx2 = sx*sx;
-  G4double S = 1.0/std::sqrt(s);
+  G4double S = 1.0/std::sqrt(s0);
   G4double S2 = S*S;
   G4double Sx = 1.0/std::sqrt(sx);
   G4double Sx2 = Sx*Sx;
@@ -248,7 +249,7 @@ G4double G4GEMProbability::I3(G4double s, G4double sx)
 											      (12.875*s2+0.625*sx2) + Sx2 *(
 															    (59.0625*s2+0.9375*sx2) + Sx2 *(324.8*s2+3.28*sx2))))));
   
-  p2 *= std::exp(sx-s);
+  p2 *= std::exp(sx-s0);
   
   return p1-p2; 
 }

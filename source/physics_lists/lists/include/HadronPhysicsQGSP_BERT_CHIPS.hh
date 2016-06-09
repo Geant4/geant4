@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.4 2010-11-23 15:09:30 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -101,6 +100,9 @@ class HadronPhysicsQGSP_BERT_CHIPS : public G4VPhysicsConstructor
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;
+
+    G4VCrossSectionDataSet * xsAxenWellischGGProton;
+    G4VCrossSectionDataSet * xsLaidlawWellischGGNeutron;
 };
 
 #endif

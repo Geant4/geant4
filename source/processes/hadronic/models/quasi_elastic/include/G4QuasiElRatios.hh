@@ -44,9 +44,10 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include <vector>
-#include "G4ProtonElasticCrossSection.hh"
-#include "G4NeutronElasticCrossSection.hh"
 #include "G4LorentzVector.hh"
+
+#include "G4ChipsProtonElasticXS.hh"
+#include "G4ChipsNeutronElasticXS.hh"
 
 
 class G4QuasiElRatios
@@ -92,6 +93,9 @@ public:
                        G4double maxCost = 1., G4double minCost = -1.);
     
 private:
+    G4ChipsProtonElasticXS* PCSmanager;
+    G4ChipsNeutronElasticXS* NCSmanager;
+    
     // These working member functions are in CHIPS units and must not be used externally
     G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
     G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)

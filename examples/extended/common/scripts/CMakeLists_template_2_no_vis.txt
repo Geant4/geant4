@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# Find Geant4 package, no UI and Vis drivers activated
+#
+find_package(Geant4 REQUIRED)
+
+#----------------------------------------------------------------------------
+# Setup Geant4 include directories and compile definitions
+#
+include(${Geant4_USE_FILE})
+
+

@@ -23,49 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01PhysicsList.cc
+/// \brief Implementation of the RE01PhysicsList class
 //
-// $Id: RE01PhysicsList.cc,v 1.2 2006-06-29 17:44:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-
 #include "RE01PhysicsList.hh"
+#include "RE01UnknownDecayPhysics.hh"
 
-#include "RE01DecayPhysics.hh"
-#include "RE01BosonPhysics.hh"
-#include "RE01LeptonPhysics.hh"
-#include "RE01HadronPhysics.hh"
-#include "RE01IonPhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4IonPhysics.hh"
+#include "G4QStoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
 
+#include "G4DataQuestionaire.hh"
+#include "HadronPhysicsQGSP_BERT.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
 {
-  // default cut value  (1.0mm) 
-  defaultCutValue = 1.0*mm;
-  // SetVerboseLevel(1);
+  G4DataQuestionaire it(photon);
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT 3.4"<<G4endl;
+  G4cout <<G4endl;
 
-  // Particle decays
-  RegisterPhysics( new RE01DecayPhysics("decay"));
 
-  // Bosons (gamma + geantinos)
-  RegisterPhysics( new RE01BosonPhysics("boson"));
+  defaultCutValue = 0.7*CLHEP::mm;
+  G4int ver = 1;
+  SetVerboseLevel(ver);
 
-  // Leptons
-  RegisterPhysics( new RE01LeptonPhysics("lepton"));
+  // EM Physics
+  RegisterPhysics( new G4EmStandardPhysics(ver) );
+
+  // Synchroton Radiation & GN Physics
+  RegisterPhysics( new G4EmExtraPhysics(ver) );
+
+  // Decays
+  RegisterPhysics( new G4DecayPhysics(ver) );
+  RegisterPhysics( new RE01UnknownDecayPhysics());
+
+  // Hadron Elastic scattering
+  RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
   // Hadron Physics
-  RegisterPhysics( new RE01HadronPhysics("hadron"));
+  RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
+
+  // Stopping Physics
+  RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  RegisterPhysics( new RE01IonPhysics("ion"));
+  RegisterPhysics( new G4IonPhysics(ver));
+
+  // Neutron tracking cut
+  RegisterPhysics( new G4NeutronTrackingCut(ver));
+
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01PhysicsList::~RE01PhysicsList()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01PhysicsList::SetCuts()
 {
   // Use default cut values gamma and e processes
   SetCutsWithDefault();   
 }
-
-
-

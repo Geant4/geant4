@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh,v 1.3 2010-06-02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +34,7 @@
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
+// 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -48,9 +48,9 @@
 #include "G4EmMessenger.hh"
 
 #include "G4SynchrotronRadiation.hh"
-#include "G4ElectroNuclearBuilder.hh"
+#include "G4BertiniElectroNuclearBuilder.hh"
 #include "G4MuonNuclearProcess.hh"
-#include "G4VDMuonNuclearModel.hh"
+#include "G4MuonVDNuclearModel.hh"
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -87,9 +87,9 @@ private:
   G4EmMessenger*           theMessenger;
   G4SynchrotronRadiation*  theElectronSynch;
   G4SynchrotronRadiation*  thePositronSynch;
-  G4ElectroNuclearBuilder* theGNPhysics;
+  G4BertiniElectroNuclearBuilder* theGNPhysics;
   G4MuonNuclearProcess* muNucProcess;
-  G4VDMuonNuclearModel* muNucModel;
+  G4MuonVDNuclearModel* muNucModel;
 
   G4int verbose;
 };

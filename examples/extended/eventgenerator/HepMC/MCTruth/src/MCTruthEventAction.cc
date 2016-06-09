@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/MCTruth/src/MCTruthEventAction.cc
+/// \brief Implementation of the MCTruthEventAction class
 //
-// $Id: MCTruthEventAction.cc,v 1.1 2006-11-22 14:51:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------

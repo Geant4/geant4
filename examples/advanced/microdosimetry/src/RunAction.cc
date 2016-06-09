@@ -24,16 +24,18 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.cc,v 1.2 2010-10-06 14:39:41 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "RunAction.hh"
 #include "G4Run.hh"
+#include "TrackingAction.hh"
+#include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det, HistoManager* his)
-:Detector(det),Histo(his)
+RunAction::RunAction(DetectorConstruction* det, HistoManager* his, TrackingAction* trackingAction)
+    :Detector(det),Histo(his),TrackingAct(trackingAction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -51,8 +53,27 @@ void RunAction::BeginOfRunAction(const G4Run*)
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container)
+{
+    std::map<const G4ParticleDefinition*, int>::iterator it;
+    for(it = container.begin() ;
+        it != container.end(); it ++)
+    {
+        G4cout << "N " << it->first->GetParticleName() << " : " << it->second << G4endl;
+    }
+}
+
 void RunAction::EndOfRunAction(const G4Run*)
 {
   //save histograms      
   Histo->save();
+
+  std::map<const G4ParticleDefinition*, int>&  particlesCreatedInWorld = TrackingAct->GetNParticlesCreatedInWorld();
+  G4cout << "Number and type of particles created outside region \"Target\" :" << G4endl;
+  PrintNParticles(particlesCreatedInWorld);
+
+  G4cout << "_______________________" << G4endl;
+  std::map<const G4ParticleDefinition*, int>&  particlesCreatedInTarget = TrackingAct->GetNParticlesCreatedInTarget();
+  G4cout << "Number and type of particles created in region \"Target\" :" << G4endl;
+  PrintNParticles(particlesCreatedInTarget);
 }

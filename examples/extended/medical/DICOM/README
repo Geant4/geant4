@@ -4,17 +4,17 @@
 |                        README                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-The DICOM application has been orignal developed by the Geant4 users:
-Louis Archambault,*Luc Beaulieu, +Vincent Hubert-Tremblay.
+The DICOM application has been originally developed by the Geant4 users:
+Louis Archambault,+Luc Beaulieu, ++Vincent Hubert-Tremblay.
 
-*Centre Hospitalier Universitaire de Quebec (CHUQ),
++ Centre Hospitalier Universitaire de Quebec (CHUQ),
 Hotel-Dieu de Quebec, departement de Radio-oncologie
 11 cote du palais. Quebec, QC, Canada, G1R 2J6
 tel (418) 525-4444 #6720
 fax (418) 691 5268
 web : thomson.phy.ulaval.ca/phys_med 
 
-+ Université Laval, Québec (QC) Canada
+++ Université Laval, Québec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007.
 Very small changes by Stephane Chauvie in January 2008.
@@ -39,10 +39,10 @@ In the application the phantom is placed on a table.
  - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
 
  - batch mode:
-   - $G4INSTALL/bin/Linux-g++/dicom run.mac 
+   - DICOM run.mac 
 
  - interactive mode:
-   - $G4INSTALL/bin/Linux-g++/dicom
+   - DICOM
    the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 
 --->4) Metadata:
@@ -117,46 +117,50 @@ The same information is also used to fill a file in binary format, that contains
 
 There are four possible ways in GEANT4 to treat the navigation in regular voxelised volumes:
 
-- The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
 - The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
 - Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
-- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below)
+- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below).
 
-You can select amont the four options in the following way:
+Obsolete option:
+- Use 1D optimisation in replica. It will be very slow because each time a track exits a voxel it has to loop to all other voxels in a 2D slide in order to locate which one it will enter.
+
+You can select amongst the four options in the following way:
 
 - By default the example will run with G4RegularNavigation
 
-- To use the first option at RegularDicomDetectorConstruction.cc you just have to set
+- To use the first option at RegularDicomDetectorConstruction.cc you must set
 
   patient_phys->SetRegularStructureId(0);
 
-- To use the second option apart from the change above at RegularDicomDetectorConstruction.cc you have to replace (i.e. use kUndefined)
+- To use the second option (Nested Parameterisation) you must set the enviromental variable DICOM_NESTED_PARAM to 1
 
-  G4PVParameterised * patient_phys = new G4PVParameterised("Patient",voxel_logic,container_logic,
-			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
-
-by 
+- To use the final, obsolete 1D-option, apart from the change above at RegularDicomDetectorConstruction.cc you need to replace (i.e. use kUndefined)
 
   G4PVParameterised * patient_phys = new G4PVParameterised("Patient",voxel_logic,container_logic,
 			kUndefined, nVoxelX*nVoxelY*nVoxelZ, param);
+by 
+  G4PVParameterised * patient_phys = new G4PVParameterised("Patient",voxel_logic,container_logic,
+			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
 
-- To use the third option you have to set the enviromental variable DICOM_NESTED_PARAM to 1
+  Note also you must *not* set the enviromental variable DICOM_NESTED_PARAM.
+
 
 
 --->10) Calculating dose in phantom voxels for regular navigation
 
 As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.
+
 It takes into account the fact that,  when the particle travels through the voxels it looses energy and therefore the energy lost per length (dEdx) is bigger and also the effect of the multiple scattering is bigger. 
 The algorithm to make this correction is an iterative one, as the step length increase due multiple scattering (that converts the geometrical step length in what we will call the true step length) and the energy loss are correlated.
 It works in the folloing way: first the total true step length is distributed among the voxels proportionally to their geometrical step length; with these values it is calculated one voxel after another the value of dEdx and then the value of the kinetic energy at the entrance of each voxel; with these values it is calculated the geometrical to true step corrections due to multiple scattering for each voxel; finally these new values are used to recalculate the energy lost in each voxel. It has been demonstrated for dose in a water phantom and in a real phantom that the two-step iteration described is enough to reproduce the dose calcualted when no skipping of voxel frontiers is done.
 
 This scorer is implemented in this examples if the regular navigation option is 
-chosen. It is triggered at the method RegularDicomDetectorConstruction::ConstructPatient() by the call
+chosen. It is triggered at the method RegularDicomDetectorConstruction::ConstructPhantom() by the call
 
 SetScorer(voxel_logic);
 
 --->11) Output
-dicom.out is produced running th macro file run.mac. It has 2 columns: the first is the number of 
+dicom.out is produced running the macro file run.mac. It has 2 columns: the first is the number of 
 voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
 It is produced, as an example, with a compression value of 32
 

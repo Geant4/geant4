@@ -48,8 +48,8 @@ $Id: README,v 1.4 2008-09-26 20:26:01 maire Exp $
 
  5- HISTOGRAMS
          
-    The test contains 6 built-in 1D histograms, which are managed by the
-    HistoManager class and its Messenger.
+    The test contains 6 built-in 1D histograms, which are managed by
+    G4AnalysisManager and its Messenger.
     
          1  continuous energy loss along primary track
          2  energy from secondaries
@@ -57,22 +57,22 @@ $Id: README,v 1.4 2008-09-26 20:26:01 maire Exp $
          4  energy spectrum of e-+
          5  energy spectrum of gamma
 	 6  step size of primary track
-	
+	 
+    The histograms are defined in HistoManager.
+     	
     The histos can be activated individually with the command :
-    /testem/histo/setHisto id nbBins valMin valMax unit
+    /analysis/h1/set id nbBins valMin valMax unit
     where 'unit' is the desired unit for the histo (MeV or KeV, cm or mm, etc..)
 								  
-    One can control the name and the type of the histograms file with 
-    the commands:
-    /testem/histo/setFileName  name  (default testem18)
-    /testem/histo/setFileType  name  (default root)
+    One can control the name of the histograms file with the command:
+    /analysis/setFileName  name  (default testem18)
+   
+    It is possible to choose the format of the histogram file : root (default),
+    xml, csv, by using namespace in HistoManager.hh 	
    
     It is also possible to print selected histograms on an ascii file:
-    /testem/histo/printHisto id
-    All selected histos will be written on a file name.ascii  (default testem18) 
-
-    Note that, by default, histograms are disabled. To activate them, uncomment
-    the flag G4ANALYSIS_USE in GNUmakefile. 	
+    /analysis/h1/setAscii id
+    All selected histos will be written on a file name.ascii  (default testem18)
  	 				
  6- VISUALIZATION
  
@@ -86,12 +86,8 @@ $Id: README,v 1.4 2008-09-26 20:26:01 maire Exp $
 	
  7- HOW TO START ?
  
-    compile and link to generate an executable
- 	% cd geant4/examples/extended/electromagnetic/TestEm18
- 	% gmake
- 		
     execute TestEm18 in 'batch' mode from macro files :
- 	% TestEm18   electron.mac.mac
+ 	% TestEm18   electron.mac
  		
     execute TestEm18 in 'interactive mode' with visualization :
  	% TestEm18
@@ -100,17 +96,3 @@ $Id: README,v 1.4 2008-09-26 20:26:01 maire Exp $
  	Idle> type your commands
  	....
  	Idle> exit
-
- 8- USING HISTOGRAMS
- 
-    By default the histograms are not activated. To activate histograms
-    the environment variable G4ANALYSIS_USE should be defined. For instance
-    uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-  
-    Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake
-	 
-    To use histograms, at least one of the AIDA implementations should be 
-    available. See InstallAida.txt
-  

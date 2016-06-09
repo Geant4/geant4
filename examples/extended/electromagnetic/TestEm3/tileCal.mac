@@ -18,10 +18,9 @@
 #
 /run/initialize
 #
-/testem/histo/setFileName tileCal/mu.1mm
-/testem/histo/setFileType root
-/testem/histo/setHisto 1 100  500.  1000.  MeV
-/testem/histo/setHisto 2 100    0.    50.  MeV
+/analysis/setFileName mu.1mm
+/analysis/h1/set 1 100  500.  1000.  MeV
+/analysis/h1/set 2 100    0.    50.  MeV
 #
 /gun/particle mu+
 /gun/energy 20 GeV

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * G4INCLParticleType.hh
  *
- *  Created on: Feb 4, 2011
- *      Author: Davide Mancusi
+ *  \date Feb 4, 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLPARTICLETYPE_HH_
@@ -60,6 +60,12 @@ namespace G4INCL {
     DeltaMinus,
     Composite,
     UnknownParticle
+  };
+
+  enum ParticipantType {
+    TargetSpectator,
+    ProjectileSpectator,
+    Participant
   };
 
 }

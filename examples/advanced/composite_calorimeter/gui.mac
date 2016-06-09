@@ -32,3 +32,6 @@
 /gui/addButton numEvents   50   "/run/beamOn  50"
 /gui/addButton numEvents  100   "/run/beamOn 100"
 #
+
+#Add an icon toolbar
+/control/execute icons.mac

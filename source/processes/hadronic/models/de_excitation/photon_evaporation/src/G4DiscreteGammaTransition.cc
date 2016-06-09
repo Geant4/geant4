@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.cc,v 1.12 2010-11-17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -65,11 +64,11 @@
 // -------------------------------------------------------------------
 
 #include "G4DiscreteGammaTransition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4RandGeneralTmp.hh"
 #include "G4AtomicShells.hh"
 #include "G4NuclearLevel.hh"
-//JMQ: 
 #include "G4NuclearLevelStore.hh"
 #include "G4Pow.hh"
 
@@ -80,7 +79,8 @@ G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level
   _levelManager = 0;
   _verbose = 0;
   //JMQ: added tolerence in the mismatch
-  _tolerance = CLHEP::keV;
+  //VI:  increased tolerence 
+  _tolerance = 10*CLHEP::keV;
 }
 
 G4DiscreteGammaTransition::~G4DiscreteGammaTransition() 
@@ -95,57 +95,67 @@ void G4DiscreteGammaTransition::SelectGamma()
   G4int nGammas = _level.NumberOfGammas();
   if (nGammas > 0)
     {
-      G4double random = G4UniformRand();
+      G4int iGamma = 0;
+      if(1 < nGammas) {
+	G4double random = G4UniformRand();
       
-      G4int iGamma;
-      for(iGamma=0; iGamma<nGammas; ++iGamma)
-	{
-	  if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
-	    { break; }
-	}
-      
-      // Small correction due to the fact that there are mismatches between 
-      // nominal level energies and emitted gamma energies
-      
-      // 09.05.2010 VI : it is an error ?
-      G4double eCorrection = _level.Energy() - _excitation;      
-      _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
+	//G4cout << "G4DiscreteGammaTransition::SelectGamma  N= " 
+	//       << nGammas << " rand= " << random << G4endl;
+	for(iGamma=0; iGamma<nGammas; ++iGamma)
+	  {
+	    //G4cout << iGamma << "  prob= " 
+	    //	   << (_level.GammaCumulativeProbabilities())[iGamma] << G4endl;
+	    if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
+	      { break; }
+	  }
+      }
+      /*     
+      G4cout << "Elevel(MeV)= " << _level.Energy()/MeV
+	     << " Etran(MeV)= " << (_level.GammaEnergies())[iGamma]/MeV
+	     << " Eexc(MeV)= " << _excitation/MeV << G4endl;
+      */
+
+      // VI: do not apply correction here in order do not make 
+      //     double correction
+      //G4double eCorrection = _level.Energy() - _excitation;      
+      //_gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
+      _gammaEnergy = (_level.GammaEnergies())[iGamma];
             
       //JMQ: 
-      //1)If chosen gamma energy is close enough to excitation energy, the later
-      //  is used instead for gamma dacey to gs (it guarantees energy conservation)
-      //2)For energy conservation, level energy differences instead of  tabulated 
-      //  gamma energies must be used (origin of final fake photons)
+      //1)If chosen gamma energy is close enough to excitation energy, 
+      //  the later is used instead for gamma dacey to gs (it guarantees 
+      //  energy conservation)
+      //2)For energy conservation, level energy differences instead of  
+      //  tabulated gamma energies must be used (origin of final fake photons)
       
-      if(_excitation - _gammaEnergy < _tolerance)      
-	{ 
-	  _gammaEnergy =_excitation;
-	}
-      else
-	{		 
-	  _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(_Z,_A);
-	  _gammaEnergy = _excitation - 
-	    _levelManager->NearestLevel(_excitation - _gammaEnergy)->Energy();
-	}
-      
-      //  Warning: the following check is needed to avoid loops:
+      // VI: remove fake photons - applied only for the last transition
+      //     do not applied on each transition
+      if(std::fabs(_excitation - _gammaEnergy) < _tolerance) { 
+	_gammaEnergy =_excitation;
+      }
+
+      //  JMQ: Warning: the following check is needed to avoid loops:
       //  Due essentially to missing nuclear levels in data files, it is
       //  possible that _gammaEnergy is so low as the nucleus doesn't change
       //  its level after the transition.
       //  When such case is found, force the full deexcitation of the nucleus.
       //
       //    NOTE: you should force the transition to the next lower level,
-      //          but this change needs a more complex revision of actual design.
+      //          but this change needs a more complex revision of actual 
+      //          design.
       //          I leave this for a later revision.
-      
-      if (_gammaEnergy < _level.Energy()*10.e-5) _gammaEnergy = _excitation;
+
+      // VI: the check has no sence and we make this very simple
+      if (_gammaEnergy < _tolerance) { 
+	_gammaEnergy = _excitation; 
+      }
 
       //G4cout << "G4DiscreteGammaTransition::SelectGamma: " << _gammaEnergy 
       //	     << " _icm: " << _icm << G4endl;
 
       // now decide whether Internal Coversion electron should be emitted instead
       if (_icm) {
-	random = G4UniformRand() ;
+	G4double random = G4UniformRand();
 	if ( random <= (_level.TotalConvertionProbabilities())[iGamma]
 	     *(_level.GammaWeights())[iGamma]
 	     /((_level.TotalConvertionProbabilities())[iGamma]*(_level.GammaWeights())[iGamma]
@@ -181,8 +191,8 @@ void G4DiscreteGammaTransition::SelectGamma()
 	    }
 	    //L.Desorgher 02/11/2011
 	    //Atomic shell information is available in Geant4 only up top Z=100
-	    //To extend the photo evaporation code to Z>100  the call to G4AtomicShells::GetBindingEnergy should
-	    // be forbidden for Z>100
+	    //To extend the photo evaporation code to Z>100  the call 
+	    // to G4AtomicShells::GetBindingEnergy should be forbidden for Z>100
 	    _bondE = 0.;
 	    if (_nucleusZ <=100)
 	    _bondE = G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell);
@@ -210,36 +220,6 @@ void G4DiscreteGammaTransition::SelectGamma()
       _gammaCreationTime = 0.;      
       if(tau > 0.0) {  _gammaCreationTime = -tau*std::log(G4UniformRand()); }
 
-      //G4double tMin = 0;
-      //G4double tMax = 10.0 * tau;
-      //  Original code, not very efficent
-      //  G4int nBins = 200;
-      //G4double sampleArray[200];
-
-      //  for(G4int i = 0;i<nBins;i++)
-      //{
-      //  G4double t = tMin + ((tMax-tMin)/nBins)*i;
-      //  sampleArray[i] = (std::exp(-t/tau))/tau;
-      // }
-
-      //  G4RandGeneralTmp randGeneral(sampleArray, nBins);
-      //G4double random = randGeneral.shoot();
-      
-      //_gammaCreationTime = tMin + (tMax - tMin) * random;
-
-      // new code by Fan Lei
-      //
-      /*
-      if (tau != 0 ) 
-      {
-	  random = G4UniformRand() ;
-	  _gammaCreationTime = -(std::log(random*(std::exp(-tMax/tau) - std::exp(-tMin/tau)) + 
-					std::exp(-tMin/tau)));
-	  //  if(_verbose > 10)
-	  //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
-	  //	   << _gammaCreationTime/second << G4endl;
-       } else { _gammaCreationTime=0.; }
-      */
     }
   return;
 }

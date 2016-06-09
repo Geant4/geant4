@@ -24,15 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6DecayerMessenger.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-// Messenger class that defines commands for G4Pythia6Decayer.
-//
-// Implements command
-// - /pythia6Decayer/verbose [level]
-// - /pythia6Decayer/forceDecayType [decayType]
-// ----------------------------------------------------------------------------
+/// \file eventgenerator/pythia/decayer6/include/G4Pythia6DecayerMessenger.hh
+/// \brief Definition of the G4Pythia6DecayerMessenger class
 
 #ifndef G4_PYTHIA6_DECAYER_MESSENGER_H
 #define G4_PYTHIA6_DECAYER_MESSENGER_H 
@@ -46,7 +41,11 @@ class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithABool;
 
-// ----------------------------------------------------------------------------
+/// Messenger class that defines commands for G4Pythia6Decayer.
+///
+/// Implements command
+/// - /pythia6Decayer/verbose [level]
+/// - /pythia6Decayer/forceDecayType [decayType]
 
 class G4Pythia6DecayerMessenger : public G4UImessenger
 {

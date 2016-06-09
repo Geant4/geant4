@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/include/G4GeoNav.hh
+/// \brief Definition of the G4GeoNav class
 //
-// $Id: G4GeoNav.hh,v 1.4 2006-06-29 17:21:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

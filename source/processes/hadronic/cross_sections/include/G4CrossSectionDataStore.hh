@@ -110,6 +110,18 @@ private:
   std::vector<G4VCrossSectionDataSet*> dataSetList;
   std::vector<G4double> xsecelm;
   std::vector<G4double> xseciso;
+
+  const G4Material* currentMaterial;
+  const G4ParticleDefinition* matParticle;
+  G4double matKinEnergy;
+  G4double matCrossSection;
+
+  const G4Material* elmMaterial;
+  const G4Element* currentElement;
+  const G4ParticleDefinition* elmParticle;
+  G4double elmKinEnergy;
+  G4double elmCrossSection;
+
   G4int nDataSetList;
   G4int verboseLevel;
 };

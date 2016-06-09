@@ -94,12 +94,24 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
     G4OpenInventorX.hh
     G4OpenInventorXt.hh
+    G4OpenInventorXtExaminerViewer.hh
+    G4OpenInventorXtExtended.hh
+    G4OpenInventorXtExtendedViewer.hh
     G4OpenInventorXtViewer.hh
+    wheelmouse.h
+    SoXtInternal.h
+    console.h
+    favorites.h
+    saveViewPt.h
     )
 
   list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
     G4OpenInventorXt.cc
+    G4OpenInventorXtExaminerViewer.cc
+    G4OpenInventorXtExtended.cc
+    G4OpenInventorXtExtendedViewer.cc
     G4OpenInventorXtViewer.cc
+    wheelmouse.cc
     )
 
   # Add the definitions for SoXt
@@ -117,6 +129,7 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
    ${MOTIF_LIBRARIES}
    ${X11_LIBRARIES}
+   ${X11_Xpm_LIB}
    )
 endif()
 

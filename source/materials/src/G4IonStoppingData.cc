@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonStoppingData.cc,v 1.3 2010-10-25 08:41:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -50,13 +49,15 @@
 // =========================================================================== 
 //
 
-#include "G4IonStoppingData.hh" 
-#include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 
+#include "G4IonStoppingData.hh" 
+#include "G4PhysicsVector.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // #########################################################################
 

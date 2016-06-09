@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HyperNucleiProperties.cc,v 1.4 2008-10-22 12:35:46 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
@@ -33,6 +32,8 @@
 // Hyper Nuclei properties based on CHIPS model (Mikhail KOSOV)
 // Migrate into particles category by H.Kurashige (Sep. 2007)
 // 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HyperNucleiProperties.hh"
 #include "G4NucleiProperties.hh"
 #include "G4ParticleTable.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.16 2010-07-14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -38,6 +37,8 @@
 // --------------------------------------------------------------------
 
 #include "G4Mag_SpinEqRhs.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MagneticField.hh"
 #include "G4ThreeVector.hh"
 

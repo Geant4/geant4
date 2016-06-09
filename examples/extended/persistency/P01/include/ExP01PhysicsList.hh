@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01PhysicsList.hh
+/// \brief Definition of the ExP01PhysicsList class
 //
-// $Id: ExP01PhysicsList.hh,v 1.2 2006-06-29 17:38:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +39,8 @@
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Physics list for the persistency example
 
 class ExP01PhysicsList: public G4VUserPhysicsList
 {

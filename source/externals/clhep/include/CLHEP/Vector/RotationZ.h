@@ -258,11 +258,11 @@ public:
 
 protected:
 
-  double d;
+  double its_d;
   // The angle of rotation.
 
-  double s;
-  double c;
+  double its_s;
+  double its_c;
   // Cache the trig functions, for rapid operations.
 
   inline HepRotationZ ( double dd, double ss, double cc );

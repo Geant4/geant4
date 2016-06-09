@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.icc,v 1.8 2009-02-24 10:58:04 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -95,9 +94,9 @@ inline void G4VMarker::SetScreenDiameter (G4double sd) {
   fScreenSize = sd;
 }
 
-inline void G4VMarker::SetScreenRadius (G4double sr) {
+inline void G4VMarker::SetScreenRadius (G4double scr) {
   fWorldSize  = 0.;
-  fScreenSize = 2. * sr;
+  fScreenSize = 2. * scr;
 }
 
 inline void G4VMarker::SetFillStyle (G4VMarker::FillStyle style) {

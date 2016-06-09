@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,25 +14,104 @@
 ***** Table : Nb of materials = 6 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  78.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
 
  Material: Water_gas    density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 755.365 m    Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
 
  Material: Graphite    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.407 cm   Imean:  81.000 eV 
-   --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Graphite_gas    density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 354.070 m    Imean:  81.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Aluminium_gas    density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.601 m    Imean: 166.000 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
+
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
 /run/verbose 2
 #
@@ -61,24 +140,25 @@ PhysicsList::SetCuts:CutLength : 10 km
 /run/beamOn 40000
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 GeV in 94 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 GeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 GeV   AngularGenSauterGavrila
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 80 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 GeV in 80 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 GeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 GeV in 160 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 GeV in 80 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       10 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -87,6 +167,11 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
       myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -101,10 +186,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 GeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -160,11 +244,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
  ======================== run conditions =====================
 
- The run will be 40000 e- of 1.000 MeV through 2*5.269 mm  of Water (density: 1.000 g/cm3 ); Mass/cm2 = 1.054 g 
+ The run will be 40000 e- of 1.000 MeV through 2*5.269 mm  of Water (density: 1.000 g/cm3 ) Mass/cm2 = 1.054 g 
  csdaRange: 4.391 mm 
 
- the cavity is 2.000 mm  of Water_gas (density: 1.000 mg/cm3); Mass/cm2 = 0.200 mg --> massRatio = 0.000190
- World radius: 10.000 m  ; range in cavity: 4.391 m  
+ the cavity is 2.000 mm  of Water_gas (density: 1.000 mg/cm3) Mass/cm2 = 0.200 mg --> massRatio = 0.000190
+ World radius: 10.000 m   range in cavity: 4.391 m  
 
  ============================================================
 
@@ -172,47 +256,46 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8644 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2858 doseCavity/Ebeam= 1.18472  (100*(ratio-1) = 18.47190 %)
+--->evntNb= 10000 Nwall= 10001 Ncav= 0 Ic/Iw= 0.00000 Ne-_cav= 2758 doseCavity/Ebeam= 1.13072  (100*(ratio-1) = 13.07191 %)
 
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79043 Ne-_cav= 5753 doseCavity/Ebeam= 1.11758  (100*(ratio-1) = 11.75835 %)
+--->evntNb= 20000 Nwall= 19997 Ncav= 4 Ic/Iw= 1.05396 Ne-_cav= 5584 doseCavity/Ebeam= 1.17943  (100*(ratio-1) = 17.94344 %)
 
---->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87828 Ne-_cav= 8635 doseCavity/Ebeam= 1.12007  (100*(ratio-1) = 12.00654 %)
+--->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87828 Ne-_cav= 8469 doseCavity/Ebeam= 1.20789  (100*(ratio-1) = 20.78933 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=6.3s Real=6.29s Sys=0s
+  User=6.81s Real=6.89s Sys=0.01s
 
- Process calls frequency --->  msc= 548731  eIoni= 608219  Transportation= 23258
+ Process calls frequency --->  msc= 545279  eIoni= 609433  Transportation= 22707
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11627	 Energy = 7.382 GeV
-      Exit  --> nbParticles = 11629	 Energy = 7.379 GeV
+      Enter --> nbParticles = 11357	 Energy = 7.211 GeV
+      Exit  --> nbParticles = 11350	 Energy = 7.208 GeV
 
  beamFluence in wall = 39994	 in cavity = 6	 Icav/Iwall = 0.79047	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 8.74970 MeV +- 4.36868 %
- Total dose in cavity = 43.74851 MeV*cm2/mg +- 4.36868 %
+ Total edep in cavity = 9.09888 MeV +- 4.66938 %
+ Total dose in cavity = 45.49442 MeV*cm2/mg +- 4.66938 %
 
- DoseCavity/EnergyFluence = 1.15277 +- 0.05036
+ DoseCavity/EnergyFluence = 1.19878 +- 0.05598
 
- Total charged trackLength in cavity = 37.6652 m     (mean value = 3.2395 mm )
+ Total charged trackLength in cavity = 36.5790 m     (mean value = 3.2208 mm )
 
- StepSize of ch. tracks in wall   = 151.4704 um  +- 136.8916 um 	 (nbSteps/track = 29.0917)
- StepSize of ch. tracks in cavity = 2.2536 mm  +- 2.6168 mm 	 (nbSteps/track = 1.4374)
+ StepSize of ch. tracks in wall   = 151.7017 um  +- 136.8996 um 	 (nbSteps/track = 29.0256)
+ StepSize of ch. tracks in cavity = 2.2077 mm  +- 2.4316 mm 	 (nbSteps/track = 1.4589)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1551534904, 788315163
+ Current couple of seeds = 1755371436, 310093908
 ----------------------------------------
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
-
+RunManager is deleted.

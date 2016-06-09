@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.2 2006-06-29 16:41:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm11/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,9 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
-                               HistoManager* histo)
-:detector(det),runAction(run), histoManager(histo)
+TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run)
+:fDetector(det),fRunAction(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,22 +50,24 @@ TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
  G4int trackID = track->GetTrackID();
-  
+ 
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+        
  //track length of primary particle or charged secondaries
  //
  G4double tracklen = track->GetTrackLength();
  if (trackID == 1) {
-    runAction->AddTrackLength(tracklen);
-    histoManager->FillHisto(3, tracklen);
+    fRunAction->AddTrackLength(tracklen);
+    analysisManager->FillH1(3, tracklen);
  } else if (track->GetDefinition()->GetPDGCharge() != 0.)
-    histoManager->FillHisto(6, tracklen);
+    analysisManager->FillH1(6, tracklen);
            
  //extract projected range of primary particle
  //
  if (trackID == 1) {
-   G4double x = track->GetPosition().x() + 0.5*detector->GetAbsorSizeX();
-   runAction->AddProjRange(x);
-   histoManager->FillHisto(5, x);
+   G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
+   fRunAction->AddProjRange(x);
+   analysisManager->FillH1(5, x);
  }
             
  //mean step size of primary particle
@@ -72,7 +75,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  if (trackID == 1) {
    G4int nbOfSteps = track->GetCurrentStepNumber();
    G4double stepSize = tracklen/nbOfSteps;
-   runAction->AddStepSize(nbOfSteps,stepSize);
+   fRunAction->AddStepSize(nbOfSteps,stepSize);
  }
             
  //status of primary particle : absorbed, transmited, reflected ?
@@ -83,7 +86,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     if (track->GetMomentumDirection().x() > 0.) status = 1;
     else                                        status = 2;
   }
-  runAction->AddTrackStatus(status);
+  fRunAction->AddTrackStatus(status);
  }   
 }
 

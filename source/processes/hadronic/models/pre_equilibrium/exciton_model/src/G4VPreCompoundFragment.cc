@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.15 2010-11-02 17:33:28 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // J. M. Quesada (August 2008).  Based  on previous work by V. Lara
 //
@@ -33,6 +32,7 @@
 //                         use int Z and A and cleanup
 
 #include "G4VPreCompoundFragment.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4NucleiProperties.hh"
 
@@ -78,7 +78,6 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
 {
   theRestNucleusA = aFragment.GetA_asInt() - theA;
   theRestNucleusZ = aFragment.GetZ_asInt() - theZ;
-  theRestNucleusA13 = g4pow->Z13(theRestNucleusA);
 
   if ((theRestNucleusA < theRestNucleusZ) ||
       (theRestNucleusA < theA) ||
@@ -88,6 +87,8 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
       theMaximalKineticEnergy = 0.0;
       return;
     }
+
+  theRestNucleusA13 = g4pow->Z13(theRestNucleusA);
     
   // Calculate Coulomb barrier
   theCoulombBarrier = theCoulombBarrierPtr->

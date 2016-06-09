@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.19 2010-11-10 09:16:08 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4ParameterisationTrd Implementation file
 //

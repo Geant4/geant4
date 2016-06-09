@@ -35,7 +35,9 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4SigmaZeroField.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
@@ -48,32 +50,8 @@ G4SigmaZeroField::G4SigmaZeroField(G4V3DNucleus * nucleus, G4double coeff)
   theCoeff = coeff;
 }
 
-
 G4SigmaZeroField::~G4SigmaZeroField()
 { }
-
-
-const G4SigmaZeroField & G4SigmaZeroField::operator=(const G4SigmaZeroField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaZeroField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4SigmaZeroField::operator==(const G4SigmaZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaZeroField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4SigmaZeroField::operator!=(const G4SigmaZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaZeroField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 
 G4double G4SigmaZeroField::GetField(const G4ThreeVector & aPosition)
 {

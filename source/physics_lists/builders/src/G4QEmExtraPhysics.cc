@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QEmExtraPhysics.cc,v 1.2 2009-11-16 19:12:10 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -49,10 +48,13 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QEmExtraPhysics::G4QEmExtraPhysics(G4int ver)
-  :  G4VPhysicsConstructor("QEmExtra"), verbose(ver), wasActivated(false) 
+  :  G4VPhysicsConstructor("QEmExtra"), hProcess(0), verbose(ver), wasActivated(false) 
 {
+  G4HadronicDeprecate("G4QEmExtraPhysics");
   if(verbose > 1) G4cout << "### G4QEmExtraPhysics" << G4endl;
 }
 

@@ -43,9 +43,7 @@
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/engineIDulong.h"
 #include <string.h>	// for strcmp
-#include <cstdlib>	// for abs(int)
-
-using namespace std;
+#include <cstdlib>	// for std::abs(int)
 
 namespace CLHEP {
 
@@ -59,8 +57,8 @@ int MTwistEngine::maxIndex = 215;
 MTwistEngine::MTwistEngine() 
 : HepRandomEngine()
 {
-  int cycle = abs(int(numEngines/maxIndex));
-  int curIndex = abs(int(numEngines%maxIndex));
+  int cycle = std::abs(int(numEngines/maxIndex));
+  int curIndex = std::abs(int(numEngines%maxIndex));
   long mask = ((cycle & 0x007fffff) << 8);
   long seedlist[2];
   HepRandom::getTheTableSeeds( seedlist, curIndex );
@@ -84,9 +82,9 @@ MTwistEngine::MTwistEngine(long seed)
 MTwistEngine::MTwistEngine(int rowIndex, int colIndex) 
 : HepRandomEngine()
 {
-  int cycle = abs(int(rowIndex/maxIndex));
-  int row = abs(int(rowIndex%maxIndex));
-  int col = abs(int(colIndex%2));
+  int cycle = std::abs(int(rowIndex/maxIndex));
+  int row = std::abs(int(rowIndex%maxIndex));
+  int col = std::abs(int(colIndex%2));
   long mask = (( cycle & 0x000007ff ) << 20 );
   long seedlist[2];
   HepRandom::getTheTableSeeds( seedlist, row );
@@ -152,9 +150,9 @@ void MTwistEngine::setSeed(long seed, int k) {
 
   theSeed = seed ? seed : 4357;
   int mti;
-  const int N=624;
+  const int N1=624;
   mt[0] = (unsigned int) (theSeed&0xffffffffUL);
-  for (mti=1; mti<N; mti++) {
+  for (mti=1; mti<N1; mti++) {
     mt[mti] = (1812433253UL * (mt[mti-1] ^ (mt[mti-1] >> 30)) + mti); 
         /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
         /* In the previous versions, MSBs of the seed affect   */

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.12 2008-07-21 23:26:29 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080721 Add ClearHistories() method by T. Koi
 //

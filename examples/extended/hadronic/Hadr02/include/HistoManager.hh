@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.9 2009-08-28 09:21:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr02/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +51,6 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
-#include "G4Element.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,7 +75,7 @@ public:
 
   ~HistoManager();
 
-  void bookHisto();
+  void BookHisto();
 
   void BeginOfRun();
   void EndOfRun();
@@ -85,83 +86,70 @@ public:
   void ScoreNewTrack(const G4Track*);
   void AddTargetStep(const G4Step*);
 
-  void SetTargetLength(G4double val)            {length  = val;};
-  void SetNumberOfSlices(G4int val)             {nSlices = val;};
-  void SetNumberOfBinsE(G4int val)              {nBinsE  = val;};
-
-  G4double Length()         const               {return length;};
-  G4int    NumberOfSlices() const               {return nSlices;};
-
   void SetVerbose(G4int val);        
-  G4int GetVerbose() const                      {return verbose;};
-
-  void SetDefaultBeamPositionFlag(G4bool f)     {beamFlag = f;};        
-  G4bool DefaultBeamPosition() const            {return beamFlag;};
-
-  void SetTargetMaterial(const G4Material* mat);
-  const G4Material* TargetMaterial() const      {return material;};
-  const G4Element* TargetElement() const        {return elm;};
-
-  G4double CurrentKinEnergy()                   {return currentKinEnergy;};
-  const G4ParticleDefinition* CurrentParticle() {return currentDef;};
-
-  void SetMaxEnergyDeposit(G4double val)        {edepMax = val;};
-
-  void SetPhysicsList(G4VModularPhysicsList* p) {physList = p;};
-  void SetPhysicsListName(const G4String& nam)  {physListName = nam;};
   void SetIonPhysics(const G4String&);
+
+  inline void SetTargetMaterial(const G4Material* mat) {fMaterial = mat;};
+  inline void SetTargetLength(G4double val)            {fLength  = val;};
+  inline void SetNumberOfSlices(G4int val)             {fNSlices = val;};
+  inline void SetNumberOfBinsE(G4int val)              {fNBinsE  = val;};
+
+  inline G4double Length()         const               {return fLength;};
+  inline G4int    NumberOfSlices() const               {return fNSlices;};
+
+  inline G4int GetVerbose() const                      {return fVerbose;};
+
+  inline void SetDefaultBeamPositionFlag(G4bool f)     {fBeamFlag = f;};
+  inline G4bool DefaultBeamPosition() const            {return fBeamFlag;};
+
+  inline void SetMaxEnergyDeposit(G4double val)        {fEdepMax = val;};
+
+  inline void SetPhysicsList(G4VModularPhysicsList* p) {fPhysList = p;};
 
 private:
 
+  void Initialise();
+
   static HistoManager* fManager;
 
-  G4VModularPhysicsList*      physList;
-  G4VPhysicsConstructor*      ionPhysics;
-  const G4ParticleDefinition* primaryDef;
-  const G4ParticleDefinition* currentDef;
-  const G4ParticleDefinition* neutron;
-  const G4Material*           material;
-  G4Element*                  elm;
-  G4String                    physListName;
+  G4VModularPhysicsList*      fPhysList;
+  G4VPhysicsConstructor*      fIonPhysics;
+  const G4ParticleDefinition* fPrimaryDef;
+  const G4ParticleDefinition* fNeutron;
+  const G4Material*           fMaterial;
 
-  G4double edepMax;
-  G4double edepEvt;
-  G4double edepEM; 
-  G4double edepPI;
-  G4double edepP;
-  G4double edepSum;
-  G4double edepSum2;
-  G4double beamEnergy;
-  G4double length;
-  G4double absZ0;
-  G4double primaryKineticEnergy;
-  G4double currentKinEnergy;
+  G4double fEdepMax;
+  G4double fEdepEvt;
+  G4double fEdepSum;
+  G4double fEdepSum2;
+  G4double fLength;
+  G4double fAbsZ0;
+  G4double fPrimaryKineticEnergy;
  
+  G4int fVerbose;
+  G4int fNBinsE;
+  G4int fNSlices;
 
-  G4int verbose;
-  G4int nBinsE;
-  G4int nSlices;
+  G4int fNevt;
+  G4int fNelec;
+  G4int fNposit;
+  G4int fNgam;
+  G4int fNcpions;
+  G4int fNpi0;
+  G4int fNkaons;
+  G4int fNmuons;
+  G4int fNions;
+  G4int fNdeut;
+  G4int fNalpha;
+  G4int fNneutron;
+  G4int fNproton;
+  G4int fNaproton;
+  G4int fNstep;
+  G4int fNHisto;
 
-  G4int n_evt;
-  G4int n_elec;
-  G4int n_posit;
-  G4int n_gam;
-  G4int n_cpions;
-  G4int n_pi0;
-  G4int n_kaons;
-  G4int n_muons;
-  G4int n_ions;
-  G4int n_deut;
-  G4int n_alpha;
-  G4int n_neutron;
-  G4int n_proton;
-  G4int n_aproton;
-  G4int n_step;
-  G4int nHisto;
+  G4bool fBeamFlag;
 
-  G4bool beamFlag;
-
-  Histo* histo;
+  Histo* fHisto;
 };
 
 #endif

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //
@@ -45,6 +44,8 @@
 
 #include "G4NuclearStopping.hh"
 #include "G4ICRU49NuclearStoppingModel.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,16 +56,16 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
 {
   isInitialized = false;  
   SetProcessSubType(fNuclearStopping);
+  SetBuildTableFlag(false);
   enableAlongStepDoIt = true; 
+  enablePostStepDoIt = false; 
   modelICRU49 = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NuclearStopping::~G4NuclearStopping()
-{
-  delete modelICRU49;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,14 +80,13 @@ void G4NuclearStopping::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialized) {
     isInitialized = true;
-    SetBuildTableFlag(false);
-    //    SetSecondaryParticle(G4Electron::Electron());
-    if(!Model()) {
+
+    if(!EmModel(1)) {
       modelICRU49 = new G4ICRU49NuclearStoppingModel();
-      SetModel(modelICRU49);
+      SetEmModel(modelICRU49);
     }
-    AddEmModel(1, Model());
-    Model()->SetParticleChange(&nParticleChange);
+    AddEmModel(1, EmModel());
+    EmModel()->SetParticleChange(&nParticleChange);
   }
 }
 
@@ -106,28 +106,31 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
 						    const G4Step&  step)
 {
   nParticleChange.InitializeForAlongStep(track);
-  G4double length = step.GetStepLength();
-  if(length > 0.0) {
+  G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
 
-    G4double T1 = step.GetPreStepPoint()->GetKineticEnergy();
-    G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
-    if(T2 > 0.0) {
+  const G4ParticleDefinition* part = track.GetParticleDefinition();
+  G4double Z = std::fabs(part->GetPDGCharge()/eplus);
+
+  if(T2 > 0.0 && T2*proton_mass_c2 < Z*Z*MeV*part->GetPDGMass()) {
+
+    G4double length = step.GetStepLength(); 
+    if(length > 0.0) {
 
       // primary
+      G4double T1= step.GetPreStepPoint()->GetKineticEnergy();
       G4double T = 0.5*(T1 + T2);
-      const G4ParticleDefinition* part = track.GetDefinition();
       const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple(); 
       G4VEmModel* mod = SelectModel(T, couple->GetIndex());
 
       // sample stopping
-      if(modelICRU49) modelICRU49->SetFluctuationFlag(true);
+      if(modelICRU49) { modelICRU49->SetFluctuationFlag(true); }
       G4double nloss = 
 	length*mod->ComputeDEDXPerVolume(couple->GetMaterial(), part, T);
-      if(nloss > T1) nloss = T1;
+      if(nloss > T1) { nloss = T1; }
       nParticleChange.SetProposedKineticEnergy(T1 - nloss);
       nParticleChange.ProposeLocalEnergyDeposit(nloss);
       nParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-      if(modelICRU49) modelICRU49->SetFluctuationFlag(false);
+      if(modelICRU49) { modelICRU49->SetFluctuationFlag(false); }
     }
   }
   return &nParticleChange;

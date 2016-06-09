@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBShexahedron.hh,v 1.9 2006-06-29 19:05:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hexa hedron builder prototype
 // OC 17 9 96

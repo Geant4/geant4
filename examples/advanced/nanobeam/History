@@ -8,11 +8,31 @@ $Id: History,v 1.11 2010-11-09 23:36:31 asaim Exp $
 
                        Package History file
                        --------------------
+14 November 2012 - tag nanobeam-V09-05-06 - P. Mato
+- fix compilation warning and corrected CMakeLists.txt
+
+3 November 2012 - tag nanobeam-V09-05-05 - S. Incerti
+- Removed shadowing in SteppingAction and TabulatedField3D 
+
+1 November 2012 - tag nanobeam-V09-05-04 - S. Incerti
+- Switched to touchables 
+
+26 October 2012 - tag nanobeam-V09-05-03 - L. Pandola
+- Changed CMakeLists.txt to deal with UI and AIDA
+
+26 October 2012 - tag nanobeam-V09-05-02 - S. Incerti
+- Changed executable name.
+
+25 October 2012 - tag nanobeam-V09-05-01 - S. Incerti
+- Switch to usage of G4UIExecutive.
+
+12 October 2012 - tag nanobeam-V09-05-00 - G. Cosmo
+- Explicit inclusion of units and constants headers.
 
 05 November 2011- tag nanobeam-V09-04-06 - S. Incerti  
 - removed export=root option in HistoManager.cc
 
-03 October 2011- tag nanobeam-V09-04-05 - G.Folger  
+03 October 2011- tag nanobeam-V09-04-05 - G. Folger  
 - fix compilation warnings from gcc46 in TabulatedField3D.cc
 
 19 August 2011- tag nanobeam-V09-04-04 - S. Incerti

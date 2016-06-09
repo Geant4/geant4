@@ -1,19 +1,21 @@
 # - Build Geant4Config.cmake file and support scripts for build and install.
 #
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Collect all global variables we need to export to the config files
 # Do this here for now, later on we could collect them as we go.
 #
 
 # Compiler flags (because user apps are a bit dependent on them...)
 set(GEANT4_COMPILER_FLAG_HINTS "#
-set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS}\")")
+set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS}\")
+set(Geant4_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\")")
 
 foreach(_mode DEBUG MINSIZEREL RELEASE RELWITHDEBINFO)
     set(GEANT4_COMPILER_FLAG_HINTS "${GEANT4_COMPILER_FLAG_HINTS}
 set(Geant4_CXX_FLAGS_${_mode} \"${CMAKE_CXX_FLAGS_${_mode}}\")")
 endforeach()
+
 
 # Core compile definitions...
 set(GEANT4_CORE_DEFINITIONS )
@@ -30,17 +32,17 @@ set(GEANT4_EXTERNALS_TARGETS )
 
 # - Stuff from Geant4LibraryBuildOptions.cmake
 if(GEANT4_BUILD_STORE_TRAJECTORY)
-    list(APPEND GEANT4_CORE_DEFINITIONS -DG4_STORE_TRAJECTORY)
+  list(APPEND GEANT4_CORE_DEFINITIONS -DG4_STORE_TRAJECTORY)
 endif()
 
 if(GEANT4_BUILD_VERBOSE_CODE)
-    list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
+  list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
 endif()
 
 # - We do actually need G4LIB_BUILD_DLL on Windows, even for user 
 # applications...
 if(WIN32)
-    list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
+  list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
 endif()
 
 
@@ -49,21 +51,21 @@ endif()
 # If it's internal, add it to the externals list, if it's external, add the 
 # include directories to the list of third party header paths
 if(GEANT4_USE_SYSTEM_CLHEP)
-    list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${CLHEP_INCLUDE_DIRS})
+  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${CLHEP_INCLUDE_DIRS})
 else()
-    list(APPEND GEANT4_EXTERNALS_TARGETS G4clhep)
+  list(APPEND GEANT4_EXTERNALS_TARGETS G4clhep)
 endif()
 
 # - Expat
 # If it's internal, add it to the externals list
 if(NOT GEANT4_USE_SYSTEM_EXPAT)
-    list(APPEND GEANT4_EXTERNALS_TARGETS G4expat)
+  list(APPEND GEANT4_EXTERNALS_TARGETS G4expat)
 endif()
 
 # - ZLIB
 # If it's internal, add it to the externals list
 if(NOT GEANT4_USE_SYSTEM_ZLIB)
-    list(APPEND GEANT4_EXTERNALS_TARGETS G4zlib)
+  list(APPEND GEANT4_EXTERNALS_TARGETS G4zlib)
 endif()
 
 # - GDML
@@ -71,41 +73,39 @@ endif()
 # interface of GDML. The library should then be in the LINK_INTERFACE of
 # persistency...
 if(GEANT4_USE_GDML)
-    list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${XERCESC_INCLUDE_DIRS})
+  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${XERCESC_INCLUDE_DIRS})
 endif()
 
 # - Stuff from Geant4InterfaceOptions.cmake
 if(GEANT4_USE_QT)
-    list(APPEND GEANT4_THIRD_PARTY_INCLUDES 
-        ${QT_INCLUDE_DIR}
-        ${QT_QTCORE_INCLUDE_DIR}
-        ${QT_QTGUI_INCLUDE_DIR}
-        ${QT_QTOPENGL_INCLUDE_DIR}
+  list(APPEND GEANT4_THIRD_PARTY_INCLUDES 
+    ${QT_INCLUDE_DIR}
+    ${QT_QTCORE_INCLUDE_DIR}
+    ${QT_QTGUI_INCLUDE_DIR}
+    ${QT_QTOPENGL_INCLUDE_DIR}
     )
 
-    # On WIN32, re-import the Qt targets.    
-    if(WIN32)
-        set(GEANT4_THIRD_PARTY_IMPORT_SETUP "${GEANT4_THIRD_PARTY_IMPORT_SETUP}
+  # On WIN32, re-import the Qt targets.    
+  if(WIN32)
+    set(GEANT4_THIRD_PARTY_IMPORT_SETUP "${GEANT4_THIRD_PARTY_IMPORT_SETUP}
 # Qt reimport on WIN32
 set(QT_QMAKE_EXECUTABLE ${QT_QMAKE_EXECUTABLE})
 set(QT_USE_IMPORTED_TARGETS ON)
 find_package(Qt4 REQUIRED)"
         )
-    endif()
+  endif()
 endif()
 
-
-
-
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # - Generate Build Tree Configuration Files
-#
+#-----------------------------------------------------------------------
 # Set needed variables for the build tree
 set(GEANT4_CMAKE_DIR "${PROJECT_BINARY_DIR}")
 
-# Set include path for build tree. This is always an absolute path, or rather
-# paths. We extract the paths from the global GEANT4_BUILDTREE_INCLUDE_DIRS
-# property and use this to create the header setup
+# Set include path for build tree. This is always an absolute path, or 
+# rather paths. We extract the paths from the global 
+# GEANT4_BUILDTREE_INCLUDE_DIRS property and use this to create the 
+# header setup
 #
 get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY
     GEANT4_BUILDTREE_INCLUDE_DIRS)
@@ -139,6 +139,19 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.i
     ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
     @ONLY)
 
+# Copy the custom modules into the build tree
+configure_file(${PROJECT_SOURCE_DIR}/cmake/Modules/CMakeMacroParseArguments.cmake
+  ${PROJECT_BINARY_DIR}/Modules/CMakeMacroParseArguments.cmake
+  COPYONLY
+  )
+
+foreach(_mod AIDA HepMC Pythia6 ROOT StatTest)
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
+    ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake
+    COPYONLY
+    )
+endforeach()
+
 # Copy the Main and Internal Use file into the build tree
 configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
     ${PROJECT_BINARY_DIR}/UseGeant4.cmake
@@ -148,9 +161,9 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4_internal.cmake
     COPYONLY)
 
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # - Generate Install Tree Configuration Files
-#
+#-----------------------------------------------------------------------
 # Set needed variables for the install tree
 set(GEANT4_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION})
 
@@ -199,10 +212,17 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.i
 
 # Install the config, config versioning and use files
 install(FILES
-    ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4Config.cmake
-    ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
-    ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
-    DESTINATION ${GEANT4_CMAKE_DIR}
-    COMPONENT Development
-)
+  ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4Config.cmake
+  ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
+  DESTINATION ${GEANT4_CMAKE_DIR}
+  COMPONENT Development
+  )
+
+# Install the custom modules for the examples
+install(DIRECTORY
+  ${PROJECT_BINARY_DIR}/Modules
+  DESTINATION ${GEANT4_CMAKE_DIR}
+  COMPONENT Development
+  )
 

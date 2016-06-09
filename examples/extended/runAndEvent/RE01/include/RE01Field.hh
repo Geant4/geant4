@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01Field.hh,v 1.2 2006-06-29 17:42:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01Field.hh
+/// \brief Definition of the RE01Field class
 //
-
+// $Id$
+//
 
 #ifndef RE01Field_H
 #define RE01Field_H 1
@@ -36,17 +37,17 @@
 
 class RE01Field : public G4MagneticField
 {
-  public:
-    RE01Field();
-    ~RE01Field();
-
-    void GetFieldValue( const  double Point[3],
-                               double *Bfield ) const;
-
-  private:
-    G4double Bz;
-    G4double rmax_sq;
-    G4double zmax;
+public:
+  RE01Field();
+  virtual ~RE01Field();
+  
+  virtual void GetFieldValue( const  double point[3],
+                              double *bfield ) const;
+  
+private:
+  G4double fBz;
+  G4double fRmax_sq;
+  G4double fZmax;
 };
 
 #endif

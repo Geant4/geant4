@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeUserEventInformation.cc
+/// \brief Implementation of the LXeUserEventInformation class
+//
+//
 #include "LXeUserEventInformation.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeUserEventInformation::LXeUserEventInformation()
-  :hitCount(0),photonCount_Scint(0),photonCount_Ceren(0),absorptionCount(0),
-   boundaryAbsorptionCount(0),totE(0.),eWeightPos(0.),reconPos(0.),convPos(0.),
-   convPosSet(false),posMax(0.),pmtsAboveThreshold(0)
-{
-}
+  :fHitCount(0),fPhotonCount_Scint(0),fPhotonCount_Ceren(0),fAbsorptionCount(0),
+   fBoundaryAbsorptionCount(0),fTotE(0.),fEWeightPos(0.),fReconPos(0.),fConvPos(0.),
+   fConvPosSet(false),fPosMax(0.),fEdepMax(0.),fPMTsAboveThreshold(0) {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeUserEventInformation::~LXeUserEventInformation()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+LXeUserEventInformation::~LXeUserEventInformation() {}

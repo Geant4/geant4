@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -41,19 +43,20 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                             DetectorConstruction* DC)
-:Detector(DC),rndmFlag("off")
+                                             DetectorConstruction* dc)
+:fDetector(dc),fRndmFlag("off")
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
   
   //create a messenger for this class
-  gunMessenger = new PrimaryGeneratorMessenger(this);
+  fGunMessenger = new PrimaryGeneratorMessenger(this);
 
   // default particle kinematic
 
@@ -61,11 +64,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(
   G4String particleName;
   G4ParticleDefinition* particle
                     = particleTable->FindParticle(particleName="e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-  particleGun->SetParticleEnergy(50.*MeV);
-  G4double position = -0.5*(Detector->GetWorldSizeX());
-  particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  fParticleGun->SetParticleEnergy(50.*MeV);
+  G4double position = -0.5*(fDetector->GetWorldSizeX());
+  fParticleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 
 }
 
@@ -73,8 +76,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;
+  delete fParticleGun;
+  delete fGunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,15 +86,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   // 
-  G4double x0 = -0.5*(Detector->GetWorldSizeX());
+  G4double x0 = -0.5*(fDetector->GetWorldSizeX());
   G4double y0 = 0.*cm, z0 = 0.*cm;
-  if (rndmFlag == "on")
-     {y0 = (Detector->GetCalorSizeYZ())*(G4UniformRand()-0.5);
-      z0 = (Detector->GetCalorSizeYZ())*(G4UniformRand()-0.5);
+  if (fRndmFlag == "on")
+     {y0 = (fDetector->GetCalorSizeYZ())*(G4UniformRand()-0.5);
+      z0 = (fDetector->GetCalorSizeYZ())*(G4UniformRand()-0.5);
      } 
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyData.cc,v 1.5 2010-10-30 07:55:00 kurasige Exp $
+// $Id$
 //
 // class G4ParticlePropertyData
 //
@@ -35,6 +35,8 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticlePropertyData.hh"
 
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.41 2010-11-12 18:37:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +59,8 @@
 
 #include "G4BetheBlochModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
@@ -360,19 +361,19 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   if(x > 1.e-6) {
 
     G4double x1 = 1.0 + x;
-    G4double g  = 1.0/(x1*x1);
+    G4double grej  = 1.0/(x1*x1);
     if( 0.5 == spin ) {
       G4double x2 = 0.5*electron_mass_c2*deltaKinEnergy/(mass*mass);
-      g *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
+      grej *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
     }
-    if(g > 1.1) {
-      G4cout << "### G4BetheBlochModel WARNING: g= " << g
+    if(grej > 1.1) {
+      G4cout << "### G4BetheBlochModel WARNING: grej= " << grej
 	     << "  " << dp->GetDefinition()->GetParticleName()
 	     << " Ekin(MeV)= " <<  kineticEnergy
 	     << " delEkin(MeV)= " << deltaKinEnergy
 	     << G4endl;
     }
-    if(G4UniformRand() > g) return;
+    if(G4UniformRand() > grej) return;
   }
 
   // delta-electron is produced

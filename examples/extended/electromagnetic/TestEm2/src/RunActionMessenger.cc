@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.4 2006-06-29 16:50:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/src/RunActionMessenger.cc
+/// \brief Implementation of the RunActionMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,60 +42,52 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
-:Run(run)
+:fRun(run)
 {
-  runDir = new G4UIdirectory("/testem/run/");
-  runDir->SetGuidance("run control");
+  fRunDir = new G4UIdirectory("/testem/run/");
+  fRunDir->SetGuidance("run control");
       
-  accCmd = new G4UIcmdWith3Vector("/testem/run/acceptance",this);
-  accCmd->SetGuidance("set Edep and RMS");
-  accCmd->SetGuidance("acceptance values for first layer");
-  accCmd->SetParameterName("edep","rms","limit",true);
-  accCmd->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAccCmd = new G4UIcmdWith3Vector("/testem/run/acceptance",this);
+  fAccCmd->SetGuidance("set Edep and RMS");
+  fAccCmd->SetGuidance("acceptance values for first layer");
+  fAccCmd->SetParameterName("edep","rms","limit",true);
+  fAccCmd->SetRange("edep>0 && edep<1 && rms>0");
+  fAccCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  verbCmd = new G4UIcmdWithAnInteger("/testem/run/verbose",this);
-  verbCmd->SetGuidance("set verbose level for runAction");
-  verbCmd->SetParameterName("verbose",false);
+  fVerbCmd = new G4UIcmdWithAnInteger("/testem/run/verbose",this);
+  fVerbCmd->SetGuidance("set verbose level for runAction");
+  fVerbCmd->SetParameterName("verbose",false);
     
-  histoDir = new G4UIdirectory("/testem/histo/");
-  histoDir->SetGuidance("histograms control");
+  fHistoDir = new G4UIdirectory("/testem/histo/");
+  fHistoDir->SetGuidance("histograms control");
   
   factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");
-
-  typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
-  typeCmd->SetGuidance("set type (hbook, root, XML) for the histograms file");
-  typeCmd->SetCandidates("hbook root XML");         
+  factoryCmd->SetGuidance("set name for the histograms file");    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::~RunActionMessenger()
 {
-  delete verbCmd;
-  delete accCmd;
-  delete runDir;
+  delete fVerbCmd;
+  delete fAccCmd;
+  delete fRunDir;
   delete factoryCmd;
-  delete typeCmd;
-  delete histoDir;
+  delete fHistoDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {      
-  if (command == accCmd )
-   { Run->SetEdepAndRMS(accCmd->GetNew3VectorValue(newValue));}
+  if (command == fAccCmd )
+   { fRun->SetEdepAndRMS(fAccCmd->GetNew3VectorValue(newValue));}
    
-  if (command == verbCmd )
-   { Run->SetVerbose(verbCmd->GetNewIntValue(newValue));}
+  if (command == fVerbCmd )
+   { fRun->SetVerbose(fVerbCmd->GetNewIntValue(newValue));}
       
   if (command == factoryCmd)
-   { Run->SetHistoName(newValue);}
-
-  if (command == typeCmd)
-   { Run->SetHistoType(newValue);}
+   { fRun->SetHistoName(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

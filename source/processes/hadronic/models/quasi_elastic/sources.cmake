@@ -58,15 +58,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_quasi_elastic
     HEADERS
-	G4VCrossSection.hh
     	G4QuasiElRatios.hh
-    	G4ProtonElasticCrossSection.hh
-    	G4NeutronElasticCrossSection.hh
     SOURCES
-	G4VCrossSection.cc
 	G4QuasiElRatios.cc
-	G4ProtonElasticCrossSection.cc
-	G4NeutronElasticCrossSection.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

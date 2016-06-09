@@ -18,10 +18,9 @@
 /gun/particle e+
 /gun/energy 100 MeV
 #
-/testem/histo/setFileName anni
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 5  210  0. 105. MeV	#energy  of gamma  
-/testem/histo/setHisto 6  200 -1. +1. none	#costeta of gamma
+/analysis/setFileName anni
+/analysis/h1/set 5  210  0. 105. MeV	#energy  of gamma  
+/analysis/h1/set 6  200 -1. +1. none	#costeta of gamma
 #
 ##/tracking/verbose 2
 ##/run/beamOn 1

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.27 2010-11-15 19:18:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +41,7 @@
 // 13.05.2006 Add corrections for ion stopping (V.Ivanhcenko)
 // 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
 // 12.09.2008 Added inlined interfaces to effective charge (V.Ivanchenko)
+// 19.04.2012 Fix reproducibility problem (A.Ribon)
 //
 // Class Description:
 //
@@ -53,6 +53,8 @@
 
 #ifndef G4EmCorrections_h
 #define G4EmCorrections_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
 #include "G4ionEffectiveCharge.hh"
@@ -233,7 +235,7 @@ private:
   G4LPhysicsFreeVector* ThetaL;
 
   std::vector<const G4Material*> currmat;
-  std::vector<G4double>          thcorr[100];
+  std::map< G4int, std::vector<G4double> > thcorr;
   size_t        ncouples;
 
   const G4ParticleDefinition* particle;
@@ -309,11 +311,11 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv,
          / ((x2-x1)*(y2-y1));
 }
 
-inline 
-void G4EmCorrections::SetIonisationModels(G4VEmModel* m1, G4VEmModel* m2)
+inline void 
+G4EmCorrections::SetIonisationModels(G4VEmModel* mod1, G4VEmModel* mod2)
 {
-  if(m1) ionLEModel = m1;
-  if(m2) ionHEModel = m2;
+  if(mod1) { ionLEModel = mod1; }
+  if(mod2) { ionHEModel = mod2; }
 }
 
 inline G4int G4EmCorrections::GetNumberOfStoppingVectors()
@@ -351,9 +353,9 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     beta2 = bg2/(gamma*gamma);
     beta  = std::sqrt(beta2);
     ba2   = beta2/alpha2;
-    G4double ratio = electron_mass_c2/mass;
-    tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
-    charge  = p->GetPDGCharge()/eplus;
+    G4double ratio = CLHEP::electron_mass_c2/mass;
+    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
+    charge  = p->GetPDGCharge()/CLHEP::eplus;
     //if(charge < 1.5)  {q2 = charge*charge;}
     //else {
     //  q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);

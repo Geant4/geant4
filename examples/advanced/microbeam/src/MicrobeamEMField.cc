@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.cc,v 1.9 2009-04-30 10:23:57 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
+#include "G4SystemOfUnits.hh"
 
 MicrobeamEMField::MicrobeamEMField() 
 {    
@@ -236,9 +237,9 @@ if (z>=-1400*mm && z <-200*mm)
   G4double x_local,y_local,z_local;
   x_local= 0; y_local=0; z_local=0;
 
-  G4double s = 0;
+  G4double vars = 0;
   G4double G0, G1, G2, G3;
-  G4double     K1, K2, K3;
+  G4double K1, K2, K3;
   G4double P0, P1, P2,     cte;
 
   K1=0;
@@ -327,11 +328,11 @@ if (z>=-1400*mm && z <-200*mm)
 	 if ( ((z_local>=-z2[i]) & (z_local<-z1[i])) ||  ((z_local>z1[i]) & (z_local<=z2[i])) ) 
 	 {
 
-	 s = ( z_local - z1[i]) / a0[i] ;
-  	 if (z_local<-z1[i]) s = ( - z_local - z1[i]) / a0[i] ;
+	 vars = ( z_local - z1[i]) / a0[i] ;
+  	 if (z_local<-z1[i]) vars = ( - z_local - z1[i]) / a0[i] ;
 
 
-	 P0 = c0[i]+c1[i]*s+c2[i]*s*s;
+	 P0 = c0[i]+c1[i]*vars+c2[i]*vars*vars;
 
 	 P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i];
 	 if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];

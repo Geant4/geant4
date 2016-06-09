@@ -15,6 +15,33 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+31-08-12 I. Hrivnacova (AnaEx01-V09-05-05)      
+- Updated CMakeLists.tx:
+  adding visualization, copying macros, install target and comment lines 
+- Adding .README  
+
+06-04-12 mma (AnaEx01-V09-05-04)      
+- AnaEx01.cc : change order of UI and Vis
+     
+22-02-12 mma (AnaEx01-V09-05-03)      
+- HistoManager : suppress SetFirstNtupleId()
+- file G4HbookAnalysisManager renamed ExG4HbookAnalysisManager
+     
+15-02-12 mma (AnaEx01-V09-05-02)   
+- HistoManager : new handle namespace and fileName[2]
+- HistoManager : add protections for histo file management
+      
+22-01-12 mma (AnaEx01-V09-05-01)        
+- HistoManager.hh and .cc : add hbook option.
+  New files :  GNUmakefile.tools_hbook and ExG4HbookAnalysisManager.hh .cc
+     
+21-01-12 mma (AnaEx01-V09-05-00)        
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoManager : histId and histPt
+- HistoManager : coding conventions
+- Update Readme accordingly
+     
 07-06-11 mma (AnaEx01-V09-04-01)     
 PhysicsList migrated to new scheme G4PhysListHelper
      

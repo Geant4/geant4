@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination3D.hh,v 1.3 2007-12-10 16:29:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4PSTermination3D_h

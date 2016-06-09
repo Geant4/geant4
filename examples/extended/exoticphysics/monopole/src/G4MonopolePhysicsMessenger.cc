@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopolePhysicsMessenger.cc,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/G4MonopolePhysicsMessenger.cc
+/// \brief Implementation of the G4MonopolePhysicsMessenger class
+//
+// $Id$
 //
 //  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //
@@ -44,51 +46,51 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysicsMessenger::G4MonopolePhysicsMessenger(G4MonopolePhysics* p)
-  : phys(p) 
+  : fPhys(p) 
 {
-  mPhysicsDir = new G4UIdirectory("/monopole/");
-  mPhysicsDir->SetGuidance("histograms control");
+  fPhysicsDir = new G4UIdirectory("/monopole/");
+  fPhysicsDir->SetGuidance("histograms control");
    
-  mPhysicsCmd = new G4UIcommand("/monopole/setup",this);
-  mPhysicsCmd->SetGuidance("Setup monopole");
+  fPhysicsCmd = new G4UIcommand("/monopole/setup",this);
+  fPhysicsCmd->SetGuidance("Setup monopole");
   //
   G4UIparameter* qmag = new G4UIparameter("qmag",'d',false);
   qmag->SetGuidance("Magnetic charge");
   qmag->SetDefaultValue("1");
-  mPhysicsCmd->SetParameter(qmag);
+  fPhysicsCmd->SetParameter(qmag);
 
   G4UIparameter* q = new G4UIparameter("qelec",'d',false);
   q->SetGuidance("Electric charge charge");
   q->SetDefaultValue("0");
-  mPhysicsCmd->SetParameter(q);
+  fPhysicsCmd->SetParameter(q);
   //    
   G4UIparameter* mass = new G4UIparameter("mass",'d',false);
   mass->SetGuidance("mass");
   mass->SetParameterRange("mass>0.");
   qmag->SetDefaultValue("100");
-  mPhysicsCmd->SetParameter(mass);
+  fPhysicsCmd->SetParameter(mass);
   //    
   G4UIparameter* unit = new G4UIparameter("unit",'s',false);
-  mPhysicsCmd->SetParameter(unit);
+  fPhysicsCmd->SetParameter(unit);
   qmag->SetDefaultValue("GeV");
-  mPhysicsCmd->AvailableForStates(G4State_PreInit);
+  fPhysicsCmd->AvailableForStates(G4State_PreInit);
 
-  mCmd = new G4UIcmdWithADouble("/monopole/magCharge",this);
-  mCmd->SetGuidance("Set monopole magnetic charge number");
-  mCmd->SetParameterName("Qmag",false);
-  mCmd->AvailableForStates(G4State_PreInit);
+  fMCmd = new G4UIcmdWithADouble("/monopole/magCharge",this);
+  fMCmd->SetGuidance("Set monopole magnetic charge number");
+  fMCmd->SetParameterName("Qmag",false);
+  fMCmd->AvailableForStates(G4State_PreInit);
 
-  zCmd = new G4UIcmdWithADouble("/monopole/elCharge",this);
-  zCmd->SetGuidance("Set monopole electric charge number");
-  zCmd->SetParameterName("Qel",false);
-  zCmd->AvailableForStates(G4State_PreInit);
+  fZCmd = new G4UIcmdWithADouble("/monopole/elCharge",this);
+  fZCmd->SetGuidance("Set monopole electric charge number");
+  fZCmd->SetParameterName("Qel",false);
+  fZCmd->AvailableForStates(G4State_PreInit);
 
-  massCmd = new G4UIcmdWithADoubleAndUnit("/monopole/mass",this);
-  massCmd->SetGuidance("Set monopole mass");
-  massCmd->SetParameterName("Mass",false);
-  massCmd->SetRange("Mass>0.");
-  massCmd->SetUnitCategory("Energy");
-  massCmd->AvailableForStates(G4State_PreInit);
+  fMassCmd = new G4UIcmdWithADoubleAndUnit("/monopole/Mass",this);
+  fMassCmd->SetGuidance("Set monopole fMass");
+  fMassCmd->SetParameterName("Mass",false);
+  fMassCmd->SetRange("Mass>0.");
+  fMassCmd->SetUnitCategory("Energy");
+  fMassCmd->AvailableForStates(G4State_PreInit);
 
 }
 
@@ -96,32 +98,38 @@ G4MonopolePhysicsMessenger::G4MonopolePhysicsMessenger(G4MonopolePhysics* p)
 
 G4MonopolePhysicsMessenger::~G4MonopolePhysicsMessenger()
 {
-  delete mPhysicsCmd;
-  delete mCmd;
-  delete zCmd;
-  delete massCmd;
-  delete mPhysicsDir;  
+  delete fPhysicsCmd;
+  delete fMCmd;
+  delete fZCmd;
+  delete fMassCmd;
+  delete fPhysicsDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysicsMessenger::SetNewValue(G4UIcommand* command, 
-					     G4String newValue)
+                                             G4String newValue)
 { 
-  if (command == mPhysicsCmd)
+  if (command == fPhysicsCmd)
    { G4double q, m; G4double mass; 
      G4String unts;
      std::istringstream is(newValue);
      is >> m >> q >> mass >> unts;
      G4String unit = unts;
      G4double vUnit = G4UIcommand::ValueOf(unit);  
-     phys->SetMagneticCharge(m);
-     phys->SetElectricCharge(q);
-     phys->SetMonopoleMass(mass*vUnit);
+     fPhys->SetMagneticCharge(m);
+     fPhys->SetElectricCharge(q);
+     fPhys->SetMonopoleMass(mass*vUnit);
    }
-  if (command == mCmd) {phys->SetMagneticCharge(mCmd->GetNewDoubleValue(newValue));}
-  if (command == zCmd) {phys->SetElectricCharge(zCmd->GetNewDoubleValue(newValue));}
-  if (command == massCmd) {phys->SetMonopoleMass(massCmd->GetNewDoubleValue(newValue));}
+  if (command == fMCmd) {
+    fPhys->SetMagneticCharge(fMCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == fZCmd) {
+    fPhys->SetElectricCharge(fZCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == fMassCmd) {
+    fPhys->SetMonopoleMass(fMassCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

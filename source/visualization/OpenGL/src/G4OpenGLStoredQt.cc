@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.10 2009-01-19 16:26:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // OpenGLStoredQt graphics system factory.
@@ -42,10 +41,10 @@
 #include "G4OpenGLViewerMessenger.hh"
 
 G4OpenGLStoredQt::G4OpenGLStoredQt ():
-  G4VGraphicsSystem ("OpenGLStoredQt",
-		     "OGLSQt",
-		     G4VisFeaturesOfOpenGLSQt (),
-		     G4VGraphicsSystem::threeD)
+  G4OpenGLQt ("OpenGLStoredQt",
+              "OGLSQt",
+              G4VisFeaturesOfOpenGLSQt (),
+              G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
 }
@@ -61,9 +60,9 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQt::CreateViewer \n");
 #endif
-  G4VViewer* pView =
-    new G4OpenGLStoredQtViewer
-    ((G4OpenGLStoredQtSceneHandler&) scene, name);
+  G4VViewer* pView = 0;
+  pView = new G4OpenGLStoredQtViewer
+    ((G4OpenGLStoredSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLStoredQt::CreateViewer: error flagged by negative"
@@ -73,15 +72,14 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
       delete pView;
       pView = 0;
     }
-  }
-  else {
+  } else {
     G4cerr << "G4OpenGLStoredQt::CreateViewer: null pointer on"
       " new G4OpenGLStoredQtViewer." << G4endl;
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQt::CreateViewer END \n");
 #endif
-   return pView;
+  return pView;
 }
 
 #endif

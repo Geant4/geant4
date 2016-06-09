@@ -19,23 +19,23 @@ inline double Hep2Vector::y() const {
   return dy;
 }
 
-inline Hep2Vector::Hep2Vector(double x, double y)
-: dx(x), dy(y) {}
+inline Hep2Vector::Hep2Vector(double x1, double y1)
+: dx(x1), dy(y1) {}
 
-inline Hep2Vector::Hep2Vector( const Hep3Vector & s)
-: dx(s.x()), dy(s.y()) {}
+inline Hep2Vector::Hep2Vector( const Hep3Vector & p)
+: dx(p.x()), dy(p.y()) {}
 
-inline void Hep2Vector::setX(double x) {
-  dx = x;
+inline void Hep2Vector::setX(double x1) {
+  dx = x1;
 }
 
-inline void Hep2Vector::setY(double y) {
-  dy = y;
+inline void Hep2Vector::setY(double y1) {
+  dy = y1;
 }
 
-inline void Hep2Vector::set(double x, double y) {
-  dx = x;
-  dy = y;
+inline void Hep2Vector::set(double x1, double y1) {
+  dx = x1;
+  dy = y1;
 }
 
 double & Hep2Vector::operator[] (int i)       { return operator()(i); }
@@ -105,8 +105,8 @@ inline Hep2Vector Hep2Vector::unit() const {
 }
 
 inline Hep2Vector Hep2Vector::orthogonal() const {
-  double x = std::fabs(dx), y = std::fabs(dy);
-  if (x < y) {
+  double x1 = std::fabs(dx), y1 = std::fabs(dy);
+  if (x1 < y1) {
     return Hep2Vector(dy,-dx);
   }else{
     return Hep2Vector(-dy,dx);
@@ -122,25 +122,25 @@ inline double Hep2Vector::angle(const Hep2Vector & q) const {
   return ptot2 <= 0.0 ? 0.0 : std::acos(dot(q)/std::sqrt(ptot2));
 }
 
-inline void Hep2Vector::setMag(double r){
+inline void Hep2Vector::setMag(double r1){
   double ph = phi();
-  setX( r * std::cos(ph) );
-  setY( r * std::sin(ph) );
+  setX( r1 * std::cos(ph) );
+  setY( r1 * std::sin(ph) );
 }
 
-inline void Hep2Vector::setR(double r){
-  setMag(r);
+inline void Hep2Vector::setR(double r1){
+  setMag(r1);
 }
 
-inline void Hep2Vector::setPhi(double phi){
+inline void Hep2Vector::setPhi(double phi1){
   double ma = mag();
-  setX( ma * std::cos(phi) );
-  setY( ma * std::sin(phi) );
+  setX( ma * std::cos(phi1) );
+  setY( ma * std::sin(phi1) );
 }
 
-inline void Hep2Vector::setPolar(double r, double phi){
-  setX( r * std::cos(phi) );
-  setY( r * std::sin(phi) );
+inline void Hep2Vector::setPolar(double r1, double phi1){
+  setX( r1 * std::cos(phi1) );
+  setY( r1 * std::sin(phi1) );
 }
 
 inline Hep2Vector operator + (const Hep2Vector & a, const Hep2Vector & b) {

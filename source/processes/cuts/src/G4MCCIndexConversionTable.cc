@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MCCIndexConversionTable.cc,v 1.3 2006-06-29 19:30:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -49,11 +48,11 @@ G4MCCIndexConversionTable::~G4MCCIndexConversionTable()
   vecNewIndex.clear();
 }
 
-void G4MCCIndexConversionTable::Reset(size_t size)
+void G4MCCIndexConversionTable::Reset(size_t siz)
 {
   // reset conversion table 
   vecNewIndex.clear();
-  vecNewIndex.resize(size, -1);
+  vecNewIndex.resize(siz, -1);
 }
  
 

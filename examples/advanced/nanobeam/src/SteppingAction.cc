@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.4 2010-10-06 13:21:06 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "SteppingAction.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -42,39 +43,39 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SteppingAction::UserSteppingAction(const G4Step* s)
+void SteppingAction::UserSteppingAction(const G4Step* step)
   
 { 
 
 if (Detector->GetCoef()==1) 
 {
 
-  if  ( (s->GetTrack()->GetDynamicParticle()->GetDefinition() == 
+  if  ( (step->GetTrack()->GetDynamicParticle()->GetDefinition() == 
        G4Proton::ProtonDefinition())
 
 /*
 // for doublet
 
-	 && (s->GetPostStepPoint()->GetPosition().z()/mm>-3230.2)
-         && (s->GetPostStepPoint()->GetPosition().z()/mm<-3229.8) 
+	 && (step->GetPostStepPoint()->GetPosition().z()/mm>-3230.2)
+         && (step->GetPostStepPoint()->GetPosition().z()/mm<-3229.8) 
 */
 
 // for triplet and whole line
 
-	 && (s->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
-         && (s->GetPostStepPoint()->GetPosition().z()/mm<250.00001) 
-         && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Vol")
-         && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "World")
+	 && (step->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
+         && (step->GetPostStepPoint()->GetPosition().z()/mm<250.00001) 
+         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()  == Detector->GetLogicalVol())
+         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalWorld())
      )
 		
      {
-     	      xIn = s->GetPostStepPoint()->GetPosition().x();
-	      yIn = s->GetPostStepPoint()->GetPosition().y();
-	      zIn = s->GetPostStepPoint()->GetPosition().z();
-	      E   = s->GetTrack()->GetKineticEnergy();
+     	      xIn = step->GetPostStepPoint()->GetPosition().x();
+	      yIn = step->GetPostStepPoint()->GetPosition().y();
+	      zIn = step->GetPostStepPoint()->GetPosition().z();
+	      E   = step->GetTrack()->GetKineticEnergy();
 
               G4ThreeVector angleIn;
-              angleIn = s->GetTrack()->GetMomentumDirection();
+              angleIn = step->GetTrack()->GetMomentumDirection();
 
               thetaIn = std::asin(angleIn[0]/std::sqrt(angleIn[0]*angleIn[0]+angleIn[1]*angleIn[1]+angleIn[2]*angleIn[2]));
               phiIn = std::asin(angleIn[1]/std::sqrt(angleIn[0]*angleIn[0]+angleIn[1]*angleIn[1]+angleIn[2]*angleIn[2]));
@@ -101,13 +102,13 @@ if (Detector->GetProfile()==1)
 {
 
 	if  (
-	    (s->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
-         && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Vol")
-         && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Vol") )
+	    (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
+         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()  == Detector->GetLogicalVol())
+         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalVol()) )
 	{
-     	      xIn = s->GetPostStepPoint()->GetPosition().x();
-	      yIn = s->GetPostStepPoint()->GetPosition().y();
-	      zIn = s->GetPostStepPoint()->GetPosition().z();
+     	      xIn = step->GetPostStepPoint()->GetPosition().x();
+	      yIn = step->GetPostStepPoint()->GetPosition().y();
+	      zIn = step->GetPostStepPoint()->GetPosition().z();
 	      
 	      Histo->FillNtuple(0, 0, xIn/um);
 	      Histo->FillNtuple(0, 1, yIn/um);
@@ -120,13 +121,13 @@ if (Detector->GetGrid()==1)
 {
 
 	if  (
-	    (s->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
-         && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "ControlVol_GridShadow")
-         && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "World") )
+	    (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
+         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()  == Detector->GetLogicalGrid())
+         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalWorld()) )
 	{
-     	      xIn = s->GetPostStepPoint()->GetPosition().x();
-	      yIn = s->GetPostStepPoint()->GetPosition().y();
-              E   = s->GetTrack()->GetKineticEnergy();
+     	      xIn = step->GetPostStepPoint()->GetPosition().x();
+	      yIn = step->GetPostStepPoint()->GetPosition().y();
+              E   = step->GetTrack()->GetKineticEnergy();
 
 	      Histo->FillNtuple(1, 0, xIn/um);
 	      Histo->FillNtuple(1, 1, yIn/um);

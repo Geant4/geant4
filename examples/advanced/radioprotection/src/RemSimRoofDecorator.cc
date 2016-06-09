@@ -32,22 +32,23 @@
 // Code developed by: S.Guatelli, susanna@uow.edu.au
 //
 //
-// $Id: RemSimRoofDecorator.cc,v 1.7 2006-06-29 16:24:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-#include "RemSimVGeometryComponent.hh"
-#include "RemSimMaterial.hh"
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
+
 #include "RemSimRoofDecorator.hh"
 #include "RemSimDecorator.hh"
+#include "RemSimVGeometryComponent.hh"
+#include "RemSimMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
 #include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4RunManager.hh"
-
 
 RemSimRoofDecorator::RemSimRoofDecorator(RemSimVGeometryComponent* comp)
   : RemSimDecorator(comp)

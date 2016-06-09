@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.68 2010-06-25 14:03:44 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -45,9 +44,11 @@
 //#define idebug
 //#define sdebug
 
-#include "G4QPDGCodeVector.hh"
 #include <cmath>
 #include <cstdlib>
+
+#include "G4QPDGCodeVector.hh"
+
 using namespace std;
 
 G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)
@@ -130,80 +131,80 @@ ostream& operator<<(ostream& lhs, const G4QPDGCode& rhs)
 // Overloading of QPDGCode addition
 G4int operator+(const G4QPDGCode& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s += rhs.GetPDGCode();
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value += rhs.GetPDGCode();
 }
 G4int operator+(const G4QPDGCode& lhs, const G4int& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s += rhs;
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value += rhs;
 }
 G4int operator+(const G4int& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs;
-  return s += rhs.GetPDGCode();
+  G4int  s_value  = lhs;
+  return s_value += rhs.GetPDGCode();
 }
 
 // Overloading of QPDGCode subtraction
 G4int operator-(const G4QPDGCode& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s -= rhs.GetPDGCode();
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value -= rhs.GetPDGCode();
 }
 G4int operator-(const G4QPDGCode& lhs, const G4int& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s -= rhs;
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value -= rhs;
 }
 G4int operator-(const G4int& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs;
-  return s -= rhs.GetPDGCode();
+  G4int  s_value  = lhs;
+  return s_value -= rhs.GetPDGCode();
 }
 
 // Overloading of QPDGCode multiplication
 G4int operator*(const G4QPDGCode& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s *= rhs.GetPDGCode();
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value *= rhs.GetPDGCode();
 }
 
 G4int operator*(const G4QPDGCode& lhs, const G4int& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s *= rhs;
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value *= rhs;
 }
 
 G4int operator*(const G4int& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs;
-  return s *= rhs.GetPDGCode();
+  G4int  s_value  = lhs;
+  return s_value *= rhs.GetPDGCode();
 }
 
 // Overloading of QPDGCode division
 G4int operator/(const G4QPDGCode& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s /= rhs.GetPDGCode();
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value /= rhs.GetPDGCode();
 }
 
 G4int operator/(const G4QPDGCode& lhs, const G4int& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s /= rhs;
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value /= rhs;
 }
 
 G4int operator/(const G4int& lhs, const G4QPDGCode& rhs)
 {
-  G4int  s  = lhs;
-  return s /= rhs.GetPDGCode();
+  G4int  s_value  = lhs;
+  return s_value /= rhs.GetPDGCode();
 }
 
 // Overloading of QPDGCode residual
 G4int operator%(const G4QPDGCode& lhs, const G4int& rhs)
 {
-  G4int  s  = lhs.GetPDGCode();
-  return s %= rhs;
+  G4int  s_value  = lhs.GetPDGCode();
+  return s_value %= rhs;
 }
 
 // TRUE if it is not RealNeutral (111,221,331 etc), FALSE if it is.
@@ -279,7 +280,7 @@ G4int G4QPDGCode::MakePDGCode(const G4int& QCode)
 G4double G4QPDGCode:: QHaM(G4int nQ)
 {
   static G4bool iniFlag=true;
-  //static G4double m[nQHM]={.511,0.,105.65837, 0., 1777., 0.,   0., 91188., 80403., 140.00
+  //static G4double mass[nQHM]={.511,0.,105.65837, 0., 1777., 0.,   0., 91188., 80403., 140.00
   //,120.000,    800.,     980.,    1370.,  134.98,  139.57, 547.51, 497.65, 493.68, 957.78
   //,939.5654,938.272, 1115.683,  1197.45, 1192.64, 1189.37,1321.31,1314.83,  775.5,  775.5
   //, 782.65,   896.0,   891.66,  1019.46,   1232.,   1232.,  1232.,  1232., 1519.5, 1387.2
@@ -289,7 +290,7 @@ G4double G4QPDGCode:: QHaM(G4int nQ)
   //,  2030.,   2030.,    2030.,    2127.,   2127.,   2252.,  2020.,  2020.,  2044.,  2045.
   //, 2045., 2297., 2170.272, 2171.565, 2464., 2464., 3108.544, 3111.13,3402.272,3403.565};
   // Reduced:
-  static G4double m[nQHM]={.511, 0., 105.65837, 0., 1777., 0.,   0., 91188., 80403., 140.00
+  static G4double mass[nQHM]={.511, 0., 105.65837, 0., 1777., 0.,   0., 91188., 80403., 140.00
     ,120.000,    800.,     980.,    1370.,  134.98,  139.57, 547.51, 497.65, 493.68, 957.78
     ,939.5654,938.272, 1115.683,  1197.45, 1192.64, 1189.37,1321.31,1314.83,  775.5,  775.5
     , 782.65,   896.0,   891.66,  1019.46,   1232.,   1232.,  1232.,  1232., 1519.5, 1387.2
@@ -297,27 +298,27 @@ G4double G4QPDGCode:: QHaM(G4int nQ)
     ,3111.13,3402.272, 3403.565};
   if(iniFlag) // Initialization of the Geant4 hadronic masses
   {
-    m[ 0]=      G4Electron::Electron()->GetPDGMass();
-    m[ 1]=    G4NeutrinoE::NeutrinoE()->GetPDGMass();
-    m[ 2]=    G4MuonMinus::MuonMinus()->GetPDGMass();
-    m[ 3]=  G4NeutrinoMu::NeutrinoMu()->GetPDGMass();
-    m[ 4]=      G4TauMinus::TauMinus()->GetPDGMass();
-    m[ 5]=G4NeutrinoTau::NeutrinoTau()->GetPDGMass();
-    m[14]=      G4PionZero::PionZero()->GetPDGMass();
-    m[15]=    G4PionMinus::PionMinus()->GetPDGMass();
-    m[16]=                G4Eta::Eta()->GetPDGMass();
-    m[17]=      G4KaonZero::KaonZero()->GetPDGMass();
-    m[18]=    G4KaonMinus::KaonMinus()->GetPDGMass();
-    m[19]=      G4EtaPrime::EtaPrime()->GetPDGMass();
-    m[20]=        G4Neutron::Neutron()->GetPDGMass();
-    m[21]=          G4Proton::Proton()->GetPDGMass();
-    m[22]=          G4Lambda::Lambda()->GetPDGMass();
-    m[23]=  G4SigmaMinus::SigmaMinus()->GetPDGMass();
-    m[24]=    G4SigmaZero::SigmaZero()->GetPDGMass();
-    m[25]=    G4SigmaPlus::SigmaPlus()->GetPDGMass();
-    m[26]=        G4XiMinus::XiMinus()->GetPDGMass();
-    m[27]=          G4XiZero::XiZero()->GetPDGMass();
-    m[44]=  G4OmegaMinus::OmegaMinus()->GetPDGMass();
+    mass[ 0]=      G4Electron::Electron()->GetPDGMass();
+    mass[ 1]=    G4NeutrinoE::NeutrinoE()->GetPDGMass();
+    mass[ 2]=    G4MuonMinus::MuonMinus()->GetPDGMass();
+    mass[ 3]=  G4NeutrinoMu::NeutrinoMu()->GetPDGMass();
+    mass[ 4]=      G4TauMinus::TauMinus()->GetPDGMass();
+    mass[ 5]=G4NeutrinoTau::NeutrinoTau()->GetPDGMass();
+    mass[14]=      G4PionZero::PionZero()->GetPDGMass();
+    mass[15]=    G4PionMinus::PionMinus()->GetPDGMass();
+    mass[16]=                G4Eta::Eta()->GetPDGMass();
+    mass[17]=      G4KaonZero::KaonZero()->GetPDGMass();
+    mass[18]=    G4KaonMinus::KaonMinus()->GetPDGMass();
+    mass[19]=      G4EtaPrime::EtaPrime()->GetPDGMass();
+    mass[20]=        G4Neutron::Neutron()->GetPDGMass();
+    mass[21]=          G4Proton::Proton()->GetPDGMass();
+    mass[22]=          G4Lambda::Lambda()->GetPDGMass();
+    mass[23]=  G4SigmaMinus::SigmaMinus()->GetPDGMass();
+    mass[24]=    G4SigmaZero::SigmaZero()->GetPDGMass();
+    mass[25]=    G4SigmaPlus::SigmaPlus()->GetPDGMass();
+    mass[26]=        G4XiMinus::XiMinus()->GetPDGMass();
+    mass[27]=          G4XiZero::XiZero()->GetPDGMass();
+    mass[44]=  G4OmegaMinus::OmegaMinus()->GetPDGMass();
     iniFlag=false;
   }
   if(nQ<0 || nQ>=nQHM)
@@ -325,7 +326,7 @@ G4double G4QPDGCode:: QHaM(G4int nQ)
     G4cout<<"***G4QPDGCode::QHaM: negative Q-code or Q="<<nQ<<" >= nQmax = "<<nQHM<<G4endl;
     return 0.;
   }
-  return m[nQ];
+  return mass[nQ];
 }
 
 // Make a Q Code out of the PDG Code
@@ -333,7 +334,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 {
   static const G4int qr[10]={0,13,19,27,33,44,50,58,64,75};
   G4int PDGC=abs(PDGCode);        // Qcode is always not negative
-  G4int s=0;
+  G4int s_value=0;
   G4int z=0;
   G4int n=0;
   if (PDGC>100000000)             // Not supported
@@ -346,18 +347,18 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
   else if (PDGC>80000000 && PDGC<100000000) // Try to convert the NUCCoding to PDGCoding
   {
     //if(PDGC==90000000) return 6;            // @@ already done in the constructor
-    ConvertPDGToZNS(PDGC, z, n, s);
-    G4int b=n+z+s;                                 // Baryon number
+    ConvertPDGToZNS(PDGC, z, n, s_value);
+    G4int b=n+z+s_value;                           // Baryon number
 #ifdef debug
-    G4cout<<"***G4QPDGCode::Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
+    G4cout<<"***G4QPDGCode::Z="<<z<<",N="<<n<<",S="<<s_value<<G4endl;
 #endif
     if(b<0)                                        // ---> Baryons & Fragments
     {
       b=-b;
       n=-n;
       z=-z;
-      s=-s;
-      PDGC=90000000+s*1000000+z*1000+n;            // New PDGC for anti-baryons
+      s_value=-s_value;
+      PDGC=90000000+s_value*1000000+z*1000+n;      // New PDGC for anti-baryons
     }
     else if(!b)                                    // --> Mesons
     {
@@ -366,26 +367,26 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       {
         n=-n;
         z=-z;
-        s=-s;
+        s_value=-s_value;
         //anti=true;                                 // For the PDG conversion
       }
       if(!z)
       {
-        if(s>0)
+        if(s_value>0)
         {
           n=-n;
-          s=-s;
+          s_value=-s_value;
           //anti=true;                               // For the PDG conversion
         }
-        if     (s==-1) return 17;                  // K0
-        else if(s==-2) return -1;                  // K0+K0 chipolino
+        if     (s_value==-1) return 17;            // K0
+        else if(s_value==-2) return -1;            // K0+K0 chipolino
         else           return -2;                  // Not supported by Q Code
       }
       else                                         // --> z>0
       {
         if(z==1)
         {
-          if   (s==-1) return 18;                  // K+
+          if   (s_value==-1) return 18;            // K+
           else         return 15;                  // pi+
         }
         else if(z==2)  return -1;                  // Chipolino
@@ -398,26 +399,26 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       {
         if(PDGC>80000000)
         {
-          if(!s)                                     // --> Baryons
+          if(!s_value)                               // --> Baryons
           {
             if     (!z)  return 53;                  // neutron
             else if(z==1)return 54;                  // proton
             else         return -2;                  // Not supported by Q Code
           }
-          else if(s==1)                              // --> Hyperons
+          else if(s_value==1)                        // --> Hyperons
           {
             if(z==-1)    return 56;                  // Sigma-
             else if(!z)  return 55;                  // Lambda
             else if(z==1)return 57;                  // Sigma+
             else         return -2;                  // Not supported by Q Code
           }
-          else if(s==2)                              // --> Xi Hyperons
+          else if(s_value==2)                        // --> Xi Hyperons
           {
             if(z==-1)    return 58;                  // Xi-
             else if(!z)  return 59;                  // Xi0
             else         return -2;                  // Not supported by Q Code
           }
-          else if(s==3)                              // --> Xi Hyperons
+          else if(s_value==3)                        // --> Xi Hyperons
           {
             if(z==-1)    return 60;                  // Omega-
             else         return -2;                  // Not supported by Q Code
@@ -425,7 +426,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         }
         else
         {
-          if(!s)                                     // --> Baryons
+          if(!s_value)                               // --> Baryons
           {
             if(z==-1)    return 34;                  // Delta-
             else if(!z)  return 20;                  // neutron
@@ -434,7 +435,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
             else if(z==3||z==-2)return -1;           // Delta+pi Chipolino
             else         return -2;                  // Not supported by Q Code
           }
-          else if(s==1)                              // --> Hyperons
+          else if(s_value==1)                        // --> Hyperons
           {
             if(z==-1)    return 23;                  // Sigma-
             else if(!z)  return 22;                  // Lambda (@@ 24->Sigma0)
@@ -442,14 +443,14 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
             else if(z==2||z==-2) return -1;          // Sigma+pi Chipolino
             else         return -2;                  // Not supported by Q Code
           }
-          else if(s==2)                              // --> Xi Hyperons
+          else if(s_value==2)                        // --> Xi Hyperons
           {
             if(z==-1)    return 26;                  // Xi-
             else if(!z)  return 27;                  // Xi0
             else if(z==1||z==-2)return -1;           // Xi+pi Chipolino
             else         return -2;                  // Not supported by Q Code
           }
-          else if(s==3)                              // --> Xi Hyperons
+          else if(s_value==3)                        // --> Xi Hyperons
           {
             if(z==-1)    return 44;                  // Omega-
             else if(!z||z==-2)  return -1;           // Omega+pi Chipolino
@@ -529,8 +530,8 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     }
     else                    // (2s+1 is even) Baryons
     {
-      G4int s=r/2;
-      if(s%2)               // ((2s+1)/2 is odd) N Family
+      s_value=r/2;
+      if(s_value%2)         // ((2s+1)/2 is odd) N Family
       {
         if     (p==211) return Q+=1;
         else if(p==221) return Q+=2;
@@ -573,9 +574,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
   }
   else                        // Nuclear Fragments
   {
-    G4int d=n+n+z+s;          // a#of d quarks
-    G4int u=n+z+z+s;          // a#of u quarks
-    G4int t=d+u+s;            // tot#of quarks
+    G4int d=n+n+z+s_value;    // a#of d quarks
+    G4int u=n+z+z+s_value;    // a#of u quarks
+    G4int t=d+u+s_value;      // tot#of quarks
     if(t%3 || abs(t)<3)       // b=0 are in mesons
     {
 #ifdef debug
@@ -588,14 +589,14 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       G4int b=t/3;            // baryon number
       if(b==1)                // baryons
       {
-        if     (s==0&&u==1&&d==2) return 53; // n
-        else if(s==0&&u==2&&d==1) return 54; // p
-        else if(s==1&&u==1&&d==1) return 55; // Lambda
-        else if(s==1&&u==0&&d==2) return 56; // Sigma-
-        else if(s==1&&u==2&&d==0) return 57; // Sigma+
-        else if(s==2&&u==0&&d==1) return 58; // Xi-
-        else if(s==2&&u==1&&d==0) return 59; // Xi0
-        else if(s==3&&u==0&&d==0) return 60; // Omega-
+        if     (s_value==0&&u==1&&d==2) return 53; // n
+        else if(s_value==0&&u==2&&d==1) return 54; // p
+        else if(s_value==1&&u==1&&d==1) return 55; // Lambda
+        else if(s_value==1&&u==0&&d==2) return 56; // Sigma-
+        else if(s_value==1&&u==2&&d==0) return 57; // Sigma+
+        else if(s_value==2&&u==0&&d==1) return 58; // Xi-
+        else if(s_value==2&&u==1&&d==0) return 59; // Xi0
+        else if(s_value==3&&u==0&&d==0) return 60; // Omega-
         else
         {
 #ifdef debug
@@ -606,12 +607,12 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       }
       else if(b==2)           // di-baryons
       {
-        if     (s==0&&u==2&&d==4) return 61; // nn
-        else if(s==0&&u==3&&d==3) return 62; // np
-        else if(s==0&&u==4&&d==2) return 63; // pp
-        else if(s==1&&u==2&&d==3) return 64; // nLambda
-        else if(s==1&&u==3&&d==2) return 65; // pLambda
-        else if(s==2&&u==2&&d==2) return 66; // LambdaLambda
+        if     (s_value==0&&u==2&&d==4) return 61; // nn
+        else if(s_value==0&&u==3&&d==3) return 62; // np
+        else if(s_value==0&&u==4&&d==2) return 63; // pp
+        else if(s_value==1&&u==2&&d==3) return 64; // nLambda
+        else if(s_value==1&&u==3&&d==2) return 65; // pLambda
+        else if(s_value==2&&u==2&&d==2) return 66; // LambdaLambda
         else
         {
 #ifdef debug
@@ -622,14 +623,14 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       }
       else if(b==3)           // tri-baryons
       {
-        if     (s==0&&u==4&&d==5) return 69; // pnn
-        else if(s==0&&u==5&&d==4) return 70; // npp
-        else if(s==1&&u==3&&d==5) return 71; // Lnn
-        else if(s==1&&u==4&&d==4) return 72; // Lnp
-        else if(s==1&&u==5&&d==3) return 73; // Lpp
-        else if(s==2&&u==3&&d==4) return 74; // LLn
-        else if(s==2&&u==4&&d==3) return 75; // LLp
-        else if(s==1&&u==2&&d==6) return 76; // nnSigma-
+        if     (s_value==0&&u==4&&d==5) return 69; // pnn
+        else if(s_value==0&&u==5&&d==4) return 70; // npp
+        else if(s_value==1&&u==3&&d==5) return 71; // Lnn
+        else if(s_value==1&&u==4&&d==4) return 72; // Lnp
+        else if(s_value==1&&u==5&&d==3) return 73; // Lpp
+        else if(s_value==2&&u==3&&d==4) return 74; // LLn
+        else if(s_value==2&&u==4&&d==3) return 75; // LLp
+        else if(s_value==1&&u==2&&d==6) return 76; // nnSigma-
         else
         {
 #ifdef debug
@@ -639,7 +640,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         }
       }
       G4int c=b/2;              // From here b>3: (4,5):c=2,g=0,1; (6,7):c=3,g=0,1; ...
-      G4int g=b%2;
+      G4int g_value=b%2;
       G4int h=c*3;
       //G4int Q=57+c*15;
       //G4int Q=65+c*15;           // "IsoNuclei"
@@ -647,15 +648,15 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       G4int Q=46+c*15;           // Reduced "Leptons/Hyperons"
       u-=h;
       d-=h;
-      if(g)
+      if(g_value)
       {
-        if     (s==0&&u==1&&d==2) return Q+= 9;
-        else if(s==0&&u==2&&d==1) return Q+=10;
-        else if(s==1&&u==0&&d==2) return Q+=11;
-        else if(s==1&&u==1&&d==1) return Q+=12;
-        else if(s==1&&u==2&&d==0) return Q+=13;
-        else if(s==2&&u==0&&d==1) return Q+=14;
-        else if(s==2&&u==1&&d==0) return Q+=15;
+        if     (s_value==0&&u==1&&d==2) return Q+= 9;
+        else if(s_value==0&&u==2&&d==1) return Q+=10;
+        else if(s_value==1&&u==0&&d==2) return Q+=11;
+        else if(s_value==1&&u==1&&d==1) return Q+=12;
+        else if(s_value==1&&u==2&&d==0) return Q+=13;
+        else if(s_value==2&&u==0&&d==1) return Q+=14;
+        else if(s_value==2&&u==1&&d==0) return Q+=15;
         else
         {
 #ifdef debug
@@ -666,14 +667,14 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       }
       else
       {
-        if     (s==0&&u==-1&&d== 1) return Q+=1;
-        else if(s==0&&u== 0&&d== 0) return Q+=2;
-        else if(s==0&&u== 1&&d==-1) return Q+=3;
-        else if(s==1&&u==-1&&d== 0) return Q+=4;
-        else if(s==1&&u== 0&&d==-1) return Q+=5;
-        else if(s==2&&u==-2&&d== 0) return Q+=6;
-        else if(s==2&&u==-1&&d==-1) return Q+=7;
-        else if(s==2&&u== 0&&d==-2) return Q+=8;
+        if     (s_value==0&&u==-1&&d== 1) return Q+=1;
+        else if(s_value==0&&u== 0&&d== 0) return Q+=2;
+        else if(s_value==0&&u== 1&&d==-1) return Q+=3;
+        else if(s_value==1&&u==-1&&d== 0) return Q+=4;
+        else if(s_value==1&&u== 0&&d==-1) return Q+=5;
+        else if(s_value==2&&u==-2&&d== 0) return Q+=6;
+        else if(s_value==2&&u==-1&&d==-1) return Q+=7;
+        else if(s_value==2&&u== 0&&d==-2) return Q+=8;
         else
         {
 #ifdef debug
@@ -723,16 +724,16 @@ G4double G4QPDGCode::GetMass()
 #endif
     return 0.;
   }
-  G4int s=0;
+  G4int s_value=0;
   G4int z=0;
   G4int n=0;
-  ConvertPDGToZNS(thePDGCode, z, n, s);
-  G4double m=GetNuclMass(z,n,s);
+  ConvertPDGToZNS(thePDGCode, z, n, s_value);
+  G4double m_value=GetNuclMass(z,n,s_value);
 #ifdef pdebug
   if(pPrint)
-  G4cout<<"G4QPDG::GetM:PDG="<<thePDGCode<<"=>Z="<<z<<",N="<<n<<",S="<<s<<",M="<<m<<G4endl;
+  G4cout<<"G4QPDG::GetM:PDG="<<thePDGCode<<"=>Z="<<z<<",N="<<n<<",S="<<s_value<<",M="<<m_value<<G4endl;
 #endif
-  return m;
+  return m_value;
 }
 
 // Get the width value for the PDG
@@ -762,7 +763,7 @@ G4double G4QPDGCode::GetWidth()
 }
 
 // Get a nuclear mass for Z (a#of protons), N (a#of neutrons), & S (a#of lambdas) 
-G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
+G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s_value)
 {
   static const G4double anb = .01; // Antibinding for Ksi-n,Sig-n,Sig+p,Sig-nn,
   static const G4double mNeut= QHaM(20);
@@ -931,12 +932,12 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
   // -------------------------------------------------------------------------------------
   G4double rm=0.;
   G4int nz=n+z;
-  G4int zns=nz+s;
-  if(nz+s<0)
+  G4int zns=nz+s_value;
+  if(nz+s_value<0)
   {
     z=-z;
     n=-n;
-    s=-s;
+    s_value=-s_value;
     nz=-nz;
     zns=-zns;
   }
@@ -944,12 +945,12 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
   {
     if(z==-1)
     {
-      if(!s)
+      if(!s_value)
       {
         if(n==1)      return mPiC;              // pi-
         else          return mPiC+(n-1)*mNeut;  // Delta- + (N-1)*n
       }
-      else if(s==1)                             // Strange negative hadron
+      else if(s_value==1)                       // Strange negative hadron
       {
         if(!n)        return mKM;               // K-
         else if(n==1) return mSiM;              // Sigma-
@@ -957,45 +958,45 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         else if(n==3) return mSmNN;             // Sigma- +2n TriBaryon
         else          return mSigM+mNeut*(n-1); // Sigma- + (N-1)*n
       }
-      else if(s==2)                             // --> Double-strange negative hadrons
+      else if(s_value==2)                       // --> Double-strange negative hadrons
       {
         if(!n)        return mKsM;              // Ksi-
         else if(n==1) return mKsiM+mNeut;       // Ksi- + n
         else if(n==2) return mKsiM+mNeut+mNeut; // Ksi- + 2n
         else          return mKsiM+mNeut*n;     // Ksi- + Z*n
       }
-      else if(s==-2)
+      else if(s_value==-2)
       {
         if     (nz==2)         return mDiKZ+mPiC; // 2K0 + Pi-
         else                   return mDiKZ+mPiC+(nz-2)*mProt;
       }
-      else if(s==3)                             // --> Triple-strange negative hadrons
+      else if(s_value==3)                       // --> Triple-strange negative hadrons
       {
         if     (n==-1) return mOmM;       // Triple-strange Omega minus
         else if(!n   ) return mOmN;       // Triple-strange (Omega-) + n DiBaryon
         else if(n==-2) return mDiKZ+mKM;  // Triple-strange K- + 2*K0
         else           return mOmeg+mNeut*(n+2);
       }
-      else if(s==4)
+      else if(s_value==4)
       {
         if(n==-2)      return mOmeg+mKM;  // Omega- + K-
         else if(n==-1) return mOmeg+mLamb;// Omega- + Lambda
         else           return mOmeg+mLamb+(n+1)*mNeut; // Omega- + Lambda + (n+1)*Neutrons
       }
-      else if(!n)            return mOmeg+(s-2)*mLamb; // Multy-Lambda + Omega minus
+      else if(!n)            return mOmeg+(s_value-2)*mLamb; // Multy-Lambda + Omega minus
       else
       {
 #ifdef qdebug
-        if(s>NZS1max)
+        if(s_value>NZS1max)
         {
-          NZS1max=s;
-          G4cout<<"-------->>G4QPDGCode::GetNucMass: Z=-1, S="<<s<<">2 with N="<<n<<G4endl;
+          NZS1max=s_value;
+          G4cout<<"-------->>G4QPDGCode::GetNucMass: Z=-1, S="<<s_value<<">2 with N="<<n<<G4endl;
         }
 #endif
-          return CalculateNuclMass(z,n,s);
+          return CalculateNuclMass(z,n,s_value);
       }
     }
-    else if(!s)
+    else if(!s_value)
     {
       if(!nz)
       {
@@ -1006,10 +1007,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
     }
     else if(!zns)           // !!! s=0 is treated above !!
     {
-      if(s>0)                return anb+s*mKM+n*mPiC; // s*K- + n*Pi-
-      else                   return anb-s*mKZ-z*mPiC; // (-s)*aK0 + (-z)*Pi-
+      if(s_value>0)          return anb+s_value*mKM+n*mPiC; // s*K- + n*Pi-
+      else                   return anb-s_value*mKZ-z*mPiC; // (-s)*aK0 + (-z)*Pi-
     }
-    else if(s==1)
+    else if(s_value==1)
     {
       if(!nz)
       {
@@ -1018,23 +1019,23 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
       }
       else                   return mSigM+nz*mNeut-(z+1)*mPiC;
     }
-    else if(s==-1)           return mKZa-z*mPiC+(nz-1)*mNeut; // aK0+(nz-1)n+(-z)*Pi-
-    else if(s==2)
+    else if(s_value==-1)     return mKZa-z*mPiC+(nz-1)*mNeut; // aK0+(nz-1)n+(-z)*Pi-
+    else if(s_value==2)
     {
       if     (nz==-1)        return mKsiM+n*mPiC;
       else if(!nz)           return mKsiM+mNeut-(z+1)*mPiC;
       else                   return mKsiM+(nz+1)*mNeut-(z+1)*mPiC;
     }
-    else if(s==-2)           return mDiKZ-z*mPiC+(nz-2)*mNeut;
-    else if(s==3)
+    else if(s_value==-2)     return mDiKZ-z*mPiC+(nz-2)*mNeut;
+    else if(s_value==3)
     {
       if     (nz==-2)        return mOmeg+(n+1)*mPiC; // Omega- + (n+1)* Pi-
       else if(nz==-1)        return mOmeg+mNeut+n*mPiC; // Omega- + n * Pi-
       else if(!nz)           return mOmeg+mDiNt+(n-1)*mPiC; // Omega- + 2N + (n-1)*Pi-
       else                   return mOmeg+(nz+2)*mProt-(z+1)*mPiC;
     }
-    else if(s<-2)            return anb-s*mKZ-z*mPiC+(nz+s)*mNeut;
-    else if(s==4)
+    else if(s_value<-2)      return anb-s_value*mKZ-z*mPiC+(nz+s_value)*mNeut;
+    else if(s_value==4)
     {
       if     (nz==-3)        return mOmeg+mKM+(n+1)*mPiC;        // Om- + K- + (n+1)*Pi-
       else if(nz==-2)        return mOmeg+mSigM+n*mPiC;          // Om- + Sig- + n*Pi-
@@ -1049,22 +1050,22 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
       if(z<NZmin)
       {
         NZmin=z;
-        G4cout<<"---->>G4QPDGCode::GetNucMass: Z="<<z<<"<-1 with N="<<n<<", S="<<s<<G4endl;
+        G4cout<<"---->>G4QPDGCode::GetNucMass: Z="<<z<<"<-1 with N="<<n<<", S="<<s_value<<G4endl;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
   else if(n<0)
   {
     if(n==-1)
     {
-      if(!s)
+      if(!s_value)
       {
         if(z==1)      return mPiC;              // pi+
         else          return mPiC+(z-1)*mProt;  // Delta++ + (Z-1)*p
       }
-      else if(s==1)                             // --> Strange neutral hadrons
+      else if(s_value==1)                       // --> Strange neutral hadrons
       {
         if(!z)        return mKZ;               // K0
         else if(z==1) return mSiP;              // Sigma+
@@ -1072,38 +1073,38 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         else if(z==3) return mSpPP;             // Sigma+ +2p TriBaryon
         else          return mSigP+mProt*(z-1); // Sigma+ + (Z-1)*p
       }
-      else if(s==2)                             // --> Double-strange negative hadrons
+      else if(s_value==2)                       // --> Double-strange negative hadrons
       {
         if(!z)        return mKsZ;              // Ksi0
         else if(z==1) return mKsiZ+mProt;       // Ksi- + p
         else if(z==2) return mKsiZ+mProt+mProt; // Ksi- + 2p
         else          return mKsiZ+mProt*z;     // Ksi- + Z*p
       }
-      else if(s==-2)
+      else if(s_value==-2)
       {
         if     (nz==2)         return mDiKM+mPiC; // 2K+ + Pi+
         else                   return mDiKM+mPiC+(nz-2)*mProt;
       }
-      else if(s==3)
+      else if(s_value==3)
       {
         if(z==1) return mOmeg+mDiPr;
         else     return mOmeg+(z+1)*mProt;
       }
-      else if(s==4) return mOmeg+mLamb+(z+1)*mProt;
-      else if(!z) return mKZa+(s-1)*mLamb;      // Multy-Lambda + K0
+      else if(s_value==4) return mOmeg+mLamb+(z+1)*mProt;
+      else if(!z) return mKZa+(s_value-1)*mLamb;      // Multy-Lambda + K0
       else
       {
 #ifdef qdebug
-        if(s>NNS1max)
+        if(s_value>NNS1max)
         {
-          NNS1max=s;
-          G4cout<<"-------->>G4QPDGCode::GetNucMass: N=-1, S="<<s<<">2 with Z="<<z<<G4endl;
+          NNS1max=s_value;
+          G4cout<<"-------->>G4QPDGCode::GetNucMass: N=-1, S="<<s_value<<">2 with Z="<<z<<G4endl;
         }
 #endif
-          return CalculateNuclMass(z,n,s);
+          return CalculateNuclMass(z,n,s_value);
       }
     }
-    else if(!s)
+    else if(!s_value)
     {
       if(!nz)
       {
@@ -1114,10 +1115,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
     }
     else if(!zns)           // !!! s=0 is treated above !!
     {
-      if(s>0)                return anb+s*mKZ+z*mPiC; // s*K0 + n*Pi+
-      else                   return anb-s*mKM-n*mPiC; // (-s)*aK+ + (-n)*Pi+
+      if(s_value>0)          return anb+s_value*mKZ+z*mPiC; // s*K0 + n*Pi+
+      else                   return anb-s_value*mKM-n*mPiC; // (-s)*aK+ + (-n)*Pi+
     }
-    else if(s==1)
+    else if(s_value==1)
     {
       if(!nz)
       {
@@ -1126,23 +1127,23 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
       }
       else                   return mSigP+nz*mProt-(n+1)*mPiC;
     }
-    else if(s==-1)           return mKMa-n*mPiC+(nz-1)*mProt; // K+ + (nz-1)*P + (-n)*Pi+
-    else if(s==2)
+    else if(s_value==-1)     return mKMa-n*mPiC+(nz-1)*mProt; // K+ + (nz-1)*P + (-n)*Pi+
+    else if(s_value==2)
     {
       if     (nz==-1)        return mKsiZ+z*mPiC;
       else if(!nz)           return mKsiZ+mProt-(n+1)*mPiC;
       else                   return mKsiZ+(nz+1)*mProt-(n+1)*mPiC;
     }
-    else if(s==-2)           return mDiKM-n*mPiC+(nz-2)*mProt;
-    else if(s==3)
+    else if(s_value==-2)     return mDiKM-n*mPiC+(nz-2)*mProt;
+    else if(s_value==3)
     {
       if     (nz==-2)        return mOmeg+(z+1)*mPiC;       // Omega + (z+1)*Pi+
       else if(nz==-1)        return mOmeg+mProt+z*mPiC;     // Omega- + P +z*Pi+
       else if(!nz)           return mOmeg+mDiPr+(z-1)*mPiC; // Omega- + 2P + (z-1)* Pi+
       else                   return mOmeg+(nz+2)*mProt-(n+1)*mPiC;
     }
-    else if(s<-2)            return anb-s*mKM-n*mPiC+(nz+s)*mProt;
-    else if(s==4)
+    else if(s_value<-2)      return anb-s_value*mKM-n*mPiC+(nz+s_value)*mProt;
+    else if(s_value==4)
     {
       if     (nz==-3)        return mOmeg+mKZ+(z+1)*mPiC;        // Om- + K0 + (z+1)*Pi+
       else if(nz==-2)        return mOmeg+mSigP+z*mPiC;          // Om- + Sig+ + z*Pi+
@@ -1157,15 +1158,15 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
       if(n<NNmin)
       {
         NNmin=n;
-        G4cout<<"---->>G4QPDGCode::GetNucMass: N="<<n<<"<-1 with Z="<<z<<", S="<<s<<G4endl;
+        G4cout<<"---->>G4QPDGCode::GetNucMass: N="<<n<<"<-1 with Z="<<z<<", S="<<s_value<<G4endl;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  //return CalculateNuclMass(z,n,s); // @@ This is just to compare the calculation time @@
+  //return CalculateNuclMass(z,n,s_value); // @@ This is just to compare the calculation time @@
   if(nz >= 256 || z >= nEl) return 256000.;
-  if(!s)                   // **************> S=0 nucleus
+  if(!s_value)             // **************> S=0 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin0[z])          // =--=> This element is already initialized
@@ -1175,7 +1176,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ0[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ0[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin0[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1188,7 +1189,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ0[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1205,10 +1206,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==1)            // ******************> S=1 nucleus
+  else if(s_value==1)      // ******************> S=1 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
 #ifdef pdebug
@@ -1224,7 +1225,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ1[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ1[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin1[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1237,7 +1238,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ1[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1254,10 +1255,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==-1)           // ******************> S=-1 nucleus
+  else if(s_value==-1)     // ******************> S=-1 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin9[z])          // =--=> This element is already initialized
@@ -1267,7 +1268,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ9[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ9[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin9[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1280,7 +1281,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ9[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1297,10 +1298,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==2)            // ******************> S=2 nucleus
+  else if(s_value==2)      // ******************> S=2 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin2[z])          // =--=> This element is already initialized
@@ -1310,7 +1311,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ2[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ2[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin2[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1323,7 +1324,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ2[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1340,10 +1341,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==-2)           // ******************> S=-2 nucleus
+  else if(s_value==-2)     // ******************> S=-2 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin8[z])          // =--=> This element is already initialized
@@ -1353,7 +1354,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ8[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ8[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin8[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1366,7 +1367,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ8[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1383,10 +1384,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==-3)           // ******************> S=-3 nucleus
+  else if(s_value==-3)     // ******************> S=-3 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin7[z])          // =--=> This element is already initialized
@@ -1396,7 +1397,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ7[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ7[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin7[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1409,7 +1410,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ7[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1426,10 +1427,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==3)            // ******************> S=3 nucleus
+  else if(s_value==3)      // ******************> S=3 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin3[z])          // =--=> This element is already initialized
@@ -1439,7 +1440,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ3[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ3[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin3[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1452,7 +1453,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ3[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1469,10 +1470,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==-4)           // ******************> S=-4 nucleus
+  else if(s_value==-4)     // ******************> S=-4 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin6[z])          // =--=> This element is already initialized
@@ -1482,7 +1483,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ6[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ6[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin6[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1495,7 +1496,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ6[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1512,10 +1513,10 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
-  else if(s==4)           // ******************> S=4 nucleus
+  else if(s_value==4)      // ******************> S=4 nucleus
   {
     G4int Nmin=iNF[z];     // Minimun N(Z) for the Dynamic Associative Memory (DAM)
     if(!iNin4[z])          // =--=> This element is already initialized
@@ -1525,7 +1526,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
 #endif
       G4int iNfin=iNL[z];
       if(iNfin>iNR) iNfin=iNR;
-      for (G4int in=0; in<iNfin; in++) VZ4[z][in] = CalculateNuclMass(z,in+Nmin,s);
+      for (G4int in=0; in<iNfin; in++) VZ4[z][in] = CalculateNuclMass(z,in+Nmin,s_value);
       iNin4[z]=true;
     }
     G4int dNn=n-Nmin;
@@ -1538,7 +1539,7 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNmin[z]=n;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
     else if(dNn<iNL[z]) return VZ4[z][dNn]; // Found in DAM
     else                   // --> The maximum N must be increased
@@ -1555,29 +1556,29 @@ G4double G4QPDGCode::GetNuclMass(G4int z, G4int n, G4int s)
         iNran[z]=dNn;
       }
 #endif
-      return CalculateNuclMass(z,n,s);
+      return CalculateNuclMass(z,n,s_value);
     }
   }
   else
   {
 #ifdef qdebug
-    if(s<Smin || s>Smax)
+    if(s_value<Smin || s_value>Smax)
     {
-      if(s<Smin) Smin=s;
-      if(s>Smax) Smax=s;
-      G4cout<<">>G4QPDGCode::GetNucM:Z="<<z<<" with S="<<s<<",N="<<n<<" (Improve)"<<G4endl;
+      if(s_value<Smin) Smin=s_value;
+      if(s_value>Smax) Smax=s_value;
+      G4cout<<">>G4QPDGCode::GetNucM:Z="<<z<<" with S="<<s_value<<",N="<<n<<" (Improve)"<<G4endl;
     }
 #endif
-    rm=CalculateNuclMass(z,n,s);
+    rm=CalculateNuclMass(z,n,s_value);
   }
 #ifdef debug
-  G4cout<<"G4QPDGCode::GetMass:GetNuclMass="<<rm<<",Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
+  G4cout<<"G4QPDGCode::GetMass:GetNuclMass="<<rm<<",Z="<<z<<",N="<<n<<",S="<<s_value<<G4endl;
 #endif
   return rm;
 } // End of GetNuclearMass
 
 // Calculate a nuclear mass for Z (a#of protons), N (a#of neutrons), & S (a#of lambdas) 
-G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
+G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s_value)
 {
   static const G4double mP  = QHaM(21); // Proton
   static const G4double mN  = QHaM(20); // Neutron
@@ -1656,7 +1657,7 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   //static const G4double b9=-1./3.;
   static const G4double a2=0.13;       // LambdaBindingEnergy for deutron+LambdaSystem(MeV)
   static const G4double a3=2.2;        // LambdaBindingEnergy for (t/He3)+LambdaSystem(MeV)
-  static const G4double um=931.49432;  // Umified atomic mass unit (MeV)
+  static const G4double um_value=931.49432;  // Umified atomic mass unit (MeV)
   //static const G4double me =0.511;     // electron mass (MeV) :: n:8.071, p:7.289
   static const G4double eps =0.0001;   // security addition for multybaryons
   //static G4double c[9][9]={// z=1     =2     =3     =4     =5     =6     =7     =8     =9
@@ -1672,13 +1673,13 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   if(z>107)
   {
 #ifdef debug
-    G4cout<<"***G4QPDGCode::CalcNuclMass: Z="<<z<<">107, N="<<n<<", S="<<s<<G4endl;
+    G4cout<<"***G4QPDGCode::CalcNuclMass: Z="<<z<<">107, N="<<n<<", S="<<s_value<<G4endl;
 #endif
     return 256000.;
   }
   G4int Z=z;
   G4int N=n;
-  G4int S=s;
+  G4int S=s_value;
 #ifdef debug
   G4cout<<"G4QPDGCode::CalcNuclMass called with Z="<<Z<<",N="<<N<<", S="<<S<<G4endl;
 #endif
@@ -1830,7 +1831,7 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
     else if(Z>A) return A*mP+(Z-A)*mPi+eps;     // Multybaryon Positive Isonuclei
   }
   // === Start mesonic extraction ===
-  G4double km=0.;                     // Mass Sum of K mesons (G4E::DecayAntiStrang.)
+  G4double km_value=0.;               // Mass Sum of K mesons (G4E::DecayAntiStrang.)
   G4int Zm=Z;
   G4int Nm=N;
   G4int Sm=S;
@@ -1838,12 +1839,12 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   {
     if(Zm>=-S)                        // Enough charge for K+'s
     {
-      km=-S*mK;                       // Anti-Lambdas are compensated by protons
+      km_value=-S*mK;                 // Anti-Lambdas are compensated by protons
       Zm+=S;
     }
     else if(Zm>0)
     {
-      km=Zm*mK-(S+Zm)*mK0;            // Anti-Lambdas are partially compensated by neutrons
+      km_value=Zm*mK-(S+Zm)*mK0;      // Anti-Lambdas are partially compensated by neutrons
       Zm=0;
       Nm+=S+Zm;
     }
@@ -1976,7 +1977,7 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   }
   A=Z+N;
   if (!A) return k+S*mL+S*eps;              // @@ multy LAMBDA states are not implemented
-  G4double m=k+A*um;                        // Expected mass in atomic units
+  G4double m_value=k+A*um_value;            // Expected mass in atomic units
   //G4double D=N-Z;                         // Isotopic shift of the nucleus
   if ( (A+S < 1 && k==0.) || Z < 0 || N < 0 ) 
   {  // @@ Can be generalized to anti-nuclei
@@ -1988,68 +1989,68 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   }
   if     (!Z) return k+N*(mN+.1)+S*(mL+.1); // @@ n+LAMBDA states are not implemented
   else if(!N) return k+Z*(mP+1.)+S*(mL+.1); // @@ p+LAMBDA states are not implemented
-  //else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];// Geant4 Comp.now
+  //else if(N<=9&&Z<=9) m_value+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];// Geant4 Comp.now
   else 
   {
     //G4double fA=A;
     // IsInTable is inside G4NucleiProperties::GetNuclearMass
     // G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm) creates new Ion!
-    if(A==256 && Z==128) m=256000.;
-    else                 m=k+G4NucleiProperties::GetNuclearMass(A,Z);
+    if(A==256 && Z==128) m_value=256000.;
+    else                 m_value=k+G4NucleiProperties::GetNuclearMass(A,Z);
   }
   //@@//G4double maxM= k+Z*mP+N*mN+S*mL+eps;      // @@ eps -- Wings of the Mass parabola
-  //@@//if(m>maxM) m=maxM;
-  G4double mm=m;
+  //@@//if(m_value>maxM) m_value=maxM;
+  G4double mm_value=m_value;
   if(Sm<0)                                  // For the new algorithm of calculation 
   {
     if(Nm<0)
     {
-      km+=-Nm*mPi;
+      km_value+=-Nm*mPi;
       Zm+=Nm;
       Nm=0;
     }
     if(Zm<0)
     {
-      km+=-Zm*mPi;
+      km_value+=-Zm*mPi;
       Nm+=Zm;
       Zm=0;
     }
     G4int Am=Zm+Nm;
-    if(!Am) return km+eps;
-    mm=km+Am*um;                            // Expected mass in atomic units
+    if(!Am) return km_value+eps;
+    mm_value=km_value+Am*um_value;          // Expected mass in atomic units
     //G4double Dm=Nm-Zm;                    // Isotopic shift of the nucleus
-    if ( (Am < 1 && km==0.) || Zm < 0 || Nm < 0 ) 
+    if ( (Am < 1 && km_value==0.) || Zm < 0 || Nm < 0 ) 
     {   // @@ Can be generalized to anti-nuclei
 #ifdef debug
       G4cerr<<"*G4QPDGCode::CalcNucM:A="<<Am<<"<1 || Z="<<Zm<<"<0 || N="<<Nm<<"<0"<<G4endl;
 #endif
     }
-    if     (!Zm) return km+Nm*(mN+.1);
-    else if(!Nm) return km+Zm*(mP+1.);
-    //else if(Nm<=9&&Zm<=9) mm+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];// Geant4
+    if     (!Zm) return km_value+Nm*(mN+.1);
+    else if(!Nm) return km_value+Zm*(mP+1.);
+    //else if(Nm<=9&&Zm<=9) mm_value+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];// Geant4
     else 
     {
       // IsInTable is inside G4NucleiProperties::GetNuclearMass
       // G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm) creates new Ion!
-      mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
+      mm_value=km_value+G4NucleiProperties::GetNuclearMass(Am,Zm);
     }
-    //@@//G4double mM= km+Zm*mP+Nm*mN+eps;
-    //@@//if(mm>mM) mm=mM;
+    //@@//G4double mM= km_value+Zm*mP+Nm*mN+eps;
+    //@@//if(mm_value>mM) mm_value=mM;
   }
-  if(m>mm) m=mm;
+  if(m_value>mm_value) m_value=mm_value;
   if(S>0)
   {
     G4double bs=0.;
     if     (A==2) bs=a2;
     else if(A==3) bs=a3;
     else if(A>3)  bs=b7*exp(-b8/(A+1.));
-    m+=S*(mL-bs);
+    m_value+=S*(mL-bs);
   }  
 #ifdef debug
-  G4cout<<"G4QPDGCode::CalcNuclMass: >->-> OUT <-<-< m="<<m<<G4endl;
+  G4cout<<"G4QPDGCode::CalcNuclMass: >->-> OUT <-<-< m="<<m_value<<G4endl;
 #endif
-  //if(z==8&&n==9&&!s) G4cout<<"G4QPDGC::GetNucM:m="<<m<<",mm="<<mm<<G4endl;
-  return m;
+  //if(z==8&&n==9&&!s_value) G4cout<<"G4QPDGC::GetNucM:m="<<m_value<<",mm="<<mm_value<<G4endl;
+  return m_value;
 }
 
 // Get a Quark Content {d,u,s,ad,au,as} for the PDG
@@ -2059,7 +2060,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   if(thePDGCode<0) a=1; // anti-particle
   G4int d=0;
   G4int u=0;
-  G4int s=0;
+  G4int s_value=0;
   G4int ad=0;
   G4int au=0;
   G4int as=0;
@@ -2119,7 +2120,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
       else if(f==3)
       {
         if(a) as++;
-        else   s++;
+        else   s_value++;
       }
       else G4cerr<<"*G4QPDGC::GetQCont:1 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       if     (v==1)
@@ -2135,7 +2136,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
       else if(v==3)
       {
         if(a) as++;
-        else   s++;
+        else   s_value++;
       }
       else G4cerr<<"*G4QPDGC::GetQCont:2 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       if     (t==1)
@@ -2151,10 +2152,10 @@ G4QContent G4QPDGCode::GetQuarkContent() const
       else if(t==3)
       {
         if(a) as++;
-        else   s++;
+        else   s_value++;
       }
       else G4cerr<<"*G4QPDGC::GetQCont:3 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
-      return G4QContent(d,u,s,ad,au,as);
+      return G4QContent(d,u,s_value,ad,au,as);
     }
     else        // Mesons
     {
@@ -2194,9 +2195,9 @@ G4QContent G4QPDGCode::GetQuarkContent() const
     G4int dn=0;
     if(szn<-100000)
     {
-      G4int ns=(-szn)/1000000+1;
-      szn+=ns*1000000;
-      ds+=ns;
+      G4int ns_value=(-szn)/1000000+1;
+      szn+=ns_value*1000000;
+      ds+=ns_value;
     }
     else if(szn<-100)
     {
@@ -2223,18 +2224,18 @@ G4QContent G4QPDGCode::GetQuarkContent() const
       z-=1000;
       ds--;
     }
-    s  =sz/1000-ds;
-    G4int b=z+n+s;
+    s_value  =sz/1000-ds;
+    G4int b=z+n+s_value;
     d=n+b;
     u=z+b;
-    if      (d<0&&u<0&&s<0) return G4QContent(0,0,0,-d,-u,-s);
-    else if (u<0&&s<0)      return G4QContent(d,0,0,0,-u,-s);
-    else if (d<0&&s<0)      return G4QContent(0,u,0,-d,0,-s);
-    else if (d<0&&u<0)      return G4QContent(0,0,s,-d,-u,0);
-    else if (u<0)           return G4QContent(d,0,s,0,-u,0);
-    else if (s<0)           return G4QContent(d,u,0,0,0,-s);
-    else if (d<0)           return G4QContent(0,u,s,-d,0,0);
-    else                    return G4QContent(d,u,s,0,0,0);
+    if      (d<0&&u<0&&s_value<0) return G4QContent(0,0,0,-d,-u,-s_value);
+    else if (u<0&&s_value<0)      return G4QContent(d,0,0,0,-u,-s_value);
+    else if (d<0&&s_value<0)      return G4QContent(0,u,0,-d,0,-s_value);
+    else if (d<0&&u<0)            return G4QContent(0,0,s_value,-d,-u,0);
+    else if (u<0)                 return G4QContent(d,0,s_value,0,-u,0);
+    else if (s_value<0)           return G4QContent(d,u,0,0,0,-s_value);
+    else if (d<0)                 return G4QContent(0,u,s_value,-d,0,0);
+    else                          return G4QContent(d,u,s_value,0,0,0);
   }
   return G4QContent(0,0,0,0,0,0);
 }
@@ -2373,13 +2374,13 @@ G4int G4QPDGCode::GetTotNumOfComb(G4int i) const
 }
 
 // Converts nuclear PDGCode to Z(#of protons), N(#of neutrons), S(#of lambdas) values
-void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
+void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s_value)
 {
   if(nucPDG>80000000&&nucPDG<100000000)            // Condition of conversion
   {
     z=0;
     n=0;
-    s=0;
+    s_value=0;
     G4int r=nucPDG;
     if(r==90000000) return;
     G4int cn =r%1000;                              // candidate to #of neutrons
@@ -2402,7 +2403,7 @@ void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
     if(cs)
     {
       if(cs>5000000) cs-=10000000;                 // AntiLambda
-      s=cs/1000000;                                // Number of Lambdas
+      s_value=cs/1000000;                          // Number of Lambdas
     }
   }
   return;

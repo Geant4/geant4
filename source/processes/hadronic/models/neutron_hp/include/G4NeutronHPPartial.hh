@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.13 2007-06-18 20:56:05 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 070618 Comment out unused private member leaking by T. Koi
 //
 #ifndef G4NeutronHPPartial_h
 #define G4NeutronHPPartial_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4NeutronHPVector.hh"
@@ -74,9 +75,9 @@ class G4NeutronHPPartial
     for( i=0; i<nData; i++)
     {
       aDataFile >> e;
-      e *= eV;
+      e *= CLHEP::eV;
       SetX(i,e);
-      InitData(i, aDataFile, eV); // energy and probability for gammas
+      InitData(i, aDataFile, CLHEP::eV); // energy and probability for gammas
     }  
   }
   

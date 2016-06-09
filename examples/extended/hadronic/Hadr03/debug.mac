@@ -1,0 +1,16 @@
+
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 2
+#
+/testhadr/det/setMat Molybdenum98 
+/testhadr/det/setSize 1 m
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 10 MeV
+#
+/control/execute vis.mac
+#
+/run/beamOn 1

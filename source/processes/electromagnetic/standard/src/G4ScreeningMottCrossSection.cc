@@ -33,7 +33,11 @@
 // Author:      Cristina Consolandi
 //
 // Creation date: 20.10.2011  
-//                                 
+//
+// Modifications:
+// 27-05-2012 Added Analytic Fitting to the Mott Cross Section by means of G4MottCoefficients class.
+//
+//
 // Class Description:
 //	Computation of electron Coulomb Scattering Cross Section.
 //	Suitable for high energy electrons and light target materials. 
@@ -43,10 +47,14 @@
 //     "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
 //      Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
 //      (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
-//
+//	Available at: http://arxiv.org/abs/1111.4042v4
 //
 //      1) Mott Differential Cross Section Approximation:  
-//      W. A. McKinley and H. Fashbach, Phys. Rev. 74, (1948) 1759.
+//	   For Target material up to Z=92 (U):
+//         As described in http://arxiv.org/abs/1111.4042v4 
+//         par. 2.1 , eq. (16)-(17)
+//         Else (Z>92):
+//	   W. A. McKinley and H. Fashbach, Phys. Rev. 74, (1948) 1759.
 //      2) Screening coefficient: 
 //      vomn G. Moliere, Z. Naturforsh A2 (1947), 133-145; A3 (1948), 78.
 //      3) Nuclear Form Factor: 
@@ -57,6 +65,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ScreeningMottCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4MottCoefficients.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
@@ -94,6 +105,15 @@ G4ScreeningMottCrossSection::G4ScreeningMottCrossSection():
 	cosTetMinNuc=0;
         cosTetMaxNuc=0;
 
+	for(G4int i=0 ; i<5; i++){
+		for(G4int j=0; j< 6; j++){
+			coeffb[i][j]=0;
+		}
+	}
+
+
+
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -123,9 +143,9 @@ void G4ScreeningMottCrossSection::SetScreeningCoefficient(){
         G4double twoR2=aU*aU;
 
         G4double factor= 1.13 + 3.76*targetZ*targetZ*invbeta2*alpha2;
-        As=(htc2)/(twoR2*mom2)*factor;
+        As=0.25*(htc2)/(twoR2*mom2)*factor;
 
-        As/=4.;
+
 
 
 //cout<<"0k .........................As  "<<As<<endl;
@@ -139,8 +159,10 @@ G4double G4ScreeningMottCrossSection::GetScreeningAngle(){
                 SetScreeningCoefficient();
 
 		//cout<<" As "<<As<<endl;
+                if(As < 0.0) { As = 0.0; }
+                else if(As > 1.0) { As = 1.0; }
 
-                G4double screenangle=2.*sqrt(As);
+                G4double screenangle=2.*asin(sqrt(As));
 
 	//	cout<<"  screenangle  "<<  screenangle <<endl;
 	
@@ -159,11 +181,14 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
         	G4int iz = G4int(Z);
                 G4double A = fNistManager->GetAtomicMassAmu(iz);
         	G4int ia = G4int(A);
-       	 	G4double m2 = G4NucleiProperties::GetNuclearMass(ia, iz);
+       	 	G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
                 targetZ = Z;
 		targetA = fNistManager->GetAtomicMassAmu(iz);
-		targetMass= m2;
+		targetMass= mass2;
+
+ 		mottcoeff->SetMottCoeff(targetZ, coeffb);
+
 	//cout<<"......... targetA "<< targetA <<endl;
 	//cout<<"......... targetMass "<< targetMass/MeV <<endl;
 
@@ -181,9 +206,9 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
         // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
         
 		//incident particle & target nucleus
-	        G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-                 mu_rel=mass*m2/Ecm;
-                G4double momCM= ptot*m2/Ecm;
+	        G4double Ecm=sqrt(m12 + mass2*mass2 + 2.0*etot*mass2);
+                 mu_rel=mass*mass2/Ecm;
+                G4double momCM= ptot*mass2/Ecm;
                 // relative system
                 mom2 = momCM*momCM;
                 invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
@@ -198,17 +223,17 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
                //.........................................................
 
 
-		G4double screenangle=GetScreeningAngle();
-
+		G4double screenangle=GetScreeningAngle()/10.;
 		//cout<<" screenangle [rad] "<<screenangle/rad <<endl;
 
-                cosTetMinNuc =min(cosThetaMin ,std::cos(screenangle)) ;
-                cosTetMaxNuc = cosThetaMax;
+                cosTetMinNuc =min( cosThetaMin ,cos(screenangle));
+                cosTetMaxNuc =cosThetaMax;
 	
 //cout<<"ok..............mu_rel "<<mu_rel<<endl;
 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4ScreeningMottCrossSection::FormFactor2ExpHof(G4double angle){
 
 
@@ -244,8 +269,35 @@ G4double G4ScreeningMottCrossSection::McFcorrection(G4double angle ){
 
 return R;
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4double G4ScreeningMottCrossSection::RatioMottRutherford(G4double angle){
 
 
+        G4double R=0;
+        G4double fcost=std::sqrt((1. -cos(angle)));
+        G4double a[5];
+        G4double shift=0.7181228;
+        G4double beta0= beta -shift;
+
+	      for(G4int j=0 ;j<=4;j++){
+        	a[j]=0;
+        	}
+
+   		for(G4int j=0 ;j<=4;j++){
+ 			for(G4int k=0;k<=5;k++ ){  
+				a[j]+=coeffb[j][k]*pow(beta0,k);
+                	}
+        	}
+
+	for(G4int j=0 ;j<=4 ;j++){
+                R+=a[j]* pow(fcost,j);
+                }
+
+
+
+return R;
+
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4ScreeningMottCrossSection::NuclearCrossSection()
@@ -256,6 +308,12 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
 
         G4double anglemin =std::acos(cosTetMinNuc);
         G4double anglemax =std::acos(cosTetMaxNuc); 
+
+        const G4double limit = 1.e-9;
+        if(anglemin < limit) {
+	  anglemin = GetScreeningAngle()/10.;
+          if(anglemin < limit) { anglemin = limit; }
+        }
 
 	//cout<<" anglemin  "<< anglemin <<endl;
 
@@ -271,7 +329,7 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
         vector<G4double> dangle;
         vector<G4double> cross;
 
-              for(G4int i=0; i<bins; i++ ){
+              for(G4int i=0; i<=bins; i++ ){
                      tet.push_back(0);
                      dangle.push_back(0);
                      angle.push_back(pow(10.,loganglemin+logdangle*i));
@@ -293,15 +351,27 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
 			}
 
 
-               		G4double R=McFcorrection(tet[i]);
+               		G4double R=0;
                         G4double F2=FormFactor2ExpHof(tet[i]);
+			
+			if (coeffb[0][0]!=0){
+			//cout<<" Mott....targetZ "<< targetZ<<endl;	
+			R=RatioMottRutherford(tet[i]);
+			}
+
+			else if (coeffb[0][0]==0){
+                       // cout<<" McF.... targetZ "<< targetZ<<endl;
+			R=McFcorrection(tet[i]);
+			}
+
+
 //cout<<"----------------- R "<<R<<" F2 "<<F2<<endl;
 
 
 //                cout<<"angle "<<tet[i] << " F2 "<<F2<<endl;
 
       			G4double e4=e2*e2;
-       			G4double den=2.*As+1.-std::cos(angle[i]);
+       			G4double den=2.*As+2.*pow(sin(tet[i]/2.),2.);
         		G4double func=1./(den*den);
 
         		G4double fatt= targetZ/(mu_rel*gamma*beta*beta);
@@ -328,8 +398,20 @@ G4double G4ScreeningMottCrossSection::AngleDistribution(G4double anglein){
         G4double fatt2=fatt*fatt;
 	total/=fatt2;
 
-	G4double y=2.*pi*sin(anglein)*McFcorrection(anglein)*FormFactor2ExpHof(anglein)/
-				((2*As+1-cos(anglein))*(2.*As+1-cos(anglein)));
+	G4double R=0;
+		 if (coeffb[0][0]!=0){
+                     //   cout<<" Mott....targetZ "<< targetZ<<endl;      
+                        R=RatioMottRutherford(anglein);
+                        }
+
+                 else if (coeffb[0][0]==0){
+                       // cout<<" McF.... targetZ "<< targetZ<<endl;
+                        R=McFcorrection(anglein);
+                        }
+
+
+	G4double y=2.*pi*sin(anglein)*R*FormFactor2ExpHof(anglein)/
+				((2*As+2.*pow(sin(anglein/2.),2.))*(2.*As+2.*pow(sin(anglein/2.),2.) ));
 
 return y/total;
 
@@ -345,8 +427,15 @@ G4double G4ScreeningMottCrossSection::GetScatteringAngle()
 
   	if(cosTetMaxNuc >= cosTetMinNuc) return 0.0;
 
-	G4double anglemin= std::acos(cosTetMinNuc);	
-	G4double anglemax= std::acos(cosTetMaxNuc);;	
+	G4double anglemin=std::acos(cosTetMinNuc);	
+	G4double anglemax= std::acos(cosTetMaxNuc);
+
+        const G4double limit = 1.e-9;
+        if(anglemin < limit) {
+	  anglemin = GetScreeningAngle()/10.;
+          if(anglemin < limit) { anglemin = limit; }
+        }
+
 //	cout<<"................ tkinLab  "<< G4BestUnit(tkinLab,"Energy") << " anglemin=  "<<anglemin<<endl;
 	//cout<<"anglemax=  "<<anglemax<<endl;
 	G4double r =G4UniformRand();
@@ -361,7 +450,7 @@ G4double G4ScreeningMottCrossSection::GetScatteringAngle()
         std::vector<G4double> tet;
         std::vector<G4double> dangle;
 
-              for(G4int i=0; i<bins; i++ ){
+              for(G4int i=0; i<=bins; i++ ){
                      tet.push_back(0);
                      dangle.push_back(0);
                      angle.push_back(pow(10.,loganglemin+logdangle*i));
@@ -421,9 +510,9 @@ G4ThreeVector dir(0.0,0.0,1.0);
 
 	//.......set Trc
 	G4double etot=tkinLab+mass;
-	G4double m2=targetMass;
-	Trec=(1.0 - cost)* m2*(etot*etot - mass*mass )/
-                              (mass*mass + m2*m2+ 2.*m2*etot);
+	G4double mass2=targetMass;
+	Trec=(1.0 - cost)* mass2*(etot*etot - mass*mass )/
+                              (mass*mass + mass2*mass2+ 2.*mass2*etot);
         
 
 

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMoleculeEncounterStepper.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -65,7 +66,8 @@ public:
     G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
     G4IT_ADD_CLONE(G4VITTimeStepper,G4DNAMoleculeEncounterStepper)
 
-    virtual void PrepareForAllProcessors();
+    virtual void Prepare();
+//    virtual void PrepareForAllProcessors();
     virtual G4double CalculateStep(const G4Track&, const G4double&);
 
     inline void SetReactionModel(G4VDNAReactionModel*);

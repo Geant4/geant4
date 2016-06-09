@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaRayTelHadronPhysics.hh,v 1.5 2010-11-11 17:25:01 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 

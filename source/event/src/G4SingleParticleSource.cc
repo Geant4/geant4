@@ -44,10 +44,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
+#include <cmath>
+
+#include "G4SingleParticleSource.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
 #include "Randomize.hh"
-#include <cmath>
 #include "G4ParticleTable.hh"
 #include "G4Geantino.hh"
 #include "G4ParticleDefinition.hh"
@@ -55,7 +59,6 @@
 #include "G4Ions.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
-#include "G4SingleParticleSource.hh"
 
 G4SingleParticleSource::G4SingleParticleSource() {
 	// Initialise all variables

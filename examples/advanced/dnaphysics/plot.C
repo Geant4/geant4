@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.5 2010/10/06 14:39:41 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -18,36 +18,37 @@ c1.Divide(2,1);
 
 TFile f("dna.root"); 
 
-TNtuple* ntuple0;
-ntuple0 = (TNtuple*)f->Get("ntuple0"); 
+TNtuple* ntuple;
+ntuple = (TNtuple*)f->Get("ntuple"); 
      
 c1.cd(1);
   gStyle->SetOptStat(000000);
   
   // All
-  ntuple0->Draw("flagProcess","");
-  ntuple0->SetFillColor(2);
-  
+  ntuple->Draw("flagProcess","","B");
+  ntuple->SetFillColor(2);
+
   // Excitation
-  ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30","same");
-  ntuple0->SetFillColor(3);
+  ntuple->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==16||flagProcess==19||flagProcess==22||flagProcess==25||flagProcess==29","Bsame");
+  ntuple->SetFillColor(3);
   
   // Elastic
-  ntuple0->Draw("flagProcess","flagProcess==11","same");
-  ntuple0->SetFillColor(4);
+  ntuple->Draw("flagProcess","flagProcess==11","Bsame");
+  ntuple->SetFillColor(4);
   
   // Ionisation
-  ntuple0->Draw("flagProcess","flagProcess==13||flagProcess==18||flagProcess==21||flagProcess==24||flagProcess==27||flagProcess==31||flagProcess==33||flagProcess==34","same");
-  ntuple0->SetFillColor(5);
+  ntuple->Draw("flagProcess","flagProcess==13||flagProcess==17||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30","Bsame");
+  ntuple->SetFillColor(5);
   
   // Charge decrease
-  ntuple0->Draw("flagProcess","flagProcess==19||flagProcess==25||flagProcess==28","same");
-  ntuple0->SetFillColor(6);
+  ntuple->Draw("flagProcess","flagProcess==18||flagProcess==24||flagProcess==27","Bsame");
+  ntuple->SetFillColor(6);
   
   // Charge increase
-  ntuple0->Draw("flagProcess","flagProcess==22||flagProcess==29||flagProcess==32","same");
+  ntuple->Draw("flagProcess","flagProcess==21||flagProcess==28||flagProcess==31","Bsame");
   
   gPad->SetLogy();
+  
 /*
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);
@@ -62,12 +63,13 @@ c1.cd(1);
 */
 
 c1.cd(2);
-  ntuple0->SetMarkerColor(2);
-  ntuple0->Draw("x:y:z/1000","flagParticle==1");
+  ntuple->SetMarkerColor(2);
+  ntuple->Draw("x:y:z/1000","flagParticle==1");
 
-  ntuple0->SetMarkerColor(4);
-  ntuple0->SetMarkerSize(4);
-  ntuple0->Draw("x:y:z/1000","flagParticle==4 || flagParticle==5 || flagParticle==6","same");
+  ntuple->SetMarkerColor(4);
+  ntuple->SetMarkerSize(4);
+  ntuple->Draw("x:y:z/1000","flagParticle==4 || flagParticle==5 || flagParticle==6","same");
+
 /*
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);

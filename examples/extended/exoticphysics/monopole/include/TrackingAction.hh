@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,14 +43,17 @@ class RunAction;
 
 class TrackingAction : public G4UserTrackingAction {
 
-  public:  
-    TrackingAction(RunAction*);
-   ~TrackingAction() {};
+public:  
+
+  TrackingAction(RunAction*);
+  ~TrackingAction();
    
-    void PostUserTrackingAction(const G4Track*);
+  void PostUserTrackingAction(const G4Track*);
     
-  private:
-    RunAction* runAction;    
+private:
+
+
+  RunAction* fRunAction;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

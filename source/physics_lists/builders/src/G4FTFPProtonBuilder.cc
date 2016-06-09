@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPProtonBuilder.cc,v 1.8 2010-11-18 14:52:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,11 +39,11 @@
 //----------------------------------------------------------------------------
 //
 #include "G4FTFPProtonBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
+#include "G4BGGNucleonInelasticXS.hh"
 
 G4FTFPProtonBuilder::
 G4FTFPProtonBuilder(G4bool quasiElastic) 
@@ -57,9 +56,8 @@ G4FTFPProtonBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface;
   thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -80,8 +78,8 @@ Build(G4ProtonInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-   aP->AddDataSet(new G4CrossSectionPairGG(
-   		new G4ProtonInelasticCrossSection(), 91*GeV));  
+    
+    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
 }
 
 G4FTFPProtonBuilder::
@@ -92,7 +90,7 @@ G4FTFPProtonBuilder::
   delete theModel;
   delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theHandler;
+  //delete theHandler;
   delete theLund;
 }
 

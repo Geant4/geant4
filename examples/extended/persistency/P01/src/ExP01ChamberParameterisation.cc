@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/ExP01ChamberParameterisation.cc
+/// \brief Implementation of the ExP01ChamberParameterisation class
 //
-// $Id: ExP01ChamberParameterisation.cc,v 1.2 2006-06-29 17:39:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +57,8 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {
-       G4Exception("ExP01ChamberParameterisation construction: Width>Spacing");
+        G4cout << "ExP01ChamberParameterisation construction: Width>Spacing" << G4endl;
+        exit(1);;
       }
    }
    

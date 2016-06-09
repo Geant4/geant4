@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmHisto.hh
+/// \brief Definition of the exrdmHisto class
+//
 
 #ifndef exrdmHisto_h
 #define exrdmHisto_h 1
@@ -66,84 +69,84 @@ public:
 
   ~exrdmHisto();
 
-  void book();
+  void Book();
   // Book predefined histogramms 
 
-  void save();
+  void Save();
   // Save histogramms to file
 
-  void add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
+  void Add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
                                                G4double x2=1., G4double u=1.);
   // In this method histogramms are predefined
 
-  void setHisto1D(G4int, G4int, G4double, G4double, G4double);
-  // It change bins and boundaries
+  void SetHisto1D(G4int, G4int, G4double, G4double, G4double);
+  // It change fBins and boundaries
 
-  void fillHisto(G4int, G4double, G4double);
+  void FillHisto(G4int, G4double, G4double);
   // exrdmHistogramms are filled
 
-  void scaleHisto(G4int, G4double);
+  void ScaleHisto(G4int, G4double);
 
-  void addTuple(const G4String&, const G4String&, const G4String&);
-  // In this method nTuple is booked
+  void AddTuple(const G4String&, const G4String&, const G4String&);
+  // In this method fNTuple is booked
 
-  void fillTuple(G4int, const G4String&, G4double);
-  // Fill nTuple parameter with a double
+  void FillTuple(G4int, const G4String&, G4double);
+  // Fill fNTuple parameter with a double
 
-  void fillTuple(G4int, G4int, G4double);
-  // Fill nTuple at a given col with a double
-  void fillTuple(G4int, const G4String&, G4String&);
-  // Fill nTuple parameter with a string
+  void FillTuple(G4int, G4int, G4double);
+  // Fill fNTuple at a given col with a double
+  void FillTuple(G4int, const G4String&, G4String&);
+  // Fill fNTuple parameter with a string
 
-  void fillTuple(G4int, const G4String&, G4bool);
-  // Fill nTuple parameter with a bool
+  void FillTuple(G4int, const G4String&, G4bool);
+  // Fill fNTuple parameter with a bool
 
-  void addRow(G4int);
+  void AddRow(G4int);
   // Save tuple event 
 
-  void setFileName(const G4String&);
-  const G4String& getFileName() const;  
+  void SetFileName(const G4String&);
+  const G4String& GetFileName() const;  
 
-  void setFileType(const G4String&);
+  void SetFileType(const G4String&);
   const G4String& FileType() const;
 
 private:
 
-  G4String histName;
-  G4String histType;
+  G4String fHistName;
+  G4String fHistType;
 
-  G4int    nHisto;
-  G4int    nTuple;
-  G4int    verbose;
-  G4int    defaultAct;
+  G4int    fNHisto;
+  G4int    fNTuple;
+  G4int    fVerbose;
+  G4int    fDefaultAct;
 #ifdef G4ANALYSIS_USE
-  std::vector<AIDA::IHistogram1D*> histo;
-  std::vector<AIDA::ITuple*>   ntup;
-  AIDA::IAnalysisFactory* aida;
-  AIDA::ITree*    tree;
+  std::vector<AIDA::IHistogram1D*> fHisto;
+  std::vector<AIDA::ITuple*>   fNtup;
+  AIDA::IAnalysisFactory* fAida;
+  AIDA::ITree*    fTree;
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
-  TFile* hfileROOT; 
-  std::vector<TH1D*> ROOThisto;
-  std::vector<TNtuple*>   ROOTntup;
-  std::vector< std::vector<float> > Rarray;
-  std::vector<G4int> Rcol;
+  TFile* fHfileROOT; 
+  std::vector<TH1D*> fROOThisto;
+  std::vector<TNtuple*>   fROOTntup;
+  std::vector< std::vector<float> > fRarray;
+  std::vector<G4int> fRcol;
 #endif
 
-  exrdmHistoMessenger* messenger;
+  exrdmHistoMessenger* fMessenger;
 
-  std::vector<G4int>     active;
-  std::vector<G4int>     bins;
-  std::vector<G4double>  xmin;
-  std::vector<G4double>  xmax;
-  std::vector<G4double>  unit;
-  std::vector<G4String>  ids;
-  std::vector<G4String>  titles;
-  std::vector<G4String>  tupleName;
-  std::vector<G4String>  tupleId;
-  std::vector<G4String>  tupleList;
-  std::vector<G4String>  tupleListROOT; 
+  std::vector<G4int>     fActive;
+  std::vector<G4int>     fBins;
+  std::vector<G4double>  fXmin;
+  std::vector<G4double>  fXmax;
+  std::vector<G4double>  fUnit;
+  std::vector<G4String>  fIds;
+  std::vector<G4String>  fTitles;
+  std::vector<G4String>  fTupleName;
+  std::vector<G4String>  fTupleId;
+  std::vector<G4String>  fTupleList;
+  std::vector<G4String>  fTupleListROOT; 
 };
 
 #endif

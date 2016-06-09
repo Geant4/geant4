@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTableEntry.hh,v 1.6 2006-06-29 18:12:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:
@@ -57,7 +56,7 @@ class G3MedTableEntry
     virtual ~G3MedTableEntry();
     
     // operators
-    const G3MedTableEntry& operator=(const G3MedTableEntry& right);
+    G3MedTableEntry& operator=(const G3MedTableEntry& right);
     G4int operator==(const G3MedTableEntry& right) const;
     G4int operator!=(const G3MedTableEntry& right) const;
 

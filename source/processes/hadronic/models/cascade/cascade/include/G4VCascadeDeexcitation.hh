@@ -25,8 +25,7 @@
 //
 #ifndef G4VCASCADE_DEEXCITATION_HH
 #define G4VCASCADE_DEEXCITATION_HH
-// $Id: G4VCascadeDeexcitation.hh,v 1.2 2010-12-15 07:40:06 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Base class to define a common interface for post-cascade processing.
 

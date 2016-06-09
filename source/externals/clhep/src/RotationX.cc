@@ -28,19 +28,19 @@ static inline double safe_acos (double x) {
   return ( (x>0) ? 0 : CLHEP::pi );
 }
 
-HepRotationX::HepRotationX(double delta) : 
-		d(proper(delta)), s(std::sin(delta)), c(std::cos(delta))
+HepRotationX::HepRotationX(double ddelta) : 
+		its_d(proper(ddelta)), its_s(std::sin(ddelta)), its_c(std::cos(ddelta))
 {}
 
-HepRotationX & HepRotationX::set ( double delta ) {
-  d = proper(delta);
-  s = std::sin(d);
-  c = std::cos(d);
+HepRotationX & HepRotationX::set ( double ddelta ) {
+  its_d = proper(ddelta);
+  its_s = std::sin(its_d);
+  its_c = std::cos(its_d);
   return *this;
 }
 
 double  HepRotationX::phi() const {
-  if ( (d > 0) && (d < CLHEP::pi) ) {
+  if ( (its_d > 0) && (its_d < CLHEP::pi) ) {
     return CLHEP::pi;
   } else {
     return 0.0;
@@ -48,11 +48,11 @@ double  HepRotationX::phi() const {
 }  // HepRotationX::phi()
 
 double  HepRotationX::theta() const {
-  return  std::fabs( d );
+  return  std::fabs( its_d );
 }  // HepRotationX::theta()
 
 double  HepRotationX::psi() const {
-  if ( (d > 0) && (d < CLHEP::pi) ) {
+  if ( (its_d > 0) && (its_d < CLHEP::pi) ) {
     return CLHEP::pi;
   } else {
     return 0.0;
@@ -78,12 +78,12 @@ double HepRotationX::phiX() const {
 
 double HepRotationX::phiY() const {
   return (yy() == 0.0 && xy() == 0.0) ? 0.0 : std::atan2(yy(),xy());
-		// or ----  return (yy() == 0.0) ? 0.0 : atan2(yy(),xy());
+		// or ----  return (yy() == 0.0) ? 0.0 : std::atan2(yy(),xy());
 }
 
 double HepRotationX::phiZ() const {
   return (yz() == 0.0 && xz() == 0.0) ? 0.0 : std::atan2(yz(),xz());
-		// or ----  return (yz() == 0.0) ? 0.0 : atan2(yz(),xz());
+		// or ----  return (yz() == 0.0) ? 0.0 : std::atan2(yz(),xz());
 }
 
 double HepRotationX::thetaX() const {
@@ -100,8 +100,8 @@ double HepRotationX::thetaZ() const {
 		// or ---- return d;
 }
 
-void HepRotationX::setDelta ( double delta ) {
-  set(delta);
+void HepRotationX::setDelta ( double ddelta ) {
+  set(ddelta);
 }
 
 void HepRotationX::decompose
@@ -129,7 +129,7 @@ void HepRotationX::decompose
 }
 
 double HepRotationX::distance2( const HepRotationX & r  ) const {
-  double answer = 2.0 * ( 1.0 - ( s * r.s + c * r.c ) ) ;
+  double answer = 2.0 * ( 1.0 - ( its_s * r.its_s + its_c * r.its_c ) ) ;
   return (answer >= 0) ? answer : 0;
 }
 
@@ -183,12 +183,12 @@ bool HepRotationX::isNear( const HepLorentzRotation & lt,
 }
 
 double HepRotationX::norm2() const {
-  return 2.0 - 2.0 * c;
+  return 2.0 - 2.0 * its_c;
 }
 
 std::ostream & HepRotationX::print( std::ostream & os ) const {
-  os << "\nRotation about X (" << d << 
-		") [cos d = " << c << " sin d = " << s << "]\n";
+  os << "\nRotation about X (" << its_d << 
+		") [cos d = " << its_c << " sin d = " << its_s << "]\n";
   return os;
 }
 

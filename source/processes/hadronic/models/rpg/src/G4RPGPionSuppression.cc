@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPionSuppression.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
-#include "G4RPGPionSuppression.hh"
-#include "Randomize.hh"
 #include <iostream>
-#include "G4HadReentrentException.hh"
 #include <signal.h>
 
+#include "G4RPGPionSuppression.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4HadReentrentException.hh"
 
 G4RPGPionSuppression::G4RPGPionSuppression()
   : G4RPGReaction() {}

@@ -11,17 +11,17 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
-            -I$(G4INSTALL)/source/global/HEPGeometry/include \
-            -I$(G4INSTALL)/source/digits_hits/hits/include \
-            -I$(G4INSTALL)/source/digits_hits/digits/include \
-            -I$(G4INSTALL)/source/particles/management/include \
-            -I$(G4INSTALL)/source/run/include \
-            -I$(G4INSTALL)/source/event/include \
-            -I$(G4INSTALL)/source/track/include \
-            -I$(G4INSTALL)/source/tracking/include \
-            -I$(G4INSTALL)/source/intercoms/include \
-            -I$(G4INSTALL)/source/geometry/management/include
+CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/digits_hits/hits/include \
+            -I$(G4BASE)/digits_hits/digits/include \
+            -I$(G4BASE)/particles/management/include \
+            -I$(G4BASE)/run/include \
+            -I$(G4BASE)/event/include \
+            -I$(G4BASE)/track/include \
+            -I$(G4BASE)/tracking/include \
+            -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/geometry/management/include
 
 include $(G4INSTALL)/config/common.gmk
 

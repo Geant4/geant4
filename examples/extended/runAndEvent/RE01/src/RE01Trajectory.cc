@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01Trajectory.cc
+/// \brief Implementation of the RE01Trajectory class
 //
-// $Id: RE01Trajectory.cc,v 1.5 2010-11-08 22:16:28 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// $Id$
+//
 
 #include "RE01Trajectory.hh"
 #include "G4ParticleTable.hh"
@@ -48,40 +49,25 @@
 
 G4Allocator<RE01Trajectory> myTrajectoryAllocator;
 
-RE01Trajectory::RE01Trajectory()
-:G4VTrajectory()
-{
-   fpParticleDefinition = 0;
-   ParticleName = "";
-   PDGCharge = 0;
-   PDGEncoding = 0;
-   fTrackID = 0;
-   fParentID = 0;
-   fTrackStatus = 0;
-   positionRecord = 0;
-   momentum = G4ThreeVector(0.,0.,0.);
-   vertexPosition = G4ThreeVector(0.,0.,0.);
-   globalTime = 0.;
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01Trajectory::RE01Trajectory(const G4Track* aTrack)
 :G4VTrajectory()
 {
-   fpParticleDefinition = aTrack->GetDefinition();
-   ParticleName = fpParticleDefinition->GetParticleName();
-   PDGCharge = fpParticleDefinition->GetPDGCharge();
-   PDGEncoding = fpParticleDefinition->GetPDGEncoding();
-   if(ParticleName=="unknown")
+   fParticleDefinition = aTrack->GetDefinition();
+   fParticleName = fParticleDefinition->GetParticleName();
+   fPDGCharge = fParticleDefinition->GetPDGCharge();
+   fPDGEncoding = fParticleDefinition->GetPDGEncoding();
+   if(fParticleName=="unknown")
    {
      G4PrimaryParticle*pp = aTrack->GetDynamicParticle()->GetPrimaryParticle();
      if(pp)
      {
-       if(pp->GetCharge()<DBL_MAX) PDGCharge = pp->GetCharge();
-       PDGEncoding = pp->GetPDGcode();
+       if(pp->GetCharge()<DBL_MAX) fPDGCharge = pp->GetCharge();
+       fPDGEncoding = pp->GetPDGcode();
        if(pp->GetG4code()!=0)
        {
-         ParticleName += " : ";
-         ParticleName += pp->GetG4code()->GetParticleName();
+         fParticleName += " : ";
+         fParticleName += pp->GetG4code()->GetParticleName();
        }
      }
    }
@@ -95,65 +81,48 @@ RE01Trajectory::RE01Trajectory(const G4Track* aTrack)
    { fParentID = trackInfo->GetSourceTrackID(); }
    else
    { fParentID = -1; }
-   positionRecord = new RE01TrajectoryPointContainer();
-   positionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
-   momentum = aTrack->GetMomentum();
-   vertexPosition = aTrack->GetPosition();
-   globalTime = aTrack->GetGlobalTime();
+   fPositionRecord = new RE01TrajectoryPointContainer();
+   fPositionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
+   fMomentum = aTrack->GetMomentum();
+   fVertexPosition = aTrack->GetPosition();
+   fGlobalTime = aTrack->GetGlobalTime();
 }
 
-RE01Trajectory::RE01Trajectory(RE01Trajectory & right)
-:G4VTrajectory()
-{
-  ParticleName = right.ParticleName;
-  fpParticleDefinition = right.fpParticleDefinition;
-  PDGCharge = right.PDGCharge;
-  PDGEncoding = right.PDGEncoding;
-  fTrackID = right.fTrackID;
-  fParentID = right.fParentID;
-  fTrackStatus = right.fTrackStatus;
-  positionRecord = new RE01TrajectoryPointContainer();
-  for(size_t i=0;i<right.positionRecord->size();i++)
-  {
-    G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
-    positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
-  }
-   momentum = right.momentum;
-   vertexPosition = right.vertexPosition;
-   globalTime = right.globalTime;
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01Trajectory::~RE01Trajectory()
 {
   size_t i;
-  for(i=0;i<positionRecord->size();i++){
-    delete  (*positionRecord)[i];
+  for(i=0;i<fPositionRecord->size();i++){
+    delete  (*fPositionRecord)[i];
   }
-  positionRecord->clear();
+  fPositionRecord->clear();
 
-  delete positionRecord;
+  delete fPositionRecord;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01Trajectory::ShowTrajectory(std::ostream& os) const
 {
    os << G4endl << "TrackID =" << fTrackID 
         << " : ParentID=" << fParentID << " : TrackStatus=" << fTrackStatus << G4endl;
-   os << "Particle name : " << ParticleName << "  PDG code : " << PDGEncoding
-        << "  Charge : " << PDGCharge << G4endl;
+   os << "Particle name : " << fParticleName << "  PDG code : " << fPDGEncoding
+        << "  Charge : " << fPDGCharge << G4endl;
    os << "Original momentum : " <<
-        G4BestUnit(momentum,"Energy") << G4endl;
-   os << "Vertex : " << G4BestUnit(vertexPosition,"Length")
-        << "  Global time : " << G4BestUnit(globalTime,"Time") << G4endl;
-   os << "  Current trajectory has " << positionRecord->size() 
+        G4BestUnit(fMomentum,"Energy") << G4endl;
+   os << "Vertex : " << G4BestUnit(fVertexPosition,"Length")
+        << "  Global time : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
+   os << "  Current trajectory has " << fPositionRecord->size() 
         << " points." << G4endl;
 
-   for( size_t i=0 ; i < positionRecord->size() ; i++){
-       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
+   for( size_t i=0 ; i < fPositionRecord->size() ; i++){
+       G4TrajectoryPoint* aTrajectoryPoint = 
+         (G4TrajectoryPoint*)((*fPositionRecord)[i]);
        os << "Point[" << i << "]" 
             << " Position= " << aTrajectoryPoint->GetPosition() << G4endl;
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01Trajectory::DrawTrajectory(G4int /*i_mode*/) const
 {
 
@@ -161,31 +130,32 @@ void RE01Trajectory::DrawTrajectory(G4int /*i_mode*/) const
    G4ThreeVector pos;
 
    G4Polyline pPolyline;
-   for (size_t i = 0; i < positionRecord->size() ; i++) {
-     G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
+   for (size_t i = 0; i < fPositionRecord->size() ; i++) {
+     G4TrajectoryPoint* aTrajectoryPoint = 
+       (G4TrajectoryPoint*)((*fPositionRecord)[i]);
      pos = aTrajectoryPoint->GetPosition();
      pPolyline.push_back( pos );
    }
 
    G4Colour colour(0.2,0.2,0.2);
-   if(fpParticleDefinition==G4Gamma::GammaDefinition())
+   if(fParticleDefinition==G4Gamma::GammaDefinition())
       colour = G4Colour(0.,0.,1.);
-   else if(fpParticleDefinition==G4Electron::ElectronDefinition()
-         ||fpParticleDefinition==G4Positron::PositronDefinition())
+   else if(fParticleDefinition==G4Electron::ElectronDefinition()
+         ||fParticleDefinition==G4Positron::PositronDefinition())
       colour = G4Colour(1.,1.,0.);
-   else if(fpParticleDefinition==G4MuonMinus::MuonMinusDefinition()
-         ||fpParticleDefinition==G4MuonPlus::MuonPlusDefinition())
+   else if(fParticleDefinition==G4MuonMinus::MuonMinusDefinition()
+         ||fParticleDefinition==G4MuonPlus::MuonPlusDefinition())
       colour = G4Colour(0.,1.,0.);
-   else if(fpParticleDefinition->GetParticleType()=="meson")
+   else if(fParticleDefinition->GetParticleType()=="meson")
    {
-      if(PDGCharge!=0.)
+      if(fPDGCharge!=0.)
          colour = G4Colour(1.,0.,0.);
       else
          colour = G4Colour(0.5,0.,0.);
    }
-   else if(fpParticleDefinition->GetParticleType()=="baryon")
+   else if(fParticleDefinition->GetParticleType()=="baryon")
    {
-      if(PDGCharge!=0.)
+      if(fPDGCharge!=0.)
          colour = G4Colour(0.,1.,1.);
       else
          colour = G4Colour(0.,0.5,0.5);
@@ -196,6 +166,7 @@ void RE01Trajectory::DrawTrajectory(G4int /*i_mode*/) const
    if(pVVisManager) pVVisManager->Draw(pPolyline);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 const std::map<G4String,G4AttDef>* RE01Trajectory::GetAttDefs() const
 {
   G4bool isNew;
@@ -203,44 +174,45 @@ const std::map<G4String,G4AttDef>* RE01Trajectory::GetAttDefs() const
     = G4AttDefStore::GetInstance("RE01Trajectory",isNew);
   if (isNew) {
 
-    G4String ID("ID");
-    (*store)[ID] = G4AttDef(ID,"Track ID","Bookkeeping","","G4int");
+    G4String id("ID");
+    (*store)[id] = G4AttDef(id,"Track ID","Bookkeeping","","G4int");
 
-    G4String PID("PID");
-    (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
+    G4String pid("PID");
+    (*store)[pid] = G4AttDef(pid,"Parent ID","Bookkeeping","","G4int");
 
-    G4String Status("Status");
-    (*store)[Status] = G4AttDef(Status,"Track Status","Bookkeeping","","G4int");
+    G4String status("Status");
+    (*store)[status] = G4AttDef(status,"Track Status","Bookkeeping","","G4int");
 
-    G4String PN("PN");
-    (*store)[PN] = G4AttDef(PN,"Particle Name","Bookkeeping","","G4String");
+    G4String pn("PN");
+    (*store)[pn] = G4AttDef(pn,"Particle Name","Bookkeeping","","G4String");
 
-    G4String Ch("Ch");
-    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","e+","G4double");
+    G4String ch("Ch");
+    (*store)[ch] = G4AttDef(ch,"Charge","Physics","e+","G4double");
 
-    G4String PDG("PDG");
-    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Bookkeeping","","G4int");
+    G4String pdg("PDG");
+    (*store)[pdg] = G4AttDef(pdg,"PDG Encoding","Bookkeeping","","G4int");
 
-    G4String IMom("IMom");
-    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
-			      "Physics","G4BestUnit","G4ThreeVector");
+    G4String imom("IMom");
+    (*store)[imom] = G4AttDef(imom, "Momentum of track at start of trajectory",
+                              "Physics","G4BestUnit","G4ThreeVector");
 
-    G4String IMag("IMag");
-    (*store)[IMag] = 
-      G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
-	       "Physics","G4BestUnit","G4double");
+    G4String imag("IMag");
+    (*store)[imag] = 
+      G4AttDef(imag, "Magnitude of momentum of track at start of trajectory",
+               "Physics","G4BestUnit","G4double");
 
-    G4String VtxPos("VtxPos");
-    (*store)[VtxPos] = G4AttDef(VtxPos, "Vertex position",
-			      "Physics","G4BestUnit","G4ThreeVector");
+    G4String vtxPos("VtxPos");
+    (*store)[vtxPos] = G4AttDef(vtxPos, "Vertex position",
+                              "Physics","G4BestUnit","G4ThreeVector");
 
-    G4String NTP("NTP");
-    (*store)[NTP] = G4AttDef(NTP,"No. of points","Bookkeeping","","G4int");
+    G4String ntp("NTP");
+    (*store)[ntp] = G4AttDef(ntp,"No. of points","Bookkeeping","","G4int");
 
   }
   return store;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 std::vector<G4AttValue>* RE01Trajectory::CreateAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
@@ -254,22 +226,22 @@ std::vector<G4AttValue>* RE01Trajectory::CreateAttValues() const
   values->push_back
     (G4AttValue("Status",G4UIcommand::ConvertToString(fTrackStatus),""));
 
-  values->push_back(G4AttValue("PN",ParticleName,""));
+  values->push_back(G4AttValue("PN",fParticleName,""));
 
   values->push_back
-    (G4AttValue("Ch",G4UIcommand::ConvertToString(PDGCharge),""));
+    (G4AttValue("Ch",G4UIcommand::ConvertToString(fPDGCharge),""));
 
   values->push_back
-    (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+    (G4AttValue("PDG",G4UIcommand::ConvertToString(fPDGEncoding),""));
 
   values->push_back
-    (G4AttValue("IMom",G4BestUnit(momentum,"Energy"),""));
+    (G4AttValue("IMom",G4BestUnit(fMomentum,"Energy"),""));
 
   values->push_back
-    (G4AttValue("IMag",G4BestUnit(momentum.mag(),"Energy"),""));
+    (G4AttValue("IMag",G4BestUnit(fMomentum.mag(),"Energy"),""));
 
   values->push_back
-    (G4AttValue("VtxPos",G4BestUnit(vertexPosition,"Length"),""));
+    (G4AttValue("VtxPos",G4BestUnit(fVertexPosition,"Length"),""));
 
   values->push_back
     (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));
@@ -277,31 +249,27 @@ std::vector<G4AttValue>* RE01Trajectory::CreateAttValues() const
   return values;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01Trajectory::AppendStep(const G4Step* aStep)
 {
-   positionRecord->push_back( new G4TrajectoryPoint(aStep->GetPostStepPoint()->
-                                 GetPosition() ));
+   fPositionRecord->push_back( 
+       new G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition() ));
 }
   
-G4ParticleDefinition* RE01Trajectory::GetParticleDefinition()
-{
-   return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
   if(!secondTrajectory) return;
 
   RE01Trajectory* seco = (RE01Trajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
-  for(int i=1;i<ent;i++) // initial point of the second trajectory should not be merged
+  //
+  // initial point of the second trajectory should not be merged
+  for(int i=1;i<ent;i++) 
   {
-    positionRecord->push_back((*(seco->positionRecord))[i]);
+    fPositionRecord->push_back((*(seco->fPositionRecord))[i]);
   }
-  delete (*seco->positionRecord)[0];
-  seco->positionRecord->clear();
+  delete (*seco->fPositionRecord)[0];
+  seco->fPositionRecord->clear();
 
 }
-
-
-

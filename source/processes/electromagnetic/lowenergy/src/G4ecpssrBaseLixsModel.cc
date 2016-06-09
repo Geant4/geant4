@@ -24,14 +24,18 @@
 // ********************************************************************
 //
 
-#include "globals.hh"
+#include <cmath>
+#include <iostream>
+
 #include "G4ecpssrBaseLixsModel.hh"
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
-#include <math.h>
-#include <iostream>
 #include "G4LinLogInterpolation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

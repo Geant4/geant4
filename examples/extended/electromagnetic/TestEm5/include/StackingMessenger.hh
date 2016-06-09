@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.hh,v 1.6 2006-09-25 17:06:29 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/StackingMessenger.hh
+/// \brief Definition of the StackingMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,13 +49,13 @@ class StackingMessenger: public G4UImessenger
     StackingMessenger(StackingAction*);
    ~StackingMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StackingAction*        stackAction;
+    StackingAction*        fStackAction;
     
-    G4UIdirectory*         stackDir;          
-    G4UIcmdWithAnInteger*  killCmd;
+    G4UIdirectory*         fStackDir;          
+    G4UIcmdWithAnInteger*  fKillCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

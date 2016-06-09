@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPWattSpectrum.hh,v 1.11 2006-06-29 20:49:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPWattSpectrum_h
 #define G4NeutronHPWattSpectrum_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEDis.hh"
 
 // we will need a List of these .... one per term.
@@ -52,9 +53,9 @@ class G4NeutronHPWattSpectrum : public G4VNeutronHPEDis
   
   inline void Init(std::ifstream & aDataFile)
   {
-    theFractionalProb.Init(aDataFile, eV);
-    theApar.Init(aDataFile, eV);
-    theBpar.Init(aDataFile, eV);
+    theFractionalProb.Init(aDataFile, CLHEP::eV);
+    theApar.Init(aDataFile, CLHEP::eV);
+    theBpar.Init(aDataFile, CLHEP::eV);
   }
   
   inline G4double GetFractionalProbability(G4double anEnergy)
@@ -68,7 +69,7 @@ class G4NeutronHPWattSpectrum : public G4VNeutronHPEDis
   
   inline G4double Watt(G4double anEnergy, G4double a, G4double b)
   {
-    G4double energy = anEnergy/eV;
+    G4double energy = anEnergy/CLHEP::eV;
     G4double result = std::exp(-energy/a)*std::sinh(std::sqrt(b*energy));
     return result;
   }

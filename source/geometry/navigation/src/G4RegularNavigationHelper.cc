@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigationHelper.cc,v 1.1 2009-01-27 09:31:29 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigationHelper implementation
@@ -35,8 +35,17 @@
 
 #include "G4RegularNavigationHelper.hh"
 
-std::vector< std::pair<G4int,G4double> >
-  G4RegularNavigationHelper::theStepLengths;
+G4RegularNavigationHelper * G4RegularNavigationHelper::theInstance = 0;
+
+G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
+{
+  if(theInstance == 0)
+  {
+    static G4RegularNavigationHelper helper;
+    theInstance = &helper;
+  }
+  return theInstance;
+}
 
 // --------------------------------------------------------------------
 //
@@ -62,4 +71,11 @@ void G4RegularNavigationHelper::ClearStepLengths()
 void G4RegularNavigationHelper::AddStepLength( G4int copyNo, G4double slen )
 {
   theStepLengths.push_back( std::pair<G4int,G4double>(copyNo,slen) );
+}
+
+// --------------------------------------------------------------------
+//
+const std::vector< std::pair<G4int,G4double> > & G4RegularNavigationHelper::GetStepLengths()
+{
+  return theStepLengths;
 }

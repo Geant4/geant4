@@ -27,11 +27,13 @@
 #ifndef G4XNNTotalLowE_h
 #define G4XNNTotalLowE_h
 
+#include <map>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4VCrossSectionSource.hh"
 #include "G4CrossSectionVector.hh"
 #include "G4LowEXsection.hh"
-#include <map>
 
 class G4KineticTrack;
 
@@ -49,7 +51,7 @@ public:
   virtual G4bool IsValid(G4double e) const;
   
   virtual G4String Name() const;
-  virtual G4double HighLimit() const { return 3.*GeV; }
+  virtual G4double HighLimit() const { return 3.*CLHEP::GeV; }
 
 
 protected:

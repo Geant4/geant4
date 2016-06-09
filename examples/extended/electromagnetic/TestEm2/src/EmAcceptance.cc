@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EmAcceptance.cc,v 1.5 2006-06-29 16:50:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/src/EmAcceptance.cc
+/// \brief Implementation of the Emeptance class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +49,7 @@ void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
 {
   G4cout << G4endl;
   G4cout << "<<<<ACCEPTANCE>>>> " << stat << " events for " << title << G4endl;
-  isAccepted = true;
+  fIsAccepted = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +57,7 @@ void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
 void EmAcceptance::EndOfAcceptance()
 {
   G4String resume = "IS ACCEPTED";
-  if(!isAccepted) resume = "IS NOT ACCEPTED";
+  if(!fIsAccepted) resume = "IS NOT ACCEPTED";
   G4cout << "<<<<END>>>>   " << resume << G4endl;
   G4cout << G4endl;
 }
@@ -69,7 +71,7 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
   G4double x = std::sqrt((G4double)stat);
   G4double dde = avr - avr0;
   G4double de = dde*x/rms;
-  if(std::fabs(de) > limit) isAccepted = false;
+  if(std::fabs(de) > limit) fIsAccepted = false;
   
   G4cout << title << ": " << avr << "  del" << title << "= " << dde 
                                  << " nrms= " << de << G4endl;

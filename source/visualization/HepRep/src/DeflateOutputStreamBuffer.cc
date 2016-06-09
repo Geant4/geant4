@@ -77,8 +77,8 @@ namespace cheprep {
         0xB40BBE37L, 0xC30C8EA1L, 0x5A05DF1BL, 0x2D02EF8DL
     };
 
-    DeflateOutputStreamBuffer::DeflateOutputStreamBuffer(streambuf *buffer) 
-            : buffer(buffer)
+    DeflateOutputStreamBuffer::DeflateOutputStreamBuffer(streambuf *aBuffer) 
+            : buffer(aBuffer)
               , crc(0)
               , size(0)
 #ifndef CHEPREP_NO_ZLIB               

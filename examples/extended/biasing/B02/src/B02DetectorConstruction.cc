@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02DetectorConstruction.cc
+/// \brief Implementation of the B02DetectorConstruction class
 //
-// $Id: B02DetectorConstruction.cc,v 1.13 2007-06-13 13:31:41 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 #include "G4Types.hh"
 #include "globals.hh"
@@ -40,6 +42,8 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // for importance biasing
 #include "G4IStore.hh"
@@ -166,7 +170,7 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   name = "shieldWorld";
   G4VPhysicalVolume *pWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		  name, 0, false, 0);
+                  name, 0, false, 0);
 
 
   // creating 18 slobs of 10 cm thick concrete
@@ -203,12 +207,12 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   pos_z = 0;
 
   new G4PVPlacement(0, 
-		    G4ThreeVector(pos_x, pos_y, pos_z),
-		    aShield_log, 
-		    name, 
-		    worldCylinder_log, 
-		    false, 
-		    0);
+                    G4ThreeVector(pos_x, pos_y, pos_z),
+                    aShield_log, 
+                    name, 
+                    worldCylinder_log, 
+                    false, 
+                    0);
   
 
   return pWorldVolume;

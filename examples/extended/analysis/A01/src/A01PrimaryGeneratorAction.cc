@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PrimaryGeneratorAction.cc,v 1.5 2006-06-29 16:33:05 gunter Exp $
+/// \file analysis/A01/src/A01PrimaryGeneratorAction.cc
+/// \brief Implementation of the A01PrimaryGeneratorAction class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 
@@ -34,81 +37,82 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 A01PrimaryGeneratorAction::A01PrimaryGeneratorAction()
 {
-  momentum = 1000.*MeV;
-  sigmaMomentum = 50.*MeV;
-  sigmaAngle = 2.*deg;
-  randomizePrimary = true;
+  fMomentum = 1000.*MeV;
+  fSigmaMomentum = 50.*MeV;
+  fSigmaAngle = 2.*deg;
+  fRandomizePrimary = true;
 
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
 
   //create a messenger for this class
-  gunMessenger = new A01PrimaryGeneratorMessenger(this);
+  fGunMessenger = new A01PrimaryGeneratorMessenger(this);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  positron = particleTable->FindParticle(particleName="e+");
-  muon = particleTable->FindParticle(particleName="mu+");
-  pion = particleTable->FindParticle(particleName="pi+");
-  kaon = particleTable->FindParticle(particleName="kaon+");
-  proton = particleTable->FindParticle(particleName="proton");
+  fPositron = particleTable->FindParticle(particleName="e+");
+  fMuon = particleTable->FindParticle(particleName="mu+");
+  fPion = particleTable->FindParticle(particleName="pi+");
+  fKaon = particleTable->FindParticle(particleName="kaon+");
+  fProton = particleTable->FindParticle(particleName="proton");
 
   // default particle kinematics
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-8.*m));
-  particleGun->SetParticleDefinition(positron);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-8.*m));
+  fParticleGun->SetParticleDefinition(fPositron);
 }
 
 A01PrimaryGeneratorAction::~A01PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;
+  delete fParticleGun;
+  delete fGunMessenger;
 }
 
 void A01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4ParticleDefinition* particle;
 
-  if(randomizePrimary)
+  if(fRandomizePrimary)
   {
     /////////////////////////////////////////////G4int i = (int)(5.*G4UniformRand());
     G4int i = (int)(2.*G4UniformRand());
     switch(i)
     {
       case 0:
-        particle = positron;
+        particle = fPositron;
         break;
       case 1:
-        particle = muon;
+        particle = fMuon;
         break;
       case 2:
-        particle = pion;
+        particle = fPion;
         break;
       case 3:
-        particle = kaon;
+        particle = fKaon;
         break;
       default:
-        particle = proton;
+        particle = fProton;
         break;
     }
-    particleGun->SetParticleDefinition(particle);
+    fParticleGun->SetParticleDefinition(particle);
   }
   else
   {
-    particle = particleGun->GetParticleDefinition();
+    particle = fParticleGun->GetParticleDefinition();
   }
 
-  G4double pp = momentum + (G4UniformRand()-0.5)*sigmaMomentum;
+  G4double pp = fMomentum + (G4UniformRand()-0.5)*fSigmaMomentum;
   G4double mass = particle->GetPDGMass();
   G4double Ekin = std::sqrt(pp*pp+mass*mass)-mass;
-  particleGun->SetParticleEnergy(Ekin);
+  fParticleGun->SetParticleEnergy(Ekin);
 
-  G4double angle = (G4UniformRand()-0.5)*sigmaAngle;
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
+  G4double angle = (G4UniformRand()-0.5)*fSigmaAngle;
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

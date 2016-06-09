@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegaMinus.cc,v 1.15 2008-09-18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +37,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4OmegaMinus.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

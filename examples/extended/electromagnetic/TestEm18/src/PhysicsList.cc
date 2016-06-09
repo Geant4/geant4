@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.9 2011-01-06 18:34:38 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,21 +40,22 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
-  pMessenger = new PhysicsListMessenger(this); 
+  fMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  fEmName = G4String("standard");
+  fEmPhysicsList = new PhysListEmStandard(fEmName);
     
   defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
     
   SetVerboseLevel(1);
 }
@@ -61,8 +64,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete emPhysicsList;
-  delete pMessenger;  
+  delete fEmPhysicsList;
+  delete fMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,25 +76,25 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "standard") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
         
   } else if (name == "livermore") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmLivermore(name);
     
   } else if (name == "penelope") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmPenelope(name);
 
   } else {
 
@@ -175,7 +178,7 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
   AddStepMax();
   
   // Em options
@@ -184,10 +187,10 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(10*eV);	//default 100 eV    
-  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
+  emOptions.SetMinEnergy(10*eV);        //default 100 eV    
+  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
+  emOptions.SetDEDXBinning(12*20);        //default=12*7  
+  emOptions.SetLambdaBinning(12*20);        //default=12*7
           
   //build CSDA range
   //
@@ -197,7 +200,7 @@ void PhysicsList::ConstructProcess()
    
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default  
+  emOptions.SetSubCutoff(false);        //default  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,7 +220,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }
@@ -233,9 +236,9 @@ void PhysicsList::SetCuts()
   
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForElectron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForElectron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -244,17 +247,17 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
-  SetParticleCuts(cutForElectron, G4Positron::Positron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
+  SetParticleCuts(fCutForElectron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

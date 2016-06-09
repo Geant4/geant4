@@ -32,6 +32,9 @@
 // To be used in your physics list, in case you need this kind of physics.
 // Class Description - End
 
+#include <cmath>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4ExcitedStringVector.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4PomeronCrossSection.hh"
@@ -42,8 +45,6 @@
 #include "G4DiffractiveStringBuilder.hh"
 #include "G4SoftStringBuilder.hh"
 #include "G4PartonPair.hh"
-
-#include <cmath>
 
 //*********************************************************************************************** 
 
@@ -56,17 +57,17 @@ class G4QGSModel : public G4VPartonStringModel
 // Constructors   
 public:
     G4QGSModel();
-    G4QGSModel(const G4QGSModel &right);
     virtual ~G4QGSModel();
+    G4QGSModel(const G4QGSModel &right);
+    G4QGSModel& operator=(const G4QGSModel &right);
 
 // Method
 public:
     virtual G4V3DNucleus* GetWoundedNucleus() const;
- 
-public:
     virtual void Init(const G4Nucleus& Nucleus, const G4DynamicParticle& Projectile);
     virtual G4ExcitedStringVector * GetStrings();
- 
+    virtual void ModelDescription(std::ostream& outFile) const;
+
 private:
    ParticipantType theParticipants;
    G4DiffractiveStringBuilder theDiffractiveStringBuilder;

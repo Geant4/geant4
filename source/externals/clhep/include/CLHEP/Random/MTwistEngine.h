@@ -14,7 +14,7 @@
 // For further information, see http://www.math.keio.ac.jp/~matumoto/emt.html
 // =======================================================================
 // Ken Smith      - Started initial draft: 14th Jul 1998
-//                - Optimized to get std::pow() out of flat() method: 21st Jul
+//                - Optimized to get pow() out of flat() method: 21st Jul
 //                - Added conversion operators:  6th Aug 1998
 // M Fischler	  - Changes in way powers of two are kept: 16-Sep-1998
 // Mark Fischler  - Methods for distrib. instance save/restore 12/8/04    

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.hh,v 1.3 2010-03-26 19:52:44 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNAEmfietzoglouExcitationModel_h
@@ -34,7 +33,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
 
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include <deque>
 #include "Randomize.hh"
 #include "G4Electron.hh"
@@ -73,8 +72,9 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  // Water density table
+  const std::vector<G4double>* fpWaterDensity;
 
-  G4Material* nistwater;
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
   G4bool isInitialised;
@@ -88,7 +88,7 @@ private:
   
   G4int nLevels;
 
-  G4WaterExcitationStructure waterExcitation;
+  G4DNAWaterExcitationStructure waterExcitation;
   
   //
    

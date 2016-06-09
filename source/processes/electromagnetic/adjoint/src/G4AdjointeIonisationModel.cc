@@ -23,18 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointeIonisationModel.cc,v 1.2 2009-11-20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4AdjointeIonisationModel.hh"
 #include "G4AdjointCSManager.hh"
 
-
+#include "G4PhysicalConstants.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"
 #include "G4AdjointElectron.hh"
-#include  "G4Gamma.hh"
+#include "G4Gamma.hh"
 #include "G4AdjointGamma.hh"
 
 
@@ -197,17 +196,18 @@ G4double G4AdjointeIonisationModel::DiffCrossSectionPerAtomPrimToSecond(
 //////////////////////////////////////////////////////////////////////////////
 //
 G4double G4AdjointeIonisationModel::DiffCrossSectionMoller(G4double kinEnergyProj,G4double kinEnergyProd){
-  G4double electron_mass_c2=0.51099906*MeV;
+
   G4double energy = kinEnergyProj + electron_mass_c2;
   G4double x   = kinEnergyProd/kinEnergyProj;
   G4double gam    = energy/electron_mass_c2;
   G4double gamma2 = gam*gam;
   G4double beta2  = 1.0 - 1.0/gamma2;
   
-  G4double g = (2.0*gam - 1.0)/gamma2;
+  G4double gg = (2.0*gam - 1.0)/gamma2;
   G4double y = 1.0 - x;
   G4double fac=twopi_mc2_rcl2/electron_mass_c2;
-  G4double dCS = fac*( 1.-g + ((1.0 - g*x)/(x*x)) + ((1.0 - g*y)/(y*y)))/(beta2*(gam-1));
+  G4double dCS = fac*( 1.-gg + ((1.0 - gg*x)/(x*x)) 
+		       + ((1.0 - gg*y)/(y*y)))/(beta2*(gam-1));
   return dCS/kinEnergyProj;
   
  

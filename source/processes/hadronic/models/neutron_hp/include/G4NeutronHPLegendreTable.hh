@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreTable.hh,v 1.12 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPLegendreTable_h
 #define G4NeutronHPLegendreTable_h 1
 
-#include "globals.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
 #include "G4ios.hh"
 #include "G4InterpolationManager.hh"
 
@@ -68,7 +69,7 @@ class G4NeutronHPLegendreTable
     G4double eNeu, coeff;
     G4int nPoly;
     aDataFile >> eNeu >> nPoly;
-    eNeu *= eV;
+    eNeu *= CLHEP::eV;
     Init(eNeu, nPoly);
     for(G4int l=0; l<nPoly; l++)
     {

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_GS.cc,v 1.2 2010-01-19 17:28:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/PhysListEmStandard_GS.cc
+/// \brief Implementation of the PhysListEmStandard_GS class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -54,11 +56,13 @@
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard_GS::PhysListEmStandard_GS(const G4String& name,
                                DetectorConstruction* det)
-: G4VPhysicsConstructor(name), detector(det)
+: G4VPhysicsConstructor(name), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +87,7 @@ void PhysListEmStandard_GS::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(detector);
+      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
       compton->SetModel(comptonModel );
             
@@ -103,7 +107,7 @@ void PhysListEmStandard_GS::ConstructProcess()
       pmanager->AddProcess(eMsc,                      -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-	    
+            
     } else if (particleName == "e+") {
       //positron
 
@@ -134,10 +138,10 @@ void PhysListEmStandard_GS::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(10*GeV);	//default  
-  emOptions.SetDEDXBinning(8*20);	//default=8*7
-  emOptions.SetLambdaBinning(8*20);	//default=8*7
+  emOptions.SetMinEnergy(100*eV);        //default    
+  emOptions.SetMaxEnergy(10*GeV);        //default  
+  emOptions.SetDEDXBinning(8*20);        //default=8*7
+  emOptions.SetLambdaBinning(8*20);      //default=8*7
       
   //multiple coulomb scattering
   //
@@ -145,13 +149,13 @@ void PhysListEmStandard_GS::ConstructProcess()
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)
+  emOptions.SetStepFunction(0.2, 10*um);        //default=(0.2, 1*mm)
                 
   //build CSDA range
   //
-  emOptions.SetBuildCSDARange(true);		//default=false
+  emOptions.SetBuildCSDARange(true);            //default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(8*7);	//default=8*7
+  emOptions.SetDEDXBinningForCSDARange(8*7);    //default=8*7
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

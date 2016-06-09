@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsListHelper.cc,v 1.72 2010-07-21 14:21:19 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -921,8 +920,38 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processType     = 1;
   tmp.processSubType  = 61;
   tmp.ordering[0]     = -1;
-  tmp.ordering[1]     =  0;
-  tmp.ordering[2]     =  0;
+  tmp.ordering[1]     = -1; 
+  tmp.ordering[2]     = -1;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
+
+  tmp.processTypeName = "DNADoubleIonisation";
+  tmp.processType     = 2;
+  tmp.processSubType  = 62;
+  tmp.ordering[0]     =  -1;
+  tmp.ordering[1]     =  -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
+
+  tmp.processTypeName = "DNADoubleCapture";
+  tmp.processType     = 2;
+  tmp.processSubType  = 63;
+  tmp.ordering[0]     =  -1;
+  tmp.ordering[1]     =  -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
+
+  tmp.processTypeName = "DNAIonisingTransfer";
+  tmp.processType     = 2;
+  tmp.processSubType  = 64;
+  tmp.ordering[0]     =  -1;
+  tmp.ordering[1]     =  -1;
+  tmp.ordering[2]     =  1000;
   tmp.isDuplicable =  false;
   theTable->push_back(tmp);
   sizeOfTable +=1;

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,7 +48,7 @@
 namespace G4INCL {
 
   /**
-   * Verbosity scale from 0 (fatal errors only) to 10 (prG4int everything)
+   * Verbosity scale from 0 (fatal errors only) to 10 (print everything)
    */
   enum MessageType { InfoMsg = 1,
     FatalMsg = 2,
@@ -71,8 +71,7 @@ namespace G4INCL {
           logStream = &(std::cout);
 #endif
           logToStdout = true;
-        }
-        else {
+        } else {
           logToStdout = false;
           logStream = new std::ofstream(logFileName.c_str());
           if(!logStream)
@@ -82,8 +81,11 @@ namespace G4INCL {
           }
         }
 
+        // Spell out "true" and "false" when logging G4bool variables
+        std::boolalpha(*logStream);
+
 #ifndef INCLXX_IN_GEANT4_MODE
-        std::log(InfoMsg, __FILE__,__LINE__) << "# Logging enabled!" << std::endl;
+        logMessage(InfoMsg, __FILE__,__LINE__, "# Logging enabled!\n");
 #endif
       };
       ~LoggerSlave() {
@@ -102,7 +104,10 @@ namespace G4INCL {
       G4int getVerbosityLevel() { return verbosityLevel; }
 
       /// \brief Write the log message.
-      LoggerSlave const &log(const MessageType type, const std::string &fileName, const G4int lineNumber) const;
+      void logMessage(const MessageType type, const std::string &fileName, const G4int lineNumber, std::string const &s) const;
+
+      /// \brief Flush the log stream
+      void flush() { logStream->flush(); }
 
       /// \brief Log a data block.
       void logDataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) const;
@@ -131,9 +136,12 @@ namespace G4INCL {
   class Logger {
     public:
       /// \brief Log a message.
-      static LoggerSlave const &log(const MessageType type, const std::string &fileName, const G4int lineNumber) {
-        return theLoggerSlave->std::log(type, fileName, lineNumber);
+      static void logMessage(const MessageType type, std::string const &fileName, const G4int lineNumber, std::string const &s) {
+        theLoggerSlave->logMessage(type, fileName, lineNumber, s);
       }
+
+      /// \brief Flush the log stream
+      static void flush() { theLoggerSlave->flush(); }
 
       /// \brief Log a data block.
       static void dataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) {
@@ -150,7 +158,10 @@ namespace G4INCL {
       static G4int getVerbosityLevel() { return theLoggerSlave->getVerbosityLevel(); }
 
       /// \brief Delete the slave Logger.
-      static void deleteLoggerSlave() { delete theLoggerSlave; }
+      static void deleteLoggerSlave() {
+        delete theLoggerSlave;
+        theLoggerSlave=NULL;
+      }
 
     private:
       static LoggerSlave *theLoggerSlave;
@@ -158,29 +169,40 @@ namespace G4INCL {
 
   // Macro definitions for line numbering in log files!
 #define FATAL(x) \
-  if(G4INCL::FatalMsg <= G4INCL::Logger::getVerbosityLevel())\
-  G4INCL::Logger::log(G4INCL::FatalMsg, __FILE__,__LINE__) << x;\
-  else (void)0
+  if(G4INCL::FatalMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::stringstream ss;\
+    ss << x;\
+    G4INCL::Logger::logMessage(G4INCL::FatalMsg, __FILE__,__LINE__, ss.str());\
+    G4INCL::Logger::flush();\
+  } else (void)0
 #define ERROR(x) \
-  if(G4INCL::ErrorMsg <= G4INCL::Logger::getVerbosityLevel())\
-  G4INCL::Logger::log(G4INCL::ErrorMsg, __FILE__,__LINE__) << x;\
-  else (void)0
+  if(G4INCL::ErrorMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::stringstream ss;\
+    ss << x;\
+    G4INCL::Logger::logMessage(G4INCL::ErrorMsg, __FILE__,__LINE__, ss.str());\
+  } else (void)0
 #define WARN(x) \
-  if(G4INCL::WarningMsg <= G4INCL::Logger::getVerbosityLevel())\
-  G4INCL::Logger::log(G4INCL::WarningMsg, __FILE__,__LINE__) << x;\
-  else (void)0
+  if(G4INCL::WarningMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::stringstream ss;\
+    ss << x;\
+    G4INCL::Logger::logMessage(G4INCL::WarningMsg, __FILE__,__LINE__, ss.str());\
+  } else (void)0
 #define INFO(x) \
-  if(G4INCL::InfoMsg <= G4INCL::Logger::getVerbosityLevel())\
-  G4INCL::Logger::log(G4INCL::InfoMsg, __FILE__,__LINE__) << x;\
-  else (void)0
+  if(G4INCL::InfoMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::stringstream ss;\
+    ss << x;\
+    G4INCL::Logger::logMessage(G4INCL::InfoMsg, __FILE__,__LINE__, ss.str());\
+  } else (void)0
 #define DEBUG(x) \
-  if(G4INCL::DebugMsg <= G4INCL::Logger::getVerbosityLevel())\
-  G4INCL::Logger::log(G4INCL::DebugMsg, __FILE__,__LINE__) << x;\
-  else (void)0
+  if(G4INCL::DebugMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::stringstream ss;\
+    ss << x;\
+    G4INCL::Logger::logMessage(G4INCL::DebugMsg, __FILE__,__LINE__, ss.str());\
+  } else (void)0
 #define DATABLOCK(x) \
-  if(G4INCL::DataBlockMsg <= G4INCL::Logger::getVerbosityLevel())\
-  G4INCL::Logger::dataBlock(x,__FILE__,__LINE__);\
-  else (void)0
+  if(G4INCL::DataBlockMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    G4INCL::Logger::dataBlock(x,__FILE__,__LINE__);\
+  } else (void)0
 
 #else
   // Empty logger for normal (production) use:
@@ -198,7 +220,10 @@ namespace G4INCL {
     ~Logger() {};
     static void setVerbosityLevel(G4int) {};
     static void setLoggerSlave(LoggerSlave * const slave) { theLoggerSlave = slave; }
-    static void deleteLoggerSlave() { delete theLoggerSlave; }
+    static void deleteLoggerSlave() {
+      delete theLoggerSlave;
+      theLoggerSlave=NULL;
+    }
   private:
     static LoggerSlave *theLoggerSlave;
   };

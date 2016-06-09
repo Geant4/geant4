@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/include/OlapSteppingAction.hh
+/// \brief Definition of the OlapSteppingAction class
 //
-// $Id: OlapSteppingAction.hh,v 1.3 2006-06-29 17:22:41 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

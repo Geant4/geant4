@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.30 2010-05-30 09:53:05 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -40,7 +39,6 @@
 #include "globals.hh"
 
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLBitMapStore.hh"
 #include "G4OpenGL.hh"
 
 #include <map>
@@ -86,6 +84,9 @@ public:
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
 
+  G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
+  void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
+
 protected:
 
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
@@ -93,6 +94,7 @@ protected:
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
 
+  void ProcessScene();
   G4VSolid* CreateSectionSolid ();
   G4VSolid* CreateCutawaySolid ();
 
@@ -101,31 +103,23 @@ protected:
   GLuint fPickName;
   std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.
 
-  G4bool fProcessing2D;
-
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
-  // Number of stored list to wait until we make a single glFlush
-  const G4int fNbListsBeforeFlush;
-  // Effective number of stored list
-  G4int fNbListsToBeFlush;
+  // Number of events to wait until we make a single glFlush
+  G4int fEventsDrawInterval;
+  // Number of events waiting to be flushed
+  G4int fEventsWaitingToBeFlushed;
+  
+  // True if caller of primitives is capable of processing three passes.
+  G4bool fThreePassCapable;
 
-private:
-
-  void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
-  void AddCircleSquareVector (const std::vector <G4VMarker>&, G4OpenGLBitMapStore::Shape);
-
-  void DrawXYPolygon
-  (G4OpenGLBitMapStore::Shape,
-   G4double size,
-   const G4Point3D& centre,
-   const G4VisAttributes* pApplicableVisAtts);
-  // Draws in world coordinates a polygon in the screen plane knowing
-  // viewpoint direction and up vector.
-
+  G4bool fSecondPassForTransparencyRequested;
+  G4bool fSecondPassForTransparency;
+  
+  G4bool fThirdPassForNonHiddenMarkersRequested;
+  G4bool fThirdPassForNonHiddenMarkers;
+  
   static const GLubyte fStippleMaskHashed [128];
-
-  G4bool fProcessingPolymarker;
 };
 
 #include "G4OpenGLSceneHandler.icc"

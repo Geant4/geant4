@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RayleighScattering.cc,v 1.2 2009-03-18 13:45:51 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // 19-12-2008, first implementation, Luciano Pandola 
@@ -33,6 +32,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4RayleighScattering.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LivermoreRayleighModel.hh"
 #include "G4Gamma.hh"
 
@@ -42,7 +42,11 @@ G4RayleighScattering::G4RayleighScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
+  SetStartFromNullFlag(false);
+  SetBuildTableFlag(true);
   SetProcessSubType(fRayleigh);
+  SetMinKinEnergyPrim(100*keV);
+  SetSplineFlag(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,10 +67,8 @@ void G4RayleighScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetLambdaBinning(200); //use 200 bins instead of 90
-    SetBuildTableFlag(true);
-    if(!Model()) SetModel(new G4LivermoreRayleighModel);
-    AddEmModel(1, Model());
+    if(!EmModel()) { SetEmModel(new G4LivermoreRayleighModel); }
+    AddEmModel(1, EmModel());
   } 
 }
 

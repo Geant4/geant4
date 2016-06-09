@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGKMinusInelastic.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGKMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4HadFinalState*
@@ -158,8 +159,8 @@ void G4RPGKMinusInelastic::Cascade(
     const G4int numSec = 60;
     static G4double protmul[numMul], protnorm[numSec]; // proton constants
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int nt(0), np(0), nm(0), nz(0);
+    // np = number of pi+, nneg = number of pi-, nz = number of pi0
+    G4int nt(0), np(0), nneg(0), nz(0);
     const G4double c = 1.25;    
     const G4double b[] = { 0.70, 0.70 };
     if( first )       // compute normalization constants, this will only be Done once
@@ -171,16 +172,16 @@ void G4RPGKMinusInelastic::Cascade(
       G4int counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+1); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>0) && (nt<=numSec) )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -192,16 +193,16 @@ void G4RPGKMinusInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=np; nm<=(np+2); ++nm )
+        for( nneg=np; nneg<=(np+2); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>0) && (nt<=numSec) )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -233,7 +234,7 @@ void G4RPGKMinusInelastic::Cascade(
     G4int iplab = G4int(std::min( 9.0, pOriginal/GeV*5.0 ));
     if( (pOriginal <= 2.0*GeV) && (G4UniformRand() < cech[iplab]) )
     {
-      np = nm = nz = nt = 0;
+      np = nneg = nz = nt = 0;
       iplab = G4int(std::min( 19.0, pOriginal/GeV*10.0 ));
       const G4double cnk0[] = {0.17,0.18,0.17,0.24,0.26,0.20,0.22,0.21,0.34,0.45,
                                0.58,0.55,0.36,0.29,0.29,0.32,0.32,0.33,0.33,0.33};
@@ -309,13 +310,13 @@ void G4RPGKMinusInelastic::Cascade(
         G4int counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nneg=std::max(0,np-1); nneg<=(np+1) && ran>=excs; ++nneg )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = np+nneg+nz;
                 if( nt > 0 )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -336,8 +337,8 @@ void G4RPGKMinusInelastic::Cascade(
           quasiElastic = true;
           return;
         }
-        np--; nm--; nz--;
-        if( np == nm )
+        np--; nneg--; nz--;
+        if( np == nneg )
         {
           if( G4UniformRand() >= 0.75 )
           {
@@ -347,7 +348,7 @@ void G4RPGKMinusInelastic::Cascade(
             targetHasChanged = true;
           }
         }
-        else if( np == nm+1 )
+        else if( np == nneg+1 )
         {
           targetParticle.SetDefinitionAndUpdateE( aNeutron );
           targetHasChanged = true;
@@ -363,13 +364,13 @@ void G4RPGKMinusInelastic::Cascade(
         G4int counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=np; nm<=(np+2) && ran>=excs; ++nm )
+          for( nneg=np; nneg<=(np+2) && ran>=excs; ++nneg )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = np+nneg+nz;
                 if( (nt>=1) && (nt<=numSec) )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -390,8 +391,8 @@ void G4RPGKMinusInelastic::Cascade(
           quasiElastic = true;
           return;
         }
-        np--; nm--; nz--;
-        if( np == nm-1 )
+        np--; nneg--; nz--;
+        if( np == nneg-1 )
         {
           if( G4UniformRand() < 0.5 )
           {
@@ -404,7 +405,7 @@ void G4RPGKMinusInelastic::Cascade(
             incidentHasChanged = true;
           }
         }
-        else if( np != nm )
+        else if( np != nneg )
         {
           currentParticle.SetDefinitionAndUpdateE( aKaonZL );
           incidentHasChanged = true;
@@ -505,24 +506,23 @@ void G4RPGKMinusInelastic::Cascade(
         }
       }
     }
-    if( currentParticle.GetDefinition() == aKaonZL )
-    {
-      if( G4UniformRand() >= 0.5 )
-      {
-        currentParticle.SetDefinitionAndUpdateE( aKaonZS );
-        incidentHasChanged = true;
-      }
+
+  if (currentParticle.GetDefinition() == aKaonZL) {
+    if (G4UniformRand() >= 0.5) {
+      currentParticle.SetDefinitionAndUpdateE(aKaonZS);
+      incidentHasChanged = true;
     }
-    if( targetParticle.GetDefinition() == aKaonZL )
-    {
-      if( G4UniformRand() >= 0.5 )
-      {
-        targetParticle.SetDefinitionAndUpdateE( aKaonZS );
-        targetHasChanged = true;
-      }
+  }
+
+  if (targetParticle.GetDefinition() == aKaonZL) {
+    if (G4UniformRand() >= 0.5) {
+      targetParticle.SetDefinitionAndUpdateE(aKaonZS);
+      targetHasChanged = true;
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
-    return;
+  }
+
+  SetUpPions(np, nneg, nz, vec, vecLen);
+  return;
 }
 
  /* end of file */

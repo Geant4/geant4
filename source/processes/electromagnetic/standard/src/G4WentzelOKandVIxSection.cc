@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.14 2010-11-13 19:08:27 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +47,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4WentzelOKandVIxSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -87,8 +88,12 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
-      ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
-      //ScreenRSquare[j] = alpha2*x*x;
+      if(1 == j) { ScreenRSquare[j] = 0.5*alpha2*a0*a0; }
+      else {
+	ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
+	//ScreenRSquare[j] = (0.5 + 0.5/G4double(j))*alpha2*x*x;
+	//ScreenRSquare[j] = 0.5*alpha2*x*x;
+      }
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
@@ -158,31 +163,25 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     //gam0pcmp = (etot + targetMass)*targetMass/invmass2;
     //pcmp2    = tmass2/invmass2;
 
-    kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
+    kinFactor = coeff*Z*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     if(Z > 1) {
-      G4double tau = tkin/mass;
-      screenZ *=std::min(Z*invbeta2,
-      	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
+      if(mass > MeV) {
+	screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
+      } else {
+	G4double tau = tkin/mass;
+	screenZ *= std::min(Z*1.13,(1.13 +3.76*Z*Z
+	  *invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(targetZ)))));
+      }
     }
     if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
       cosTetMaxNuc2 = 0.0;
     }
     formfactA = FormFactor[targetZ]*mom2;
 
-    // allowing do not compute scattering off e-
     cosTetMaxElec = 1.0;
-    if(cut < DBL_MAX) { 
-      /*
-      if(mass < MeV) { 
-	if(cosTetMaxNuc < 1.0 && cosTetMaxNuc > 0.0 && tkin < 10*cut) { 
-	  cosTetMaxNuc2 *= 0.1*tkin/cut;
-	}
-      }
-      */
-      ComputeMaxElectronScattering(cut); 
-    }
+    ComputeMaxElectronScattering(cut); 
   }
   return cosTetMaxNuc2;
 } 
@@ -336,16 +335,18 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
 void 
 G4WentzelOKandVIxSection::ComputeMaxElectronScattering(G4double cutEnergy)
 {
-  G4double tmax = tkin;
   if(mass > MeV) {
     G4double ratio = electron_mass_c2/mass;
     G4double tau = tkin/mass;
-    tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
-      (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
+    G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
+      (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio);
+    //tmax = std::min(tmax, targetZ*targetZ*10*eV); 
     cosTetMaxElec = 1.0 - std::min(cutEnergy, tmax)*electron_mass_c2/mom2;
   } else {
 
+    G4double tmax = tkin;
     if(particle == theElectron) { tmax *= 0.5; }
+    //tmax = std::min(tmax, targetZ*targetZ*10*eV); 
     G4double t = std::min(cutEnergy, tmax);
     G4double mom21 = t*(t + 2.0*electron_mass_c2);
     G4double t1 = tkin - t;
@@ -355,7 +356,6 @@ G4WentzelOKandVIxSection::ComputeMaxElectronScattering(G4double cutEnergy)
       G4double mom22 = t1*(t1 + 2.0*mass);
       G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
       if(ctm <  1.0) { cosTetMaxElec = ctm; }
-      //if(ctm < -1.0) { cosTetMaxElec = -1.0;}
       if(particle == theElectron && cosTetMaxElec < 0.0) { cosTetMaxElec = 0.0; }
     }
   }

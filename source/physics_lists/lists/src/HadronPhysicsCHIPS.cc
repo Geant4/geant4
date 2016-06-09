@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsCHIPS.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -50,10 +49,11 @@
 
 HadronPhysicsCHIPS::HadronPhysicsCHIPS(G4int)
 :  G4VPhysicsConstructor( "CHIPS hadronic")
+    , theInelasticCHIPS(0)
 //  , verbosity(verbose)
 {}
 
-HadronPhysicsCHIPS::HadronPhysicsCHIPS(const G4String& name):  G4VPhysicsConstructor(name)
+HadronPhysicsCHIPS::HadronPhysicsCHIPS(const G4String& name):  G4VPhysicsConstructor(name), theInelasticCHIPS(0)
 {}
 
 HadronPhysicsCHIPS::~HadronPhysicsCHIPS() 

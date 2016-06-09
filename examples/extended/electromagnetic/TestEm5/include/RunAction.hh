@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.9 2009-01-22 17:41:43 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,68 +56,68 @@ class RunAction : public G4UserRunAction
 
 public:
 
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-    virtual ~RunAction();
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+   ~RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void AddEnergy (G4double edep)
-                 {EnergyDeposit += edep; EnergyDeposit2 += edep*edep;};
+                 {fEnergyDeposit += edep; fEnergyDeposit2 += edep*edep;};
 
     void AddTrakLenCharg (G4double length)
-                 {TrakLenCharged += length; TrakLenCharged2 += length*length;};
+                 {fTrakLenCharged += length; fTrakLenCharged2 += length*length;};
 
     void AddTrakLenNeutr (G4double length)
-                 {TrakLenNeutral += length; TrakLenNeutral2 += length*length;};
+                 {fTrakLenNeutral += length; fTrakLenNeutral2 += length*length;};
 
     void AddMscProjTheta (G4double theta)
-                 {if (std::abs(theta) <= MscThetaCentral) { MscEntryCentral++;
-		    MscProjecTheta += theta;  MscProjecTheta2 += theta*theta;}
-		 };
+                 {if (std::abs(theta) <= fMscThetaCentral) { fMscEntryCentral++;
+                    fMscProjecTheta += theta;  fMscProjecTheta2 += theta*theta;}
+                 };
 
     void CountStepsCharg (G4int nSteps)
-                 {nbStepsCharged += nSteps; nbStepsCharged2 += nSteps*nSteps;};
+                 {fNbStepsCharged += nSteps; fNbStepsCharged2 += nSteps*nSteps;};
 
     void CountStepsNeutr (G4int nSteps)
-                 {nbStepsNeutral += nSteps; nbStepsNeutral2 += nSteps*nSteps;};
+                 {fNbStepsNeutral += nSteps; fNbStepsNeutral2 += nSteps*nSteps;};
 
     void CountParticles (G4ParticleDefinition* part)
-                 {     if (part == G4Gamma::Gamma())       nbGamma++ ;
-		  else if (part == G4Electron::Electron()) nbElect++ ;
-		  else if (part == G4Positron::Positron()) nbPosit++ ; };
+                 {     if (part == G4Gamma::Gamma())       fNbGamma++ ;
+                  else if (part == G4Electron::Electron()) fNbElect++ ;
+                  else if (part == G4Positron::Positron()) fNbPosit++ ; };
 
     void CountTransmit (G4int flag)
-                 {     if (flag == 1)  Transmit[0]++;
-		  else if (flag == 2) {Transmit[0]++; Transmit[1]++; }};
+                 {     if (flag == 1)  fTransmit[0]++;
+                  else if (flag == 2) {fTransmit[0]++; fTransmit[1]++; }};
 
     void CountReflect (G4int flag)
-                 {     if (flag == 1)  Reflect[0]++;
-		  else if (flag == 2) {Reflect[0]++; Reflect[1]++; }};
+                 {     if (flag == 1)  fReflect[0]++;
+                  else if (flag == 2) {fReflect[0]++; fReflect[1]++; }};
 
     G4double ComputeMscHighland();
     
     void AddEnergyLeak (G4double eleak, G4int index)
-               { EnergyLeak[index] += eleak; EnergyLeak2[index] += eleak*eleak;};
+               { fEnergyLeak[index] += eleak; fEnergyLeak2[index] += eleak*eleak;};
 
   private:
-    G4double EnergyDeposit,  EnergyDeposit2;
-    G4double TrakLenCharged, TrakLenCharged2;
-    G4double TrakLenNeutral, TrakLenNeutral2;
-    G4double nbStepsCharged, nbStepsCharged2;
-    G4double nbStepsNeutral, nbStepsNeutral2;
-    G4double MscProjecTheta, MscProjecTheta2;
-    G4double MscThetaCentral;
+    G4double fEnergyDeposit,  fEnergyDeposit2;
+    G4double fTrakLenCharged, fTrakLenCharged2;
+    G4double fTrakLenNeutral, fTrakLenNeutral2;
+    G4double fNbStepsCharged, fNbStepsCharged2;
+    G4double fNbStepsNeutral, fNbStepsNeutral2;
+    G4double fMscProjecTheta, fMscProjecTheta2;
+    G4double fMscThetaCentral;
     
-    G4int    nbGamma, nbElect, nbPosit;
-    G4int    Transmit[2],   Reflect[2];
-    G4int    MscEntryCentral;
+    G4int    fNbGamma, fNbElect, fNbPosit;
+    G4int    fTransmit[2],   fReflect[2];
+    G4int    fMscEntryCentral;
     
-    G4double EnergyLeak[2],  EnergyLeak2[2];
+    G4double fEnergyLeak[2],  fEnergyLeak2[2];
 
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

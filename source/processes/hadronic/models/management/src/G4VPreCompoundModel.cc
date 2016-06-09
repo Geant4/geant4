@@ -24,20 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc,v 1.7 2010-06-11 15:26:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
+// -----------------------------------------------------------------------------
+//      GEANT 4 class file
+//
+//      History: first implementation 1998
+//
+//      V.Ivanchenko 03.01.2012
+//          Added G4ExcitationHandler pointer to the constructor and cleanup
+// -----------------------------------------------------------------------------
+
 
 #include "G4VPreCompoundModel.hh"
-//#include "G4HadronicException.hh"
 
-G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler* const value,
+G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler* ptr,
                                          const G4String& modelName):
-  G4HadronicInteraction(modelName), theExcitationHandler(value)
-{}
-
-G4VPreCompoundModel::G4VPreCompoundModel():
-  G4HadronicInteraction(""), theExcitationHandler(0)
+  G4HadronicInteraction(modelName), theExcitationHandler(ptr)
 {}
 
 G4VPreCompoundModel::~G4VPreCompoundModel()

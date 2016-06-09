@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4BuildTree.hh,v 1.8 2006-06-29 18:12:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class Description:

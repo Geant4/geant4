@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.18 2010-11-10 23:53:23 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -42,6 +41,8 @@
 #include <sstream>
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VisManager.hh"
 
 #include "G4GMocrenFile.hh"
@@ -168,8 +169,6 @@ G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler ()
     // close g4.gdd
     GFEndModeling();
   }
-  ClearStore (); // clear current scene
-
 }
 
 //----- initialize all parameters
@@ -509,10 +508,10 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
       //scene->AddEndOfEventModel(new G4HitsModel());
       if(GFDEBUG_HIT) {
         G4Scene * scene = GetScene();
-	std::vector<G4VModel*> vmodel = scene->GetEndOfEventModelList();
-	std::vector<G4VModel*>::iterator itr = vmodel.begin();
+	std::vector<G4Scene::Model> vmodel = scene->GetEndOfEventModelList();
+	std::vector<G4Scene::Model>::iterator itr = vmodel.begin();
 	for(; itr != vmodel.end(); itr++) {
-	  G4cout << " IIIIII model name: " << (*itr)->GetGlobalTag() << G4endl;
+	  G4cout << " IIIIII model name: " << itr->fpModel->GetGlobalTag() << G4endl;
 	}
       }
 
@@ -528,6 +527,17 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive" << G4endl;
 
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline&)",
+	 "gMocren1001", JustWarning,
+	 "2D polylines not implemented.  Ignored.");
+    }
+    return;
+  }
 
   //----- Initialize if necessary
   GFBeginModeling();
@@ -620,6 +630,18 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
 //----- Add text
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
 {
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Text&)",
+	 "gMocren1002", JustWarning,
+	 "2D text not implemented.  Ignored.");
+    }
+    return;
+  }
+
   // to avoid a warning in the compile process
   G4Text dummytext = text;
 
@@ -639,6 +661,18 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   // to avoid a warning in the compile process
   G4Circle dummycircle = mark_circle;
 
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Circle&)",
+	 "gMocren1003", JustWarning,
+	 "2D circles not implemented.  Ignored.");
+    }
+    return;
+  }
+
   //----- 
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Circle )" << G4endl;
@@ -655,6 +689,18 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
 {
   // to avoid a warning in the compile process
   G4Square dummysquare = mark_square;
+
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Square&)",
+	 "gMocren1004", JustWarning,
+	 "2D squares not implemented.  Ignored.");
+    }
+    return;
+  }
 
   //----- 
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
@@ -675,6 +721,18 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
 
 
   if (polyhedron.GetNoFacets() == 0) return;
+
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyhedron&)",
+	 "gMocren1005", JustWarning,
+	 "2D polyhedra not implemented.  Ignored.");
+    }
+    return;
+  }
 
   //----- Initialize if necessary
   GFBeginModeling();
@@ -757,7 +815,6 @@ void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTran
   GFBeginModeling();
 
   G4VSceneHandler::BeginPrimitives (objectTransformation);
-  fpObjectTransformation = &objectTransformation;
 
 }
 
@@ -796,7 +853,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4cout << "-------" << G4endl;
     G4cout << "    " << box.GetName() << G4endl;
     G4Polyhedron * poly = box.CreatePolyhedron();
-    poly->Transform(*fpObjectTransformation);
+    poly->Transform(fObjectTransformation);
     //G4int nv = poly->GetNoVertices();
     G4Point3D v1, v2;
     G4int next;
@@ -858,15 +915,15 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
   //-- check the parameterised volume
   if(box.GetName() == volName) {
     
-    kVolumeTrans3D = *fpObjectTransformation;
+    kVolumeTrans3D = fObjectTransformation;
     // coordination system correction for gMocren
     G4ThreeVector raxis(1., 0., 0.), dummy(0.,0.,0.); 
     G4RotationMatrix rot(raxis, pi*rad);
     G4Transform3D trot(rot, dummy);
     if(GFDEBUG_DET) {
-      G4ThreeVector trans = kVolumeTrans3D.getTranslation();
-      G4RotationMatrix rot = kVolumeTrans3D.getRotation().inverse();
-      G4cout << "kVolumeTrans3D: " << trans << G4endl << rot << G4endl;
+      G4ThreeVector trans1 = kVolumeTrans3D.getTranslation();
+      G4RotationMatrix rot1 = kVolumeTrans3D.getRotation().inverse();
+      G4cout << "kVolumeTrans3D: " << trans1 << G4endl << rot1 << G4endl;
     }
     kVolumeTrans3D = kVolumeTrans3D*trot;
     if(GFDEBUG_DET) G4cout << " Parameterised volume : " << box.GetName() << G4endl;
@@ -1081,7 +1138,6 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	  G4cout << G4endl;
 
 
-	  EAxis axis; G4int nReplicas; G4double width; G4double offset; G4bool consuming;  
 	  pPVModel->GetCurrentPV()->GetReplicationData(axis, nReplicas, width, offset, consuming);
 	  G4cout << "     # replicas : " << nReplicas << G4endl;
 	  G4double pareDims[3] = {0.,0.,0.};
@@ -1254,7 +1310,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     }
 
 
-    kVolumeTrans3D = *fpObjectTransformation;
+    kVolumeTrans3D = fObjectTransformation;
 
     // translation for the scoring mesh
     G4ThreeVector sbth = scoringBox->GetTranslation();
@@ -1663,7 +1719,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
   }
   */
   
-
+  {  // Scope bracket to avoid compiler messages about shadowing (JA).
   //for(G4int i = 0; i < nhitname; i++) {       // this selection trusts
     //if(scorername == hitScorerNames[i]) {   // thea command /vis/scene/add/psHits hit_name.
 
@@ -1688,6 +1744,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
       //break;
     //}
   //}
+  }
 
   if(GFDEBUG_HIT) {
     G4String meshname = static_cast<G4VHitsCollection>(hits).GetSDname();
@@ -1737,7 +1794,6 @@ G4bool G4GMocrenFileSceneHandler::IsVisible()
 //----- 
 void G4GMocrenFileSceneHandler::ClearTransientStore() 
 {
-  G4VSceneHandler::ClearTransientStore ();
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...
@@ -1768,7 +1824,7 @@ void G4GMocrenFileSceneHandler::AddDetector(const G4VSolid & solid) {
   std::vector<G4float *> dedges;
   G4Polyhedron * poly = solid.CreatePolyhedron();
   detector.polyhedron = poly;
-  detector.transform3D = *fpObjectTransformation;
+  detector.transform3D = fObjectTransformation;
 
   // retrieve color
   unsigned char uccolor[3] = {30, 30, 30};

@@ -1,0 +1,146 @@
+#
+# ------ MacOS-X ------
+#                                 MacOS 10.7 clang-3.0
+#
+# Original author: Gabriele Cosmo - CERN
+#
+ifeq ($(G4SYSTEM),Darwin-clang)
+  CXX       := clang
+  CXXFLAGS  := -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O2
+    FCFLAGS   := -O2
+    CCFLAGS   := -O2
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
+  endif
+  ifdef G4PROFILE
+    CXXFLAGS  += -pg
+    FCFLAGS   += -pg
+    CCFLAGS   += -pg
+  endif
+  ifdef G4OPTDEBUG
+    CXXFLAGS  += -O2 -g
+    FCFLAGS   += -O2 -g
+    CCFLAGS   += -O2 -g
+  endif
+  FC := gfortran
+  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  LDFLAGS += -bind_at_load
+  FCLIBS := -lg2c -lnsl
+  SHEXT   := dylib
+  LOADLIBS += -lm -lstdc++
+  ifndef X11FLAGS
+    X11FLAGS  := -I/usr/X11R6/include/X11/extensions -I/usr/X11R6/include/X11
+  endif
+  ifndef X11LIBS
+    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+  endif
+  ifndef XMFLAGS
+    XMFLAGS   := -I/sw/include
+#   XMFLAGS   := -I/usr/X11R6/include          ##### some installations.
+  endif
+  ifndef XMLIBS
+    XMLIBS    := -L/sw/lib -lXm -lXpm
+#   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
+  endif
+  ifndef XAWFLAGS
+    XAWFLAGS   := -I/sw/include
+#   XAWFLAGS   := -I/usr/X11R6/include         ##### some installations.
+  endif
+  ifndef XAWLIBS
+    XAWLIBS    := -lXaw
+  endif
+  DLDLIBS   := -ldl
+  ifndef OGLHOME
+    OGLHOME  := /usr/X11R6
+  endif
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
+    ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
+      OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
+      ifeq ($(G4VIS_USE_OPENGLX),1)
+        OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
+      endif
+    else
+      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+    endif
+  endif
+
+# ---- Qt Setup block -------------------------------------------------------
+
+  ifndef QTHOME
+    QTHOME := /Library/Frameworks
+  endif
+  ifndef QTMOC
+    ifeq ($(QTHOME),/Library/Frameworks)
+      QTMOC      := /usr/bin/moc
+    else
+      QTMOC      := $(QTHOME)/bin/moc
+    endif
+  endif
+  ifndef QTFLAGS
+    QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
+    QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
+    QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+    QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
+  endif
+  ifndef QTLIBPATH
+    ifeq ($(QTHOME),/Library/Frameworks)
+      QTLPATH  := $(QTHOME)
+    else
+      QTLPATH  := $(QTHOME)/lib
+    endif
+    QTLIBPATH  := -F$(QTLPATH)
+  endif
+
+  QT_AS_FRAMEWORK := $(shell test -d $(QTLPATH)/QtCore.framework && echo yes)
+
+  ifndef QTLIBS
+    ifdef QT_AS_FRAMEWORK
+       QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+    else
+       QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
+    endif   
+  endif
+  ifndef GLQTLIBS  
+    ifdef QT_AS_FRAMEWORK
+      GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+      GLQTLIBS    += -framework QtOpenGL
+    else
+      GLQTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+    endif   
+  endif
+
+#------ Wt Setup block ------------------------------------------------------
+
+  ifndef WTHOME
+    WTHOME := /usr
+  endif
+  WTFLAGS := -I$(WTHOME)/include/boost -I$(WTHOME)/include -DQT_NO_KEYWORDS 
+  WTLIBS  := -L$(WTHOME)/lib -lwt -lwtext -lwthttp  -lboost_signals  -L/usr/lib -lz -lssl -lcrypto
+
+#----------------------------------------------------------------------------
+
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
+         -o $$libdir/$(@F) $(INTYLIBS) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
+         -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+
+endif

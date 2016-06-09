@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITReactionProcess.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -82,7 +83,7 @@ public:
     virtual void Initialize(){;}
 
     virtual G4bool IsApplicable(G4ITType,G4ITType) const {return true;}
-    virtual void GetApplicableTypes(G4ITType&, G4ITType&) const;
+//    virtual void GetApplicableTypes(G4ITType&, G4ITType&) const;
 
     virtual G4bool TestReactibility(const G4Track&,
                                     const G4Track&,
@@ -97,21 +98,21 @@ public:
     inline void ResetChanges();
 
 protected:
-    G4ITType    fApplicableType1;
-    G4ITType    fApplicableType2;
+//    G4ITType    fApplicableType1;
+//    G4ITType    fApplicableType2;
 
-    const G4ITReactionTable* fReactionTable;
-    G4ITReactionChange*  fChanges ;
+    const G4ITReactionTable* fpReactionTable;
+    G4ITReactionChange*  fpChanges ;
     G4String    fName ;
 };
 
 inline void G4VITReactionProcess::SetReactionTable(const G4ITReactionTable* table)
 {
-    fReactionTable = table;
+    fpReactionTable = table;
 }
 
 inline void G4VITReactionProcess::ResetChanges()
 {
-    fChanges = 0;
+    fpChanges = 0;
 }
 #endif // G4VITREACTIONPROCESS_H

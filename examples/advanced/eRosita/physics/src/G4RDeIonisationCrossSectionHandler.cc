@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RDeIonisationCrossSectionHandler.cc,v 1.11 2006/06/29 19:42:00 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,8 @@
 // -------------------------------------------------------------------
 
 #include "G4RDeIonisationCrossSectionHandler.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RDVEnergySpectrum.hh"
 #include "G4DataVector.hh"
 #include "G4RDCompositeEMDataSet.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.hh,v 1.3 2006-06-29 19:30:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // ------------------------------------------------------------
@@ -34,6 +33,8 @@
 //
 #ifndef G4UnknownDecay_h
 #define G4UnknownDecay_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -142,7 +143,7 @@ inline
   
   // use pre-assigned Decay time to determine PIL
   //return GetMeanFreePath(track, previousStepSize, condition);
-  return remainder*c_light;
+  return remainder*CLHEP::c_light;
 
 }
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BIC.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -36,14 +35,17 @@
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 25.04.2007 G.Folger: Add code for quasielastic
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "HadronPhysicsQGSP_BIC.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
@@ -51,13 +53,43 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BIC);
+
 HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_BIC")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP_BIC")
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBinaryNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0)
+    , theBinaryPro(0)
+    , theMisc(0)
+    , QuasiElastic(true)
 {}
 
 HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name)
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBinaryNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0)
+    , theBinaryPro(0)
+    , theMisc(0)
+    , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSP_BIC::CreateModels()
@@ -86,12 +118,12 @@ void HadronPhysicsQGSP_BIC::CreateModels()
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);
 
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BIC::~HadronPhysicsQGSP_BIC() 
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
@@ -123,6 +155,6 @@ void HadronPhysicsQGSP_BIC::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/HepMCEx02.cc
+/// \brief Main program of the eventgenerator/HepMC/HepMCEx02 example
 //
-// $Id: hepmcEx02.cc,v 1.8 2010-12-10 06:22:25 kmura Exp $
+//
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +39,7 @@
 #include "G4UImanager.hh"
 
 #include "H02DetectorConstruction.hh"
-#include "QGSP_BERT.hh"
+#include "FTFP_BERT.hh"
 #include "H02PrimaryGeneratorAction.hh"
 #include "H02EventAction.hh"
 #include "H02SteppingAction.hh"
@@ -58,7 +61,7 @@ int main(int argc, char** argv)
   G4VUserDetectorConstruction* detector = new H02DetectorConstruction;
   runManager-> SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP_BERT;
+  G4VUserPhysicsList* physics = new FTFP_BERT;
   runManager-> SetUserInitialization(physics);
 
   runManager-> Initialize();

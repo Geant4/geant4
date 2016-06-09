@@ -32,18 +32,19 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimMaterial.cc,v 1.7 2006-06-29 16:23:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
+#include "RemSimMaterial.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4MaterialPropertyVector.hh"
-#include "globals.hh"
 #include "G4MaterialTable.hh"
 #include "G4RunManager.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
-#include "RemSimMaterial.hh"
 
 RemSimMaterial::RemSimMaterial():
   matPb(0), matAir(0), matH2O(0), Al(0), nylon(0), mylar(0), 
@@ -129,7 +130,7 @@ void RemSimMaterial::DefineMaterials()
  
   // Air material
   G4double airDensity = 1.290*mg/cm3;
-  G4Material* matAir = new G4Material("Air",airDensity,2);
+  matAir = new G4Material("Air",airDensity,2);
   matAir -> AddElement(elN,0.7);
   matAir -> AddElement(elO,0.3);
 

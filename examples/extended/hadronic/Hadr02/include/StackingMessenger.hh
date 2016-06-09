@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.hh,v 1.3 2006-06-29 17:23:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr02/include/StackingMessenger.hh
+/// \brief Definition of the StackingMessenger class
+//
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -62,10 +64,10 @@ public:
     
 private:
     
-  StackingAction*     stackAction;
+  StackingAction*     fStackAction;
     
-  G4UIcmdWithABool*   killCmd;
-  G4UIcmdWithABool*   kCmd;
+  G4UIcmdWithABool*   fKillCmd;
+  G4UIcmdWithABool*   fKCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

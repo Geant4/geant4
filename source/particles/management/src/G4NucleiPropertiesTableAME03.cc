@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.cc,v 1.5 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +44,8 @@
 //
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiPropertiesTableAME03.hh"
 
 // Class G4NucleiPropertiesTableAME03 

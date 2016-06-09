@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/ExGflash.cc
+/// \brief Main program of the parameterisations/gflash example
+//
 // Created by Joanna Weng 26.11.2004
 
 //std includes 
@@ -64,75 +67,75 @@ G4Timer Timerintern;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
-{ 	
-	// Timer to see GFlash performance
-	Timer.Start();
-	
-	G4cout<<"+-------------------------------------------------------+"<<G4endl;
-	G4cout<<"|                                                       |"<<G4endl;
-	G4cout<<"|          This is an example of Shower                 |"<<G4endl;
-	G4cout<<"|          Parameterization with GFLASH                 |"<<G4endl;
-	G4cout<<"+-------------------------------------------------------+"<<G4endl;
-	
-	G4RunManager* runManager = new G4RunManager;
-	
-	// UserInitialization classes (mandatory)
-	G4cout<<"# GFlash Example: Detector Construction"<<G4endl;    
-	runManager->SetUserInitialization(new ExGflashDetectorConstruction);
-	G4cout<<"# GFlash Example: Physics list"<<G4endl;
-	runManager->SetUserInitialization(new ExGflashPhysicsList);
-	G4cout<<"# GFlash Example: Primary Generator"<<G4endl;
-	runManager->SetUserAction(new ExGflashPrimaryGeneratorAction);
-	G4cout<<"# GFlash Example: User Action Classes"<<G4endl;
-	runManager->SetUserAction(new ExGflashEventAction);
-	runManager->SetUserAction(new ExGflashRunAction);
-	
+{   
+  // Timer to see GFlash performance
+  Timer.Start();
+  
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+  G4cout<<"|                                                       |"<<G4endl;
+  G4cout<<"|          This is an example of Shower                 |"<<G4endl;
+  G4cout<<"|          Parameterization with GFLASH                 |"<<G4endl;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+  
+  G4RunManager* runManager = new G4RunManager;
+  
+  // UserInitialization classes (mandatory)
+  G4cout<<"# GFlash Example: Detector Construction"<<G4endl;    
+  runManager->SetUserInitialization(new ExGflashDetectorConstruction);
+  G4cout<<"# GFlash Example: Physics list"<<G4endl;
+  runManager->SetUserInitialization(new ExGflashPhysicsList);
+  G4cout<<"# GFlash Example: Primary Generator"<<G4endl;
+  runManager->SetUserAction(new ExGflashPrimaryGeneratorAction);
+  G4cout<<"# GFlash Example: User Action Classes"<<G4endl;
+  runManager->SetUserAction(new ExGflashEventAction);
+  runManager->SetUserAction(new ExGflashRunAction);
+  
 #ifdef G4VIS_USE
-	G4VisManager* visManager = new G4VisExecutive;
-	visManager->Initialize();
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 #endif
-	
-	G4UImanager* UImanager = G4UImanager::GetUIpointer();
-	UImanager->ApplyCommand("/run/verbose 0");
-	runManager->Initialize();
-	UImanager->ApplyCommand("/Step/Verbose 0");
-	
-	if (argc==1)   // Define UI terminal for interactive mode  
-	{ 
+  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  UImanager->ApplyCommand("/run/verbose 0");
+  runManager->Initialize();
+  UImanager->ApplyCommand("/Step/Verbose 0");
+  
+  if (argc==1)   // Define UI terminal for interactive mode  
+  { 
 #ifdef G4UI_USE
-		G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-		UImanager->ApplyCommand("/control/execute vis.mac");     
+    UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-		ui->SessionStart();
-		delete ui;
+    ui->SessionStart();
+    delete ui;
 #endif
-	}
-	else           // Batch mode
-	{ 
-		G4String s=*(argv+1);
-		UImanager->ApplyCommand("/control/execute "+s);
-	}
-	
-	#ifdef G4VIS_USE
-	delete visManager;
-	#endif	
-	delete runManager;
-	
-	Timer.Stop();
-	G4cout << G4endl;
-	G4cout << "******************************************";
-	G4cout << G4endl;
-	G4cout << "Total Real Elapsed Time is: "<< Timer.GetRealElapsed();
-	G4cout << G4endl;
-	G4cout << "Total System Elapsed Time: " << Timer.GetSystemElapsed();
-	G4cout << G4endl;
-	G4cout << "Total GetUserElapsed Time: " << Timer.GetUserElapsed();
-	G4cout << G4endl;
-	G4cout << "******************************************";
-	G4cout << G4endl;
-	
-	return 0;
+  }
+  else           // Batch mode
+  { 
+    G4String s=*(argv+1);
+    UImanager->ApplyCommand("/control/execute "+s);
+  }
+  
+  #ifdef G4VIS_USE
+  delete visManager;
+  #endif  
+  delete runManager;
+  
+  Timer.Stop();
+  G4cout << G4endl;
+  G4cout << "******************************************";
+  G4cout << G4endl;
+  G4cout << "Total Real Elapsed Time is: "<< Timer.GetRealElapsed();
+  G4cout << G4endl;
+  G4cout << "Total System Elapsed Time: " << Timer.GetSystemElapsed();
+  G4cout << G4endl;
+  G4cout << "Total GetUserElapsed Time: " << Timer.GetUserElapsed();
+  G4cout << G4endl;
+  G4cout << "******************************************";
+  G4cout << G4endl;
+  
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

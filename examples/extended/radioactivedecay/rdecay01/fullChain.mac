@@ -6,18 +6,22 @@
 #
 /rdecay01/fullChain true
 #
-/rdecay01/histo/setFileName run2
-###/rdecay01/histo/setFileType hbook
-/rdecay01/histo/setFileType root
-/rdecay01/histo/setHisto 1  100  0. 4000 keV	#e+ e-
-/rdecay01/histo/setHisto 2  100  0. 4000 keV	#neutrino
-/rdecay01/histo/setHisto 3  100  0. 4000 keV	#gamma
-/rdecay01/histo/setHisto 4  100  0. 10   MeV	#alpha
-/rdecay01/histo/setHisto 5  100  0. 200  keV	#recoil ion
-/rdecay01/histo/setHisto 6  100  0  8    MeV	#EkinTot (Q)
-/rdecay01/histo/setHisto 7  100  0. 300  MeV	#P balance
-/rdecay01/histo/setHisto 8  100  0. 1.e+11 y	#time of life
+/analysis/setFileName run2
+/analysis/h1/set 1  100  0. 4000 keV	#e+ e-
+/analysis/h1/set 2  100  0. 4000 keV	#neutrino
+/analysis/h1/set 3  100  0. 4000 keV	#gamma
+/analysis/h1/set 4  100  0. 10   MeV	#alpha
+/analysis/h1/set 5  100  0. 200  keV	#recoil ion
+/analysis/h1/set 6  100  0  8    MeV	#EkinTot (Q)
+/analysis/h1/set 7  100  0. 300  MeV	#P balance
+/analysis/h1/set 8  100  0. 1.e+11 y	#time of life
 #
 /rdecay01/event/printModulo 10000
 #  
 /run/beamOn 100000
+
+#limit the chain
+#
+###/grdm/nucleusLimits 234 238 90 92
+#
+###/run/beamOn 1

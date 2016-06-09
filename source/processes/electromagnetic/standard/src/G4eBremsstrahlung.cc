@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.56 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -76,6 +75,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eBremsstrahlung.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4eBremsstrahlungModel.hh"
 #include "G4SeltzerBergerModel.hh"
@@ -95,6 +95,8 @@ G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name):
   isInitialised(false)
 {
   SetProcessSubType(fBremsstrahlung);
+  SetSecondaryParticle(G4Gamma::Gamma());
+  SetIonisation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,8 +118,6 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					       const G4ParticleDefinition*)
 {
   if(!isInitialised) {
-    SetSecondaryParticle(G4Gamma::Gamma());
-    SetIonisation(false);
 
     //    if (!EmModel(1)) { SetEmModel(new G4eBremsstrahlungModel(), 1); }
     if (!EmModel(1)) { SetEmModel(new G4SeltzerBergerModel(), 1); }

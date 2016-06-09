@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.3 2009-10-04 16:05:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -39,8 +38,8 @@
 #ifndef QBBC_h
 #define QBBC_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 
 class QBBC : public G4VModularPhysicsList
 {

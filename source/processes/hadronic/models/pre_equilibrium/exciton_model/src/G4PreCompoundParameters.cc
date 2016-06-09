@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundParameters.cc,v 1.4 2010-08-18 14:07:24 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by V. Lara
 //
@@ -32,6 +31,7 @@
 //
 
 #include "G4PreCompoundParameters.hh"
+#include "G4SystemOfUnits.hh"
 
 G4PreCompoundParameters* G4PreCompoundParameters::theParameters = 0;
 

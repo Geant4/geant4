@@ -35,14 +35,15 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.52 2010-07-13 15:59:42 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
-#include "G4PropagatorInField.hh"
-#include "G4ios.hh"
 #include <iomanip>
 
+#include "G4PropagatorInField.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
@@ -86,11 +87,14 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
   fPreviousSafety= 0.0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fZeroStepThreshold= std::max( 1.0e5 * kCarTolerance, 1.0e-1 * micrometer ) ; 
+  fZeroStepThreshold= std::max( 1.0e5 * kCarTolerance, 1.0e-1 * micrometer );
+
 #ifdef G4DEBUG_FIELD
-  G4cout << " PiF: Zero Step Threshold set to " << fZeroStepThreshold / millimeter
+  G4cout << " PiF: Zero Step Threshold set to "
+         << fZeroStepThreshold / millimeter
 	 << " mm." << G4endl;
-  G4cout << " PiF:   Value of kCarTolerance = " << kCarTolerance / millimeter 
+  G4cout << " PiF:   Value of kCarTolerance = "
+         << kCarTolerance / millimeter 
 	 << " mm. " << G4endl;
 #endif 
 
@@ -165,7 +169,7 @@ G4PropagatorInField::ComputeStep(
   // For the next call, the field manager must again be set
   fSetFieldMgr= false;
 
-  GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass); 
+  GetChordFinder()->SetChargeMomentumMass(fCharge,fInitialMomentumModulus,fMass);
 
  // Values for Intersection Locator has to be updated on each call for the
  // case that CurrentFieldManager has changed from the one of previous step
@@ -226,8 +230,8 @@ G4PropagatorInField::ComputeStep(
       //
       if( stepTrial > 100.0*fZeroStepThreshold )
         decreaseFactor = 0.35;     // Try decreasing slower
-      else if( stepTrial > 100.0*fZeroStepThreshold )
-        decreaseFactor= 0.5;       // Try yet slower decreases
+      else if( stepTrial > 30.0*fZeroStepThreshold )
+        decreaseFactor= 0.5;       // Try yet slower decrease
       else if( stepTrial > 10.0*fZeroStepThreshold )
         decreaseFactor= 0.75;      // Try even slower decreases
       else

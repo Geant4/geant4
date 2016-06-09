@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPEnergyDistribution.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPEnergyDistribution_h
 #define G4NeutronHPEnergyDistribution_h 1
 
+#include <fstream>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
+#include "Randomize.hh"
 #include "G4NeutronHPArbitaryTab.hh"
 #include "G4NeutronHPEvapSpectrum.hh"
 #include "G4NeutronHPSimpleEvapSpectrum.hh"
@@ -40,7 +41,6 @@
 #include "G4NeutronHPWattSpectrum.hh"
 #include "G4NeutronHPMadlandNixSpectrum.hh"
 #include "G4VNeutronHPEDis.hh"
-#include "Randomize.hh"
 
 // we will need a List of these .... one per term.
 

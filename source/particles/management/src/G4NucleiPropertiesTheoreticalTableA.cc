@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.9 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -35,6 +34,8 @@
 // Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 
 #include "G4NucleiPropertiesTheoreticalTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A) 

@@ -39,6 +39,7 @@
 
 #include "G4PiMinusAbsorptionAtRest.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4PiMinusStopLi.hh"
 #include "G4PiMinusStopC.hh"
 #include "G4PiMinusStopN.hh"
@@ -56,6 +57,8 @@
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Constructor
 
@@ -63,6 +66,8 @@ G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName
                                                      G4ProcessType aType) :
   G4VRestProcess (processName, aType)
 {
+  G4HadronicDeprecate("G4PiMinusAbsorptionAtRest");
+
   SetProcessSubType(fHadronAtRest);
 
   _indexDeexcitation = 0;

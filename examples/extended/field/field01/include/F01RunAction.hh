@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01RunAction.hh
+/// \brief Definition of the F01RunAction class
 //
-// $Id: F01RunAction.hh,v 1.6 2006-06-29 17:16:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -50,19 +52,19 @@ class F01RunAction : public G4UserRunAction
 {
   public:
     F01RunAction();
-   ~F01RunAction();
+    ~F01RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}
+    void  SetRndmFreq(G4int val) {fSaveRndm = val;}
+    G4int GetRndmFreq() const    {return fSaveRndm;}
 
   private:
 
-    F01RunMessenger* runMessenger;
-    G4int saveRndm;    
+    F01RunMessenger* fMessenger;
+    G4int fSaveRndm;    
 };
 
 #endif

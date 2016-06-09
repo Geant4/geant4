@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.10 2010-10-26 14:15:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +50,8 @@
 
 #include "G4eeToHadronsModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "G4Positron.hh"
@@ -64,10 +65,10 @@
 
 using namespace std;
 
-G4eeToHadronsModel::G4eeToHadronsModel(G4Vee2hadrons* m, G4int ver,
+G4eeToHadronsModel::G4eeToHadronsModel(G4Vee2hadrons* mod, G4int ver,
                                        const G4String& nam)
   : G4VEmModel(nam),
-    model(m),
+    model(mod),
     crossPerElectron(0),
     crossBornPerElectron(0),
     isInitialised(false),
@@ -236,10 +237,10 @@ void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp
       G4LorentzVector gLv = gamma->Get4Momentum();
       G4LorentzVector lv(0.0,0.0,0.0,e);
       lv -= gLv;
-      G4double m = lv.m();
+      G4double mass = lv.m();
       G4ThreeVector boost = lv.boostVector();
       const G4ThreeVector dir = gamma->GetMomentumDirection();
-      model->SampleSecondaries(newp, m, dir);
+      model->SampleSecondaries(newp, mass, dir);
       G4int np = newp->size();
       for(G4int j=0; j<np; j++) {
 	G4DynamicParticle* dp = (*newp)[j];
@@ -277,12 +278,13 @@ void G4eeToHadronsModel::ComputeCMCrossSectionPerElectron()
 	G4double x2  = x1;
 	G4double s2  = crossBornPerElectron->GetValue(e2, b);
 	G4double w2  = bt*(del*pow(x2,btm1) - 1.0 + 0.5*x2);
-     
+        G4double w1;      
+
 	for(G4int j=i-2; j>=0; j--) {
 	  e1  = crossPerElectron->GetLowEdgeEnergy(j);
 	  x1  = 1. - e1/e;
-	  G4double s1 = crossBornPerElectron->GetValue(e1, b);
-	  G4double w1 = bt*(del*pow(x1,btm1) - 1.0 + 0.5*x1);
+	  s1  = crossBornPerElectron->GetValue(e1, b);
+	  w1  = bt*(del*pow(x1,btm1) - 1.0 + 0.5*x1);
 	  cs += 0.5*(x1 - x2)*(w2*s2 + w1*s1);
 	  e2 = e1;
 	  x2 = x1;

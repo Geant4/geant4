@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4MolecularDecayTable.cc 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -96,15 +97,16 @@ const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayCha
 const G4String& G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy* conf) const
 {
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
-    if(it_exstates != fExcitedStatesMap.end())
+
+    if(it_exstates == fExcitedStatesMap.end())
     {
-        return it_exstates->second;
+        G4String errMsg = "Excited state not found";
+        G4Exception("G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
+                    "G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
+//        return *(new G4String("IM FAKE"));  // fake return statement
     }
 
-    G4String errMsg = "Excited state not found";
-    G4Exception("G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
-                "G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
-    return it_exstates->second;  // fake return statement
+    return it_exstates->second;
 }
 
 const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4String& exState) const
@@ -133,6 +135,7 @@ void G4MolecularDecayTable::AddExcitedState(const G4String& label)
         G4String errMsg = "Excited state" + label + " already registered in the decay table.";
         G4Exception("G4MolecularDecayTable::AddExcitedState",
                     "G4MolecularDecayTable003",FatalErrorInArgument, errMsg);
+        return;
     }
     fDecayChannelsMap[label] ;
 }

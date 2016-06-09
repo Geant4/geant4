@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.29 2010-05-27 14:22:05 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -59,7 +58,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4VMscModel.hh"
-#include "G4PhysicsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4WentzelOKandVIxSection.hh"
 
@@ -81,6 +79,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  void StartTracking(G4Track*);
+
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double KineticEnergy,
 					      G4double AtomicNumber,
@@ -88,11 +88,11 @@ public:
 					      G4double cut = DBL_MAX,
 					      G4double emax= DBL_MAX);
 
-  virtual void SampleScattering(const G4DynamicParticle*, G4double safety);
+  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+					  G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
-					      G4PhysicsTable* theLambdaTable,
-					      G4double currentMinimalStep);
+					      G4double& currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -101,8 +101,6 @@ public:
 private:
 
   G4double ComputeXSectionPerVolume();
-
-  inline G4double GetLambda(G4double kinEnergy);
 
   inline void SetupParticle(const G4ParticleDefinition*);
 
@@ -118,7 +116,6 @@ private:
   G4WentzelOKandVIxSection* wokvi;
   G4Pow*                    fG4pow;
 
-  G4PhysicsTable*           theLambdaTable;
   const G4DataVector*       currentCuts;
 
   G4double tlimitminfix;
@@ -154,8 +151,8 @@ private:
   G4double lowEnergyLimit;
 
   // flags
-  G4bool   isInitialized;
   G4bool   inside;
+  G4bool   singleScatteringMode;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -166,24 +163,10 @@ void G4WentzelVIModel::DefineMaterial(const G4MaterialCutsCouple* cup)
 { 
   if(cup != currentCouple) {
     currentCouple = cup;
+    SetCurrentCouple(cup); 
     currentMaterial = cup->GetMaterial();
     currentMaterialIndex = currentCouple->GetIndex(); 
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4WentzelVIModel::GetLambda(G4double e)
-{
-  G4double x;
-  if(theLambdaTable) { x = ((*theLambdaTable)[currentMaterialIndex])->Value(e); } 
-  else { x = CrossSection(currentCouple,particle,e,
-			  (*currentCuts)[currentMaterialIndex]);
-  }
-  if(x > DBL_MIN) { x = 1./x; }
-  else            { x = DBL_MAX; }
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

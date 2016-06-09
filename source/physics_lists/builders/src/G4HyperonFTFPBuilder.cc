@@ -37,9 +37,11 @@
 //
 #include "G4HyperonFTFPBuilder.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
   
   
 G4HyperonFTFPBuilder::G4HyperonFTFPBuilder(): 
@@ -89,7 +91,7 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
   AntiHyperonFTFP->SetHighEnergyGenerator(theStringModel);
 
 // use CHIPS cross sections
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  theCHIPSInelastic = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name());
 }
 
 
@@ -100,7 +102,7 @@ G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder()
   delete theStringDecay;
   delete theCascade;
   delete thePreEquilib;
-  delete theHandler;
+  //  delete theHandler;
   delete theBertini;
   delete AntiHyperonFTFP;
   
@@ -130,7 +132,6 @@ void G4HyperonFTFPBuilder::Build()
   theLambdaInelastic->RegisterMe(theBertini);
   theLambdaInelastic->RegisterMe(HyperonFTFP);
   theLambdaInelastic->AddDataSet(theCHIPSInelastic);
-
   aProcMan = G4Lambda::Lambda()->GetProcessManager();
   aProcMan->AddDiscreteProcess(theLambdaInelastic);
   

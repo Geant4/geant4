@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.29 2010-10-06 10:05:52 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -37,11 +36,13 @@
 
 #include "G4OpenGLStoredViewer.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4UnitsTable.hh"
 #include "G4Scene.hh"
+#include "G4OpenGLTransform3D.hh"
 
 G4OpenGLStoredViewer::G4OpenGLStoredViewer
 (G4OpenGLStoredSceneHandler& sceneHandler):
@@ -86,13 +87,14 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       // if status changes so that back plane culling can be switched.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
-      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetDefaultVisAttributes()->GetColour() !=
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ())
+      (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
+      (lastVP.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       )
     return true;
   
@@ -129,96 +131,215 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
 #ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
+  printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
 #endif
 
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
     fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
-  size_t nPasses = cutawayUnion? cutaways.size(): 1;
+  const size_t nCutaways = cutawayUnion? cutaways.size(): 1;
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredViewer::DrawDisplayLists");
 #endif
-  for (size_t i = 0; i < nPasses; ++i) {
-#ifdef G4DEBUG_VIS_OGL
-    printf("+");
-#endif
+  G4int iPass = 1;
+  G4bool secondPassForTransparencyRequested = false;
+  G4bool thirdPassForNonHiddenMarkersRequested = false;
+  do {
+    for (size_t iCutaway = 0; iCutaway < nCutaways; ++iCutaway) {
 
-    if (cutawayUnion) {
-      double a[4];
-      a[0] = cutaways[i].a();
-      a[1] = cutaways[i].b();
-      a[2] = cutaways[i].c();
-      a[3] = cutaways[i].d();
-      glClipPlane (GL_CLIP_PLANE2, a);
-      glEnable (GL_CLIP_PLANE2);
-    }
-
-    G4bool isPicking = fVP.IsPicking();
-
-    for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fPOList.size(); ++i) {
-      if (POSelected(i)) {
-	G4OpenGLStoredSceneHandler::PO& po =
-	  fG4OpenGLStoredSceneHandler.fPOList[i];
-	glPushMatrix();
-	G4OpenGLTransform3D oglt (po.fTransform);
-	glMultMatrixd (oglt.GetGLMatrix ());
-	if (isPicking) glLoadName(po.fPickName);
-	glCallList (po.fDisplayListId);
-	glPopMatrix();
+      if (cutawayUnion) {
+	double a[4];
+	a[0] = cutaways[iCutaway].a();
+	a[1] = cutaways[iCutaway].b();
+	a[2] = cutaways[iCutaway].c();
+	a[3] = cutaways[iCutaway].d();
+	glClipPlane (GL_CLIP_PLANE2, a);
+	glEnable (GL_CLIP_PLANE2);
       }
-    }
 
-    //if (fG4OpenGLStoredSceneHandler.fTopPODL) 
-    //  glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
+      G4bool isPicking = fVP.IsPicking();
 
-    const G4Colour& bg = fVP.GetBackgroundColour();
-    G4double bsf = 1.;  // Brightness scaling factor.
-    G4double bsf_temp = 1.; // Local brightness scaling factor
-    G4double aRed = (1. - bsf) * bg.GetRed();
-    G4double aGreen = (1. - bsf) * bg.GetGreen();
-    G4double aBlue = (1. - bsf) * bg.GetBlue();
-    G4double bgRed = bg.GetRed();
-    G4double bgGreen = bg.GetGreen();
-    G4double bgBlue = bg.GetBlue();
-
-    for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
-#ifdef G4DEBUG_VIS_OGL
-      //      printf("-");
-#endif
-      if (TOSelected(i)) {
-	G4OpenGLStoredSceneHandler::TO& to =
-	  fG4OpenGLStoredSceneHandler.fTOList[i];
-	if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
-	  glPushMatrix();
-	  G4OpenGLTransform3D oglt (to.fTransform);
-	  glMultMatrixd (oglt.GetGLMatrix ());
-	  if (isPicking) glLoadName(to.fPickName);
-	  const G4Colour& c = to.fColour;
-	  if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
-	    bsf_temp = 1. - fFadeFactor *
-	      ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
-	    glColor3d
-	      (bsf_temp * c.GetRed() + (1. - bsf_temp) * bgRed,
-	       bsf_temp * c.GetGreen() + (1. - bsf_temp) * bgGreen,
-	       bsf_temp * c.GetBlue() + (1. - bsf_temp) * bgBlue);
+      for (size_t iPO = 0;
+	   iPO < fG4OpenGLStoredSceneHandler.fPOList.size(); ++iPO) {
+	if (POSelected(iPO)) {
+	  G4OpenGLStoredSceneHandler::PO& po =
+	    fG4OpenGLStoredSceneHandler.fPOList[iPO];
+	  G4Colour c = po.fColour;
+	  DisplayTimePOColourModification(c,iPO);
+          const G4bool isTransparent = c.GetAlpha() < 1.;
+	  if ( iPass == 1) {
+	    if (isTransparent && transparency_enabled) {
+	      secondPassForTransparencyRequested = true;
+	      continue;
+	    }
+	    if (po.fMarkerOrPolyline && fVP.IsMarkerNotHidden()) {
+	      thirdPassForNonHiddenMarkersRequested = true;
+	      continue;
+	    }
+	  } else if (iPass == 2) {  // Second pass for transparency.
+	    if (!isTransparent) {
+	      continue;
+	    }
+	  } else {  // Third pass for non-hidden markers
+	    if (!po.fMarkerOrPolyline) {
+	      continue;
+	    }            
+          }
+	  if (isPicking) glLoadName(po.fPickName);
+          if (transparency_enabled) {
+            glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+          } else {
+            glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+          }
+          if (po.fMarkerOrPolyline && fVP.IsMarkerNotHidden())
+            glDisable (GL_DEPTH_TEST);
+          else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+	  if (po.fpG4TextPlus) {
+	    if (po.fpG4TextPlus->fProcessing2D) {
+	      glMatrixMode (GL_PROJECTION);
+	      glPushMatrix();
+	      glLoadIdentity();
+	      glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+	      glMatrixMode (GL_MODELVIEW);
+	      glPushMatrix();
+	      glLoadIdentity();
+	    }
+	    G4OpenGLTransform3D oglt (po.fTransform);
+	    glMultMatrixd (oglt.GetGLMatrix ());
+	    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+	      (po.fpG4TextPlus->fG4Text);
+	    if (po.fpG4TextPlus->fProcessing2D) {
+	      glMatrixMode (GL_PROJECTION);
+	      glPopMatrix();
+	      glMatrixMode (GL_MODELVIEW);
+	      glPopMatrix();
+	    }
 	  } else {
-	    glColor3d
-	      (bsf * c.GetRed() + aRed,
-	       bsf * c.GetGreen() + aGreen,
-	       bsf * c.GetBlue() + aBlue);
+	    glPushMatrix();
+	    G4OpenGLTransform3D oglt (po.fTransform);
+	    glMultMatrixd (oglt.GetGLMatrix ());
+	    glCallList (po.fDisplayListId);
+	    glPopMatrix();
 	  }
-	  glCallList (to.fDisplayListId);
-	  glPopMatrix();
 	}
       }
-    }
 
-    if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
-  }
-#ifdef G4DEBUG_VIS_OGL
-      printf("\n");
-#endif
+      G4Transform3D lastMatrixTransform;
+      G4bool first = true;
+
+      for (size_t iTO = 0;
+	   iTO < fG4OpenGLStoredSceneHandler.fTOList.size(); ++iTO) {
+	if (TOSelected(iTO)) {
+	  G4OpenGLStoredSceneHandler::TO& to =
+	    fG4OpenGLStoredSceneHandler.fTOList[iTO];
+          const G4Colour& c = to.fColour;
+          const G4bool isTransparent = c.GetAlpha() < 1.;
+	  if ( iPass == 1) {
+	    if (isTransparent && transparency_enabled) {
+	      secondPassForTransparencyRequested = true;
+	      continue;
+	    }
+	    if (to.fMarkerOrPolyline && fVP.IsMarkerNotHidden()) {
+	      thirdPassForNonHiddenMarkersRequested = true;
+	      continue;
+	    }
+	  } else if (iPass == 2) {  // Second pass for transparency.
+	    if (!isTransparent) {
+	      continue;
+	    }
+	  } else {  // Third pass for non-hidden markers
+	    if (!to.fMarkerOrPolyline) {
+	      continue;
+	    }
+          }
+          if (to.fMarkerOrPolyline && fVP.IsMarkerNotHidden())
+            glDisable (GL_DEPTH_TEST);
+          else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+	  if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
+	    if (fVP.IsPicking()) glLoadName(to.fPickName);
+	    if (to.fpG4TextPlus) {
+	      if (to.fpG4TextPlus->fProcessing2D) {
+		glMatrixMode (GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+		glMatrixMode (GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+	      }
+	      G4OpenGLTransform3D oglt (to.fTransform);
+	      glMultMatrixd (oglt.GetGLMatrix ());
+              if (transparency_enabled) {
+                glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+              } else {
+                glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+              }
+	      fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+		(to.fpG4TextPlus->fG4Text);
+	      if (to.fpG4TextPlus->fProcessing2D) {
+		glMatrixMode (GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode (GL_MODELVIEW);
+		glPopMatrix();
+	      }
+	    } else {
+	      if (to.fTransform != lastMatrixTransform) {
+		if (! first) {
+		  glPopMatrix();
+		}
+		first = false;
+		glPushMatrix();
+		G4OpenGLTransform3D oglt (to.fTransform);
+		glMultMatrixd (oglt.GetGLMatrix ());
+	      }
+	      const G4Colour& cc = to.fColour;
+	      if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
+		// Brightness scaling factor
+		G4double bsf = 1. - fFadeFactor *
+		  ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
+		const G4Colour& bg = fVP.GetBackgroundColour();
+                if (transparency_enabled) {
+                  glColor4d
+		  (bsf * cc.GetRed() + (1. - bsf) * bg.GetRed(),
+		   bsf * cc.GetGreen() + (1. - bsf) * bg.GetGreen(),
+		   bsf * cc.GetBlue() + (1. - bsf) * bg.GetBlue(),
+                   bsf * cc.GetAlpha() + (1. - bsf) * bg.GetAlpha());
+                } else {
+                  glColor3d
+		  (bsf * cc.GetRed() + (1. - bsf) * bg.GetRed(),
+		   bsf * cc.GetGreen() + (1. - bsf) * bg.GetGreen(),
+		   bsf * cc.GetBlue() + (1. - bsf) * bg.GetBlue());
+                }
+	      } else {
+                if (transparency_enabled) {
+                  glColor4d(cc.GetRed(),cc.GetGreen(),cc.GetBlue(),cc.GetAlpha());
+                } else {
+                  glColor3d(cc.GetRed(),cc.GetGreen(),cc.GetBlue());
+                }
+	      }
+	      glCallList (to.fDisplayListId);
+	    }
+	    if (to.fTransform != lastMatrixTransform) {
+	      lastMatrixTransform = to.fTransform;
+	    }
+	  }
+	}
+      }
+      if (! first) {
+	glPopMatrix();
+      }
+
+      if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
+    }  // iCutaway
+    
+    if (iPass == 2) secondPassForTransparencyRequested = false;  // Done.
+    if (iPass == 3) thirdPassForNonHiddenMarkersRequested = false;  // Done.
+    
+    if (secondPassForTransparencyRequested) iPass = 2;
+    else if (thirdPassForNonHiddenMarkersRequested) iPass = 3;
+    else break;
+
+  } while (true);
 
   // Display time at "head" of time range, which is fEndTime...
   if (fDisplayHeadTime && fEndTime < DBL_MAX) {
@@ -237,8 +358,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 			      fDisplayHeadTimeGreen,
 			      fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
-    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-      G4OpenGLSceneHandler::AddPrimitive(headTimeText);
+    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -291,8 +411,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	glColor3d(fDisplayLightFrontRed,
 		  fDisplayLightFrontGreen,
 		  fDisplayLightFrontBlue);
-	static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-	  G4OpenGLSceneHandler::AddPrimitive(lightFront);
+	fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(lightFront);
       }
     }
   }

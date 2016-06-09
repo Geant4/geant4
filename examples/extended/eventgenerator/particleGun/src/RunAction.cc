@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/src/RunAction.cc
+/// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -38,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-:histoManager(histo)
+:fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +54,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {      
   //histograms
   //
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +63,7 @@ void RunAction::EndOfRunAction(const G4Run*)
 {     
   //save histograms
   //      
-  histoManager->save();
+  fHistoManager->save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

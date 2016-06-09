@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.12 2010-05-11 11:13:35 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  31st December 1997.
@@ -90,6 +89,11 @@ inline G4VSolid* G4ModelingParameters::GetCutawaySolid () const
 inline const G4Event* G4ModelingParameters::GetEvent () const
 {return fpEvent;}
 
+inline const std::vector<G4ModelingParameters::VisAttributesModifier>&
+G4ModelingParameters::GetVisAttributesModifiers() const {
+  return fVisAttributesModifiers;
+}
+
 inline void G4ModelingParameters::SetWarning (G4bool value) {
   fWarning = value;
 }
@@ -133,3 +137,9 @@ inline void G4ModelingParameters::SetExplodeCentre
 inline void G4ModelingParameters::SetEvent(const G4Event* pEvent) {
   fpEvent = pEvent;
 }
+
+inline void G4ModelingParameters::SetVisAttributesModifiers
+(const std::vector<G4ModelingParameters::VisAttributesModifier> vams) {
+  fVisAttributesModifiers = vams;
+}
+

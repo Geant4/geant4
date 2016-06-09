@@ -23,23 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/field02.cc
+/// \brief Main program of the field/field02 example
 //
-// $Id: field02.cc,v 1.10 2010-05-12 16:36:58 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - TestF02 
-//
-// --------------------------------------------------------------
-// Comments
-//     
-//   
-// --------------------------------------------------------------
-
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
 
 #include "F02DetectorConstruction.hh"
 #include "F02ElectricFieldSetup.hh"
@@ -47,8 +33,11 @@
 #include "F02PrimaryGeneratorAction.hh"
 #include "F02RunAction.hh"
 #include "F02EventAction.hh"
-#include "F02SteppingAction.hh"
 #include "F02SteppingVerbose.hh"
+
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -71,17 +60,16 @@ int main(int argc,char** argv)
   
   // Construct the default run manager
 
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager;
 
   // Construct the helper class to manage the electric field & 
-  //  the parameters for the propagation of particles in it.
+  // the parameters for the propagation of particles in it.
 
   F02ElectricFieldSetup* field = new F02ElectricFieldSetup() ;
     
   // Set mandatory initialization classes
 
-  F02DetectorConstruction* detector;
-  detector = new F02DetectorConstruction;
+  F02DetectorConstruction* detector = new F02DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new F02PhysicsList(detector));
   
@@ -90,15 +78,9 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new F02PrimaryGeneratorAction(detector));
 
   F02RunAction* runAction = new F02RunAction;
-
   runManager->SetUserAction(runAction);
 
-  F02EventAction* eventAction = new F02EventAction(runAction);
-
-  runManager->SetUserAction(eventAction);
-
-  F02SteppingAction* steppingAction = new F02SteppingAction();
-  runManager->SetUserAction(steppingAction);
+  runManager->SetUserAction(new F02EventAction(runAction));
   
   // Initialize G4 kernel, physics tables ...
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_INCLXX.hh,v 1.1 2009-07-19 18:24:03 kaitanie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -33,14 +32,17 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// D. Mancusi 23.03.2012 Extended INCL++ to incident heavy ions up to 16O
 //
 //----------------------------------------------------------------------------
 //
 #ifndef TQGSP_INCLXX_h
 #define TQGSP_INCLXX_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 /**
@@ -69,6 +71,7 @@
  * @see G4INCLXXProtonBuilder
  * @see G4INCLXXNeutronBuilder
  * @see G4INCLXXPiKBuilder
+ * @see G4IonINCLXXPhysics
  */
 template<class T>
 class TQGSP_INCLXX: public T

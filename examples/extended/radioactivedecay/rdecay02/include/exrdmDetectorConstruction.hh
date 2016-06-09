@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmDetectorConstruction.hh
+/// \brief Definition of the exrdmDetectorConstruction class
+//
 #ifndef exrdmDetectorConstruction_h
 #define exrdmDetectorConstruction_h 1
 
@@ -45,14 +48,14 @@ class exrdmDetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      exrdmDetectorConstruction();
-    ~exrdmDetectorConstruction();
+     virtual ~exrdmDetectorConstruction();
 
   public:
   
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      
      const 
-     G4VPhysicalVolume* GetDetector() {return physiDetector;};
+     G4VPhysicalVolume* GetDetector() {return fPhysiDetector;};
 
      G4double GetDetectoFullLength() {return fDetectorLength;};
      G4double GetTargetFullLength()  {return fTargetLength;};
@@ -61,47 +64,50 @@ class exrdmDetectorConstruction : public G4VUserDetectorConstruction
      G4double GetTargetRadius()  {return fTargetRadius;};
      G4double GetWorldRadius()   {return fWorldRadius;}; 
      
-     void setTargetMaterial (G4String);
-     void setDetectorMaterial(G4String);
+     void SetTargetMaterial (G4String);
+     void SetDetectorMaterial(G4String);
 
-     void setTargetRadius (G4double value) { fTargetRadius = value; };
-     void setDetectorThickness(G4double value){ fDetectorThickness = value;};  
-     void setTargetLength (G4double value) { fTargetLength = value; };
-     void setDetectorLength(G4double value){ fDetectorLength = value;};  
+     void SetTargetRadius (G4double value) { fTargetRadius = value; };
+     void SetDetectorThickness(G4double value){ fDetectorThickness = value;};  
+     void SetTargetLength (G4double value) { fTargetLength = value; };
+     void SetDetectorLength(G4double value){ fDetectorLength = value;};  
      
   private:
      void DefineMaterials();
      
   private: 
 
-     G4Tubs*             solidWorld;    // pointer to the solid envelope 
-     G4LogicalVolume*   logicWorld;    // pointer to the logical envelope
-     G4VPhysicalVolume* physiWorld;    // pointer to the physical envelope
+     G4Tubs*             fSolidWorld;    // pointer to the solid envelope 
+     G4LogicalVolume*   fLogicWorld;    // pointer to the logical envelope
+     G4VPhysicalVolume* fPhysiWorld;    // pointer to the physical envelope
      
-     G4Tubs*             solidTarget;   // pointer to the solid Target
-     G4LogicalVolume*   logicTarget;   // pointer to the logical Target
-     G4VPhysicalVolume* physiTarget;   // pointer to the physical Target
+     G4Tubs*             fSolidTarget;   // pointer to the solid Target
+     G4LogicalVolume*   fLogicTarget;   // pointer to the logical Target
+     G4VPhysicalVolume* fPhysiTarget;   // pointer to the physical Target
                
-     G4Tubs*             solidDetector;  // pointer to the solid Detector
-     G4LogicalVolume*   logicDetector;  // pointer to the logical Detector
-     G4VPhysicalVolume* physiDetector;  // pointer to the physical Detector
+     G4Tubs*             fSolidDetector;  // pointer to the solid Detector
+     G4LogicalVolume*   fLogicDetector;  // pointer to the logical Detector
+     G4VPhysicalVolume* fPhysiDetector;  // pointer to the physical Detector
      
-     exrdmDetectorMessenger* detectorMessenger;  // pointer to the Messenger
-     exrdmMaterial* materialsManager;         // material manager
+     exrdmDetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
+     exrdmMaterial* fMaterialsManager;         // material manager
       
-     G4Material* DefaultMater;          // Default material
-     G4Material* TargetMater;           // Target material
-     G4Material* DetectorMater;         // Detector material
+     G4Material* fDefaultMater;          // Default material
+     G4Material* fTargetMater;           // Target material
+     G4Material* fDetectorMater;         // Detector material
  
-     G4double fWorldLength;            // Full length the world volume
-     G4double fTargetLength;           // Full length of the target
-     G4double fDetectorLength;         // Full length of the Detector
-     G4double fWorldRadius;            // Radius of  the world volume
-     G4double fTargetRadius;           // Radius of the target
-     G4double fDetectorThickness;      // Thickness of the Detector
 
-     G4Region*   targetRegion;
-     G4Region*   detectorRegion;
+     G4double fTargetLength;           // Full length of the target
+     G4double fTargetRadius;           // Radius of the target
+     G4double fDetectorLength;         // Full length of the Detector
+     G4double fDetectorThickness;      // Thickness of the Detector
+     G4double fWorldLength;            // Full length the world volume
+     G4double fWorldRadius;            // Radius of  the world volume
+
+
+
+     G4Region*   fTargetRegion;
+     G4Region*   fDetectorRegion;
 
 };
 

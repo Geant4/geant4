@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity2.cc,v 1.3 2010-11-02 15:56:47 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/fanoCavity2.cc
+/// \brief Main program of the medical/fanoCavity2 example
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -89,6 +91,11 @@ int main(int argc,char** argv) {
   //get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
+
   if (argc!=1)   // batch mode  
     {
      G4String command = "/control/execute ";
@@ -99,17 +106,16 @@ int main(int argc,char** argv) {
   else           // interactive mode :define visualization and UI terminal
     { 
 #ifdef G4UI_USE
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
-#ifdef G4VIS_USE
-      delete visManager;
+     ui->SessionStart();
+     delete ui;
 #endif     
+
+#ifdef G4VIS_USE
+     delete visManager;
 #endif     
     }
 

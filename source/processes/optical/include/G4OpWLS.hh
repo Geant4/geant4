@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.hh,v 1.4 2006-06-29 21:08:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Definition
@@ -81,55 +80,64 @@ class G4VWLSTimeGeneratorProfile;
 class G4OpWLS : public G4VDiscreteProcess 
 {
 
-public: // Without description
+public:
 
-  ////////////////////////////////
-  // Constructors and Destructor
-  ////////////////////////////////
+        ////////////////////////////////
+        // Constructors and Destructor
+        ////////////////////////////////
 
-  G4OpWLS(const G4String& processName = "OpWLS",
-                   G4ProcessType type = fOptical);
-
-  ~G4OpWLS();
-
-  ////////////
-  // Methods
-  ////////////
-
-public: // With description
-
-  G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-  // Returns true -> 'is applicable' only for an optical photon.
-
-  G4double GetMeanFreePath(const G4Track& aTrack,
-			   G4double ,
-			   G4ForceCondition* );
-  // Returns the absorption length for bulk absorption of optical
-  // photons in media with a specified attenuation length.
-
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-				  const G4Step&  aStep);
-  // This is the method implementing bulk absorption of optical
-  // photons.
-
-  G4PhysicsTable* GetIntegralTable() const;
-  // Returns the address of the WLS integral table.
-
-  void DumpPhysicsTable() const;
-  // Prints the WLS integral table.
-
-  void UseTimeProfile(const G4String name);
-  // Selects the time profile generator
+        G4OpWLS(const G4String& processName = "OpWLS",
+                         G4ProcessType type = fOptical);
+        ~G4OpWLS();
 
 private:
 
-  void BuildThePhysicsTable();
-  // Is the WLS integral table;
+        G4OpWLS(const G4OpWLS &right);
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4OpWLS& operator=(const G4OpWLS &right);
+
+public:
+
+        ////////////
+        // Methods
+        ////////////
+
+        G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable' only for an optical photon.
+
+        G4double GetMeanFreePath(const G4Track& aTrack,
+                                 G4double ,
+                                 G4ForceCondition* );
+        // Returns the absorption length for bulk absorption of optical
+        // photons in media with a specified attenuation length.
+
+        G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+                                        const G4Step&  aStep);
+        // This is the method implementing bulk absorption of optical
+        // photons.
+
+        G4PhysicsTable* GetIntegralTable() const;
+        // Returns the address of the WLS integral table.
+
+        void DumpPhysicsTable() const;
+        // Prints the WLS integral table.
+
+        void UseTimeProfile(const G4String name);
+        // Selects the time profile generator
+
+private:
+
+        void BuildThePhysicsTable();
+        // Is the WLS integral table;
 
 protected:
 
-  G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
-  G4PhysicsTable* theIntegralTable;
+        G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
+        G4PhysicsTable* theIntegralTable;
 
 };
 
@@ -163,4 +171,3 @@ void G4OpWLS::DumpPhysicsTable() const
 }
 
 #endif /* G4OpWLS_h */
-

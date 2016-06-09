@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisFeaturesOfFukuiRenderer.cc,v 1.5 2006-06-29 21:29:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

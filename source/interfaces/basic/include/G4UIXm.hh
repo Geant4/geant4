@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.hh,v 1.14 2008-11-14 16:21:42 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4UIXm_h
 #define G4UIXm_h 
@@ -82,14 +81,14 @@ public:
   ~G4UIXm();
   void Prompt(G4String);
   void SessionTerminate();
-  void PauseSessionStart(G4String);
-  G4int ReceiveG4cout(G4String);
-  G4int ReceiveG4cerr(G4String);
+  virtual void PauseSessionStart(const G4String&);
+  virtual G4int ReceiveG4cout(const G4String&);
+  virtual G4int ReceiveG4cerr(const G4String&);
   G4String GetCommand(Widget);
 private:
   void SecondaryLoop(G4String);
   G4bool GetHelpChoice(G4int&);
-  void ExitHelp();
+  void ExitHelp() const;
 private:
   Widget form,shell,command,menuBar,text;
   std::map<Widget,G4String, std::less<Widget> > commands;

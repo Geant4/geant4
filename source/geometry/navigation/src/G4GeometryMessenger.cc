@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.6 2010-11-10 14:06:40 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -62,7 +61,7 @@
 //
 G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   : x(0,0,0), p(0,0,1), grdRes(100,100,100), cylRes(90,50,50),
-    cylfZ(0.8), cylfR(0.8), newtol(false), tol(1E-4*mm),
+    cylfZ(0.8), cylfR(0.8), newtol(false), tol(1E-4),  // mm
     recLevel(0), recDepth(-1), tmanager(tman), tlogger(0), tvolume(0)
 {
   geodir = new G4UIdirectory( "/geometry/" );

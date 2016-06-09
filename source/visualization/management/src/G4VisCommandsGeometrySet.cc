@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.8 2010-06-15 16:34:30 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -153,7 +152,13 @@ void G4VisCommandGeometrySetColour::SetNewValue
   G4Colour colour(1,1,1,1);  // Default white and opaque.
   const size_t iPos0 = 0;
   if (std::isalpha(redOrString[iPos0])) {
-    G4Colour::GetColour(redOrString, colour); // Remains if not found.
+    if (!G4Colour::GetColour(redOrString, colour)) {
+      if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+        G4cout << "WARNING: Colour \"" << redOrString
+               << "\" not found.  Defaulting to white and opaque."
+               << G4endl;
+      }
+    }
   } else {
     colour = G4Colour(G4UIcommand::ConvertToDouble(redOrString), green, blue);
   }

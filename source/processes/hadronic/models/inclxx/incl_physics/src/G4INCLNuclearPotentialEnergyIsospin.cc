@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Provides an isospin- and energy-dependent nuclear potential.
  *
- * Created on: 21 March 2011
- *     Author: Davide Mancusi
+ * \date 21 March 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLNuclearPotentialEnergyIsospin.hh"
@@ -56,8 +56,8 @@ namespace G4INCL {
     const G4double NuclearPotentialEnergyIsospin::alpha= 0.223;
 
     // Constructors
-    NuclearPotentialEnergyIsospin::NuclearPotentialEnergyIsospin(NuclearDensity *density, G4bool pionPotential)
-      : NuclearPotentialIsospin(density,pionPotential)
+    NuclearPotentialEnergyIsospin::NuclearPotentialEnergyIsospin(const G4int A, const G4int Z, const G4bool aPionPotential)
+      : NuclearPotentialIsospin(A,Z,aPionPotential)
     {}
 
     // Destructor

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.19 2010-10-27 07:21:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4Event_h
@@ -69,6 +68,11 @@ class G4Event
       // Invoke Draw() methods of all stored trajectories, hits, and digits.
       // For hits and digits, Draw() methods of the concrete classes must be
       // implemented. Otherwise nothing will be drawn.
+
+  private:
+      // These copy constructor and = operator must not be used.
+      G4Event(const G4Event &) {;}
+      G4Event& operator=(const G4Event &) { return *this; }
 
   private:
       // event ID

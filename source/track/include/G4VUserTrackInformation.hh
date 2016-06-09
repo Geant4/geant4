@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.hh,v 1.9 2010-03-09 02:49:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //---------------------------------------------------------------
@@ -65,6 +64,10 @@ class G4VUserTrackInformation
     G4VUserTrackInformation(const G4String& infoType);
     // String is provided to indicate Type of UserTrackInfo class  
     // User is recommended to set the type of his/her class  
+
+    G4VUserTrackInformation(const  G4VUserTrackInformation&);
+    G4VUserTrackInformation& operator=(const G4VUserTrackInformation&);
+  
 
     virtual ~G4VUserTrackInformation();
 

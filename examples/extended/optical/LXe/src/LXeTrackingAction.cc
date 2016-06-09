@@ -23,27 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeTrackingAction.cc
+/// \brief Implementation of the LXeTrackingAction class
+//
+//
 #include "LXeTrajectory.hh"
 #include "LXeTrackingAction.hh"
 #include "LXeUserTrackInformation.hh"
 #include "LXeDetectorConstruction.hh"
-#include "RecorderBase.hh" 
+#include "LXeRecorderBase.hh"
 
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
 #include "G4ParticleTypes.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeTrackingAction::LXeTrackingAction(RecorderBase* r)
-  :recorder(r)
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+LXeTrackingAction::LXeTrackingAction(LXeRecorderBase* r)
+  : fRecorder(r) {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   //Let this be up to the user via vis.mac
   //  fpTrackingManager->SetStoreTrajectory(true);
-  
+
   //Use custom trajectory class
   fpTrackingManager->SetTrajectory(new LXeTrajectory(aTrack));
 
@@ -56,12 +61,13 @@ void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   */
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){
   LXeTrajectory* trajectory=(LXeTrajectory*)fpTrackingManager->GimmeTrajectory();
   LXeUserTrackInformation*
     trackInformation=(LXeUserTrackInformation*)aTrack->GetUserInformation();
-  
+
   //Lets choose to draw only the photons that hit the sphere and a pmt
   if(aTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()){
 
@@ -73,13 +79,13 @@ void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){
 
     if(LXeDetectorConstruction::GetSphereOn()){
       if((trackInformation->GetTrackStatus()&hitPMT)&&
-	 (trackInformation->GetTrackStatus()&hitSphere)){
-	trajectory->SetDrawTrajectory(true);
+         (trackInformation->GetTrackStatus()&hitSphere)){
+        trajectory->SetDrawTrajectory(true);
       }
     }
     else{
       if(trackInformation->GetTrackStatus()&hitPMT)
-	trajectory->SetDrawTrajectory(true);
+        trajectory->SetDrawTrajectory(true);
     }
   }
   else //draw all other trajectories
@@ -88,21 +94,5 @@ void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){
   if(trackInformation->GetForceDrawTrajectory())
     trajectory->SetDrawTrajectory(true);
 
-  if(recorder)recorder->RecordTrack(aTrack);
+  if(fRecorder)fRecorder->RecordTrack(aTrack);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.27 2010-06-16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -63,6 +62,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Poisson.hh"
 #include "G4EmProcessSubType.hh"
 
@@ -91,13 +92,6 @@
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VProcess(processName, type)
 {
-        G4cout << "G4Cerenkov::G4Cerenkov constructor" << G4endl;
-        G4cout << "NOTE: this is now a G4VProcess!" << G4endl;
-        G4cout << "Required change in UserPhysicsList: " << G4endl;
-        G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
-        G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
-        G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
-
         SetProcessSubType(fCerenkov);
 
 	fTrackSecondariesFirst = false;
@@ -347,8 +341,8 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 
 	if (verboseLevel>0) {
-	G4cout << "\n Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = " 
-	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
+	   G4cout <<"\n Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = "
+	          << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
         return pParticleChange;
@@ -418,12 +412,12 @@ void G4Cerenkov::BuildThePhysicsTable()
 			 // loop over all (photon energy, refraction index)
 			 // pairs stored for this material  
 
-                         for (size_t i = 1;
-                              i < theRefractionIndexVector->GetVectorLength();
-                              i++)
+                         for (size_t ii = 1;
+                              ii < theRefractionIndexVector->GetVectorLength();
+                              ++ii)
 			 {
-                                currentRI = (*theRefractionIndexVector)[i];
-                                currentPM = theRefractionIndexVector->Energy(i);
+                                currentRI = (*theRefractionIndexVector)[ii];
+                                currentPM = theRefractionIndexVector->Energy(ii);
 
 				currentCAI = 0.5*(1.0/(prevRI*prevRI) +
 					          1.0/(currentRI*currentRI));
@@ -476,15 +470,15 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
         const G4Material* aMaterial = aTrack.GetMaterial();
         const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
 
-        const G4double kineticEnergy = aParticle->GetKineticEnergy();
+        G4double kineticEnergy = aParticle->GetKineticEnergy();
         const G4ParticleDefinition* particleType = aParticle->GetDefinition();
-        const G4double mass = particleType->GetPDGMass();
+        G4double mass = particleType->GetPDGMass();
 
         // particle beta
-        const G4double beta = aParticle->GetTotalMomentum() /
-                              aParticle->GetTotalEnergy();
+        G4double beta = aParticle->GetTotalMomentum() /
+	                aParticle->GetTotalEnergy();
         // particle gamma
-        const G4double gamma = 1./std::sqrt(1.-beta*beta);
+        G4double gamma = aParticle->GetTotalEnergy()/mass;
 
         G4MaterialPropertiesTable* aMaterialPropertiesTable =
                             aMaterial->GetMaterialPropertiesTable();
@@ -537,7 +531,7 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
 	   G4double MeanNumberOfPhotons = 
                     GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
 
-           G4double Step = 0.;
+           Step = 0.;
            if (MeanNumberOfPhotons > 0.0) Step = fMaxPhotons /
                                                  MeanNumberOfPhotons;
 
@@ -557,7 +551,7 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
                                                  (1.-fMaxBetaChange)*
                                                  (1.-fMaxBetaChange));
 
-           G4double Step = mass * deltaGamma / dedx;
+           Step = mass * deltaGamma / dedx;
 
            if (Step > 0. && Step < StepLimit) StepLimit = Step;
 

@@ -31,6 +31,7 @@
 //
 
 #include "G4NeutronHPorLCaptureModel.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronHPorLCaptureModel::G4NeutronHPorLCaptureModel()
 {

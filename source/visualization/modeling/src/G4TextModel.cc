@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.cc,v 1.7 2006-06-29 21:33:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  3rd April 2001
@@ -42,6 +41,7 @@
 G4TextModel::~G4TextModel () {}
 
 G4TextModel::G4TextModel (const G4Text& g4Text): fG4Text(g4Text) {
+  fType = "G4TextModel";
   std::ostringstream oss;
   oss << "G4TextModel: \"" << fG4Text.GetText()
       << "\" at " << G4BestUnit(g4Text.GetPosition(),"Length")

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/exampleP01.cc
+/// \brief Main program of the persistency/P01 example
 //
-// $Id: exampleP01.cc,v 1.4 2010-12-01 14:18:27 witoldp Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

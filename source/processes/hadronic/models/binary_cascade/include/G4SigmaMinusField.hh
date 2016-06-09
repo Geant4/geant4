@@ -39,12 +39,14 @@
 #ifndef G4SigmaMinusField_h
 #define  G4SigmaMinusField_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VNuclearField.hh"
 
 class G4SigmaMinusField: public G4VNuclearField
 {
 public:
-  G4SigmaMinusField(G4V3DNucleus * nucleus, G4double coeff = 0.36*fermi);
+  G4SigmaMinusField(G4V3DNucleus * nucleus, G4double coeff = 0.36*CLHEP::fermi);
   virtual ~G4SigmaMinusField();
 
 private:

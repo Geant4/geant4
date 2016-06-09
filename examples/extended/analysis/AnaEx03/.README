@@ -1,0 +1,95 @@
+//$Id$
+
+///\file "analysis/AnaEx03/.README"
+///\brief Example AnaEx03 README page
+
+/*! \page ExampleAnaEx03 Example AnaEx03
+
+ This example shows the usage of histogram and tuple manipulations using 
+ an AIDA compliant system. All analysis manipulations 
+ (attaching an AIDA implementation, histo booking, filling, saving 
+ histos in a file, etc...) are located in one class : HistoManager.
+ 
+ The example is an adaptation of examples/novice/N03. It describes a simple 
+ sampling calorimeter setup.
+	
+\section AnaEx03_s1 Detector description
+ 
+ The calorimeter is a box made of a given number of layers. A layer
+ consists of an absorber plate and of a detection gap. The layer is
+ replicated.
+ 	
+ Six parameters define the calorimeter :
+ 	- the material of the absorber,
+	- the thickness of an absorber plate,
+ 	- the material of the detection gap,
+ 	- the thickness of a  gap,
+ 	- the number of layers,
+ 	- the transverse size of the calorimeter (the input face is a square). 
+ 	
+ The default geometry is constructed in DetectorConstruction class,
+ but all of the above parameters can be modified interactively via
+ the commands defined in the DetectorMessenger class.
+
+<pre>
+	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+	|			|			|			|
+	==========================================================================
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+ beam	||		|	||		|	||		|	||
+======>	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||    		| 	||    		| 	||    		| 	||
+	==========================================================================
+</pre>	
+	
+ 	    
+\section AnaEx03_s2 An event : PrimaryGeneratorAction
+ 
+ The primary kinematic consists of a single particle which hits the
+ calorimeter perpendicular to the input face. The type of the particle
+ and its energy are set in the PrimaryGeneratorAction class, and can
+ be changed via the G4 build-in commands of ParticleGun class.
+ 	
+
+\section AnaEx03_s3 Histograms
+
+ To produce histograms, at least one of the AIDA implementations should be 
+ available. See the file InstallAida.txt
+    
+ AnaEx03 can produce 4 histograms :
+  
+  - histo 1 : total energy deposit in absorber per event
+  - histo 2 : total energy deposit in gap per event	  
+  - histo 3 : total track length of charged particles in absorber per event 
+  - histo 4 : total track length of charged particles in gap per event 
+ 
+ And 1 Ntuple :
+ - one row per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
+  
+ These histos are booked in HistoManager and filled from EventAction.
+ 
+ One can control the name of the histograms file and its format:
+ - default name     : AnaEx03
+ Possible formats : hbook root (default) xml
+ 
+ See HistoManager constructor
+    
+ Note that, by default, histograms are disabled. To activate them, uncomment
+ the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
+   
+\section AnaEx03_s4 AIDA and OpenScientist
+
+ See the pages \link ExampleA01AIDA README.AIDA \endlink and
+  \link ExampleA01OpenScientist README.OpenScientist \endlink in \ref ExampleA01
+ for more indications how to use this system to visualize and handle 
+ histogram files.
+  
+*/

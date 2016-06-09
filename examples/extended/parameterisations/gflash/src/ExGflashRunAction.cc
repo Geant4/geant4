@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashRunAction.cc
+/// \brief Implementation of the ExGflashRunAction class
+//
 #include "ExGflashRunAction.hh"
 #include "G4Run.hh"
 #include "G4UImanager.hh"

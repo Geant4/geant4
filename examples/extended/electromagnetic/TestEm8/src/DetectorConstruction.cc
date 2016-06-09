@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2010-10-27 14:52:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -63,6 +65,8 @@
 #include "G4Colour.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -115,6 +119,7 @@ void DetectorConstruction::DefineMaterials()
   G4Element* elC  = manager->FindOrBuildElement(6);
   G4Element* elO  = manager->FindOrBuildElement(8);
   G4Element* elF  = manager->FindOrBuildElement(9);
+  G4Element* elNe  = manager->FindOrBuildElement(10);
   G4Element* elXe = manager->FindOrBuildElement(54);
   //
   // simple gases at STP conditions 
@@ -134,18 +139,18 @@ void DetectorConstruction::DefineMaterials()
   // 93% Kr + 7% CH4, STP
   density = 3.491*mg/cm3 ;      
   G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
-				      ncomponents=2);
+                                      ncomponents=2);
   Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
   Kr7CH4->AddMaterial( Methane,  fractionmass = 0.014 ) ;
 
   G4double TRT_Xe_density = 5.485*mg/cm3;
   G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
-				      kStateGas,293.15*kelvin,1.*atmosphere);
+                                      kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_Xe->AddElement(elXe,1);
 
   G4double TRT_CO2_density = 1.842*mg/cm3;
   G4Material* TRT_CO2 = new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
-				       kStateGas,293.15*kelvin,1.*atmosphere);
+                                       kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_CO2->AddElement(elC,1);
   TRT_CO2->AddElement(elO,2);
 
@@ -158,8 +163,8 @@ void DetectorConstruction::DefineMaterials()
   // ATLAS TRT straw tube gas mixture (20 C, 1 atm)
   G4double XeCO2CF4_density = 4.76*mg/cm3;
   G4Material* XeCO2CF4 = new G4Material(name="XeCO2CF4", XeCO2CF4_density,
-					ncomponents=3,
-					kStateGas,293.15*kelvin,1.*atmosphere);
+                                        ncomponents=3,
+                                        kStateGas,293.15*kelvin,1.*atmosphere);
   XeCO2CF4->AddMaterial(TRT_Xe,0.807);
   XeCO2CF4->AddMaterial(TRT_CO2,0.039);
   XeCO2CF4->AddMaterial(TRT_CF4,0.154);
@@ -187,23 +192,31 @@ void DetectorConstruction::DefineMaterials()
   // 80% Ar + 20% CO2, STP
   density = 1.8223*mg/cm3 ;      
   G4Material* Ar_80CO2_20 = new G4Material(name="ArCO2"  , density, 
-					   ncomponents=2);
+                                           ncomponents=2);
   Ar_80CO2_20->AddMaterial( Argon,           fractionmass = 0.783 ) ;
   Ar_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
 
   // 80% Xe + 20% CO2, STP
   density = 5.0818*mg/cm3 ;      
   G4Material* Xe20CO2 = new G4Material(name="Xe20CO2", density, 
-				       ncomponents=2);
+                                       ncomponents=2);
   Xe20CO2->AddMaterial( Xe,            fractionmass = 0.922 ) ;
   Xe20CO2->AddMaterial( CarbonDioxide, fractionmass = 0.078 ) ;
 
   // 80% Kr + 20% CO2, STP
   density = 3.601*mg/cm3 ;      
   G4Material* Kr20CO2 = new G4Material(name="Kr20CO2"  , density, 
-				       ncomponents=2);
+                                       ncomponents=2);
   Kr20CO2->AddMaterial( Kr,            fractionmass = 0.89 ) ;
   Kr20CO2->AddMaterial( CarbonDioxide, fractionmass = 0.11 ) ;
+
+  // ALICE mixture TPC_Ne-CO2-2
+  density = 0.939*mg/cm3 ;      
+  G4Material* NeCO2 = new G4Material(name="TPC_Ne-CO2-2", density, 
+                                            ncomponents=3);
+  NeCO2->AddElement( elNe, fractionmass = 0.8039 ) ;
+  NeCO2->AddElement( elO,  fractionmass = 0.1426 ) ;
+  NeCO2->AddElement( elC,  fractionmass = 0.0535 ) ;
    
   fGasMat = XeCH4C3H8;
   fWindowMat = Mylar;
@@ -238,38 +251,38 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // Printout parameters
   G4cout << "\n The  WORLD   is made of " 
-	 << worldSizeZ/mm << "mm of " << fWorldMaterial->GetName() ;
+         << worldSizeZ/mm << "mm of " << fWorldMaterial->GetName() ;
   G4cout << ", the transverse size (R) of the world is " << worldSizeR/mm 
-	 << " mm. " << G4endl;
+         << " mm. " << G4endl;
   G4cout << " The CONTAINER is made of " 
-	 << fWindowThick/mm << "mm of " << fWindowMat->GetName() << G4endl;
+         << fWindowThick/mm << "mm of " << fWindowMat->GetName() << G4endl;
   G4cout << " The TARGET is made of " 
-	 << fGasThickness/mm << "mm of " << fGasMat->GetName() ;
+         << fGasThickness/mm << "mm of " << fGasMat->GetName() ;
   G4cout << ", the transverse size (R) is " << fGasRadius/mm << " mm. " << G4endl;
   G4cout << G4endl;
       
   // World
-  G4Tubs* SolidWorld = new G4Tubs("World",			     
-				  0.,worldSizeR,worldSizeZ/2.,0.,CLHEP::twopi);
+  G4Tubs* SolidWorld = new G4Tubs("World",                             
+                                  0.,worldSizeR,worldSizeZ/2.,0.,CLHEP::twopi);
                    
-  fLogicWorld = new G4LogicalVolume(SolidWorld, fWorldMaterial, "World");		
+  fLogicWorld = new G4LogicalVolume(SolidWorld, fWorldMaterial, "World");                
                                    
-  fPhysWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(0.,0.,0.),     
+  fPhysWorld = new G4PVPlacement(0,                        //no rotation
+                                   G4ThreeVector(0.,0.,0.),     
                                  "World", 
                                  fLogicWorld,
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+                                 0,                        //its mother  volume
+                                 false,                        //no boolean operation
+                                 0);                        //copy number
 
   // Window
-  G4Tubs* wind = new G4Tubs("Absorber",		
-			    0.,contR,contThick/2.,0.,CLHEP::twopi); 
+  G4Tubs* wind = new G4Tubs("Absorber",                
+                            0.,contR,contThick/2.,0.,CLHEP::twopi); 
 
   fLogicWind = new G4LogicalVolume(wind, fWindowMat, "Window"); 
 
   G4PVPlacement* PhysWind = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "Window", 
-					      fLogicWind, fPhysWorld, false, 0);                
+                                              fLogicWind, fPhysWorld, false, 0);                
                                         
   // Detector volume
   G4Tubs* det = new G4Tubs("Gas", 0., fGasRadius, fGasThickness/2., 0., CLHEP::twopi);  

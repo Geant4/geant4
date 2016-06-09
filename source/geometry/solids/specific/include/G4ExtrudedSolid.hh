@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.10 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -50,11 +49,11 @@
 //                                     in increasing z-position order
 //
 // Parameters in the special constructor (for solid with 2 z-sections:
-// G4double hz                       - the solid half length in Z
-// G4TwoVector off1                  - offset of the side in -hz
-// G4double scale1                   - scale of the side in -hz
-// G4TwoVector off2                  - offset of the side in +hz
-// G4double scale2                   - scale of the side in -hz
+// G4double halfZ                    - the solid half length in Z
+// G4TwoVector off1                  - offset of the side in -halfZ
+// G4double scale1                   - scale of the side in -halfZ
+// G4TwoVector off2                  - offset of the side in +halfZ
+// G4double scale2                   - scale of the side in -halfZ
 
 // Author:
 //   Ivana Hrivnacova, IPN Orsay
@@ -68,6 +67,8 @@
 #include "G4TwoVector.hh"
 
 #include "G4TessellatedSolid.hh"
+
+class G4VFacet;
 
 class G4ExtrudedSolid : public G4TessellatedSolid
 {
@@ -93,7 +94,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
      G4ExtrudedSolid( const G4String&                 pName,
                             std::vector<G4TwoVector>  polygon,
-                            G4double                  hz,
+                            G4double                  halfZ,
                             G4TwoVector off1, G4double scale1,
                             G4TwoVector off2, G4double scale2 );
        // Special constructor for solid with 2 z-sections

@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc,v 1.6 2008-07-25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
-
 #include "G4StatMFMacroChemicalPotential.hh"
+#include "G4PhysicalConstants.hh"
 
 // operators definitions
 G4StatMFMacroChemicalPotential & 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RPGKPlusInelastic.hh,v 1.1 2007-07-18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: D. H. Wright
 // Date:   18 June 2007
@@ -38,6 +37,7 @@
 // Final state production model for K+ inelastic scattering
 // using the re-parameterized Gheisha model.
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
  class G4RPGKPlusInelastic : public G4RPGInelastic
@@ -47,7 +47,7 @@
     G4RPGKPlusInelastic() : G4RPGInelastic("G4RPGKPlusInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGKPlusInelastic()

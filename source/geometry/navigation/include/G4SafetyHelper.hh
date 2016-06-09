@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.7 2007-05-02 15:32:13 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4SafetyHelper
@@ -67,9 +66,14 @@ public: // with description
      //
      // Return linear step for mass geometry
 
-  G4double ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
+  G4double ComputeSafety( const G4ThreeVector& pGlobalPoint,
+                         G4double maxRadius=DBL_MAX );   // Radius of interest
      //
-     // Return safety for all geometries
+     // Return safety for all geometries.
+     //
+     //  The 2nd argument is the radius of your interest (e.g. maximum displacement )
+     //    Giving this you can reduce the average computational cost.
+     //  If the second argument is not given, this is the real isotropic safety
 
   void Locate(const G4ThreeVector& pGlobalPoint,
               const G4ThreeVector& direction);
@@ -89,6 +93,8 @@ public: // with description
      //
      // Check for new navigator for tracking, and reinitialise pointer
 
+  G4int SetVerboseLevel( G4int lev ) { G4int oldlv= fVerbose; fVerbose= lev; return oldlv; } 
+
   inline G4VPhysicalVolume* GetWorldVolume();
   inline void SetCurrentSafety(G4double val, const G4ThreeVector& pos);
 
@@ -106,6 +112,8 @@ private:
     // Flag whether to use PathFinder or single (mass) Navigator directly
   G4bool fFirstCall;
     // Flag of first call
+  G4int         fVerbose; 
+    // Whether to print warning in case of move outside safety
 
   // State used during tracking -- for optimisation
   G4ThreeVector fLastSafetyPosition;

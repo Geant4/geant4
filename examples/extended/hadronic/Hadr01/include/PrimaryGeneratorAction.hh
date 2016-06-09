@@ -23,19 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.3 2006-06-29 17:23:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// EventActionMessenger
+// PrimaryGeneratorAction
 //
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -58,15 +60,14 @@ public:
   virtual ~PrimaryGeneratorAction();
 
   void GeneratePrimaries(G4Event*);
-  G4ParticleGun* GetParticleGun() {return particleGun;};
 
 private:
 
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*   particleGun;
-  HistoManager*    histo; 
+  G4ParticleGun*   fParticleGun;
+  HistoManager*    fHisto; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

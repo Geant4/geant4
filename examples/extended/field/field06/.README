@@ -1,0 +1,68 @@
+//$Id$
+
+///\file "field/field06/.README"
+///\brief Example field06 README page
+
+/*! \page Examplefield06 Example field06
+
+  This example exercises the new (in 9.5) capability of tracking massive
+  particles in a gravity field.
+
+  Credit goes to Erik Miller (Univ. of Northern British Columbia) and
+  Garry Yan (Univ. of Toronto)
+
+Classes Used
+
+\section field06_s1 main()
+
+ See field06.cc.
+
+\section field06_s2 GEOMETRY DEFINITION
+
+ As simple world G4Box with a G4UniformGravityField propagating momentum
+ (G4EqGravityField) with G4ClassicalRK4(fEquation,8). The example uses the
+ default gravity field on the earth's surface: gy = -9.81*m/s/s/c_light.
+
+\section field06_s3 AN EVENT: THE PRIMARY GENERATOR
+
+ Uses an Ultra Cold Neutron (UCN) and G4ParticleGun with: \n
+ particleEnergy = G4UniformRand()*1e-7*eV
+
+ UCN are launched from (0,0,0) uniform into 4pi
+
+\section field06_s4 PHYSICS
+
+ The simulation knows of only four particles: G4Neutron, G4Proton, 
+ G4Electron and G4AntiNeutrinoE
+\verbatim
+ RegisterPhysics(new G4DecayPhysics());
+ RegisterPhysics(new F06ExtraPhysics());
+
+ G4VModularPhysicsList::ConstructProcess();
+\endverbatim
+ F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+
+ F06ExtraPhysics::AddBetaDecay() to "neutron" as an example of how to set a decay-table with
+ decay-channel(s) to a G4ParticleDefinition.
+
+\section field06_s5 User Action Classes
+
+  F06EventAction::EndOfEventAction() - draws trajectories in G4TrajectoryContainer
+
+\section field06_s6 HOW TO START ?
+
+  - Execute field06 in 'batch' mode from macro files e.g.
+\verbatim
+% field06 field06.in > field06.out &
+\endverbatim
+
+  - Execute field06 in 'interactive' mode with visualization e.g.
+\verbatim
+% field06
+....
+Idle> type your commands, for example:
+Idle> run/beamOn 1
+....
+\endverbatim
+
+*/

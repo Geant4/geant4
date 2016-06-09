@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh,v 1.5 2010-11-17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -62,9 +61,10 @@ private:
   G4bool operator!=(const G4CompetitiveFission &right) const;
 
 public:
-  G4FragmentVector * BreakUp(const G4Fragment &theNucleus);
 
-  void Initialize(const G4Fragment & fragment);
+  virtual G4FragmentVector * BreakUp(const G4Fragment &theNucleus);
+
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
   inline void SetFissionBarrier(G4VFissionBarrier * aBarrier)
   {
@@ -90,8 +90,6 @@ public:
 
 
   inline G4double GetFissionBarrier(void) const { return FissionBarrier; }
-
-  inline G4double GetEmissionProbability(void) const { return FissionProbability; }
 
   inline G4double GetLevelDensityParameter(void) const { return LevelDensityParameter; }
 

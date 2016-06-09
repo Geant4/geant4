@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.11 2010-07-12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -39,6 +38,7 @@
 // --------------------------------------------------------------------
 
 #include "G4EnclosingCylinder.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4GeometryTolerance.hh"
 

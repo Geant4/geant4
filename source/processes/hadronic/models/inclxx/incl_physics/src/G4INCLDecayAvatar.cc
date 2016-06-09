@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,7 +42,7 @@
 #include "G4INCLPauliBlocking.hh"
 #include <sstream>
 #include <string>
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -51,7 +51,6 @@ namespace G4INCL {
       incidentDirection(aParticle->getMomentum())
   {
     setType(DecayAvatarType);
-    // TODO Auto-generated constructor stub
   }
 
   DecayAvatar::~DecayAvatar() {
@@ -74,7 +73,7 @@ namespace G4INCL {
 
   FinalState *DecayAvatar::postInteraction(FinalState *fs) {
     // Make sure we have at least two particles in the final state
-    // assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
+// assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
 
     if(!forced) { // Normal decay
 
@@ -86,11 +85,11 @@ namespace G4INCL {
         /* If the decay was Pauli-blocked, make sure the propagation model
          * generates a new decay avatar on the next call to propagate().
          *
-         * Note that we don't generate new decay avatars for deltas that could
-         * not satisfy energy conservation. This is in keeping with INCL4.6,
-         * but doesn't seem to make much sense to me (DM), as energy
+         * \bug{Note that we don't generate new decay avatars for deltas that
+         * could not satisfy energy conservation. This is in keeping with
+         * INCL4.6, but doesn't seem to make much sense to me (DM), as energy
          * conservation can be impossible to satisfy due to weird local-energy
-         * conditions, for example, that evolve with time. Therefore, FIXME.
+         * conditions, for example, that evolve with time.}
          */
         fs->setBlockedDelta(particle1);
 
@@ -174,6 +173,8 @@ namespace G4INCL {
           theNucleus->getStore()->getBook()->incrementBlockedDecays();
           break;
         case NoEnergyConservationFS:
+        case ParticleBelowFermiFS:
+        case ParticleBelowZeroFS:
           break;
         case ValidFS:
           theNucleus->getStore()->getBook()->incrementAcceptedDecays();

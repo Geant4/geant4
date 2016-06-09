@@ -27,15 +27,18 @@
 //    Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------
 
+#include <string.h>
+#include <cmath>
+#include <stdio.h>
+
 #include "G4NeutronCaptureAtRest.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
 #include "G4HadronicProcessStore.hh"
-#include <string.h>
-#include <cmath>
-#include <stdio.h>
- 
+#include "G4HadronicDeprecate.hh"
+
 #define MAX_SECONDARIES 100
 
 // constructor
@@ -51,6 +54,7 @@ G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName,
   pdefGamma(G4Gamma::Gamma()),
   pdefNeutron(G4Neutron::Neutron())
 {
+  G4HadronicDeprecate("G4NeutronCaptureAtRest");
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }

@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChebyshevApproximation.cc,v 1.7 2007-11-13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4ChebyshevApproximation.hh"
+#include "G4PhysicalConstants.hh"
 
 // Constructor for initialisation of the class data members.
 // It creates the array fChebyshevCof[0,...,fNumber-1], fNumber = n ;

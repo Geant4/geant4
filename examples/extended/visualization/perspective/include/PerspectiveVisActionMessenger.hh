@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/perspective/include/PerspectiveVisActionMessenger.hh
+/// \brief Definition of the PerspectiveVisActionMessenger class
 //
-// $Id: PerspectiveVisActionMessenger.hh,v 1.2 2006-06-29 17:45:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 
 #ifndef PERSPECTIVEVISACTIONMESSENGER_HH
 #define PERSPECTIVEVISACTIONMESSENGER_HH
@@ -40,7 +42,7 @@ class PerspectiveVisActionMessenger: public G4UImessenger {
 public:
   PerspectiveVisActionMessenger(PerspectiveVisAction*);
   ~PerspectiveVisActionMessenger();
-  void SetNewValue (G4UIcommand*, G4String);
+  virtual void SetNewValue (G4UIcommand*, G4String);
 
 private:
   PerspectiveVisAction* fPVA;

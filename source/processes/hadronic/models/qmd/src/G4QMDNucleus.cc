@@ -25,12 +25,13 @@
 //
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
+#include <numeric>
+
 #include "G4QMDNucleus.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4NucleiProperties.hh"
-
-#include <numeric>
 
 G4QMDNucleus::G4QMDNucleus()
 {

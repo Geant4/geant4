@@ -1,8 +1,8 @@
-// $Id: Doxymodules_common.h 55417 2011-11-23 11:19:12Z gcosmo $
+// $Id: Doxymodules_common.h 60059 2012-06-27 13:00:49Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_common.h
-/// \brief The page that defines the class groups for examples documentation 
+/// \brief The page that defines the extended/common classes modules 
 
 
 /** @defgroup extended_common common

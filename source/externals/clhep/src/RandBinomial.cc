@@ -21,8 +21,6 @@
 #include <algorithm>	// for min() and max()
 #include <cmath>	// for exp()
 
-using namespace std;
-
 namespace CLHEP {
 
 std::string RandBinomial::name() const {return "RandBinomial";}
@@ -275,7 +273,7 @@ double RandBinomial::genBinomial( HepRandomEngine *anEngine, long n, double p )
 		}
 
  // acceptance test :  two cases, depending on |K - m|
-	 if ((Km = std::abs(K - m)) <= DMAX_KM || Km + Km + 2L >= ss)
+	 if ((Km = std::labs(K - m)) <= DMAX_KM || Km + Km + 2L >= ss)
 	  {
 
  // computation of p(K) via recurrence relationship from the mode

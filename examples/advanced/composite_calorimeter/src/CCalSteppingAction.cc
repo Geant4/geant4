@@ -27,13 +27,15 @@
 // File: CCalSeppingAction.cc
 // Description: Study profiling during the steps
 ///////////////////////////////////////////////////////////////////////////////
+#include <iostream>
+#include <cmath>
+
 #include "CCalSteppingAction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4StepPoint.hh"
-#include <iostream>
 #include "G4ThreeVector.hh"
-#include <cmath>
 
 #ifdef G4ANALYSIS_USE  
 #include "CCalAnalysis.hh"
@@ -67,7 +69,8 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
   G4StepPoint*  PreStepPoint= aStep->GetPreStepPoint(); 
   int TSliceID;
 
-  TSliceID = static_cast<int>( (PostStepPoint->GetGlobalTime() ) / nanosecond);
+  if ( PostStepPoint->GetGlobalTime() / nanosecond > 1.0E9 ) TSliceID = 999999999;
+  else TSliceID = static_cast<int>( PostStepPoint->GetGlobalTime() / nanosecond );
   TSliceID = TSliceID<timeHistoMaxBin ? TSliceID : timeHistoMaxBin-1;
   timeDeposit[TSliceID] += aStep->GetTotalEnergyDeposit() / GeV;
 
@@ -93,5 +96,7 @@ void CCalSteppingAction::endOfEvent(){
   int i=0;
   for (i=0; i<70; i++){LateralProfile[i] = 0.;}
   for (i=0; i<200; i++){timeDeposit[i] = 0.;}
+
+  G4cout << " --- End of event --- " << G4endl;
   
 }  

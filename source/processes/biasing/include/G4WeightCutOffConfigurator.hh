@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.hh,v 1.3 2008-04-21 09:10:28 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffConfigurator

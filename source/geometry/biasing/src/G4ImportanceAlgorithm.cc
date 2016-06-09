@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.14 2006-06-29 18:17:20 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -113,14 +112,14 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
   return nw;
 }
 
-void G4ImportanceAlgorithm::Error(const G4String &m) const
+void G4ImportanceAlgorithm::Error(const G4String &msg) const
 {
   G4Exception("G4ImportanceAlgorithm::Error()",
-              "GeomBias0002", FatalException, m);
+              "GeomBias0002", FatalException, msg);
 }
 
-void G4ImportanceAlgorithm::Warning(const G4String &m) const
+void G4ImportanceAlgorithm::Warning(const G4String &msg) const
 {
   G4Exception("G4ImportanceAlgorithm::Warning()",
-              "GeomBias1001", JustWarning, m);
+              "GeomBias1001", JustWarning, msg);
 }

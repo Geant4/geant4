@@ -44,6 +44,8 @@
 //	"Non Ionizing Energy Loss induced by Electrons in the Space Environment"
 //	Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
 //	(13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
+//	Available at: http://arxiv.org/abs/1111.4042v4
+//
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +53,7 @@
 
 
 #include "G4eSingleCoulombScatteringModel.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Proton.hh"
@@ -85,7 +88,7 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
 	mass=0;
 	currentMaterialIndex = -1;
 
-  	McFcross = new G4ScreeningMottCrossSection(); 
+  	Mottcross = new G4ScreeningMottCrossSection(); 
 
 }
 
@@ -93,7 +96,7 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eSingleCoulombScatteringModel::~G4eSingleCoulombScatteringModel()
-{ delete  McFcross;}
+{ delete  Mottcross;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -104,7 +107,7 @@ void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   	currentCouple = 0;
 	currentMaterialIndex = -1;
   	cosThetaMin = cos(PolarAngleLimit());
-  	McFcross->Initialise(p,cosThetaMin);
+  	Mottcross->Initialise(p,cosThetaMin);
  
         pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
 
@@ -128,17 +131,17 @@ G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   	SetupParticle(p);
  
-  	G4double xsec =0.0;
-	if(kinEnergy < lowEnergyLimit) return xsec;
+  	G4double cross =0.0;
+	if(kinEnergy < lowEnergyLimit) return cross;
 
   	DefineMaterial(CurrentCouple());
 
 	//Total Cross section
-        McFcross->SetupKinematic(kinEnergy, Z);
-  	xsec = McFcross->NuclearCrossSection();
+        Mottcross->SetupKinematic(kinEnergy, Z);
+  	cross = Mottcross->NuclearCrossSection();
 
-	//cout<< "....xsec "<<G4BestUnit(xsec,"Surface") << " cm2 "<< xsec/cm2 <<endl;
-  return xsec;
+	//cout<< "....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -167,19 +170,21 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   	G4int iz    = G4int(Z);
   	G4int ia = SelectIsotopeNumber(currentElement);
 
-	G4double xsec= McFcross->GetTotalCross();
+	//cout<<"Element "<<currentElement->GetName()<<endl;;	
+
+	G4double cross= Mottcross->GetTotalCross();
 
 
-	if(xsec == 0.0)return;
+	if(cross == 0.0)return;
     		
   	G4ThreeVector dir = dp->GetMomentumDirection(); //old direction
-	G4ThreeVector newDirection=McFcross->GetNewDirection();//new direction
+	G4ThreeVector newDirection=Mottcross->GetNewDirection();//new direction
   	newDirection.rotateUz(dir);   
   
 	fParticleChange->ProposeMomentumDirection(newDirection);   
   
 	//Recoil energy
-	G4double trec= McFcross->GetTrec();
+	G4double trec= Mottcross->GetTrec();
 	//Energy after scattering	
         G4double finalT = kinEnergy - trec;
 
@@ -202,7 +207,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
     		G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
 
 		//incident before scattering
-		G4double ptot=sqrt(McFcross->GetMom2Lab());
+		G4double ptot=sqrt(Mottcross->GetMom2Lab());
 		//incident after scattering
     		G4double plab = sqrt(finalT*(finalT + 2.0*mass));
     		G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * IPropagationModel.hh
  *
- *  Created on: 4 juin 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 juin 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef G4INCLIPropagationModel_hh
@@ -53,7 +53,7 @@ namespace G4INCL {
 
     /**
      * Propagation model takes care of transporting the particles until something
-     * G4interesting (i.e. an avatar) happens. This avatar is then returned back to the INCL
+     * interesting (i.e. an avatar) happens. This avatar is then returned back to the INCL
      * kernel for further processing.
      *
      * The propagation model idea abstracts the details of propagation. This allows us to
@@ -63,25 +63,29 @@ namespace G4INCL {
      */
     class IPropagationModel {
     public:
-      IPropagationModel();
-      virtual ~IPropagationModel();
+      IPropagationModel() {}
+      virtual ~IPropagationModel() {}
 
       /**
        * Set the nucleus for the propagation model.
        *
-       * @param nucleus PoG4inter to the nucleus
+       * @param nucleus Pointer to the nucleus
        */
       virtual void setNucleus(G4INCL::Nucleus *nucleus) = 0;
 
       /**
-       * Get a poG4inter to the nucleus.
+       * Get a pointer to the nucleus.
        *
        * @return G4INCL::Nuleus*
        */
       virtual G4INCL::Nucleus* getNucleus() = 0;
 
-      virtual G4bool shootProjectile(G4INCL::Particle *p, G4double impactParameter) = 0;
-      virtual G4bool shootProjectile(G4INCL::Nucleus *n, G4double impactParameter) = 0;
+      virtual G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
+    protected:
+      virtual G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
+      virtual G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
+
+    public:
 
       /**
        * Returns the current global time of the system.

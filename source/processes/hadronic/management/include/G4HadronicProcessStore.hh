@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.7 2010-07-05 14:50:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // -------------------------------------------------------------------
@@ -76,7 +75,18 @@ public:
   ~G4HadronicProcessStore();
 
   void Clean();
-
+  G4double GetCrossSectionPerAtom(
+    const G4ParticleDefinition* particle,
+    G4double kineticEnergy,
+    const G4VProcess* process,
+    const G4Element*  element);
+      
+  G4double GetCrossSectionPerVolume(
+    const G4ParticleDefinition* particle,
+    G4double kineticEnergy,
+    const G4VProcess* process,
+    const G4Material* material);
+    
   G4double GetInelasticCrossSectionPerVolume(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
@@ -176,6 +186,7 @@ public:
   void Dump(G4int level);
   void DumpHtml();
   void PrintHtml(const G4ParticleDefinition*, std::ofstream&);
+  void PrintModelHtml(const G4HadronicInteraction * model) const;
 
   void SetVerbose(G4int val);
 

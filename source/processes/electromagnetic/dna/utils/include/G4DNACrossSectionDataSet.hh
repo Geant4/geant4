@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNACrossSectionDataSet.hh,v 1.7 2009-09-25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 //
@@ -49,6 +48,8 @@
 #ifndef  G4DNACROSSSECTIONDATASET_HH
 #define  G4DNACROSSSECTIONDATASET_HH 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4ShellEMDataSet.hh"
 
 class G4DNACrossSectionDataSet : public G4VEMDataSet
@@ -56,8 +57,8 @@ class G4DNACrossSectionDataSet : public G4VEMDataSet
 
 public:
   G4DNACrossSectionDataSet(G4VDataSetAlgorithm* algo, 
-			   G4double xUnit=MeV, 
-			   G4double dataUnit=barn);
+			   G4double xUnit=CLHEP::MeV, 
+			   G4double dataUnit=CLHEP::barn);
 
   virtual ~G4DNACrossSectionDataSet();
 

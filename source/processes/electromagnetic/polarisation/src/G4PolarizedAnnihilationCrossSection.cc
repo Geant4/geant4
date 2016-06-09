@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.6 2007-11-01 17:32:34 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -48,6 +47,7 @@
 //
 
 #include "G4PolarizedAnnihilationCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 
 G4PolarizedAnnihilationCrossSection::G4PolarizedAnnihilationCrossSection() :
   polxx(0.), polyy(0.), polzz(0.), polxz(0.), polzx(0.), polxy(0.), 

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/include/PrimaryGeneratorMessenger.hh
+/// \brief Definition of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -53,9 +55,9 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  PrimaryGeneratorAction* Action;
-  G4UIdirectory*          gunDir; 
-  G4UIcmdWithAString*     RndmCmd;
+  PrimaryGeneratorAction* fAction;
+  G4UIdirectory*          fGunDir; 
+  G4UIcmdWithAString*     fRndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -46,6 +46,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4ThreeVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 // Constructor
 
@@ -53,6 +54,7 @@ G4PiMinusStopAbsorption::G4PiMinusStopAbsorption(G4PiMinusStopMaterial* material
 						 const G4double Z, const G4double A)
   
 {
+  G4HadronicDeprecate("G4PiMinusStopAbsorption");
   _materialAlgo = materialAlgo;
   _nucleusZ = Z;
   _nucleusA = A;

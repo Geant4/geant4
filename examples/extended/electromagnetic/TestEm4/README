@@ -44,10 +44,6 @@ $Id: README,v 1.21 2008-09-12 18:46:14 maire Exp $
  	
  6- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd examples/extended/electromagnetic/TestEm4
- 		% gmake
- 		
  	- execute TestEm4 in 'batch' mode from macro files
  		% TestEm4   TestEm4.in
  		
@@ -67,18 +63,39 @@ $Id: README,v 1.21 2008-09-12 18:46:14 maire Exp $
 
  7- USING HISTOGRAMS
 
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-  Before compilation of the example it is optimal to clean up old files:
-	gmake histclean
-	gmake
-
-  It is possible to choose the format of the histogram file :
-  hbook, root (default), XML
-  comment/uncomment 1 line in the constructor of RunAction. 
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
+ The format of the histogram file can be : root (default),
+ hbook, xml, csv, by selecting g4nnn.hh in RunAction.hh 
+ 
+ Using hbook format
+ ------------------
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in RunAction.hh
   
+ 8- RANDOM NUMBERS HANDLING
+ 
+   CLHEP provides several random number engines. In this example the Ranecu
+   engine is choosen at beginning of the main (TestEm4.cc).
+	
+   By default, G4RunManager does not save the rndm seed.
+   To do so the user must set in BeginOfRunAction:
+   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+	
+   Then the rndm seed is systematically saved at beginning of run
+   (currentRun.rndm) and beginning of event (currentEvent.rndm)
+   Therefore, in case of abnormal end, the seed of the last event processed
+   is available in currentEvent.rndm
+	
+   Even in case of normal run processing, the user may wish to preserve the
+   rndm seed of selected events. At any time in the event, put the
+   following statement:
+   if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
+   currentEvent.rndm will be copied to runXXevntYY.rndm
+   (see SteppingAction::UserSteppingAction() )
+	
+   To restart a run from a given rndm seed, use the UI command :
+   /random/resetEngineFrom  fileName 
+	
+   The macro rndmSeed.mac shows how to save and reset the random number
+   seed between runs, from UI commands.	

@@ -112,10 +112,6 @@ $Id: README,v 1.23 2010-09-17 18:45:43 maire Exp $
 		  	
  6- HOW TO START ?
  
-     - compile and link to generate an executable
-	% cd geant4/examples/extended/electromagnetic/TestEm7 
- 	% gmake
- 		
      - execute Test  in 'batch' mode from macro files
  	% TestEm7    proton.mac
  		
@@ -145,27 +141,18 @@ $Id: README,v 1.23 2010-09-17 18:45:43 maire Exp $
 
      The next histogram allows to have a zoom around the Bragg peak. Its bining
      should be defined via UI command: 
-     /testem/histo/setHisto 2 nbins xmin xmax unit
+     /analysis/h1/set 2 nbins xmin xmax unit
 
      The last histogram shows the projectile range. Its bining should be defined
      similary by the UI command:
-     /testem/histo/setHisto 3 nbins xmin xmax unit
-      
-  8- USING HISTOGRAMS
-
-     By default the histograms are not activated. To activate histograms
-     the environment variable G4ANALYSIS_USE should be defined. For instance
-     uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-  
-     To use histograms, at least one of the AIDA implementations should be 
-     available. See InstallAida.txt
-
-     Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake 
-
-     One can choose the format of the histogram file (hbook, root, XML):
-     /testem/histo/setFileType root
-
-     The default name "testem7" can be changed:
-     /testem/histo/setFileName myname
+     /analysis/h1/set 3 nbins xmin xmax unit
+         
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default testem7)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh 
+     
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii  (default testem7)

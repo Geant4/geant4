@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.cc,v 1.13 2010-04-26 17:22:08 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -49,6 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ASTARStopping.hh" 
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -418,10 +418,10 @@ G4double e73[78] = { 18.11, 23.3, 27.86, 31.99, 35.83, 42.84, 49.2, 55.1, 60.63,
 AddData(T0,e73, 73);
 } 
 
-void G4ASTARStopping::AddData(G4double* ekin, G4double* s, G4int idx)
+void G4ASTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
 sdata[idx] = new G4LPhysicsFreeVector(78, ekin[0]*MeV, ekin[77]*MeV);
 const G4double fac = MeV*cm2/g;
-for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*fac); }
+for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
 sdata[idx]->SetSpline(true);
 }

@@ -26,18 +26,4 @@
 #include "G4FieldPropagation.hh"
 #include "G4HadronicException.hh"
 
-const G4FieldPropagation & G4FieldPropagation::operator=(const G4FieldPropagation &)
-{
-   throw G4HadronicException(__FILE__, __LINE__, "G4FieldPropagation::operator= meant to be private");
-   return *this;
-}
-
-int G4FieldPropagation::operator==(const G4FieldPropagation &) const
-{
-   return 1;
-}
-
-int G4FieldPropagation::operator!=(const G4FieldPropagation &) const
-{
-   return 0;
-}
+G4FieldPropagation::~G4FieldPropagation() {}

@@ -34,24 +34,32 @@
 //
 // Creation date: 20.10.2011 
 //
-// Class Description:
-//      Computation of electron Coulomb Scattering Cross Section. 
-// 	Suitable for high energy electrons and light target materials.
+// Modifications:
+// 27-05-2012 Added Analytic Fitting to the Mott Cross Section by means of G4MottCoefficients class.
 //
-// Reference:
-//     M.J. Boschini et al.
-//    "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
-//     Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
-//     (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
-// 
-// 
-//       1) Mott Differential Cross Section Approximation:  
-//       W. A. McKinley and H. Fashbach, Phys. Rev. 74, (1948) 1759.
-//       2) Screening coefficient: 
-//       vomn G. Moliere, Z. Naturforsh A2 (1947), 133-145; A3 (1948), 78.
-//       3) Nuclear Form Factor: 
-//       A.V. Butkevich et al. Nucl. Instr. and Meth. in Phys. Res. A 488 (2002), 282-294.
-//       
+//
+// Class Description:
+//      Computation of electron Coulomb Scattering Cross Section.
+//      Suitable for high energy electrons and light target materials. 
+//
+//      Reference:
+//      M.J. Boschini et al.
+//     "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
+//      Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
+//      (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
+//      Available at: http://arxiv.org/abs/1111.4042v4
+//
+//      1) Mott Differential Cross Section Approximation:  
+//         For Target material up to Z=92 (U):
+//         As described in http://arxiv.org/abs/1111.4042v4 
+//         par. 2.1 , eq. (16)-(17)
+//         Else (Z>92):
+//         W. A. McKinley and H. Fashbach, Phys. Rev. 74, (1948) 1759.
+//      2) Screening coefficient: 
+//      vomn G. Moliere, Z. Naturforsh A2 (1947), 133-145; A3 (1948), 78.
+//      3) Nuclear Form Factor: 
+//      A.V. Butkevich et al. Nucl. Instr. and Meth. in Phys. Res. A 488 (2002), 282-294.
+//
 // ----------------------------------------------------------------------------------------
 
 //
@@ -60,6 +68,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+
+#include "G4MottCoefficients.hh"
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -101,7 +111,10 @@ public:
         inline G4double GetScreeningCoefficient() const;
         inline G4double GetTotalCross() const;
 
+
+
         G4double McFcorrection(G4double);
+	G4double RatioMottRutherford(G4double);//.....new
         G4double FormFactor2ExpHof(G4double);
         G4double GetScatteringAngle();
         G4double AngleDistribution(G4double);
@@ -114,6 +127,7 @@ private:
 
 
   	G4NistManager*  fNistManager;		
+	G4MottCoefficients * mottcoeff;
 
 	G4double 		TotalCross;
 
@@ -155,6 +169,7 @@ private:
   	G4double                targetMass; 
 	G4double 		Trec;
  	G4double 		As; 
+	G4double 		coeffb[5][6];
 
 	//constants
 	G4double                 alpha;

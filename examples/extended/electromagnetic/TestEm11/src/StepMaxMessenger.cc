@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc,v 1.3 2006-06-29 16:40:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm11/src/StepMaxMessenger.cc
+/// \brief Implementation of the StepMaxMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,31 +35,42 @@
 
 #include "StepMax.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:stepMax(stepM)
-{ 
-  StepMaxCmd = new G4UIcmdWithABool("/testem/applyStepMax",this);
-  StepMaxCmd->SetGuidance("apply StepMax computed from histograms");
-  StepMaxCmd->SetParameterName("mxStep",true);
-  StepMaxCmd->SetDefaultValue(true);
+:fStepMax(stepM)
+{
+  fStepMax1Cmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  fStepMax1Cmd->SetGuidance("Set max allowed step length");
+  fStepMax1Cmd->SetParameterName("mxStep1",false);
+  fStepMax1Cmd->SetRange("mxStep1>0.");
+  fStepMax1Cmd->SetUnitCategory("Length");
+   
+  fStepMax2Cmd = new G4UIcmdWithABool("/testem/applyAutomaticStepMax",this);
+  fStepMax2Cmd->SetGuidance("apply StepMax computed from histograms");
+  fStepMax2Cmd->SetParameterName("mxStep2",true);
+  fStepMax2Cmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::~StepMaxMessenger()
 {
-  delete StepMaxCmd;
+  delete fStepMax1Cmd;
+  delete fStepMax2Cmd;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == StepMaxCmd)
-    { stepMax->ApplyMaxStep(StepMaxCmd->GetNewBoolValue(newValue));}
+  if (command == fStepMax1Cmd)
+    { fStepMax->SetMaxStep1(fStepMax1Cmd->GetNewDoubleValue(newValue));}
+    
+  if (command == fStepMax2Cmd)
+    { fStepMax->ApplyMaxStep2(fStepMax2Cmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

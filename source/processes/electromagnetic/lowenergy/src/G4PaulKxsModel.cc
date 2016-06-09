@@ -39,17 +39,16 @@
 
 // -------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
-//#include "G4CompositeEMDataSet.hh"
-//#include "G4ShellEMDataSet.hh"
-#include "G4EMDataSet.hh"
-//#include "G4VEMDataSet.hh"
-//#include "G4VDataSetAlgorithm.hh"
-#include "G4LogLogInterpolation.hh"
+
 #include "G4PaulKxsModel.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
+#include "G4EMDataSet.hh"
+#include "G4LogLogInterpolation.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
 

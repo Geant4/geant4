@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TargetSD.hh,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/include/TargetSD.hh
+/// \brief Definition of the TargetSD class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -65,7 +67,7 @@ public: // Without description
 
 private:
 
-  HistoManager* theHisto;
+  HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

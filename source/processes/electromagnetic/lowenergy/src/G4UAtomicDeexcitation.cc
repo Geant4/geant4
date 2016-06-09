@@ -41,6 +41,7 @@
 //                   out thei ranges with Analytical one.
 // 07 Nov 2011  Alf  Restored original ioniation XS for alphas, 
 //                   letting scaled ones for other ions.   
+// 20 Mar 2012  LP   Register G4PenelopeIonisationCrossSection
 //
 // -------------------------------------------------------------------
 //
@@ -50,9 +51,10 @@
 // -------------------------------------------------------------------
 
 #include "G4UAtomicDeexcitation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4FluoTransition.hh"
 #include "G4Electron.hh"
@@ -62,6 +64,7 @@
 
 #include "G4teoCrossSection.hh"
 #include "G4empCrossSection.hh"
+#include "G4PenelopeIonisationCrossSection.hh"
 #include "G4LivermoreIonisationCrossSection.hh"
 #include "G4EmCorrections.hh"
 #include "G4LossTableManager.hh"
@@ -94,7 +97,6 @@ G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
- 
   if(!IsFluoActive()) { return; }
   transitionManager = G4AtomicTransitionManager::Instance();
   if(IsPIXEActive()) {
@@ -102,7 +104,7 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     G4cout << "### === G4UAtomicDeexcitation::InitialiseForNewRun()" << G4endl;
     anaPIXEshellCS = new G4teoCrossSection("Analytical");
  
- }
+  }
   else  {return;}
   // initializing PIXE x-section name
   // 
@@ -176,6 +178,8 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     {
       SetPIXEElectronCrossSectionModel("ProtonEmpirical");
     }
+  else if (PIXEElectronCrossSectionModel() == "Penelope")
+    SetPIXEElectronCrossSectionModel("Penelope");
   else 
     {
       G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
@@ -211,6 +215,10 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
       else if(PIXEElectronCrossSectionModel() == "Livermore")
 	{
 	  ePIXEshellCS = new G4LivermoreIonisationCrossSection();
+	}
+      else if (PIXEElectronCrossSectionModel() == "Penelope")
+	{
+	  ePIXEshellCS = new G4PenelopeIonisationCrossSection();
 	}
     } 
 }
@@ -262,7 +270,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  ( provShellId >0) 
 	      {
 		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
+		//if (aParticle != 0) { G4cout << "****FLUO!_1**** " << aParticle->GetParticleDefinition()->GetParticleType() << " " << aParticle->GetKineticEnergy()/keV << G4endl ;} //debug  
 	      }
 	    else if ( provShellId == -1)
 	      {
@@ -282,7 +290,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  (provShellId >0)
 	      {
 		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
+		//if (aParticle != 0) { G4cout << "****FLUO!_2****" << aParticle->GetParticleDefinition()->GetParticleType() << " " << aParticle->GetKineticEnergy()/keV << G4endl;} //debug
 	      }
 	    else if ( provShellId == -1)
 	      {
@@ -333,7 +341,7 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 
   // 
   if(pdef == theElectron || pdef == thePositron) {
-    xsec = ePIXEshellCS->CrossSection(Z,shellEnum,kineticEnergy,0.0);
+    xsec = ePIXEshellCS->CrossSection(Z,shellEnum,kineticEnergy,0.0,mat);
     return xsec;
   }
 
@@ -355,10 +363,10 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
     }
   }
   
-  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
+  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,shellEnum,escaled,mass,mat); }
   if(xsec < 1e-100) { 
     
-    xsec = anaPIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); 
+    xsec = anaPIXEshellCS->CrossSection(Z,shellEnum,escaled,mass,mat); 
     
   }
 

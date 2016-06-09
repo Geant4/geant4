@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 24th, 2012 I.Hrivnacova (exParameterisations-V09-05-00)
+--------------------
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters  
+
 Nov 4th, 2005 J.Weng (exparam-V07-01-01)
 --------------------
 - Added new example demonstrating usage 'gflash' shower parameterisation.

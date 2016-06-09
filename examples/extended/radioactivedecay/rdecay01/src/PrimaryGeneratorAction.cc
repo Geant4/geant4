@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -36,6 +38,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Geantino.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,37 +46,37 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
   
-  particleGun->SetParticleEnergy(0*eV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));          
+  fParticleGun->SetParticleEnergy(0*eV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if (particleGun->GetParticleDefinition() == G4Geantino::Geantino()) {  
+  if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino()) {  
     G4int Z = 10, A = 24;
     G4double ionCharge   = 0.*eplus;
     G4double excitEnergy = 0.*keV;
     
     G4ParticleDefinition* ion
        = G4ParticleTable::GetParticleTable()->GetIon(Z,A,excitEnergy);
-    particleGun->SetParticleDefinition(ion);
-    particleGun->SetParticleCharge(ionCharge);
+    fParticleGun->SetParticleDefinition(ion);
+    fParticleGun->SetParticleCharge(ionCharge);
   }  
   
   //create vertex
   //   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

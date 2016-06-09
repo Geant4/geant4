@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.30 2010-11-23 19:01:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -44,6 +43,7 @@
 // 10-05-06 Add command MscStepLimit to G4LossTableManager (V.Ivantchenko) 
 // 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
+// 30-05-12 Add biasing for G4VEmProcess (D. Sawkey)
 //
 // Class Description:
 //
@@ -53,6 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmProcessOptions.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4VEmProcess.hh"
 #include "G4VEnergyLossProcess.hh"
@@ -219,9 +220,9 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
+    G4VMultipleScattering* msc = *itm;
     if(s) {
-      if (s->GetProcessName() == name) { s->SetVerboseLevel(val); }
+      if (msc->GetProcessName() == name) { msc->SetVerboseLevel(val); }
     }
   }
 }
@@ -482,12 +483,34 @@ G4EmProcessOptions::ActivateSecondaryBiasing(const G4String& name,
 					     G4double factor,
 					     G4double energyLimit)
 {
-  if(0.0 >= factor) { return; }
+  if(0.0 > factor) { return; }
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); ++itr) {
     G4VEnergyLossProcess* p = *itr;
+    if(p) {
+      if (p->GetProcessName() == name) { 
+	p->ActivateSecondaryBiasing(region, factor, energyLimit); 
+      }
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4EmProcessOptions::ActivateSecondaryBiasingForGamma(const G4String& name,
+					     const G4String& region, 
+					     G4double factor,
+					     G4double energyLimit)
+{
+  if(0.0 > factor) { return; }
+  const std::vector<G4VEmProcess*>& v =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); ++itr) {
+    G4VEmProcess* p = *itr;
     if(p) {
       if (p->GetProcessName() == name) { 
 	p->ActivateSecondaryBiasing(region, factor, energyLimit); 

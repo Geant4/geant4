@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.4 2010-06-07 05:40:45 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm11/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,17 +41,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run, HistoManager* histo)
-:runAct(run), drawFlag("none"), printModulo(10000), histoManager(histo)
+EventAction::EventAction(RunAction* run)
+:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,11 +61,11 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
 
  //printing survey
- if (evtNb%printModulo == 0)
+ if (evtNb%fPrintModulo == 0)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
     
  //energy deposited per event
- totalEdep = 0.;   
+ fTotalEdep = 0.;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,9 +74,9 @@ void EventAction::EndOfEventAction(const G4Event*)
 {
   //plot energy deposited per event
   //
-  if (totalEdep > 0.) {
-    runAct->AddEdep(totalEdep);
-    histoManager->FillHisto(2,totalEdep);
+  if (fTotalEdep > 0.) {
+    fRunAct->AddEdep(fTotalEdep);
+    G4AnalysisManager::Instance()->FillH1(2,fTotalEdep);
   }  
 }
 

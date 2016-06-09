@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc,v 1.8 2010-11-23 15:31:10 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4PAIySection.cc -- class implementation file
@@ -48,6 +47,8 @@
 #include "G4PAIySection.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "G4Material.hh"

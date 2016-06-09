@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm8/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

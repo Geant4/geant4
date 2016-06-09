@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.21 2010-11-04 12:40:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -49,6 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EnergyLossForExtrapolator.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
@@ -559,6 +560,7 @@ void G4EnergyLossForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* 
   for(G4int i=0; i<nmat; i++) {  
 
     const G4Material* mat = (*mtable)[i];
+    msc->SetCurrentCouple(couples[i]);
     if(1<verbose)
       G4cout << "i= " << i << "  mat= " << mat->GetName() << G4endl;
     G4PhysicsVector* aVector = (*table)[i];

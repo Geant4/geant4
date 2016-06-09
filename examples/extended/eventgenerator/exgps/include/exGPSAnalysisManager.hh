@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSAnalysisManager.hh
+/// \brief Definition of the exGPSAnalysisManager class
+//
 #ifndef exGPSAnalysisManager_h
 #define exGPSAnalysisManager_h 1
 
@@ -52,46 +55,47 @@ private:
   virtual ~exGPSAnalysisManager ();
 
 public:
-  static exGPSAnalysisManager* getInstance ();
-  static void dispose();
+  static exGPSAnalysisManager* GetInstance ();
+  static void Dispose();
 
 public:
   void BeginOfRun();
   void EndOfRun();
 
-  void SetFileName(G4String filename) {fileName = filename;};
-  void SetFileType(G4String filetype) {fileType = filetype;};
+  void SetFileName(G4String filename) {fIleName = filename;};
+  void SetFileType(G4String filetype) {fIleType = filetype;};
 
-  void SetPosMax(G4double pmax) {maxpos = pmax;};
-  void SetPosMin(G4double pmin) {minpos = pmin;};
-  void SetEngMax(G4double emax) {maxeng = emax;};
-  void SetEngMin(G4double emin) {mineng = emin;};
+  void SetPosMax(G4double pmax) {fMaxpos = pmax;};
+  void SetPosMin(G4double pmin) {fMinpos = pmin;};
+  void SetEngMax(G4double emax) {fMaxeng = emax;};
+  void SetEngMin(G4double emin) {fMineng = emin;};
   
-  void Fill(G4String, G4double, G4double, G4double, G4double, G4double, G4double, G4double);
+  void Fill(G4String, G4double, G4double, G4double, G4double, G4double,
+                                                                                                                                          G4double, G4double);
 
 private:
 
-  static exGPSAnalysisManager* instance;
+  static exGPSAnalysisManager* fInstance;
 
-  G4String fileName;
-  G4String fileType;
+  G4String fIleName;
+  G4String fIleType;
 
-  AIDA::IAnalysisFactory* analysisFactory;
-  AIDA::ITree* tree;
-  AIDA::IPlotter* plotter;
+  AIDA::IAnalysisFactory* fAnalysisFactory;
+  AIDA::ITree* fTree;
+  AIDA::IPlotter* fPlotter;
 
-  G4double minpos, maxpos;
-  G4double mineng, maxeng;
+  G4double fMinpos, fMaxpos;
+  G4double fMineng, fMaxeng;
 
-  AIDA::IHistogram1D* enerHisto;
-  AIDA::IHistogram2D* posiXY;
-  AIDA::IHistogram2D* posiXZ;
-  AIDA::IHistogram2D* posiYZ;
-  AIDA::IHistogram2D* anglCTP;
-  AIDA::IHistogram2D* anglTP;
-  AIDA::ITuple* tuple;
+  AIDA::IHistogram1D* fEnerHisto;
+  AIDA::IHistogram2D* fPosiXY;
+  AIDA::IHistogram2D* fPosiXZ;
+  AIDA::IHistogram2D* fPosiYZ;
+  AIDA::IHistogram2D* fAnglCTP;
+  AIDA::IHistogram2D* fAnglTP;
+  AIDA::ITuple* fTuple;
 
-  exGPSAnalysisMessenger* analysisMessenger;
+  exGPSAnalysisMessenger* fAnalysisMessenger;
 
 };
 

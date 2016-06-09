@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/include/G4BlineTracer.hh
+/// \brief Definition of the G4BlineTracer class
 //
-// $Id: G4BlineTracer.hh,v 1.2 2006-06-29 17:15:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -75,7 +77,7 @@ class G4BlineTracer : public G4UserRunAction
      void ComputeBlines(G4int nlines);
 
      inline void SetMaxTrackingStep(G4double max_step)
-       { MaxTrackingStep=max_step; }
+       { fMaxTrackingStep=max_step; }
      inline G4BlineEventAction* GetEventAction()
        { return fEventAction; }
 
@@ -89,16 +91,16 @@ class G4BlineTracer : public G4UserRunAction
      G4BlineSteppingAction* fSteppingAction;
      G4BlineEventAction* fEventAction;
      G4BlinePrimaryGeneratorAction* fPrimaryGeneratorAction;
-     G4double MaxTrackingStep;
-     G4bool was_ResetChordFinders_already_called;
+     G4double fMaxTrackingStep;
+     G4bool fWas_ResetChordFinders_already_called;
  
      G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
        // User defined primary generator action
 
-     std::vector<G4ChordFinder* > vecChordFinders;
-     std::vector<G4FieldManager* > vecFieldManagers;
-     std::vector<G4MagneticField* > vecMagneticFields;
-     std::vector<G4BlineEquation* > vecEquationOfMotion;
+     std::vector<G4ChordFinder* > fVecChordFinders;
+     std::vector<G4FieldManager* > fVecFieldManagers;
+     std::vector<G4MagneticField* > fVecMagneticFields;
+     std::vector<G4BlineEquation* > fVecEquationOfMotion;
        // ChordFinders, detector fields, equation of motions, and field
        // manager for the different local and global magnetic fields.
 };

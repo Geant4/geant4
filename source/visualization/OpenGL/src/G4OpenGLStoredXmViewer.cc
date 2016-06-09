@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.26 2010-04-30 13:18:32 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -36,6 +35,7 @@
 
 #include "G4OpenGLStoredXmViewer.hh"
 
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
 
 G4OpenGLStoredXmViewer::
@@ -70,16 +70,6 @@ void G4OpenGLStoredXmViewer::Initialise () {
   InitializeGLView ();
 
   glDrawBuffer (GL_BACK);
-}
-
-void G4OpenGLStoredXmViewer::ShowView () {
-  // Some X servers fail to draw all trajectories, particularly Mac
-  // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
-  // extra...
-  ClearView();
-  DrawView();
-  // ..then call parent method.
-  G4OpenGLXmViewer::ShowView();
 }
 
 void G4OpenGLStoredXmViewer::DrawView () {

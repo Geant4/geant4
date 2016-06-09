@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc,v 1.8 2006-06-29 18:09:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

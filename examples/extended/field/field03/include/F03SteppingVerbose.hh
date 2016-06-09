@@ -23,41 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03SteppingVerbose.hh
+/// \brief Definition of the F03SteppingVerbose class
 //
-// $Id: F03SteppingVerbose.hh,v 1.4 2006-06-29 17:19:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-//  
-//---------------------------------------------------------------
-//
-// F03SteppingVerbose.hh
-//
-// Description:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
 
 #ifndef F03SteppingVerbose_h
 #define F03SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
+/// This class manages the vervose outputs in G4SteppingManager. 
+///   
+/// Contact: \n
+/// Questions and comments to this code should be sent to
+///   -  Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+///   -  Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+
 class F03SteppingVerbose : public G4SteppingVerbose 
 {
   public:   
 
     F03SteppingVerbose();
-   ~F03SteppingVerbose();
+    ~F03SteppingVerbose();
       // Constructor, Destructor
 
-    void StepInfo();
-    void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 
 };
 

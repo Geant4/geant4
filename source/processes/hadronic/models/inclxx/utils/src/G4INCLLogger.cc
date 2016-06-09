@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -57,13 +57,13 @@ namespace G4INCL {
       return std::string("Unknown");
   }
 
-  LoggerSlave const &LoggerSlave::log(const MessageType type, const std::string &fileName, const G4int lineNumber) const {
+  void LoggerSlave::logMessage(const MessageType type, const std::string &fileName, const G4int lineNumber, std::string const &s) const {
     if(type!=InfoMsg) {
       (*logStream) << typeToString(type) << " [" <<
         fileName.substr(fileName.find_last_of("/")+1) <<
         ":" << lineNumber << "] ";
     }
-    return *this;
+    (*logStream) << s;
   }
   
   void LoggerSlave::logDataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) const {

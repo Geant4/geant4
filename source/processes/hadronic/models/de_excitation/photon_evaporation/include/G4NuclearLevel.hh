@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevel.hh,v 1.7 2010-11-17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -124,7 +123,7 @@ public:
   G4bool operator==(const G4NuclearLevel &right) const;
   G4bool operator!=(const G4NuclearLevel &right) const;
   G4bool operator<(const G4NuclearLevel &right) const;
-  const G4NuclearLevel& operator=(const G4NuclearLevel &right);
+  G4NuclearLevel& operator=(const G4NuclearLevel &right);
 
   G4NuclearLevel(const G4NuclearLevel &right);
 

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LindhardPartition.cc,v 1.4 2009-11-26 08:19:57 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/src/G4LindhardPartition.cc
+/// \brief Implementation of the G4LindhardPartition class
+//
+// $Id$
 //
 
 /*
@@ -38,6 +40,8 @@
 #include "G4LindhardPartition.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 /*
 for a first cut, we will compute NIEL from a Lindhard-Robinson partition
@@ -71,26 +75,26 @@ G4double G4LindhardRobinsonPartition::PartitionNIEL(
    G4int z1, G4double a1, const G4Material *material, G4double energy) const
 {
   size_t nMatElements = material->GetNumberOfElements();
-	
+        
   const G4double *atomDensities=material->GetVecNbOfAtomsPerVolume();
   G4double maxdens=0.0;
   size_t maxindex=0;
   for (size_t k=0 ; k < nMatElements ; k++ )
     {
       if(atomDensities[k] > maxdens) {
-	maxdens=atomDensities[k];
-	maxindex=k;
+        maxdens=atomDensities[k];
+        maxindex=k;
       }
     }
   const G4Element *element=material->GetElement(maxindex);
 
   G4int z2=G4int(element->GetZ());
-	
+        
   G4double a2=element->GetA()/(Avogadro*amu);
-	
+        
   G4double zpow=z23[z1]+z23[z2];
   G4double asum=a1+a2;
-	
+        
   G4double el=30.724*z1*z2*std::sqrt(zpow)*asum/a2;
   G4double fl=0.0793*z23[z1]*std::sqrt(z2*asum*asum*asum/(a1*a1*a1*a2))/std::pow(zpow, 0.75);
   G4double eps=(energy/eV)*(1.0/el);

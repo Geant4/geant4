@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VImportanceSplitExaminer.hh,v 1.5 2006-06-29 18:16:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4VImportanceSplitExaminer

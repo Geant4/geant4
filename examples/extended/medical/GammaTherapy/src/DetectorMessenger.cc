@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
 // -------------------------------------------------------------
 //      GEANT4  test  IBREM
 //
@@ -50,128 +53,103 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
-  hDet(h)
+  fDetector(h)
 {
-  detDir = new G4UIdirectory("/testem/");
-  detDir->SetGuidance("General  commands");
-  detDir1= new G4UIdirectory("/testem/physics/");
-  detDir1->SetGuidance(" commands to define physics");
-  detDir2= new G4UIdirectory("/testem/gun/");
-  detDir2->SetGuidance(" commands to define gun");
+  fDetDir = new G4UIdirectory("/testem/");
+  fDetDir->SetGuidance("General  commands");
+  fDetDir1= new G4UIdirectory("/testem/physics/");
+  fDetDir1->SetGuidance(" commands to define physics");
+  fDetDir2= new G4UIdirectory("/testem/gun/");
+  fDetDir2->SetGuidance(" commands to define gun");
 
-  AbsMaterCmd = new G4UIcmdWithAString("/testem/target1Material",this);
-  AbsMaterCmd->SetGuidance("Select Material of the target1.");
-  AbsMaterCmd->SetParameterName("Material1",false);
-  AbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsMaterCmd = new G4UIcmdWithAString("/testem/target1Material",this);
+  fAbsMaterCmd->SetGuidance("Select Material of the target1.");
+  fAbsMaterCmd->SetParameterName("Material1",false);
+  fAbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  WorldMaterCmd = new G4UIcmdWithAString("/testem/target2Material",this);
-  WorldMaterCmd->SetGuidance("Select Material of the target2.");
-  WorldMaterCmd->SetParameterName("Material2",false);
-  WorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldMaterCmd = new G4UIcmdWithAString("/testem/target2Material",this);
+  fWorldMaterCmd->SetGuidance("Select Material of the target2.");
+  fWorldMaterCmd->SetParameterName("Material2",false);
+  fWorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/mylarZ",this);
-  AbsThickCmd->SetGuidance("Set mylarZ");
-  AbsThickCmd->SetParameterName("mylarZ",false);
-  AbsThickCmd->SetUnitCategory("Length");
-  AbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/mylarZ",this);
+  fAbsThickCmd->SetGuidance("Set mylarZ");
+  fAbsThickCmd->SetParameterName("mylarZ",false);
+  fAbsThickCmd->SetUnitCategory("Length");
+  fAbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  AbsGapCmd = new G4UIcmdWithADoubleAndUnit("/testem/delta",this);
-  AbsGapCmd->SetGuidance("Set gap between absorbers");
-  AbsGapCmd->SetParameterName("delta",false);
-  AbsGapCmd->SetUnitCategory("Length");
-  AbsGapCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsGapCmd = new G4UIcmdWithADoubleAndUnit("/testem/delta",this);
+  fAbsGapCmd->SetGuidance("Set gap between absorbers");
+  fAbsGapCmd->SetParameterName("delta",false);
+  fAbsGapCmd->SetUnitCategory("Length");
+  fAbsGapCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/target1Z",this);
-  AbsSizYZCmd->SetGuidance("Set targeet1Z");
-  AbsSizYZCmd->SetParameterName("target1Z",false);
-  AbsSizYZCmd->SetUnitCategory("Length");
-  AbsSizYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/target1Z",this);
+  fAbsSizYZCmd->SetGuidance("Set targeet1Z");
+  fAbsSizYZCmd->SetParameterName("target1Z",false);
+  fAbsSizYZCmd->SetUnitCategory("Length");
+  fAbsSizYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  WorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/target2Z",this);
-  WorldXCmd->SetGuidance("Set target2Z");
-  WorldXCmd->SetParameterName("target2Z",false);
-  WorldXCmd->SetUnitCategory("Length");
-  WorldXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/target2Z",this);
+  fWorldXCmd->SetGuidance("Set target2Z");
+  fWorldXCmd->SetParameterName("target2Z",false);
+  fWorldXCmd->SetUnitCategory("Length");
+  fWorldXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  XMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/checkShiftZ",this);
-  XMagFieldCmd->SetGuidance("Define checkShftZ");
-  XMagFieldCmd->SetParameterName("CheckSZ",false);
-  XMagFieldCmd->SetUnitCategory("Length");
-  XMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fXMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/checkShiftZ",this);
+  fXMagFieldCmd->SetGuidance("Define checkShftZ");
+  fXMagFieldCmd->SetParameterName("CheckSZ",false);
+  fXMagFieldCmd->SetUnitCategory("Length");
+  fXMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  YMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdZ",this);
-  YMagFieldCmd->SetGuidance("Define sensitive detector Z");
-  YMagFieldCmd->SetParameterName("sdZ",false);
-  YMagFieldCmd->SetUnitCategory("Length");
-  YMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fYMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdZ",this);
+  fYMagFieldCmd->SetGuidance("Define sensitive detector Z");
+  fYMagFieldCmd->SetParameterName("sdZ",false);
+  fYMagFieldCmd->SetUnitCategory("Length");
+  fYMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdShiftZ",this);
-  ZMagFieldCmd->SetGuidance("Define shift of sensitive detector");
-  ZMagFieldCmd->SetParameterName("sdShiftZ",false);
-  ZMagFieldCmd->SetUnitCategory("Length");
-  ZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdShiftZ",this);
+  fZMagFieldCmd->SetGuidance("Define shift of sensitive detector");
+  fZMagFieldCmd->SetParameterName("sdShiftZ",false);
+  fZMagFieldCmd->SetUnitCategory("Length");
+  fZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  HistoCmd = new G4UIcmdWithAString("/testem/histoName",this);
-  HistoCmd->SetGuidance("Set the name of the histo file");
-  HistoCmd->SetParameterName("histo",false);
-  HistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fHistoCmd = new G4UIcmdWithAString("/testem/histoName",this);
+  fHistoCmd->SetGuidance("Set the name of the histo file");
+  fHistoCmd->SetParameterName("histo",false);
+  fHistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  HistoTCmd = new G4UIcmdWithAString("/testem/histoType",this);
-  HistoTCmd->SetGuidance("Set the type of the histo file");
-  HistoTCmd->SetParameterName("histoT",false);
-  HistoTCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNumOfAbsCmd = new G4UIcmdWithAnInteger("/testem/numberDivR",this);
+  fNumOfAbsCmd->SetGuidance("Set number divisions R");
+  fNumOfAbsCmd->SetParameterName("NR",false);
+  fNumOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ntupCmd = new G4UIcmdWithABool("/testem/ntuple",this);
-  ntupCmd->SetGuidance("Set ntuple to fill");
-  ntupCmd->SetParameterName("ntuple",false);
-  ntupCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNumOfEvt = new G4UIcmdWithAnInteger("/testem/numberDivZ",this);
+  fNumOfEvt->SetGuidance("Set number of divisions Z");
+  fNumOfEvt->SetParameterName("NZ",false);
+  fNumOfEvt->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  NumOfAbsCmd = new G4UIcmdWithAnInteger("/testem/numberDivR",this);
-  NumOfAbsCmd->SetGuidance("Set number divisions R");
-  NumOfAbsCmd->SetParameterName("NR",false);
-  NumOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fVerbCmd = new G4UIcmdWithAnInteger("/testem/verbose",this);
+  fVerbCmd->SetGuidance("Set verbose for ");
+  fVerbCmd->SetParameterName("verb",false);
+  fVerbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  NumOfEvt = new G4UIcmdWithAnInteger("/testem/numberDivZ",this);
-  NumOfEvt->SetGuidance("Set number of divisions Z");
-  NumOfEvt->SetParameterName("NZ",false);
-  NumOfEvt->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fIntCmd = new G4UIcmdWithAnInteger("/testem/numberDivE",this);
+  fIntCmd->SetGuidance("Set number of divisions E");
+  fIntCmd->SetParameterName("NZ",false);
+  fIntCmd->AvailableForStates(G4State_PreInit);
 
-  verbCmd = new G4UIcmdWithAnInteger("/testem/verbose",this);
-  verbCmd->SetGuidance("Set verbose for ");
-  verbCmd->SetParameterName("verb",false);
-  verbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  intCmd = new G4UIcmdWithAnInteger("/testem/numberDivE",this);
-  intCmd->SetGuidance("Set number of divisions E");
-  intCmd->SetParameterName("NZ",false);
-  intCmd->AvailableForStates(G4State_PreInit);
-
-  nhistCmd = new G4UIcmdWithAnInteger("/testem/histoNumber",this);
-  nhistCmd->SetGuidance("Set number of histograms to fill");
-  nhistCmd->SetParameterName("HistoNumber",false);
-  nhistCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  nDebugSCmd = new G4UIcmdWithAnInteger("/testem/nFirstEventToDebug",this);
-  nDebugSCmd->SetGuidance("Set number of the first event to debug");
-  nDebugSCmd->SetParameterName("nFirstEventToDebug",false);
-  nDebugSCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  nDebugECmd = new G4UIcmdWithAnInteger("/testem/nLastEventToDebug",this);
-  nDebugECmd->SetGuidance("Set number of the last event to debug");
-  nDebugECmd->SetParameterName("nLastEventToDebug",false);
-  nDebugECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  DeltaECmd = new G4UIcmdWithADoubleAndUnit("/testem/maxEnergy",this);
-  DeltaECmd->SetGuidance("Define scale of secondary energy histogram");
-  DeltaECmd->SetParameterName("DeltaE",false);
-  DeltaECmd->SetUnitCategory("Energy");
-  DeltaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDeltaECmd = new G4UIcmdWithADoubleAndUnit("/testem/maxEnergy",this);
+  fDeltaECmd->SetGuidance("Define scale of secondary energy histogram");
+  fDeltaECmd->SetParameterName("DeltaE",false);
+  fDeltaECmd->SetUnitCategory("Energy");
+  fDeltaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 
@@ -179,102 +157,82 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete NumOfAbsCmd;
-  delete AbsMaterCmd;
-  delete AbsThickCmd;
-  delete AbsGapCmd;
-  delete AbsSizYZCmd;
-  delete WorldMaterCmd;
-  delete WorldXCmd;
-  delete UpdateCmd;
-  delete XMagFieldCmd;
-  delete YMagFieldCmd;
-  delete ZMagFieldCmd;
-  delete HistoCmd;
-  delete HistoTCmd;
-  delete NumOfEvt;
-  delete verbCmd;
-  delete intCmd;
-  delete nhistCmd;
-  delete nDebugSCmd;
-  delete nDebugECmd;
-  delete detDir;
-  delete detDir1;
-  delete detDir2;
-  delete DeltaECmd;
-  delete ntupCmd;
+  delete fNumOfAbsCmd;
+  delete fAbsMaterCmd;
+  delete fAbsThickCmd;
+  delete fAbsGapCmd;
+  delete fAbsSizYZCmd;
+  delete fWorldMaterCmd;
+  delete fWorldXCmd;
+  delete fUpdateCmd;
+  delete fXMagFieldCmd;
+  delete fYMagFieldCmd;
+  delete fZMagFieldCmd;
+  delete fHistoCmd;
+  delete fNumOfEvt;
+  delete fVerbCmd;
+  delete fIntCmd;
+  delete fDetDir;
+  delete fDetDir1;
+  delete fDetDir2;
+  delete fDeltaECmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if( command == AbsMaterCmd )
-   { hDet->setTarget1Material(newValue);}
+  if( command == fAbsMaterCmd )
+   { fDetector->SetTarget1Material(newValue);}
 
-  if( command == WorldMaterCmd )
-   { hDet->setTarget2Material(newValue);}
+  if( command == fWorldMaterCmd )
+   { fDetector->SetTarget2Material(newValue);}
 
-  if( command == AbsThickCmd )
-   { hDet->setMylarZ(AbsThickCmd->GetNewDoubleValue(newValue));}
+  if( command == fAbsThickCmd )
+   { fDetector->SetMylarZ(fAbsThickCmd->GetNewDoubleValue(newValue));}
 
-  if( command == AbsGapCmd )
-   { hDet->setGap(AbsGapCmd->GetNewDoubleValue(newValue));}
+  if( command == fAbsGapCmd )
+   { fDetector->SetGap(fAbsGapCmd->GetNewDoubleValue(newValue));}
 
-  if( command == AbsSizYZCmd )
-   { hDet->setTarget1Z(AbsSizYZCmd->GetNewDoubleValue(newValue));}
+  if( command == fAbsSizYZCmd )
+   { fDetector->SetTarget1Z(fAbsSizYZCmd->GetNewDoubleValue(newValue));}
 
-  if( command == WorldXCmd )
-   { hDet->setTarget2Z(WorldXCmd->GetNewDoubleValue(newValue));}
+  if( command == fWorldXCmd )
+   { fDetector->SetTarget2Z(fWorldXCmd->GetNewDoubleValue(newValue));}
 
-  if( command == UpdateCmd )
-   { hDet->UpdateGeometry(); }
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry(); }
 
-  if( command == XMagFieldCmd )
-   { hDet->setCheckShiftZ(XMagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fXMagFieldCmd )
+   { fDetector->SetCheckShiftZ(fXMagFieldCmd->GetNewDoubleValue(newValue));}
 
-  if( command == YMagFieldCmd )
-   { G4double x = YMagFieldCmd->GetNewDoubleValue(newValue);
-     hDet->setAbsorberZ(x);
+  if( command == fYMagFieldCmd )
+   { G4double x = fYMagFieldCmd->GetNewDoubleValue(newValue);
+     fDetector->SetAbsorberZ(x);
    }
 
-  if( command == ZMagFieldCmd )
-   { hDet->setAbsorberShiftZ(ZMagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fZMagFieldCmd )
+   { fDetector->SetAbsorberShiftZ(fZMagFieldCmd->GetNewDoubleValue(newValue));}
 
-  if( command == HistoCmd )
+  if( command == fHistoCmd )
    { (Histo::GetPointer())->SetHistoName(newValue);}
 
-  if( command == HistoTCmd )
-   { (Histo::GetPointer())->SetHistoType(newValue);}
+  if( command == fNumOfAbsCmd )
+   {(Histo::GetPointer())->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));}
 
-  if( command == ntupCmd )
-   { (Histo::GetPointer())->SetNtuple(ntupCmd->GetNewBoolValue(newValue));}
+  if( command == fNumOfEvt )
+   {(Histo::GetPointer())->SetNumberDivZ(fNumOfEvt->GetNewIntValue(newValue));}
 
-  if( command == NumOfAbsCmd )
-   {(Histo::GetPointer())->SetNumberDivR(NumOfAbsCmd->GetNewIntValue(newValue));}
-
-  if( command == NumOfEvt )
-   {(Histo::GetPointer())->SetNumberDivZ(NumOfEvt->GetNewIntValue(newValue));}
-
-  if( command == verbCmd ){
-     G4int ver = verbCmd->GetNewIntValue(newValue);
+  if( command == fVerbCmd ){
+     G4int ver = fVerbCmd->GetNewIntValue(newValue);
      (Histo::GetPointer())->SetVerbose(ver);
    }
 
-  if( command == intCmd )
-   {(Histo::GetPointer())->SetNumberDivE(intCmd->GetNewIntValue(newValue));}
+  if( command == fIntCmd )
+   {(Histo::GetPointer())->SetNumberDivE(fIntCmd->GetNewIntValue(newValue));}
 
-  if( command == nhistCmd )
-   { (Histo::GetPointer())->SetHistoNumber(nhistCmd->GetNewIntValue(newValue));}
-
-  if( command == nDebugSCmd )
-   {(Histo::GetPointer())->SetFirstEventToDebug(nDebugSCmd->GetNewIntValue(newValue));}
-
-  if( command == nDebugECmd )
-   {(Histo::GetPointer())->SetLastEventToDebug(nDebugECmd->GetNewIntValue(newValue));}
-
-  if( command == DeltaECmd )
-   {(Histo::GetPointer()) ->SetMaxEnergy(DeltaECmd->GetNewDoubleValue(newValue));}
+  if( command == fDeltaECmd )
+   {(Histo::GetPointer()) ->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));}
 
 }
 

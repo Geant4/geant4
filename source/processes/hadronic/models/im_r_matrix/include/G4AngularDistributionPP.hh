@@ -41,7 +41,8 @@ class G4AngularDistributionPP : public G4VAngularDistribution
 {
  private:
 
-   enum { NENERGY=22, NANGLE=180 };
+//   enum { NENERGY=22, NANGLE=180 };
+   enum { NENERGY=40, NENERGYC=22, NANGLE=180 };
 
  public:
 
@@ -55,10 +56,12 @@ class G4AngularDistributionPP : public G4VAngularDistribution
 
  private:
 
-   static G4float sig[NENERGY][NANGLE];
-   static G4float pcm[NENERGY], elab[NENERGY],
-     dsigmax[NENERGY], sigtot[NENERGY];
-};
+  // Coulomb effects suppressed:
+  static G4float sig[NENERGY][NANGLE];
+  static G4float pcm[NENERGY], elab[NENERGY],
+  dsigmax[NENERGY], sigtot[NENERGY];
+
+ };
 
 #endif
 

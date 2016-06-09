@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.114 2010-11-24 19:39:15 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -73,7 +72,8 @@ G4RunManager::G4RunManager()
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),
- currentWorld(0),nParallelWorlds(0)
+ currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
+ numberOfEventProcessed(0)
 {
   if(fRunManager)
   {
@@ -99,6 +99,14 @@ G4RunManager::G4RunManager()
 
 G4RunManager::~G4RunManager()
 {
+  G4StateManager* pStateManager = G4StateManager::GetStateManager();
+  // set the application state to the quite state
+  if(pStateManager->GetCurrentState()!=G4State_Quit)
+  {
+    if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
+    pStateManager->SetNewState(G4State_Quit);
+  }
+
   if(currentRun) delete currentRun;
   delete timer;
   delete runMessenger;
@@ -108,27 +116,31 @@ G4RunManager::~G4RunManager()
   if(userDetector)
   {
     delete userDetector;
+    userDetector = 0;
     if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
   }
   if(physicsList)
   {
     delete physicsList;
+    physicsList = 0;
     if(verboseLevel>1) G4cout << "UserPhysicsList deleted." << G4endl;
   }
   if(userRunAction)
   {
     delete userRunAction;
+    userRunAction = 0;
     if(verboseLevel>1) G4cout << "UserRunAction deleted." << G4endl;
   }
   if(userPrimaryGeneratorAction)
   {
     delete userPrimaryGeneratorAction;
+    userPrimaryGeneratorAction = 0;
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
 
   delete kernel;
 
-  if(verboseLevel>1) G4cout << "RunManager is deleting." << G4endl;
+  if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
   fRunManager = 0;
 }
 
@@ -211,48 +223,68 @@ void G4RunManager::RunInitialization()
   }
 
   runAborted = false;
-
+  numberOfEventProcessed = 0;
   if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
-  if(verboseLevel>0) 
-  { timer->Start(); }
-
-  G4String msg;
-  if(macroFile!=0)
-  { 
-    if(n_select<0) n_select = n_event;
-    msg = "/control/execute ";
-    msg += macroFile;
-  }
-  else
-  { n_select = -1; }
+  InitializeEventLoop(n_event,macroFile,n_select);
 
 // Event loop
-  G4int i_event;
-  for( i_event=0; i_event<n_event; i_event++ )
+  for(G4int i_event=0; i_event<n_event; i_event++ )
   {
-    currentEvent = GenerateEvent(i_event);
-    eventManager->ProcessOneEvent(currentEvent);
-    AnalyzeEvent(currentEvent);
-    UpdateScoring();
-    if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    StackPreviousEvent(currentEvent);
-    currentEvent = 0;
+    ProcessOneEvent(i_event);
+    TerminateOneEvent();
     if(runAborted) break;
   }
 
+  TerminateEventLoop();
+}
+
+void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int n_select)
+{
+  if(verboseLevel>0) 
+  { timer->Start(); }
+
+  n_select_msg = n_select;
+  if(macroFile!=0)
+  { 
+    if(n_select_msg<0) n_select_msg = n_event;
+    msgText = "/control/execute ";
+    msgText += macroFile;
+  }
+  else
+  { n_select_msg = -1; }
+}
+
+void G4RunManager::ProcessOneEvent(G4int i_event)
+{
+  currentEvent = GenerateEvent(i_event);
+  eventManager->ProcessOneEvent(currentEvent);
+  AnalyzeEvent(currentEvent);
+  UpdateScoring();
+  if(i_event<n_select_msg) G4UImanager::GetUIpointer()->ApplyCommand(msgText);
+}
+
+void G4RunManager::TerminateOneEvent()
+{
+  StackPreviousEvent(currentEvent);
+  currentEvent = 0;
+  numberOfEventProcessed++;
+}
+
+void G4RunManager::TerminateEventLoop()
+{
   if(verboseLevel>0)
   {
     timer->Stop();
     G4cout << "Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
-    { G4cout << "  Run Aborted after " << i_event + 1 << " events processed." << G4endl; }
+    { G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl; }
     else
-    { G4cout << "  Number of events processed : " << n_event << G4endl; }
+    { G4cout << "  Number of events processed : " << numberOfEventProcessed << G4endl; }
     G4cout << "  "  << *timer << G4endl;
   }
 }

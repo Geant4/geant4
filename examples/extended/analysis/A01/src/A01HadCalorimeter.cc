@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeter.cc,v 1.6 2006-06-29 16:32:43 gunter Exp $
+/// \file analysis/A01/src/A01HadCalorimeter.cc
+/// \brief Implementation of the A01HadCalorimeter class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01HadCalorimeter.hh"
@@ -40,25 +43,25 @@ A01HadCalorimeter::A01HadCalorimeter(G4String name)
 {
   G4String HCname;
   collectionName.insert(HCname="HadCalorimeterColl");
-  HCID = -1;
+  fHCID = -1;
 }
 
 A01HadCalorimeter::~A01HadCalorimeter(){;}
 
 void A01HadCalorimeter::Initialize(G4HCofThisEvent*HCE)
 {
-  hitsCollection = new A01HadCalorimeterHitsCollection
+  fHitsCollection = new A01HadCalorimeterHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(hitsCollection); }
-  HCE->AddHitsCollection(HCID,hitsCollection);
+  if(fHCID<0)
+  { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
+  HCE->AddHitsCollection(fHCID,fHitsCollection);
 
   // fill calorimeter hits with zero energy deposition
   for(int iColumn=0;iColumn<10;iColumn++)
   for(int iRow=0;iRow<2;iRow++)
   {
     A01HadCalorimeterHit* aHit = new A01HadCalorimeterHit();
-    hitsCollection->insert( aHit );
+    fHitsCollection->insert( aHit );
   }
 }
 
@@ -75,7 +78,7 @@ G4bool A01HadCalorimeter::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*
   G4VPhysicalVolume* theColumnPhysical = theTouchable->GetVolume(3);
   G4int columnNo = theColumnPhysical->GetCopyNo();
   G4int hitID = 2*columnNo+rowNo;
-  A01HadCalorimeterHit* aHit = (*hitsCollection)[hitID];
+  A01HadCalorimeterHit* aHit = (*fHitsCollection)[hitID];
 
   // check if it is first touch
   if(aHit->GetColumnID()<0)

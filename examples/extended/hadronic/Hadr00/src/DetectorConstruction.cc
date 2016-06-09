@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr00/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -59,26 +61,29 @@
 
 #include "G4NistManager.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
 {
-  logicTarget = 0;
-  logicWorld  = 0;
-  detectorMessenger = new DetectorMessenger(this);
+  fLogicTarget = 0;
+  fLogicWorld  = 0;
+  fDetectorMessenger = new DetectorMessenger(this);
 
-  radius = 5.*cm;
-  length = 10.*cm;
+  fRadius = 5.*cm;
+  fLength = 10.*cm;
 
-  targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+  fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 { 
-  delete detectorMessenger;
+  delete fDetectorMessenger;
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
@@ -91,35 +96,37 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4SolidStore::GetInstance()->Clean();
 
   // Sizes
-  G4double worldR  = radius + cm;
-  G4double worldZ  = length + cm;
+  G4double worldR  = fRadius + cm;
+  G4double worldZ  = fLength + cm;
 
   //
   // World
   //
-  G4Tubs* solidW = new G4Tubs("World",0.,worldR,worldZ/2.0,0.,twopi);
-  logicWorld = new G4LogicalVolume( solidW,worldMaterial,"World");
-  G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
-                                       logicWorld,"World",0,false,0);
+  G4Tubs* solidW = new G4Tubs("World", 0., worldR, 0.5*worldZ, 0., twopi);
+  fLogicWorld = new G4LogicalVolume(solidW, fWorldMaterial,"World");
+  G4VPhysicalVolume* world = new G4PVPlacement(0, G4ThreeVector(),
+                                               fLogicWorld, "World", 
+                                               0, false, 0);
 
   //
   // Target volume
   //
-  G4Tubs* solidA = new G4Tubs("Target",0.,radius,length/2.0,0.,twopi);
-  logicTarget = new G4LogicalVolume( solidA,targetMaterial,"Target");
-  new G4PVPlacement(0,G4ThreeVector(),logicTarget,"Target",logicWorld,false,0);
+  G4Tubs* solidA = new G4Tubs("Target", 0., fRadius, 0.5*fLength, 0.,twopi);
+  fLogicTarget = new G4LogicalVolume( solidA, fTargetMaterial, "Target");
+  new G4PVPlacement(0, G4ThreeVector(), fLogicTarget, "Target",
+                    fLogicWorld, false, 0);
 
   G4cout << "### Target consist of " 
-         << targetMaterial->GetName() 
-         << " disks with R(mm)= " << radius/mm
-         << "  Length(mm)= " << length/mm
+         << fTargetMaterial->GetName() 
+         << " disks with R(mm)= " << fRadius/mm
+         << "  fLength(mm)= " << fLength/mm
          <<  "  ###" << G4endl;
 
   // colors
-  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  fLogicWorld->SetVisAttributes(G4VisAttributes::Invisible);
 
   G4VisAttributes* regCcolor = new G4VisAttributes(G4Colour(0., 0.3, 0.7));
-  logicTarget->SetVisAttributes(regCcolor);
+  fLogicTarget->SetVisAttributes(regCcolor);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
@@ -133,9 +140,9 @@ void DetectorConstruction::SetTargetMaterial(const G4String& mat)
   // search the material by its name
   G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
-  if (material && material != targetMaterial) {
-    targetMaterial = material;
-    if(logicTarget) logicTarget->SetMaterial(targetMaterial);
+  if (material && material != fTargetMaterial) {
+    fTargetMaterial = material;
+    if(fLogicTarget) fLogicTarget->SetMaterial(fTargetMaterial);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -147,9 +154,9 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
   // search the material by its name
   G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
-  if (material && material != worldMaterial) {
-    worldMaterial = material;
-    if(logicWorld) logicWorld->SetMaterial(worldMaterial);
+  if (material && material != fWorldMaterial) {
+    fWorldMaterial = material;
+    if(fLogicWorld) fLogicWorld->SetMaterial(fWorldMaterial);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -165,8 +172,8 @@ void DetectorConstruction::UpdateGeometry()
 
 void DetectorConstruction::SetTargetRadius(G4double val)  
 {
-  if(val > 0.0 && val != radius) {
-    radius = val;
+  if(val > 0.0 && val != fRadius) {
+    fRadius = val;
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   } 
 }
@@ -175,8 +182,8 @@ void DetectorConstruction::SetTargetRadius(G4double val)
 
 void DetectorConstruction::SetTargetLength(G4double val)  
 {
-  if(val > 0.0 && val != length) {
-    length = val;
+  if(val > 0.0 && val != fLength) {
+    fLength = val;
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   } 
 }

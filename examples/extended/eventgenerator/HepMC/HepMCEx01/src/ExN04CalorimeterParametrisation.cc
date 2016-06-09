@@ -23,12 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterParametrisation.cc
+/// \brief Implementation of the ExN04CalorimeterParametrisation class
+//
 
 #include "ExN04CalorimeterParametrisation.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation()
 {

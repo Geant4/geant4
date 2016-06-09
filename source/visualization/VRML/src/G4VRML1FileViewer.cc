@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.cc,v 1.12 2010-11-11 00:14:50 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VRMLView.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -76,10 +75,10 @@ void G4VRML1FileViewer::DrawView()
 
 void G4VRML1FileViewer::ClearView(void)
 {
-  //#if defined DEBUG_FR_VIEW
+  #if defined DEBUG_FR_VIEW
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** G4VRML1File1View::ClearView()" << G4endl;
-  //#endif
+  #endif
   if(fSceneHandler.fFlagDestOpen) {
     fSceneHandler.fDest.close();
     // Re-open with same filename...

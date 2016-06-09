@@ -5,7 +5,26 @@ Analysis_W002: Writing histogram or ntuple on file failed
 Analysis_W003: Adding ntpule row failed
 
 Analysis_W004: Cannot create ntuple; only one ntuple supported.
+               Unsuported column type when ntuple is created from 
+               booking.
+Analysis_W005: Cannot create ntuple column; ntuple has to be created
+               first.
 
 Analysis_W006: Trying to get/fill Histogram which does not exist
 Analysis_W007: Trying to get/fill Ntuple which does not exist
 Analysis_W008: Trying to get/fill Ntuple column which does not exist
+
+Analysis_W009: Cannot set Histogram directory name or firstHistoId,
+               as some histograms already exists
+Analysis_W010: Cannot set Ntuple directory name or firstNtupleId;
+               as an ntuple already exists
+               
+Analysis_W011: The histogram ID has to be redefined in the output as
+               its generic value is not allowed in given output type
+Analysis_W012: The ntuple ID has to be redefined in the output as
+               its generic value is not allowed in given output type
+
+Analysis_W013: Cannot apply histogram/ntuple attribute due to its
+               wrong definition
+Analysis_W013: Wrong histogram/ntuple attribute value
+              

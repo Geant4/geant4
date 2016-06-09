@@ -49,7 +49,7 @@
 #include "G4QInelasticCHIPSBuilder.hh"
 
 G4QInelasticCHIPSBuilder::G4QInelasticCHIPSBuilder(G4int ver):
- verbose(ver), wasActivated(false), inelastic(0)
+ verbose(ver), wasActivated(false), inelastic(0), nGamma(0)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

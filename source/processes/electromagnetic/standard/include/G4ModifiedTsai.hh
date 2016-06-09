@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.hh,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -60,8 +59,9 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VBremAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
 
-class G4ModifiedTsai : public G4VBremAngularDistribution
+class G4ModifiedTsai : public G4VEmAngularDistribution
 {
 
 public:
@@ -70,19 +70,18 @@ public:
 
   virtual ~G4ModifiedTsai();
 
-  G4double PolarAngle(const G4double initial_energy,
-		      const G4double final_energy,
-		      const G4int Z);
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double out_energy,
+                                         G4int Z,
+                                         const G4Material* mat = 0);
 
   void PrintGeneratorInformation() const;
-
-protected:
 
 private:
 
   // hide assignment operator 
-     G4ModifiedTsai & operator=(const  G4ModifiedTsai &right);
-     G4ModifiedTsai(const  G4ModifiedTsai&);
+  G4ModifiedTsai & operator=(const  G4ModifiedTsai &right);
+  G4ModifiedTsai(const  G4ModifiedTsai&);
 
 };
 

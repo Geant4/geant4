@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.6 2010-10-26 12:09:14 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/GammaTherapy/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 
 #ifndef PrimaryGeneratorAction_h
@@ -66,50 +68,50 @@ public:
   PrimaryGeneratorAction(DetectorConstruction* pDet);
 
   //The destructor. It deletes the ParticleGun.
-  ~PrimaryGeneratorAction();
-
-public:
+  virtual ~PrimaryGeneratorAction();
 
   //It reads the parameters of the primary particles.
   //Generates the primary event via the ParticleGun method.
   void GeneratePrimaries(G4Event* anEvent);
 
   //Get/Set methods
-  void SetBeamSigmaE(G4double val);
   void SetBeamEnergy(G4double val);
 
-  inline void SetBeamX(G4double val) {x0 = val;};
-  inline void SetBeamY(G4double val) {y0 = val;};
-  inline void SetBeamZ(G4double val) {z0 = val;};
-  inline void SetBeamSigmaX(G4double val) {sigmaX = val;};
-  inline void SetBeamSigmaY(G4double val) {sigmaY = val;};
-  inline void SetBeamSigmaZ(G4double val) {sigmaY = val;};
-  inline void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
-  inline void SetSigmaTheta(G4double val) {sigmaTheta = val;};
-  inline void SetVerbose(G4int val) {verbose = val;};
-  inline void SetRandom(const G4String& type) {m_gauss = type;};
+  inline void SetBeamSigmaE(G4double val) { fSigmaE = val; };
+  inline void SetBeamX(G4double val) { fX0 = val;};
+  inline void SetBeamY(G4double val) { fY0 = val;};
+  inline void SetBeamZ(G4double val) { fZ0 = val;};
+  inline void SetBeamSigmaX(G4double val) { fSigmaX = val;};
+  inline void SetBeamSigmaY(G4double val) { fSigmaY = val;};
+  inline void SetBeamSigmaZ(G4double val) { fSigmaY = val;};
+  inline void SetBeamMinCosTheta(G4double val) { fMinCosTheta = val;};
+  inline void SetSigmaTheta(G4double val) { fSigmaTheta = val;};
+  inline void SetVerbose(G4int val) { fVerbose = val;};
+  inline void SetRandom(const G4String& type) { fGauss = type;};
 
 private:
 
   void InitializeMe();
 
-  G4ParticleGun* particleGun;
-  PrimaryGeneratorMessenger* theMessenger;
+  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
+  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
+  G4ParticleGun* fParticleGun;
+  PrimaryGeneratorMessenger* fMessenger;
   DetectorConstruction* fDetector;
 
-  G4int counter;
-  G4int verbose;
-  G4double x0, y0, z0;
-  G4double sigmaX, sigmaY, sigmaZ;
-  G4double rMax2;
-  G4double sigmaE;
-  G4double sigmaTheta;
-  G4double energy;
-  G4double minCosTheta;
-  G4ThreeVector position;
-  G4ThreeVector direction;
-  G4String m_gauss;
+  G4int fCounter;
+  G4int fVerbose;
+  G4double fX0, fY0, fZ0;
+  G4double fSigmaX, fSigmaY, fSigmaZ;
+  G4double fRMax2;
+  G4double fSigmaE;
+  G4double fSigmaTheta;
+  G4double fEnergy;
+  G4double fMinCosTheta;
+  G4ThreeVector fPosition;
+  G4ThreeVector fDirection;
+  G4String fGauss;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

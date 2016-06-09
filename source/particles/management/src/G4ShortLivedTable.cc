@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.18 2010-08-10 15:47:43 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -39,6 +38,7 @@
 
 #include "G4ShortLivedTable.hh"
 #include "G4ParticleTable.hh"
+#include "G4StateManager.hh"
 
 #include "G4ios.hh"
 
@@ -87,6 +87,18 @@ G4bool G4ShortLivedTable::IsShortLived(const G4ParticleDefinition* particle) con
   return particle->IsShortLived();
 }
 
+void G4ShortLivedTable::clear()
+{
+  if (G4ParticleTable::GetParticleTable()->GetReadiness()) {
+    G4Exception("G4ShortLivedTable::clear()",
+		"PART116", JustWarning,
+		"No effects because readyToUse is true.");    
+    return;
+  }
+
+  fShortLivedList->clear();
+}
+
 void G4ShortLivedTable::Insert(const G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
@@ -96,6 +108,26 @@ void G4ShortLivedTable::Insert(const G4ParticleDefinition* particle)
 
 void G4ShortLivedTable::Remove(const G4ParticleDefinition* particle)
 {
+  if (G4ParticleTable::GetParticleTable()->GetReadiness()) {
+    G4StateManager* pStateManager = G4StateManager::GetStateManager();
+    G4ApplicationState currentState = pStateManager->GetCurrentState();
+    if (currentState != G4State_PreInit) {
+      G4String msg = "Request of removing ";
+      msg += particle->GetParticleName();  
+      msg += " has No effects other than Pre_Init";
+      G4Exception("G4ShortLivedTable::Remove()",
+		"PART117", JustWarning, msg);
+      return;
+    } else {
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>0){
+	G4cout << particle->GetParticleName()
+	       << " will be removed from the ShortLivedTable " << G4endl;
+      }
+#endif
+    }
+  }
+
   if (IsShortLived(particle)) {
     G4ShortLivedList::iterator idx;
     for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {

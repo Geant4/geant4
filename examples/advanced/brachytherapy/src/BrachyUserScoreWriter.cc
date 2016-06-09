@@ -31,15 +31,16 @@
 Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 */
 
+#include <map>
+#include <fstream>
+
 #include "BrachyUserScoreWriter.hh"
+#include "G4SystemOfUnits.hh"
 #include "BrachyAnalysis.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
 #include "G4VScoringMesh.hh"
-
-#include <map>
-#include <fstream>
 
 // The default output is
 // voxelX, voxelY, voxelZ, edep
@@ -56,7 +57,7 @@ BrachyUserScoreWriter::BrachyUserScoreWriter(): G4VScoreWriter()
 BrachyUserScoreWriter::~BrachyUserScoreWriter() 
 {;}
 
-void BrachyUserScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) 
+void BrachyUserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4String & fileName, const G4String & option) 
 {
   if(verboseLevel > 0) {
     G4cout << "BrachyUserScorer-defined DumpQuantityToFile() method is invoked."

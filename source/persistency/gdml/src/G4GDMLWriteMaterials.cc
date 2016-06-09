@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.26 2010-10-14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -34,8 +33,11 @@
 // --------------------------------------------------------------------
 
 #include <sstream>
+
 #include "G4GDMLWriteMaterials.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"

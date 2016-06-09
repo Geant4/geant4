@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.36 2010-06-25 14:03:44 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -139,8 +138,8 @@ std::ostream& operator<<(std::ostream& lhs, G4QParticle& rhs)
   {
     lhs << DCV[i]->GetDecayChanLimit() << "PDG codes";
     G4QPDGCodeVector PCV=DCV[i]->GetVecOfSecHadrons();
-    G4int m = PCV.size();
-    for (int j=0; j<m; j++)
+    G4int m_value = PCV.size();
+    for (int j=0; j<m_value; j++)
     {
       if(!j) lhs << ":";
       else   lhs << ",";

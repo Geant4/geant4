@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04SteppingAction.hh
+/// \brief Definition of the ExN04SteppingAction class
+//
 
 #ifndef ExN04SteppingAction_H
 #define ExN04SteppingAction_H 1

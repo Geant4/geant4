@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WHadronElasticProcess.hh,v 1.2 2009-09-22 17:35:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -68,6 +67,10 @@ public:
   virtual void Description() const;
 
 private:
+
+  // hide assignment operator as private 
+  G4WHadronElasticProcess& operator=(const G4WHadronElasticProcess &right);
+  G4WHadronElasticProcess(const G4WHadronElasticProcess& );
 
   const G4ParticleDefinition* theNeutron;
 

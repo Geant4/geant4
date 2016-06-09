@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.16 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 
-#include "G4CSGSolid.hh"
+#include <cmath>
 
+#include "G4CSGSolid.hh"
+#include "Randomize.hh"
 #include "G4Polyhedron.hh"
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,6 +97,16 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
 
    return *this;
 }  
+
+G4double G4CSGSolid::GetRadiusInRing(G4double rmin, G4double rmax) const
+{
+  // Generate radius in annular ring according to uniform area
+  //
+  if (rmin<=0.)   { return rmax*std::sqrt(G4UniformRand()); }
+  if (rmin!=rmax) { return std::sqrt(G4UniformRand()
+                           * (sqr(rmax)-sqr(rmin))+sqr(rmin)); }
+  return rmin;
+}
 
 std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 {

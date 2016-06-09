@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigationHelper.hh,v 1.1 2009-01-27 09:31:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -48,14 +47,18 @@
 class G4RegularNavigationHelper
 {
   public:
-
-    G4RegularNavigationHelper();
+    static G4RegularNavigationHelper * Instance();
    ~G4RegularNavigationHelper();
   
-    static void ClearStepLengths();
-    static void AddStepLength( G4int copyNo, G4double slen );
+    void ClearStepLengths();
+    void AddStepLength( G4int copyNo, G4double slen );
+    const std::vector< std::pair<G4int,G4double> > & GetStepLengths();
 
-    static std::vector< std::pair<G4int,G4double> > theStepLengths;
+    std::vector< std::pair<G4int,G4double> > theStepLengths;
+
+  private:
+    G4RegularNavigationHelper();
+    static G4RegularNavigationHelper * theInstance;
 };
 
 #endif

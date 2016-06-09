@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.9 2010-04-06 11:11:24 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm1/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,36 +50,36 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     
-    void CountTraks0(G4int nt) { NbOfTraks0 += nt;}
-    void CountTraks1(G4int nt) { NbOfTraks1 += nt;}
-    void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
-    void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
-    void CountProcesses(G4String procName) { procCounter[procName]++;};
+    void CountTraks0(G4int nt) { fNbOfTraks0 += nt;}
+    void CountTraks1(G4int nt) { fNbOfTraks1 += nt;}
+    void CountSteps0(G4int ns) { fNbOfSteps0 += ns;}
+    void CountSteps1(G4int ns) { fNbOfSteps1 += ns;}
+    void CountProcesses(G4String procName) { fProcCounter[procName]++;};
     
-    void AddEdep(G4double val)     { edep += val;}
-    void AddTrueRange (G4double l) { trueRange += l; trueRange2 += l*l;};
-    void AddProjRange (G4double x) { projRange += x; projRange2 += x*x;};
-    void AddTransvDev (G4double y) { transvDev += y; transvDev2 += y*y;};    
+    void AddEdep(G4double val)     { fEdep += val;}
+    void AddTrueRange (G4double l) { fTrueRange += l; fTrueRange2 += l*l;};
+    void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x;};
+    void AddTransvDev (G4double y) { fTransvDev += y; fTransvDev2 += y*y;};    
                                   
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    HistoManager*           fHistoManager;
       
-    G4int           NbOfTraks0, NbOfTraks1;
-    G4int           NbOfSteps0, NbOfSteps1;
-    G4double        edep;
-    G4double        trueRange, trueRange2;             
-    G4double        projRange, projRange2;
-    G4double        transvDev, transvDev2;
-    std::map<G4String,G4int>   procCounter;
+    G4int           fNbOfTraks0, fNbOfTraks1;
+    G4int           fNbOfSteps0, fNbOfSteps1;
+    G4double        fEdep;
+    G4double        fTrueRange, fTrueRange2;             
+    G4double        fProjRange, fProjRange2;
+    G4double        fTransvDev, fTransvDev2;
+    std::map<G4String,G4int>    fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDShellEMDataSet.hh,v 1.12 2008/03/17 13:45:25 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,9 +48,11 @@
 #ifndef G4RDSHELLEMDATASET_HH
 #define G4RDSHELLEMDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4RDVEMDataSet.hh"
-#include <vector>
 
 class G4RDVDataSetAlgorithm;
 
@@ -59,8 +61,8 @@ class G4RDShellEMDataSet : public G4RDVEMDataSet
 public:
   G4RDShellEMDataSet(G4int Z, 
 		   G4RDVDataSetAlgorithm* algo, 
-		   G4double eUnit=MeV, 
-		   G4double dataUnit=barn);
+		   G4double eUnit=CLHEP::MeV, 
+		   G4double dataUnit=CLHEP::barn);
 
   virtual ~G4RDShellEMDataSet();
  

@@ -59,12 +59,12 @@ public:
   //   For mu > 100 then we use a corrected version of a 
   //   (quick) Gaussian approximation.  Naively that would be:
   //
-  //	Poisson(mu) ~ std::floor( mu + .5 + Gaussian(std::sqrt(mu)) )
+  //	Poisson(mu) ~ floor( mu + .5 + Gaussian(sqrt(mu)) )
   //
   //   but actually, that would give a slightly incorrect sigma and a 
   //   very different skew than a true Poisson.  Instead we return 
   // 
-  //	Poisson(mu) ~ std::floor( a0*mu + a1*g + a2*g*g ) )
+  //	Poisson(mu) ~ floor( a0*mu + a1*g + a2*g*g ) )
   //						(with g a gaussian normal)
   //
   //   where a0, a1, a2 are chosen to give the exctly correct mean, sigma,

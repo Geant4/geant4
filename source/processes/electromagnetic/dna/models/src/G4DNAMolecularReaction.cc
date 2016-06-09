@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMolecularReaction.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -44,7 +45,7 @@
 using namespace std;
 
 G4DNAMolecularReaction::G4DNAMolecularReaction():G4VITReactionProcess(),
-    fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable))
+    fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
     //ctor
     fVerbose        = 0;
@@ -56,11 +57,11 @@ G4DNAMolecularReaction::G4DNAMolecularReaction():G4VITReactionProcess(),
 G4DNAMolecularReaction::~G4DNAMolecularReaction()
 {
     //dtor
-    if(fChanges) delete fChanges;
+    if(fpChanges) delete fpChanges;
 }
 
 G4DNAMolecularReaction::G4DNAMolecularReaction(const G4DNAMolecularReaction& other):G4VITReactionProcess(other),
-    fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable))
+    fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
     //copy ctor
     fVerbose            = other.fVerbose ;
@@ -147,8 +148,8 @@ G4bool G4DNAMolecularReaction::TestReactibility(const G4Track& trackA,
 
 G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA, const G4Track& trackB)
 {
-    fChanges = new G4ITReactionChange();
-    fChanges->Initialize(trackA, trackB);
+    fpChanges = new G4ITReactionChange();
+    fpChanges->Initialize(trackA, trackB);
 
     G4Molecule* moleculeA = GetMolecule(trackA);
     G4Molecule* moleculeB = GetMolecule(trackB);
@@ -195,12 +196,12 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA, 
 
             productTrack->SetTrackStatus(fAlive);
 
-            fChanges->AddSecondary(productTrack);
+            fpChanges->AddSecondary(productTrack);
             G4ITManager<G4Molecule>::Instance()->Push(productTrack);
         }
     }
 
-    fChanges->KillParents(true);
+    fpChanges->KillParents(true);
 
-    return fChanges;
+    return fpChanges;
 }

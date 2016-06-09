@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G01/load_gdml.cc
+/// \brief Main program of the persistency/gdml/G01 example
 //
-// $Id: load_gdml.cc,v 1.13 2010-11-17 10:55:11 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -41,9 +43,9 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4TransportationManager.hh"
 
-#include "PrimaryGeneratorAction.hh"
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
+#include "G01PrimaryGeneratorAction.hh"
+#include "G01DetectorConstruction.hh"
+#include "G01PhysicsList.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -85,17 +87,17 @@ int main(int argc,char **argv)
 
    G4RunManager* runManager = new G4RunManager;
 
-   runManager->SetUserInitialization(new DetectorConstruction(
+   runManager->SetUserInitialization(new G01DetectorConstruction(
                                      parser.GetWorldVolume()));
-   runManager->SetUserInitialization(new PhysicsList);
-   runManager->SetUserAction(new PrimaryGeneratorAction);
+   runManager->SetUserInitialization(new G01PhysicsList);
+   runManager->SetUserAction(new G01PrimaryGeneratorAction);
 
    runManager->Initialize();
 
    if (argc>=3)
    {
       parser.Write(argv[2], G4TransportationManager::GetTransportationManager()->
-		   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+                   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
    }
 
    G4UImanager* UImanager = G4UImanager::GetUIpointer();

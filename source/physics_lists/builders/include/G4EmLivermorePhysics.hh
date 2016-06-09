@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePhysics.hh,v 1.2 2010-06-02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4EmLivermorePhysics_h
 #define G4EmLivermorePhysics_h 1

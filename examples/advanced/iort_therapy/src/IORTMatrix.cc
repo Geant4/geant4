@@ -38,18 +38,19 @@
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "IORTMatrix.hh"
-#include "IORTAnalysisManager.hh"
-#include "G4RunManager.hh"
-#include "IORTPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-
 #include <fstream>
-#include <unistd.h>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+
+#include "IORTMatrix.hh"
+#include "IORTAnalysisManager.hh"
+#include "IORTPrimaryGeneratorAction.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
+#include "G4ParticleGun.hh"
 
 // Units definition: CLHEP/Units/SystemOfUnits.h
 //
@@ -204,10 +205,10 @@ G4bool IORTMatrix::Fill(G4int trackID,
 		// Initialize data
     if (newIon.dose && newIon.fluence)
     {
-		for(G4int m=0; m<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ; m++)
+		for(G4int q=0; q<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ; q++)
 		{
-			newIon.dose[m] = 0.;
-			newIon.fluence[m] = 0;
+			newIon.dose[q] = 0.;
+			newIon.fluence[q] = 0;
 		}
 		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
 		if (fluence) newIon.fluence[Index(i, j, k)]++;

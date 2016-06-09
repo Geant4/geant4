@@ -26,10 +26,10 @@
 
 #include "G4RadioactiveDecayMode.hh"
 
-std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q)
+std::istream &operator >> (std::istream& strm, G4RadioactiveDecayMode& q)
 {
   G4String a;
-  s >> a;
+  strm >> a;
   if (a == "IT")
     {q = IT;}
   else if (a == "BetaMinus")
@@ -48,7 +48,6 @@ std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q)
     {q = SpFission;}
   else
     {q = ERROR;}
-  return s;
+  return strm;
 }
-////////////////////////////////////////////////////////////////////////////////
 

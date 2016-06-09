@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.hh,v 1.7 2006-06-29 18:16:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowAlgorithm

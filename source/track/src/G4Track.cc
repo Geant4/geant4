@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.35 2010-09-21 00:33:05 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //---------------------------------------------------------------
@@ -41,6 +40,7 @@
 //   Use G4VelocityTable                     17 AUg. 2011 H.Kurashige
 
 #include "G4Track.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ParticleTable.hh"
 #include "G4VelocityTable.hh"
 
@@ -71,7 +71,8 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false)
+    is_OpticalPhoton(false),
+    useGivenVelocity(false)
 {    
   static G4bool isFirstTime = true;
   static G4ParticleDefinition* fOpticalPhoton =0;
@@ -107,7 +108,8 @@ G4Track::G4Track()
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false)
+    is_OpticalPhoton(false),
+    useGivenVelocity(false)
 {
 }
 //////////////////
@@ -128,7 +130,8 @@ G4Track::G4Track(const G4Track& right)
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false)
+    is_OpticalPhoton(false),
+    useGivenVelocity(false)
 {
   *this = right;
 }
@@ -190,7 +193,8 @@ G4Track & G4Track::operator=(const G4Track &right)
    prev_velocity = right.prev_velocity;
    prev_momentum = right.prev_momentum;
 
-   is_OpticalPhoton = right.is_OpticalPhoton; 
+   is_OpticalPhoton = right.is_OpticalPhoton;
+   useGivenVelocity = right.useGivenVelocity; 
   }
   return *this;
 }
@@ -206,7 +210,8 @@ void G4Track::CopyTrackInfo(const G4Track& right)
 G4double G4Track::CalculateVelocity() const
 ///////////////////
 { 
-    
+  if (useGivenVelocity) return fVelocity;    
+
   G4double velocity = c_light ;
   
   G4double mass = fpDynamicParticle->GetMass();

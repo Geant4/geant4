@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01GeneralPhysics.cc,v 1.6 2006-06-29 16:32:41 gunter Exp $
+/// \file analysis/A01/src/A01GeneralPhysics.cc
+/// \brief Implementation of the A01GeneralPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 22-Nov-2004 Construt ALL Particles by T. Koi

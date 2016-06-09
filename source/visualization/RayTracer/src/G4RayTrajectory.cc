@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.15 2006-06-29 21:24:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //

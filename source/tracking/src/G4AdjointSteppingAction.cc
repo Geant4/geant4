@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.cc,v 1.4 2010-07-19 13:41:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -116,5 +115,17 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 		return;
 	}  
   }
+  //Check for reaching out of world
+  if (aStep->GetPostStepPoint()->GetStepStatus() == fWorldBoundary) {
+	  did_adj_part_reach_ext_source=true;
+	  last_momentum =aTrack->GetMomentum();
+	  last_ekin=aTrack->GetKineticEnergy();
+	  last_weight = aTrack->GetWeight();
+	  last_part_def = aTrack->GetDefinition();
+	  last_pos = crossing_pos;
+  		return;
+
+  }
+  
 }
 

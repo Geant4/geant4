@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.cc,v 1.6 2009-09-14 07:27:46 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -39,6 +38,8 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4RToEConvForProton::G4RToEConvForProton() : G4VRangeToEnergyConverter()
 {    

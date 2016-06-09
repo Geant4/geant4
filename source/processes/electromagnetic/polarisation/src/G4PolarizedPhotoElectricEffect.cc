@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPhotoElectricEffect.cc,v 1.3 2008-10-30 22:34:23 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //------------------ G4PolarizedPhotoElectricEffect physics process --
@@ -62,10 +61,10 @@ void G4PolarizedPhotoElectricEffect::InitialiseProcess(const G4ParticleDefinitio
     isInitialised = true;
     SetBuildTableFlag(false);
     SetSecondaryParticle(G4Electron::Electron());
-    if(!Model()) SetModel(new G4PolarizedPEEffectModel);
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    if(!EmModel()) SetEmModel(new G4PolarizedPEEffectModel);
+    EmModel()->SetLowEnergyLimit(MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel());
   }
 }
 
@@ -75,7 +74,7 @@ void G4PolarizedPhotoElectricEffect::PrintInfo()
 {
   G4cout
     << " Total cross sections from Sandia parametrisation. "
-    << "\n      Sampling according " << Model()->GetName() << " model"  
+    << "\n      Sampling according " << EmModel()->GetName() << " model"  
     << G4endl;
 }
 

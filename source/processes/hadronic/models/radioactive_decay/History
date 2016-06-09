@@ -12,12 +12,104 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+     ---------------------------------------------------------
+
+13 November 2012  Dennis Wright  radioactive_decay-V09-05-12
+------------------------------------------------------------
+- G4NuclearDecayChannel: fix Coverity bugs 15098, 15099, 37711 uninitialized
+  variables, and bug 14520, dereference of possible null pointer
+- G4RIsotopeTable: add assignment operator as per Coverity bug 37113
+- G4RadioactiveDecay.hh - remove extra include of G4RadioactiveDecaymessenger.hh
+
+04 October 2012  Gabriele Cosmo  radioactive_decay-V09-05-11
+------------------------------------------------------------
+- G4RIsotopeTable.cc: added inclusion of units header...
+ 
+03 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-10
+------------------------------------------------------------------
+- G4RadioactiveDecay - added isInitialised flag to reduce 
+    initialisation printout
+
+03 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-09
+------------------------------------------------------------------
+- G4RadioactiveDecay - removed internal PhysicsVector of mean free
+    path and implement the same algorithm as one of G4Decay,
+    PhysicsVector here useless because introduce extra objects but
+    do not save any CPU
+
+02 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-08
+------------------------------------------------------------------
+- G4RadioactiveDecay - modified BuildPhysicsTable method: substitute
+    obsolete methods to access PhysicsVector, add spline, add
+    initialisation of atomic de-excitation (needed for the case when
+    radioactive decay is used alone), modified GetMeanFreePath - 
+    sabstitute obsolete access method to the PhysicsVector
+- source.cmake and GNUmakefile - remove dependence on emlowenergy
+
+22 September 2012  Laurent Desorgher  radioactive_decay-V09-05-07
+--------------------------------------------------------------
+- Reset a print message in G4RIsotopeTable to verbose level 1 to avoid some systematic printing for some decays.
+  Problem reported by Michel Maire.
+
+21 September 2012  Gabriele Cosmo  radioactive_decay-V09-05-06
+--------------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+27 July 2012  Laurent Desorgher  radioactive_decay-V09-05-05
+------------------------------------------------------------
+ -Set a flag isAllVolumesMode in G4RadioactiveDecay to ensure  that  when 
+  the geometry is changed, the AllVolume Mode is still considered.
+  Problem reported by Tatsumi Koi.  
+    
+ -Use of evaporation nuclear level data in G4RIsotope::GetMeanLifeTime
+ 	for getting the mean life of an exited nuclei, when it is not provided in 
+ 	radioactive decay database. Solving of a problem reported by Tatsumi Koi.
+
+
+10 July 2012  Laurent Desorgher  radioactive_decay-V09-05-04
+---------------------===------------------------------------
+ -G4RadiocativeDecay::LoadDecayTable
+ 	Add LoadedNuclei.push_back(theParentNucleus.GetParticleName())
+ 	also for the case where user data files are used. Correction for bug
+    1324. Changes proposed by Joa L.
+
+27 June 2012  Dennis Wright  radioactive_decay-V09-05-03
+--------------------------------------------------------
+- G4BetaDecayCorrections::ctor : to fix bug for beta+ decay, replace
+  alphaZ = fine_structure_const*std::abs(Z);
+     with
+  alphaZ = fine_structure_const*Z;
+- G4BetaDecayCorrections::FermiFunction : replace
+  if (Wprime < 1.) Wprime = W;
+    with
+  if (Wprime <= 1.00001) Wprime = 1.00001;
+  to fix discontinuity in electron screening energy
+
+  Above changes suggested by Ryan Fitzgerald (NIST)
+ 
+11 June 2012  Dennis Wright  radioactive_decay-V09-05-02
+--------------------------------------------------------
+- replace shadowed variable "s" in G4NucleusLimits.cc, G4BetaDecayType.cc
+  and G4RadioactiveDecayMode.cc.  Replace shadowed variable "theDecayTable"
+  in G4RadioactiveDecay.cc
+       
+01 May 2012  Laurent Desorgher  radioactive_decay-V09-05-01
+---------------------------------------------------------
+- G4RIsotopeTable : Add the reading of user data  files  in order to take
+   into account the life time given in these files. (Bug reported by M. Maire)
+- G4RadioactiveDecay: Put the activation development of Fan Lei from trunk in
+   the tagged release. 
+
+17 March 2012  Dennis Wright  radioactive_decay-V09-05-00
+---------------------------------------------------------
+- G4RIsotopeTable::GetMeanLifeTime : change length of inputChars to 100
+  to fix infinite loop when excitation energy is non-zero
 
 23 November 2011  L.Desorgher(radioactive_decay-V09-04-14)
 ---------------------------------
--- G4NuclearDecayChannel.cc: add initialisation of dynamicDaughter  in line 455 to avoid
-   segmentation fault for some decays. 
+- G4NuclearDecayChannel.cc: add initialisation of dynamicDaughter in
+  line 455 to avoid segmentation fault for some decays. 
 
 20 November 2011  V.Ivanchenko(radioactive_decay-V09-04-13)
 ---------------------------------
@@ -43,14 +135,16 @@ track of all tags.
 18 October 2011 Laurent Desorgher(radioactive_decay-V09-04-10)
 ---------------------------------
 --G4RadioactiveDecay:
-		-Add possibility for the user to load its own decay file.
-		-Set halflifethreshold negative by default to allow the tracking of all
-	   								excited nuclei resulting from a radioactive decay
+   -Add possibility for the user to load its own decay file.
+   -Set halflifethreshold negative by default to allow the tracking of all
+     excited nuclei resulting from a radioactive decay
 --G4RadioactiveDecayChannel:
-		-Correction to allow the atomic relaxation of de-excited nuclei produce also during beta and alpha decay.
-		 Problem ersaed and solution proposed by Ko Abe 
+   -Correction to allow the atomic relaxation of de-excited nuclei produce
+     also during beta and alpha decay.  Problem ersaed and solution proposed
+     by Ko Abe 
 --G4RadioactiveDecayMessenger:
-		-Add macro commands  /grdm/setRadioactiveDecayFile and  /grdm/setPhotoEvaporationFile
+   -Add macro commands  /grdm/setRadioactiveDecayFile and
+                        /grdm/setPhotoEvaporationFile
 
 26 September 2011  Dennis Wright  (radioactive_decay-V09-04-09)
 ---------------------------------------------------------------

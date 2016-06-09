@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.13 2010-11-04 18:18:00 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4VoxelNavigation Implementation
@@ -574,6 +573,52 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   motherSafety = motherSolid->DistanceToOut(localPoint);
   ourSafety = motherSafety;                 // Working isotropic safety
 
+  if( motherSafety == 0.0 )
+  {
+    // Check that point is inside mother volume
+    EInside  insideMother= motherSolid->Inside(localPoint);
+
+#if 1 // def G4DEBUG_NAVIGATION
+    if( insideMother == kOutside )
+    {
+      G4ExceptionDescription message;
+      message << "Safety method called for location outside current Volume." << G4endl
+         << "Location for safety is Outside this volume. " << G4endl
+         << "The approximate distance to the solid "
+         << "(safety from outside) is: "
+         << motherSolid->DistanceToIn( localPoint ) << G4endl;
+      message << "  Problem occurred with physical volume: "
+         << " Name: " << motherPhysical->GetName()
+         << " Copy No: " << motherPhysical->GetCopyNo() << G4endl
+         << "    Local Point = " << localPoint << G4endl;
+      message << "  Description of solid: " << G4endl
+            << *motherSolid << G4endl;
+      G4Exception("G4VoxelNavigation::ComputeSafety()", "GeomNav0003",
+                  JustWarning,  // FatalException,
+                  message);
+    }
+#endif
+#if 1 // def G4DEBUG_NAVIGATION
+    // Following check is NOT for an issue - it is only for information
+    //  It is allowed that a solid gives approximate safety - even zero.
+    if( insideMother == kInside ) // && fVerbose )
+    {
+      G4ExceptionDescription messageIn;
+      
+      messageIn << " Point is Inside, but safety is Zero ."  << G4endl;
+      messageIn << " Inexact safety for volume " << motherPhysical->GetName() << G4endl
+             << "  Solid: Name= " << motherSolid->GetName()
+             << "   Type= " << motherSolid->GetEntityType() << G4endl;
+      messageIn << "  Local point= " << localPoint << G4endl;
+      messageIn << "  Solid parameters: " << G4endl << *motherSolid << G4endl;
+      G4Exception("G4VoxelNavigation::ComputeSafety()", "GeomNav0003",
+                  JustWarning, messageIn);
+    }
+#endif
+    // if( insideMother != kInside )
+    return 0.0;
+  }
+   
 #ifdef G4VERBOSE
   if( fCheck )
   {

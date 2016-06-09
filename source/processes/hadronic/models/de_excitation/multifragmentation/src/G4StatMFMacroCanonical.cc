@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.8 2008-11-19 14:33:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -37,8 +36,9 @@
 //          a fagment with Z=A; fixed memory leak
 
 #include "G4StatMFMacroCanonical.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
-
 
 // constructor
 G4StatMFMacroCanonical::G4StatMFMacroCanonical(const G4Fragment & theFragment) 

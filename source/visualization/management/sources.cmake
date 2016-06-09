@@ -70,14 +70,16 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VisCommandModelCreate.hh
         G4VisCommands.hh
         G4VisCommandsCompound.hh
-        G4VisCommandsDefault.hh
         G4VisCommandsGeometry.hh
         G4VisCommandsGeometrySet.hh
         G4VisCommandsListManager.hh
+        G4VisCommandsSet.hh
         G4VisCommandsScene.hh
         G4VisCommandsSceneAdd.hh
         G4VisCommandsSceneHandler.hh
+        G4VisCommandsTouchableSet.hh
         G4VisCommandsViewer.hh
+        G4VisCommandsViewerDefault.hh
         G4VisCommandsViewerSet.hh
         G4VisExecutive.hh
         G4VisExecutive.icc
@@ -104,13 +106,15 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4ViewerList.cc
         G4VisCommands.cc
         G4VisCommandsCompound.cc
-        G4VisCommandsDefault.cc
         G4VisCommandsGeometry.cc
         G4VisCommandsGeometrySet.cc
+        G4VisCommandsSet.cc
         G4VisCommandsScene.cc
         G4VisCommandsSceneAdd.cc
         G4VisCommandsSceneHandler.cc
+        G4VisCommandsTouchableSet.cc
         G4VisCommandsViewer.cc
+        G4VisCommandsViewerDefault.cc
         G4VisCommandsViewerSet.cc
         G4VisFeaturesOfDAWNFILE.cc
         G4VisFeaturesOfFukuiRenderer.cc

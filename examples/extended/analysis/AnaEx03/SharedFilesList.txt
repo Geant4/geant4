@@ -1,0 +1,10 @@
+EXAMPLE extended/analysis/AnaEx03
+SHARED_CLASSES_PATH ../shared
+SHARED_CLASSES_LIST
+DetectorConstruction
+DetectorMessenger
+EventAction
+PhysicsList
+PrimaryGeneratorAction
+RunAction
+SteppingAction

@@ -12,8 +12,8 @@ using namespace std;
  */
 namespace cheprep {
 
-IndentPrintWriter::IndentPrintWriter(ostream* out, int level)
-    : out(out), 
+IndentPrintWriter::IndentPrintWriter(ostream* outstream, int level)
+    : out(outstream), 
       closed(false), 
       indentLevel(level),
       indented(false),
@@ -82,8 +82,8 @@ string IndentPrintWriter::getIndentString() const {
     return indentString;
 }
 
-void IndentPrintWriter::setIndentString(const string & indent) {
-    indentString = indent;
+void IndentPrintWriter::setIndentString(const string & anIndent) {
+    indentString = anIndent;
 }
 
 } // cheprep

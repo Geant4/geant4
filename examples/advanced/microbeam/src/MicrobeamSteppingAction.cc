@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.cc,v 1.10 2010-10-07 14:03:11 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
+#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 
 #include "MicrobeamSteppingAction.hh"

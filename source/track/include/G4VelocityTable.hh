@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VelocityTable.hh,v 1.4 2011-08-10 08:42:47 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------
 //
@@ -79,7 +78,7 @@ class G4VelocityTable
   size_t FindBinLocation(G4double theEnergy) const;
    // Find the bin# in which theEnergy belongs - pure virtual function
 
-  G4double Interpolation(G4int lastBin) const;
+  G4double Interpolation() const;
 
   G4double edgeMin;           // Energy of first point
   G4double edgeMax;           // Energy of the last point
@@ -107,7 +106,7 @@ class G4VelocityTable
 };
 
 inline
- G4double G4VelocityTable::Interpolation(G4int lastBin) const
+ G4double G4VelocityTable::Interpolation() const
 {
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 

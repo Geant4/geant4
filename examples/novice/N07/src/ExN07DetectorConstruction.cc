@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.8 2007-05-04 01:49:28 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -57,6 +56,9 @@
 #include "ExN07DetectorMessenger.hh"
 #include "ExN07PrimaryGeneratorAction.hh"
 #include "ExN07ParallelWorld.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN07DetectorConstruction::ExN07DetectorConstruction()
 :constructed(false),worldMaterial(0),absorberMaterial(0),gapMaterial(0),
@@ -468,7 +470,7 @@ void   ExN07DetectorConstruction::AddMaterial()
 
   G4Material* CO2 = 
     new G4Material("CarbonicGas", density= 27.*mg/cm3, ncomponents=2,
-		   kStateGas, 325.*kelvin, 50.*atmosphere);
+                   kStateGas, 325.*kelvin, 50.*atmosphere);
   CO2->AddElement(C, natoms=1);
   CO2->AddElement(O, natoms=2);
 

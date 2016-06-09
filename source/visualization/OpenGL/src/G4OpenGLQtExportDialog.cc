@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.9 2008-10-24 14:17:10 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 
@@ -47,12 +46,12 @@
 #include <qbuttongroup.h>
 
 G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
- QWidget* parent
+ QWidget* parentw
 ,QString format
  ,int aHeight
  ,int aWidth
 )
-  : QDialog( parent ),
+  : QDialog( parentw ),
     isChangingSize(false)
 {
   setWindowTitle( tr( " Export options" ));

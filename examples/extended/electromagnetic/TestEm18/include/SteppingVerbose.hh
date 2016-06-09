@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingVerbose.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/include/SteppingVerbose.hh
+/// \brief Definition of the SteppingVerbose class
+//
+// $Id$
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.
@@ -47,8 +49,8 @@ public:
   SteppingVerbose();
  ~SteppingVerbose();
 
-  void StepInfo();
-  void TrackingStarted();
+  virtual void StepInfo();
+  virtual void TrackingStarted();
 
 };
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.6 2010-07-05 13:29:12 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4PVReplica

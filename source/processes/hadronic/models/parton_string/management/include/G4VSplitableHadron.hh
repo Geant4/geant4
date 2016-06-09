@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.8 2010-12-07 10:42:40 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VSplitableHadron_h

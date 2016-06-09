@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04MuonSD.cc
+/// \brief Implementation of the ExN04MuonSD class
+//
 
 #include "ExN04MuonSD.hh"
 #include "ExN04MuonHit.hh"
@@ -30,6 +33,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04MuonSD::ExN04MuonSD(G4String name)

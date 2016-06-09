@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.55 2010-11-21 10:55:44 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -44,6 +43,10 @@
 // 21.11.10 V. Grichine verbose flag for protons and G4PAYySection to check sandia table 
 //
 
+#include "G4PAIModel.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Region.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -54,7 +57,6 @@
 #include "G4SandiaTable.hh"
 #include "G4OrderedTable.hh"
 
-#include "G4PAIModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

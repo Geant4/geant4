@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.9 2006-10-26 11:30:10 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  7th March 2006
@@ -36,6 +35,7 @@
 
 #include "G4XXXStoredViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
@@ -81,6 +81,7 @@ void G4XXXStoredSceneHandler::PrintThings() {
       "\n  current physical volume: "
            << pPVModel->GetCurrentPV()->GetName() <<
       "\n  current logical volume: "
+// There might be a problem with the LV pointer if this is a G4LogicalVolumeModel
            << pPVModel->GetCurrentLV()->GetName() <<
       "\n  current depth of geometry tree: "
            << pPVModel->GetCurrentDepth();
@@ -375,21 +376,15 @@ void G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS&) {
   //?? Don't bother implementing this.  NURBS are not functional.
 }
 
-void G4XXXStoredSceneHandler::ClearStore () {
-
-  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
+void G4XXXStoredSceneHandler::ClearStore ()
+{
   fStore.clear();
   fPermanents.clear();
   fTransients.clear();
 }
 
-void G4XXXStoredSceneHandler::ClearTransientStore () {
-
-  G4VSceneHandler::ClearTransientStore ();
-
-  typedef std::list<G4String> Store;
-  typedef std::list<G4String>::iterator StoreIterator;
+void G4XXXStoredSceneHandler::ClearTransientStore ()
+{
   typedef std::vector<StoreIterator>::iterator StoreIteratorIterator;
   for (StoreIteratorIterator i = fTransients.begin();
        i != fTransients.end(); ++i) {

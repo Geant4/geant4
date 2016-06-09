@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/TargetSD.cc
+/// \brief Implementation of the TargetSD class
+//
 // -------------------------------------------------------------
 //
 //
@@ -52,9 +55,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TargetSD::TargetSD(const G4String& name)
- :G4VSensitiveDetector(name),
-  theHisto(Histo::GetPointer()),
-  evno(0)
+ : G4VSensitiveDetector(name), fHisto(Histo::GetPointer()), fEvno(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,10 +67,10 @@ TargetSD::~TargetSD()
 
 void TargetSD::Initialize(G4HCofThisEvent*)
 {
-  evno++;
-  if(0 < theHisto->GetVerbose())
-    G4cout << "TargetSD: Begin Of Event # " << evno << G4endl;
-
+  ++fEvno;
+  if(0 < fHisto->GetVerbose()) {
+    G4cout << "TargetSD: Begin Of Event # " << fEvno << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +78,7 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   const G4Track* track = aStep->GetTrack();
-  if(track->GetTrackID() == 1) theHisto->AddStepInTarget();
+  if(track->GetTrackID() == 1) { fHisto->AddStepInTarget(); }
   return true;
 }
 

@@ -1,59 +1,59 @@
-# - Script for setting up backward compatibility with GNU make user toolchain
+# - Set up backward compatible Geant4 GNU make toolchain
 #
-# The GNU make based buildsystem for Geant4 provides a toolchain for users
-# building simple Geant4 applications. The old style build and install of 
-# Geant4 provides a customized set of non-standard install paths with use of 
-# the toolchain dependent on environment variables pointing to the install
-# paths.
+# The GNU make based buildsystem for Geant4 provides a toolchain for 
+# users building simple Geant4 applications. The old style build and 
+# install of Geant4 provides a customized set of non-standard install 
+# paths with use of the toolchain dependent on environment variables 
+# pointing to the install paths.
 #
-# This script processes information on the CMake install paths, system and
-# compiler to determine the following variables for backward compatibility
+# This script processes information on the CMake install paths, system 
+# and compiler to determine the following variables for backward 
+# compatibility:
 #
-#     GEANT4_SYSTEM  : Old style system name, e.g. 'Linux', 'Darwin' or 'WIN32'
+#  GEANT4_SYSTEM      Old style system name, e.g. 'Linux', 'Darwin' 
+#                     or 'WIN32'
 #
-#     GEANT4_COMPILER: Old system compiler id, e.g. 'g++', 'VC'. 
+#  GEANT4_COMPILER    Old system compiler id, e.g. 'g++', 'VC'. 
 #
-#     G4INSTALL      : Location of config subdirectory containing GNU make
-#                      fragment files for toolchain.
+#  G4INSTALL          Location of 'config' subdirectory which contains
+#                     all the GNU make toolchain fragments
 #
-#     G4INCLUDE      : Old style path to location of Geant4 headers
+#  G4INCLUDE          Old style path to location of Geant4 headers
 #
-#     G4LIB          : Old style library directory path. Rather than
-#                      containing the actual libraries, it is expected to
-#                      contain subdirectories named
-#                      GEANT4_SYSTEM-GEANT4_COMPILER
+#  G4LIB              Old style library directory path. Rather than
+#                     containing the actual libraries, it is expected to
+#                     contain subdirectories named
+#                     GEANT4_SYSTEM-GEANT4_COMPILER
 #
-#
-# These variables are used in a CMake configuration file which is used to 
-# generate shell scripts (C and Bourne flavour) the user can source to set 
-# up their environment for use of the old toolchain. 
-# These replace the old style 'env.(c)sh' scripts to allow users to work with 
-# the new CMake built libraries transparently if their application relies on 
-# the old style toolchain.
+# These variables are used in a CMake configuration file which is used 
+# to generate shell scripts (C and Bourne flavour) the user can source 
+# to set up their environment for use of the old toolchain. 
+# These replace the old 'env.(c)sh' scripts to allow users to work with 
+# the new CMake built libraries transparently if their application 
+# relies on the old style toolchain.
 #
 # The scripts are generated for both the build and install trees so that
-# developers wishing to write test applications do not have to install their
-# fresh build of Geant4.
+# developers wishing to write test applications do not have to install 
+# their fresh build of Geant4.
 #
 # Compatibility with the library path style:
 #
-#     <prefix>/lib/G4SYSTEM-G4COMPILER
+#  <prefix>/lib/G4SYSTEM-G4COMPILER
 #
-# is provided by installing a directory 'geant4-<version>' in the actual
-# library directory and creating a symbolic link inside this directory
+# is provided by installing a directory 'geant4-<version>' in the 
+# <prefix>/lib directory and creating a symbolic link inside here
 # pointing up one directory level.
-# This will not work on Windows however, and here users are recommended to
-# use Visual Studio directly, or to use the under development CMake 
-# Geant4Config system.
+# This will not work on Windows however, and here users are recommended 
+# to use Visual Studio directly, or to use CMake for application
+# configuration.
 #
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # - Functions and Macros to help configuration of shell scripts.
-#
-#----------------------------------------------------------------------------
-# MACRO(_g4tc_shell_setup)
-# Set shell parameters such as program, family and common builtins for either
-# bourne or cshell families
+#-----------------------------------------------------------------------
+# macro _g4tc_shell_setup(<shell>)
+#       Set shell parameters such as program, family and common builtins 
+#       for supplied shell (e.g. 'bourne' or 'cshell'
 #
 macro(_g4tc_shell_setup SHELL_FAMILY)
   if(${SHELL_FAMILY} STREQUAL "bourne")
@@ -67,53 +67,102 @@ macro(_g4tc_shell_setup SHELL_FAMILY)
     set(GEANT4_TC_UNSET_COMMAND "unsetenv")
     set(GEANT4_TC_SHELL_EXTENSION ".csh")
   else()
-    # Nothing about other shells...
+    message(FATAL_ERROR "Unsupported shell '${SHELL_FAMILY}'")
   endif()
 endmacro()
 
-
-#----------------------------------------------------------------------------
-# FUNCTION(_g4tc_selflocate)
-# return the shell commands need to locate the directory in which the script
-# is located when it is sourced.
+#-----------------------------------------------------------------------
+# function _g4tc_selflocate(<output> <shell> <script> <variable name>)
+#          Set output to string containing shell commands needed to 
+#          locate the directory in which script is located if the
+#          script is sourced. This derived location is set as the
+#          value of the shell variable name.
 #
 function(_g4tc_selflocate TEMPLATE_NAME SHELL_FAMILY SCRIPT_NAME LOCATION_VARIABLE)
   if(${SHELL_FAMILY} STREQUAL "bourne")
     set(${TEMPLATE_NAME} 
       "# Self locate script when sourced
-if [ \"x\${BASH_ARGV[0]}\" = \"x\" ]; then
+if [ -z \"\$BASH_VERSION\" ]; then
   # Not bash, so rely on sourcing from correct location
   if [ ! -f ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ]; then
-    echo 'ERROR: cd to location of ${SCRIPT_NAME} script and source it there'
+    echo 'ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation'
+    echo 'This is most likely because you are using ksh, zsh or similar'
+    echo 'To fix this issue, cd to the directory containing this script'
+    echo 'and source it in that directory.'
     return 1
   fi
   ${LOCATION_VARIABLE}=\$\(pwd\)
 else
   g4sls_sourced_dir=\$\(dirname \${BASH_ARGV[0]}\)
-  ${LOCATION_VARIABLE}=$\(cd \$g4sls_sourced_dir; pwd\)
+  ${LOCATION_VARIABLE}=$\(cd \$g4sls_sourced_dir > /dev/null ; pwd\)
 fi
       "
       PARENT_SCOPE
       )
+    # For bourne shell, set the values of the guard variables
+    set(GEANT4_TC_IF_SELFLOCATED "" PARENT_SCOPE)
+    set(GEANT4_TC_ENDIF_SELFLOCATED "" PARENT_SCOPE)
 
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     set(${TEMPLATE_NAME}
       "# Self locate script when sourced
-set ARGS=(\$_)
-set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
-set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir}; pwd`\"
+# If sourced interactively, we can use $_ as this should be
+#
+#   source path_to_script_dir/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}
+#
+set ARGS=($_)
+if (\"$ARGS\" != \"\") then
+  set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
+else
+  # Oh great, we were sourced non-interactively. This means that $_
+  # won't be set, so we need an external source of information on
+  # where the script is located.
+  # We obtain this in one of two ways:
+  #   1) Current directory:
+  #     cd script_dir ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}
+  #
+  #   2) Supply the directory as an argument to the script:
+  #     source script_dir/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} script_dir
+  #
+  if ( -e ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ) then
+    set g4sls_sourced_dir=\"`pwd`\"
+  else if ( \"\$1\" != \"\" )  then
+    if ( -e \${1}/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ) then
+      set g4sls_sourced_dir=\${1}
+    else
+      echo \"ERROR \${1} does not contain a Geant4 installation\"
+    endif
+  else
+    unset g4sls_sourced_dir
+    echo \"ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation\"
+    echo \"because it was sourced (i.e. embedded) in another script.\"
+    echo \"This is due to limitations of (t)csh but can be worked around by providing\"
+    echo \"the directory where ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} is located\"
+    echo \"to it, either via cd-ing to the directory before sourcing:\"
+    echo \"  cd where_script_is ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}\"
+    echo \"or by supplying the directory as an argument to the script:\"
+    echo \"  source where_script_is/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} where_script_is\"
+    echo \" \"
+  endif
+endif
+
+if (\$?g4sls_sourced_dir) then
+  set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir} > /dev/null ; pwd`\"
+endif
 "
       PARENT_SCOPE
       )
-    endif()
+
+    # For C-shell, set the values of the guard variables
+    set(GEANT4_TC_IF_SELFLOCATED "if (\${?g4sls_sourced_dir}) then" PARENT_SCOPE)
+   set(GEANT4_TC_ENDIF_SELFLOCATED "endif" PARENT_SCOPE)
+  endif()
 endfunction()
 
-
-
-
-#----------------------------------------------------------------------------
-# FUNCTION(_g4tc_setenv_command)
-# Return the string giving the shell command to set an environment variable
+#-----------------------------------------------------------------------
+# function _g4tc_setenv_command(<output> <shell> <name> <value>)
+#          Set output to a string whose value is the shell command to 
+#          set an environment variable with name and value
 #
 function(_g4tc_setenv_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME VARIABLE_VALUE)
   if(${SHELL_FAMILY} STREQUAL "bourne")
@@ -129,13 +178,14 @@ function(_g4tc_setenv_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME VARIABLE_
   endif()
 endfunction()
 
-
-#----------------------------------------------------------------------------
-# FUNCTION(_g4tc_setenv_ifnotset_command)
-# Return the string giving the shell comment to set an environment variable
-# if the variable is not already set
+#-----------------------------------------------------------------------
+# function _g4tc_setenv_ifnotset_command(<output> <shell> <name> <value>)
+#          Set output to a string whose value is the shell command to 
+#          set an environment variable with name and value if the
+#          variable is not already set
 #
 function(_g4tc_setenv_ifnotset_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME VARIABLE_VALUE)
+  # -- bourne
   if(${SHELL_FAMILY} STREQUAL "bourne")
     # Have to make this section verbatim to get correct formatting
     set(${TEMPLATE_NAME}
@@ -146,6 +196,7 @@ fi
 "
       PARENT_SCOPE
       )
+  # -- cshell
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     # Again, verbatim to get correct formatting...
     set(${TEMPLATE_NAME} 
@@ -159,16 +210,15 @@ endif
   endif()
 endfunction()
 
-
-
-
-#----------------------------------------------------------------------------
-# FUNCTION(_g4tc_prepend_path)
-# return the string of commands needed to prepend a value to a path style
-# environment variable
+#-----------------------------------------------------------------------
+# function _g4tc_prepend_path(<output> <shell> <name> <value>)
+#          Set output to a string whose value is the shell command to
+#          prepend supplied value to the path style environment variable
+#          name (e.g. 'PATH')
 #
 function(_g4tc_prepend_path TEMPLATE_NAME SHELL_FAMILY PATH_VARIABLE
   APPEND_VARIABLE)
+  # -- bourne block
   if(${SHELL_FAMILY} STREQUAL "bourne")
     # We have to make this section verbatim
     set(${TEMPLATE_NAME}
@@ -181,6 +231,7 @@ fi
 "
     PARENT_SCOPE
     )
+  # -- cshell block
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     # Again, this is verbatim so final output is formatted correctly
     set(${TEMPLATE_NAME}
@@ -196,10 +247,7 @@ endif
   endif()
 endfunction()
 
-
-
-
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # MACRO(_g4tc_configure_tc_variables)
 # Macro to perform the actual setting of the low level toolchain variables
 # which need to be set in the final shell files.
@@ -207,7 +255,7 @@ endfunction()
 # the install and build trees.
 #
 macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
-  # - Setup the requested shell
+  # - Set up the requested shell
   _g4tc_shell_setup(${SHELL_FAMILY})
 
   # - Locate self
@@ -227,6 +275,8 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
   endif()
 
   _g4tc_setenv_ifnotset_command(GEANT4_TC_G4WORKDIR_SETUP ${SHELL_FAMILY} G4WORKDIR ${G4WORKDIR_DEFAULT})
+  _g4tc_prepend_path(GEANT4_TC_G4WORKDIR_PATH_SETUP ${SHELL_FAMILY} PATH
+  \${G4WORKDIR}/bin/\${G4SYSTEM})
 
   # - Geant4 Library build setup
   # We prefer shared libs if these are built, otherwise fall back to static
@@ -242,25 +292,11 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
 
 
   # - Resource file paths
-  if(GEANT4_INSTALL_DATA)
-    _g4tc_setenv_command(GEANT4_TC_G4ABLADATA ${SHELL_FAMILY} G4ABLADATA ${G4ABLADATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4LEDATA ${SHELL_FAMILY} G4LEDATA ${G4LEDATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4LEVELGAMMADATA ${SHELL_FAMILY} G4LEVELGAMMADATA ${G4LEVELGAMMADATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4NEUTRONHPDATA ${SHELL_FAMILY} G4NEUTRONHPDATA ${G4NEUTRONHPDATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4NEUTRONXSDATA ${SHELL_FAMILY} G4NEUTRONXSDATA ${G4NEUTRONXSDATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4PIIDATA ${SHELL_FAMILY} G4PIIDATA ${G4PIIDATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4RADIOACTIVEDATA ${SHELL_FAMILY} G4RADIOACTIVEDATA ${G4RADIOACTIVEDATA_PATH})
-    _g4tc_setenv_command(GEANT4_TC_G4REALSURFACEDATA ${SHELL_FAMILY} G4REALSURFACEDATA ${G4REALSURFACEDATA_PATH})
-  else()
-    set(GEANT4_TC_G4ABLADATA        "# ABLA Data not installed")
-    set(GEANT4_TC_G4LEDATA          "# EMLOW Data not installed")
-    set(GEANT4_TC_G4LEVELGAMMADATA  "# Photon Evaporation Data not installed")
-    set(GEANT4_TC_G4NEUTRONHPDATA   "# NDL Data not installed")
-    set(GEANT4_TC_G4NEUTRONXSDATA   "# Neutron Cross Section Data not installed")
-    set(GEANT4_TC_G4PIIDATA         "# Shell Ionization Cross Section Data not installed")
-    set(GEANT4_TC_G4RADIOACTIVEDATA "# Radioactive Decay Data not installed")
-    set(GEANT4_TC_G4REALSURFACEDATA "# RealSurface Data not installed")
-  endif()
+  set(GEANT4_TC_DATASETS )
+  foreach(_ds ${GEANT4_EXPORTED_DATASETS})
+    _g4tc_setenv_command(_dssetenvcmd ${SHELL_FAMILY} ${${_ds}_ENVVAR} ${${_ds}_PATH})
+    set(GEANT4_TC_DATASETS "${GEANT4_TC_DATASETS}${_dssetenvcmd}\n")
+  endforeach()
 
 
   # - CLHEP...
@@ -393,9 +429,10 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
 endmacro()
 
 
-#----------------------------------------------------------------------------
-# MACRO(_g4tc_configure_build_tree_scripts)
-# Macro to configure toolchain compatibility scripts for the build tree
+#-----------------------------------------------------------------------
+# macro _g4tc_configure_build_tree_scripts()
+#       Macro to configure toolchain compatibility scripts for the 
+#       build tree
 #
 macro(_g4tc_configure_build_tree_scripts SCRIPT_NAME)
   # Need to process for bourne and cshell families
@@ -413,9 +450,10 @@ macro(_g4tc_configure_build_tree_scripts SCRIPT_NAME)
 endmacro()
 
 
-#----------------------------------------------------------------------------
-# MACRO(_g4tc_configure_install_tree_script)
-# Macro to configure toolchain compatibility scripts for the install tree
+#-----------------------------------------------------------------------
+# macro _g4tc_configure_install_tree_script()
+#       Macro to configure toolchain compatibility scripts for the 
+#       install tree
 #
 macro(_g4tc_configure_install_tree_scripts CONFIGURE_DESTINATION SCRIPT_NAME INSTALL_DESTINATION)
   # Need to process for bourne and cshell families
@@ -444,52 +482,42 @@ macro(_g4tc_configure_install_tree_scripts CONFIGURE_DESTINATION SCRIPT_NAME INS
 endmacro()
 
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Implementation section
-# 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Configure shell scripts for BUILD TREE
-# This means we have to point to libraries in the build tree, but includes and
-# resource files in the source tree
+# This means we have to point to libraries in the build tree, but 
+# includes and resource files will be in the source tree
 # This script never needs to be relocatable, so we don't need to use the
 # self location functionality.
 # N.B. IT WILL NOT WORK when building with VS/Xcode or any multiconfig
-# buildtool because we cannot reconcile the output paths these use with those
-# expected by the old toolchain...
+# buildtool because we cannot reconcile the output paths these use with 
+# those expected by the old toolchain...
 #
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL ${PROJECT_SOURCE_DIR})
-set(G4INCLUDE ${PROJECT_SOURCE_DIR}/no_include)
+set(G4INCLUDE ${PROJECT_SOURCE_DIR}/this_is_a_deliberate_dummy_path)
 set(G4LIB ${PROJECT_BINARY_DIR}/outputs/library)
 set(G4LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
 # - Data
-# Messy for now...
-if(GEANT4_INSTALL_DATA)
-  set(_g4datarootdir ${PROJECT_BINARY_DIR}/data)
+geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
+foreach(_ds ${GEANT4_EXPORTED_DATASETS})
+  geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
+  geant4_get_dataset_property(${_ds} BUILD_DIR ${_ds}_PATH)
+endforeach()
 
-  foreach(_ds ${GEANT4_DATASETS})
-    string(REPLACE "/" ";" _tuple ${_ds})
-    list(GET _tuple 0 _name)
-    list(GET _tuple 1 _vers)
-    list(GET _tuple 4 _envvarname)
 
-    set(${_envvarname}_PATH ${_g4datarootdir}/${_name}${_vers})
-  endforeach()
-endif()
-
-#----------------------------------------------------------------------------
-# Configure the shell scripts for the BUILD TREE
+# - Configure the shell scripts for the BUILD TREE
 _g4tc_configure_build_tree_scripts(geant4make)
 
 
-
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Configure shell scripts for INSTALL TREE
-# This means we have to point things to their final location when installed
-# These paths are all determined by the CMAKE_INSTALL_FULL directories and
-# others.
+# This means we have to point things to their final location when 
+# installed. These paths are all determined by the CMAKE_INSTALL_FULL 
+# directories and others.
 # If we are relocatable, then the structure we will have is
 # +- CMAKE_INSTALL_PREFIX
 #    +- LIBDIR/Geant4-VERSION (G4LIB)
@@ -499,20 +527,18 @@ _g4tc_configure_build_tree_scripts(geant4make)
 #          +- geant4make.(c)sh
 #          +- config/
 
-#------------------------------------------------------------------------------
-# Construct universal backward compatible INSTALL TREE PATHS.
-#
+# - Construct universal backward compatible INSTALL TREE PATHS.
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL "\"\$geant4make_root\"")
 
-# Now need relative paths between 'G4INSTALL' and include/lib dirs
+# - Now need relative paths between 'G4INSTALL' and include/lib dirs
 # - Include dir
 file(RELATIVE_PATH
   G4MAKE_TO_INCLUDEDIR
   ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
   ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${PROJECT_NAME}
   )
-set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR}\; pwd`\"")
+set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR} > /dev/null \; pwd`\"")
 
 # - Lib dir
 file(RELATIVE_PATH
@@ -520,44 +546,36 @@ file(RELATIVE_PATH
   ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
   ${CMAKE_INSTALL_FULL_LIBDIR}
   )
-set(G4LIB "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}/Geant4-${Geant4_VERSION}\; pwd`\"")
-set(G4LIB_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}\; pwd`\"")
+set(G4LIB "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}/Geant4-${Geant4_VERSION} > /dev/null \; pwd`\"")
+set(G4LIB_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR} > /dev/null \; pwd`\"")
 
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
 # - Data
-# Messy for now...
-if(GEANT4_INSTALL_DATA)
+geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
+foreach(_ds ${GEANT4_EXPORTED_DATASETS})
+  geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
+  geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
+
   file(RELATIVE_PATH
     G4MAKE_TO_DATADIR
     ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
-    ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/data
+    ${${_ds}_PATH}
     )
+  set(${_ds}_PATH "\"`cd \$geant4make_root/${G4MAKE_TO_DATADIR} > /dev/null \; pwd`\"")
+endforeach()
 
-  foreach(_ds ${GEANT4_DATASETS})
-    string(REPLACE "/" ";" _tuple ${_ds})
-    list(GET _tuple 0 _name)
-    list(GET _tuple 1 _vers)
-    list(GET _tuple 4 _envvarname)
-
-    set(${_envvarname}_PATH "\"`cd \$geant4make_root/${G4MAKE_TO_DATADIR}/${_name}${_vers}\; pwd`\"")
-  endforeach()
-endif()
-
-#----------------------------------------------------------------------------
-# Configure the shell scripts for the INSTALL TREE
-#
+# - Configure the shell scripts for the INSTALL TREE
 _g4tc_configure_install_tree_scripts(
     ${CMAKE_BINARY_DIR}/InstallTreeFiles
     geant4make
     ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
-)
+    )
 
 
-#----------------------------------------------------------------------------
-# For install tree, we also need to install the config directory which contains
-# all the old toolchain scripts, and to create a softlink to the G4SYSTEM
-# directory.
+# - For install tree, we also need to install the config directory 
+#   which contains all the old toolchain scripts, and to create a 
+#   softlink to the G4SYSTEM directory.
 #
 install(DIRECTORY config
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
@@ -568,15 +586,16 @@ install(DIRECTORY config
     PATTERN "scripts/" EXCLUDE
 )
 
-# compatibility softlink to library directory
-# NB This won't work on Windows, but shouldn't fail either.
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})")
+# Compatibility softlink to library directory, we do this on all
+# platforms, but it does nothing on Windows (well, at least the
+# attempted symlink creation does not)
+# Take care to quote the path names to avoid issues with spaces
+install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
 
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})")
+install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
 
 
-
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # TEMPORARY
 # Configure environment setup script for install of Geant4
 # Temporarily here to keep all shell setup in one place.
@@ -594,27 +613,21 @@ file(RELATIVE_PATH
   )
 
 # - Data
-# Messy for now...
-if(GEANT4_INSTALL_DATA)
+geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
+foreach(_ds ${GEANT4_EXPORTED_DATASETS})
+  geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
+  geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
+
   file(RELATIVE_PATH
     G4ENV_BINDIR_TO_DATADIR
     ${CMAKE_INSTALL_FULL_BINDIR}
-    ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/data
+    ${${_ds}_PATH}
     )
-
-  foreach(_ds ${GEANT4_DATASETS})
-    string(REPLACE "/" ";" _tuple ${_ds})
-    list(GET _tuple 0 _name)
-    list(GET _tuple 1 _vers)
-    list(GET _tuple 4 _envvarname)
-
-    set(${_envvarname}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR}/${_name}${_vers}\; pwd`\"")
-  endforeach()
-endif()
+  set(${_ds}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR} > /dev/null \; pwd`\"")
+endforeach()
 
 
-
-
+# - Configure for each shell
 foreach(_shell bourne;cshell)
   # Setup the shell
   _g4tc_shell_setup(${_shell})
@@ -646,30 +659,15 @@ foreach(_shell bourne;cshell)
   _g4tc_prepend_path(GEANT4_ENV_LIBPATH_SETUP
     ${_shell}
     ${_libpathname}
-    "\"`cd $geant4_envbindir/${G4ENV_BINDIR_TO_LIBDIR}; pwd`\""
+    "\"`cd $geant4_envbindir/${G4ENV_BINDIR_TO_LIBDIR} > /dev/null ; pwd`\""
     )
 
   # - Set data paths
-  if(GEANT4_INSTALL_DATA)
-    _g4tc_setenv_command(GEANT4_ENV_G4ABLADATA ${_shell} G4ABLADATA ${G4ABLADATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4LEDATA ${_shell} G4LEDATA ${G4LEDATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4LEVELGAMMADATA ${_shell} G4LEVELGAMMADATA ${G4LEVELGAMMADATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4NEUTRONHPDATA ${_shell} G4NEUTRONHPDATA ${G4NEUTRONHPDATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4NEUTRONXSDATA ${_shell} G4NEUTRONXSDATA ${G4NEUTRONXSDATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4PIIDATA ${_shell} G4PIIDATA ${G4PIIDATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4RADIOACTIVEDATA ${_shell} G4RADIOACTIVEDATA ${G4RADIOACTIVEDATA_PATH})
-    _g4tc_setenv_command(GEANT4_ENV_G4REALSURFACEDATA ${_shell} G4REALSURFACEDATA ${G4REALSURFACEDATA_PATH})
-  else()
-    set(GEANT4_ENV_G4ABLADATA        "# ABLA Data not installed")
-    set(GEANT4_ENV_G4LEDATA          "# EMLOW Data not installed")
-    set(GEANT4_ENV_G4LEVELGAMMADATA  "# Photon Evaporation Data not installed")
-    set(GEANT4_ENV_G4NEUTRONHPDATA   "# NDL Data not installed")
-    set(GEANT4_ENV_G4NEUTRONXSDATA   "# Neutron Cross Section Data not installed")
-    set(GEANT4_ENV_G4PIIDATA         "# Shell Ionization Cross Section Data not installed")
-    set(GEANT4_ENV_G4RADIOACTIVEDATA "# Radioactive Decay Data not installed")
-    set(GEANT4_ENV_G4REALSURFACEDATA "# RealSurface Data not installed")
-  endif()
-
+  set(GEANT4_ENV_DATASETS )
+  foreach(_ds ${GEANT4_EXPORTED_DATASETS})
+    _g4tc_setenv_command(_dssetenvcmd ${_shell} ${${_ds}_ENVVAR} ${${_ds}_PATH})
+    set(GEANT4_ENV_DATASETS "${GEANT4_ENV_DATASETS}${_dssetenvcmd}\n")
+  endforeach()
 
   # Configure the file
   configure_file(

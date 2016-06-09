@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricModel.hh,v 1.2 2010-11-23 16:42:15 flongo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -36,24 +35,16 @@
 #include "G4Electron.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
-#include "G4AtomicDeexcitation.hh"
-#include "G4AtomicTransitionManager.hh"
-#include "G4AtomicShell.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4ForceCondition.hh"
-#include "G4Gamma.hh"
+
+class G4VAtomDeexcitation;
 
 class G4LivermorePolarizedPhotoElectricModel : public G4VEmModel
 {
 
 public:
 
-  G4LivermorePolarizedPhotoElectricModel(const G4ParticleDefinition* p = 0, 
-		                   const G4String& nam = "LivermorePolarizedPhotoElectric");
+  G4LivermorePolarizedPhotoElectricModel( 
+	     const G4String& nam = "LivermorePolarizedPhotoElectric");
 
   virtual ~G4LivermorePolarizedPhotoElectricModel();
 
@@ -73,52 +64,27 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-
-  // void SetCutForLowEnSecPhotons(G4double);
-  // void SetCutForLowEnSecElectrons(G4double);
-  
-  void ActivateAuger(G4bool);
-
-
-
 protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
-  //G4double GetMeanFreePath(const G4Track& aTrack, 
-  //G4double previousStepSize, 
-  //		   G4ForceCondition* condition);
-
 private:
-
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
-
-  G4VEMDataSet* meanFreePathTable;
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VCrossSectionHandler* shellCrossSectionHandler;
-
-  G4AtomicDeexcitation deexcitationManager;
-
-
-  // specific methods for polarization 
-  
-  G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
-  G4ThreeVector GetPerpendicularPolarization(const G4ThreeVector& direction0, const G4ThreeVector& polarization0) const;
-  
-  G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); // temporary
-  G4ThreeVector SetNewPolarization(G4double epsilon, G4double sinSqrTheta, 
-				   G4double phi, G4double cosTheta);
-  G4double SetPhi(G4double, G4double, G4double);
-  G4double SetCosTheta(G4double);
-  
-  void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1, 
-			 G4ThreeVector& polarization0);
   
   G4LivermorePolarizedPhotoElectricModel & operator=(const  G4LivermorePolarizedPhotoElectricModel &right);
   G4LivermorePolarizedPhotoElectricModel(const  G4LivermorePolarizedPhotoElectricModel&);
+
+  G4ParticleDefinition*   theGamma;
+  G4ParticleDefinition*   theElectron;
+
+  G4double lowEnergyLimit;  
+  G4double highEnergyLimit; 
+  G4int    verboseLevel;
+  G4bool   fDeexcitationActive;
+
+  G4VCrossSectionHandler* crossSectionHandler;
+  G4VCrossSectionHandler* shellCrossSectionHandler;
+
+  G4VAtomDeexcitation*    fAtomDeexcitation;
 
 };
 

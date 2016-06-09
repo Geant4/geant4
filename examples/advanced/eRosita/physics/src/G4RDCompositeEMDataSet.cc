@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDCompositeEMDataSet.cc,v 1.13 2008/03/17 13:40:53 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

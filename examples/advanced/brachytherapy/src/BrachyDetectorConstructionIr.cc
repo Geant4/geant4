@@ -37,10 +37,10 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.10 2006-06-29 15:48:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "BrachyDetectorConstructionIr.hh"
 #include "G4Sphere.hh"
 #include "G4RunManager.hh"

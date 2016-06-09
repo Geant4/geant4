@@ -37,6 +37,8 @@
 // -------------------------------------------------------------------
 //
 #include "G4UniformGravityField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Construct from a 3-vector
 G4UniformGravityField::G4UniformGravityField(const G4ThreeVector FieldVector)

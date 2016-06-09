@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.48 2010-10-26 10:35:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +64,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eBremsstrahlungModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -701,7 +702,7 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 
   // limits of the energy sampling
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
-  G4ThreeVector direction = dp->GetMomentumDirection();
+
   G4double xmin     = tmin/kineticEnergy;
   G4double xmax     = tmax/kineticEnergy;
   G4double kappa    = 0.0;
@@ -824,25 +825,21 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   // angles of the emitted gamma. ( Z - axis along the parent particle)
   // use general interface
   //
-  G4double theta = GetAngularDistribution()->PolarAngle(totalEnergy,
-							totalEnergy-gammaEnergy,
-							(G4int)anElement->GetZ());
 
-  G4double sint = sin(theta);
-
-  G4double phi = twopi * G4UniformRand() ;
-
-  G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
-  gammaDirection.rotateUz(direction);
+  G4ThreeVector gammaDirection = 
+    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
+					      G4lrint(anElement->GetZ()), 
+					      couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,
-                                                        gammaEnergy);
-  vdp->push_back(g);
+  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
+						   gammaEnergy);
+  vdp->push_back(gamma);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
-  G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
-  direction = dir.unit();
+
+  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
+			     - gammaEnergy*gammaDirection).unit();
 
   // energy of primary
   G4double finalE = kineticEnergy - gammaEnergy;

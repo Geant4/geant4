@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.3 2011-01-06 18:34:38 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/include/StackingAction.hh
+/// \brief Definition of the StackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,22 +39,20 @@
 
 class RunAction;
 class EventAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(RunAction*, EventAction*, HistoManager* );
+    StackingAction(RunAction*, EventAction*);
    ~StackingAction();
      
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    RunAction*    runaction;
-    EventAction*  eventaction;
-    HistoManager* histoManager;        
+    RunAction*    fRunaction;
+    EventAction*  fEventaction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

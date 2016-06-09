@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.14 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -41,6 +40,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistedBox.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
 
 G4TwistedBox::G4TwistedBox( const G4String& pName,

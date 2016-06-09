@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc,v 1.10 2010-10-30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -36,6 +35,8 @@
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 #include "G4KL3DecayChannel.hh"

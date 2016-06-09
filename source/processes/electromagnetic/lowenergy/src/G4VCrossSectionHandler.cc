@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.20 2010-12-02 17:39:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -518,7 +517,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
 
-  for (size_t m=0; m<numOfCouples; m++)
+  for (size_t mLocal=0; mLocal<numOfCouples; mLocal++)
     {
       energies = new G4DataVector;
       data = new G4DataVector;
@@ -529,7 +528,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 	  G4double energy = energyVector[bin];
 	  energies->push_back(energy);
           log_energies->push_back(std::log10(energy));
-	  G4VEMDataSet* matCrossSet = (*crossSections)[m];
+	  G4VEMDataSet* matCrossSet = (*crossSections)[mLocal];
 	  G4double materialCrossSection = 0.0;
           G4int nElm = matCrossSet->NumberOfComponents();
           for(G4int j=0; j<nElm; j++) {
@@ -547,11 +546,11 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
               log_data->push_back(std::log10(DBL_MAX));
 	    }
 	}
-      G4VDataSetAlgorithm* algo = CreateInterpolation();
+      G4VDataSetAlgorithm* algoLocal = CreateInterpolation();
 
       //G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);
 
-      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,log_energies,log_data,algo,1.,1.);
+      G4VEMDataSet* dataSet = new G4EMDataSet(mLocal,energies,data,log_energies,log_data,algoLocal,1.,1.);
 
       materialSet->AddComponent(dataSet);
     }
@@ -702,9 +701,9 @@ void G4VCrossSectionHandler::ActiveElements()
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int m=0; m<nMaterials; m++)
+  for (G4int mLocal2=0; mLocal2<nMaterials; mLocal2++)
     {
-      const G4Material* material= (*materialTable)[m];
+      const G4Material* material= (*materialTable)[mLocal2];
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4int nElements = material->GetNumberOfElements();
 

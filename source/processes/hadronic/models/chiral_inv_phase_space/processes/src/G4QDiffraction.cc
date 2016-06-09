@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QDiffraction class -----------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -48,6 +47,9 @@
 //#define ppdebug
 
 #include "G4QDiffraction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 //G4int    G4QDiffraction::nPartCWorld=152;  // #of particles initialized in CHIPS
@@ -62,6 +64,8 @@ std::vector<std::vector<G4double>*>G4QDiffraction::IsoProbInEl;//SumProbIsotE(i)
 G4QDiffraction::G4QDiffraction(const G4String& processName):
  G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QDiffraction");
+
 #ifdef debug
   G4cout<<"G4QDiffraction::Constructor is called processName="<<processName<<G4endl;
 #endif
@@ -474,7 +478,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
 #ifdef pdebug
   G4cout<<"G4QDiffraction::PostStepDoIt: =---=found=---= nSecondaries="<<nSec<<G4endl;
 #endif
-  for(G4int i=0; i<nSec; i++)
+  for(i=0; i<nSec; i++)
   {
     difQH = (*out)[i];
     difPDG= difQH->GetPDGCode();
@@ -513,7 +517,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
     else if(difPDG==   13) theDefinition=G4MuonPlus::MuonPlus();
     else
     {
-      G4int Z = difQH->GetCharge();
+      Z = difQH->GetCharge();
       G4int B = difQH->GetBaryonNumber();
       G4int S = difQH->GetStrangeness();
       if(S||Z>B||Z<0)G4cout<<"-Warning-G4QDif::PoStDoIt:Z="<<Z<<",A="<<B<<",S="<<S<<G4endl;
@@ -562,10 +566,10 @@ G4double G4QDiffraction::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG)
   //G4double x=CSmanager->GetCrossSection(true, p, Z, N, PDG); // inelastic XS
   //G4double pIU=p*GeV;                                        // IndependentUnistMomentum
   //G4double r=diffRatio->GetRatio(pIU, PDG, Z, N);            // Proj. Diffraction Part
-  //G4double s=x*r;                                            // XS for proj. diffraction
-  G4double s=diffRatio->GetTargSingDiffXS(p, PDG, Z, N);     // XS for target diffraction
+  //G4double xs_value=x*r;                                            // XS for proj. diffraction
+  G4double xs_value=diffRatio->GetTargSingDiffXS(p, PDG, Z, N);     // XS for target diffraction
 #ifdef debug
-  G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<s<<G4endl;
+  G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<xs_value<<G4endl;
 #endif
-  return s;
+  return xs_value;
 }

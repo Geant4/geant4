@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.cc,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -58,43 +57,47 @@
 //
 
 #include "G4ModifiedTsai.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 G4ModifiedTsai::G4ModifiedTsai(const G4String&)
-  : G4VBremAngularDistribution("AngularGenUrban")
+  : G4VEmAngularDistribution("AngularGenUrban")
 {}    
 
 G4ModifiedTsai::~G4ModifiedTsai() 
 {}
 
-G4double G4ModifiedTsai::PolarAngle(const G4double initial_energy,
-				    const G4double, // final_energy
-				    const G4int ) // Z
+G4ThreeVector& 
+G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
+				G4double, G4int, const G4Material*)
 {
   // Sample gamma angle (Z - axis along the parent particle).
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
   // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
-  G4double gamma = 1. + initial_energy/electron_mass_c2;   
-  G4double uMax  = gamma*pi;
+  G4double uMax = 2*(1. + dp->GetKineticEnergy()/electron_mass_c2);   
 
   const G4double a1     = 0.625;
   const G4double a2     = 1.875;
   const G4double border = 0.25;
-  G4double u, theta;
+  G4double u;
 
-  do
-  {
+  do {
     u = - std::log(G4UniformRand()*G4UniformRand());
 
-    if ( border > G4UniformRand() ) u /= a1; 
-    else                            u /= a2; 
+    if ( border > G4UniformRand() ) { u /= a1; }
+    else                            { u /= a2; }
     
-  } while( u > uMax );
+  } while(u > uMax);
 
-  theta = u/gamma;
+  G4double cost = 1.0 - 2*u*u/(uMax*uMax);
+  G4double sint = std::sqrt((1 - cost)*(1 + cost));
+  G4double phi  = CLHEP::twopi*G4UniformRand(); 
 
-  return theta;
+  fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi), cost);
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+
+  return fLocalDirection;
 }
 
 void G4ModifiedTsai::PrintGeneratorInformation() const

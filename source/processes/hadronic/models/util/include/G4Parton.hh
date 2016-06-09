@@ -63,7 +63,7 @@ class G4Parton
 
       ~G4Parton();
 
-      const G4Parton & operator=(const G4Parton &right);
+      G4Parton & operator=(const G4Parton &right);
 
       int operator==(const G4Parton &right) const;
 

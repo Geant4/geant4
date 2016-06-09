@@ -14,12 +14,31 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
-17 October 2011  Tatsumi Koi (hadr-lllfis-V09-04-00)
+14 November 2012  Dennis Wright (hadr-lllfis-V09-05-02)
+-------------------------------------------------------
+- G4FissLib.cc : fix coverity bug #15660: uninitialized variable xSec
+- G4FissionLibrary.cc : fix coverity bug #15252: uninitialized variables
+    targetMass and theIsotope
+- G4SmpSpNuDistData.cc : fix coverity bug #14686: overrun of array sfnu
+- G4SmpSpNugDistData.cc : fix coverity bug #14687: overrun of array Cf252spdist
+- G4fissionEvent.cc : fix coverity bug #15174: uninitialized array pointers
+
+26 September 2012 Gabriele Cosmo (hadr-lllfis-V09-05-01)
+--------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+12 June 2012 Dennis Wright (hadr-lllfis-V09-05-00)
 --------------------------------------------------
+- Replaced shadowed variable "index" with "imat" in G4FissLib.cc.
+- Replaced shadowed variables "g" and "erg" in G4SmpNEngCf252.cc.
+
+17 October 2011 Tatsumi Koi (hadr-lllfis-V09-04-00)
+---------------------------------------------------
 - Interface change along with "hadr-hpn-V09-04-28"
 - Enable to handle excited isomer nuclie as targets 
 	include/G4FissionLibrary.hh
-	src/G4FissionLibrary.cc
+	src/G4FissionLibrary.cc.
 
 09 July 2008 Dennis Wright (hadr-lllfis-V09-01-00)
 --------------------------------------------------

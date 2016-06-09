@@ -19,10 +19,6 @@
 /gun/particle pi+ 
 /gun/energy 5 GeV
 #
-/testem/histo/setFileName testem5
-/testem/histo/setFileType root
-/testem/histo/setHisto 13 100 -0.25 0.25 mrad 
-#
 /run/beamOn 100000
 #
 /testem/det/setAbsMat Gold

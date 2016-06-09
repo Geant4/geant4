@@ -23,24 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeRunAction.cc
+/// \brief Implementation of the LXeRunAction class
+//
+//
 #include "LXeRunAction.hh"
-#include "RecorderBase.hh"
+#include "LXeRecorderBase.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeRunAction::LXeRunAction(RecorderBase* r)
-  :recorder(r)
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeRunAction::~LXeRunAction()
-{}
+LXeRunAction::LXeRunAction(LXeRecorderBase* r) : fRecorder(r) {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXeRunAction::~LXeRunAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeRunAction::BeginOfRunAction(const G4Run* aRun){
-  if(recorder)recorder->RecordBeginOfRun(aRun);
+  if(fRecorder)fRecorder->RecordBeginOfRun(aRun);
 }
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeRunAction::EndOfRunAction(const G4Run* aRun){
-  if(recorder)recorder->RecordEndOfRun(aRun);
+  if(fRecorder)fRecorder->RecordEndOfRun(aRun);
 }

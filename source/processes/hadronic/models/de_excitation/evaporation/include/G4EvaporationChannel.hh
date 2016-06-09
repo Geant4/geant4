@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.hh,v 1.11 2010-11-17 12:19:08 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //J.M. Quesada (August2008). Based on:
@@ -52,7 +51,7 @@ public:
   G4EvaporationChannel(G4int theA, G4int theZ, const G4String & aName,
 		       G4EvaporationProbability * aEmissionStrategy,
 	               G4VCoulombBarrier * aCoulombBarrier);
-public:
+
   // destructor
   virtual ~G4EvaporationChannel();
   
@@ -66,27 +65,14 @@ protected:
   // default constructor
   G4EvaporationChannel();
   
-private:
-  // copy constructor
-  G4EvaporationChannel(const G4EvaporationChannel & right);
-  
-private:
-  const G4EvaporationChannel & operator=(const G4EvaporationChannel & right);
-  
-public:
-  G4bool operator==(const G4EvaporationChannel & right) const;
-  G4bool operator!=(const G4EvaporationChannel & right) const;
+public:  
 
-public:
-  void Initialize(const G4Fragment & fragment);
+  //  virtual void Initialize(const G4Fragment & fragment);
+
+  virtual G4double GetEmissionProbability(G4Fragment* fragment); 
 
   G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
-public:
-
-  inline G4double GetEmissionProbability(void) const 
-  {return EmissionProbability;}
-    
   inline G4double GetMaximalKineticEnergy(void) const 
   { return MaximalKineticEnergy; }
   
@@ -103,6 +89,11 @@ private:
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
+
+  G4EvaporationChannel(const G4EvaporationChannel & right);
+  const G4EvaporationChannel & operator=(const G4EvaporationChannel & right);
+  G4bool operator==(const G4EvaporationChannel & right) const;
+  G4bool operator!=(const G4EvaporationChannel & right) const;
 
 	// Data Members
 	// ************

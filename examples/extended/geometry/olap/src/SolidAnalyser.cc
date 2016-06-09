@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/src/SolidAnalyser.cc
+/// \brief Implementation of the SolidAnalyser class
 //
-// $Id: SolidAnalyser.cc,v 1.6 2006-06-29 17:23:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

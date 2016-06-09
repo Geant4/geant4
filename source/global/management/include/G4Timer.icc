@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.icc,v 1.2 2006-06-29 19:03:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -50,4 +49,14 @@ inline
 G4bool G4Timer::IsValid() const
 {
   return fValidTimes;
+}
+
+inline const char* G4Timer::GetClockTime() const
+{
+  time_t rawtime;
+  struct tm * timeinfo;
+
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+  return asctime (timeinfo);
 }

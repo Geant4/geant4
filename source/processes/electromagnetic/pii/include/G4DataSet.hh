@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -45,6 +44,8 @@
 #ifndef  G4DATASET_HH
 #define  G4DATASET_HH 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4IDataSet.hh"
 
@@ -55,16 +56,16 @@ class G4DataSet : public G4IDataSet
 public:
   G4DataSet(G4int argZ, 
 	    G4IInterpolator* algo, 
-	    G4double xUnit=MeV, 
-	    G4double yUnit=barn,
+	    G4double xUnit=CLHEP::MeV, 
+	    G4double yUnit=CLHEP::barn,
 	    G4bool random=false);
 
   G4DataSet(G4int argZ, 
 	    G4DataVector* xData, 
 	    G4DataVector* data, 
 	    G4IInterpolator* algo, 
-	    G4double xUnit=MeV, 
-	    G4double yUnit=barn,
+	    G4double xUnit=CLHEP::MeV, 
+	    G4double yUnit=CLHEP::barn,
 	    G4bool random=false);
 
   virtual ~G4DataSet();

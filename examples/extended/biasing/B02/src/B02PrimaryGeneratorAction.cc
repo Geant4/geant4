@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02PrimaryGeneratorAction.cc
+/// \brief Implementation of the B02PrimaryGeneratorAction class
 //
-// $Id: B02PrimaryGeneratorAction.cc,v 1.6 2006-06-29 16:34:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "globals.hh"
@@ -36,6 +38,7 @@
 #include "G4ParticleGun.hh"
 #include "G4Neutron.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 B02PrimaryGeneratorAction::B02PrimaryGeneratorAction()
 {

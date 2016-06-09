@@ -14,8 +14,8 @@ namespace histo {
 template <class TC,class TN,class TW,class TH>
 class b3 : public base_histo<TC,TN,TW,TH> {
   typedef base_histo<TC,TN,TW,TH> parent;
-  typedef axis<TC> axis_t;
 public:
+  typedef axis<TC> axis_t;
   typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
@@ -230,18 +230,18 @@ public:
     bn_t yoffset = parent::m_axes[1].m_offset;
     bn_t zoffset = parent::m_axes[2].m_offset;
     bn_t joffset = ibin;
-    TN entries = 0;
+    TN _entries = 0;
     for(jbin=0;jbin<ybins;jbin++) {
       //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       offset = joffset;
       for(kbin=0;kbin<zbins;kbin++) {
         //offset = joffset + kbin * parent::m_axes[2].m_offset;
-        entries += parent::m_bin_entries[offset];
+        _entries += parent::m_bin_entries[offset];
         offset += zoffset;
       }
       joffset += yoffset;
     }
-    return entries;
+    return _entries;
   }
 
   TN bin_entries_y(int aJ) const {
@@ -254,18 +254,18 @@ public:
     bn_t yoffset = parent::m_axes[1].m_offset;
     bn_t zoffset = parent::m_axes[2].m_offset;
     bn_t joffset = jbin * yoffset;
-    TN entries = 0;
+    TN _entries = 0;
     for(ibin=0;ibin<xbins;ibin++) {
       //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       offset = joffset;
       for(kbin=0;kbin<zbins;kbin++) {
         //offset = joffset + kbin * parent::m_axes[2].m_offset;
-        entries += parent::m_bin_entries[offset];
+        _entries += parent::m_bin_entries[offset];
         offset += zoffset;
       }
       joffset++;
     }
-    return entries;
+    return _entries;
   }
 
   TN bin_entries_z(int aK) const {
@@ -278,18 +278,18 @@ public:
     bn_t yoffset = parent::m_axes[1].m_offset;
     bn_t zoffset = parent::m_axes[2].m_offset;
     bn_t koffset = kbin * zoffset;
-    TN entries = 0;
+    TN _entries = 0;
     for(ibin=0;ibin<xbins;ibin++) {
       //koffset = ibin + kbin * parent::m_axes[2].m_offset;
       offset = koffset;
       for(jbin=0;jbin<ybins;jbin++) {
         //offset = koffset + jbin * parent::m_axes[1].m_offset;
-        entries += parent::m_bin_entries[offset];
+        _entries += parent::m_bin_entries[offset];
         offset += yoffset;
       }
       koffset++;
     }
-    return entries;
+    return _entries;
   }
 
   TW bin_height_x(int aI) const {
@@ -361,6 +361,16 @@ public:
     }
     return sw;
   }
+
+public:
+  //NOTE : print is a Python keyword.
+  void hprint(std::ostream& a_out) {
+    // A la HPRINT.
+    a_out << parent::dimension() << parent::title() << std::endl;
+    a_out 
+      << " * ENTRIES = " << parent::all_entries() << std::endl;
+  
+  }
 public:
   b3(const std::string& a_title,
                 bn_t aXnumber,TC aXmin,TC aXmax,
@@ -376,10 +386,10 @@ public:
   ,m_in_range_Sz2w(0)
   {
     parent::m_title = a_title;
-    std::vector<bn_t> ns;
-    ns.push_back(aXnumber);
-    ns.push_back(aYnumber);
-    ns.push_back(aZnumber);
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
+    nbins.push_back(aYnumber);
+    nbins.push_back(aZnumber);
     std::vector<TC> mins;
     mins.push_back(aXmin);
     mins.push_back(aYmin);
@@ -388,7 +398,7 @@ public:
     maxs.push_back(aXmax);
     maxs.push_back(aYmax);
     maxs.push_back(aZmax);
-    parent::configure(3,ns,mins,maxs);
+    parent::configure(3,nbins,mins,maxs);
   }
 
   b3(const std::string& a_title,
@@ -440,6 +450,54 @@ protected:
     update_fast_getters();
     return *this;
   }
+
+public:
+  bool configure(bn_t aXnumber,TC aXmin,TC aXmax,
+                 bn_t aYnumber,TC aYmin,TC aYmax,
+                 bn_t aZnumber,TC aZmin,TC aZmax){
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sxw = 0;
+    m_in_range_Syw = 0;
+    m_in_range_Szw = 0;
+    m_in_range_Sx2w = 0;
+    m_in_range_Sy2w = 0;
+    m_in_range_Sz2w = 0;
+
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
+    nbins.push_back(aYnumber);
+    nbins.push_back(aZnumber);
+    std::vector<TC> mins;
+    mins.push_back(aXmin);
+    mins.push_back(aYmin);
+    mins.push_back(aZmin);
+    std::vector<TC> maxs;
+    maxs.push_back(aXmax);
+    maxs.push_back(aYmax);
+    maxs.push_back(aZmax);
+    return parent::configure(3,nbins,mins,maxs);
+  }
+
+  bool configure(const std::vector<TC>& aEdgesX,
+                 const std::vector<TC>& aEdgesY,
+                 const std::vector<TC>& aEdgesZ){
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sxw = 0;
+    m_in_range_Syw = 0;
+    m_in_range_Szw = 0;
+    m_in_range_Sx2w = 0;
+    m_in_range_Sy2w = 0;
+    m_in_range_Sz2w = 0;
+
+    std::vector< std::vector<TC> > edges(3);
+    edges[0] = aEdgesX;
+    edges[1] = aEdgesY;
+    edges[2] = aEdgesZ;
+    return parent::configure(3,edges);
+  }
+
 protected:
   TN m_in_range_entries;
   TW m_in_range_Sw;

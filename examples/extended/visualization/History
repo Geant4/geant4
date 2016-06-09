@@ -1,12 +1,12 @@
-$Id: History,v 1.2 2006-05-30 16:53:31 allison Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-        examples/extended/visualization/standalone History file
-        -------------------------------------------------------
+        examples/extended/visualization History file
+        ---------------------------------------------
 
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -15,15 +15,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 2012  Ivana Hrivnacova (exVisualization-V09-05-01)
+- Improved .README
      
-        examples/extended/visualization/userVisAction History file
-        ----------------------------------------------------------
-
-25th May 2006  John Allison  (exam-ext-vis-V08-00-00)
-- userVisAction:
-  o Improved vis.mac.
-  o UVA_VisAction.cc: Follow changes in G4Colour statics.
-- perspective: First perspective example.
-
-18th October 2005 (exam-ext-vis-V07-01-00)
-- First userVisAction and standalone examples.
+25th September 2012  Ivana Hrivnacova (exVisualization-V09-05-00)
+- Added/updated CMakeLists.txt files:
+  adding visualization, copying macros, install target and comment lines
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters

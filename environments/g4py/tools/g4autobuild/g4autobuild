@@ -2,7 +2,7 @@
 # ======================================================================
 #  A script for Geant4 autobuild
 #
-#  Version 2.4.2 Apr. 2010
+#  Version 2.5.0 May 2012
 #
 #  [usage]
 #    g4autobuild [<options>]
@@ -13,6 +13,7 @@
 #      --config=CONFIG  configure file [PREFIX/g4auto.cfg]
 #      --jobs=N         allow N jobs at once
 #      --with-fpic      default -fPIC option
+#      --with-clhep     require external clhep
 # ======================================================================
 export LANG=C
 
@@ -33,7 +34,7 @@ cat <<EOF
      --config=CONFIG  configure file [PREFIX/g4auto.cfg]
      --jobs=N         allow N jobs at once
      --with-fpic      default -fPIC option
-
+     --with-clhep     require external clhep
 EOF
 }
 
@@ -139,6 +140,7 @@ config=$prefix/g4auto.cfg
 status_dir=$prefix/status
 njobs=1
 qfpic=0
+qclhep=0
 
 # parsing options
 while test $# -gt 0
@@ -155,6 +157,7 @@ do
     --config=*)                config=$optarg                    ;;
     --jobs=*)                  njobs=$optarg                     ;;
     --with-fpic )              qfpic=1                           ;;
+    --with-clhep )             qclhep=1                          ;;
     # ---------------------------------------------------------------
     -*)
       echo "Unrecognized option: $1"
@@ -213,8 +216,10 @@ if [ ! -d $g4base ]; then
 fi
 
 if [ ! -d $clhepbase ]; then
-  echo "*** abort :$clhepbase does not exist."
-  exit -1
+  if [ $qclhep == 1 ]; then
+    echo "*** abort :$clhepbase does not exist."
+    exit -1
+  fi
 fi
 
 if [ $xercescroot ]; then
@@ -263,7 +268,6 @@ export LANG=C
 # ========================================================================
 export G4SYSTEM=$g4sys
 export G4INSTALL=$g4base/$g4
-export CLHEP_BASE_DIR=$clhepbase/$clhep
 EOF
 
   cat > g4rc.csh << EOF
@@ -277,8 +281,11 @@ setenv LANG C
 # ========================================================================
 setenv G4SYSTEM $g4sys
 setenv G4INSTALL $g4base/$g4
-setenv CLHEP_BASE_DIR $clhepbase/$clhep
 EOF
+
+if [ $qclhep == 1 ]; then
+  add_ext_env CLHEP_BASE_DIR $clhepbase/$clhep
+fi
 
 if [ $xercescroot ]; then
   envval=XERCESCROOT

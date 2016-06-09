@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/src/F05DetectorConstruction.cc
+/// \brief Implementation of the F05DetectorConstruction class
+//
 //
 //
 // 
@@ -48,6 +51,7 @@
 #include "G4Colour.hh"
 
 #include "G4UserLimits.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F05Field.hh"
 
@@ -94,20 +98,20 @@ G4VPhysicalVolume* F05DetectorConstruction::Construct()
   WorldSizeXY = 20.0*m;
   WorldSizeZ  =  1.0*mm;
 
-  solidWorld = new G4Box("World",                               //its name
-                   WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);   //its size
+  solidWorld = new G4Box("World",                            //its name
+                   WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);//its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
+  logicWorld = new G4LogicalVolume(solidWorld,          //its solid
                                    Vacuum,              //its material
-                                   "World");		//its name
+                                   "World");            //its name
                                    
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  physiWorld = new G4PVPlacement(0,                     //no rotation
+                                 G4ThreeVector(),       //at (0,0,0)
+                                 logicWorld,            //its logical volume
+                                 "World",               //its name
+                                 0,                     //its mother  volume
+                                 false,                 //no boolean operation
+                                 0);                    //copy number
   
   G4UserLimits* stepLimit;
   stepLimit = new  G4UserLimits(5*mm);

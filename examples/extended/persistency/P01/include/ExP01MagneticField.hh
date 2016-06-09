@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01MagneticField.hh
+/// \brief Definition of the ExP01MagneticField class
 //
-// $Id: ExP01MagneticField.hh,v 1.2 2006-06-29 17:38:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 //    A class for control of the Magnetic Field of the detector.
@@ -43,6 +45,7 @@ class G4FieldManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Magnetic field for the persistency example
 
 class ExP01MagneticField: public G4UniformMagField
 {

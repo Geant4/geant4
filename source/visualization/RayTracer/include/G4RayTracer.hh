@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.hh,v 1.12 2007-06-14 15:25:20 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

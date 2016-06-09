@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.15 2009-02-04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -61,12 +60,12 @@ public:
   void AddPrimitive (const G4Scale& scale);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
-  void ClearTransientStore ();
 
 protected:
 
-  void RequestPrimitives (const G4VSolid& solid);
-  void AddPrimitivePreamble(const G4Visible& visible);
+  G4bool AddPrimitivePreamble(const G4Visible& visible);
+
+  void ClearTransientStore ();
 
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
 };

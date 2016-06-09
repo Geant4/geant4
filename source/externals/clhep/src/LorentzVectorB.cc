@@ -47,30 +47,30 @@ HepLorentzVector rotationZOf
 //-********
 
 HepLorentzVector & HepLorentzVector::boost 
-			( const Hep3Vector & axis,  double beta ) {
-  if (beta==0) {
+			( const Hep3Vector & aaxis,  double bbeta ) {
+  if (bbeta==0) {
     return *this; // do nothing for a 0 boost
   }
-  double r2 = axis.mag2();
+  double r2 = aaxis.mag2();
   if ( r2 == 0 ) {
     std::cerr << "HepLorentzVector::boost() - "
       << "A zero vector used as axis defining a boost -- no boost done"
       << std::endl;
     return *this;
   } 
-  double b2 = beta*beta;
+  double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boost() - "
       << "LorentzVector boosted with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    Hep3Vector u = axis.unit();
-    register double gamma = std::sqrt(1./(1.-b2));
-    register double betaDotV = u.dot(pp)*beta;
+    Hep3Vector u = aaxis.unit();
+    register double ggamma = std::sqrt(1./(1.-b2));
+    register double betaDotV = u.dot(pp)*bbeta;
     register double tt = ee;
 
-    ee = gamma * (tt + betaDotV);
-    pp += ( ((gamma-1)/b2)*betaDotV*beta + gamma*beta*tt ) * u;
+    ee = ggamma * (tt + betaDotV);
+    pp += ( ((ggamma-1)/b2)*betaDotV*bbeta + ggamma*bbeta*tt ) * u;
     // Note:  I have verified the behavior of this even when beta is very
     //        small -- (gamma-1)/b2 becomes inaccurate by O(1), but it is then
     //        multiplied by O(beta**2) and added to an O(beta) term, so the

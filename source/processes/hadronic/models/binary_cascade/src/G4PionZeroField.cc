@@ -35,13 +35,14 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4PionZeroField.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4PionZero.hh"
 #include "G4HadTmpUtil.hh"
-
 
 G4PionZeroField::G4PionZeroField(G4V3DNucleus * nucleus, G4double coeff)
   : G4VNuclearField(nucleus)
@@ -52,28 +53,6 @@ G4PionZeroField::G4PionZeroField(G4V3DNucleus * nucleus, G4double coeff)
 
 G4PionZeroField::~G4PionZeroField()
 { }
-
-
-const G4PionZeroField & G4PionZeroField::operator=(const G4PionZeroField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionZeroField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4PionZeroField::operator==(const G4PionZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionZeroField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4PionZeroField::operator!=(const G4PionZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionZeroField::operator!= meant not to be accessible");
-  return 1;
-}
-
 
 G4double G4PionZeroField::GetField(const G4ThreeVector & aPosition)
 {

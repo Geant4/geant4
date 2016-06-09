@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02ImportanceDetectorConstruction.cc
+/// \brief Implementation of the B02ImportanceDetectorConstruction class
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.11 2007-06-22 13:38:55 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "globals.hh"
@@ -38,6 +40,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // For Primitive Scorers
 #include "G4SDManager.hh"
@@ -125,13 +129,13 @@ void B02ImportanceDetectorConstruction::Construct()
     G4double pos_z = startz + (i-1) * (2*hightShield);
     G4VPhysicalVolume *pvol = 
       new G4PVPlacement(0, 
-			G4ThreeVector(pos_x, pos_y, pos_z),
-			aShield_log, 
-			name, 
-			worldLogical, 
-			false, 
-			i);
-    //			0);
+                        G4ThreeVector(pos_x, pos_y, pos_z),
+                        aShield_log, 
+                        name, 
+                        worldLogical, 
+                        false, 
+                        i);
+    //                        0);
     G4GeometryCell cell(*pvol, i);
     //    G4GeometryCell cell(*pvol, 0);
     fPVolumeStore.AddPVolume(cell);
@@ -149,11 +153,11 @@ void B02ImportanceDetectorConstruction::Construct()
   spanningAngleShield    = 360*deg;
 
   G4Tubs *aRest = new G4Tubs("Rest",
-			     innerRadiusShield,
-			     outerRadiusShield,
-			     hightShield,
-			     startAngleShield,
-			     spanningAngleShield);
+                             innerRadiusShield,
+                             outerRadiusShield,
+                             hightShield,
+                             startAngleShield,
+                             spanningAngleShield);
   
   G4LogicalVolume *aRest_log = 
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
@@ -168,13 +172,13 @@ void B02ImportanceDetectorConstruction::Construct()
   G4double pos_z = 95*cm;
   G4VPhysicalVolume *pvol = 
     new G4PVPlacement(0, 
-		      G4ThreeVector(pos_x, pos_y, pos_z),
-		      aRest_log, 
-		      name, 
-		      worldLogical, 
-		      false, 
-		      19);
-  //		      0);
+                      G4ThreeVector(pos_x, pos_y, pos_z),
+                      aRest_log, 
+                      name, 
+                      worldLogical, 
+                      false, 
+                      19);
+  //                      0);
   G4GeometryCell cell(*pvol, 19);
   //  G4GeometryCell cell(*pvol, 0);
   fPVolumeStore.AddPVolume(cell);

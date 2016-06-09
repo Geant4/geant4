@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.hh,v 1.8 2009-12-02 22:45:09 perl Exp $
+/// \file analysis/A01/include/A01MuonPhysics.hh
+/// \brief Definition of the A01MuonPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi
@@ -57,11 +60,7 @@ class A01MuonPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
-  protected:
-
 };
-
 
 #endif
 

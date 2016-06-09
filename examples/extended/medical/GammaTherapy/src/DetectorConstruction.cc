@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 //
 // -------------------------------------------------------------
 //      GEANT4 ibrem test
@@ -64,35 +67,25 @@
 #include "G4Colour.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::DetectorConstruction()
 {
-  Initialise();
-}
+  fLogicTarget1 = 0;
+  fLogicTarget2 = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  fMessenger = new DetectorMessenger(this);
 
-DetectorConstruction::~DetectorConstruction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void DetectorConstruction::Initialise()
-{
-  logicTarget1 = 0;
-  logicTarget2 = 0;
-  DefineMaterials();
-  dMessenger = new DetectorMessenger(this);
-
-  checkSD = new CheckVolumeSD("checkSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( checkSD );
-  calorimeterSD = new PhantomSD("phantomSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( calorimeterSD );
-  targetSD = new TargetSD("targetSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( targetSD );
+  fCheckSD = new CheckVolumeSD("checkSD");
+  (G4SDManager::GetSDMpointer())->AddNewDetector( fCheckSD );
+  fPhantomSD = new PhantomSD("phantomSD");
+  (G4SDManager::GetSDMpointer())->AddNewDetector( fPhantomSD );
+  fTargetSD = new TargetSD("targetSD");
+  (G4SDManager::GetSDMpointer())->AddNewDetector( fTargetSD );
 
   fDistanceVacuumTarget = 30.*mm,
 
@@ -116,10 +109,27 @@ void DetectorConstruction::Initialise()
   fAirZ                 = 210.*mm;
   fAbsorberShiftZ       = 70.*mm;
   fWindowZ              = 0.05*mm;
+
+  G4NistManager* man = G4NistManager::Instance();
+  //man->SetVerbose(1);
+
+  fTarget1Material = man->FindOrBuildMaterial("G4_Be");
+  fWindowMaterial  = fTarget1Material;
+  fTarget2Material = man->FindOrBuildMaterial("G4_W");
+  fLightMaterial   = man->FindOrBuildMaterial("G4_He");
+  fAbsorberMaterial= man->FindOrBuildMaterial("G4_WATER");
+  fWorldMaterial   = man->FindOrBuildMaterial("G4_AIR");
+  fMylar           = man->FindOrBuildMaterial("G4_MYLAR");
+
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-///////////////////////////////////////////////////////////////
+DetectorConstruction::~DetectorConstruction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::InitialiseGeometryParameters()
 {
@@ -136,9 +146,10 @@ void DetectorConstruction::InitialiseGeometryParameters()
   fTargetVolumeZ = fDistanceVacuumTarget + fTarget2Z + fTarget1Z + fDelta;
   fWorldZ  = factor*ztot*0.5;
 
-  if(fCheckShiftZ < fDelta) fCheckShiftZ = fDelta;
-  if(fCheckShiftZ > fAirZ - fCheckVolumeZ -fDelta)
-      fCheckShiftZ = fAirZ - fCheckVolumeZ -fDelta;
+  if(fCheckShiftZ < fDelta) { fCheckShiftZ = fDelta; }
+  if(fCheckShiftZ > fAirZ - fCheckVolumeZ -fDelta) {
+    fCheckShiftZ = fAirZ - fCheckVolumeZ -fDelta;
+  }
 
   // Z position of volumes from upstream to downstream
 
@@ -160,14 +171,15 @@ void DetectorConstruction::InitialiseGeometryParameters()
   (Histo::GetPointer())->SetAbsorberR(fAbsorberRadius);
   (Histo::GetPointer())->SetScoreZ(fAbsorberShiftZ);
   G4double shiftZPh = fPhantomPosZ-0.5*fPhantomZ;
-  calorimeterSD->setShiftZ(shiftZPh);
+  fPhantomSD->SetShiftZ(shiftZPh);
+
   G4cout << "===================================================" << G4endl;
-  G4cout << "#                  IBREM geometry                 #" << G4endl;
+  G4cout << "#           GammaTherapy Geometry                 #" << G4endl;
   G4cout << "===================================================" << G4endl;
   G4cout << "  World   width= " << fWorldZ/mm << " mm " << G4endl;
-  G4cout << "  Window  width= " << fWindowZ/mm << " mm       position = "
+  G4cout << "  Window  width= " << fWindowZ/mm << " mm    position = "
                                 << fWindowPosZ/mm << " mm:" << G4endl;
-  G4cout << "  TargetV width= " << fTargetVolumeZ/mm << " mm       position = "
+  G4cout << "  TargetV width= " << fTargetVolumeZ/mm << " mm  position = "
                                 << fTargetVolumePosZ/mm << " mm:" << G4endl;
   G4cout << "  Target1 width= " << fTarget1Z/mm << " mm       position = "
                                 << fTarget1PosZ/mm << " mm:" << G4endl;
@@ -195,33 +207,6 @@ void DetectorConstruction::InitialiseGeometryParameters()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  return ConstructVolumes();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void DetectorConstruction::DefineMaterials()
-{
-
-  G4NistManager* man = G4NistManager::Instance();
-  man->SetVerbose(0);
-
-  fTarget1Material = man->FindOrBuildMaterial("G4_Be");
-  fWindowMaterial  = fTarget1Material;
-  fTarget2Material = man->FindOrBuildMaterial("G4_W");
-  fLightMaterial   = man->FindOrBuildMaterial("G4_He");
-  fAbsorberMaterial= man->FindOrBuildMaterial("G4_WATER");
-  fWorldMaterial   = man->FindOrBuildMaterial("G4_AIR");
-  fMylar           = man->FindOrBuildMaterial("G4_MYLAR");
-
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
-}
-
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
-{
   // Cleanup old geometry
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
@@ -233,109 +218,117 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //
   // World
   //
-
   G4VPhysicalVolume* pv;
 
   G4Box* solidWorld = new G4Box("World",fWorldXY,fWorldXY,fWorldZ);
-
   G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,
-                                                               fWorldMaterial,"World");
+                                                    fWorldMaterial,"World");
   G4VPhysicalVolume* physWorld = new G4PVPlacement(0,G4ThreeVector(),"World",
-                                                               logicWorld,0,false,0);
+                                                   logicWorld,0,false,0);
 
   // Be Vacuum window
-  G4Tubs* solidWin = new G4Tubs("Window",0.,fTargetRadius*0.25,0.5*fWindowZ,0.,twopi);
-  G4LogicalVolume* logicWin = new G4LogicalVolume(solidWin,fWindowMaterial,"Window");
+  G4Tubs* solidWin = new G4Tubs("Window",0.,fTargetRadius*0.25,0.5*fWindowZ,
+                                0.,twopi);
+  G4LogicalVolume* logicWin = new G4LogicalVolume(solidWin,
+                                                  fWindowMaterial,"Window");
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fWindowPosZ),"Window",logicWin,
-                                                               physWorld,false,0);
+                         physWorld,false,0);
 
   // Target Volume
   G4Tubs* solidTGVolume = new G4Tubs("TargetVolume",0.,fTargetRadius,
-                                                               0.5*fTargetVolumeZ,0.,twopi);
+                                     0.5*fTargetVolumeZ,0.,twopi);
   G4LogicalVolume* logicTGVolume = new G4LogicalVolume(solidTGVolume,
-                                                               fLightMaterial,"TargetVolume");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fTargetVolumePosZ),logicTGVolume,"TargetVolume",
-                                                               logicWorld,false,0);
+                                                       fLightMaterial,
+                                                       "TargetVolume");
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fTargetVolumePosZ),
+                         logicTGVolume,"TargetVolume",
+                         logicWorld,false,0);
 
   // Target 1
-  G4Tubs* solidTarget1 = new G4Tubs("Target1",0.,fTargetRadius*0.5,0.5*fTarget1Z,0.,twopi);
-  logicTarget1 = new G4LogicalVolume(solidTarget1,fTarget1Material,"Target1");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fTarget1PosZ),logicTarget1,"Target1",
-                                                               logicTGVolume,false,0);
+  G4Tubs* solidTarget1 = new G4Tubs("Target1",0.,fTargetRadius*0.5,
+                                    0.5*fTarget1Z,0.,twopi);
+  fLogicTarget1 = new G4LogicalVolume(solidTarget1,fTarget1Material,"Target1");
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fTarget1PosZ),
+                         fLogicTarget1,"Target1",
+                         logicTGVolume,false,0);
   (Histo::GetPointer())->SetTarget1(pv);
-  logicTarget1->SetSensitiveDetector(targetSD);
-
+  fLogicTarget1->SetSensitiveDetector(fTargetSD);
 
   // Target 2 (for combined targets)
-  G4Tubs* solidTarget2 = new G4Tubs("Target2",0.,fTargetRadius*0.5,0.5*fTarget2Z,0.,twopi);
-  logicTarget2 = new G4LogicalVolume(solidTarget2,fTarget2Material,"Target2");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fTarget2PosZ),logicTarget2,"Target2",
-                                                               logicTGVolume,false,0);
+  G4Tubs* solidTarget2 = new G4Tubs("Target2",0.,fTargetRadius*0.5,
+                                    0.5*fTarget2Z,0.,twopi);
+  fLogicTarget2 = new G4LogicalVolume(solidTarget2,fTarget2Material,"Target2");
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fTarget2PosZ),
+                         fLogicTarget2,"Target2",
+                         logicTGVolume,false,0);
 
   (Histo::GetPointer())->SetTarget2(pv);
-  logicTarget2->SetSensitiveDetector(targetSD);
+  fLogicTarget2->SetSensitiveDetector(fTargetSD);
 
   // Gas Volume
-
   G4Tubs* solidGasVolume = new G4Tubs("GasVolume",0.,fGasVolumeRadius,
-                                                               0.5*fGasVolumeZ,0.,twopi);
+                                      0.5*fGasVolumeZ,0.,twopi);
   G4LogicalVolume* logicGasVolume = new G4LogicalVolume(solidGasVolume,
-                                                               fLightMaterial,"GasVolume");
+                                                        fLightMaterial,
+                                                        "GasVolume");
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fGasVolumePosZ),
-                                                               "GasVolume",logicGasVolume,
-                                                               physWorld,false,0);
+                         "GasVolume",logicGasVolume,
+                         physWorld,false,0);
   (Histo::GetPointer())->SetGasVolume(pv);
 
   // Mylar window
-
   G4Tubs* sMylarVolume = new G4Tubs("Mylar",0.,fGasVolumeRadius,
-                                                               0.5*fMylarVolumeZ,0.,twopi);
+                                    0.5*fMylarVolumeZ,0.,twopi);
   G4LogicalVolume* lMylarVolume = new G4LogicalVolume(sMylarVolume,
-                                                               fMylar,"Mylar");
+                                                      fMylar,"Mylar");
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fMylarPosZ),"Mylar",lMylarVolume,
-                                                               physWorld,false,0);
-
+                         physWorld,false,0);
 
   // Check Volume
-
   G4Tubs* solidCheckVolume = new G4Tubs("CheckVolume",0.,fGasVolumeRadius,
-                                                               0.5*fCheckVolumeZ,0.,twopi);
+                                        0.5*fCheckVolumeZ,0.,twopi);
   G4LogicalVolume* logicCheckVolume = new G4LogicalVolume(solidCheckVolume,
-                                                              fWorldMaterial,"CheckVolume");
+                                                          fWorldMaterial,
+                                                          "CheckVolume");
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fCheckVolumePosZ),
-                                                              "CheckVolume",logicCheckVolume,
-                                                              physWorld,false,0);
+                         "CheckVolume",logicCheckVolume,
+                         physWorld,false,0);
   (Histo::GetPointer())->SetCheckVolume(pv);
-  logicCheckVolume->SetSensitiveDetector(checkSD);
+  logicCheckVolume->SetSensitiveDetector(fCheckSD);
 
   // Phantom
-
   G4Box* solidPhantom = new G4Box("Phantom",fPhantomRadius,fPhantomRadius,
-                                                              0.5*fPhantomZ);
+                                  0.5*fPhantomZ);
   G4LogicalVolume* logicPhantom = new G4LogicalVolume(solidPhantom,
-                                                              fAbsorberMaterial,"Phantom");
-  G4VPhysicalVolume* physPhantom = new G4PVPlacement(0,
-                                                              G4ThreeVector(0.,0.,fPhantomPosZ),
-                                                              "Phantom",logicPhantom,
-                                                              physWorld,false,0);
+                                                      fAbsorberMaterial,
+                                                      "Phantom");
+  G4VPhysicalVolume* physPhantom = 
+    new G4PVPlacement(0, G4ThreeVector(0.,0.,fPhantomPosZ),
+                      "Phantom",logicPhantom,
+                      physWorld,false,0);
 
-  G4Tubs* solidPh = new G4Tubs("PhantomSD",0.,fAbsorberRadius,0.5*fPhantomZ,0.,twopi);
-  G4LogicalVolume* logicPh = new G4LogicalVolume(solidPh,fAbsorberMaterial,"PhantomSD");
+  G4Tubs* solidPh = new G4Tubs("PhantomSD",0.,fAbsorberRadius,
+                               0.5*fPhantomZ,0.,twopi);
+  G4LogicalVolume* logicPh = new G4LogicalVolume(solidPh,
+                                                 fAbsorberMaterial,"PhantomSD");
   G4VPhysicalVolume* physPh = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),
-                                                              "Phantom",logicPh,
-                                                              physPhantom,false,0);
-  G4cout << "Phantom R= " << fAbsorberRadius << " dz= " << 0.5*fPhantomZ << G4endl;
+                                                "Phantom",logicPh,
+                                                physPhantom,false,0);
+  G4cout << "Phantom R= " << fAbsorberRadius << " dz= " << 0.5*fPhantomZ 
+         << G4endl;
 
   // Sensitive Absorber
-
   G4double absWidth = 0.5*fAbsorberZ;
-  G4Tubs* solidAbsorber = new G4Tubs("Absorber",0.,fAbsorberRadius,absWidth,0.,twopi);
+  G4Tubs* solidAbsorber = new G4Tubs("Absorber",0.,fAbsorberRadius,absWidth,
+                                     0.,twopi);
   G4LogicalVolume* logicAbsorber = new G4LogicalVolume(solidAbsorber,
-                                                              fAbsorberMaterial,"Absorber");
-  G4cout << "Absorber R= " << fAbsorberRadius << " dz= " << absWidth << " posZ= " << fAbsorberPosZ<< G4endl;
+                                                       fAbsorberMaterial,
+                                                       "Absorber");
+  G4cout << "Absorber R= " << fAbsorberRadius << " dz= " << absWidth 
+         << " posZ= " << fAbsorberPosZ<< G4endl;
 
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fAbsorberPosZ),"Absorber",logicAbsorber,
-                                                              physPh,false,0);
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,fAbsorberPosZ),"Absorber",
+                         logicAbsorber,physPh,false,0);
   (Histo::GetPointer())->SetPhantom(physPh);
   G4int numR = (Histo::GetPointer())->GetNumberDivR();
   G4double stepR = fAbsorberRadius/(G4double)numR;
@@ -348,23 +341,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   for(G4int k=0; k<numR; k++) {
     r2 = r1 + stepR;
     if(k == numR-1) r2 = fAbsorberRadius;
-//    G4cout << "New ring r1= " << r1 << " r2= " << r2 << " dz= " << absWidth << G4endl;
+    //    G4cout << "New ring r1= " << r1 << " r2= " << r2 
+    //  << " dz= " << absWidth << G4endl;
     solidRing = new G4Tubs("Ring",r1,r2,absWidth,0.,twopi);
     logicRing = new G4LogicalVolume(solidRing,fAbsorberMaterial,"Ring");
-    logicRing->SetSensitiveDetector(calorimeterSD);
+    logicRing->SetSensitiveDetector(fPhantomSD);
     logicRing->SetVisAttributes(G4VisAttributes::Invisible);
     pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),logicRing,"Ring",
-                                                              logicAbsorber,false,k);
+                           logicAbsorber,false,k);
     r1 = r2;
   }
-
   //
   // Sensitive Detectors: Absorber
   //
-
-  logicPh->SetSensitiveDetector(calorimeterSD);
-  logicAbsorber->SetSensitiveDetector(calorimeterSD);
-
+  logicPh->SetSensitiveDetector(fPhantomSD);
+  logicAbsorber->SetSensitiveDetector(fPhantomSD);
   //
   // Visualization attributes
   //
@@ -395,8 +386,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   VisAtt= new G4VisAttributes(G4Colour(0.0,0.5,1.0));
   VisAtt->SetVisibility(true);
-  logicTarget1->SetVisAttributes(VisAtt);
-  logicTarget2->SetVisAttributes(VisAtt);
+  fLogicTarget1->SetVisAttributes(VisAtt);
+  fLogicTarget2->SetVisAttributes(VisAtt);
   logicTGVolume->SetVisAttributes(VisAtt);
 
   return physWorld;
@@ -404,44 +395,43 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void DetectorConstruction::SetTarget1Material(const G4String& mat)
+{
+  // search the material by its name
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+  if(!pttoMaterial) {
+    G4cout << "Material " << mat << " is not found out!" << G4endl;
+  } else if (pttoMaterial != fTarget1Material) {
+    G4cout << "New target1 material " << mat << G4endl;
+    if(fLogicTarget1) { fLogicTarget1->SetMaterial(fTarget1Material); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetTarget2Material(const G4String& mat)
+{
+  // search the material by its name
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+
+  if(!pttoMaterial) {
+    G4cout << "Material " << mat << " is not found out!" << G4endl;
+  } else if (pttoMaterial != fTarget2Material) {
+    fTarget2Material = pttoMaterial;
+    G4cout << "New target2 material " << mat << G4endl;
+    if(fLogicTarget2) { fLogicTarget2->SetMaterial(fTarget2Material); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::setTarget1Material(const G4String& mat)
-{
-  // search the material by its name
-  G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
-  if (pttoMaterial)
-     {
-       fTarget1Material = pttoMaterial;
-       G4cout << "New target1 material " << mat << G4endl;
-       if(logicTarget1) logicTarget1->SetMaterial(fTarget1Material);
-     }
-  else
-       G4cout << "Material " << mat << " is not found out!" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::setTarget2Material(const G4String& mat)
-{
-  // search the material by its name
-  G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
-
-  if (pttoMaterial)
-     {
-       fTarget2Material = pttoMaterial;
-       G4cout << "New target2 material " << mat << G4endl;
-       if(logicTarget2) logicTarget2->SetMaterial(fTarget2Material);
-     }
-  else
-       G4cout << "Material " << mat << " is not found out!" << G4endl;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

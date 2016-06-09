@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.17 2009-09-22 16:21:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: V. Grichine (Vladimir,Grichine@cern.ch)
 //
@@ -43,9 +42,9 @@
 
 #ifndef G4DiffuseElastic_h
 #define G4DiffuseElastic_h 1
- 
+
+#include <CLHEP/Units/PhysicalConstants.h>
 #include "globals.hh"
-// #include "G4HadronicInteraction.hh"
 #include "G4HadronElastic.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
@@ -421,7 +420,7 @@ inline  G4double G4DiffuseElastic::CalculateParticleBeta( const G4ParticleDefini
 
 inline  G4double G4DiffuseElastic::CalculateZommerfeld( G4double beta, G4double Z1, G4double Z2 )
 {
-  fZommerfeld = fine_structure_const*Z1*Z2/beta;
+  fZommerfeld = CLHEP::fine_structure_const*Z1*Z2/beta;
 
   return fZommerfeld; 
 }
@@ -432,9 +431,9 @@ inline  G4double G4DiffuseElastic::CalculateZommerfeld( G4double beta, G4double 
 
 inline  G4double G4DiffuseElastic::CalculateAm( G4double momentum, G4double n, G4double Z)
 {
-  G4double k   = momentum/hbarc;
+  G4double k   = momentum/CLHEP::hbarc;
   G4double ch  = 1.13 + 3.76*n*n;
-  G4double zn  = 1.77*k*std::pow(Z,-1./3.)*Bohr_radius;
+  G4double zn  = 1.77*k*std::pow(Z,-1./3.)*CLHEP::Bohr_radius;
   G4double zn2 = zn*zn;
   fAm          = ch/zn2;
 
@@ -451,14 +450,14 @@ inline  G4double G4DiffuseElastic::CalculateNuclearRad( G4double A)
 
   if( A < 50. )
   {
-    if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-    else          r0  = 1.1*fermi;
+    if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*CLHEP::fermi;   // 1.08*fermi;
+    else          r0  = 1.1*CLHEP::fermi;
 
     fNuclearRadius = r0*std::pow(A, 1./3.);
   }
   else
   {
-    r0 = 1.7*fermi;   // 1.7*fermi;
+    r0 = 1.7*CLHEP::fermi;   // 1.7*fermi;
 
     fNuclearRadius = r0*std::pow(A, 0.27); // 0.27);
   }
@@ -480,7 +479,7 @@ inline  G4double G4DiffuseElastic::GetCoulombElasticXsc( const G4ParticleDefinit
   G4double z             = particle->GetPDGCharge();
   G4double n             = CalculateZommerfeld( beta, z, Z );
   G4double am            = CalculateAm( momentum, n, Z);
-  G4double k             = momentum/hbarc;
+  G4double k             = momentum/CLHEP::hbarc;
   G4double ch            = 0.5*n/k;
   G4double ch2           = ch*ch;
   G4double xsc           = ch2/(sinHalfTheta2+am)/(sinHalfTheta2+am);
@@ -503,12 +502,12 @@ inline  G4double G4DiffuseElastic::GetCoulombTotalXsc( const G4ParticleDefinitio
   G4cout<<"fZomerfeld = "<<n<<G4endl;
   G4double am            = CalculateAm( momentum, n, Z);
   G4cout<<"cof Am = "<<am<<G4endl;
-  G4double k             = momentum/hbarc;
-  G4cout<<"k = "<<k*fermi<<" 1/fermi"<<G4endl;
-  G4cout<<"k*Bohr_radius = "<<k*Bohr_radius<<G4endl;
+  G4double k             = momentum/CLHEP::hbarc;
+  G4cout<<"k = "<<k*CLHEP::fermi<<" 1/fermi"<<G4endl;
+  G4cout<<"k*Bohr_radius = "<<k*CLHEP::Bohr_radius<<G4endl;
   G4double ch            = n/k;
   G4double ch2           = ch*ch;
-  G4double xsc           = ch2*pi/(am +am*am);
+  G4double xsc           = ch2*CLHEP::pi/(am +am*am);
 
   return xsc;
 }
@@ -533,13 +532,13 @@ inline  G4double G4DiffuseElastic::GetCoulombIntegralXsc( const G4ParticleDefini
   // G4cout<<"fZomerfeld = "<<n<<G4endl;
   G4double am            = CalculateAm( momentum, n, Z);
   // G4cout<<"cof Am = "<<am<<G4endl;
-  G4double k             = momentum/hbarc;
-  // G4cout<<"k = "<<k*fermi<<" 1/fermi"<<G4endl;
-  // G4cout<<"k*Bohr_radius = "<<k*Bohr_radius<<G4endl;
+  G4double k             = momentum/CLHEP::hbarc;
+  // G4cout<<"k = "<<k*CLHEP::fermi<<" 1/fermi"<<G4endl;
+  // G4cout<<"k*Bohr_radius = "<<k*CLHEP::Bohr_radius<<G4endl;
   G4double ch            = n/k;
   G4double ch2           = ch*ch;
   am *= 2.;
-  G4double xsc           = ch2*twopi*(c1-c2);
+  G4double xsc           = ch2*CLHEP::twopi*(c1-c2);
            xsc          /= (1 - c1 + am)*(1 - c2 + am);
 
   return xsc;

@@ -32,13 +32,14 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: PurgMagDetectorConstruction.cc,v 1.4 2006-06-29 16:06:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagTabulatedField3D.hh"
-#include "G4ThreeVector.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/include/ExGflashMaterialManager.hh
+/// \brief Definition of the ExGflashMaterialManager class
+//
 #ifndef MATERIALMANAGER_H
 #define MATERIALMANAGER_H
 
@@ -41,27 +44,27 @@ typedef std::map< G4String, G4Material*, std::less<G4String> > MaterialList;
 
 class ExGflashMaterialManager {
 private:
-	ElementList elist;
-	MaterialList mlist;
-	ExGflashMaterialManager() {initialize();}
-	static ExGflashMaterialManager *mpointer;
+    ElementList elist;
+    MaterialList mlist;
+    ExGflashMaterialManager() {initialize();}
+    static ExGflashMaterialManager *mpointer;
 public:
-	static ExGflashMaterialManager* GetMaterialManager()
-	{
-		if (!mpointer)
-			mpointer=new ExGflashMaterialManager;
-		return mpointer;
-	}
-	void storeElement(G4String, G4String, double, double);
-	G4Element* getElement(G4String);
-	void storeMaterial(G4String, double, double, double);
-	void storeMaterial(G4String, double, int);
-	G4Material* getMaterial(G4String);
-	void addMaterial(G4String,G4String,double);
-	void addElement(G4String,G4String,double);
-	void addElement(G4String,G4String,int);
-	void printElementTable();
-	void printMaterialTable();
-	void initialize();
+    static ExGflashMaterialManager* GetMaterialManager()
+    {
+        if (!mpointer)
+            mpointer=new ExGflashMaterialManager;
+        return mpointer;
+    }
+    void storeElement(G4String, G4String, double, double);
+    G4Element* getElement(G4String);
+    void storeMaterial(G4String, double, double, double);
+    void storeMaterial(G4String, double, int);
+    G4Material* getMaterial(G4String);
+    void addMaterial(G4String,G4String,double);
+    void addElement(G4String,G4String,double);
+    void addElement(G4String,G4String,int);
+    void printElementTable();
+    void printMaterialTable();
+    void initialize();
 };
 #endif

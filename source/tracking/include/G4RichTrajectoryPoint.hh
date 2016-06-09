@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh,v 1.9 2010-10-27 07:57:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------
 //
@@ -80,6 +79,11 @@ public: // without description
   G4RichTrajectoryPoint(const G4Step*);   // For subsequent points.
   G4RichTrajectoryPoint(const G4RichTrajectoryPoint &right);
   virtual ~G4RichTrajectoryPoint();
+
+private:
+  G4RichTrajectoryPoint& operator= (const G4RichTrajectoryPoint&);
+
+public:
 
   // Get/Set functions
   const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const

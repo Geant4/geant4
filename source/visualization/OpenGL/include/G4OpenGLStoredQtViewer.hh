@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.10 2010-03-10 11:03:46 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4OpenGLStoredQtViewer : a class derived from
@@ -60,9 +59,12 @@ public:
   void paintGL();
   void updateQWidget();
   void ShowView ();
-  void DrawText(const char * ,double x,double y,double z, double size);
+  void DisplayTimePOColourModification (G4Colour&,size_t);
 
 protected:
+
+  // Special version for Qt - avoid comparing VisAttributesModifiers.
+  G4bool CompareForKernelVisit(G4ViewParameters&);
 
   // Two virtual functions to return sub-class selection.
   G4bool POSelected(size_t POListIndex);

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeter.hh,v 1.4 2006-06-29 16:31:00 gunter Exp $
+/// \file analysis/A01/include/A01EmCalorimeter.hh
+/// \brief Definition of the A01EmCalorimeter class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01EmCalorimeter_h
@@ -47,8 +50,8 @@ class A01EmCalorimeter : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      A01EmCalorimeterHitsCollection* hitsCollection;
-      G4int HCID;
+      A01EmCalorimeterHitsCollection* fHitsCollection;
+      G4int fHCID;
 };
 
 

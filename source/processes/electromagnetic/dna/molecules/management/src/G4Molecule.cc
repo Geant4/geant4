@@ -22,6 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Molecule.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
@@ -49,7 +50,10 @@
 #include "G4Molecule.hh"
 #include "G4MolecularConfiguration.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
+#include "G4MoleculeCounter.hh"
 
 using namespace std;
 
@@ -125,7 +129,7 @@ void G4Molecule::Init()
  */
 //////////////////////////
 G4Molecule::G4Molecule() : G4VUserTrackInformation("G4Molecule"), G4IT()
-//////////////////////////
+  //////////////////////////
 {
     Init();
 }
@@ -134,9 +138,14 @@ G4Molecule::G4Molecule() : G4VUserTrackInformation("G4Molecule"), G4IT()
 G4Molecule::~G4Molecule()
 //////////////////////////
 {
-    if(fTrack!=NULL)
+    if(fpTrack!=NULL)
     {
-        fTrack = 0;
+        if(G4MoleculeCounter::GetMoleculeCounter()->InUse())
+        {
+            G4MoleculeCounter::GetMoleculeCounter()->RemoveAMoleculeAtTime(*this,
+                                                                           fpTrack->GetGlobalTime());
+        }
+        fpTrack = 0;
     }
     fMolecularConfiguration = 0;
     fDynamicParticle = 0;
@@ -150,7 +159,7 @@ G4Molecule::~G4Molecule()
 //////////////////////////
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
     G4VUserTrackInformation("G4Molecule"), G4IT()
-//////////////////////////
+  //////////////////////////
 {
     Init();
     fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition);
@@ -163,7 +172,7 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
 //////////////////////////
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalToFree, G4int OrbitalToFill):
     G4VUserTrackInformation("G4Molecule"), G4IT()
-//////////////////////////
+  //////////////////////////
 {
     Init();
 
@@ -269,7 +278,7 @@ void G4Molecule::PrintState() const
 
 G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Position)
 {
-    if(fTrack != 0)
+    if(fpTrack != 0)
     {
         G4Exception("G4Molecule::BuildTrack","Molecule001",
                     FatalErrorInArgument,"A track was already assigned to this molecule");
@@ -289,14 +298,17 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
     G4double KineticEnergy = GetKineticEnergy();
     // G4cout << " **** KineticEnergy : " << KineticEnergy << G4endl;
     fDynamicParticle = new G4DynamicParticle(fMolecularConfiguration->GetDefinition(),
-            MomentumDirection,
-            KineticEnergy);
+                                             MomentumDirection,
+                                             KineticEnergy);
+
+    if(G4MoleculeCounter::GetMoleculeCounter()->InUse())
+        G4MoleculeCounter::GetMoleculeCounter()->AddAMoleculeAtTime(*this,globalTime);
 
     //Set the Track
-    fTrack = new G4Track(fDynamicParticle, globalTime, Position);
-    fTrack -> SetUserInformation (this);
+    fpTrack = new G4Track(fDynamicParticle, globalTime, Position);
+    fpTrack -> SetUserInformation (this);
 
-    return fTrack;
+    return fpTrack;
 }
 
 G4double G4Molecule::GetKineticEnergy() const
@@ -311,17 +323,17 @@ G4double G4Molecule::GetKineticEnergy() const
 
 G4double G4Molecule::GetDiffusionVelocity() const
 {
-    double m = fMolecularConfiguration->GetMass()/(c_squared);
+    double moleculeMass = fMolecularConfiguration->GetMass()/(c_squared);
 
     ////
     // Different possibilities
     ////
     // Ideal Gaz case : Maxwell Boltzmann Distribution
-    //    double sigma = k_Boltzmann * fgTemperature / m;
+    //    double sigma = k_Boltzmann * fgTemperature / mass;
     //    return G4RandGauss::shoot( 0, sigma );
     ////
     // Ideal Gaz case : mean velocity from equipartition theorem
-    return sqrt(3*k_Boltzmann*fgTemperature/m);
+    return sqrt(3*k_Boltzmann*fgTemperature/moleculeMass);
     ////
     // Using this approximation for liquid is wrong
     // However the brownian process avoid taking
@@ -375,9 +387,9 @@ G4double G4Molecule::GetMass() const
     return fMolecularConfiguration->GetMass();
 }
 
-G4ElectronOccupancy G4Molecule::GetElectronOccupancy() const
+const G4ElectronOccupancy* G4Molecule::GetElectronOccupancy() const
 {
-    return *(fMolecularConfiguration->GetElectronOccupancy());
+    return fMolecularConfiguration->GetElectronOccupancy();
 }
 
 const G4MoleculeDefinition* G4Molecule::GetDefinition() const

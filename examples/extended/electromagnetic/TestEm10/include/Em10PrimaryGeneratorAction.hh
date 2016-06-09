@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10PrimaryGeneratorAction.hh
+/// \brief Definition of the Em10PrimaryGeneratorAction class
 //
-// $Id: Em10PrimaryGeneratorAction.hh,v 1.3 2006-06-29 16:38:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -61,11 +63,11 @@ class Em10PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static G4String GetPrimaryName() ;                
 
   private:
-    G4ParticleGun*                particleGun;	//pointer a to G4 service class
+    G4ParticleGun*                particleGun;        //pointer a to G4 service class
     Em10DetectorConstruction*      Em10Detector; //pointer to the geometry
     
     Em10PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	//flag for a random impact point       
+    G4String                      rndmFlag;        //flag for a random impact point       
 
     static G4String thePrimaryParticleName ;
     G4double xvertex,yvertex,zvertex;

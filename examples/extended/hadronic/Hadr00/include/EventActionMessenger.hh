@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr00/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -57,14 +59,13 @@ public:
   EventActionMessenger(EventAction*);
   virtual ~EventActionMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 
-  EventAction*          eventAction;   
-  G4UIcmdWithAString*   drawCmd;
-  G4UIcmdWithAnInteger* printCmd;    
-  G4UIcmdWithAnInteger* dCmd;    
+  EventAction*          fEventAction;   
+  G4UIcmdWithAnInteger* fPrintCmd;    
+  G4UIcmdWithAnInteger* fCmd;    
 
 };
 

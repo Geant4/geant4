@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2006-06-29 16:50:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run)
-:detector(det),Run(run)
+:fDetector(det),fRun(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,16 +56,17 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  // energy deposit
  //
  G4double dEStep = step->GetTotalEnergyDeposit();
+ fRun->AddStep(step->GetTrack()->GetDefinition()->GetPDGCharge());
  if (dEStep > 0.) {
    G4ThreeVector prePoint  = step->GetPreStepPoint()->GetPosition();
    G4ThreeVector postPoint = step->GetPostStepPoint()->GetPosition();
    G4ThreeVector position  = prePoint + G4UniformRand()*(postPoint - prePoint);
    G4double x = position.x(), y = position.y(), z = position.z();
    G4double radius = std::sqrt(x*x + y*y);
-   G4double offset = 0.5*detector->GetfullLength();
-   G4int SlideNb = int((z + offset)/detector->GetdLlength());
-   G4int RingNb  = int(radius/detector->GetdRlength());        
-   Run->fillPerStep(dEStep,SlideNb,RingNb);
+   G4double offset = 0.5*fDetector->GetfullLength();
+   G4int SlideNb = G4int((z + offset)/fDetector->GetdLlength());
+   G4int RingNb  = G4int(radius/fDetector->GetdRlength());        
+   fRun->FillPerStep(dEStep,SlideNb,RingNb);
  }
 }
 

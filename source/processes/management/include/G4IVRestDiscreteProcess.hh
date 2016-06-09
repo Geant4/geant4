@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVRestDiscreteProcess.hh,v 1.8 2006-06-29 21:07:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -44,11 +43,18 @@
 #ifndef G4IVRestDiscreteProcess_h
 #define G4IVRestDiscreteProcess_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
+#include "Randomize.hh"              
 
 #include "G4VProcess.hh"
 
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
 
 class G4IVRestDiscreteProcess : public G4VProcess 
 {
@@ -130,11 +136,6 @@ class G4IVRestDiscreteProcess : public G4VProcess
 // -----------------------------------------
 //  inlined function members implementation
 // -----------------------------------------
-#include "Randomize.hh"              
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 inline 
  void     G4IVRestDiscreteProcess::SubtractNumberOfInteractionLengthLeft(
@@ -175,7 +176,7 @@ inline G4double G4IVRestDiscreteProcess::AtRestGetPhysicalInteractionLength(
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/CLHEP::ns << "[ns]" <<G4endl;
   }
 #endif
 
@@ -194,19 +195,4 @@ inline G4VParticleChange* G4IVRestDiscreteProcess::AtRestDoIt(
     return pParticleChange;
 }
 
-
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

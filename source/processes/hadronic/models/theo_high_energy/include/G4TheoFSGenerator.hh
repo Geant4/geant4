@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.hh,v 1.6 2007-11-13 16:01:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Class Description
@@ -72,6 +71,8 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
       void SetProjectileDiffraction(G4ProjectileDiffractiveChannel *const value);
       virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
+      void ModelDescription(std::ostream& outFile) const;
+
 
   private:
       const G4VIntraNuclearTransportModel * GetTransport() const;

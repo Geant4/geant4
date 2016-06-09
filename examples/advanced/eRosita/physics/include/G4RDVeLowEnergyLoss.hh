@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDVeLowEnergyLoss.hh,v 1.9 2006/06/29 19:37:23 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // 3.4.2000 Veronique Lefebure:

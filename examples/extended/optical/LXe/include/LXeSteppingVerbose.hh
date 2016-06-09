@@ -23,24 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-class LXeSteppingVerbose;
-
+/// \file optical/LXe/include/LXeSteppingVerbose.hh
+/// \brief Definition of the LXeSteppingVerbose class
+//
+//
 #ifndef LXeSteppingVerbose_h
 #define LXeSteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-
 class LXeSteppingVerbose : public G4SteppingVerbose
 {
- public:   
+  public:
 
-   LXeSteppingVerbose();
-  ~LXeSteppingVerbose();
+    LXeSteppingVerbose();
+    virtual ~LXeSteppingVerbose();
 
-   void StepInfo();
-   void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 
 };
 

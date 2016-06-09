@@ -26,16 +26,19 @@
 //
 // $Id: RemSimPrimaryGeneratorAction.cc,v 1.17 2006-06-29 16:24:09 gunter Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
+#include <fstream>
+#include <cmath>
+
 #include "RemSimPrimaryGeneratorAction.hh"
+#include "RemSimPrimaryGeneratorMessenger.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-#include <fstream>
 #include "G4DataVector.hh"
-#include "RemSimPrimaryGeneratorMessenger.hh"
-#include <math.h>
 
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
 {
@@ -165,9 +168,9 @@ void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
 	{
           if (k%nColumns != 0)
 	    {	
-	      G4double energy = a *MeV;
-	      energies -> push_back(energy);
-	      //   G4cout << "energy: " << energy << G4endl;
+	      G4double ene = a *MeV;
+	      energies -> push_back(ene);
+	      //   G4cout << "energy: " << ene << G4endl;
               k++;
 	    }
 	  else if (k%nColumns == 0)

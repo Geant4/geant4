@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.hh,v 1.4 2006-06-29 16:50:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/include/RunActionMessenger.hh
+/// \brief Definition of the RunActionMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,18 +51,17 @@ class RunActionMessenger: public G4UImessenger
     RunActionMessenger(RunAction*);
    ~RunActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RunAction*          Run;
+    RunAction*            fRun;
     
-    G4UIdirectory*        runDir;
-    G4UIcmdWith3Vector*   accCmd;
-    G4UIcmdWithAnInteger* verbCmd;
+    G4UIdirectory*        fRunDir;
+    G4UIcmdWith3Vector*   fAccCmd;
+    G4UIcmdWithAnInteger* fVerbCmd;
             
-    G4UIdirectory*        histoDir;        
+    G4UIdirectory*        fHistoDir;        
     G4UIcmdWithAString*   factoryCmd;
-    G4UIcmdWithAString*   typeCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010-11-10 17:10:49 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -38,6 +37,7 @@
 
 #include "globals.hh"
 #include "G4OpenGLSceneHandler.hh"
+#include "G4Text.hh"
 #include <map>
 #include <vector>
 
@@ -73,41 +73,71 @@ public:
 
 protected:
 
-  void RequestPrimitives (const G4VSolid& solid);
-  void AddPrimitivePreamble(const G4Visible& visible);
+  G4bool AddPrimitivePreamble(const G4Visible& visible);
+  // Return false if no further processing required.
+
   void AddPrimitivePostamble();
 
   // Two virtual functions for extra processing in a sub-class, for
-  // example, to make a display tree.
-  virtual void ExtraPOProcessing(size_t) {}
-  virtual void ExtraTOProcessing(size_t) {}
+  // example, to make a display tree.  They are to return true if the
+  // visible object uses gl commands for drawing.  This is
+  // predominantly true; a notable exception is Qt text.  In that
+  // case, a display list does not need to be created; all relevant
+  // information is assumed to be stored in the PO/TOList.
+  virtual G4bool ExtraPOProcessing
+  (const G4Visible&, size_t /*currentPOListIndex*/) {return true;}
+  virtual G4bool ExtraTOProcessing
+  (const G4Visible&, size_t /*currentTOListIndex*/) {return true;}
 
   static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
   // Display list management.  All static since there's only one OGL store.
   static G4int  fDisplayListId;  // Workspace.
   static G4bool fMemoryForDisplayLists;  // avoid memory overflow
   static G4int  fDisplayListLimit;       // avoid memory overflow
-  G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
-  GLint  fTopPODL;                  // List which calls the other PODLs.
+  // This "top PODL" was made redundant when the PO list was
+  // "unwrapped" 27th October 2011, but keep it for now in case we
+  // need to wrap it again.
+  GLint  fTopPODL;              // List which calls the other PODLs.
+
+  // G4Text plus transform and 2/3D.
+  struct G4TextPlus {
+    G4TextPlus(const G4Text& text): fG4Text(text), fProcessing2D(false) {}
+    G4Text fG4Text;
+    G4bool fProcessing2D;
+  };
+
   // PO = Persistent Object, i.e., run-durantion object, e.g., geometry.
   struct PO {
+    PO();
+    PO(const PO&);
     PO(G4int id, const G4Transform3D& tr = G4Transform3D());
+    ~PO();
+    PO& operator= (const PO&);
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
+    G4Colour fColour;
+    G4TextPlus* fpG4TextPlus;
+    G4bool fMarkerOrPolyline;
   };
   std::vector<PO> fPOList; 
   
   // TO = Transient Object, e.g., trajectories.
   struct TO {
+    TO();
+    TO(const TO&);
     TO(G4int id, const G4Transform3D& tr = G4Transform3D());
+    ~TO();
+    TO& operator= (const TO&);
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
     G4Colour fColour;
+    G4TextPlus* fpG4TextPlus;
+    G4bool fMarkerOrPolyline;
   };
   std::vector<TO> fTOList; 
   

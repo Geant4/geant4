@@ -96,26 +96,26 @@ double HepLorentzRotation::operator () (int i, int j) const {
 
 // ---------- Comparison:
 
-int HepLorentzRotation::compare( const HepLorentzRotation & m  ) const {
-       if (mtt<m.mtt) return -1; else if (mtt>m.mtt) return 1;
-  else if (mtz<m.mtz) return -1; else if (mtz>m.mtz) return 1;
-  else if (mty<m.mty) return -1; else if (mty>m.mty) return 1;
-  else if (mtx<m.mtx) return -1; else if (mtx>m.mtx) return 1;
+int HepLorentzRotation::compare( const HepLorentzRotation & m1  ) const {
+       if (mtt<m1.mtt) return -1; else if (mtt>m1.mtt) return 1;
+  else if (mtz<m1.mtz) return -1; else if (mtz>m1.mtz) return 1;
+  else if (mty<m1.mty) return -1; else if (mty>m1.mty) return 1;
+  else if (mtx<m1.mtx) return -1; else if (mtx>m1.mtx) return 1;
 
-  else if (mzt<m.mzt) return -1; else if (mzt>m.mzt) return 1;
-  else if (mzz<m.mzz) return -1; else if (mzz>m.mzz) return 1;
-  else if (mzy<m.mzy) return -1; else if (mzy>m.mzy) return 1;
-  else if (mzx<m.mzx) return -1; else if (mzx>m.mzx) return 1;
+  else if (mzt<m1.mzt) return -1; else if (mzt>m1.mzt) return 1;
+  else if (mzz<m1.mzz) return -1; else if (mzz>m1.mzz) return 1;
+  else if (mzy<m1.mzy) return -1; else if (mzy>m1.mzy) return 1;
+  else if (mzx<m1.mzx) return -1; else if (mzx>m1.mzx) return 1;
 
-  else if (myt<m.myt) return -1; else if (myt>m.myt) return 1;
-  else if (myz<m.myz) return -1; else if (myz>m.myz) return 1;
-  else if (myy<m.myy) return -1; else if (myy>m.myy) return 1;
-  else if (myx<m.myx) return -1; else if (myx>m.myx) return 1;
+  else if (myt<m1.myt) return -1; else if (myt>m1.myt) return 1;
+  else if (myz<m1.myz) return -1; else if (myz>m1.myz) return 1;
+  else if (myy<m1.myy) return -1; else if (myy>m1.myy) return 1;
+  else if (myx<m1.myx) return -1; else if (myx>m1.myx) return 1;
 
-  else if (mxt<m.mxt) return -1; else if (mxt>m.mxt) return 1;
-  else if (mxz<m.mxz) return -1; else if (mxz>m.mxz) return 1;
-  else if (mxy<m.mxy) return -1; else if (mxy>m.mxy) return 1;
-  else if (mxx<m.mxx) return -1; else if (mxx>m.mxx) return 1;
+  else if (mxt<m1.mxt) return -1; else if (mxt>m1.mxt) return 1;
+  else if (mxz<m1.mxz) return -1; else if (mxz>m1.mxz) return 1;
+  else if (mxy<m1.mxy) return -1; else if (mxy>m1.mxy) return 1;
+  else if (mxx<m1.mxx) return -1; else if (mxx>m1.mxx) return 1;
 
   else return 0;
 }
@@ -124,60 +124,60 @@ int HepLorentzRotation::compare( const HepLorentzRotation & m  ) const {
 // ---------- Operations in the group of 4-Rotations
 
 HepLorentzRotation
-HepLorentzRotation::matrixMultiplication(const HepRep4x4 & m) const {
+HepLorentzRotation::matrixMultiplication(const HepRep4x4 & m1) const {
   return HepLorentzRotation(
-    mxx*m.xx_ + mxy*m.yx_ + mxz*m.zx_ + mxt*m.tx_,
-    mxx*m.xy_ + mxy*m.yy_ + mxz*m.zy_ + mxt*m.ty_,
-    mxx*m.xz_ + mxy*m.yz_ + mxz*m.zz_ + mxt*m.tz_,
-    mxx*m.xt_ + mxy*m.yt_ + mxz*m.zt_ + mxt*m.tt_,
+    mxx*m1.xx_ + mxy*m1.yx_ + mxz*m1.zx_ + mxt*m1.tx_,
+    mxx*m1.xy_ + mxy*m1.yy_ + mxz*m1.zy_ + mxt*m1.ty_,
+    mxx*m1.xz_ + mxy*m1.yz_ + mxz*m1.zz_ + mxt*m1.tz_,
+    mxx*m1.xt_ + mxy*m1.yt_ + mxz*m1.zt_ + mxt*m1.tt_,
 
-    myx*m.xx_ + myy*m.yx_ + myz*m.zx_ + myt*m.tx_,
-    myx*m.xy_ + myy*m.yy_ + myz*m.zy_ + myt*m.ty_,
-    myx*m.xz_ + myy*m.yz_ + myz*m.zz_ + myt*m.tz_,
-    myx*m.xt_ + myy*m.yt_ + myz*m.zt_ + myt*m.tt_,
+    myx*m1.xx_ + myy*m1.yx_ + myz*m1.zx_ + myt*m1.tx_,
+    myx*m1.xy_ + myy*m1.yy_ + myz*m1.zy_ + myt*m1.ty_,
+    myx*m1.xz_ + myy*m1.yz_ + myz*m1.zz_ + myt*m1.tz_,
+    myx*m1.xt_ + myy*m1.yt_ + myz*m1.zt_ + myt*m1.tt_,
 
-    mzx*m.xx_ + mzy*m.yx_ + mzz*m.zx_ + mzt*m.tx_,
-    mzx*m.xy_ + mzy*m.yy_ + mzz*m.zy_ + mzt*m.ty_,
-    mzx*m.xz_ + mzy*m.yz_ + mzz*m.zz_ + mzt*m.tz_,
-    mzx*m.xt_ + mzy*m.yt_ + mzz*m.zt_ + mzt*m.tt_,
+    mzx*m1.xx_ + mzy*m1.yx_ + mzz*m1.zx_ + mzt*m1.tx_,
+    mzx*m1.xy_ + mzy*m1.yy_ + mzz*m1.zy_ + mzt*m1.ty_,
+    mzx*m1.xz_ + mzy*m1.yz_ + mzz*m1.zz_ + mzt*m1.tz_,
+    mzx*m1.xt_ + mzy*m1.yt_ + mzz*m1.zt_ + mzt*m1.tt_,
 
-    mtx*m.xx_ + mty*m.yx_ + mtz*m.zx_ + mtt*m.tx_,
-    mtx*m.xy_ + mty*m.yy_ + mtz*m.zy_ + mtt*m.ty_,
-    mtx*m.xz_ + mty*m.yz_ + mtz*m.zz_ + mtt*m.tz_,
-    mtx*m.xt_ + mty*m.yt_ + mtz*m.zt_ + mtt*m.tt_ );
+    mtx*m1.xx_ + mty*m1.yx_ + mtz*m1.zx_ + mtt*m1.tx_,
+    mtx*m1.xy_ + mty*m1.yy_ + mtz*m1.zy_ + mtt*m1.ty_,
+    mtx*m1.xz_ + mty*m1.yz_ + mtz*m1.zz_ + mtt*m1.tz_,
+    mtx*m1.xt_ + mty*m1.yt_ + mtz*m1.zt_ + mtt*m1.tt_ );
 }
 
 HepLorentzRotation & HepLorentzRotation::rotateX(double delta) {
-  double c = std::cos (delta);
-  double s = std::sin (delta);
+  double c1 = std::cos (delta);
+  double s1 = std::sin (delta);
   HepLorentzVector rowy = row2();
   HepLorentzVector rowz = row3();
-  HepLorentzVector r2 = c * rowy - s * rowz;
-  HepLorentzVector r3 = s * rowy + c * rowz;
+  HepLorentzVector r2 = c1 * rowy - s1 * rowz;
+  HepLorentzVector r3 = s1 * rowy + c1 * rowz;
   myx = r2.x();   myy = r2.y();   myz = r2.z();   myt = r2.t();	
   mzx = r3.x();   mzy = r3.y();   mzz = r3.z();   mzt = r3.t();	
   return *this;
 }
 
 HepLorentzRotation & HepLorentzRotation::rotateY(double delta) {
-  double c = std::cos (delta);
-  double s = std::sin (delta);
+  double c1 = std::cos (delta);
+  double s1 = std::sin (delta);
   HepLorentzVector rowx = row1();
   HepLorentzVector rowz = row3();
-  HepLorentzVector r1 =  c * rowx + s * rowz;
-  HepLorentzVector r3 = -s * rowx + c * rowz;
+  HepLorentzVector r1 =  c1 * rowx + s1 * rowz;
+  HepLorentzVector r3 = -s1 * rowx + c1 * rowz;
   mxx = r1.x();   mxy = r1.y();   mxz = r1.z();   mxt = r1.t();	
   mzx = r3.x();   mzy = r3.y();   mzz = r3.z();   mzt = r3.t();	
   return *this;
 }
 
 HepLorentzRotation & HepLorentzRotation::rotateZ(double delta) {
-  double c = std::cos (delta);
-  double s = std::sin (delta);
+  double c1 = std::cos (delta);
+  double s1 = std::sin (delta);
   HepLorentzVector rowx = row1();
   HepLorentzVector rowy = row2();
-  HepLorentzVector r1 = c * rowx - s * rowy;
-  HepLorentzVector r2 = s * rowx + c * rowy;
+  HepLorentzVector r1 = c1 * rowx - s1 * rowy;
+  HepLorentzVector r2 = s1 * rowx + c1 * rowy;
   mxx = r1.x();   mxy = r1.y();   mxz = r1.z();   mxt = r1.t();
   myx = r2.x();   myy = r2.y();   myz = r2.z();   myt = r2.t();
   return *this;
@@ -190,12 +190,12 @@ HepLorentzRotation & HepLorentzRotation::boostX(double beta) {
 //      << "Beta supplied to HepLorentzRotation::boostX represents speed >= c."
 //      << std::endl;
 //  }    
-  double g  = 1.0/std::sqrt(1.0-b2);
-  double bg = beta*g;
+  double g1  = 1.0/std::sqrt(1.0-b2);
+  double bg = beta*g1;
   HepLorentzVector rowx = row1();
   HepLorentzVector rowt = row4();
-  HepLorentzVector r1 =  g * rowx + bg * rowt;
-  HepLorentzVector r4 = bg * rowx +  g * rowt;
+  HepLorentzVector r1 =  g1 * rowx + bg * rowt;
+  HepLorentzVector r4 = bg * rowx +  g1 * rowt;
   mxx = r1.x();   mxy = r1.y();   mxz = r1.z();   mxt = r1.t();	
   mtx = r4.x();   mty = r4.y();   mtz = r4.z();   mtt = r4.t();	
   return *this;
@@ -208,12 +208,12 @@ HepLorentzRotation & HepLorentzRotation::boostY(double beta) {
 //      << "Beta supplied to HepLorentzRotation::boostY represents speed >= c."
 //      << std::endl;
 //  }    
-  double g  = 1.0/std::sqrt(1.0-b2);
-  double bg = beta*g;
+  double g1  = 1.0/std::sqrt(1.0-b2);
+  double bg = beta*g1;
   HepLorentzVector rowy = row2();
   HepLorentzVector rowt = row4();
-  HepLorentzVector r2 =  g * rowy + bg * rowt;
-  HepLorentzVector r4 = bg * rowy +  g * rowt;
+  HepLorentzVector r2 =  g1 * rowy + bg * rowt;
+  HepLorentzVector r4 = bg * rowy +  g1 * rowt;
   myx = r2.x();   myy = r2.y();   myz = r2.z();   myt = r2.t();	
   mtx = r4.x();   mty = r4.y();   mtz = r4.z();   mtt = r4.t();	
   return *this;
@@ -226,20 +226,18 @@ HepLorentzRotation & HepLorentzRotation::boostZ(double beta) {
 //      << "Beta supplied to HepLorentzRotation::boostZ represents speed >= c."
 //      << std::endl;
 //  }    
-  double g  = 1.0/std::sqrt(1.0-b2);
-  double bg = beta*g;
+  double g1  = 1.0/std::sqrt(1.0-b2);
+  double bg = beta*g1;
   HepLorentzVector rowz = row3();
   HepLorentzVector rowt = row4();
-  HepLorentzVector r3 =  g * rowz + bg * rowt;
-  HepLorentzVector r4 = bg * rowz +  g * rowt;
+  HepLorentzVector r3 =  g1 * rowz + bg * rowt;
+  HepLorentzVector r4 = bg * rowz +  g1 * rowt;
   mtx = r4.x();   mty = r4.y();   mtz = r4.z();   mtt = r4.t();	
   mzx = r3.x();   mzy = r3.y();   mzz = r3.z();   mzt = r3.t();	
   return *this;
 }
 
 std::ostream & HepLorentzRotation::print( std::ostream & os ) const {
-//  using std::setw;
-//  using std::setprecision;
   os << "\n   [ ( " <<
         std::setw(11) << std::setprecision(6) << xx() << "   " <<
         std::setw(11) << std::setprecision(6) << xy() << "   " <<

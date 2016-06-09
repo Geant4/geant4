@@ -72,8 +72,6 @@
 #include "CexmcException.hh"
 #include "CexmcHistoWidget.hh"
 
-extern TDirectory *  gDirectory;
-
 
 namespace
 {

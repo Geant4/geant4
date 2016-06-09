@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file optical/LXe/include/LXeScintHit.hh
+/// \brief Definition of the LXeScintHit class
+//
+//
 #ifndef LXeScintHit_h
 #define LXeScintHit_h 1
 
@@ -38,34 +41,34 @@
 
 class LXeScintHit : public G4VHit
 {
-public:
-  
-  LXeScintHit();
-  LXeScintHit(G4VPhysicalVolume* pVol);
-  ~LXeScintHit();
-  LXeScintHit(const LXeScintHit &right);
-  const LXeScintHit& operator=(const LXeScintHit &right);
-  G4int operator==(const LXeScintHit &right) const;
+  public:
+ 
+    LXeScintHit();
+    LXeScintHit(G4VPhysicalVolume* pVol);
+    virtual ~LXeScintHit();
+    LXeScintHit(const LXeScintHit &right);
+    const LXeScintHit& operator=(const LXeScintHit &right);
+    G4int operator==(const LXeScintHit &right) const;
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
-  
-  void Draw();
-  void Print();
+    inline void *operator new(size_t);
+    inline void operator delete(void *aHit);
+ 
+    virtual void Draw();
+    virtual void Print();
 
-  inline void SetEdep(G4double de) { edep = de; }  
-  inline void AddEdep(G4double de) { edep += de; }
-  inline G4double GetEdep() { return edep; }
-  
-  inline void SetPos(G4ThreeVector xyz) { pos = xyz; }
-  inline G4ThreeVector GetPos() { return pos; }
+    inline void SetEdep(G4double de) { fEdep = de; }
+    inline void AddEdep(G4double de) { fEdep += de; }
+    inline G4double GetEdep() { return fEdep; }
 
-  inline const G4VPhysicalVolume * GetPhysV() { return physVol; }
+    inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+    inline G4ThreeVector GetPos() { return fPos; }
 
-private:
-  G4double edep;
-  G4ThreeVector pos;
-  const G4VPhysicalVolume* physVol;
+    inline const G4VPhysicalVolume * GetPhysV() { return fPhysVol; }
+
+  private:
+    G4double fEdep;
+    G4ThreeVector fPos;
+    const G4VPhysicalVolume* fPhysVol;
 
 };
 
@@ -86,5 +89,3 @@ inline void LXeScintHit::operator delete(void *aHit)
 }
 
 #endif
-
-

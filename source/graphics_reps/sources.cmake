@@ -88,6 +88,7 @@ GEANT4_DEFINE_MODULE(NAME G4graphics_reps
         G4AttUtils.cc
         G4Circle.cc
         G4Colour.cc
+        G4DimensionedTypeUtils.cc
         G4NURBS.cc
         G4NURBSbox.cc
         G4NURBScylinder.cc

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4OH.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -33,6 +34,8 @@
 // -------------------------------------------------------------------
 
 #include "G4OH.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
@@ -65,7 +68,7 @@ G4OH* G4OH::Definition()
 
 
         G4double mass = 17.00734*g/Avogadro * c_squared;
-        anInstance = new G4MoleculeDefinition("OH", mass,
+        anInstance = new G4MoleculeDefinition(name, mass,
                                               9, 5,
                                               2.8e-9*(m*m/s),
                                               2, 0.958 * angstrom);

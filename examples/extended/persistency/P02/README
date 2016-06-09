@@ -25,28 +25,14 @@ the geometry is read from geo.root file.
 	Building and running the example
 	--------------------------------
 
-	Before buidling and/or running the example you need to set the
-following environment variables:
+        This example requires the ROOT toolkit to be installed in the
+system as well as GCCXML package which is used by the Reflex tool. The
+provided CMake file checks for the existance of those packages. 
+Once the CMake configuration has been succesfully done, the executable
+for this example should be build using make (in your CMake build
+directory):
 
-ROOTSYS - ROOT installation directory, it is required to run ROOT
-
-GCCXMLPATH - gccxml binary directory, it is needed by ROOT for the
-             dictionary generation
-LD_LIBRARY_PATH - to include the ROOT library path and the path to
-                  the dictionary library, i.e., for tcsh UNIX shell:
-   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$ROOTSYS/lib:
-                          $G4WORKDIR/tmp/$G4SYSTEM/exampleP01
-
-The present version of the example requires that Geant4 headers are
-installed in a single directory referenced by G4INCLUDE, as the standard
-Geant4 installation procedure allows to do.
-
-Once those variables are set (together with the standard Geant4 setup)
-the example can be build by issueing the 'make' command. The final
-executable file can be found in the usual directory:
-
-$G4WORKDIR/bin/$G4SYSTEM/
-
+	make
 
 	Remark on dictionary generation
 	-------------------------------

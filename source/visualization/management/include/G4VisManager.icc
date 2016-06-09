@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.23 2010-12-14 15:53:28 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -34,12 +33,24 @@ inline void G4VisManager::Initialize () {
   Initialise ();
 }
 
-inline G4VisExtent G4VisManager::GetUserActionExtent () const {
-  return fUserVisActionExtent;
+inline const std::vector<G4VisManager::UserVisAction>&
+G4VisManager::GetRunDurationUserVisActions () const {
+  return fRunDurationUserVisActions;
 }
 
-inline G4VUserVisAction* G4VisManager::GetUserAction () const {
-  return fpUserVisAction;
+inline const std::vector<G4VisManager::UserVisAction>&
+G4VisManager::GetEndOfEventUserVisActions () const {
+  return fEndOfEventUserVisActions;
+}
+
+inline const std::vector<G4VisManager::UserVisAction>&
+G4VisManager::GetEndOfRunUserVisActions () const {
+  return fEndOfRunUserVisActions;
+}
+
+inline const std::map<G4VUserVisAction*,G4VisExtent>&
+G4VisManager::GetUserVisActionExtents () const {
+  return fUserVisActionExtents;
 }
 
 inline G4VSceneHandler* G4VisManager::GetCurrentSceneHandler () const {
@@ -88,8 +99,10 @@ inline const G4ViewParameters& G4VisManager::GetDefaultViewParameters() const {
   return fDefaultViewParameters;
 }
 
-inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {
-  fUserVisActionExtent = extent;
+inline void G4VisManager::SetUserAction
+(G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  RegisterRunDurationUserVisAction("SetUserAction",pVisAction,extent);
 }
 
 inline G4SceneList& G4VisManager::SetSceneList () {

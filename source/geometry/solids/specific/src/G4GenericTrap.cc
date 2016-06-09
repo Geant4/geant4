@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.21 2010-11-26 13:30:26 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -45,9 +44,13 @@
 #include <iomanip>
 
 #include "G4GenericTrap.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4TessellatedSolid.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
+#include "G4VoxelLimits.hh"
+#include "G4AffineTransform.hh"
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
@@ -62,11 +65,11 @@ const G4double G4GenericTrap::fgkTolerance = 1E-3;
 
 // --------------------------------------------------------------------
 
-G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
+G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
                               const std::vector<G4TwoVector>&  vertices )
   : G4VSolid(name),
     fpPolyhedron(0),
-    fDz(hz),
+    fDz(halfZ),
     fVertices(),
     fIsTwisted(false),
     fTessellatedSolid(0),
@@ -95,7 +98,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
   
   // Check dZ
   // 
-  if (hz < kCarTolerance)
+  if (halfZ < kCarTolerance)
   {
      G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids0002",
                 FatalErrorInArgument, "dZ is too small or negative");
@@ -381,18 +384,18 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 
   // Compute distance for lateral planes
   //
-  for (G4int s=0; s<4; s++)
+  for (G4int q=0; q<4; q++)
   {
-    p0=G4ThreeVector(vertices[s].x(),vertices[s].y(),p.z());
+    p0=G4ThreeVector(vertices[q].x(),vertices[q].y(),p.z());
     if(zPlusSide)
     {
-      p1=G4ThreeVector(fVertices[s].x(),fVertices[s].y(),-fDz);
+      p1=G4ThreeVector(fVertices[q].x(),fVertices[q].y(),-fDz);
     }
     else
     {
-      p1=G4ThreeVector(fVertices[s+4].x(),fVertices[s+4].y(),fDz); 
+      p1=G4ThreeVector(fVertices[q+4].x(),fVertices[q+4].y(),fDz); 
     }
-    p2=G4ThreeVector(vertices[(s+1)%4].x(),vertices[(s+1)%4].y(),p.z());
+    p2=G4ThreeVector(vertices[(q+1)%4].x(),vertices[(q+1)%4].y(),p.z());
 
     // Collapsed vertices
     //
@@ -400,11 +403,11 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     {
       if ( std::fabs(p.z()+fDz) > kCarTolerance )
       {
-        p2=G4ThreeVector(fVertices[(s+1)%4].x(),fVertices[(s+1)%4].y(),-fDz);
+        p2=G4ThreeVector(fVertices[(q+1)%4].x(),fVertices[(q+1)%4].y(),-fDz);
       }
       else
       {
-        p2=G4ThreeVector(fVertices[(s+1)%4+4].x(),fVertices[(s+1)%4+4].y(),fDz);
+        p2=G4ThreeVector(fVertices[(q+1)%4+4].x(),fVertices[(q+1)%4+4].y(),fDz);
       }
     }
     lnorm = (p1-p0).cross(p2-p0);
@@ -413,7 +416,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 
     // Adjust Normal for Twisted Surface
     //
-    if ( (fIsTwisted) && (GetTwistAngle(s)!=0) )
+    if ( (fIsTwisted) && (GetTwistAngle(q)!=0) )
     {
       G4double normP=(p2-p0).mag();
       if(normP)
@@ -421,10 +424,10 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
         G4double proj=(p-p0).dot(p2-p0)/normP;
         if(proj<0)     { proj=0; }
         if(proj>normP) { proj=normP; }
-        G4int j=(s+1)%4;
-        r1=G4ThreeVector(fVertices[s+4].x(),fVertices[s+4].y(),fDz);
+        G4int j=(q+1)%4;
+        r1=G4ThreeVector(fVertices[q+4].x(),fVertices[q+4].y(),fDz);
         r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
-        r3=G4ThreeVector(fVertices[s].x(),fVertices[s].y(),-fDz);
+        r3=G4ThreeVector(fVertices[q].x(),fVertices[q].y(),-fDz);
         r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
         r1=r1+proj*(r2-r1)/normP;
         r3=r3+proj*(r4-r3)/normP;
@@ -597,19 +600,19 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
   G4double b = dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
              + tx1*ys2-tx2*ys1)*v.z();
   G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
-  G4double s=kInfinity;
+  G4double q=kInfinity;
   G4double x1,x2,y1,y2,xp,yp,zi;
 
   if (std::fabs(a)<kCarTolerance)
   {           
     if (std::fabs(b)<kCarTolerance)  { return kInfinity; }
-    s=-c/b;
+    q=-c/b;
 
     // Check if Point is on the Surface
 
-    if (s>-halfCarTolerance)
+    if (q>-halfCarTolerance)
     {
-      if (s<halfCarTolerance)
+      if (q<halfCarTolerance)
       {
         if (NormalToPlane(p,ipl).dot(v)<=0)
           { if(Inside(p) != kOutside) { return 0.; } }
@@ -619,17 +622,17 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
 
       // Check the Intersection
       //
-      zi=p.z()+s*v.z();
+      zi=p.z()+q*v.z();
       if (std::fabs(zi)<fDz)
       {
-        x1=xs1+tx1*v.z()*s;
-        x2=xs2+tx2*v.z()*s;
-        xp=p.x()+s*v.x();
-        y1=ys1+ty1*v.z()*s;
-        y2=ys2+ty2*v.z()*s;
-        yp=p.y()+s*v.y();
+        x1=xs1+tx1*v.z()*q;
+        x2=xs2+tx2*v.z()*q;
+        xp=p.x()+q*v.x();
+        y1=ys1+ty1*v.z()*q;
+        y2=ys2+ty2*v.z()*q;
+        yp=p.y()+q*v.y();
         zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-        if (zi<=halfCarTolerance)  { return s; }
+        if (zi<=halfCarTolerance)  { return q; }
       }
     }
     return kInfinity;
@@ -637,14 +640,14 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
   G4double d=b*b-4*a*c;
   if (d>=0)
   {
-    if (a>0) { s=0.5*(-b-std::sqrt(d))/a; }
-    else     { s=0.5*(-b+std::sqrt(d))/a; }
+    if (a>0) { q=0.5*(-b-std::sqrt(d))/a; }
+    else     { q=0.5*(-b+std::sqrt(d))/a; }
 
     // Check if Point is on the Surface
     //
-    if (s>-halfCarTolerance)
+    if (q>-halfCarTolerance)
     {
-      if(s<halfCarTolerance)
+      if(q<halfCarTolerance)
       {
         if (NormalToPlane(p,ipl).dot(v)<=0)
         {
@@ -652,34 +655,34 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
         }
         else  // Check second root; return kInfinity
         {
-          if (a>0) { s=0.5*(-b+std::sqrt(d))/a; }
-          else     { s=0.5*(-b-std::sqrt(d))/a; }
-          if (s<=halfCarTolerance) { return kInfinity; }
+          if (a>0) { q=0.5*(-b+std::sqrt(d))/a; }
+          else     { q=0.5*(-b-std::sqrt(d))/a; }
+          if (q<=halfCarTolerance) { return kInfinity; }
         }
       }
       // Check the Intersection
       //
-      zi=p.z()+s*v.z();
+      zi=p.z()+q*v.z();
       if (std::fabs(zi)<fDz)
       {
-        x1=xs1+tx1*v.z()*s;
-        x2=xs2+tx2*v.z()*s;
-        xp=p.x()+s*v.x();
-        y1=ys1+ty1*v.z()*s;
-        y2=ys2+ty2*v.z()*s;
-        yp=p.y()+s*v.y();
+        x1=xs1+tx1*v.z()*q;
+        x2=xs2+tx2*v.z()*q;
+        xp=p.x()+q*v.x();
+        y1=ys1+ty1*v.z()*q;
+        y2=ys2+ty2*v.z()*q;
+        yp=p.y()+q*v.y();
         zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-        if (zi<=halfCarTolerance)  { return s; }
+        if (zi<=halfCarTolerance)  { return q; }
       }
     }
-    if (a>0)  { s=0.5*(-b+std::sqrt(d))/a; }
-    else      { s=0.5*(-b-std::sqrt(d))/a; }
+    if (a>0)  { q=0.5*(-b+std::sqrt(d))/a; }
+    else      { q=0.5*(-b-std::sqrt(d))/a; }
 
     // Check if Point is on the Surface
     //
-    if (s>-halfCarTolerance)
+    if (q>-halfCarTolerance)
     {
-      if(s<halfCarTolerance)
+      if(q<halfCarTolerance)
       {
         if (NormalToPlane(p,ipl).dot(v)<=0)
         {
@@ -687,24 +690,24 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
         }
         else   // Check second root; return kInfinity.
         {
-          if (a>0) { s=0.5*(-b-std::sqrt(d))/a; }
-          else     { s=0.5*(-b+std::sqrt(d))/a; }
-          if (s<=halfCarTolerance)  { return kInfinity; }
+          if (a>0) { q=0.5*(-b-std::sqrt(d))/a; }
+          else     { q=0.5*(-b+std::sqrt(d))/a; }
+          if (q<=halfCarTolerance)  { return kInfinity; }
         }
       }
       // Check the Intersection
       //
-      zi=p.z()+s*v.z();
+      zi=p.z()+q*v.z();
       if (std::fabs(zi)<fDz)
       {
-        x1=xs1+tx1*v.z()*s;
-        x2=xs2+tx2*v.z()*s;
-        xp=p.x()+s*v.x();
-        y1=ys1+ty1*v.z()*s;
-        y2=ys2+ty2*v.z()*s;
-        yp=p.y()+s*v.y();
+        x1=xs1+tx1*v.z()*q;
+        x2=xs2+tx2*v.z()*q;
+        xp=p.x()+q*v.x();
+        y1=ys1+ty1*v.z()*q;
+        y2=ys2+ty2*v.z()*q;
+        yp=p.y()+q*v.y();
         zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-        if (zi<=halfCarTolerance)  { return s; }
+        if (zi<=halfCarTolerance)  { return q; }
       }
     }
   }
@@ -944,10 +947,10 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     if ( ((std::fabs(xb-xd)+std::fabs(yb-yd))<halfCarTolerance)
       || ((std::fabs(xa-xc)+std::fabs(ya-yc))<halfCarTolerance) )
     {
-      G4double s=DistToTriangle(p,v,ipl) ;
-      if ( (s>=0) && (s<distmin) )
+      G4double q=DistToTriangle(p,v,ipl) ;
+      if ( (q>=0) && (q<distmin) )
       {
-        distmin=s;
+        distmin=q;
         lateral_cross=true;
         side=ESide(ipl+1);
       }
@@ -970,22 +973,22 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     G4double b = dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
                + tx1*ys2-tx2*ys1)*v.z();
     G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
-    G4double s=kInfinity;
+    G4double q=kInfinity;
 
     if (std::fabs(a) < kCarTolerance)
     {           
       if (std::fabs(b) < kCarTolerance) { continue; }
-      s=-c/b;
+      q=-c/b;
          
       // Check for Point on the Surface
       //
-      if ((s > -halfCarTolerance) && (s < distmin))
+      if ((q > -halfCarTolerance) && (q < distmin))
       {
-        if (s < halfCarTolerance)
+        if (q < halfCarTolerance)
         {
           if (NormalToPlane(p,ipl).dot(v)<0.)  { continue; }
         }
-        distmin =s;
+        distmin =q;
         lateral_cross=true;
         side=ESide(ipl+1);
       }   
@@ -994,60 +997,60 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     G4double d=b*b-4*a*c;
     if (d >= 0.)
     {
-      if (a > 0)  { s=0.5*(-b-std::sqrt(d))/a; }
-      else        { s=0.5*(-b+std::sqrt(d))/a; }
+      if (a > 0)  { q=0.5*(-b-std::sqrt(d))/a; }
+      else        { q=0.5*(-b+std::sqrt(d))/a; }
 
       // Check for Point on the Surface
       //
-      if (s > -halfCarTolerance )
+      if (q > -halfCarTolerance )
       {
-        if (s < distmin)
+        if (q < distmin)
         {
-          if(s < halfCarTolerance)
+          if(q < halfCarTolerance)
           {
             if (NormalToPlane(p,ipl).dot(v)<0.)  // Check second root
             {
-              if (a > 0)  { s=0.5*(-b+std::sqrt(d))/a; }
-              else        { s=0.5*(-b-std::sqrt(d))/a; }
-              if (( s > halfCarTolerance) && (s < distmin))
+              if (a > 0)  { q=0.5*(-b+std::sqrt(d))/a; }
+              else        { q=0.5*(-b-std::sqrt(d))/a; }
+              if (( q > halfCarTolerance) && (q < distmin))
               {
-                distmin=s;
+                distmin=q;
                 lateral_cross = true;
                 side=ESide(ipl+1);
               }
               continue;
             }
           }
-          distmin = s;
+          distmin = q;
           lateral_cross = true;
           side=ESide(ipl+1);
         }
       }
       else
       {
-        if (a > 0)  { s=0.5*(-b+std::sqrt(d))/a; }
-        else        { s=0.5*(-b-std::sqrt(d))/a; }
+        if (a > 0)  { q=0.5*(-b+std::sqrt(d))/a; }
+        else        { q=0.5*(-b-std::sqrt(d))/a; }
 
         // Check for Point on the Surface
         //
-        if ((s > -halfCarTolerance) && (s < distmin))
+        if ((q > -halfCarTolerance) && (q < distmin))
         {
-          if (s < halfCarTolerance)
+          if (q < halfCarTolerance)
           {
             if (NormalToPlane(p,ipl).dot(v)<0.)  // Check second root
             {
-              if (a > 0)  { s=0.5*(-b-std::sqrt(d))/a; }
-              else        { s=0.5*(-b+std::sqrt(d))/a; }
-              if ( ( s > halfCarTolerance) && (s < distmin) )
+              if (a > 0)  { q=0.5*(-b-std::sqrt(d))/a; }
+              else        { q=0.5*(-b+std::sqrt(d))/a; }
+              if ( ( q > halfCarTolerance) && (q < distmin) )
               {
-                distmin=s;
+                distmin=q;
                 lateral_cross = true;
                 side=ESide(ipl+1);
               }
               continue;
             }  
           }
-          distmin =s;
+          distmin =q;
           lateral_cross = true;
           side=ESide(ipl+1);
         }   
@@ -1834,7 +1837,7 @@ G4GenericTrap::IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b,
   //
   G4ThreeVector temp1,temp2;
   G4ThreeVector v1,v2,p1,p2,p3,p4,dv;
-  G4double s,det;
+  G4double q,det;
   p1=G4ThreeVector(a.x(),a.y(),-fDz);
   p2=G4ThreeVector(c.x(),c.y(),-fDz);
   p3=G4ThreeVector(b.x(),b.y(),fDz);
@@ -1861,12 +1864,12 @@ G4GenericTrap::IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b,
     temp1 = v1.cross(v2);
     temp2 = (p2-p1).cross(v2);
     if (temp1.dot(temp2) < 0)  { return false; } // intersection negative
-    s = temp1.mag();
+    q = temp1.mag();
 
-    if ( s < kCarTolerance )  { return false; }  // parallel lines
-    s = ((dv).cross(v2)).mag()/s;
+    if ( q < kCarTolerance )  { return false; }  // parallel lines
+    q = ((dv).cross(v2)).mag()/q;
    
-    if(s < 1.-kCarTolerance)  { return true; }
+    if(q < 1.-kCarTolerance)  { return true; }
   }
   return false;
 }

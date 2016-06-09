@@ -30,28 +30,30 @@
 // the *COMPLETE* version of this program, together with its documentation;
 // Hadrontherapy (both basic and full version) are supported by the Italian INFN
 // Institute in the framework of the MC-INFN Group
-//
+// 
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Main Authors:
 //
-// G.A.P. Cirrone(a)°, G.Cuttone(a), S.E.Mazzaglia(a), F.Romano(a)
+// R. Calcagno(a), G.A.P. Cirrone(a)*, G.Cuttone(a), F.Romano(a,b), A.Varisano(a)
 // 
 // Past authors:
-// F.Di Rosa(a), S.Guatelli(c), A.Lechner(e), M.G.Pia(b), G.Russo(a), M.Russo(a),
-// P.Kaitaniemi(d), A.Heikkinen(d), G.Danielsen (d) 
+// F.Di Rosa(a), S.Guatelli(d), A.Lechner(f), S.E.Mazzaglia(a),  M.G.Pia(c), G.Russo(a), M.Russo(a),
+// P.Kaitaniemi(e), A.Heikkinen(e), G.Danielsen (e) 
 //
-// (a) Laboratori Nazionali del Sud 
+// (a) Laboratori Nazionali del Sud
 //     of the INFN, Catania, Italy
 //
-// (b) INFN Section of Genova, Italy
+// (b) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
 // 
-// (c) University of Wallongong, Australia
+// (c) INFN Section of Genova, Italy
+// 
+// (d) University of Wallongong, Australia
 //
-// (d) Helsinki Institute of Physics, Helsinki, Finland
+// (e) Helsinki Institute of Physics, Helsinki, Finland
 //
-// (e) CERN, (CH)
+// (f) CERN, (CH)
 //
 //  *Corresponding author, email to cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
@@ -76,7 +78,7 @@
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
 #include "G4ScoringManager.hh"
-#include "IAEAScoreWriter.hh"
+
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -104,7 +106,7 @@ int main(int argc ,char ** argv)
 	
   G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
   scoringManager->SetVerboseLevel(1);
-  scoringManager->SetScoreWriter(new IAEAScoreWriter());
+  
 	
   // Initialize the default Hadrontherapy geometry
   geometryController->SetGeometry("default");
@@ -115,13 +117,13 @@ int main(int argc ,char ** argv)
   // Initialize the physics 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
-  G4String physName = "";
+  G4String physName = ""; 
 
   // Physics List name defined via environment variable
   char* path = getenv("PHYSLIST");
   if (path) { physName = G4String(path); }
 
- if(factory.IsReferencePhysList(physName)) 
+  if(physName != "" && factory.IsReferencePhysList(physName))
     {
       phys = factory.GetReferencePhysList(physName);
     } 
@@ -185,7 +187,6 @@ int main(int argc ,char ** argv)
 	}
       
 #endif
-      if (ui->IsGUI())
       ui->SessionStart();
       delete ui;
 #endif 

@@ -29,7 +29,7 @@
 #/gun/ion 6 12
 /gun/energy 108 GeV
 #
-/testem/histo/setHisto 1 200 350. 550. MeV
+/analysis/h1/set 1 200 350. 550. MeV
 #
 /testem/event/printModulo 1000
 /run/beamOn 5000

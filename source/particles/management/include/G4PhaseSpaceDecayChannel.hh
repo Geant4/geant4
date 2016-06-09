@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.hh,v 1.6 2006-06-29 19:24:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // ------------------------------------------------------------
@@ -34,6 +33,7 @@
 //      History: first implementation, based on object model of
 //      27 July 1996 H.Kurashige
 //      30 May 1997 H.Kurashige
+//      24 May 2012 H.Kurashige    Add current_parent_mass;
 // ------------------------------------------------------------
 #ifndef G4PhaseSpaceDecayChannel_h
 #define G4PhaseSpaceDecayChannel_h 1
@@ -66,6 +66,7 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
      static G4double Pmx(G4double e, G4double p1, G4double p2);
 
   private: 
+     G4double        current_parent_mass;
      G4DecayProducts *OneBodyDecayIt();
      G4DecayProducts *TwoBodyDecayIt();
      G4DecayProducts *ThreeBodyDecayIt();

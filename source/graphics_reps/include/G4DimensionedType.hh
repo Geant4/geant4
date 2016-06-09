@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DimensionedType.hh,v 1.3 2006-12-13 15:44:09 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Generic dimensioned type.
 //
@@ -39,50 +38,9 @@
 #include "G4UnitsTable.hh"
 #include <ostream>
 
-namespace {
-
-  // Helper class
-  class HasName{
-  public:
-    HasName(const G4String& name): fName(name) {};
-    bool operator()(const G4UnitDefinition* value) const
-    {
-      return ((value->GetName() == fName) || (value->GetSymbol() == fName));
-    }    
-  private:
-    G4String fName;
-  };
-  
-  // Get unit value from input string. Return value indicates if 
-  // conversion was successful.
-  G4bool GetUnitValue(const G4String& unit, G4double& value) 
-  {
-    // Get units table
-    G4UnitsTable& unitTable = G4UnitDefinition::GetUnitsTable();    
-    if (unitTable.size() == 0) G4UnitDefinition::BuildUnitsTable();
-    
-    // Iterate over unit lists, searching for unit match
-    G4UnitsTable::const_iterator iterTable = unitTable.begin();
-    
-    HasName myUnit(unit);
-    G4bool gotUnit(false);
-    
-    while (!gotUnit && (iterTable != unitTable.end())) {
-      G4UnitsContainer unitContainer = (*iterTable)->GetUnitsList();
-      
-      G4UnitsContainer::const_iterator iterUnits =
-      std::find_if(unitContainer.begin(), unitContainer.end(), myUnit);
-      
-      if (iterUnits != unitContainer.end()) {
-	value = (*iterUnits)->GetValue();
-	gotUnit = true;
-      }
-      
-      iterTable++;
-    }
-    
-    return gotUnit;
-  }
+namespace G4DimensionedTypeUtils
+{
+  G4bool GetUnitValue(const G4String& unit, G4double& value);
 }
 
 // Default error handling done through G4ConversionFatalError
@@ -140,7 +98,7 @@ G4DimensionedType<T, ConversionErrorPolicy>::G4DimensionedType(const T& value, c
   G4double unitValue(0);
 
   // Convert unit string to unit value
-  if (!GetUnitValue(unit, unitValue)) ConversionErrorPolicy::ReportError(unit, "Invalid unit"); 
+  if (!G4DimensionedTypeUtils::GetUnitValue(unit, unitValue)) ConversionErrorPolicy::ReportError(unit, "Invalid unit");
 
   fDimensionedValue = value*unitValue;
 }

@@ -23,16 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01SD.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file biasing/ReverseMC01/src/RMC01SD.cc
+/// \brief Implementation of the RMC01SD class
+//
+// $Id$
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01SD
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//      Class Name:        RMC01SD
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "RMC01SD.hh"
 #include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
@@ -54,91 +60,107 @@
 #include "G4Gamma.hh"
 #include "G4Proton.hh"
 
-
-
-
 class G4Step;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01SD::RMC01SD(G4String name)
-:G4VSensitiveDetector(name)
-{  
-   collectionName.insert("edep"); 
-   collectionName.insert("current_electron"); 
-   collectionName.insert("current_proton"); 
-   collectionName.insert("current_gamma");
-;
+:G4VSensitiveDetector(name),
+ fTotalEventEdep(0.),fEventEdepCollection(0),
+ fProtonCurrentCollection(0),fGammaCurrentCollection(0),
+ fElectronCurrentCollection(0)
+{
+  collectionName.insert("edep");
+  collectionName.insert("current_electron");
+  collectionName.insert("current_proton");
+  collectionName.insert("current_gamma");
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01SD::~RMC01SD()
 {; 
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01SD::Initialize(G4HCofThisEvent* HCE)
-{  TotalEventEdep=0.;
-   static G4int HCID = -1;
+{
+  fTotalEventEdep=0.;
+  static G4int HCID = -1;
    
-   EventEdepCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>(SensitiveDetectorName,collectionName[0]);
-   HCID = GetCollectionID(0);
-   HCE->AddHitsCollection(HCID,EventEdepCollection);
+  fEventEdepCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>
+                                      (SensitiveDetectorName,collectionName[0]);
+  HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID,fEventEdepCollection);
   
-   ElectronCurrentCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>(SensitiveDetectorName,collectionName[1]);
-   HCID = GetCollectionID(1);
-   HCE->AddHitsCollection(HCID,ElectronCurrentCollection);
+  fElectronCurrentCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>
+                                      (SensitiveDetectorName,collectionName[1]);
+  HCID = GetCollectionID(1);
+  HCE->AddHitsCollection(HCID,fElectronCurrentCollection);
  
-   ProtonCurrentCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>(SensitiveDetectorName,collectionName[2]);
-   HCID = GetCollectionID(2);
-   HCE->AddHitsCollection(HCID,ProtonCurrentCollection);
+  fProtonCurrentCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>
+                                      (SensitiveDetectorName,collectionName[2]);
+  HCID = GetCollectionID(2);
+  HCE->AddHitsCollection(HCID,fProtonCurrentCollection);
   
-   GammaCurrentCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>(SensitiveDetectorName,collectionName[3]);
-   HCID = GetCollectionID(3);
-   HCE->AddHitsCollection(HCID,GammaCurrentCollection); 
-  
-   
-   
+  fGammaCurrentCollection = new G4THitsCollection<RMC01DoubleWithWeightHit>
+                                      (SensitiveDetectorName,collectionName[3]);
+  HCID = GetCollectionID(3);
+  HCE->AddHitsCollection(HCID,fGammaCurrentCollection);
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4bool RMC01SD::ProcessHits(G4Step*aStep,G4TouchableHistory* )
 {
   G4double weight =aStep->GetTrack()->GetWeight();
   G4double edep= aStep->GetTotalEnergyDeposit();
-  if (edep >0) EventEdepCollection->insert(new RMC01DoubleWithWeightHit(edep,weight)); 
+  if (edep >0) fEventEdepCollection->insert(
+                                   new RMC01DoubleWithWeightHit(edep,weight));
   
   G4StepPoint* preStepPoint =aStep->GetPreStepPoint();
   
   if (preStepPoint->GetStepStatus() == fGeomBoundary ){
-  
-     // Entering the sensitive volume
-     weight=preStepPoint->GetWeight();
-     G4double eKin = preStepPoint->GetKineticEnergy();
-     G4ParticleDefinition* thePartDef = aStep->GetTrack()->GetDefinition(); 
-     if (thePartDef == G4Electron::Electron())  ElectronCurrentCollection->insert(new RMC01DoubleWithWeightHit(eKin,weight));
-     else if (thePartDef == G4Gamma::Gamma())   GammaCurrentCollection->insert(new RMC01DoubleWithWeightHit(eKin,weight));
-     else if (thePartDef == G4Proton::Proton()) ProtonCurrentCollection->insert(new RMC01DoubleWithWeightHit(eKin,weight));
-  
+    // Entering the sensitive volume
+    weight=preStepPoint->GetWeight();
+    G4double eKin = preStepPoint->GetKineticEnergy();
+    G4ParticleDefinition* thePartDef = aStep->GetTrack()->GetDefinition();
+    if (thePartDef == G4Electron::Electron())  fElectronCurrentCollection->
+                                                         insert(new RMC01DoubleWithWeightHit(eKin,weight));
+    else if (thePartDef == G4Gamma::Gamma())   fGammaCurrentCollection->
+                                                         insert(new RMC01DoubleWithWeightHit(eKin,weight));
+    else if (thePartDef == G4Proton::Proton()) fProtonCurrentCollection->
+                                                         insert(new RMC01DoubleWithWeightHit(eKin,weight));
   }   
   return true;   
 }  
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01SD::EndOfEvent(G4HCofThisEvent*)
-{ EventEdepCollection->insert(new RMC01DoubleWithWeightHit(TotalEventEdep,1.)); 
+{
+  fEventEdepCollection->insert(new RMC01DoubleWithWeightHit(fTotalEventEdep,1.));
 }
-////////////////////////////////////////////////////////////////////////////////
-//
-void RMC01SD::clear()
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RMC01SD::Clear()
 {;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01SD::DrawAll()
 {;
 } 
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01SD::PrintAll()
 {;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 

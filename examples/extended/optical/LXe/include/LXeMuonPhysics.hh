@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeMuonPhysics.hh
+/// \brief Definition of the LXeMuonPhysics class
+//
+//
 #ifndef LXeMuonPhysics_h
 #define LXeMuonPhysics_h 1
 
@@ -40,36 +44,35 @@
 
 class LXeMuonPhysics : public G4VPhysicsConstructor
 {
-  public: 
+  public:
+
     LXeMuonPhysics(const G4String& name="muon");
     virtual ~LXeMuonPhysics();
 
-  public: 
-    // This method will be invoked in the Construct() method. 
+    // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
     virtual void ConstructParticle();
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
+    // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
   protected:
+
    // Muon physics
    G4MuIonisation*         fMuPlusIonisation;
    G4MuMultipleScattering* fMuPlusMultipleScattering;
-   G4MuBremsstrahlung*     fMuPlusBremsstrahlung ;
+   G4MuBremsstrahlung*     fMuPlusBremsstrahlung;
    G4MuPairProduction*     fMuPlusPairProduction;
 
    G4MuIonisation*         fMuMinusIonisation;
    G4MuMultipleScattering* fMuMinusMultipleScattering;
-   G4MuBremsstrahlung*     fMuMinusBremsstrahlung ;
+   G4MuBremsstrahlung*     fMuMinusBremsstrahlung;
    G4MuPairProduction*     fMuMinusPairProduction;
 
    G4MuonMinusCaptureAtRest* fMuMinusCaptureAtRest;
 
 };
 
-
 #endif
-

@@ -23,171 +23,168 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/src/exGPSAnalysisManager.cc
+/// \brief Implementation of the exGPSAnalysisManager class
+//
 #ifdef G4ANALYSIS_USE
-
 #include <AIDA/AIDA.h>
-
 #include "exGPSAnalysisManager.hh"
 #include "exGPSAnalysisMessenger.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
-exGPSAnalysisManager* exGPSAnalysisManager::instance = 0;
+exGPSAnalysisManager* exGPSAnalysisManager::fInstance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSAnalysisManager::exGPSAnalysisManager(): 
-fileName("exgps.aida"),fileType("xml"),analysisFactory(0), tree(0),plotter(0),
-minpos(-10.),maxpos(10),mineng(0.),maxeng(1000.),
-enerHisto(0),posiXY(0),posiXZ(0),posiYZ(0),anglCTP(0),anglTP(0),tuple(0)
+fIleName("exgps.aida"),fIleType("xml"),fAnalysisFactory(0),
+fTree(0),fPlotter(0),fMinpos(-10.),fMaxpos(10),fMineng(0.),fMaxeng(1000.),
+fEnerHisto(0),fPosiXY(0),fPosiXZ(0),fPosiYZ(0),fAnglCTP(0),fAnglTP(0),fTuple(0)
 {
   // Define the messenger and the analysis system
-  analysisMessenger = new exGPSAnalysisMessenger(this);
+  fAnalysisMessenger = new exGPSAnalysisMessenger(this);
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSAnalysisManager::~exGPSAnalysisManager() {
-
-  delete analysisMessenger;
+  delete fAnalysisMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-////////////////////////////////////////////////////////////////////////////////
-//
-exGPSAnalysisManager* exGPSAnalysisManager::getInstance ()
+exGPSAnalysisManager* exGPSAnalysisManager::GetInstance ()
 {
-  if (instance == 0) instance = new exGPSAnalysisManager();
-  return instance;
+  if (fInstance == 0) fInstance = new exGPSAnalysisManager();
+  return fInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exGPSAnalysisManager::dispose()
+void exGPSAnalysisManager::Dispose()
 {
-  if (instance != 0)
+  if (fInstance != 0)
   {
-    delete instance;
-    instance = 0;
+    delete fInstance;
+    fInstance = 0;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exGPSAnalysisManager::Fill(G4String pname, G4double e, 
-				G4double x, G4double y, G4double z,
-				G4double t, G4double p, G4double w)
+                                G4double x, G4double y, G4double z,
+                                G4double t, G4double p, G4double w)
 {
-  if(enerHisto) {
-    enerHisto->fill(e/MeV,w);
-    posiXY->fill(x/cm,y/cm,w);
-    posiXZ->fill(x/cm,z/cm,w);
-    posiYZ->fill(y/cm,z/cm,w);
-    anglCTP->fill(p/deg,std::cos(t),w);
-    anglTP->fill(p/deg,t/deg,w);
+  if(fEnerHisto) {
+    fEnerHisto->fill(e/MeV,w);
+    fPosiXY->fill(x/cm,y/cm,w);
+    fPosiXZ->fill(x/cm,z/cm,w);
+    fPosiYZ->fill(y/cm,z/cm,w);
+    fAnglCTP->fill(p/deg,std::cos(t),w);
+    fAnglTP->fill(p/deg,t/deg,w);
   }
 
-  if (plotter) plotter->refresh();
+  if (fPlotter) fPlotter->refresh();
 
-  // Fill the tuple
+  // Fill the fTuple
 
-  if (tuple) {
-    tuple->fill(0,pname);
-    tuple->fill(1,e/MeV);
-    tuple->fill(2,x/cm);
-    tuple->fill(3,y/cm);
-    tuple->fill(4,z/cm);
-    tuple->fill(5,t/deg);
-    tuple->fill(6,p/deg);
-    tuple->fill(7,w);
-    
-    tuple->addRow();
+  if (fTuple) {
+    fTuple->fill(0,pname);
+    fTuple->fill(1,e/MeV);
+    fTuple->fill(2,x/cm);
+    fTuple->fill(3,y/cm);
+    fTuple->fill(4,z/cm);
+    fTuple->fill(5,t/deg);
+    fTuple->fill(6,p/deg);
+    fTuple->fill(7,w);
+    fTuple->addRow();
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 /* 
    This member reset the histograms and it is called at the begin
-   of each run; here we put the inizialization so that the histograms have 
+   of each run; here we put the initialization so that the histograms have
    always the right dimensions depending from the detector geometry
 */
 void exGPSAnalysisManager::BeginOfRun() 
 { 
-  tree = 0;
-  plotter = 0;
+  fTree = 0;
+  fPlotter = 0;
+  fEnerHisto =0;
+  fPosiXY = fPosiXZ = fPosiYZ = fAnglCTP =fAnglTP = 0;
+  fTuple = 0;
 
-  enerHisto =0;
-  posiXY = posiXZ = posiYZ = anglCTP =anglTP = 0;
-  tuple = 0;
-
-  // Hooking an AIDA compliant analysis system.
-  analysisFactory = AIDA_createAnalysisFactory();
-  if(!analysisFactory) //Have to check that, it can fail.
+  //Hooking an AIDA compliant analysis system.
+  fAnalysisFactory = AIDA_createAnalysisFactory();
+  if(!fAnalysisFactory) //Have to check that, it can fail.
   {
     G4cout << "exGPSAnalysisManager::BeginOfRun: can't get AIDA." << G4endl; 
     return;
   }
-  AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+  AIDA::ITreeFactory* treeFactory = fAnalysisFactory->createTreeFactory();
   if(treeFactory) 
   {
-    tree = treeFactory->create(fileName,fileType,false,true,"compress=yes");
-    if(!tree) //Have to check that, it can fail.
+    fTree = treeFactory->create(fIleName,fIleType,false,true,"compress=yes");
+    if(!fTree) //Have to check that, it can fail.
     {
       G4cout << "exGPSAnalysisManager::BeginOfRun:"
-             << " can't create the AIDA::ITree : " << fileName << G4endl; 
+             << " can't create the AIDA::ITree : " << fIleName << G4endl; 
       return;
     }
 
     delete treeFactory; // Will not delete the ITree.
   }
 
-  AIDA::IHistogramFactory* hFactory = analysisFactory->createHistogramFactory(*tree);
+  AIDA::IHistogramFactory* hFactory =
+    fAnalysisFactory->createHistogramFactory(*fTree);
   if (hFactory)
   {
     // Create the energy histogram
-    enerHisto = hFactory->createHistogram1D("Source Energy Spectrum",100,mineng,maxeng);
+    fEnerHisto = hFactory->createHistogram1D("Source Energy Spectrum",100,
+                                                                                                                      fMineng,fMaxeng);
 
     // Create some 2d histos 
-    posiXY = hFactory->createHistogram2D("Source X-Y distribution",100,minpos/cm,maxpos/cm
-					    ,100,minpos/cm,maxpos/cm);
-    posiXZ = hFactory->createHistogram2D("Source X-Z distribution",100,minpos/cm,maxpos/cm
-					    ,100,minpos/cm,maxpos/cm);
-    posiYZ = hFactory->createHistogram2D("Source Y-Z distribution",100,minpos/cm,maxpos/cm
-					    ,100,minpos/cm,maxpos/cm);
-    anglCTP = hFactory->createHistogram2D("Source phi-std::cos(theta) distribution",360,0,360
-						   , 100, -1, 1);
-    anglTP = hFactory->createHistogram2D("Source phi-theta distribution",360,0,360
-						  ,180,0,180);
+    fPosiXY = hFactory->createHistogram2D("Source X-Y distribution",100,
+                              fMinpos/cm,fMaxpos/cm,100,fMinpos/cm,fMaxpos/cm);
+    fPosiXZ = hFactory->createHistogram2D("Source X-Z distribution",100,
+                              fMinpos/cm,fMaxpos/cm,100,fMinpos/cm,fMaxpos/cm);
+    fPosiYZ = hFactory->createHistogram2D("Source Y-Z distribution",100,
+                              fMinpos/cm,fMaxpos/cm,100,fMinpos/cm,fMaxpos/cm);
+    fAnglCTP = hFactory->createHistogram2D("Source phi-std::cos(theta) distribution",
+                              360,0,360,100, -1, 1);
+    fAnglTP = hFactory->createHistogram2D("Source phi-theta distribution",
+                              360,0,360,180,0,180);
     delete hFactory;
   }
 
   // Create a Tuple
 
-  AIDA::ITupleFactory* tFactory = analysisFactory->createTupleFactory(*tree);
+  AIDA::ITupleFactory* tFactory = fAnalysisFactory->createTupleFactory(*fTree);
   if (tFactory)
   {
-     tuple = tFactory->create("MyTuple","MyTuple","string Pname, double Energy, X, Y, Z, Theta, Phi, Weight","");
+     fTuple = tFactory->create("MyTuple","MyTuple",
+                     "string Pname, double Energy, X, Y, Z, Theta, Phi, Weight","");
      delete tFactory;
   }
   
-  AIDA::IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
+  AIDA::IPlotterFactory* pf = fAnalysisFactory->createPlotterFactory(0,0);
   if(pf) 
   {
-    plotter = pf->create();
-    if (plotter)
+    fPlotter = pf->create();
+    if (fPlotter)
     {
-       plotter->createRegions(2,3);
-       if(enerHisto) plotter->region(0)->plot(*enerHisto);
-       if(posiXY) plotter->region(1)->plot(*posiXY);
-       if(posiXZ) plotter->region(2)->plot(*posiXZ);
-       if(posiYZ) plotter->region(3)->plot(*posiYZ);
-       if(anglCTP) plotter->region(4)->plot(*anglCTP);
-       if(anglTP) plotter->region(5)->plot(*anglTP);
-       plotter->show();
+       fPlotter->createRegions(2,3);
+       if(fEnerHisto) fPlotter->region(0)->plot(*fEnerHisto);
+       if(fPosiXY) fPlotter->region(1)->plot(*fPosiXY);
+       if(fPosiXZ) fPlotter->region(2)->plot(*fPosiXZ);
+       if(fPosiYZ) fPlotter->region(3)->plot(*fPosiYZ);
+       if(fAnglCTP) fPlotter->region(4)->plot(*fAnglCTP);
+       if(fAnglTP) fPlotter->region(5)->plot(*fAnglTP);
+       fPlotter->show();
     }
     delete pf;
   }
@@ -200,35 +197,25 @@ void exGPSAnalysisManager::BeginOfRun()
 */
 void exGPSAnalysisManager::EndOfRun() 
 {
-  if (analysisFactory)
+  if (fAnalysisFactory)
   {
-    if (!tree->commit()) G4cout << "Commit failed: no AIDA file produced!" << G4endl;
-    delete tree;
-    tree = 0;
-    //    G4cout << "Warning: Geant4 will NOT continue unless you close the JAS-AIDA window." << G4endl;
+    if (!fTree->commit()) G4cout << "Commit failed: no AIDA file produced!"
+                                                                                                                                    << G4endl;
+    delete fTree;
+    fTree = 0;
 
-    delete plotter;
-    plotter = 0;
+    delete fPlotter;
+    fPlotter = 0;
 
-    delete analysisFactory; //cleanup all AIDA related things.
-    analysisFactory = 0;
+    delete fAnalysisFactory; //cleanup all AIDA related things.
+    fAnalysisFactory = 0;
 
-    enerHisto = 0;
-    posiXY = posiXZ = posiYZ = anglCTP =anglTP = 0;
-    tuple = 0;
+    fEnerHisto = 0;
+    fPosiXY = fPosiXZ = fPosiYZ = fAnglCTP =fAnglTP = 0;
+    fTuple = 0;
 
   }
 }
 
 
 #endif // G4ANALYSIS_USE
-
-
-
-
-
-
-
-
-
-

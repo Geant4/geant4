@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.8 2010-10-26 15:40:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -60,7 +59,8 @@ class G4mplIonisationModel : public G4VEmModel, public G4VEmFluctuationModel
 
 public:
 
-  G4mplIonisationModel(G4double mCharge, const G4String& nam = "mplIonisation");
+  G4mplIonisationModel(G4double mCharge,
+		       const G4String& nam = "mplIonisation");
 
   virtual ~G4mplIonisationModel();
 
@@ -89,9 +89,10 @@ public:
                               G4double& tmax,
                               G4double& length);
 
+  void SetParticle(const G4ParticleDefinition* p);
+
 private:
 
-  void SetParticle(const G4ParticleDefinition* p);
   G4double ComputeDEDXAhlen(const G4Material* material, G4double bg2);
 
   // hide assignment operator

@@ -1,0 +1,79 @@
+//$Id$
+
+///\file "field/field03/.README"
+///\brief Example field03 README page
+
+/*! \page Examplefield03 Example  field03
+
+ Example of tracking in magnetic field where field associated
+ to selected logical volumes varies.
+
+	
+\section field03_s1 GEOMETRY DEFINITION
+ 
+ The "absorber" is a solid made of a given material.                
+ 
+ Three parameters define the absorber :
+ - the material of the absorber,
+	- the thickness of an absorber,
+ - the transverse size of the absorber (the input face is a square). 
+    
+ The volume "World" contains the "absorber". 
+ In this test the parameters of the "World" can be changed , too.
+
+ In addition a transverse uniform magnetic field can be applied.
+ 
+ The default geometry is constructed in F03DetectorConstruction class,
+ but all the parameters can be changed via
+ the commands defined in the F03DetectorMessenger class.
+ 
+\section field03_s2 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle which hits the
+ absorber perpendicular to the input face. The type of the particle
+ and its energy are set in the F03PrimaryGeneratorAction class, and can
+ be changed via the G4 build-in commands of G4ParticleGun class (see
+ the macros provided with this example).
+ 
+ A RUN is a set of events.
+ 
+\section field03_s3 DETECTOR RESPONSE
+
+ 
+ A HIT is a record, event per event , of all the 
+ informations needed to simulate and analyse the detector response.
+ 
+ In this example a F03CalorHit is defined as a set of 2 informations:
+ - the total energy deposit in the absorber,
+ - the total tracklength of all charged particles in the absorber,  
+ 
+ Therefore  the absorber is declared
+ 'sensitive detector' (SD), see F03CalorimeterSD, which means they can contribute to the hit.
+
+ 
+\section field03_s4 PHYSICS DEMO
+ 
+ The particle's type and the physic processes which will be available
+ in this example are set in F03PhysicsList class.
+ 
+ The  messenger classes, F03PhysicsListMessenger, introduce interactive commands . Using these
+ commands the geometry of the detector, the data of the primary
+ particle, etc. can be changed.
+ 
+
+\section field03_s5 HOW TO START ?
+ 
+ - Execute field03 in 'batch' mode from macro files e.g.
+\verbatim
+% field03 field03.in
+\endverbatim
+		
+ - Execute field03 in 'interactive' mode with visualization e.g.
+\verbatim
+% field03
+....
+Idle> /control/execute vis.mac
+....
+\endverbatim
+
+*/

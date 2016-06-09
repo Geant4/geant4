@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 October 2012 Gabriele Cosmo (gdml-V09-05-05)
+- Added inclusion of headers to G4STRead.cc to make it self consistent.
+
+18 July 2012 Witek Pokorski (gdml-V09-05-04)
+- Corrected handling of constant material properties.
+
+5 July 2012 - Gabriele Cosmo (gdml-V09-05-03)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+30 May 2012 - Gabriele Cosmo (gdml-V09-05-02)
+- Fixed typo introduced in previous tag...
+
+25 May 2012 - Gabriele Cosmo (gdml-V09-05-01)
+- Fixed trivial cases of variable shadowing.
+
+20 March 2012 Witek Pokorski (gdml-V09-05-00, gdml-V09-04-11)
+- Bug fix in material properties.
+
 23 November 2011 Gabriele Cosmo (gdml-V09-04-10)
 - Additional fix on G4EllipticalTube, to not consider units in import for
   semi-axes ratios.

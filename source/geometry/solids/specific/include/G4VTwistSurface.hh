@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.hh,v 1.6 2007-05-11 13:54:28 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -47,6 +46,8 @@
 // --------------------------------------------------------------------
 #ifndef __G4VTWISTSURFACE__
 #define __G4VTWISTSURFACE__
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VSolid.hh"
 #include "geomdefs.hh"
@@ -377,7 +378,7 @@ G4bool DistanceSort( const Intersection &a, const Intersection &b)
 inline
 G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 {
-  return ( ( a.xx - b.xx ).mag() < 1E-9*mm ) ;
+  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;
 }
 
 #include "G4VTwistSurface.icc"

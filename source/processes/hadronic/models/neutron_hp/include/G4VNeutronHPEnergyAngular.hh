@@ -24,17 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEnergyAngular.hh,v 1.12 2008-07-21 23:26:29 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080718 Add ClearHistories() method by T. Koi
 //
 #ifndef G4VNeutronHPEnergyAngular_h
 #define G4VNeutronHPEnergyAngular_h 1
 
-#include "G4ios.hh"
 #include <fstream>
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ReactionProduct.hh"
 
 class G4VNeutronHPEnergyAngular

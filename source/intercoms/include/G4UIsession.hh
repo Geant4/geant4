@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIsession.hh,v 1.5 2006-06-29 19:08:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // $id$
 
@@ -53,12 +52,12 @@ class G4UIsession : public G4coutDestination
       // This method will be invoked by main().
       // Optionally, it can be invoked by another session.
       
-      virtual void PauseSessionStart(G4String Prompt);
+      virtual void PauseSessionStart(const G4String& Prompt);
       // This method will be invoked by G4UImanager
       // when G4kernel becomes to Pause state.
       
-      virtual G4int ReceiveG4cout(G4String coutString);
-      virtual G4int ReceiveG4cerr(G4String cerrString);
+      virtual G4int ReceiveG4cout(const G4String& coutString);
+      virtual G4int ReceiveG4cerr(const G4String& cerrString);
       // These two methods will be invoked by G4strstreambuf.
 
 };

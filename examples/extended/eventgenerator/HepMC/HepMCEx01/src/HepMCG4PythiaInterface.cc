@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaInterface.cc
+/// \brief Implementation of the HepMCG4PythiaInterface class
+//
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.cc
-//   $Id: HepMCG4PythiaInterface.cc,v 1.6 2010-12-10 06:21:34 kmura Exp $
+//   $Id$
 //
 // ====================================================================
 
@@ -84,7 +87,7 @@ void HepMCG4PythiaInterface::CallPygive(G4String par)
 
 //////////////////////////////////////////////////////////////////////
 void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam, 
-					G4String target, G4double win)
+                                        G4String target, G4double win)
 //////////////////////////////////////////////////////////////////////
 {
   call_pyinit(frame.c_str(), beam.c_str(), target.c_str(), win);
@@ -136,8 +139,8 @@ void HepMCG4PythiaInterface::SetUserParameters()
 ////////////////////////////////////////////////
 {
   G4cout << "set user parameters of PYTHIA common." << G4endl
-	 << "nothing to be done in default."
-	 << G4endl;
+         << "nothing to be done in default."
+         << G4endl;
 }
 
 /////////////////////////////////////////////////////////////

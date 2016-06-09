@@ -50,6 +50,10 @@ class G4MesonAbsorption : public G4BCAction
                                          std::vector<G4KineticTrack *> targets);
 
   private:
+    G4MesonAbsorption(const G4MesonAbsorption &);
+    G4MesonAbsorption & operator= (const G4MesonAbsorption &);
+
+  private:
   G4double GetTimeToAbsorption(const G4KineticTrack& trk1, const G4KineticTrack& trk2);
   
   void FindAndFillCluster(G4KineticTrackVector & result, 
@@ -59,7 +63,6 @@ class G4MesonAbsorption : public G4BCAction
   G4double AbsorptionCrossSection(const G4KineticTrack & trk1, const G4KineticTrack & trk2);  
   private:
   std::vector<G4CollisionInitialState *> theCollisions;
-  G4double theCross;
     
 };
 

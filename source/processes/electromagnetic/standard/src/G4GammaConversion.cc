@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.31 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------
@@ -67,7 +66,10 @@
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BetheHeitlerModel.hh"
+#include "G4PairProductionRelModel.hh"
 #include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,6 +82,9 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
 {
   SetMinKinEnergy(2.0*electron_mass_c2);
   SetProcessSubType(fGammaConversion);
+  SetStartFromNullFlag(true);
+  SetBuildTableFlag(true);
+  SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,15 +105,33 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(true);
-    SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = std::max(MinKinEnergy(), 2.0*electron_mass_c2);
+    const G4double limit = 80*GeV;
+    G4double emin = std::max(MinKinEnergy(), 2*electron_mass_c2);
+    G4double emax = MaxKinEnergy();
     SetMinKinEnergy(emin);
-    if(!Model()) { SetModel(new G4BetheHeitlerModel()); }
-    Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+
+    if(!EmModel(1)) { SetEmModel(new G4BetheHeitlerModel(), 1); }
+    EmModel(1)->SetLowEnergyLimit(emin);
+    G4double ehigh = std::min(emax,limit);
+    ehigh = std::min(ehigh,EmModel(1)->HighEnergyLimit());
+    EmModel(1)->SetHighEnergyLimit(ehigh);
+    AddEmModel(1, EmModel(1));
+
+    if(emax > ehigh) {
+      if(!EmModel(2)) { SetEmModel(new G4PairProductionRelModel(), 2); }
+      EmModel(2)->SetLowEnergyLimit(ehigh);
+      EmModel(2)->SetHighEnergyLimit(emax);
+      AddEmModel(2, EmModel(2));
+    }
   } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4GammaConversion::MinPrimaryEnergy(const G4ParticleDefinition*,
+					     const G4Material*)
+{
+  return 2*electron_mass_c2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

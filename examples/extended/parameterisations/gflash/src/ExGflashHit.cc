@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashHit.cc
+/// \brief Implementation of the ExGflashHit class
+//
 
 #include "ExGflashHit.hh"
 
@@ -71,9 +74,9 @@ const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
 int ExGflashHit::operator==(const ExGflashHit &right) const
 {
 // @@@@ return 0;
-	if ((pos==right.pos) &&  (edep == right.edep)) return true;
-	else return false;
-	
+  if ((pos==right.pos) &&  (edep == right.edep)) return true;
+  else return false;
+  
 }
 
 void ExGflashHit::Draw()

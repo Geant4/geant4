@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/src/G4BlineEquation.cc
+/// \brief Implementation of the G4BlineEquation class
 //
-// $Id: G4BlineEquation.cc,v 1.2 2006-06-29 17:15:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -44,8 +46,8 @@
 G4BlineEquation::G4BlineEquation( G4MagneticField* MagField )
   : G4Mag_EqRhs( MagField ) 
 {
-  backward_direction=false;
-  direction=1.;
+  fBackward_direction=false;
+  fDirection=1.;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,7 +62,7 @@ void G4BlineEquation::EvaluateRhsGivenB( const G4double y[],
                                          const G4double B[3],
                                                G4double dydx[] ) const
 {
-  G4double Bmag = direction*std::sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2]);
+  G4double Bmag = fDirection*std::sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2]);
   dydx[0] = B[0]/Bmag;       
   dydx[1] = B[1]/Bmag;       
   dydx[2] = B[2]/Bmag;
@@ -74,7 +76,7 @@ void G4BlineEquation::EvaluateRhsGivenB( const G4double y[],
 
 void G4BlineEquation::SetBackwardDirectionOfIntegration(G4bool abool)
 {
-  backward_direction=abool;
-  direction=1.;
-  if (backward_direction) direction= -1.;
+  fBackward_direction=abool;
+  fDirection=1.;
+  if (fBackward_direction) fDirection= -1.;
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.25 2008-07-10 09:40:08 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -330,9 +329,9 @@ G4double G4LogicalVolume::GetSmartless() const
 // ********************************************************************
 //
 inline
-void G4LogicalVolume::SetSmartless(G4double s)
+void G4LogicalVolume::SetSmartless(G4double smt)
 {
-  fSmartless = s;
+  fSmartless = smt;
 }
 
 // ********************************************************************
@@ -482,9 +481,9 @@ void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 // ********************************************************************
 //
 inline
-void G4LogicalVolume::SetBiasWeight(G4double w)
+void G4LogicalVolume::SetBiasWeight(G4double weight)
 {
-  fBiasWeight = w;
+  fBiasWeight = weight;
 }
 
 // ********************************************************************

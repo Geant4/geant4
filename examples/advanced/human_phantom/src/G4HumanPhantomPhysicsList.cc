@@ -35,11 +35,11 @@
 //    *                                *
 //    **********************************
 //
-// $Id: G4HumanPhantomPhysicsList.cc,v 1.13 2010-11-16 15:28:49 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4HumanPhantomPhysicsList.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"

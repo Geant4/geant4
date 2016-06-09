@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.21 2006-11-13 18:24:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4FieldTrack
@@ -125,6 +124,8 @@ class  G4FieldTrack
      inline void SetMomentumDir(G4ThreeVector nMomDir);
        // Does NOT change Momentum or Velocity Vector.
 
+     inline void SetRestMass(G4double Mass_c2) { fRestMass_c2= Mass_c2; }
+   
      inline void SetCurveLength(G4double nCurve_s);
        // Distance along curve.
      inline void SetKineticEnergy(G4double nEnergy);
@@ -136,10 +137,6 @@ class  G4FieldTrack
        //  Modifiers
 
    public: // without description
-
-     inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
-                                      const G4ThreeVector& pMomentum,
-                                            G4double       s_curve );
      inline void          InitialiseSpin( const G4ThreeVector& Spin );
        //  Used to update / initialise the state
 
@@ -152,8 +149,11 @@ class  G4FieldTrack
      friend  std::ostream&
              operator<<( std::ostream& os, const G4FieldTrack& SixVec);
 
+   private: // Implementation method -- Obsolete
+     inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
+                                      const G4ThreeVector& pMomentum,
+                                      G4double       s_curve );
    private:
-
      G4double  SixVector[6];
      G4double  fDistanceAlongCurve;  // distance along curve of point
      G4double  fKineticEnergy;
@@ -162,6 +162,8 @@ class  G4FieldTrack
      G4double  fProperTimeOfFlight;
      G4ThreeVector fSpin;
      G4ThreeVector fMomentumDir;
+     // G4double  fInitialMomentumMag;  // At 'track' creation.
+     // G4double  fLastMomentumMag;     // From last Update (for checking.)
 
    private:   //  Implementation detail -- daughter class
 
@@ -174,6 +176,7 @@ class  G4FieldTrack
                                 G4double electric_dipole_moment= 0.0,  
                                 G4double magnetic_charge= 0.0);  
            inline G4ChargeState( const G4ChargeState& right ); 
+           inline G4ChargeState& operator = ( const G4ChargeState& right );
 
            inline void SetCharge(G4double charge){ fCharge= charge; }
 

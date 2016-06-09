@@ -59,6 +59,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "G4EMDissociation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Evaporation.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4StatMF.hh"
@@ -77,52 +79,61 @@
 #include "G4ReactionProductVector.hh"
 #include "Randomize.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
-G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation")
-{
-//
-//
-// Send message to stdout to advise that the G4EMDissociation model is being
-// used.
-//
+
+G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation") {
+
+  // Send message to stdout to advise that the G4EMDissociation model is being
+  // used.
   PrintWelcomeMessage();
-//
-//
-// No de-excitation handler has been supplied - define the default handler.
-//
-  theExcitationHandler             = new G4ExcitationHandler;
-  G4Evaporation * theEvaporation   = new G4Evaporation;
-  G4FermiBreakUp * theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF * theMF                 = new G4StatMF;
+
+  // No de-excitation handler has been supplied - define the default handler.
+  theExcitationHandler            = new G4ExcitationHandler;
+  G4Evaporation* theEvaporation   = new G4Evaporation;
+  G4FermiBreakUp* theFermiBreakUp = new G4FermiBreakUp;
+  G4StatMF* theMF                 = new G4StatMF;
   theExcitationHandler->SetEvaporation(theEvaporation);
   theExcitationHandler->SetFermiModel(theFermiBreakUp);
   theExcitationHandler->SetMultiFragmentation(theMF);
   theExcitationHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theExcitationHandler->SetMinEForMultiFrag(5.0*MeV);
   handlerDefinedInternally = true;
-//
-//
-// This EM dissociation model needs access to the cross-sections held in
-// G4EMDissociationCrossSection.
-//
+
+  // This EM dissociation model needs access to the cross-sections held in
+  // G4EMDissociationCrossSection.
   dissociationCrossSection = new G4EMDissociationCrossSection;
   thePhotonSpectrum = new G4EMDissociationSpectrum;
-//
-//
-// Set the minimum and maximum range for the model (despite nomanclature, this
-// is in energy per nucleon number).  
-//  
+
+  // Set the minimum and maximum range for the model (despite nomanclature, this
+  // is in energy per nucleon number).    
   SetMinEnergy(100.0*MeV);
   SetMaxEnergy(500.0*GeV);
-//
-//
-// Set the default verbose level to 0 - no output.
-//
+
+  // Set the default verbose level to 0 - no output.
   verboseLevel = 0;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+/*
+G4EMDissociation::G4EMDissociation(const G4EMDissociation& emd)
+ : G4HadronicInteraction(emd)
+{
+  if (emd.theExcitationHandler != 0) {
+    theExcitationHandler = new G4ExcitationHandler;
+    *theExcitationHandler = *emd.theExcitationHandler;
+  }
+
+  handlerDefinedInternally = emd.handlerDefinedInternally;
+
+  if (emd.dissociationCrossSection != 0) {
+    dissociationCrossSection = new G4EMDissociationCrossSection;
+    *dissociationCrossSection = *emd.dissociationCrossSection;
+  }
+
+  if (emd.thePhotonSpectrum !- 0) {
+    thePhotonSpectrum = new G4EMDissociationSpectrum;
+    *thePhotonSpectrum = *emd.thePhotonSpectrum;
+}
+*/
+
 G4EMDissociation::G4EMDissociation (G4ExcitationHandler *aExcitationHandler)
 {
 //
@@ -154,16 +165,17 @@ G4EMDissociation::G4EMDissociation (G4ExcitationHandler *aExcitationHandler)
 //
   verboseLevel = 0;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
-G4EMDissociation::~G4EMDissociation ()
-{
+
+
+G4EMDissociation::~G4EMDissociation() {
   if (handlerDefinedInternally) delete theExcitationHandler;
-  delete dissociationCrossSection;
+  // delete dissociationCrossSection;
+  // Cross section deleted by G4CrossSectionRegistry; don't do it here
+  // Bug reported by Gong Ding in Bug Report #1339
   delete thePhotonSpectrum;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4HadFinalState *G4EMDissociation::ApplyYourself
   (const G4HadProjectile &theTrack, G4Nucleus &theTarget)
 {
@@ -359,9 +371,10 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 // projectile.
 //
   G4double e  = mass + Eg;
-  G4double m1 = typeNucleon->GetPDGMass();
-  G4double m2 = typeDaughter->GetPDGMass();
-  G4double pp = (e+m1+m2)*(e+m1-m2)*(e-m1+m2)*(e-m1-m2)/(4.0*e*e);
+  G4double mass1 = typeNucleon->GetPDGMass();
+  G4double mass2 = typeDaughter->GetPDGMass();
+  G4double pp = (e+mass1+mass2)*(e+mass1-mass2)*
+                (e-mass1+mass2)*(e-mass1-mass2)/(4.0*e*e);
   if (pp < 0.0)
   {
     pp = 1.0*eV;
@@ -371,8 +384,8 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 //      G4cout <<"Error in mass of secondaries compared with primary:" <<G4endl;
 //      G4cout <<"Rest mass of primary      = " <<mass <<" MeV" <<G4endl;
 //      G4cout <<"Virtual gamma energy      = " <<Eg   <<" MeV" <<G4endl;
-//      G4cout <<"Rest mass of secondary #1 = " <<m1   <<" MeV" <<G4endl;
-//      G4cout <<"Rest mass of secondary #2 = " <<m2   <<" MeV" <<G4endl;
+//      G4cout <<"Rest mass of secondary #1 = " <<mass1   <<" MeV" <<G4endl;
+//      G4cout <<"Rest mass of secondary #2 = " <<mass2   <<" MeV" <<G4endl;
 //    }
   }
   else

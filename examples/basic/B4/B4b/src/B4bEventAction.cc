@@ -29,11 +29,11 @@
 /// \brief Implementation of the B4bEventAction class
 
 #include "B4bEventAction.hh"
-#include "B4bEventActionMessenger.hh"
 #include "B4bRunData.hh"
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -43,15 +43,25 @@
 
 B4bEventAction::B4bEventAction()
  : G4UserEventAction(),
-   fMessenger(this),
+   fMessenger(0),
    fPrintModulo(1)
 {
+  // Define /B4/event commands using generic messenger class
+  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
+
+  // Define /B4/event/setPrintModulo command
+  G4GenericMessenger::Command& setPrintModulo 
+    = fMessenger->DeclareProperty("setPrintModulo", 
+                                  fPrintModulo, 
+                                 "Print events modulo n");
+  setPrintModulo.SetRange("value>0");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4bEventAction::~B4bEventAction()
 {
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

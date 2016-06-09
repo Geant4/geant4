@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02PhysicsList.cc,v 1.2 2006-06-29 17:45:29 gunter Exp $
+/// \file runAndEvent/RE02/src/RE02PhysicsList.cc
+/// \brief Implementation of the RE02PhysicsList class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi
@@ -34,6 +37,7 @@
 #include "RE02PhysicsList.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -55,24 +59,28 @@
 //#include "HadronPhysicsQGSP_BERT.hh"
 //#include "HadronPhysicsQGSP_BIC.hh"
 
-RE02PhysicsList::RE02PhysicsList():  G4VModularPhysicsList()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE02PhysicsList::RE02PhysicsList() : G4VModularPhysicsList()
 {
 
-  G4cout << "You are using the RE02PhysicsList" << G4endl;
-  G4cout << "This PhysicsList originally comes from "<<G4endl;
-  G4cout << "example/extended/analysis/A01, and is modified "<<G4endl;
-  G4cout << "in Hadron Physics in order to involve Binary Cascade" << G4endl;
-  G4cout << "at low energy region and inelastic process for generic ions. "<<G4endl;
-  G4cout << "Full set of particles (barions bosons and mesons) will be created and" << G4endl;
-  G4cout << "Standard EM Physics and Low & High Energy parameterized models will be applied." << G4endl;
-  G4cout << "RE02PhysicsList is optimized for robustness" << G4endl;
-  G4cout << "and not for any particular usage." << G4endl;
-  G4cout << "For the hadronic physics, educated guesses of physics list are prepared for various use cases." << G4endl;
-  G4cout << "When you will start REAL calculations for your own interest," << G4endl;
-  G4cout << "please consider the usage of hadronic_lists instead of RE02PhysicsLists." << G4endl;
-  G4cout << "More information can also be found from the Geant4 HyperNews." << G4endl;
-  G4cout << "http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index" << G4endl;
-  G4cout << "" << G4endl;
+  G4cout
+    << "You are using the RE02PhysicsList\n"
+    << "This PhysicsList originally comes from example/extended/analysis/A01,\n"
+    << "and is modified in Hadron Physics in order to involve Binary Cascade\n"
+    << "at low energy region and inelastic process for generic ions.\n"
+    << "Full set of particles (barions bosons and mesons) will be created and\n"
+    << "Standard EM Physics and Low & High Energy parameterized models will be "
+    << "applied.\n"
+    << "RE02PhysicsList is optimized for robustness and not for any particular "
+    << "usage.\n"
+    << "For the hadronic physics, educated guesses of physics list are "
+    << "prepared\n"
+    << "for various use cases.\n"
+    << "When you will start REAL calculations for your own interest, please\n"
+    << "consider the usage of hadronic_lists instead of RE02PhysicsLists.\n"
+    << "More information can also be found from the Geant4 HyperNews.\n"
+    << "http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index\n"
+    << G4endl;
 
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
@@ -89,7 +97,7 @@ RE02PhysicsList::RE02PhysicsList():  G4VModularPhysicsList()
 
    // Hadron Physics ( Apply related processes to hadrons )
    RegisterPhysics(  new RE02HadronPhysics("hadron"));
-// We do not use hadronic lists since v7.
+   // We do not use hadronic lists since v7.
   //RegisterPhysics(  new HadronPhysicsQGSP_BERT("hadron"));
   //RegisterPhysics(  new HadronPhysicsQGSP_BIC("hadron"));
 
@@ -98,10 +106,12 @@ RE02PhysicsList::RE02PhysicsList():  G4VModularPhysicsList()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PhysicsList::~RE02PhysicsList()
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02PhysicsList::SetCuts()
 {
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets

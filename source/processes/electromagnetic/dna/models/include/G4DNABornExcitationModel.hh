@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.hh,v 1.4 2010-03-27 12:46:51 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNABornExcitationModel_h
@@ -38,7 +37,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "G4NistManager.hh"
 
 class G4DNABornExcitationModel : public G4VEmModel
@@ -71,7 +70,8 @@ protected:
 
 private:
 
-  G4Material* nistwater;
+  // Water density table
+  const std::vector<G4double>* fpMolWaterDensity;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
@@ -93,7 +93,7 @@ private:
   
   // Final state
 
-  G4WaterExcitationStructure waterStructure;
+  G4DNAWaterExcitationStructure waterStructure;
    
   //
   

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file optical/LXe/include/LXeEventMessenger.hh
+/// \brief Definition of the LXeEventMessenger class
+//
+//
 #ifndef LXeEventMessenger_h
 #define LXeEventMessenger_h 1
 
@@ -36,20 +39,21 @@ class G4UIcmdWithABool;
 
 class LXeEventMessenger: public G4UImessenger
 {
-public:
-  LXeEventMessenger(LXeEventAction*);
-  ~LXeEventMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  LXeEventAction*        LXeEvent;
-  G4UIcmdWithAnInteger*  saveThresholdCmd;
-  G4UIcmdWithAnInteger*  verboseCmd;
-  G4UIcmdWithAnInteger*  pmtThresholdCmd;
-  G4UIcmdWithABool*      forceDrawPhotonsCmd;
-  G4UIcmdWithABool*      forceDrawNoPhotonsCmd;
+  public:
+
+    LXeEventMessenger(LXeEventAction*);
+    virtual ~LXeEventMessenger();
+ 
+    virtual void SetNewValue(G4UIcommand*, G4String);
+ 
+  private:
+
+    LXeEventAction*        fLXeEvent;
+    G4UIcmdWithAnInteger*  fSaveThresholdCmd;
+    G4UIcmdWithAnInteger*  fVerboseCmd;
+    G4UIcmdWithAnInteger*  fPmtThresholdCmd;
+    G4UIcmdWithABool*      fForceDrawPhotonsCmd;
+    G4UIcmdWithABool*      fForceDrawNoPhotonsCmd;
 };
 
 #endif
-

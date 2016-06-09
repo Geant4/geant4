@@ -40,11 +40,37 @@
 #########################
 # Set the primary particle type,
 # energy and position along the X direction
+
+
+#---------------------------gps-----------------
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
+/gps/particle proton
+/gps/pos/type Beam
+
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
 #
-/gun/particle proton
-/beam/energy/meanEnergy 62 MeV
-/beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -3000 mm
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0. deg
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
+
 
 #########################
 # Display the event number

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01DetectorConstruction.hh
+/// \brief Definition of the ExP01DetectorConstruction class
 //
-// $Id: ExP01DetectorConstruction.hh,v 1.2 2006-06-29 17:38:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +46,8 @@ class G4Material;
 class ExP01DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Detector Construction for the persistency example
 
 class ExP01DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -95,7 +99,7 @@ class ExP01DetectorConstruction : public G4VUserDetectorConstruction
      G4double fTrackerLength;          // Full length of Tracker
      G4int    NbOfChambers;            // Nb of chambers in the tracker region
      G4double ChamberWidth;            // width of the chambers
-     G4double ChamberSpacing;	       // distance between chambers
+     G4double ChamberSpacing;          // distance between chambers
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

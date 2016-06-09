@@ -15,6 +15,46 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-10-12 V.Ivant (testem8-V09-05-09)
+- Migration to the updated analysis tool
+- Added Opt4 Physics List and decreased limit on cuts
+
+23-05-12 V.Ivant (testem8-V09-05-08)
+- Histo - fixed n-tuples
+
+17-04-12 V.Ivant (testem8-V09-05-07)
+- Histo - minor cleanup
+- PrimaryGeneratorAction - fixed initialisation
+
+17-04-12 V.Ivant (testem8-V09-05-06)
+- Histo - minor cleanup
+- PrimaryGeneratorAction - fixed initialisation
+
+17-04-12 V.Ivant (testem8-V09-05-05)
+- Histo - changed default names of output file; added SetVerbose
+
+12-04-12 V.Ivant (testem8-V09-05-04)
+- Histo - added method Activate(); fixed method Save()
+
+11-04-12 V.Ivant (testem8-V09-05-03)
+- Histo - use only ROOT option for analysis, 
+	  allow to have several runs with histograms per session
+- HistoManager - fixed computation of mean energy deposit,
+                 allow to have several runs with histograms per session
+
+10-04-12 V.Ivant (testem8-V09-05-02)
+- migration from AIDA to Geant4 histogram's tool; 
+  applied code convention for all classes of the example
+
+29-02-12 V.Ivant (testem8-V09-05-01)
+- PhysicsListMessenger - removed test cout
+- DetectorConstruction - uncomment material printout
+
+01-02-12 V.Ivant (testem8-V09-05-00)
+- DetectorConstruction - added gas of ALICE TPC and macro testALICE.mac
+- TragetSD - added zero-energy steps to histograms and step counters
+- HistoManager - book histograms at begin of run not earlier
+
 19-11-10 V.Ivant (testem8-V09-03-07)
 - V. Grichine Histomanager.cc The preparation of 
               distribution.out file was added. It has

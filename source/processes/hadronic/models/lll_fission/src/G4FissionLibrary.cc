@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissionLibrary.cc,v 1.4 2007-06-01 14:02:08 gcosmo Exp $
+// $Id$
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007
@@ -61,16 +61,16 @@
 //
 
 #include "G4FissionLibrary.hh"
+#include "G4SystemOfUnits.hh"
 
 G4FissionLibrary::G4FissionLibrary()
-  : G4NeutronHPFinalState()
+  : G4NeutronHPFinalState(), theIsotope(0), targetMass(0.0)
 {
   hasXsec = false;
 }
 
 G4FissionLibrary::~G4FissionLibrary()
-{
-}
+{}
 
 G4NeutronHPFinalState * G4FissionLibrary::New()
 {

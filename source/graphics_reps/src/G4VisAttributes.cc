@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.17 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  23rd October 1996
@@ -33,6 +32,28 @@
 #include "G4VisAttributes.hh"
 
 #include "G4AttValue.hh"
+#include "G4AttDef.hh"
+
+G4VisAttributes::G4VisAttributes (const G4VisAttributes& va):
+fVisible             (va.fVisible),
+fDaughtersInvisible  (va.fDaughtersInvisible),
+fColour              (va.fColour),
+fLineStyle           (va.fLineStyle),
+fLineWidth           (va.fLineWidth),
+fForceDrawingStyle   (va.fForceDrawingStyle),
+fForcedStyle         (va.fForcedStyle),
+fForceAuxEdgeVisible (va.fForceAuxEdgeVisible),
+fForcedLineSegmentsPerCircle (va.fForcedLineSegmentsPerCircle),
+fStartTime           (va.fStartTime),
+fEndTime             (va.fEndTime),
+// AttValues are created afresh for each object (using the
+// CreateAttValues message), but deletion is the responsibility of
+// the creator.  So just copy pointer.
+fAttValues           (va.fAttValues),
+// AttDefs, if any, belong to the object from which they were obtained
+// (with a GetAttDefs message), so just copy pointer.
+fAttDefs             (va.fAttDefs)
+{}
 
 G4VisAttributes::G4VisAttributes ():
 fVisible             (true),
@@ -98,6 +119,34 @@ fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
+
+G4VisAttributes::~G4VisAttributes()
+{
+}
+
+G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
+{
+  if (&rhs == this) return *this;
+  fVisible             = rhs.fVisible;
+  fDaughtersInvisible  = rhs.fDaughtersInvisible;
+  fColour              = rhs.fColour;
+  fLineStyle           = rhs.fLineStyle;
+  fLineWidth           = rhs.fLineWidth;
+  fForceDrawingStyle   = rhs.fForceDrawingStyle;
+  fForcedStyle         = rhs.fForcedStyle;
+  fForceAuxEdgeVisible = rhs.fForceAuxEdgeVisible;
+  fForcedLineSegmentsPerCircle = rhs.fForcedLineSegmentsPerCircle;
+  fStartTime           = rhs.fStartTime;
+  fEndTime             = rhs.fEndTime;
+  // AttValues are created afresh for each object (using the
+  // CreateAttValues message), but deletion is the responsibility of
+  // the creator.  So just copy pointer.
+  fAttValues           = rhs.fAttValues;
+  // AttDefs, if any, belong to the object from which they were obtained
+  // (with a GetAttDefs message), so just copy pointer.
+  fAttDefs             = rhs.fAttDefs;
+  return *this;
+}
 
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
 

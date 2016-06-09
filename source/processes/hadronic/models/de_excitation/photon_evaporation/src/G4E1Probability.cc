@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.cc,v 1.11 2010-11-23 18:05:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------
 //
@@ -43,6 +42,7 @@
 #include "G4E1Probability.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
+#include "G4SystemOfUnits.hh"
 
 // Constructors and operators
 //

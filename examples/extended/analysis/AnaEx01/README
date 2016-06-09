@@ -8,9 +8,9 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
                             AnaEx01
                             -------
  This example shows the usage of histogram and tuple manipulations using 
- an AIDA compliant system. All analysis manipulations 
- (attaching an AIDA implementation, histo booking, filling, saving 
- histos in a file, etc...) are located in one class : HistoManager.
+ G4Analysis system. All analysis manipulations 
+ (histo booking, filling, saving histos in a file, etc...) 
+ are located in one class : HistoManager.
  
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
@@ -64,9 +64,7 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
 
  3- Histograms
  ------------- 
- To produce histograms, at least one of the AIDA implementations should be 
- available. See the file InstallAida.txt
-    
+
  AnaEx01 can produce 4 histograms :
   
   histo 1 : total energy deposit in absorber per event
@@ -75,22 +73,18 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
   histo 4 : total track length of charged particles in gap per event 
  
  And 1 Ntuple :
-  one raw per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
+  one row per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
   
  These histos are booked in HistoManager and filled from EventAction.
  
  One can control the name of the histograms file and its format:
- default name     : AnaEx01
- possible formats : hbook root (default) xml
+ default name     : AnaEx01   
+ The format of the histogram file can be : root (default),
+ hbook, xml, csv. Include correct g4nnn.hh in HistoManager.hh 
  
- See HistoManager constructor
-    
- Note that, by default, histograms are disabled. To activate them, uncomment
- the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
-   
- 4- OpenScientist
- ----------------
-
- The file UseOpenScientist.txt gives some indications how to use this system to
- visualize and handle histogram files.
-  
+ Using hbook format
+ ------------------
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and  g4hbook.hh in HistoManager.hh

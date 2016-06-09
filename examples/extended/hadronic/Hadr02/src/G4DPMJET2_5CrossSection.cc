@@ -33,16 +33,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/G4DPMJET2_5CrossSection.cc
+/// \brief Implementation of the G4DPMJET2_5CrossSection class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5CrossSection.cc
 //
-// Version:		0.A
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.A
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,6 +55,7 @@
 
 #include "G4DPMJET2_5CrossSection.hh"
 #include "G4ParticleTable.hh"
+#include "G4DynamicParticle.hh"
 #include "G4IonTable.hh"
 
 #include "G4HadronicException.hh"
@@ -63,6 +67,8 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+
+#include "G4DynamicParticle.hh"
 
 using namespace std;
 
@@ -99,9 +105,9 @@ G4DPMJET2_5CrossSection::~G4DPMJET2_5CrossSection ()
     G4DPMJET2_5CrossSectionIndex::iterator it;
     for (it=theCrossSectionIndex.begin(); it!=theCrossSectionIndex.end(); ++it)
       {
-	G4DPMJET2_5CrossSectionParamSet *ptr = it->second;
-	for (G4DPMJET2_5CrossSectionParamSet *ptr1=ptr; ptr1<ptr+maxA; ptr1++)
-	  { delete ptr1; }
+        G4DPMJET2_5CrossSectionParamSet *ptr = it->second;
+        for (G4DPMJET2_5CrossSectionParamSet *ptr1=ptr; ptr1<ptr+maxA; ptr1++)
+          { delete ptr1; }
       }
   }
   */
@@ -154,8 +160,8 @@ G4bool G4DPMJET2_5CrossSection::IsApplicable
     } while (result && ++i < nIso);
   }
   G4cout << "G4DPMJET2_5CrossSection::IsApplicable E(GeV)= "
-	 << theProjectile->GetKineticEnergy()/GeV << " off "
-	 << theTarget->GetName() << " - " << result << G4endl;
+         << theProjectile->GetKineticEnergy()/GeV << " off "
+         << theTarget->GetName() << " - " << result << G4endl;
   return result;
 }
 ///////////////////////////////////////////////////////////////////////////////

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1SingleProbability1.cc,v 1.5 2010-11-17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  Class G4E1SingleProbability1.cc
 //
@@ -33,6 +32,8 @@
 #include "G4ConstantLevelDensityParameter.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Constructors and operators
 //

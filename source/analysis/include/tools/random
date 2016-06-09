@@ -47,7 +47,7 @@ public:
     fac = ::sqrt(-2.0*::log(r)/r);
     return (v2 * fac) * m_std_dev + m_mean;
   }
-private:
+protected:
   flat m_flat;
   double m_mean;
   double m_std_dev;
@@ -71,7 +71,7 @@ public:
     double displ = 0.5 * m_gamma * ::tan(rval * half_pi());
     return m_mean + displ;
   }
-private:
+protected:
   flat m_flat;
   double m_mean;
   double m_gamma;
@@ -91,7 +91,7 @@ public:
     } while(v<=0);
     return -::log(v)/m_rate;
   }
-private:
+protected:
   flat m_flat;
   double m_rate;
 };

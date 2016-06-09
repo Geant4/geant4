@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.10 2006-11-03 17:58:49 mverderi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "ExN05DetectorConstruction.hh"
 #include "ExN05CalorimeterSD.hh"
@@ -45,7 +44,7 @@
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
+#include "G4SystemOfUnits.hh"
 
 ExN05DetectorConstruction::ExN05DetectorConstruction()
 {;}
@@ -96,11 +95,11 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   //--------------
   G4Box *WorldBox= new G4Box("WorldBox",400*cm, 400*cm, 400*cm);
   G4LogicalVolume *WorldLog=new G4LogicalVolume(WorldBox,Air,
-						  "WorldLogical", 0, 0, 0);
+                                                "WorldLogical", 0, 0, 0);
   G4PVPlacement *WorldPhys=new G4PVPlacement(0,G4ThreeVector(),
-					       "WorldPhysical",
-					       WorldLog,
-					       0,false,0);
+                                             "WorldPhysical",
+                                             WorldLog,
+                                             0,false,0);
   // Size of detectors:
   G4double detectSize = 125*cm;
   
@@ -113,13 +112,13 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
     = new G4Box("DriftChamberSolid", detectSize, detectSize, 40*cm);
   G4LogicalVolume *driftChamberLog
     = new G4LogicalVolume(driftChamberBox,He,
-			  "DriftChamberLogical", 0, 0, 0);
+                          "DriftChamberLogical", 0, 0, 0);
   // -- Placement:
   // G4PVPlacement *driftChamberPhys  =
       new G4PVPlacement(0,G4ThreeVector(0., 0., 50*cm),
-			"DriftChamberPhysical",
-		        driftChamberLog,
-			WorldPhys,false,0);
+                        "DriftChamberPhysical",
+                        driftChamberLog,
+                        WorldPhys,false,0);
   
   //--------------------------
   // "Calorimeter": used in
@@ -129,12 +128,12 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4Box *calorimeterBox
     = new G4Box("CalorimeterSolid", detectSize, detectSize, 20*cm);
   G4LogicalVolume *calorimeterLog = new G4LogicalVolume(calorimeterBox,Air,
-							"CalorimeterLogical", 0, 0, 0);
+                                                        "CalorimeterLogical", 0, 0, 0);
   // -- Placement:
   G4PVPlacement *calorimeterPhys  = new G4PVPlacement(0,G4ThreeVector(0., 0., 120*cm),
-						      "CalorimeterPhysical",
-						      calorimeterLog,
-						      WorldPhys,false,0);
+                                                      "CalorimeterPhysical",
+                                                      calorimeterLog,
+                                                      WorldPhys,false,0);
   
   //--------------------------------------
   // The calorimeter is filled with
@@ -146,9 +145,9 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4double CrystalZ = 20*cm;
   G4Box *CrystalSolid = new G4Box("CrystalSolid", CrystalX, CrystalY, CrystalZ);
   theCrystalLog       = new G4LogicalVolume(CrystalSolid,CsI,
-					    "CrystalLogical", 0, 0, 0);
+                                            "CrystalLogical", 0, 0, 0);
   
-  G4String tName1("Crystal");	// Allow all target physicals to share
+  G4String tName1("Crystal");        // Allow all target physicals to share
   // same name (delayed copy)
   
   // -- and placements inside the calorimeter:
@@ -160,13 +159,13 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
     {
       yTlate = -detectSize + 3*CrystalY + j*2*CrystalY;
       for (G4int i = 0; i < nX; i++)
-	{
-	  xTlate = -detectSize + 3*CrystalX + i*2*CrystalX;
-	  new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
-					  tName1,
-					  theCrystalLog,
-					  calorimeterPhys,false,copyNo++);
-	}
+        {
+          xTlate = -detectSize + 3*CrystalX + i*2*CrystalX;
+          new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+                            tName1,
+                            theCrystalLog,
+                            calorimeterPhys,false,copyNo++);
+        }
     }
 
 
@@ -179,12 +178,12 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4Box *hadCaloBox
     = new G4Box("HadCaloSolid", detectSize, detectSize, 50*cm);
   G4LogicalVolume *hadCaloLog = new G4LogicalVolume(hadCaloBox,Air,
- 						    "HadCaloLogical", 0, 0, 0);
+                                                     "HadCaloLogical", 0, 0, 0);
   // -- Placement:
   G4PVPlacement *hadCaloPhys  = new G4PVPlacement(0,G4ThreeVector(0., 0., 200*cm),
- 						  "HadCaloPhysical",
- 						  hadCaloLog,
- 						  WorldPhys,false,0);
+                                                   "HadCaloPhysical",
+                                                   hadCaloLog,
+                                                   WorldPhys,false,0);
   
   //--------------------------------------
   // The calorimeter is filled with
@@ -196,7 +195,7 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4double TowerZ = 45*cm;
   G4Box *TowerSolid = new G4Box("TowerSolid", TowerX, TowerY, TowerZ);
   theTowerLog       = new G4LogicalVolume(TowerSolid,Fe,
-					  "TowerLogical", 0, 0, 0);
+                                          "TowerLogical", 0, 0, 0);
   
   G4String tName2("Tower");
   
@@ -208,13 +207,13 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
     {
       yTlate = -detectSize + 3*TowerY + jj*2*TowerY;
       for (G4int i = 0; i < nXhad; i++)
- 	{
-	  xTlate = -detectSize + 3*TowerX + i*2*TowerX;
- 	  new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
- 				tName2,
- 				theTowerLog,
- 				hadCaloPhys,false,copyNo++);
- 	}
+         {
+          xTlate = -detectSize + 3*TowerX + i*2*TowerX;
+           new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+                             tName2,
+                             theTowerLog,
+                             hadCaloPhys,false,copyNo++);
+         }
     }
   
   

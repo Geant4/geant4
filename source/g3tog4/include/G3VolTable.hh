@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTable.hh,v 1.18 2006-06-29 18:12:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:

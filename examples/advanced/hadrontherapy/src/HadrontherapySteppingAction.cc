@@ -32,6 +32,8 @@
 // Institute in the framework of the MC-INFN Group
 //
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
 #include "HadrontherapySteppingAction.hh"
@@ -88,18 +90,18 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 	if(particleType == "nucleus") {
 	    G4int A = def->GetBaryonNumber();
 	    G4double Z = def->GetPDGCharge();
-	    G4double posX = aStep->GetTrack()->GetPosition().x() / cm;
-	    G4double posY = aStep->GetTrack()->GetPosition().y() / cm;
-	    G4double posZ = aStep->GetTrack()->GetPosition().z() / cm;
-	    G4double energy = secondaryParticleKineticEnergy / A / MeV;
+	    G4double posX = aStep->GetTrack()->GetPosition().x() / CLHEP::cm;
+	    G4double posY = aStep->GetTrack()->GetPosition().y() / CLHEP::cm;
+	    G4double posZ = aStep->GetTrack()->GetPosition().z() / CLHEP::cm;
+	    G4double energy = secondaryParticleKineticEnergy / A / CLHEP::MeV;
 
 	    HadrontherapyAnalysisManager* analysisMgr =  HadrontherapyAnalysisManager::GetInstance();   
 	    analysisMgr->FillFragmentTuple(A, Z, energy, posX, posY, posZ);
 	} else if(particleName == "proton") {   // proton (hydrogen-1) is a special case
-	    G4double posX = aStep->GetTrack()->GetPosition().x() / cm ;
-	    G4double posY = aStep->GetTrack()->GetPosition().y() / cm ;
-	    G4double posZ = aStep->GetTrack()->GetPosition().z() / cm ;
-	    G4double energy = secondaryParticleKineticEnergy * MeV;    // Hydrogen-1: A = 1, Z = 1
+	    G4double posX = aStep->GetTrack()->GetPosition().x() / CLHEP::cm ;
+	    G4double posY = aStep->GetTrack()->GetPosition().y() / CLHEP::cm ;
+	    G4double posZ = aStep->GetTrack()->GetPosition().z() / CLHEP::cm ;
+	    G4double energy = secondaryParticleKineticEnergy * CLHEP::MeV;    // Hydrogen-1: A = 1, Z = 1
 	    HadrontherapyAnalysisManager::GetInstance()->FillFragmentTuple(1, 1.0, energy, posX, posY, posZ);
 	}
 
@@ -109,19 +111,19 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 	HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::GetInstance();   
 	//There is a bunch of stuff recorded with the energy 0, something should perhaps be done about this.
 	if(secondaryParticleName == "proton") {
-	    analysis->hydrogenEnergy(secondaryParticleKineticEnergy / MeV);
+	    analysis->hydrogenEnergy(secondaryParticleKineticEnergy / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "deuteron") {
-	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/2) / MeV);
+	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/2) / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "triton") {
-	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/3) / MeV);
+	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/3) / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "alpha") {
-	    analysis->heliumEnergy((secondaryParticleKineticEnergy/4) / MeV);
+	    analysis->heliumEnergy((secondaryParticleKineticEnergy/4) / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "He3"){
-	    analysis->heliumEnergy((secondaryParticleKineticEnergy/3) / MeV);		
+	    analysis->heliumEnergy((secondaryParticleKineticEnergy/3) / CLHEP::MeV);		
 	}
 #endif
 
@@ -177,19 +179,19 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 	    HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::GetInstance();   
 
 	    if (secondaryParticleName == "e-")
-		analysis -> electronEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> electronEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "gamma")
-		analysis -> gammaEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> gammaEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "deuteron")
-		analysis -> deuteronEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> deuteronEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "triton")
-		analysis -> tritonEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> tritonEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "alpha")
-		analysis -> alphaEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> alphaEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    G4double z = (*fSecondary)[lp1]-> GetDynamicParticle() -> GetDefinition() -> GetPDGCharge();
 	    if (z > 0.)
@@ -199,7 +201,7 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 
 		// If a generic ion is originated in the detector, its baryonic number, PDG charge, 
 		// total number of electrons in the orbitals are stored in a ntuple 
-		analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/MeV);
+		analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/CLHEP::MeV);
 	    }
 #endif
 	}

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaMessenger.hh,v 1.1 2009-10-25 19:06:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/MyKleinNishinaMessenger.hh
+/// \brief Definition of the MyKleinNishinaMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,8 +51,8 @@ class MyKleinNishinaMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:  
-    MyKleinNishinaCompton* pKleinNishina;  
-    G4UIcmdWithADouble* csFactor;
+    MyKleinNishinaCompton* fKleinNishina;  
+    G4UIcmdWithADouble*    fCsFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

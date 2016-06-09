@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PartialPhantomParameterisation.hh,v 1.2 2010-11-10 11:20:45 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4PartialPhantomParameterisation

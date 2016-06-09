@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLCoulombNone.hh
  * \brief Placeholder class for no Coulomb distortion.
  *
- * Created on: 14 February 2011
- *     Author: Davide Mancusi
+ * \date 14 February 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLCOULOMBNONE_HH_
@@ -49,11 +49,13 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLICoulomb.hh"
+#include <utility>
 
 namespace G4INCL {
 
   class CoulombNone : public ICoulomb {
-  public:
+
+    public:
     CoulombNone() {}
     virtual ~CoulombNone() {}
 
@@ -64,22 +66,32 @@ namespace G4INCL {
      * \param p incoming particle
      * \param n distorting nucleus
      **/
-    void bringToSurface(Particle * const p, Nucleus const * const n) const;
+    ParticleEntryAvatar *bringToSurface(Particle * const p, Nucleus * const n) const;
+
+    /** \brief Position the cluster on the surface of the nucleus.
+     *
+     * This method does not perform any distortion.
+     *
+     * \param c incoming cluster
+     * \param n distorting nucleus
+     **/
+    IAvatarList bringToSurface(Cluster * const c, Nucleus * const n) const;
 
     /** \brief Modify the momenta of the outgoing particles.
      *
      * This method does not perform any distortion.
-     *
-     * \param pL list of outgoing particles
-     * \param n distorting nucleus
      */
     void distortOut(ParticleList const & /* pL */, Nucleus const * const /* n */) const {}
 
     /** \brief Return the maximum impact parameter for Coulomb-distorted
      *         trajectories. **/
-    G4double maxImpactParameter(Particle const * const p, Nucleus const *
+    G4double maxImpactParameter(ParticleSpecies const &p, const G4double /*kinE*/, Nucleus const *
         const n) const {
-      return n->getSurfaceRadius(p);
+      if(p.theType == Composite)
+        return 2.*ParticleTable::getNuclearRadius(p.theA, p.theZ)
+          + n->getUniverseRadius();
+      else
+        return n->getUniverseRadius();
     }
 
   };

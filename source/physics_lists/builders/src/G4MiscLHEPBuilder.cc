@@ -39,11 +39,15 @@
 //
 #include "G4MiscLHEPBuilder.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
 G4MiscLHEPBuilder::G4MiscLHEPBuilder(): 
+  theAntiProtonInelastic(0), theLEAntiProtonModel(0), 
+  theHEAntiProtonModel(0),
+  theAntiNeutronInelastic(0), theLEAntiNeutronModel(0),
   theHEAntiNeutronModel(0),
   theLambdaInelastic(0), theLELambdaModel(0), theHELambdaModel(0),
   theAntiLambdaInelastic(0), theLEAntiLambdaModel(0), theHEAntiLambdaModel(0),
@@ -80,7 +84,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiProtonInelastic->RegisterMe(theLEAntiProtonModel);
   theAntiProtonInelastic->RegisterMe(theHEAntiProtonModel);
   aProcMan->AddDiscreteProcess(theAntiProtonInelastic);
-
+ 
   // AntiNeutron
   theAntiNeutronInelastic = new G4AntiNeutronInelasticProcess();
   aProcMan = G4AntiNeutron::AntiNeutron()->GetProcessManager();
@@ -100,7 +104,7 @@ void G4MiscLHEPBuilder::Build()
   theLambdaInelastic->RegisterMe(theLELambdaModel);
   theLambdaInelastic->RegisterMe(theHELambdaModel);
   aProcMan->AddDiscreteProcess(theLambdaInelastic);
-  
+    
   // AntiLambda
   theAntiLambdaInelastic = new G4AntiLambdaInelasticProcess();
   aProcMan = G4AntiLambda::AntiLambda()->GetProcessManager();
@@ -120,7 +124,7 @@ void G4MiscLHEPBuilder::Build()
   theSigmaMinusInelastic->RegisterMe(theLESigmaMinusModel);
   theSigmaMinusInelastic->RegisterMe(theHESigmaMinusModel);
   aProcMan->AddDiscreteProcess(theSigmaMinusInelastic);
-
+    
   // anti-SigmaMinus
   theAntiSigmaMinusInelastic = new G4AntiSigmaMinusInelasticProcess();
   aProcMan = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
@@ -140,7 +144,7 @@ void G4MiscLHEPBuilder::Build()
   theSigmaPlusInelastic->RegisterMe(theLESigmaPlusModel);
   theSigmaPlusInelastic->RegisterMe(theHESigmaPlusModel);
   aProcMan->AddDiscreteProcess(theSigmaPlusInelastic);
-
+    
   // anti-SigmaPlus
   theAntiSigmaPlusInelastic = new G4AntiSigmaPlusInelasticProcess();
   aProcMan = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
@@ -180,7 +184,7 @@ void G4MiscLHEPBuilder::Build()
   theXiZeroInelastic->RegisterMe(theLEXiZeroModel);
   theXiZeroInelastic->RegisterMe(theHEXiZeroModel);
   aProcMan->AddDiscreteProcess(theXiZeroInelastic);
-
+    
   // anti-XiZero
   theAntiXiZeroInelastic = new G4AntiXiZeroInelasticProcess();
   aProcMan = G4AntiXiZero::AntiXiZero()->GetProcessManager();

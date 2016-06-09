@@ -86,45 +86,45 @@ G4VPhysicalVolume* ExG4DetectorConstruction02::Construct()
   // World
   //
   G4Box* sWorld 
-    = new G4Box("World",                                //name
-                 worldDimensions.x(),                   //dimensions (half-lentghs)
+    = new G4Box("World",                        //name
+                 worldDimensions.x(),           //dimensions (half-lentghs)
                  worldDimensions.y(), 
                  worldDimensions.z());
 
   fWorldVolume 
-    = new G4LogicalVolume(sWorld,			//shape
-                          worldMaterial,                 //material
-                          "World");			//name
+    = new G4LogicalVolume(sWorld,               //shape
+                          worldMaterial,        //material
+                          "World");             //name
 
   G4VPhysicalVolume* pWorld 
-    = new G4PVPlacement(0,				//no rotation
-  			G4ThreeVector(),                //at (0,0,0)
-                        fWorldVolume,                   //logical volume
-			"World",                        //name
-                        0,                              //mother  volume
-                        false,                          //no boolean operation
-                        0);                             //copy number
-			   			   
+    = new G4PVPlacement(0,                      //no rotation
+                        G4ThreeVector(),        //at (0,0,0)
+                        fWorldVolume,           //logical volume
+                        "World",                //name
+                        0,                      //mother  volume
+                        false,                  //no boolean operation
+                        0);                     //copy number
+                                                
   // Box
-  //			   
+  //                           
   G4Box* sBox 
-    = new G4Box("Box",				        //its name
-                 fBoxDimensions.x(),                    //dimensions (half-lengths)
+    = new G4Box("Box",                          //its name
+                 fBoxDimensions.x(),            //dimensions (half-lengths)
                  fBoxDimensions.y(), 
                  fBoxDimensions.z());
-		   
+                   
   fBoxVolume 
-    = new G4LogicalVolume(sBox,		                //its shape
-                          boxMaterial,                  //its material
-                          "Box");                       //its name
+    = new G4LogicalVolume(sBox,                 //its shape
+                          boxMaterial,          //its material
+                          "Box");               //its name
 
-  new G4PVPlacement(0,				        //no rotation
-  		    G4ThreeVector(),		        //at (0,0,0)
-                    fBoxVolume,			        //its logical volume			   
-                    "Box",	                        //its name
-                    fWorldVolume,	 		//its mother  volume
-                    false,			        //no boolean operation
-                    0);				        //copy number
+  new G4PVPlacement(0,                          //no rotation
+                    G4ThreeVector(),            //at (0,0,0)
+                    fBoxVolume,                 //its logical volume                           
+                    "Box",                      //its name
+                    fWorldVolume,               //its mother  volume
+                    false,                      //no boolean operation
+                    0);                         //copy number
 
   //always return the root volume
   //

@@ -40,14 +40,14 @@
 //
 //*******************************************************//
 
-
 #include "ML2Ph_BoxInBox.hh"
+#include "G4SystemOfUnits.hh"
 
 CML2Ph_BoxInBox::CML2Ph_BoxInBox()
 {// phantom size
-	this->halfSize.set(150.*mm,150.*mm,150.*mm);
+	halfSize.set(150.*mm,150.*mm,150.*mm);
 // phantom position
-	this->centre.set(0.*mm,0.*mm,0.*mm);
+	centre.set(0.*mm,0.*mm,0.*mm);
 }
 
 CML2Ph_BoxInBox::~CML2Ph_BoxInBox(void)
@@ -55,12 +55,12 @@ CML2Ph_BoxInBox::~CML2Ph_BoxInBox(void)
 }
 void CML2Ph_BoxInBox::writeInfo()
 {
-	std::cout<<"\n\n\tcentre of the inside box: " <<this->centreBoxInside/mm<<" [mm]"<< G4endl;
-	std::cout<<"\thalf thickness of the inside box: " <<this->halfBoxInside_Thickness/mm<<" [mm]\n"<< G4endl;
+	std::cout<<"\n\n\tcentre of the inside box: " <<centreBoxInside/mm<<" [mm]"<< G4endl;
+	std::cout<<"\thalf thickness of the inside box: " <<halfBoxInside_Thickness/mm<<" [mm]\n"<< G4endl;
 }
-bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG)
+bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG)
 {	
-	this->PVWorld=PVWorld;
+	PVWorld=PWorld;
 
 
 	G4double A, Z;
@@ -93,37 +93,34 @@ bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_
 	boxInSideMaterial=PMMA;
 	std::cout <<"boxInSideMaterial name "<<boxInSideMaterial->GetName() <<" density "<< boxInSideMaterial->GetDensity()/(g/cm3) <<" g/cm3"<< G4endl;
 
-	this->centreBoxInside.set(0,0,-50); // the centre of the inside box
-	this->halfBoxInside_Thickness=3.*cm; // the half thickness of the inside box
+	centreBoxInside.set(0,0,-50); // the centre of the inside box
+	halfBoxInside_Thickness=3.*cm; // the half thickness of the inside box
 
-	G4Box *boxInSide=new G4Box("BoxInSide", this->halfBoxInside_Thickness, this->halfBoxInside_Thickness, this->halfBoxInside_Thickness);
+	G4Box *boxInSide=new G4Box("BoxInSide", halfBoxInside_Thickness, halfBoxInside_Thickness, halfBoxInside_Thickness);
 	G4LogicalVolume *boxInSideLV=new G4LogicalVolume(boxInSide, boxInSideMaterial, "boxInSideLV");
-	G4VPhysicalVolume *boxInSidePV = 0;
-	boxInSidePV = new G4PVPlacement(0, centre+this->centreBoxInside,"BoxInsidePV", boxInSideLV,this->PVWorld,false,0,0);
+	boxInSidePV = new G4PVPlacement(0, centre+centreBoxInside,"BoxInsidePV", boxInSideLV,PVWorld,false,0,0);
 
 // layer PMMA
 	G4Material *layerMaterial=G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS"); // changable
 	G4double halfPMMA_Z_Thickness=0.5*cm;
-	G4Box *layer=new G4Box("layer", this->halfSize.getX(), this->halfSize.getY(), halfPMMA_Z_Thickness);
+	G4Box *layer=new G4Box("layer", halfSize.getX(), halfSize.getY(), halfPMMA_Z_Thickness);
 	G4LogicalVolume *layerLV = new G4LogicalVolume(layer, layerMaterial, "layerLV");
-	G4VPhysicalVolume *layerPV = 0;
-	layerPV = new G4PVPlacement(0, centre+G4ThreeVector(0,0,-this->halfSize.getZ()+halfPMMA_Z_Thickness),"layerPV", layerLV,this->PVWorld,false,0,0);
+	layerPV = new G4PVPlacement(0, centre+G4ThreeVector(0,0,-halfSize.getZ()+halfPMMA_Z_Thickness),"layerPV", layerLV,PVWorld,false,0,0);
 
 	std::cout <<"layerMaterial name "<<layerMaterial->GetName() <<" density " << layerMaterial->GetDensity()/(g/cm3) <<" g/cm3"<< G4endl;
 
 // BOX OUTSIDE 
 	G4Material *boxOutSideMaterial=G4NistManager::Instance()->FindOrBuildMaterial("G4_LUNG_ICRP"); // changable
 	boxOutSideMaterial=lightWater;
-	G4double halfBoxOutSide_Thickness=this->halfSize.getZ()-halfPMMA_Z_Thickness;
-	G4Box *boxOutSide=new G4Box("BoxOutSide", this->halfSize.getX(), this->halfSize.getY(), halfBoxOutSide_Thickness);
+	G4double halfBoxOutSide_Thickness=halfSize.getZ()-halfPMMA_Z_Thickness;
+	G4Box *boxOutSide=new G4Box("BoxOutSide", halfSize.getX(), halfSize.getY(), halfBoxOutSide_Thickness);
 
 	// boolean logic subtraction between outside box and inside box
 
 	G4SubtractionSolid* OutMinusInBox = new G4SubtractionSolid("OutMinusInBox",	boxOutSide, boxInSide, 0, centreBoxInside-G4ThreeVector(0,0,5));
 	G4LogicalVolume *OutMinusInBoxLV = new G4LogicalVolume(OutMinusInBox, boxOutSideMaterial,"OutMinusInBoxLV",0,0,0);
-	G4VPhysicalVolume *OutMinusInBoxPV = 0;
-	OutMinusInBoxPV = new G4PVPlacement(0, centre+G4ThreeVector(0,0,-this->halfSize.getZ()+2*halfPMMA_Z_Thickness+halfBoxOutSide_Thickness),
-					"OutMinusInBoxPV",OutMinusInBoxLV,this->PVWorld,false,0);
+	OutMinusInBoxPV = new G4PVPlacement(0, centre+G4ThreeVector(0,0,-halfSize.getZ()+2*halfPMMA_Z_Thickness+halfBoxOutSide_Thickness),
+					"OutMinusInBoxPV",OutMinusInBoxLV,PVWorld,false,0);
 
 	std::cout <<"boxOutSideMaterial name "<<boxOutSideMaterial->GetName() <<" density "<<boxOutSideMaterial->GetDensity()/(g/cm3) <<" g/cm3"<< G4endl;
  
@@ -169,18 +166,18 @@ bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_
 	layerLV->SetVisAttributes(simple_PMMA_VisAttWalls);
 
 	// Sensitive detector
-	this->sensDet=new CML2SDWithVoxels("BoxInBoxPhantom", saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG, centre, this->halfSize, 100, 100, 100);
+	sensDet=new CML2SDWithVoxels("BoxInBoxPhantom", saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG, centre, halfSize, 100, 100, 100);
 	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
-	SDManager->AddNewDetector(this->sensDet);
+	SDManager->AddNewDetector(sensDet);
 	
 	// Read Out Geometry
 	CML2ReadOutGeometry *ROG = new CML2ReadOutGeometry();
-	ROG->setBuildData(this->PVWorld->GetFrameTranslation(), this->halfSize, 100, 100, 100);
+	ROG->setBuildData(PVWorld->GetFrameTranslation(), halfSize, 100, 100, 100);
 	ROG->BuildROGeometry();
-	this->sensDet->SetROgeometry(ROG);
-	OutMinusInBoxLV->SetSensitiveDetector(this->sensDet);
-	layerLV->SetSensitiveDetector(this->sensDet);
-	boxInSideLV->SetSensitiveDetector(this->sensDet);
+	sensDet->SetROgeometry(ROG);
+	OutMinusInBoxLV->SetSensitiveDetector(sensDet);
+	layerLV->SetSensitiveDetector(sensDet);
+	boxInSideLV->SetSensitiveDetector(sensDet);
 
 	return true;
 }

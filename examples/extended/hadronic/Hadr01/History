@@ -5,7 +5,7 @@ $Id: History,v 1.43 2010-11-19 20:13:26 vnivanch Exp $
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    hadr01 History file
+                    Hadr01 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,38 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-11-12  V.Ivanchenko (exhadr01-V09-05-09)
+- PhysicsList - bug fixed (absence of elestic scattering)
+    hadronic HyperNews report #734
+
+15-11-12  I. Hrivnacova (exhadr01-V09-05-08)
+- Synchronized .README with changes in README
+
+13-11-12  V.Ivanchenko (exhadr01-V09-05-07)
+- updated README
+- DetectorConstruction - fixed bug in volume name
+
+17-10-12  A. Ribon (exhadr01-V09-05-06)
+- Retagged after that the previous tag was rejected.
+
+16-10-12  A. Ribon (exhadr01-V09-05-05)
+- Renamed default stopping and ion physics classes.
+
+13-10-12  A. Dotti (exhadr01-V09-05-04)
+- Adding explicit use of system of units
+
+12-07-12  V.Ivant (exhadr01-V09-05-03)
+- Upgraded README
+
+12-07-12  V.Ivant (exhadr01-V09-05-02)
+- Added G4EmUserPhysics builder, default Physics List - FTFP_BERT
+
+23-05-12  V.Ivant (exhadr01-V09-05-01)
+- Applied code convension
+
+06-01-12  V.Ivant (exhadr01-V09-05-00)
+- DetectorMessenger - fixed deletion of objects 
 
 21-04-11  V.Ivant (exhadr01-V09-04-01)
 - Added new builders for ions

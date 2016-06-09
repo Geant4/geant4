@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.8 2008-07-25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by V. Lara
 // --------------------------------------------------------------------
 
 #include "G4StatMFMicroPartition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
-
 
 // Copy constructor
 G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )

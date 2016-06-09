@@ -15,6 +15,34 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+20-10-12 mma (testem11-V09-05-07)
+- PhysListEmStandard: use G4UrbanMsc96 
+     
+18-10-12 mma (testem11-V09-05-06)
+- use G4AnalysisManager
+- coding convention : virtual
+
+12-10-12 V.Ivant (testem11-V09-05-05)
+- Added Opt4 Physics List and decreased limit on cuts
+     
+25-05-12 mma (testem11-V09-05-04)
+- new results in sandia/EGSnrc : e- 50 MeV, 150 MeV in Water
+     
+13-04-12 mma (testem11-V09-05-03)
+- all classes : apply G4 coding conventions
+       
+05-03-12 mma (testem11-V09-05-02)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+
+09-02-12 V.Ivant (testem11-V09-05-01)
+- PhysListEmStandardSS - more correct process order  
+     
+06-02-12 mma (testem11-V09-05-00)
+- modify StepMax mechanism. Add command /testem/StepMax
+     
 08-11-11 mma (testem11-V09-04-07)
 - modify SteppingVerbose for OutOfWorld
           

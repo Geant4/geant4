@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.13 2011-01-06 15:56:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm9/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
+// $Id$
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -88,82 +90,77 @@ public: // Without description
   void AddDeltaElectron(const G4DynamicParticle*);
   void AddPhoton(const G4DynamicParticle*);
 
-  G4double GetTrackLength() const {return trackLength;};
-  void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
-  void SetTrackOutAbsorber() {trackAbs = false;};
-  G4bool GetTrackInAbsorber() const {return trackAbs;};
-  void AddTrackLength(G4double x)   {trackLength += x;};
-  void AddPositron(const G4DynamicParticle*) {n_posit++;};
-  void SetVerbose(G4int val) {verbose = val;};
-  G4int GetVerbose() const {return verbose;};
-  void SetHistoNumber(G4int val) {nHisto = val;};
-  void SetNtuple(G4bool val) {nTuple = val;};
+  inline void ResetTrackLength() {fTrackLength = 0.0, fTrackAbs = true;};
+  inline void AddPositron(const G4DynamicParticle*) {++fPosit;};
+  inline void SetVerbose(G4int val) {fVerbose = val;};
+  inline G4int GetVerbose() const {return fVerbose;};
+  inline void SetHistoNumber(G4int val) {fNHisto = val;};
 
-  void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
-  G4int FirstEventToDebug() const {return nEvt1;};
-  void SetLastEventToDebug(G4int val) {nEvt2 = val;};
-  G4int LastEventToDebug() const {return nEvt2;};
+  inline void SetFirstEventToDebug(G4int val) {fEvt1 = val;};
+  inline G4int FirstEventToDebug() const {return fEvt1;};
+  inline void SetLastEventToDebug(G4int val) {fEvt2 = val;};
+  inline G4int LastEventToDebug() const {return fEvt2;};
 
-  void SetMaxEnergy(G4double val) {maxEnergy = val;};
-  G4double  GetMaxEnergy() const {return maxEnergy;};
-  void SetThresholdEnergy(G4double val) {thKinE = val;};
-  void SetThresholdZ(G4double val) {thPosZ = val;};
-  void AddStep() {n_step += 1.0;};
+  inline void SetMaxEnergy(G4double val) {fMaxEnergy = val;};
+  inline G4double  GetMaxEnergy() const {return fMaxEnergy;};
+  inline void AddStep() {fStep += 1.0;};
 
   // Acceptance parameters
+  inline void SetBeamEnergy(G4double val) {fBeamEnergy = val;};
+
   void SetEdepAndRMS(G4int, G4ThreeVector);
-  void SetBeamEnergy(G4double val) {beamEnergy = val;};
 
 private:
 
   // MEMBERS
   static HistoManager* fManager;
 
-  G4int nHisto;
-  G4int verbose;
-  G4int nEvt1;
-  G4int nEvt2;
+  const G4ParticleDefinition* fGamma;
+  const G4ParticleDefinition* fElectron;
+  const G4ParticleDefinition* fPositron;
 
-  G4double beamEnergy;
-  G4double maxEnergy;
-  G4double maxEnergyAbs;
-  G4double thKinE;
-  G4double thPosZ;
+  G4int fNHisto;
+  G4int fVerbose;
+  G4int fEvt1;
+  G4int fEvt2;
 
-  G4double trackLength;
-  G4double n_step;
-  G4double n_step_target;
-  G4bool trackAbs;        // Track is in absorber
-  G4int n_evt;
-  G4int n_elec;
-  G4int n_posit;
-  G4int n_gam;
-  G4int n_gamph;
-  G4int n_gam_tar;
-  G4int n_lowe;
-  G4int nBinsE, nBinsEA, nBinsED;
-  G4bool nTuple;
+  G4double fBeamEnergy;
+  G4double fMaxEnergy;
+  G4double fMaxEnergyAbs;
 
-  G4double Eabs1, Eabs2, Eabs3, Eabs4;
-  G4double     E[25];
-  G4DataVector Evertex;
-  G4DataVector Nvertex;
-  G4DataVector brem;
-  G4DataVector phot;
-  G4DataVector comp;
-  G4DataVector conv;
+  G4double fTrackLength;
+  G4double fStep;
+  G4double fStepTarget;
+  G4bool fTrackAbs;        // Track is in absorber
+  G4int fEvt;
+  G4int fElec;
+  G4int fPosit;
+  G4int fGam;
+  G4int fGamph;
+  G4int fGamTar;
+  G4int fLowe;
+  G4int fBinsE, fBinsEA, fBinsED;
 
-  G4double  edeptrue[3];
-  G4double  rmstrue[3];
-  G4double  limittrue[3];
-  G4double  edep[6];
-  G4double  erms[6];
-  G4double  edeptr[6];
-  G4double  ermstr[6];
-  G4int     stat[6];
-  G4int     nmax;
+  G4double fEabs1, fEabs2, fEabs3, fEabs4;
+  G4double     fE[25];
+  G4DataVector fEvertex;
+  G4DataVector fNvertex;
+  G4DataVector fBrem;
+  G4DataVector fPhot;
+  G4DataVector fComp;
+  G4DataVector fConv;
 
-  Histo*    histo;
+  G4double  fEdeptrue[3];
+  G4double  fRmstrue[3];
+  G4double  fLimittrue[3];
+  G4double  fEdep[6];
+  G4double  fErms[6];
+  G4double  fEdeptr[6];
+  G4double  fErmstr[6];
+  G4int     fStat[6];
+  G4int     fNmax;
+
+  Histo*    fHisto;
   
 
 

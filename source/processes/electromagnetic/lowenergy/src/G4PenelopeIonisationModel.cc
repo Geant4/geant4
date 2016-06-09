@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.3 2010-12-15 10:26:41 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -37,15 +36,21 @@
 //                          Make sure that fluorescence/Auger is generated only if 
 //                          above threshold
 // 25 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
+// 26 Jan 2012   L Pandola  Migration of AtomicDeexcitation to the new interface 
+// 09 Mar 2012   L Pandola  Moved the management and calculation of
+//                          cross sections to a separate class. Use a different method to 
+//                          get normalized shell cross sections
+//                          
 //
 
 #include "G4PenelopeIonisationModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4AtomicTransitionManager.hh"
-#include "G4AtomicDeexcitation.hh"
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -56,19 +61,19 @@
 #include "G4PenelopeCrossSection.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLogVector.hh" 
+#include "G4LossTableManager.hh"
+#include "G4PenelopeIonisationXSHandler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
  
 G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*,
 						     const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),
-   kineticEnergy1(0.*eV),
-   cosThetaPrimary(1.0),
-   energySecondary(0.*eV),
-   cosThetaSecondary(0.0),
-   targetOscillator(-1),XSTableElectron(0),XSTablePositron(0),
-   theDeltaTable(0),energyGrid(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   fAtomDeexcitation(0),kineticEnergy1(0.*eV),
+   cosThetaPrimary(1.0),energySecondary(0.*eV),
+   cosThetaSecondary(0.0),targetOscillator(-1),
+   theCrossSectionHandler(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -89,39 +94,47 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
 
   // Atomic deexcitation model activated by default
   SetDeexcitationFlag(true);
-  ActivateAuger(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4PenelopeIonisationModel::~G4PenelopeIonisationModel()
 {
-  ClearTables();
+  if (theCrossSectionHandler)
+    delete theCrossSectionHandler;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition*,
 					   const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeIonisationModel::Initialise()" << G4endl;
- 
-  //Clear and re-build the tables
-  ClearTables();
-  XSTableElectron = new 
-    std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
-  XSTablePositron = new 
-    std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
 
-  theDeltaTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopeIonisationModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
 
   //Set the number of bins for the tables. 20 points per decade
   nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
   nBins = std::max(nBins,(size_t)100);
 
-  energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
-				      HighEnergyLimit(), 
-				      nBins-1); //one hidden bin is added
+   //Clear and re-build the tables
+  if (theCrossSectionHandler)
+    {
+      delete theCrossSectionHandler;
+      theCrossSectionHandler = 0;
+    }
+  theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);
+  theCrossSectionHandler->SetVerboseLevel(verboseLevel);
 
   if (verboseLevel > 2) {
     G4cout << "Penelope Ionisation model v2008 is initialized " << G4endl
@@ -170,8 +183,10 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
   G4double totalCross = 0.0;
   G4double crossPerMolecule = 0.;
 
-  G4PenelopeCrossSection* theXS = GetCrossSectionTableForCouple(theParticle,material,
-								cutEnergy);
+  G4PenelopeCrossSection* theXS = 
+    theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
+							  material,
+							  cutEnergy);
 
   if (theXS)
     crossPerMolecule = theXS->GetHardCrossSection(energy);
@@ -247,8 +262,9 @@ G4double G4PenelopeIonisationModel::ComputeDEDXPerVolume(const G4Material* mater
     G4cout << "Calling ComputeDEDX() of G4PenelopeIonisationModel" << G4endl;
  
 
-  G4PenelopeCrossSection* theXS = GetCrossSectionTableForCouple(theParticle,material,
-								cutEnergy);
+  G4PenelopeCrossSection* theXS = 
+    theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,material,
+							  cutEnergy);
   G4double sPowerPerMolecule = 0.0;
   if (theXS)
     sPowerPerMolecule = theXS->GetSoftStoppingPower(kineticEnergy);
@@ -400,17 +416,17 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
   G4int Z = (G4int) (*theTable)[targetOscillator]->GetParentZ();
 
   //initialize here, then check photons created by Atomic-Deexcitation, and the final state e-
-  std::vector<G4DynamicParticle*>* photonVector=0;  
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   G4double bindingEnergy = 0.*eV;
-  G4int shellId = 0;
+  //G4int shellId = 0;
 
+  const G4AtomicShell* shell = 0;
   //Real level
   if (Z > 0 && shFlag<30)
     {
-      const G4AtomicShell* shell = transitionManager->Shell(Z,shFlag-1);
+      shell = transitionManager->Shell(Z,shFlag-1);
       bindingEnergy = shell->BindingEnergy();
-      shellId = shell->ShellId();
+      //shellId = shell->ShellId();
     }
 
   //correct the energySecondary to account for the fact that the Penelope 
@@ -432,68 +448,29 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
       localEnergyDeposit += energySecondary;
       energySecondary = 0.0;
     }
-  
-  //the local energy deposit is what remains: part of this may be spent for fluorescence.
-  if(DeexcitationFlag() && Z > 5) 
+
+  //Notice: shell might be NULL (invalid!) if shFlag=30. Must be protected
+  //Now, take care of fluorescence, if required
+  if (fAtomDeexcitation && shell)
     {
-      const G4ProductionCutsTable* theCoupleTable=
-	G4ProductionCutsTable::GetProductionCutsTable();
-
-      size_t index = couple->GetIndex();
-      G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-      G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-
-      // Generation of fluorescence
-      // Data in EADL are available only for Z > 5
-      // Protection to avoid generating photons in the unphysical case of
-      // shell binding energy > photon energy
-      if (localEnergyDeposit > cutg || localEnergyDeposit > cute)
-	{ 
-	  G4DynamicParticle* aPhoton;
-	  deexcitationManager.SetCutForSecondaryPhotons(cutg);
-	  deexcitationManager.SetCutForAugerElectrons(cute);
-	  
-	  photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-	  if(photonVector) 
+      G4int index = couple->GetIndex();
+      if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
+	{
+	  size_t nBefore = fvect->size();
+	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
+	  size_t nAfter = fvect->size(); 
+      
+	  if (nAfter > nBefore) //actual production of fluorescence
 	    {
-	      size_t nPhotons = photonVector->size();
-	      for (size_t k=0; k<nPhotons; k++)
+	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
 		{
-		  aPhoton = (*photonVector)[k];
-		  if (aPhoton)
-		    {
-		      G4double itsEnergy = aPhoton->GetKineticEnergy();
-		      G4bool keepIt = false;
-		      if (itsEnergy <= localEnergyDeposit)
-			{
-			  //check if good! 
-			  if(aPhoton->GetDefinition() == G4Gamma::Gamma()
-			     && itsEnergy >= cutg)
-			    {
-			      keepIt = true;
-			      energyInFluorescence += itsEnergy;			  
-			    }
-			  if (aPhoton->GetDefinition() == G4Electron::Electron() && 
-			      itsEnergy >= cute)
-			    {
-			      energyInAuger += itsEnergy;
-			      keepIt = true;
-			    }
-			}
-		      //good secondary, register it
-		      if (keepIt)
-			{
-			  localEnergyDeposit -= itsEnergy;
-			  fvect->push_back(aPhoton);
-			}		    
-		      else
-			{
-			  delete aPhoton;
-			  (*photonVector)[k] = 0;
-			}		      
-		    }
+		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
+		  localEnergyDeposit -= itsEnergy;
+		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+		    energyInFluorescence += itsEnergy;
+		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
+		    energyInAuger += itsEnergy;
 		}
-	      delete photonVector;
 	    }
 	}
     }
@@ -559,674 +536,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
     }
     
 }
-  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-void G4PenelopeIonisationModel::ActivateAuger(G4bool augerbool)
-{
-  if (!DeexcitationFlag() && augerbool)
-    {
-      G4cout << "WARNING - G4PenelopeIonisationModel" << G4endl;
-      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
-      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
-    }
-  deexcitationManager.ActivateAugerElectronProduction(augerbool);
-  if (verboseLevel > 1)
-    G4cout << "Auger production set to " << augerbool << G4endl;
-}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4PenelopeIonisationModel::ClearTables()
-{  
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>::iterator i;
-  if (XSTableElectron)
-    {
-      for (i=XSTableElectron->begin(); i != XSTableElectron->end(); i++)
-	{
-	  G4PenelopeCrossSection* tab = i->second;
-	  delete tab;
-	}
-      delete XSTableElectron;
-      XSTableElectron = 0;
-    }
-
-  if (XSTablePositron)
-    {
-      for (i=XSTablePositron->begin(); i != XSTablePositron->end(); i++)
-	{
-	  G4PenelopeCrossSection* tab = i->second;
-	  delete tab;
-	}
-      delete XSTablePositron;
-      XSTablePositron = 0;
-    }
-
-  std::map<const G4Material*,G4PhysicsFreeVector*>::iterator k;
-  if (theDeltaTable)
-    {
-      for (k=theDeltaTable->begin();k!=theDeltaTable->end();k++)	
-	delete k->second;
-      delete theDeltaTable;
-      theDeltaTable = 0;
-    }
-    
-  if (energyGrid)
-    delete energyGrid;
-
-  if (verboseLevel > 2)
-    G4cout << "G4PenelopeIonisationModel: cleared tables" << G4endl;
-  return;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PenelopeCrossSection* 
-G4PenelopeIonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefinition* part,
-							 const G4Material* mat,
-							 G4double cut)
-{
-  if (part != G4Electron::Electron() && part != G4Positron::Positron())
-    {
-      G4ExceptionDescription ed;
-      ed << "Invalid particle: " << part->GetParticleName() << G4endl;
-      G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
-		  "em0001",FatalException,ed);
-      return NULL;
-    }
-
-  if (part == G4Electron::Electron())
-    {
-      if (!XSTableElectron)
-	{
-	  G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
-		      "em0028",FatalException,  
-		      "The Cross Section Table for e- was not initialized correctly!");
-	  return NULL;
-	}
-      std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-      if (XSTableElectron->count(theKey)) //table already built	
-	return XSTableElectron->find(theKey)->second;
-      else
-	{
-	  BuildXSTable(mat,cut,part);
-	  if (XSTableElectron->count(theKey)) //now it should be ok!
-	    return XSTableElectron->find(theKey)->second;
-	  else
-	    {
-	      G4ExceptionDescription ed;
-	      ed << "Unable to build e- table for " << mat->GetName() << G4endl;
-	      G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
-			  "em0029",FatalException,ed);	   
-	    }
-	}
-    }
-
-  if (part == G4Positron::Positron())
-    {
-      if (!XSTablePositron)
-	{
-	  G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
-		      "em0028",FatalException,  
-		      "The Cross Section Table for e+ was not initialized correctly!");
-	  return NULL;
-	}
-      std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-      if (XSTablePositron->count(theKey)) //table already built	
-	return XSTablePositron->find(theKey)->second;
-      else
-	{
-	  BuildXSTable(mat,cut,part);
-	  if (XSTablePositron->count(theKey)) //now it should be ok!
-	    return XSTablePositron->find(theKey)->second;
-	  else
-	    {
-	      G4ExceptionDescription ed;
-	      ed << "Unable to build e+ table for " << mat->GetName() << G4endl;
-	      G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
-			  "em0029",FatalException,ed);	   	   
-	    }
-	}
-    }
-  return NULL;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4PenelopeIonisationModel::BuildXSTable(const G4Material* mat,G4double cut,
-					     const G4ParticleDefinition* part)
-{
-  //
-  //This method fills the G4PenelopeCrossSection containers for electrons or positrons
-  //and for the given material/cut couple. The calculation is done as sum over the 
-  //individual shells.
-  //Equivalent of subroutines EINaT and PINaT of Penelope
-  //
-  if (verboseLevel > 2)
-    {
-      G4cout << "G4PenelopeIonisationModel: going to build cross section table " << G4endl;
-      G4cout << "for " << part->GetParticleName() << " in " << mat->GetName() << G4endl;
-    }
-
-  //Tables have been already created (checked by GetCrossSectionTableForCouple)
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
-  size_t numberOfOscillators = theTable->size();
-
-  if (energyGrid->GetVectorLength() != nBins) 
-    {
-      G4ExceptionDescription ed;
-      ed << "Energy Grid looks not initialized" << G4endl;
-      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
-      G4Exception("G4PenelopeIonisationModel::BuildXSTable()",
-		  "em2030",FatalException,ed);
-    }
-
-  G4PenelopeCrossSection* XSEntry = new G4PenelopeCrossSection(nBins,numberOfOscillators);
- 
-  //loop on the energy grid
-  for (size_t bin=0;bin<nBins;bin++)
-    {
-       G4double energy = energyGrid->GetLowEdgeEnergy(bin);
-       G4double XH0=0, XH1=0, XH2=0;
-       G4double XS0=0, XS1=0, XS2=0;
-   
-       //oscillator loop
-       for (size_t iosc=0;iosc<numberOfOscillators;iosc++)
-	 {
-	   G4DataVector* tempStorage = 0;
-
-	   G4PenelopeOscillator* theOsc = (*theTable)[iosc];
-	   G4double delta = GetDensityCorrection(mat,energy);
-	   if (part == G4Electron::Electron())	     
-	     tempStorage = ComputeShellCrossSectionsElectron(theOsc,energy,cut,delta);
-	   else if (part == G4Positron::Positron())
-	     tempStorage = ComputeShellCrossSectionsPositron(theOsc,energy,cut,delta);
-	   //check results are all right
-	   if (!tempStorage)
-	     {
-	       G4ExceptionDescription ed;
-	       ed << "Problem in calculating the shell XS for shell # " 
-		  << iosc << G4endl;
-	       G4Exception("G4PenelopeIonisationModel::BuildXSTable()",
-			   "em2031",FatalException,ed);			   
-	       delete XSEntry;
-	       return;
-	     }
-	   if (tempStorage->size() != 6)
-	     {
-	       G4ExceptionDescription ed;
-	       ed << "Problem in calculating the shell XS " << G4endl;
-	       ed << "Result has dimension " << tempStorage->size() << " instead of 6" << G4endl;
-	       G4Exception("G4PenelopeIonisationModel::BuildXSTable()",
-			   "em2031",FatalException,ed);	
-	     }
-	   G4double stre = theOsc->GetOscillatorStrength();
-
-	   XH0 += stre*(*tempStorage)[0];
-	   XH1 += stre*(*tempStorage)[1];
-	   XH2 += stre*(*tempStorage)[2];
-	   XS0 += stre*(*tempStorage)[3];
-	   XS1 += stre*(*tempStorage)[4];
-	   XS2 += stre*(*tempStorage)[5];
-	   XSEntry->AddShellCrossSectionPoint(bin,iosc,energy,stre*(*tempStorage)[0]);
-	   if (tempStorage)
-	     {
-	       delete tempStorage;
-	       tempStorage = 0;
-	     }
-	 }       
-       XSEntry->AddCrossSectionPoint(bin,energy,XH0,XH1,XH2,XS0,XS1,XS2);
-    }
-
-
-  //Normalize shell cross sections before insertion in the table
-  XSEntry->NormalizeShellCrossSections();
-
-
-  //Insert in the appropriate table
-  std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  if (part == G4Electron::Electron())      
-    XSTableElectron->insert(std::make_pair(theKey,XSEntry));
-  else if (part == G4Positron::Positron())
-    XSTablePositron->insert(std::make_pair(theKey,XSEntry));
-  else
-    delete XSEntry;
-  
-  return;
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4PenelopeIonisationModel::GetDensityCorrection(const G4Material* mat,
-							 G4double energy)
-{
-  G4double result = 0;
-  if (!theDeltaTable)
-    {
-      G4Exception("G4PenelopeIonisationModel::GetDensityCorrection()",
-		  "em2032",FatalException,
-		  "Delta Table not initialized. Was Initialise() run?");
-      return 0;
-    }
-  if (energy <= 0*eV)
-    {
-      G4cout << "G4PenelopeIonisationModel::GetDensityCorrection()" << G4endl;
-      G4cout << "Invalid energy " << energy/eV << " eV " << G4endl;
-      return 0;
-    }
-  G4double logene = std::log(energy);
-
-  //check if the material has been built
-  if (!(theDeltaTable->count(mat)))
-    BuildDeltaTable(mat);
-
-  if (theDeltaTable->count(mat))
-    {
-      G4PhysicsFreeVector* vec = theDeltaTable->find(mat)->second;
-      result = vec->Value(logene); //the table has delta vs. ln(E)      
-    }
-  else
-    {
-      G4ExceptionDescription ed;      
-      ed << "Unable to build table for " << mat->GetName() << G4endl;
-      G4Exception("G4PenelopeIonisationModel::GetDensityCorrection()",
-		  "em2033",FatalException,ed);
-    }
-
-  return result;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4PenelopeIonisationModel::BuildDeltaTable(const G4Material* mat)
-{
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
-  G4double plasmaSq = oscManager->GetPlasmaEnergySquared(mat);
-  G4double totalZ = oscManager->GetTotalZ(mat);
-  size_t numberOfOscillators = theTable->size();
-
-  if (energyGrid->GetVectorLength() != nBins) 
-    {
-      G4ExceptionDescription ed;
-      ed << "Energy Grid for Delta table looks not initialized" << G4endl;
-      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
-      G4Exception("G4PenelopeIonisationModel::BuildDeltaTable()",
-		  "em2030",FatalException,ed);
-    }
-
-  G4PhysicsFreeVector* theVector = new G4PhysicsFreeVector(nBins);
-
-  //loop on the energy grid
-  for (size_t bin=0;bin<nBins;bin++)
-    {
-      G4double delta = 0.;
-      G4double energy = energyGrid->GetLowEdgeEnergy(bin);
-
-      //Here calculate delta
-      G4double gam = 1.0+(energy/electron_mass_c2);
-      G4double gamSq = gam*gam;
-
-      G4double TST = totalZ/(gamSq*plasmaSq);
-      G4double wl2 = 0;
-      G4double fdel = 0;
-
-      //loop on oscillators
-      for (size_t i=0;i<numberOfOscillators;i++)
-	{
-	  G4PenelopeOscillator* theOsc = (*theTable)[i];
-	  G4double wri = theOsc->GetResonanceEnergy();
-	  fdel += theOsc->GetOscillatorStrength()/(wri*wri+wl2);
-	}      
-      if (fdel >= TST) //if fdel < TST, delta = 0
-	{
-	  //get last oscillator
-	  G4PenelopeOscillator* theOsc = (*theTable)[numberOfOscillators-1]; 
-	  wl2 = theOsc->GetResonanceEnergy()*theOsc->GetResonanceEnergy();
-	  
-	  //First iteration
-	  G4bool loopAgain = false;
-	  do
-	    {
-	      loopAgain = false;
-	      wl2 += wl2;
-	      fdel = 0.;
-	      for (size_t i=0;i<numberOfOscillators;i++)
-		{
-		  G4PenelopeOscillator* theOsc = (*theTable)[i];
-		  G4double wri = theOsc->GetResonanceEnergy();
-		  fdel += theOsc->GetOscillatorStrength()/(wri*wri+wl2);
-		}
-	      if (fdel > TST)
-		loopAgain = true;
-	    }while(loopAgain);
-
-	  G4double wl2l = 0;
-	  G4double wl2u = wl2;
-	  //second iteration
-	  do
-	    {	     
-	      loopAgain = false;
-	      wl2 = 0.5*(wl2l+wl2u);
-	      fdel = 0;
-	      for (size_t i=0;i<numberOfOscillators;i++)
-		{
-		  G4PenelopeOscillator* theOsc = (*theTable)[i];
-		  G4double wri = theOsc->GetResonanceEnergy();
-		  fdel += theOsc->GetOscillatorStrength()/(wri*wri+wl2);
-		}
-	      if (fdel > TST)
-		wl2l = wl2;
-	      else
-		wl2u = wl2;
-	      if ((wl2u-wl2l)>1e-12*wl2)
-		loopAgain = true;
-	    }while(loopAgain);
-	  
-	  //Eventually get density correction
-	  delta = 0.;
-	  for (size_t i=0;i<numberOfOscillators;i++)
-	    {
-	      G4PenelopeOscillator* theOsc = (*theTable)[i];
-	      G4double wri = theOsc->GetResonanceEnergy();
-	      delta += theOsc->GetOscillatorStrength()*
-		std::log(1.0+(wl2/(wri*wri)));	  	     
-	    }
-	  delta = (delta/totalZ)-wl2/(gamSq*plasmaSq);
-	}
-      energy = std::max(1e-9*eV,energy); //prevents log(0)
-      theVector->PutValue(bin,std::log(energy),delta);
-    }
-  theDeltaTable->insert(std::make_pair(mat,theVector));
-  return;
-}
-							
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4DataVector* G4PenelopeIonisationModel::ComputeShellCrossSectionsElectron(G4PenelopeOscillator* theOsc,
-									   G4double energy,
-									   G4double cut,
-									   G4double delta)
-{
-  //
-  //This method calculates the hard and soft cross sections (H0-H1-H2-S0-S1-S2) for 
-  //the given oscillator/cut and at the given energy.
-  //It returns a G4DataVector* with 6 entries (H0-H1-H2-S0-S1-S2)
-  //Equivalent of subroutines EINaT1 of Penelope
-  //
-  // Results are _per target electron_
-  //
-  G4DataVector* result = new G4DataVector();
-  for (size_t i=0;i<6;i++)
-    result->push_back(0.);
-  G4double ionEnergy = theOsc->GetIonisationEnergy();
-  
-  //return a set of zero's if the energy it too low to excite the current oscillator
-  if (energy < ionEnergy)
-    return result;
-
-  G4double H0=0.,H1=0.,H2=0.;
-  G4double S0=0.,S1=0.,S2=0.;
-
-  //Define useful constants to be used in the calculation
-  G4double gamma = 1.0+energy/electron_mass_c2;
-  G4double gammaSq = gamma*gamma;
-  G4double beta = (gammaSq-1.0)/gammaSq;
-  G4double pielr2 = pi*classic_electr_radius*classic_electr_radius; //pi*re^2
-  G4double constant = pielr2*2.0*electron_mass_c2/beta;
-  G4double XHDT0 = std::log(gammaSq)-beta;
-
-  G4double cpSq = energy*(energy+2.0*electron_mass_c2);
-  G4double cp = std::sqrt(cpSq);
-  G4double amol = (energy/(energy+electron_mass_c2))*(energy/(energy+electron_mass_c2));
-
-  //
-  // Distant interactions
-  //
-  G4double resEne = theOsc->GetResonanceEnergy();
-  G4double cutoffEne = theOsc->GetCutoffRecoilResonantEnergy();
-  if (energy > resEne)
-    {
-      G4double cp1Sq = (energy-resEne)*(energy-resEne+2.0*electron_mass_c2);
-      G4double cp1 = std::sqrt(cp1Sq);
-      
-      //Distant longitudinal interactions
-      G4double QM = 0;
-      if (resEne > 1e-6*energy)
-	QM = std::sqrt((cp-cp1)*(cp-cp1)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
-      else
-	{
-	  QM = resEne*resEne/(beta*2.0*electron_mass_c2);
-	  QM = QM*(1.0-0.5*QM/electron_mass_c2);
-	}
-      G4double SDL1 = 0;
-      if (QM < cutoffEne)
-	SDL1 = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
-      
-      //Distant transverse interactions
-      if (SDL1)
-	{
-	  G4double SDT1 = std::max(XHDT0-delta,0.0);
-	  G4double SD1 = SDL1+SDT1;
-	  if (cut > resEne)
-	    {
-	      S1 = SD1; //XS1
-	      S0 = SD1/resEne; //XS0
-	      S2 = SD1*resEne; //XS2
-	    }
-	  else
-	    {
-	      H1 = SD1; //XH1
-	      H0 = SD1/resEne; //XH0
-	      H2 = SD1*resEne; //XH2
-	    }
-	}
-    }
-  //
-  // Close collisions (Moller's cross section)
-  //
-  G4double wl = std::max(cut,cutoffEne);
-  G4double ee = energy + ionEnergy;
-  G4double wu = 0.5*ee;
-  if (wl < wu-(1e-5*eV))
-    {
-      H0 += (1.0/(ee-wu)) - (1.0/(ee-wl)) - (1.0/wu) + (1.0/wl) + 
-	(1.0-amol)*std::log(((ee-wu)*wl)/((ee-wl)*wu))/ee + 
-	amol*(wu-wl)/(ee*ee);
-      H1 += std::log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
-	(2.0-amol)*std::log((ee-wu)/(ee-wl)) + 
-	amol*(wu*wu-wl*wl)/(2.0*ee*ee);
-      H2 += (2.0-amol)*(wu-wl)+(wu*(2.0*ee-wu)/(ee-wu)) - 
-	(wl*(2.0*ee-wl)/(ee-wl)) + 
-	(3.0-amol)*ee*std::log((ee-wu)/(ee-wl)) + 	
-	amol*(wu*wu*wu-wl*wl*wl)/(3.0*ee*ee);
-      wu = wl;
-    }
-  wl = cutoffEne;
-  
-  if (wl > wu-(1e-5*eV))
-    {
-      (*result)[0] = constant*H0;
-      (*result)[1] = constant*H1;
-      (*result)[2] = constant*H2;
-      (*result)[3] = constant*S0;
-      (*result)[4] = constant*S1;
-      (*result)[5] = constant*S2;
-      return result;
-    }
-
-  S0 += (1.0/(ee-wu))-(1.0/(ee-wl)) - (1.0/wu) + (1.0/wl) + 
-    (1.0-amol)*std::log(((ee-wu)*wl)/((ee-wl)*wu))/ee +
-    amol*(wu-wl)/(ee*ee);
-  S1 += std::log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
-    (2.0-amol)*std::log((ee-wu)/(ee-wl)) + 
-    amol*(wu*wu-wl*wl)/(2.0*ee*ee);
-  S2 += (2.0-amol)*(wu-wl)+(wu*(2.0*ee-wu)/(ee-wu)) - 
-    (wl*(2.0*ee-wl)/(ee-wl)) + 
-    (3.0-amol)*ee*std::log((ee-wu)/(ee-wl)) + 
-    amol*(wu*wu*wu-wl*wl*wl)/(3.0*ee*ee);
-
-  (*result)[0] = constant*H0;
-  (*result)[1] = constant*H1;
-  (*result)[2] = constant*H2;
-  (*result)[3] = constant*S0;
-  (*result)[4] = constant*S1;
-  (*result)[5] = constant*S2;
-  return result;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4DataVector* G4PenelopeIonisationModel::ComputeShellCrossSectionsPositron(G4PenelopeOscillator* theOsc,
-									   G4double energy,
-									   G4double cut,
-									   G4double delta)
-{
-  //
-  //This method calculates the hard and soft cross sections (H0-H1-H2-S0-S1-S2) for 
-  //the given oscillator/cut and at the given energy.
-  //It returns a G4DataVector* with 6 entries (H0-H1-H2-S0-S1-S2)
-  //Equivalent of subroutines PINaT1 of Penelope
-  //
-  // Results are _per target electron_
-  //
-  G4DataVector* result = new G4DataVector();
-  for (size_t i=0;i<6;i++)
-    result->push_back(0.);
-  G4double ionEnergy = theOsc->GetIonisationEnergy();
-  
-  //return a set of zero's if the energy it too low to excite the current oscillator
-  if (energy < ionEnergy)
-    return result;
-
-  G4double H0=0.,H1=0.,H2=0.;
-  G4double S0=0.,S1=0.,S2=0.;
-
-  //Define useful constants to be used in the calculation
-  G4double gamma = 1.0+energy/electron_mass_c2;
-  G4double gammaSq = gamma*gamma;
-  G4double beta = (gammaSq-1.0)/gammaSq;
-  G4double pielr2 = pi*classic_electr_radius*classic_electr_radius; //pi*re^2
-  G4double constant = pielr2*2.0*electron_mass_c2/beta;
-  G4double XHDT0 = std::log(gammaSq)-beta;
-
-  G4double cpSq = energy*(energy+2.0*electron_mass_c2);
-  G4double cp = std::sqrt(cpSq);
-  G4double amol = (energy/(energy+electron_mass_c2))*(energy/(energy+electron_mass_c2));
-  G4double g12 = (gamma+1.0)*(gamma+1.0);
-  //Bhabha coefficients
-  G4double bha1 = amol*(2.0*g12-1.0)/(gammaSq-1.0);
-  G4double bha2 = amol*(3.0+1.0/g12);
-  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/g12;
-  G4double bha4 = amol*(gamma-1.0)*(gamma-1.0)/g12;
-
-  //
-  // Distant interactions
-  //
-  G4double resEne = theOsc->GetResonanceEnergy();
-  G4double cutoffEne = theOsc->GetCutoffRecoilResonantEnergy();
-  if (energy > resEne)
-    {
-      G4double cp1Sq = (energy-resEne)*(energy-resEne+2.0*electron_mass_c2);
-      G4double cp1 = std::sqrt(cp1Sq);
-      
-      //Distant longitudinal interactions
-      G4double QM = 0;
-      if (resEne > 1e-6*energy)
-	QM = std::sqrt((cp-cp1)*(cp-cp1)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
-      else
-	{
-	  QM = resEne*resEne/(beta*2.0*electron_mass_c2);
-	  QM = QM*(1.0-0.5*QM/electron_mass_c2);
-	}
-      G4double SDL1 = 0;
-      if (QM < cutoffEne)
-	SDL1 = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
-      
-      //Distant transverse interactions
-      if (SDL1)
-	{
-	  G4double SDT1 = std::max(XHDT0-delta,0.0);
-	  G4double SD1 = SDL1+SDT1;
-	  if (cut > resEne)
-	    {
-	      S1 = SD1; //XS1
-	      S0 = SD1/resEne; //XS0
-	      S2 = SD1*resEne; //XS2
-	    }
-	  else
-	    {
-	      H1 = SD1; //XH1
-	      H0 = SD1/resEne; //XH0
-	      H2 = SD1*resEne; //XH2
-	    }
-	}
-    }
-
-  //
-  // Close collisions (Bhabha's cross section)
-  //
-  G4double wl = std::max(cut,cutoffEne);
-  G4double wu = energy; 
-  G4double energySq = energy*energy;
-  if (wl < wu-(1e-5*eV))
-    {
-      G4double wlSq = wl*wl;
-      G4double wuSq = wu*wu;
-      H0 += (1.0/wl) - (1.0/wu)- bha1*std::log(wu/wl)/energy  
-	+ bha2*(wu-wl)/energySq  
-	- bha3*(wuSq-wlSq)/(2.0*energySq*energy)
-	+ bha4*(wuSq*wu-wlSq*wl)/(3.0*energySq*energySq);
-      H1 += std::log(wu/wl) - bha1*(wu-wl)/energy
-	+ bha2*(wuSq-wlSq)/(2.0*energySq)
-	- bha3*(wuSq*wu-wlSq*wl)/(3.0*energySq*energy)
-	+ bha4*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energySq);
-      H2 += wu - wl - bha1*(wuSq-wlSq)/(2.0*energy)
-	+ bha2*(wuSq*wu-wlSq*wl)/(3.0*energySq)
-	- bha3*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energy)
-	+ bha4*(wuSq*wuSq*wu-wlSq*wlSq*wl)/(5.0*energySq*energySq);
-      wu = wl;
-    }
-  wl = cutoffEne;
-  
-  if (wl > wu-(1e-5*eV))
-    {
-      (*result)[0] = constant*H0;
-      (*result)[1] = constant*H1;
-      (*result)[2] = constant*H2;
-      (*result)[3] = constant*S0;
-      (*result)[4] = constant*S1;
-      (*result)[5] = constant*S2;
-      return result;
-    }
-
-  G4double wlSq = wl*wl;
-  G4double wuSq = wu*wu;
-
-  S0 += (1.0/wl) - (1.0/wu) - bha1*std::log(wu/wl)/energy 
-    + bha2*(wu-wl)/energySq  
-    - bha3*(wuSq-wlSq)/(2.0*energySq*energy)
-    + bha4*(wuSq*wu-wlSq*wl)/(3.0*energySq*energySq);
-
-  S1 += std::log(wu/wl) - bha1*(wu-wl)/energy
-    + bha2*(wuSq-wlSq)/(2.0*energySq)
-    - bha3*(wuSq*wu-wlSq*wl)/(3.0*energySq*energy)
-    + bha4*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energySq);
-
-  S2 += wu - wl - bha1*(wuSq-wlSq)/(2.0*energy)
-    + bha2*(wuSq*wu-wlSq*wl)/(3.0*energySq)
-    - bha3*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energy)
-    + bha4*(wuSq*wuSq*wu-wlSq*wlSq*wl)/(5.0*energySq*energySq);
-
- (*result)[0] = constant*H0;
- (*result)[1] = constant*H1;
- (*result)[2] = constant*H2;
- (*result)[3] = constant*S0;
- (*result)[4] = constant*S1;
- (*result)[5] = constant*S2;
-
- return result;
-}
-
+  						       
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
 							 G4double cutEnergy,
@@ -1242,9 +552,10 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
 
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
   size_t numberOfOscillators = theTable->size();
-  G4PenelopeCrossSection* theXS = GetCrossSectionTableForCouple(G4Electron::Electron(),mat,
-								cutEnergy);
-  G4double delta = GetDensityCorrection(mat,kineticEnergy);
+  G4PenelopeCrossSection* theXS = 
+    theCrossSectionHandler->GetCrossSectionTableForCouple(G4Electron::Electron(),mat,
+							  cutEnergy);
+  G4double delta = theCrossSectionHandler->GetDensityCorrection(mat,kineticEnergy);
  
   // Selection of the active oscillator
   G4double TST = G4UniformRand();
@@ -1253,7 +564,13 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
 
   for (size_t i=0;i<numberOfOscillators-1;i++)
     {
-      XSsum += theXS->GetShellCrossSection(i,kineticEnergy); 
+      /* testing purposes
+      G4cout << "sampling: " << i << " " << XSsum << " " << TST << " " << 
+	theXS->GetShellCrossSection(i,kineticEnergy) << " " << 
+	theXS->GetNormalizedShellCrossSection(i,kineticEnergy) << " " << 
+	mat->GetName() << G4endl;
+      */
+      XSsum += theXS->GetNormalizedShellCrossSection(i,kineticEnergy); 
      	
       if (XSsum > TST)
 	{
@@ -1448,9 +765,9 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
  
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
   size_t numberOfOscillators = theTable->size();
-  G4PenelopeCrossSection* theXS = GetCrossSectionTableForCouple(G4Positron::Positron(),mat,
+  G4PenelopeCrossSection* theXS = theCrossSectionHandler->GetCrossSectionTableForCouple(G4Positron::Positron(),mat,
 								cutEnergy);
-  G4double delta = GetDensityCorrection(mat,kineticEnergy);
+  G4double delta = theCrossSectionHandler->GetDensityCorrection(mat,kineticEnergy);
 
   // Selection of the active oscillator
   G4double TST = G4UniformRand();
@@ -1458,7 +775,7 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
   G4double XSsum = 0.;
   for (size_t i=0;i<numberOfOscillators-1;i++)
     {
-      XSsum += theXS->GetShellCrossSection(i,kineticEnergy);   	
+      XSsum += theXS->GetNormalizedShellCrossSection(i,kineticEnergy);   	
       if (XSsum > TST)
 	{
 	  targetOscillator = (G4int) i;

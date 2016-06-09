@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.6 2006-06-29 16:54:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +68,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void SetMagField(G4double);
 
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
 
@@ -74,48 +76,48 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void PrintCalorParameters();
 
-     G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};	     
-     G4double    GetAbsorberThickness() {return AbsorberThickness;};
-     G4double    GetAbsorberSizeYZ()    {return AbsorberSizeYZ;};
+     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};             
+     G4double    GetAbsorberThickness() {return fAbsorberThickness;};
+     G4double    GetAbsorberSizeYZ()    {return fAbsorberSizeYZ;};
 
-     G4double    GetAbsorberXpos()      {return XposAbs;};
-     G4double    GetxstartAbs()         {return xstartAbs;};
-     G4double    GetxendAbs()           {return xendAbs;};
+     G4double    GetAbsorberXpos()      {return fXposAbs;};
+     G4double    GetxstartAbs()         {return fXstartAbs;};
+     G4double    GetxendAbs()           {return fXendAbs;};
 
-     G4Material* GetWorldMaterial()     {return WorldMaterial;};
-     G4double    GetWorldSizeX()        {return WorldSizeX;};
-     G4double    GetWorldSizeYZ()       {return WorldSizeYZ;};
+     G4Material* GetWorldMaterial()     {return fWorldMaterial;};
+     G4double    GetWorldSizeX()        {return fWorldSizeX;};
+     G4double    GetWorldSizeYZ()       {return fWorldSizeYZ;};
 
-     const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};
-     const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
+     const G4VPhysicalVolume* GetphysiWorld() {return fPhysiWorld;};
+     const G4VPhysicalVolume* GetAbsorber()   {return fPhysiAbsorber;};
      const G4MaterialCutsCouple* GetAbsorbMaterialCut()  const
-                             {return logicAbsorber->GetMaterialCutsCouple();};
+                             {return fLogicAbsorber->GetMaterialCutsCouple();};
   private:
 
-     G4Material*        AbsorberMaterial;
-     G4double           AbsorberThickness;
-     G4double           AbsorberSizeYZ;
+     G4Material*        fAbsorberMaterial;
+     G4double           fAbsorberThickness;
+     G4double           fAbsorberSizeYZ;
 
-     G4double           XposAbs;
-     G4double           xstartAbs, xendAbs;
+     G4double           fXposAbs;
+     G4double           fXstartAbs, fXendAbs;
 
-     G4Material*        WorldMaterial;
-     G4double           WorldSizeX;
-     G4double           WorldSizeYZ;
+     G4Material*        fWorldMaterial;
+     G4double           fWorldSizeX;
+     G4double           fWorldSizeYZ;
 
-     G4bool             defaultWorld;
+     G4bool             fDefaultWorld;
 
-     G4Box*             solidWorld;
-     G4LogicalVolume*   logicWorld;
-     G4VPhysicalVolume* physiWorld;
+     G4Box*             fSolidWorld;
+     G4LogicalVolume*   fLogicWorld;
+     G4VPhysicalVolume* fPhysiWorld;
 
-     G4Box*             solidAbsorber;
-     G4LogicalVolume*   logicAbsorber;
-     G4VPhysicalVolume* physiAbsorber;
+     G4Box*             fSolidAbsorber;
+     G4LogicalVolume*   fLogicAbsorber;
+     G4VPhysicalVolume* fPhysiAbsorber;
 
-     G4UniformMagField* magField;
+     G4UniformMagField* fMagField;
      
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger* fDetectorMessenger;
       
   private:
     

@@ -32,6 +32,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
@@ -926,24 +927,24 @@ void G4QMDGroundStateNucleus::killCMMotionAndAngularM()
 
 // Move to cm system
 
-   G4ThreeVector pcm ( 0.0 );
-   G4ThreeVector rcm ( 0.0 );
+   G4ThreeVector pcm_tmp ( 0.0 );
+   G4ThreeVector rcm_tmp ( 0.0 );
    G4double sumMass = 0.0;
 
    for ( G4int i = 0 ; i < GetMassNumber() ; i++ )
    {
-      pcm += participants[i]->GetMomentum();
-      rcm += participants[i]->GetPosition() * participants[i]->GetMass();
+      pcm_tmp += participants[i]->GetMomentum();
+      rcm_tmp += participants[i]->GetPosition() * participants[i]->GetMass();
       sumMass += participants[i]->GetMass();
    }
 
-   pcm = pcm/GetMassNumber();
-   rcm = rcm/sumMass;
+   pcm_tmp = pcm_tmp/GetMassNumber();
+   rcm_tmp = rcm_tmp/sumMass;
 
    for ( G4int i = 0 ; i < GetMassNumber() ; i++ )
    {
-      participants[i]->SetMomentum( participants[i]->GetMomentum() - pcm );
-      participants[i]->SetPosition( participants[i]->GetPosition() - rcm );
+      participants[i]->SetMomentum( participants[i]->GetMomentum() - pcm_tmp );
+      participants[i]->SetPosition( participants[i]->GetPosition() - rcm_tmp );
    }
 
 // kill the angular momentum

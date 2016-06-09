@@ -13,6 +13,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-11-12 I. Hrivnacova (exampleN03Con-V09-05-07)   
+- Removed executing gui.mac, as the macro is not provided
+  in the example 
+
+06-11-12 L. Garnier (exampleN03Con-V09-05-06)   
+- Fix gui.mac in example and not in visTutor
+
+03-09-12 I. Hrivnacova (exampleN03Con-V09-05-05)   
+- New tag to be synchronized with the update in tests/ctest;
+  no changes in the example itself   
+
+31-08-12 I. Hrivnacova (exampleN03Con-V09-05-01)      
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Adding .README  
+
+27-04-12 T. Koi (exampleN03Con-V09-05-00)
+- applying Extended Examples Coding Guidelines 1.5
      
 12-11-10 mma (exampleN03Con-V09-03-03)
 - change classe mames : suppress ExN03

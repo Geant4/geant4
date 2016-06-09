@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeSigmaPlusNChannel.cc,v 1.7 2010-12-15 07:40:41 gunter Exp $
+// $Id$
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.hh,v 1.4 2010-01-07 18:10:19 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNARuddIonisationModel_h
@@ -40,7 +39,7 @@
 #include "G4Proton.hh"
 #include "G4LogLogInterpolation.hh"
 
-#include "G4WaterIonisationStructure.hh"
+#include "G4DNAWaterIonisationStructure.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
 
@@ -73,10 +72,12 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  // Water density table
+  const std::vector<G4double>* fpWaterDensity;
 
   //deexcitation manager to produce fluo photns and e-
   G4VAtomDeexcitation*      fAtomDeexcitation;
-  G4Material* nistwater;
+
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
@@ -100,7 +101,7 @@ private:
   
   // Final state
   
-  G4WaterIonisationStructure waterStructure;
+  G4DNAWaterIonisationStructure waterStructure;
 
   G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
 					  G4double incomingParticleEnergy, 

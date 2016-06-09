@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/particleGun.cc
+/// \brief Main program of the eventgenerator/particleGun example
 //
-// $Id: particleGun.cc,v 1.2 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -86,6 +88,11 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 
+#ifdef G4VIS_USE
+     G4VisManager* visManager = new G4VisExecutive;
+     visManager->Initialize();
+#endif
+
   if (argc!=1)   // batch mode  
     { 
      G4String command = "/control/execute ";
@@ -95,16 +102,13 @@ int main(int argc,char** argv) {
     
   else           // define visualization and UI terminal for interactive mode 
     { 
+#ifdef G4UI_USE
+     G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
 #ifdef G4VIS_USE
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
      UI->ApplyCommand("/control/execute vis.mac");          
 #endif
-
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
+     ui->SessionStart();
+     delete ui;
 #endif
      
 #ifdef G4VIS_USE

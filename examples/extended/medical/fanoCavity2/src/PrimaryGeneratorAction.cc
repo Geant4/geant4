@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,27 +40,28 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det,
                                                HistoManager* histo)
-:detector(det),histoManager(histo)					       
+:fDetector(det),fHistoManager(histo)                                               
 {
-  particleGun  = new G4ParticleGun(1);
+  fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
            = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(1*MeV);  
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleEnergy(1*MeV);  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,11 +70,11 @@ void PrimaryGeneratorAction::RunInitialisation(G4double effWall, G4double massR)
 {
   //this function is called at beginning of run
   //
-  cavityThickness = detector->GetCavityThickness();      
-  effWallThick = effWall;
-  massWallRatio  = massR;    
+  fCavityThickness = fDetector->GetCavityThickness();      
+  fEffWallThick = effWall;
+  fMassWallRatio  = massR;    
     
-  Nwall = Ncavity = 0;
+  fNwall = fNcavity = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,22 +84,22 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //this function is called at the begining of event
   //      
   G4double Zvertex;
-  if (G4UniformRand() < massWallRatio) {
-    Zvertex = 0.5*cavityThickness + G4UniformRand()*effWallThick;
+  if (G4UniformRand() < fMassWallRatio) {
+    Zvertex = 0.5*fCavityThickness + G4UniformRand()*fEffWallThick;
     if (G4UniformRand() < 0.5) Zvertex = -Zvertex;
-    Nwall++;
+    fNwall++;
   } else {
-    Zvertex = (G4UniformRand() - 0.5)*cavityThickness;
-    Ncavity++;
+    Zvertex = (G4UniformRand() - 0.5)*fCavityThickness;
+    fNcavity++;
   }
   
-  particleGun->SetParticlePosition(G4ThreeVector(0., 0., Zvertex));  
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., Zvertex));  
+  fParticleGun->GeneratePrimaryVertex(anEvent);
   
   //histograms
   //
-  histoManager->FillHisto(1,Zvertex);
-  histoManager->FillHisto(2,particleGun->GetParticleEnergy()); 
+  fHistoManager->FillHisto(1,Zvertex);
+  fHistoManager->FillHisto(2,fParticleGun->GetParticleEnergy()); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

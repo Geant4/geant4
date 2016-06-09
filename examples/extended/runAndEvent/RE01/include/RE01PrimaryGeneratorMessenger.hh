@@ -23,37 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01PrimaryGeneratorMessenger.hh,v 1.2 2006-06-29 17:43:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01PrimaryGeneratorMessenger.hh
+/// \brief Definition of the RE01PrimaryGeneratorMessenger class
 //
-
+// $Id$
+//
 
 #ifndef RE01PrimaryGeneratorMessenger_h
 #define RE01PrimaryGeneratorMessenger_h 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class RE01PrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
 class RE01PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction* mpga);
-    ~RE01PrimaryGeneratorMessenger();
-    
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+public:
+  RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction* mpga);
+  virtual ~RE01PrimaryGeneratorMessenger();
 
-  private:
-    RE01PrimaryGeneratorAction * myAction;
+public:
+  virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+  virtual G4String GetCurrentValue(G4UIcommand * command);
+
+private:
+  RE01PrimaryGeneratorAction * fMyAction;
     
-  private: //commands
-    G4UIdirectory *             mydetDirectory;
-    G4UIcmdWithAString *        genCmd;
+private: //commands
+  G4UIdirectory *             fMydetDirectory;
+  G4UIcmdWithAString *        fGenCmd;
     
 };
 

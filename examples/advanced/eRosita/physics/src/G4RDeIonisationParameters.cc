@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDeIonisationParameters.cc,v 1.23 2006/06/29 19:42:02 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -43,6 +43,9 @@
 //
 // -------------------------------------------------------------------
 
+#include <fstream>
+#include <sstream>
+
 #include "G4RDeIonisationParameters.hh"
 #include "G4RDVEMDataSet.hh"
 #include "G4RDShellEMDataSet.hh"
@@ -52,11 +55,9 @@
 #include "G4RDLogLogInterpolation.hh"
 #include "G4RDLinLogLogInterpolation.hh"
 #include "G4RDSemiLogInterpolation.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4DataVector.hh"
-#include <fstream>
-#include <sstream>
-
 
 G4RDeIonisationParameters:: G4RDeIonisationParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ),

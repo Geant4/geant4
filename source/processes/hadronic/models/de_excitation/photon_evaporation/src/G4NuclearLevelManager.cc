@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc,v 1.14 2010-11-17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -46,17 +45,18 @@
 //        06 Oct 2010, M. Kelsey -- Use object storage, not pointers, drop
 //		public access to list, simplify list construction
 // -------------------------------------------------------------------
-
-#include "G4NuclearLevelManager.hh"
-
-#include "globals.hh"
-#include "G4NuclearLevel.hh"
-#include "G4ios.hh"
-#include "G4HadronicException.hh"
 #include <stdlib.h>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+
+#include "G4NuclearLevelManager.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4NuclearLevel.hh"
+#include "G4ios.hh"
+#include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
 /*
 G4NuclearLevelManager::G4NuclearLevelManager():
@@ -105,12 +105,16 @@ G4NuclearLevelManager::NearestLevel(G4double energy,
   if (NumberOfLevels() <= 0) return 0;
 
   G4int iNear = -1;
+
+  //G4cout << "G4NuclearLevelManager::NearestLevel E(MeV)= " 
+  //	 << energy/MeV << " dEmax(MeV)= " << eDiffMax/MeV << G4endl;
   
   G4double diff = 9999. * GeV;
   for (unsigned int i=0; i<_levels->size(); i++)
     {
       G4double e = GetLevel(i)->Energy();
       G4double eDiff = std::abs(e - energy);
+      //G4cout << i << ".   eDiff(MeV)= " << eDiff/MeV << G4endl;
       if (eDiff < diff && eDiff <= eDiffMax)
 	{ 
 	  diff = eDiff; 

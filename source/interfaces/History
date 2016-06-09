@@ -17,6 +17,216 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+15th November 2012 Laurent Garnier (interfaces-V09-05-36)
+- G4UIQt:
+ o Fix bug #1391 : Menus were append before the "File" menu
+ o FIx bug #1389 : add button with command with arguments was not working
+
+14th November 2012 Laurent Garnier
+- G4UIQt: Put name of the app in the title bar
+
+6 November 2012 Koichi Murakami (interfaces-V09-05-35)
+- G4UIExecutive, remove Win32 session from best guess.
+
+2nd November 2012 Koichi Murakami (interfaces-V09-05-34)
+- G4UIExecutive, G4UItcsh, add null check for getenv return.
+
+2nd November 2012  Laurent Garnier (interfaces-V09-05-33)
+- G4UIQt : Remove icons for all applications. It will be now provided in a 
+           icons.mac file
+
+1st November, 2012 Gabriele Cosmo (interfaces-V09-05-32)
+- Fixed GNUmakefile and source.cmake in basic module for missing G4UIGAG.hh.
+
+30th October, 2012 John Allison (interfaces-V09-05-31 needs vis-V09-05-45)
+- G4UIQt: Removed IsInstantiated.  No longer needed.
+
+23th October, 2012 Koichi Murakami (interfaces-V09-05-30)
+- UIExecutive, fixed Windows error, add SelectSessionByBestGuess().
+
+22th October, 2012 Koichi Murakami (interfaces-V09-05-29)
+- GetCommandLine in G4UIshell-related is changed to GetCommandLineString
+  due to expected conflict on Windows. 
+
+(interfaces-V09-05-28 is used intarnally. It was tagged on the branch,
+interfaces-V09-05-24-check_on_win, for testing errors on Windows)
+
+20th October, 2012 Koichi Murakami (interfaces-V09-05-27)
+- ReceiveG4cout/cerr in G4coutDestion arguments is changed to const G4String&,
+  the correspoinding methods in delived classes are updated.
+- add "const" for constant-functions.
+- G4UItcsh, command completion method is changed, dynamically optimize path.
+- G4UIExecutive, fixed case-insensitivity in .g4session, with some modfications.
+  For Windows, logic is back to the original, csh is active and fallback.
+
+19th October 2012  Laurent Garnier 
+- G4UIQt
+  o Manage mouse style with bool instead of Icon status
+  o Prevent case of no-icons on toolbar
+
+- G4InteractorMessenger.cc : Allow "addIcon" command to have ommitables parameters
+
+19th October 2012  John Allison
+- G4UIExecutive.cc
+  o Re-ordered printing of available sessions.
+
+19th October 2012  John Allison  (interfaces-V09-05-26)
+- G4UIExecutive.cc
+  o Resuscitate GAG on Windows.
+- G4UIQt.cc:
+  o Fixed compiler warning.
+
+19th October 2012  Laurent Garnier 
+- G4UIQt.cc
+  o Resolved bug <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1365">1365</a>
+    some code was removed since interfaces-V09-05-18
+
+19th October 2012  John Allison  (interfaces-V09-05-25)
+- G4UIExecutive.cc
+  o Fixed compiler errors on Windows.
+  o Re-introduced Xm.
+
+18th October 2012  Laurent Garnier
+- G4UIQt : Fix a Qt < 4.5 issue for ColorDialog
+
+18th October, 2012 Koichi Murakami (interfaces-V09-05-24)
+- G4UIExective
+ o additional code clean-up
+ o treat case-insensitve session type for .g4session
+
+18th October, 2012 Koichi Murakami (interfaces-V09-05-23)
+- G4VUIshell, G4UItcsh, G4VBasicShell, G4UIterminal
+ o improve swimming among command directories wih ".", ".."
+- G4UIExective
+ o introduce run-time session selection scheme
+ o new G4UIExective.cc instead of G4UIExecutive.icc
+ o sources.cmake updated
+
+18th October 2012  John Allison  (interfaces-V09-05-22)
+- G4UIExecutive.icc
+  o Fixed compiler errors on Windows.
+
+12th October 2012  John Allison  (interfaces-V09-05-21)
+- G4UIExecutive.icc
+  o Some problem with Xm - commented out.
+
+12th October 2012  John Allison  (interfaces-V09-05-20, co-works vis-V09-05-47)
+- G4UIExecutive:
+  o Introduced string-driven-selection of UI session.
+- G4UIXaw.cc:
+  o Deprecated.
+
+10th Octobre 2012  Laurent Garnier (co-works 
+- G4UIQt :
+ o Add a "save" command to "save" icon thanks to John /vis/viewer/save
+
+9th Octobre 2012  Laurent Garnier  (interfaces-V09-05-19)
+- G4UIQt :
+ o Fix a bad naming method
+
+5th Octobre 2012  Laurent Garnier
+- G4UIQt/G4VInteractiveSession/G4InteractorMessenger : 
+ o Add a new command /gui/addIcon to be able to add an icon on the toolbar
+ o Remove "Scene" and "viewer" components
+
+28th September 2012  Laurent Garnier (interfaces-V09-05-17 & interfaces-V09-05-18)
+- G4UIQt :
+  o Fixed compiler warning and remove dead code
+
+27th September 2012 John Allison (interfaces-V09-05-16)
+- Tagged.
+
+26th September 2012  Laurent Garnier
+- G4UIQt:
+ o Move Icon creation in a generic method : AddIcon()
+ o Move command line on the right widget
+ o Add warning when creating new menu if command not found
+ o Re-order lot lof things to be able to call widget dialog box for parameters outside
+   view/scene tab stack component.
+ o A menu/icon with a command without parameter will open a parameter dialog box
+
+20th September 2012  Laurent Garnier (interfaces-V09-05-15)
+- G4UIQt : Fix a compiler warning on  uninitialized parameter
+
+19th September 2012  John Allison (interfaces-V09-05-14)
+- G4UIQt: Introduced static G4bool IsInstantiated() for use by vis system.
+
+18th Septembre 2012 Hisaya Kurashige (interfaces-V09-05-13)
+- Same as interfaces-V09-05-12
+  (Re-tagged because of system test )
+
+5th Septembre 2012 Laurent Garnier (interfaces-V09-05-12)
+- G4UIQt.cc :
+  o Add Perspective/Ortho icons
+  o Add new OGL S/I mode
+  o Remove warnings
+  o Add Zoom In/Out icons
+  o Fix icon radio button problem
+ 
+2nd Septembre 2012 Laurent Garnier
+- G4UIQt.cc : 
+  o Add Load/Macro icons and actions (not finish!)
+  o Fix a problem when no tab was displayed and creating first vis tab 
+
+23 August 2012 Laurent Garnier
+- G4UIQt.cc : Begin of changing lot of things in UI
+  o Add some icons (not finish!)
+  o Change some layout (to be continue)
+
+9 August 2012 Laurent Garnier (interfaces-V09-05-11)
+- G4UIQt.cc :
+  o Fix problem with component size
+  o Fix multiples vis parameters widgets when refiling the help tree
+  o Fix major bug intriduce in last revision
+  o Fix warnings on Linux
+  o Move Cout widget out of toolbar
+
+8 August 2012 John Allison (interfaces-V09-05-10)
+- Linux compilation fixed (Laurent Garnier).
+
+8 August 2012 John Allison (interfaces-V09-05-09)
+- Tagged.
+
+3 August 2012 Laurent Garnier ()
+- G4UIQt.cc : Big changes in GUI window. Add /vis/scene/add and 
+  /vis/viewer parameters widgets
+
+11 July 2012 Laurent Garnier (interfaces-V09-05-08)
+- G4UIQt.cc : Small variable name changes and re-add scene tree viewer
+ (slow problem fixed in visualization)
+
+6 July 2012 Laurent Garnier (interfaces-V09-05-07)
+- G4VBasicShell.cc : Fix compilation warnings on Linux/gcc
+
+6 July 2012 Laurent Garnier (interfaces-V09-05-06)
+- G4UIGAG, G4UIQt : Fix compilation warnings on Linux/gcc
+
+6 July 2012 Laurent Garnier (interfaces-V09-05-05)
+- G4UIGAG, G4UIGainServer, G4UIQt : Fix compilation warnings on Linux/gcc
+
+21 June 2012 Laurent Garnier (interfaces-V09-05-04)
+- Remove scene tree from next tag. Slow some examples (DICOM) too much.
+
+1st June 2012  John Allison (interfaces-V09-05-03)
+- Tagged.
+
+6th April 2012 Laurent Garnier
+- G4UIQt : Set Cout as default ToolBox widget at launch
+
+3rd April 2012  Pere Mato (interfaces-V09-05-02)
+- basic/src/G4UIWin32.cc : Attempt to make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA
+
+2nd April 2012  John Allison (interfaces-V09-05-01)
+- Tagged.
+
+28th March 2012 Laurent Garnier
+- basic/G4UIQt : Change name of viewer components
+
+1st February 2012  John Allison (interfaces-V09-05-00)
+- Added moc to svn:ignore property in subdirectory basic.
+
 30th November 2011 Ben Morgan (interfaces-V09-04-14)
 - basic/sources.cmake : Ensure Motif libraries linked before X11 libraries to 
   prevent item 321 in the Motif FAQ regarding 'non-widget child "dsm"' errors. 

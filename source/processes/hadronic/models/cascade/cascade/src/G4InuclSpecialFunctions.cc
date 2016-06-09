@@ -23,18 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclSpecialFunctions.cc,v 1.21 2010-09-14 17:51:36 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard pointless
 //		verbosity.
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+
+#include <cmath>
 
 #include "G4InuclSpecialFunctions.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
-#include <cmath>
 
 
 G4double G4InuclSpecialFunctions::getAL(G4int A) {
@@ -79,13 +81,11 @@ G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
 }
 
 G4double G4InuclSpecialFunctions::inuclRndm() { 
-  G4double rnd = G4UniformRand(); 
-  return rnd;
+  return G4UniformRand(); 
 } 
 
 G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
   const G4double eps = 1.0e-6;
-  const G4double twopi = 6.2831854;
   G4double r1 = inuclRndm();
   r1 = r1 > eps ? r1 : eps;
   G4double r2 = inuclRndm();
@@ -96,7 +96,6 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
 } 
 
 G4double G4InuclSpecialFunctions::randomPHI() { 
-  const G4double twopi = 6.2831853;
   return twopi * inuclRndm();
 } 
 
@@ -108,7 +107,7 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
 G4LorentzVector 
 G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p, 
-						G4double m) {
+						G4double mass) {
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
 
@@ -116,13 +115,13 @@ G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p,
   static G4LorentzVector momr;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*ct);
-  momr.setVectM(pvec, m);
+  momr.setVectM(pvec, mass);
 
   return momr;
 }
 
 G4LorentzVector 
-G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double m) {
+G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass) {
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double phi = randomPHI();
   G4double pt = p * COS_SIN.second;
@@ -131,7 +130,7 @@ G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double m) {
   static G4LorentzVector momr;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*COS_SIN.first);
-  momr.setVectM(pvec, m);
+  momr.setVectM(pvec, mass);
 
   return momr;
 }

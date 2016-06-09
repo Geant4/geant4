@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/TestEm18.cc
+/// \brief Main program of the electromagnetic/TestEm18 example
 //
-// $Id: TestEm18.cc,v 1.2 2010-05-21 08:41:18 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +44,6 @@
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "StackingAction.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -71,8 +72,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
 
-  HistoManager* histo = new HistoManager();
-
   // set user action classes
   //
   //primaryGenerator
@@ -80,21 +79,19 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(primary);
 
   //runAction
-  RunAction* runaction = new RunAction(detector,primary,histo);
+  RunAction* runaction = new RunAction(detector,primary);
   runManager->SetUserAction(runaction);
 
   //eventAction
-  EventAction* eventaction = new EventAction(runaction,histo);
+  EventAction* eventaction = new EventAction(runaction);
   runManager->SetUserAction(eventaction);
 
   //stepAction
-  SteppingAction* steppingaction = new SteppingAction(runaction, eventaction,
-                                                      histo);
+  SteppingAction* steppingaction = new SteppingAction(runaction, eventaction);
   runManager->SetUserAction(steppingaction);
   
   //stackAction
-  StackingAction* stackingaction = new StackingAction(runaction, eventaction,
-                                                      histo);
+  StackingAction* stackingaction = new StackingAction(runaction, eventaction);
   runManager->SetUserAction(stackingaction);      
    
   // get the pointer to the User Interface manager 
@@ -127,7 +124,6 @@ int main(int argc,char** argv) {
     
   // job termination
   // 
-  delete histo;
   delete runManager;
 
   return 0;

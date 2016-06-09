@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P02/src/ExP02DetectorConstruction.cc
+/// \brief Implementation of the ExP02DetectorConstruction class
+//
 //
 #include "ExP02DetectorConstruction.hh"
 
@@ -33,6 +36,7 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 //ROOT
 #include "TROOT.h"
@@ -42,16 +46,22 @@
 
 #include "ExP02GeoTree.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExP02DetectorConstruction::ExP02DetectorConstruction()
- :  experimentalHall_log(0), tracker_log(0),
-    calorimeterBlock_log(0), calorimeterLayer_log(0),
-    experimentalHall_phys(0), calorimeterLayer_phys(0),
-    calorimeterBlock_phys(0), tracker_phys(0)
+ :  fExperimentalHall_log(0), fTracker_log(0),
+    fCalorimeterBlock_log(0), fCalorimeterLayer_log(0),
+    fExperimentalHall_phys(0), fCalorimeterLayer_phys(0),
+    fCalorimeterBlock_phys(0), fTracker_phys(0)
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02DetectorConstruction::~ExP02DetectorConstruction()
 {
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
 {
@@ -81,10 +91,10 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   G4double expHall_z = 1.0*m;
   G4Box* experimentalHall_box
     = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
-  experimentalHall_log = new G4LogicalVolume(experimentalHall_box,
+  fExperimentalHall_log = new G4LogicalVolume(experimentalHall_box,
                                              Ar,"expHall_log",0,0,0);
-  experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),
-                                      experimentalHall_log,"expHall",0,false,0);
+  fExperimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),
+                                      fExperimentalHall_log,"expHall",0,false,0);
 
   //------------------------------ a tracker tube
 
@@ -96,13 +106,13 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   G4Tubs* tracker_tube = new G4Tubs("tracker_tube",innerRadiusOfTheTube,
                                     outerRadiusOfTheTube,hightOfTheTube,
                                     startAngleOfTheTube,spanningAngleOfTheTube);
-  tracker_log = new G4LogicalVolume(tracker_tube,Al,"tracker_log",0,0,0);
+  fTracker_log = new G4LogicalVolume(tracker_tube,Al,"tracker_log",0,0,0);
   G4double trackerPos_x = -1.0*m;
   G4double trackerPos_y = 0.*m;
   G4double trackerPos_z = 0.*m;
-  tracker_phys = new G4PVPlacement(0,
+  fTracker_phys = new G4PVPlacement(0,
              G4ThreeVector(trackerPos_x,trackerPos_y,trackerPos_z),
-             tracker_log,"tracker",experimentalHall_log,false,0);
+             fTracker_log,"tracker",fExperimentalHall_log,false,0);
 
   //------------------------------ a calorimeter block
 
@@ -111,14 +121,14 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   G4double block_z = 50.0*cm;
   G4Box* calorimeterBlock_box = new G4Box("calBlock_box",block_x,
                                           block_y,block_z);
-  calorimeterBlock_log = new G4LogicalVolume(calorimeterBlock_box,
+  fCalorimeterBlock_log = new G4LogicalVolume(calorimeterBlock_box,
                                              Pb,"caloBlock_log",0,0,0);
   G4double blockPos_x = 1.0*m;
   G4double blockPos_y = 0.0*m;
   G4double blockPos_z = 0.0*m;
-  calorimeterBlock_phys = new G4PVPlacement(0,
+  fCalorimeterBlock_phys = new G4PVPlacement(0,
              G4ThreeVector(blockPos_x,blockPos_y,blockPos_z),
-             calorimeterBlock_log,"caloBlock",experimentalHall_log,false,0);
+             fCalorimeterBlock_log,"caloBlock",fExperimentalHall_log,false,0);
 
   //------------------------------ calorimeter layers
 
@@ -127,16 +137,16 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   G4double calo_z = 40.*cm;
   G4Box* calorimeterLayer_box = new G4Box("caloLayer_box",
                                           calo_x,calo_y,calo_z);
-  calorimeterLayer_log = new G4LogicalVolume(calorimeterLayer_box,
+  fCalorimeterLayer_log = new G4LogicalVolume(calorimeterLayer_box,
                                              Al,"caloLayer_log",0,0,0);
   for(G4int i=0;i<19;i++) // loop for 19 layers
   {
     G4double caloPos_x = (i-9)*10.*cm;
     G4double caloPos_y = 0.0*m;
     G4double caloPos_z = 0.0*m;
-    calorimeterLayer_phys = new G4PVPlacement(0,
+    fCalorimeterLayer_phys = new G4PVPlacement(0,
                G4ThreeVector(caloPos_x,caloPos_y,caloPos_z),
-               calorimeterLayer_log,"caloLayer",calorimeterBlock_log,false,i);
+               fCalorimeterLayer_log,"caloLayer",fCalorimeterBlock_log,false,i);
   }
 
   //------------------------------------------------------------------
@@ -146,7 +156,7 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   // initialize ROOT
   TSystem ts;
 
-  gSystem->Load("libClassesDict");
+  gSystem->Load("libExP02ClassesDict");
   
   //  ROOT::Cintex::Cintex::SetDebug(2);
   ROOT::Cintex::Cintex::Enable();
@@ -155,12 +165,12 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   const G4ElementTable* eltab = G4Element::GetElementTable();
   const G4MaterialTable* mattab = G4Material::GetMaterialTable();
 
-  ExP02GeoTree* geotree = new ExP02GeoTree(experimentalHall_phys, eltab, mattab);
+  ExP02GeoTree* geotree = new ExP02GeoTree(fExperimentalHall_phys, eltab, mattab);
 
   TFile fo("geo.root","RECREATE");
 
   fo.WriteObject(geotree, "my_geo");
   
-  return experimentalHall_phys;
+  return fExperimentalHall_phys;
 }
 

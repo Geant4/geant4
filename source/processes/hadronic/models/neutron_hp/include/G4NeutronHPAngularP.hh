@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngularP.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPAngularP_h
 #define G4NeutronHPAngularP_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4InterpolationManager.hh"
@@ -54,7 +55,7 @@ class G4NeutronHPAngularP
     G4int nProb;
     aDataFile >> eNeu >> nProb;
     theManager.Init(aDataFile);
-    eNeu *= eV;
+    eNeu *= CLHEP::eV;
     Init(eNeu, nProb);
     for (G4int iii=0; iii<nProb; iii++)
     {

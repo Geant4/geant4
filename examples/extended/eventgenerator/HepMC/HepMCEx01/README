@@ -32,7 +32,7 @@ a readout geometry to find the phi-z cell.
 
 3. Full set of "ordinary" physics processes
 
- ExN04PhysicsList defines almost all of leptons and hadrons which
+FTFP_BERT physics list defines almost all of leptons and hadrons which
 Geant4 has dedicated classes for. Also almost all physics processes 
 Geant4 has are defined.
 
@@ -48,7 +48,11 @@ At the third stage, all particles in the RoI (Region of Interest) along
 the isolated muons are tracked. All these examinations are applied in
 ExN04StackingAction.
 
-NOTE: it requires the installation of:
-      - CERNLIB 2005 and proper access to the "/cern/pro/bin" path included
-        in $PATH.
-      - HepMC, version 1.27 or greater and proper path defined in $HEPMC_DIR.
+5. Installation
+ 
+ See HepMC/README how to build this example.
+
+6. Execution
+ 
+ % HepMCEx01 hepmc_pygen.in
+   

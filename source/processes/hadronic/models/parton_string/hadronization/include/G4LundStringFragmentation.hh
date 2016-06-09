@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh,v 1.7 2010-09-20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $ Maxim Komogorov
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -50,6 +49,7 @@ public:
     virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
 private:
+    // not implemented to protect/forbid use
     G4LundStringFragmentation(const G4LundStringFragmentation &right);
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);
     int operator==(const G4LundStringFragmentation &right) const;

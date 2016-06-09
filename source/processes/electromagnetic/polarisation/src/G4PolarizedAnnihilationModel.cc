@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.10 2010-11-12 10:38:56 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +52,7 @@
 
 // -------------------------------------------------------------------
 #include "G4PolarizedAnnihilationModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PolarizationManager.hh"
 #include "G4PolarizationHelper.hh"
 #include "G4StokesVector.hh"

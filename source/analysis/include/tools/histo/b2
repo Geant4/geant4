@@ -96,7 +96,7 @@ public:
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
     if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
     bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
-    return parent::m_bin_Sw(offset);
+    return parent::m_bin_Sw[offset];
   }
 
   TW bin_Sw2(int aI,int aJ) const {
@@ -105,7 +105,7 @@ public:
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
     if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
     bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
-    return parent::m_bin_Sw2(offset);
+    return parent::m_bin_Sw2[offset];
   }
   TC bin_Sxw(int aI,int aJ) const {
     if(parent::m_bin_number==0) return 0;
@@ -219,12 +219,12 @@ public:
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
     bn_t ybins = parent::m_axes[1].bins()+2;
     bn_t offset;
-    TN entries = 0;
+    TN _entries = 0;
     for(bn_t jbin=0;jbin<ybins;jbin++) {
       offset = ibin + jbin * parent::m_axes[1].m_offset;
-      entries += parent::m_bin_entries[offset];
+      _entries += parent::m_bin_entries[offset];
     }
-    return entries;
+    return _entries;
   }
 
   TW bin_height_x(int aI) const {
@@ -247,12 +247,12 @@ public:
     if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
     bn_t xbins = parent::m_axes[0].bins()+2;
     bn_t offset;
-    TN entries = 0;
+    TN _entries = 0;
     for(bn_t ibin=0;ibin<xbins;ibin++) {
       offset = ibin + jbin * parent::m_axes[1].m_offset;
-      entries += parent::m_bin_entries[offset];
+      _entries += parent::m_bin_entries[offset];
     }
-    return entries;
+    return _entries;
   }
 
   TW bin_height_y(int aJ) const {
@@ -352,8 +352,8 @@ public:
   }
 protected:
   b2(const std::string& a_title,
-         bn_t aXnumber,TC aXmin,TC aXmax,
-         bn_t aYnumber,TC aYmin,TC aYmax)
+     bn_t aXnumber,TC aXmin,TC aXmax,
+     bn_t aYnumber,TC aYmin,TC aYmax)
   :m_in_range_entries(0)
   ,m_in_range_Sw(0)
   ,m_in_range_Sxw(0)
@@ -362,16 +362,16 @@ protected:
   ,m_in_range_Sy2w(0)
   {
     parent::m_title = a_title;
-    std::vector<bn_t> ns;
-    ns.push_back(aXnumber);
-    ns.push_back(aYnumber);
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
+    nbins.push_back(aYnumber);
     std::vector<TC> mins;
     mins.push_back(aXmin);
     mins.push_back(aYmin);
     std::vector<TC> maxs;
     maxs.push_back(aXmax);
     maxs.push_back(aYmax);
-    parent::configure(2,ns,mins,maxs);
+    parent::configure(2,nbins,mins,maxs);
   }
 
   b2(const std::string& a_title,
@@ -415,6 +415,43 @@ protected:
     m_in_range_Sy2w = a_from.m_in_range_Sy2w;
     update_fast_getters();
     return *this;
+  }
+
+public:
+  bool configure(bn_t aXnumber,TC aXmin,TC aXmax,
+                 bn_t aYnumber,TC aYmin,TC aYmax){
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sxw = 0;
+    m_in_range_Syw = 0;
+    m_in_range_Sx2w = 0;
+    m_in_range_Sy2w = 0;
+
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
+    nbins.push_back(aYnumber);
+    std::vector<TC> mins;
+    mins.push_back(aXmin);
+    mins.push_back(aYmin);
+    std::vector<TC> maxs;
+    maxs.push_back(aXmax);
+    maxs.push_back(aYmax);
+    return parent::configure(2,nbins,mins,maxs);
+  }
+
+  bool configure(const std::vector<TC>& aEdgesX,
+                 const std::vector<TC>& aEdgesY){
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sxw = 0;
+    m_in_range_Syw = 0;
+    m_in_range_Sx2w = 0;
+    m_in_range_Sy2w = 0;
+
+    std::vector< std::vector<TC> > edges(2);
+    edges[0] = aEdgesX;
+    edges[1] = aEdgesY;
+    return parent::configure(2,edges);
   }
 
 protected:

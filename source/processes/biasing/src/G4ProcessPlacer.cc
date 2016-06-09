@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.5 2008-04-21 09:10:29 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -225,22 +224,22 @@ void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
     G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidArgument",
                 FatalException, "NULL pointer to process-vector !");
   }
-  G4int len = processVec->length();
+  size_t len = processVec->length();
   if (len==0)
   {
     G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidSetup",
                 FatalException, "Length of process-vector is zero !");
   }
-  for (int pi=0; pi<len; pi++)
+  for (size_t i=0; i<len; i++)
   {
-    G4VProcess *p = (*processVec)[pi];
+    G4VProcess *p = (*processVec)[i];
     if (p)
     {
       G4cout << "   " << p->GetProcessName() << G4endl;
     } 
     else
     {
-      G4cout << "   " << "no process found for position: " << pi 
+      G4cout << "   " << "no process found for position: " << i 
              << ", in vector of length: " << len << G4endl;
     }
   }

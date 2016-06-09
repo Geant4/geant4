@@ -14,8 +14,6 @@
 #include "CLHEP/Random/Stat.h"
 #include <cmath>
 
-using namespace std;
-
 namespace CLHEP {
 
 double HepStat::gammln(double xx) {
@@ -33,14 +31,14 @@ double HepStat::gammln(double xx) {
   int j;
   double x = xx - 1.0;
   double tmp = x + 5.5;
-  tmp -= (x + 0.5) * log(tmp);
+  tmp -= (x + 0.5) * std::log(tmp);
   double ser = 1.000000000190015;
 
   for ( j = 0; j <= 5; j++ ) {
     x += 1.0;
     ser += cof[j]/x;
   }
-  return -tmp + log(2.5066282746310005*ser);
+  return -tmp + std::log(2.5066282746310005*ser);
 }
 
 }  // namespace CLHEP

@@ -26,10 +26,10 @@
 
 #include "G4BetaDecayType.hh"
 
-std::istream& operator >> (std::istream& s, G4BetaDecayType& q)
+std::istream& operator >> (std::istream& strm, G4BetaDecayType& q)
 {
   G4String a;
-  s >> a;
+  strm >> a;
 
   if (a == "allowed")
     {q = allowed;}
@@ -48,5 +48,5 @@ std::istream& operator >> (std::istream& s, G4BetaDecayType& q)
   else
     {q = notImplemented;}
 
-  return s;
+  return strm;
 }

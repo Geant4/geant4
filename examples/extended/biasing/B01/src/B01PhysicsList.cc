@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/src/B01PhysicsList.cc
+/// \brief Implementation of the B01PhysicsList class
 //
-// $Id: B01PhysicsList.cc,v 1.9 2010-03-24 21:04:23 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #include "globals.hh"
@@ -47,6 +49,7 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4SystemOfUnits.hh"
 
 B01PhysicsList::B01PhysicsList():  G4VUserPhysicsList()
 {
@@ -308,7 +311,7 @@ void B01PhysicsList::ConstructHad()
         theHandler->SetMultiFragmentation(theMF);
         theHandler->SetMaxAandZForFermiBreakUp(12, 6);
         theHandler->SetMinEForMultiFrag(3*MeV);
-	
+        
     // Pre equilibrium stage 
     G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
 
@@ -316,7 +319,7 @@ void B01PhysicsList::ConstructHad()
     // a no-cascade generator-precompound interaface
     G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
             theCascade->SetDeExcitation(thePreEquilib);  
-	
+        
     // here come the high energy parts
     // the string model; still not quite according to design - Explicite use of the forseen interfaces 
     // will be tested and documented in this program by beta-02 at latest.
@@ -455,7 +458,7 @@ void B01PhysicsList::ConstructHad()
          G4LEAntiNeutronInelastic* theInelasticModel = 
                                new G4LEAntiNeutronInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-	 theInelasticProcess->RegisterMe(theTheoModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "lambda") {
@@ -654,11 +657,11 @@ void B01PhysicsList::AddScoringProcess(){
     while( (*theParticleIterator)() ){
       G4ParticleDefinition* particle = theParticleIterator->value();
       if ( !particle->IsShortLived() ){
-	G4ProcessManager* pmanager = particle->GetProcessManager();
-	pmanager->AddProcess(theParallelWorldScoringProcess);
-	pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxAtRest);
-	pmanager->SetProcessOrdering(theParallelWorldScoringProcess,idxAlongStep,1);
-	pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxPostStep);
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        pmanager->AddProcess(theParallelWorldScoringProcess);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxAtRest);
+        pmanager->SetProcessOrdering(theParallelWorldScoringProcess,idxAlongStep,1);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxPostStep);
       }
     }
   }

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01TrackingAction.hh,v 1.2 2006-06-29 17:43:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01TrackingAction.hh
+/// \brief Definition of the RE01TrackingAction class
+//
+// $Id$
 //
 
 #ifndef RE01TrackingAction_h
@@ -32,16 +34,15 @@
 
 #include "G4UserTrackingAction.hh"
 
-
-class RE01TrackingAction : public G4UserTrackingAction {
-
-  public:
-    RE01TrackingAction(){};
-    virtual ~RE01TrackingAction(){};
+class RE01TrackingAction : public G4UserTrackingAction 
+{
+public:
+  RE01TrackingAction();
+  virtual ~RE01TrackingAction(){};
    
-    virtual void PreUserTrackingAction(const G4Track*);
-    virtual void PostUserTrackingAction(const G4Track*);
-
+  virtual void PreUserTrackingAction(const G4Track*);
+  virtual void PostUserTrackingAction(const G4Track*);
+  
 };
 
 #endif

@@ -26,10 +26,9 @@
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/setFileName essai
-/testem/histo/setFileType root
-/testem/histo/setHisto 2 100 70 80 mm
-/testem/histo/setHisto 3 100 70 80 mm
+/analysis/setFileName testem7
+/analysis/h1/set 2 100 70 80 mm
+/analysis/h1/set 3 100 70 80 mm
 #
 /run/beamOn 10000
 #

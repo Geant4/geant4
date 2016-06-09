@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03EventActionMessenger.hh
+/// \brief Definition of the F03EventActionMessenger class
 //
-// $Id: F03EventActionMessenger.hh,v 1.3 2006-06-29 17:18:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -35,13 +35,11 @@
 #ifndef F03EventActionMessenger_h
 #define F03EventActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class F03EventAction;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -49,15 +47,14 @@ class F03EventActionMessenger: public G4UImessenger
 {
   public:
     F03EventActionMessenger(F03EventAction*);
-   ~F03EventActionMessenger();
+    ~F03EventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    F03EventAction* eventAction;   
-    G4UIcmdWithAnInteger* setVerboseCmd;
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+    F03EventAction* fEventAction;   
+    G4UIcmdWithAnInteger* fSetVerboseCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 #endif

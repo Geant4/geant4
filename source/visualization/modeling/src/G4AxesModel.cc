@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.cc,v 1.6 2006-06-29 21:32:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  3rd April 2001
@@ -38,47 +37,126 @@
 #include "G4VisAttributes.hh"
 #include "G4Polyline.hh"
 #include "G4Colour.hh"
+#include "G4UnitsTable.hh"
+#include "G4ArrowModel.hh"
+#include "G4TextModel.hh"
 
 G4AxesModel::~G4AxesModel () {}
 
 G4AxesModel::G4AxesModel
-(G4double x0, G4double y0, G4double z0, G4double length):
-  fX0(x0), fY0(y0), fZ0(z0), fLength(length) {
-  fGlobalTag = "G4AxesModel";
-  fGlobalDescription = fGlobalTag;
+(G4double x0, G4double y0, G4double z0, G4double length,
+ G4double arrowWidth,
+ const G4String& colourString,
+ const G4String& description,
+ G4bool withAnnotation):
+  fXAxisModel(0),
+  fXLabelModel(0),
+  fXAnnotationModel(0),
+  fYAxisModel(0),
+  fYLabelModel(0),
+  fYAnnotationModel(0),
+  fZAxisModel(0),
+  fZLabelModel(0),
+  fZAnnotationModel(0)
+{
+  fType = "G4AxesModel";
+  fGlobalTag = fType;
+  fGlobalDescription = fType + ": " + description;
+  fExtent = G4VisExtent
+    (x0, x0+length, y0, y0+length, z0, z0+length);
+
+  G4Colour colour(1,1,1,1);  // Default white and opaque (unless "auto").
+  G4bool autoColour = false;
+  if (colourString == "auto") autoColour = true;
+  else {
+    if (!G4Colour::GetColour(colourString, colour)) {
+      G4ExceptionDescription ed;
+      ed << "Colour \"" << colourString
+	 << "\" not found.  Defaulting to white and opaque.";
+      G4Exception
+	("G4AxesModel::G4AxesModel",
+	 "modeling0012", JustWarning, ed);
+    }
+  }
+
+  G4String annotation = G4BestUnit(length,"Length");
+
+  G4Text* text = 0;
+  G4VisAttributes* va = 0;
+
+  G4Colour xColour(colour);
+  if (autoColour) xColour = G4Colour::Red();
+  fXAxisModel = new G4ArrowModel
+    (x0, y0, z0, x0+length, y0, z0, arrowWidth,
+     xColour, "x-axis: " + description);
+  if (withAnnotation) {
+    text = new G4Text("x",G4Point3D(x0+1.05*length, y0, z0));
+    text->SetScreenSize(10.);
+    text->SetLayout(G4Text::centre);
+    va = new G4VisAttributes(xColour);
+    text->SetVisAttributes(va);
+    fXLabelModel = new G4TextModel(*text);
+    text = new G4Text(annotation,G4Point3D(x0+0.8*length, y0, z0));
+    text->SetScreenSize(10.);
+    text->SetOffset(5.,5.);
+    text->SetLayout(G4Text::centre);
+    va = new G4VisAttributes(xColour);
+    text->SetVisAttributes(va);
+    fXAnnotationModel = new G4TextModel(*text);
+  }
+
+  G4Colour yColour(colour);
+  if (autoColour) yColour = G4Colour::Green();
+  fYAxisModel = new G4ArrowModel
+    (x0, y0, z0, x0, y0+length, z0, arrowWidth,
+     yColour, "y-axis: " + description);
+  if (withAnnotation) {
+    text = new G4Text("y",G4Point3D(x0, y0+1.05*length, z0));
+    text->SetScreenSize(10.);
+    text->SetLayout(G4Text::centre);
+    va = new G4VisAttributes(yColour);
+    text->SetVisAttributes(va);
+    fYLabelModel = new G4TextModel(*text);
+    text = new G4Text(annotation,G4Point3D(x0, y0+0.8*length, z0));
+    text->SetScreenSize(10.);
+    text->SetOffset(5.,5.);
+    text->SetLayout(G4Text::centre);
+    va = new G4VisAttributes(yColour);
+    text->SetVisAttributes(va);
+    fYAnnotationModel = new G4TextModel(*text);
+  }
+
+  G4Colour zColour(colour);
+  if (autoColour) zColour = G4Colour::Blue();
+  fZAxisModel = new G4ArrowModel
+    (x0, y0, z0, x0, y0, z0+length, arrowWidth,
+     zColour, "z-axis: " + description);
+  if (withAnnotation) {
+    text = new G4Text("z",G4Point3D(x0, y0, z0+1.05*length));
+    text->SetScreenSize(10.);
+    text->SetLayout(G4Text::centre);
+    va = new G4VisAttributes(zColour);
+    text->SetVisAttributes(va);
+    fZLabelModel = new G4TextModel(*text);
+    text = new G4Text(annotation,G4Point3D(x0, y0, z0+0.8*length));
+    text->SetScreenSize(10.);
+    text->SetOffset(5.,5.);
+    text->SetLayout(G4Text::centre);
+    va = new G4VisAttributes(zColour);
+    text->SetVisAttributes(va);
+    fZAnnotationModel = new G4TextModel(*text);
+  }
 }
 
-void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
-
-  G4Polyline x_axis, y_axis, z_axis;
-
-  G4Colour cx(1.0, 0.0, 0.0); // color for x-axis
-  G4Colour cy(0.0, 1.0, 0.0); // color for y-axis
-  G4Colour cz(0.0, 0.0, 1.0); // color for z-axis
-
-  G4VisAttributes ax(cx);     // VA for x-axis
-  G4VisAttributes ay(cy);     // VA for y-axis
-  G4VisAttributes az(cz);     // VA for z-axis
-
-  sceneHandler.BeginPrimitives();
-
-  //----- Draw x-axis
-  x_axis.SetVisAttributes(&ax);
-  x_axis.push_back(G4Point3D(fX0,fY0,fZ0));
-  x_axis.push_back(G4Point3D((fX0 + fLength),fY0,fZ0));
-  sceneHandler.AddPrimitive(x_axis);
-
-  //----- Draw y-axis
-  y_axis.SetVisAttributes(&ay);
-  y_axis.push_back(G4Point3D(fX0,fY0,fZ0));
-  y_axis.push_back(G4Point3D(fX0,(fY0 + fLength),fZ0));
-  sceneHandler.AddPrimitive(y_axis);
-
-  //----- Draw z-axis
-  z_axis.SetVisAttributes(&az);
-  z_axis.push_back(G4Point3D(fX0,fY0,fZ0));
-  z_axis.push_back(G4Point3D(fX0,fY0,(fZ0 + fLength)));
-  sceneHandler.AddPrimitive(z_axis);
-
-  sceneHandler.EndPrimitives();
+void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
+{
+  if (fXAxisModel)       fXAxisModel->DescribeYourselfTo(sceneHandler);
+  if (fXLabelModel)      fXLabelModel->DescribeYourselfTo(sceneHandler);
+  if (fXAnnotationModel) fXAnnotationModel->DescribeYourselfTo(sceneHandler);
+  if (fYAxisModel)       fYAxisModel->DescribeYourselfTo(sceneHandler);
+  if (fYLabelModel)      fYLabelModel->DescribeYourselfTo(sceneHandler);
+  if (fYAnnotationModel) fYAnnotationModel->DescribeYourselfTo(sceneHandler);
+  if (fZAxisModel)       fZAxisModel->DescribeYourselfTo(sceneHandler);
+  if (fZLabelModel)      fZLabelModel->DescribeYourselfTo(sceneHandler);
+  if (fZAnnotationModel) fZAnnotationModel->DescribeYourselfTo(sceneHandler);
 }

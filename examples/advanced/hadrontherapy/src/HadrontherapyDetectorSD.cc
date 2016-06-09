@@ -32,6 +32,8 @@
 // Institute in the framework of the MC-INFN Group
 //
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyDetectorHit.hh"
@@ -48,7 +50,7 @@ HadrontherapyDetectorSD::HadrontherapyDetectorSD(G4String name):
     G4String HCname;
     collectionName.insert(HCname="HadrontherapyDetectorHitsCollection");
     HitsCollection = NULL; 
-    G4String sensitiveDetectorName = name;
+    sensitiveDetectorName = name;
 
 }
 
@@ -160,28 +162,28 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	if(trackID != 1)
 	{
 	    if (particleName == "proton")
-		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "neutron")
-		analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "alpha")
-		analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "gamma")
-		analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "e-")
-		analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "triton")
-		analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "deuteron")
-		analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
+		analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/CLHEP::MeV);
 
 	    else if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
-		analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
+		analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/CLHEP::MeV);   	
 	}
     }
 #endif

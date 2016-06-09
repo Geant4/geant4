@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.37 2010-12-23 16:12:55 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -53,7 +52,8 @@
 // 14.06.11 A.Ivantchenko updated body materials (G4_....ICRP)
 //                    according ICRU Report 46 (1992) instead of 1975 
 //                    data from ICRU Report 37 used previously
-// 26.10.11 new scheme for G4Exception  (mma) 
+// 26.10.11 new scheme for G4Exception  (mma)
+// 09.02.12 P.Gumplinger add ConstructNewIdealGasMaterial
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,8 @@
 #include "G4NistMaterialBuilder.hh"
 #include "G4NistElementBuilder.hh"
 #include "G4Element.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -189,7 +191,11 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
 	             FatalException, "Fail to construct material");
 	return 0;
       }
-      mat->AddElement(el,fractions[idx+j]);
+      if(atomCount[i]) {
+	mat->AddElement(el,G4lrint(fractions[idx+j]));
+      } else {
+	mat->AddElement(el,fractions[idx+j]);
+      }
     }
   }
 
@@ -234,8 +240,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   }
 
   // Material not in DB
-  G4int nm = elm.size();
-  if(nm == 0) { 
+  G4int els = elm.size();
+  if(els == 0) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: empty list of elements for " << name
 	   << G4endl;
@@ -249,10 +255,11 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   G4bool stp = true;
   if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
     { stp = false; }
-  AddMaterial(name,dens*cm3/g,0,0.,nm,state,stp);
+
+  AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
-  for (G4int i=0; i<nm; ++i) {
+  for (G4int i=0; i<els; ++i) {
     AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
   }
 
@@ -283,8 +290,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   }
 
   // Material not in DB
-  G4int nm = elm.size();
-  if(nm == 0) { 
+  G4int els = elm.size();
+  if(els == 0) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: empty list of elements for " << name
 	   << G4endl;
@@ -298,10 +305,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   G4bool stp = true;
   if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
     { stp = false; }
-  AddMaterial(name,dens*cm3/g,0,0.,nm,state,stp);
+  AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
-  for (G4int i=0; i<nm; ++i) {
+  for (G4int i=0; i<els; ++i) {
     AddElementByWeightFraction(elmBuilder->GetZ(elm[i]), w[i]);
   }
   
@@ -356,6 +363,69 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
+                                      const G4String& name,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4int>& nbAtoms,
+                                      G4bool isotopes,
+                                      G4double temp,
+                                      G4double pres)
+{
+  G4State state = kStateGas;
+
+  // Material is in DB
+  G4Material* mat = FindOrBuildMaterial(name);
+  if(mat) {
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: the material <" << name
+           << "> is already exist" << G4endl;
+    G4cout << "      New material will NOT be built!"
+           << G4endl;
+    return mat;
+  }
+
+  // Material not in DB
+  G4int els = elm.size();
+  if(els == 0) {
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: empty list of elements for " << name
+           << G4endl;
+    G4cout << "      New material will NOT be built!"
+           << G4endl;
+    return 0;
+  }
+
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential is not defined
+  G4bool stp = true;
+  if(temp != STP_Temperature && pres != STP_Pressure)
+    { stp = false; }
+
+  G4double massPerMole = 0;
+
+  G4int Z = 0;
+  for (G4int i=0; i<els; ++i) {
+    Z = elmBuilder->GetZ(elm[i]);
+    massPerMole += nbAtoms[i] * elmBuilder->GetAtomicMassAmu(Z) * amu_c2;
+  }
+
+  G4double dens = massPerMole / (Avogadro*k_Boltzmann*temp/pres);
+
+  if (els == 1) { AddMaterial(name,dens,Z,0.,els,state,stp); }
+  else {
+    AddMaterial(name,dens,0,0.,els,state,stp);
+    for (G4int i=0; i<els; ++i) {
+      AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
+    }
+  }
+
+  if(!stp) { AddGas(name,temp,pres); }
+
+  return BuildMaterial(nMaterials-1, isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 					G4int Z, G4double pot, 
 					G4int ncomp, G4State state, 
@@ -363,6 +433,9 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 {
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential in eV
+
+  // if ncomp == 1 then Z should be defined and 
+  // AddElement should not be applied
 
   if (nCurrent != 0) {
     G4cout << "G4NistMaterialBuilder::AddMaterial WARNING: previous "
@@ -385,10 +458,12 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   indexes.push_back(nComponents);
   STP.push_back(stp);
   matIndex.push_back(-1);
+  atomCount.push_back(false);
 
-  if (ncomp == 1) {
+  if (ncomp == 1 && Z > 0) {
     elements.push_back(Z);
     fractions.push_back(1.0);
+    atomCount[nMaterials] = true;
     ++nComponents;
     nCurrent = 0;
   } else {
@@ -567,8 +642,10 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(G4int Z, G4double w)
     G4int imin = indexes[n];
     G4int imax = imin + components[n];
 
-    for(G4int i=imin; i<imax; ++i) {sum += fractions[i];}
-    if (sum > 0.0) for (G4int i=imin; i<imax; ++i) {fractions[i] /= sum;}
+    if(!atomCount[n]) {
+      for(G4int i=imin; i<imax; ++i) {sum += fractions[i];}
+      if (sum > 0.0) for (G4int i=imin; i<imax; ++i) {fractions[i] /= sum;}
+    }
   }
 }
 
@@ -585,17 +662,19 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(const G4String& name,
 
 void G4NistMaterialBuilder::AddElementByAtomCount(G4int Z, G4int nb)
 {
-  G4double w = nb*elmBuilder->GetA(Z);
+  atomCount[nMaterials-1] = true;
+  G4double w = (G4double)nb;
   AddElementByWeightFraction(Z, w);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::AddElementByAtomCount(const G4String& name,
-                                                     G4int nb)
+						  G4int nb)
 {
+  atomCount[nMaterials-1] = true;
   G4int Z = elmBuilder->GetZ(name);
-  G4double w = nb*elmBuilder->GetA(Z);
+  G4double w = (G4double)nb;
   AddElementByWeightFraction(Z, w);
 }
 
@@ -745,10 +824,10 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.077418);
   AddElementByWeightFraction( 6, 0.922582);
 
-  AddMaterial("G4_ADENINE", 1.35, 0, 71.4, 3);
-  AddElementByWeightFraction( 1, 0.037294);
-  AddElementByWeightFraction( 6, 0.44443 );
-  AddElementByWeightFraction( 7, 0.518275);
+  AddMaterial("G4_ADENINE", 1.6/*1.35*/, 0, 71.4, 3);
+  AddElementByAtomCount("H",5 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
 
   AddMaterial("G4_ADIPOSE_TISSUE_ICRP", 0.95, 0, 63.2, 7);
   AddElementByWeightFraction( 1, 0.114);
@@ -1156,11 +1235,11 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.391262);
   AddElementByWeightFraction( 8, 0.521185);
 
-  AddMaterial("G4_GUANINE", 1.58, 0, 75. ,4);
-  AddElementByWeightFraction( 1, 0.033346);
-  AddElementByWeightFraction( 6, 0.39738 );
-  AddElementByWeightFraction( 7, 0.463407);
-  AddElementByWeightFraction( 8, 0.105867);
+  AddMaterial("G4_GUANINE", 2.2/*1.58*/, 0, 75. ,4);
+  AddElementByAtomCount("H",5 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
+  AddElementByAtomCount("O",1 );
 
   AddMaterial("G4_GYPSUM", 2.32, 0, 129.7, 4);
   AddElementByWeightFraction( 1, 0.023416);
@@ -1690,13 +1769,13 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 9, 0.710028);
 
   AddMaterial("G4_WATER", 1.0,0, 78., 2);
-  AddElementByWeightFraction( 1, 0.111894);
-  AddElementByWeightFraction( 8, 0.888106);
+  AddElementByAtomCount("H", 2);
+  AddElementByAtomCount("O", 1);
   chFormulas[nMaterials-1] = "H_2O";
 
   AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.111894);
-  AddElementByWeightFraction( 8, 0.888106);
+  AddElementByAtomCount("H", 2);
+  AddElementByAtomCount("O", 1);
   chFormulas[nMaterials-1] = "H_2O-Gas";
 
   AddMaterial("G4_XYLENE", 0.87, 0, 61.8, 2);
@@ -1795,6 +1874,24 @@ void G4NistMaterialBuilder::SpaceMaterials()
 
 void G4NistMaterialBuilder::BioChemicalMaterials()
 {
+  AddMaterial("G4_CYTOSINE", 1.55, 0, 72., 4);
+  AddElementByAtomCount("H", 5);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 1);
+
+  AddMaterial("G4_THYMINE", 1.23, 0, 72., 4);
+  AddElementByAtomCount("H", 6);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
+  AddMaterial("G4_URACIL", 1.32, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
   // DNA_Nucleobase (Nucleobase-1H)
   AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
   AddElementByAtomCount("H",4 );
@@ -1820,7 +1917,7 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("O", 2);
 
   AddMaterial("G4_DNA_URACIL", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("H", 3);
   AddElementByAtomCount("C", 4);
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.2 2006-06-29 16:42:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm12/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,22 +50,22 @@ class EventAction : public G4UserEventAction
    ~EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
-    void AddEdep(G4double edep) {totalEdep += edep;};
+    void AddEdep(G4double edep) {fTotalEdep += edep;};
     
-    void SetDrawFlag(G4String val) {drawFlag = val;};
-    void SetPrintModulo(G4int val) {printModulo = val;};
+    void SetDrawFlag(G4String val) {fDrawFlag = val;};
+    void SetPrintModulo(G4int val) {fPrintModulo = val;};
             
     
   private:
-    RunAction*             runAct;
-    G4double               totalEdep;
-    G4String               drawFlag;
-    G4int                  printModulo;
-    HistoManager*          histoManager;                        
-    EventActionMessenger*  eventMessenger;
+    RunAction*             fRunAct;
+    G4double               fTotalEdep;
+    G4String               fDrawFlag;
+    G4int                  fPrintModulo;
+    HistoManager*          fHistoManager;                        
+    EventActionMessenger*  fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.72 2010-07-21 14:21:19 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -48,8 +47,10 @@
 //           SetCuts is not 'pure virtual' any more 
 // ------------------------------------------------------------
 
-#include "globals.hh"
 #include "G4VUserPhysicsList.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"

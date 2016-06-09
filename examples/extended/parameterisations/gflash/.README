@@ -1,0 +1,66 @@
+//$Id$
+
+///\file "parameterisations/gflash/.README"
+///\brief Example gflash README page
+
+/*! \page Examplegflash Example gflash
+
+This examples demonstrates the use of the GFLASH parameterisation library.
+It uses the GFLASH equations(hep-ex/0001020, Grindhammer & Peters) 
+to parametrise electromagnetic showers in matter. 
+In this example the calorimeter is a simple cube,
+which consists of 10 x 10 crystals of PbWO4 (CMS like:).
+The Geant4 shower framework is used (see novice example N05)
+
+Geometry, sensitive detector, hits, processes are defined respectively in:
+- ExGflashDetectorConstruction
+- ExGflashSensitiveDetector
+- ExGflashHit
+- ExGflashPhysicsList
+
+Briefly, whenever a e-/e+  enters the calorimeter, it is parametrised if it 
+has a minimum energy and the shower is expected to be contained 
+in the calorimeter(so called " parameterisation envelope").
+If this is fullfilled the particle is killed, as well as all secondaries,
+and the energy is deposited according to the GFLASH equations.
+The example shows how to interface GFLASH to your application.
+The simulation time is measured, so the user can see immiadiatly 
+the speed up by using GFLASH. 
+ 
+
+To use GFLASH the user has to implement the following to use GFLASH:
+
+- ExGflashPhysicsList::AddParameterisation(): \n
+the paraameterisation has to be added to the processmanager.
+Don't forget it, since than gflash is never triggered.	
+	
+- ExGflashDetectorConstruction	: \n
+Here GFLASH has to be initialized and assigend to the enelope,  
+where it should be active (here our calorimeter = m_calo_log )
+\verbatim
+/**********************************************
+ * Initializing shower modell
+***********************************************/	
+cout<<"Shower parameterization"<<endl;
+m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",m_calo_log);
+m_theParametrisation = new GFlashHomoShowerParamterisation(matManager->getMaterial(mat));
+m_theFastShowerModel->SetParametrisation(*m_theParametrisation);
+m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
+m_theFastShowerModel->SetHitMaker(*m_theHMaker);	 
+cout<<"end shower parameterization"<<endl;
+/**********************************************/
+\endverbatim
+
+- ExGflashSensitiveDetector: \n
+It is mandatory to use G4VGFlashSensitiveDetector as (additionl) 
+base class for the sensitive detector.
+Here it is necessary to implement a seperate 
+interface, where the GFlash spots are processed.
+(ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHistory* ROhist))
+The separate interface is used, because the GFLASH spots contains
+(naturally) less information than the full simulation. 
+	
+Note: Instead of particle gun the gps class is used here for
+particle generation. 
+
+*/  

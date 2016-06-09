@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.13 2009-08-15 15:45:50 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-//
+//  Last Modification : 04/Oct/11 P. Mato - making use of G4TrackStack with value semantics
+///
 
 
 #ifndef G4StackManager_h
@@ -42,22 +42,22 @@
 #include "G4TrackStatus.hh"
 #include "globals.hh"
 #include "evmandefs.hh"
+
 class G4StackingMessenger;
 class G4VTrajectory;
 
 // class description:
 //
-//  This is the manager class of handling stacks of G4Track objects.
+// This is the manager class of handling stacks of G4Track objects.
 // This class must be a singleton and be constructed by G4EventManager.
 // Almost all methods must be invoked exclusively by G4EventManager.
 // Especially, some Clear() methods MUST NOT be invoked by the user.
 // Event abortion is handled by G4EventManager.
 //
-//  This G4StackingManager has three stacks, the urgent stack, the
+// This G4StackingManager has three stacks, the urgent stack, the
 // waiting stack, and the postpone to next event stack. The meanings
 // of each stack is descrived in the Geant4 user's manual.
 //
-
 
 class G4StackManager 
 {
@@ -66,8 +66,7 @@ class G4StackManager
       ~G4StackManager();
 
   private:
-      const G4StackManager & operator=
-                          (const G4StackManager &right);
+      const G4StackManager& operator=(const G4StackManager &right);
       G4int operator==(const G4StackManager &right) const;
       G4int operator!=(const G4StackManager &right) const;
 
@@ -122,57 +121,19 @@ class G4StackManager
       G4int numberOfAdditionalWaitingStacks;
 
   public:
-      inline void clear()
-      { 
-        ClearUrgentStack();
-        ClearWaitingStack();
-        for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {ClearWaitingStack(i);}
-      }
-      inline void ClearUrgentStack()
-      { urgentStack->clear(); }
-      inline void ClearWaitingStack(int i=0)
-      {
-        if(i==0) {
-          waitingStack->clear(); 
-        } else {
-          if(i<=numberOfAdditionalWaitingStacks) additionalWaitingStacks[i-1]->clear();
-        }
-      }
-      inline void ClearPostponeStack()
-      { postponeStack->clear(); }
-      inline G4int GetNTotalTrack() const
-      { int n = urgentStack->GetNTrack() + waitingStack->GetNTrack() + postponeStack->GetNTrack();
-        for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {n += additionalWaitingStacks[i-1]->GetNTrack();}
-        return n;
-      }
-      inline G4int GetNUrgentTrack() const
-      { return urgentStack->GetNTrack(); }
-      inline G4int GetNWaitingTrack(int i=0) const
-      { if(i==0) { return waitingStack->GetNTrack(); }
-        else {
-         if(i<=numberOfAdditionalWaitingStacks) { return additionalWaitingStacks[i-1]->GetNTrack();}
-        }
-        return 0;
-      }
-      inline G4int GetNPostponedTrack() const
-      { return postponeStack->GetNTrack(); }
-      inline void SetVerboseLevel( G4int const value )
-      { verboseLevel = value; }
-      inline void SetUserStackingAction(G4UserStackingAction* value)
-      { 
-	userStackingAction = value;
-        if(userStackingAction) userStackingAction->SetStackManager(this);
-      }
-
+      void clear();
+      void ClearUrgentStack();
+      void ClearWaitingStack(int i=0);
+      void ClearPostponeStack();
+      G4int GetNTotalTrack() const;
+      G4int GetNUrgentTrack() const;
+      G4int GetNWaitingTrack(int i=0) const;
+      G4int GetNPostponedTrack() const;
+      void SetVerboseLevel( G4int const value );
+      void SetUserStackingAction(G4UserStackingAction* value);
+  
   private:
-      inline G4ClassificationOfNewTrack 
-      DefaultClassification(G4Track *aTrack)
-      { 
-        G4ClassificationOfNewTrack classification = fUrgent;
-        if( aTrack->GetTrackStatus() == fPostponeToNextEvent )
-        { classification = fPostpone; }
-        return classification;
-      }
+     G4ClassificationOfNewTrack DefaultClassification(G4Track *aTrack);
 };
 
 #endif

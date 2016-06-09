@@ -31,7 +31,8 @@
 // 080808 bug fix in Sample() and GetXsec() by T. Koi
 //
 #include "G4NeutronHPVector.hh"
- 
+#include "G4SystemOfUnits.hh"
+
   // if the ranges do not match, constant extrapolation is used.
   G4NeutronHPVector & operator + (G4NeutronHPVector & left, G4NeutronHPVector & right)
   {
@@ -225,9 +226,9 @@
     // continue in unknown areas by substraction of the last difference.
     
     CleanUp();
-    G4int s = 0, n=0, m=0;
+    G4int s_tmp = 0, n=0, m_tmp=0;
     G4NeutronHPVector * tmp;
-    G4int a = s, p = n, t;
+    G4int a = s_tmp, p = n, t;
     while ( a<active->GetVectorLength() )
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
@@ -235,9 +236,9 @@
         G4double xa  = active->GetEnergy(a);
         G4double yy = theInt.Interpolate(aScheme, aValue, active->GetLabel(), passive->GetLabel(),
                                                           active->GetXsec(a), passive->GetXsec(xa));
-        SetData(m, xa, yy);
-        theManager.AppendScheme(m, active->GetScheme(a));
-        m++;
+        SetData(m_tmp, xa, yy);
+        theManager.AppendScheme(m_tmp, active->GetScheme(a));
+        m_tmp++;
         a++;
         G4double xp = passive->GetEnergy(p);
         //if( std::abs(std::abs(xp-xa)/xa)<0.0000001&&a<active->GetVectorLength() ) 
@@ -257,7 +258,7 @@
       }
     }
     
-    G4double deltaX = passive->GetXsec(GetEnergy(m-1)) - GetXsec(m-1);
+    G4double deltaX = passive->GetXsec(GetEnergy(m_tmp-1)) - GetXsec(m_tmp-1);
     while (p!=passive->GetVectorLength()&&passive->GetEnergy(p)<=aValue)
     {
       G4double anX;
@@ -266,10 +267,10 @@
       {
         //if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.0000001)
         if ( passive->GetEnergy(p) == 0 
-          || std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p) > 0.0000001 )
+          || std::abs(GetEnergy(m_tmp-1)-passive->GetEnergy(p))/passive->GetEnergy(p) > 0.0000001 )
         {
-          SetData(m, passive->GetEnergy(p), anX);
-          theManager.AppendScheme(m++, passive->GetScheme(p));
+          SetData(m_tmp, passive->GetEnergy(p), anX);
+          theManager.AppendScheme(m_tmp++, passive->GetScheme(p));
         }
       }
       p++;
@@ -415,7 +416,18 @@
            
            x2 = theData[ ibin ].GetX();
            value = rand * ( x2 - x1 ) + x1;
+	   //***********************************************************************
+	   /*
            test = GetY ( value ) / std::max ( GetY( ibin-1 ) , GetY ( ibin ) ); 
+	   */
+	   //***********************************************************************
+	   //EMendoza - Always linear interpolation:
+	   G4double y1=theData[ ibin-1 ].GetY();
+           G4double y2=theData[ ibin ].GetY();
+	   G4double mval=(y2-y1)/(x2-x1);
+	   G4double bval=y1-mval*x1;
+	   test =(mval*value+bval)/std::max ( GetY( ibin-1 ) , GetY ( ibin ) ); 
+	   //***********************************************************************
         }
         while ( G4UniformRand() > test );
         result = value;

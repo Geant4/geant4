@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.23 2010-06-10 15:37:13 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -51,9 +50,10 @@ class QTreeWidgetItem;
 class QTextEdit;
 class QLabel;
 class QResizeEvent;
-class QToolBox;
+class QTabWidget;
 class QStringList;
 class QSplitter;
+class QToolBar;
 
 // Class description :
 //
@@ -61,7 +61,7 @@ class QSplitter;
 // G4UIQt is the Qt version of G4UIterminal.
 //
 //  A command box is at disposal for entering/recalling Geant4 commands.
-//  A menubar could be customized through the AddMenu, AddButton methods.
+//  A menubar could be customized through the AddMenu, AddButton, AddIcon methods.
 //  Note that there are corresponding Geant4 commands to add a 
 // menus in the menubar and add buttons in a menu.
 //  Ex : 
@@ -106,37 +106,71 @@ public: // With description
   // Second argument is the label of the button.
   // Third argument is the Geant4 command executed when the button is fired.
   // Ex : AddButton("my_menu","Run","/run/beamOn 1"); 
+  void AddIcon(const char* userLabel, const char* iconFile, const char* command, const char* file_name="");
+  // To add a icon in the toolbar
+  // First argument is the label of the icon.
+  // Second argument is the icon file.
+  // Third argument is the Geant4 command executed when the button is fired.
+  // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
 
   bool AddTabWidget(QWidget*,QString,int,int);
   // To add a tab for vis openGL Qt driver
   
-  QWidget* GetViewComponentsTBWidget();
+  QTabWidget* GetSceneTreeComponentsTBWidget();
   // Get the viewComponent
 
   bool IsSplitterReleased();
+
+  inline bool IsIconMoveSelected() {
+    return fMoveSelected;
+  };
+  inline bool IsIconRotateSelected() {
+    return fRotateSelected;
+  };
+  inline bool IsIconPickSelected() {
+    return fPickSelected;
+  };
+  inline bool IsIconZoomInSelected() {
+    return fZoomInSelected;
+  };
+  inline bool IsIconZoomOutSelected() {
+    return fZoomOutSelected;
+  };
+
+  void SetIconMoveSelected();
+  void SetIconRotateSelected();
+  void SetIconPickSelected();
+  void SetIconZoomInSelected();
+  void SetIconZoomOutSelected();
+  void SetIconHLHSRSelected();
+  void SetIconHLRSelected();
+  void SetIconSolidSelected();
+  void SetIconWireframeSelected();
+  void SetIconPerspectiveSelected();
+  void SetIconOrthoSelected();
 
 public:
   ~G4UIQt();
   void Prompt(G4String);
   void SessionTerminate();
-  void PauseSessionStart(G4String);
-  G4int ReceiveG4cout(G4String);
-  G4int ReceiveG4cerr(G4String);
+  virtual void PauseSessionStart(const G4String&);
+  virtual G4int ReceiveG4cout(const G4String&);
+  virtual G4int ReceiveG4cerr(const G4String&);
   //   G4String GetCommand(Widget);
 
 private:
   void SecondaryLoop(G4String); // a VIRER
   void CreateHelpWidget();
-  void InitHelpTree();
+  void InitHelpTreeAndVisParametersWidget();
   void FillHelpTree();
-  void ExitHelp();
+  virtual void ExitHelp() const;
 
-  void CreateChildTree(QTreeWidgetItem*,G4UIcommandTree*);
+  void CreateHelpTree(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
 
   QString GetCommandList(const G4UIcommand*);
 
-  G4bool GetHelpChoice(G4int&) ;// have to be implemeted because we heritate from G4VBasicShell
+  virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
@@ -148,19 +182,18 @@ private:
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
+  G4bool IsGUICommand(const G4UIcommand*);
+  bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
+  bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
 
 private:
 
-  //  Widget form,shell,command,menuBar,text;
-  //  std::map<QAction*,G4String, std::less<QAction*> > commands;
-  //  static void commandEnteredCallback(Widget,XtPointer,XtPointer);
-  //  static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   QMainWindow * fMainWindow;
   QLabel *fCommandLabel;
   QLineEdit * fCommandArea;
   QTextEdit *fCoutTBTextArea;
   QTextEdit *fHelpArea;
-  QToolBox* fToolBox;
+  QTabWidget* fUITabWidget;
   QStringList fG4cout;
   QLineEdit * fCoutFilter;
 
@@ -169,16 +202,25 @@ private:
   QWidget* fHelpTBWidget;
   QWidget* fHistoryTBWidget;
   QWidget* fCoutTBWidget;
-  QWidget* fVisParametersTBWidget;
-  QWidget* fViewComponentsTBWidget;
+  QTabWidget* fSceneTreeComponentsTBWidget;
   QLineEdit* fHelpLine;
-  G4QTabWidget* fTabWidget;
+  G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
   QLabel *fEmptyViewerTabLabel;
-  QSplitter * fMyVSplitter;
+  QSplitter * fMainSplitterWidget;
+  QSplitter* fRightSplitterWidget;
   QSplitter * fHelpVSplitter;
   int fLastQTabSizeX;
   int fLastQTabSizeY;
+
+  QToolBar *fToolbarApp;
+  QToolBar *fToolbarUser;
+
+  bool fMoveSelected;
+  bool fRotateSelected;
+  bool fPickSelected;
+  bool fZoomInSelected;
+  bool fZoomOutSelected;
 
 private Q_SLOTS :
   void ExitSession();
@@ -195,6 +237,13 @@ private Q_SLOTS :
   void CoutFilterCallback(const QString&);
   void TabCloseCallback(int);
   void ToolBoxActivated(int);
+  void VisParameterCallback(QWidget*);
+  void ChangeColorCallback(QWidget*);
+  void ChangeCursorStyle(const QString&);
+  void ChangeSurfaceStyle(const QString&);
+  void OpenIconCallback(const QString&);
+  void SaveIconCallback(const QString&);
+  void ChangePerspectiveOrtho(const QString&);
 };
 
 #endif

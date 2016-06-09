@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.2 2010-10-11 11:02:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr00/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -92,68 +94,68 @@ private:
 
   static HistoManager* fManager;
 
-  Histo* histo;
+  Histo* fHisto;
 
-  const G4ParticleDefinition* neutron;
+  const G4ParticleDefinition* fNeutron;
 
-  G4String particleName;
-  G4String elementName;
+  G4String fParticleName;
+  G4String fElementName;
 
-  G4double minKinEnergy;
-  G4double maxKinEnergy;
-  G4double minMomentum;
-  G4double maxMomentum;
+  G4double fMinKinEnergy;
+  G4double fMaxKinEnergy;
+  G4double fMinMomentum;
+  G4double fMaxMomentum;
  
-  G4int verbose;
-  G4int nBinsE;
-  G4int nBinsP;
+  G4int fVerbose;
+  G4int fBinsE;
+  G4int fBinsP;
 
-  G4bool isInitialised;
+  G4bool fIsInitialised;
 };
 
 inline void HistoManager::SetParticleName(const G4String& name)
 {
-  particleName = name;
+  fParticleName = name;
 }
 
 inline void HistoManager::SetElementName(const G4String& name)
 {
-  elementName = name;
+  fElementName = name;
 }
 
 inline void HistoManager::SetNumberOfBinsE(G4int val)
 {
-  if(val>0) { nBinsE = val; } 
+  if(val>0) { fBinsE = val; } 
 }
 
 inline void HistoManager::SetNumberOfBinsP(G4int val)
 {
-  if(val>0) { nBinsP = val; } 
+  if(val>0) { fBinsP = val; } 
 }
 
 inline void HistoManager::SetMinKinEnergy(G4double val)
 {
-  if(val>0 && val<maxKinEnergy) { minKinEnergy = val; }
+  if(val>0 && val<fMaxKinEnergy) { fMinKinEnergy = val; }
 }
  
 inline void HistoManager::SetMaxKinEnergy(G4double val)
 {
-  if(val>minKinEnergy) { maxKinEnergy = val; }
+  if(val>fMinKinEnergy) { fMaxKinEnergy = val; }
 }
 
 inline void HistoManager::SetMinMomentum(G4double val)
 {
-  if(val>0 && val<maxMomentum) { minMomentum = val; }
+  if(val>0 && val<fMaxMomentum) { fMinMomentum = val; }
 }
   
 inline void HistoManager::SetMaxMomentum(G4double val)
 {
-  if(val>minMomentum) { maxMomentum = val; }
+  if(val>fMinMomentum) { fMaxMomentum = val; }
 }
  
 inline G4int HistoManager::GetVerbose() const
 {
-  return verbose;
+  return fVerbose;
 }
 
 #endif

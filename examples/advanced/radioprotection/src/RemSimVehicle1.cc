@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimVehicle1.cc,v 1.9 2006-06-29 16:24:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "RemSimVehicle1.hh"
 #include "G4Box.hh"

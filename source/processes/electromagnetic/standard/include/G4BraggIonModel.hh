@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.12 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +56,8 @@
 
 #ifndef G4BraggIonModel_h
 #define G4BraggIonModel_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VEmModel.hh"
 #include "G4ASTARStopping.hh"
@@ -182,10 +183,10 @@ inline void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
   particle = p;
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
-  G4double q   = particle->GetPDGCharge()/eplus;
+  G4double q   = particle->GetPDGCharge()/CLHEP::eplus;
   chargeSquare = q*q;
-  massRate     = mass/proton_mass_c2;
-  ratio        = electron_mass_c2/mass;
+  massRate     = mass/CLHEP::proton_mass_c2;
+  ratio        = CLHEP::electron_mass_c2/mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

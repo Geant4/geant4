@@ -23,12 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerParametrisation.cc
+/// \brief Implementation of the ExN04TrackerParametrisation class
+//
 
 #include "ExN04TrackerParametrisation.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN04TrackerParametrisation::ExN04TrackerParametrisation()
 {

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredViewer.cc,v 1.6 2010-10-06 10:12:03 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  7th March 2006
@@ -132,7 +131,9 @@ G4bool G4XXXStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       ) {
     return true;
   }

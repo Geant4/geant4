@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/include/H02SteppingAction.hh
+/// \brief Definition of the H02SteppingAction class
+//
 // ====================================================================
 //
 //   H02SteppingAction.hh
-//   $Id: H02SteppingAction.hh,v 1.3 2006-06-29 17:10:06 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef H02_STEPPING_ACTION_H

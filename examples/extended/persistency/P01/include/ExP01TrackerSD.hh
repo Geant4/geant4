@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01TrackerSD.hh
+/// \brief Definition of the ExP01TrackerSD class
 //
-// $Id: ExP01TrackerSD.hh,v 1.2 2006-06-29 17:39:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +43,8 @@ class G4HCofThisEvent;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Sensitive detector implementation for the ROOT hits persistency example
+
 class ExP01TrackerSD : public G4VSensitiveDetector
 {
   public:
@@ -52,8 +56,8 @@ class ExP01TrackerSD : public G4VSensitiveDetector
       void EndOfEvent(G4HCofThisEvent*);
 
   private:
-      ExP01TrackerHitsCollection* trackerCollection;
-
+      ExP01TrackerHitsCollection* fTrackerCollection;
+      G4int fHCID;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.52 2009-02-20 14:48:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +70,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MuPairProduction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
@@ -90,6 +90,8 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     isInitialised(false)
 {
   SetProcessSubType(fPairProdByCharged);
+  SetSecondaryParticle(G4Positron::Positron());
+  SetIonisation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -123,8 +125,6 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
     isInitialised = true;
 
     theParticle = part;
-    SetSecondaryParticle(G4Positron::Positron());
-    SetIonisation(false);
 
     if (!EmModel()) { SetEmModel(new G4MuPairProductionModel()); }
 

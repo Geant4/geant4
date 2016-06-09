@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPionInelastic.cc,v 1.2 2009-05-25 19:05:47 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGPionInelastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4RPGPionInelastic::G4RPGPionInelastic(const G4String& modelName)
@@ -40,38 +40,36 @@ G4RPGPionInelastic::G4RPGPionInelastic(const G4String& modelName)
   //   pi-nucleon inelastic cross sections for a given multiplicity 
   //   for |T_z| = 3/2 and 1/2, respectively 
 
-  G4int i, k, m;
+  G4int i, k, j;
   G4int start, stop;
 
-  for (m = 0; m < 8; m++) {
-    start = pipPindex[m][0];
-    stop = pipPindex[m][1] + 1;
+  for (j = 0; j < 8; j++) {
+    start = pipPindex[j][0];
+    stop = pipPindex[j][1] + 1;
     for (k = 0; k < 30; k++) {
-      t32_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t32_dSigma_dMult[m][k] += pipPCrossSections[i][k];
+      t32_dSigma_dMult[j][k] = 0.0;
+      for (i = start; i < stop; i++) t32_dSigma_dMult[j][k] += pipPCrossSections[i][k];
     }
 
-    start = pimPindex[m][0];
-    stop = pimPindex[m][1] + 1;
+    start = pimPindex[j][0];
+    stop = pimPindex[j][1] + 1;
     for (k = 0; k < 30; k++) {
-      t12_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t12_dSigma_dMult[m][k] += pimPCrossSections[i][k];
+      t12_dSigma_dMult[j][k] = 0.0;
+      for (i = start; i < stop; i++) t12_dSigma_dMult[j][k] += pimPCrossSections[i][k];
     }
   }
 
   // Initialize total cross section array
-
   for (k = 0; k < 30; k++) {
     pipPtot[k] = 0.0;
     pimPtot[k] = 0.0;
-    for (m = 0; m < 8; m++) {
-      pipPtot[k] += t32_dSigma_dMult[m][k];
-      pimPtot[k] += t12_dSigma_dMult[m][k];
+    for (j = 0; j < 8; j++) {
+      pipPtot[k] += t32_dSigma_dMult[j][k];
+      pimPtot[k] += t12_dSigma_dMult[j][k];
     }
   }
 
   //  printCrossSections();
-
 }
 
 
@@ -107,9 +105,9 @@ G4int G4RPGPionInelastic::GetMultiplicityT12(G4double KE) const
   G4int k = epair.first;
   G4double fraction = epair.second;
 
-  for(G4int m = 0; m < 8; m++) {
-    multint = t12_dSigma_dMult[m][k]
-         + fraction*(t12_dSigma_dMult[m][k+1] - t12_dSigma_dMult[m][k]);
+  for(G4int j = 0; j < 8; j++) {
+    multint = t12_dSigma_dMult[j][k]
+         + fraction*(t12_dSigma_dMult[j][k+1] - t12_dSigma_dMult[j][k]);
       sigma.push_back(multint);
   }
 
@@ -126,9 +124,9 @@ G4int G4RPGPionInelastic::GetMultiplicityT32(G4double KE) const
   G4int k = epair.first;
   G4double fraction = epair.second;
 
-  for(G4int m = 0; m < 8; m++) {
-    multint = t32_dSigma_dMult[m][k]
-         + fraction*(t32_dSigma_dMult[m][k+1] - t32_dSigma_dMult[m][k]);
+  for (G4int j = 0; j < 8; j++) {
+    multint = t32_dSigma_dMult[j][k]
+         + fraction*(t32_dSigma_dMult[j][k+1] - t32_dSigma_dMult[j][k]);
       sigma.push_back(multint);
   }
 

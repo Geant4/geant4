@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMChannel.cc,v 1.12 2010-11-18 16:21:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -38,6 +37,8 @@
 
 #include "G4GEMChannel.hh"
 #include "G4PairingCorrection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
@@ -64,10 +65,10 @@ G4GEMChannel::~G4GEMChannel()
   if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
 }
 
-void G4GEMChannel::Initialize(const G4Fragment & fragment)
+G4double G4GEMChannel::GetEmissionProbability(G4Fragment* fragment)
 {
-  G4int anA = fragment.GetA_asInt();
-  G4int aZ  = fragment.GetZ_asInt();
+  G4int anA = fragment->GetA_asInt();
+  G4int aZ  = fragment->GetZ_asInt();
   ResidualA = anA - A;
   ResidualZ = aZ - Z;
   //G4cout << "G4GEMChannel::Initialize: Z= " << aZ << " A= " << anA
@@ -90,7 +91,7 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
       // param for protons must be the same)   
       //    G4double ExEnergy = fragment.GetExcitationEnergy() -
       //    G4PairingCorrection::GetInstance()->GetPairingCorrection(ResidualA,ResidualZ);
-      G4double ExEnergy = fragment.GetExcitationEnergy() -
+      G4double ExEnergy = fragment->GetExcitationEnergy() -
 	G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
 
       //G4cout << "Eexc(MeV)= " << ExEnergy/MeV << G4endl;
@@ -110,7 +111,7 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
 
 	//Maximal kinetic energy (JMQ : at the Coulomb barrier)
 	MaximalKineticEnergy = 
-	  CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
+	  CalcMaximalKineticEnergy(fragment->GetGroundStateMass()+ExEnergy);
 	//G4cout << "MaxE(MeV)= " << MaximalKineticEnergy/MeV << G4endl;
 		
 	// Emission probability
@@ -122,12 +123,13 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
 	  { 
 	    // Total emission probability for this channel
 	    EmissionProbability = 
-	      theEvaporationProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
+	      theEvaporationProbabilityPtr->EmissionProbability(*fragment,
+								MaximalKineticEnergy);
 	  }
       }
     }   
-    //G4cout << "Prob= " << EmissionProbability << G4endl;
-    return;
+  //G4cout << "Prob= " << EmissionProbability << G4endl;
+  return EmissionProbability;
 }
 
 G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
@@ -222,7 +224,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   //JMQ  BIG BUG fixed: hbarc instead of hbar_Planck !!!!
   //     it was fixed in total probability (for this channel) but remained still here!!
   //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
-  G4double g = (2.0*Spin+1.0)*EvaporatedMass/(pi2* hbarc*hbarc);
+  G4double gg = (2.0*Spin+1.0)*EvaporatedMass/(pi2* hbarc*hbarc);
   //
   //JMQ  fix on Rb and  geometrical cross sections according to Furihata's paper 
   //                      (JAERI-Data/Code 2001-105, p6)
@@ -249,7 +251,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   //   G4double GeometricalXS = pi*RN*RN*std::pow(G4double(fragment.GetA()-A),2./3.); 
   G4double GeometricalXS = pi*Rb*Rb; 
     
-  G4double ConstantFactor = g*GeometricalXS*Alpha/InitialLevelDensity;
+  G4double ConstantFactor = gg*GeometricalXS*Alpha/InitialLevelDensity;
   ConstantFactor *= pi/12.0;
   //JMQ : this is the assimptotic maximal kinetic energy of the ejectile 
   //      (obtained by energy-momentum conservation). 

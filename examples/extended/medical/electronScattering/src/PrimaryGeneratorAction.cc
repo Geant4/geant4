@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2009-09-19 16:09:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/electronScattering/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,37 +39,38 @@
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:detector(DC)
+:fDetector(DC)
 {
-  particleGun  = new G4ParticleGun(1);
+  fParticleGun  = new G4ParticleGun(1);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(20.*MeV);
-  z0 = -0.5*(detector->GetThicknessWorld());
-  particleGun->SetParticlePosition(G4ThreeVector(0*cm, 0*cm, z0));   
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleEnergy(20.*MeV);
+  fZ0 = -0.5*(fDetector->GetThicknessWorld());
+  fParticleGun->SetParticlePosition(G4ThreeVector(0*cm, 0*cm, fZ0));   
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   
-  G4double radiusWorld = detector->GetRadiusWorld();
-  r2World = radiusWorld*radiusWorld; 
-  rndmBeam = 420*um;
+  G4double radiusWorld = fDetector->GetRadiusWorld();
+  fR2World = radiusWorld*radiusWorld; 
+  fRndmBeam = 420*um;
           
   //create a messenger for this class
-  gunMessenger = new PrimaryGeneratorMessenger(this);
+  fGunMessenger = new PrimaryGeneratorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;  
+  delete fParticleGun;
+  delete fGunMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,17 +80,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //this function is called at the begining of event
   //
   //randomize beam, if requested.
-  if (rndmBeam > 0.) {
-    G4double s_proj = rndmBeam/std::sqrt(2.);
+  if (fRndmBeam > 0.) {
+    G4double s_proj = fRndmBeam/std::sqrt(2.);
     G4double x0, y0;     
     do {
         x0 = G4RandGauss::shoot(0.,s_proj);
         y0 = G4RandGauss::shoot(0.,s_proj);      
-    } while ((x0*x0 + y0*y0) > r2World);
-    particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));     
+    } while ((x0*x0 + y0*y0) > fR2World);
+    fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,fZ0));     
   }
   
-  particleGun->GeneratePrimaryVertex(anEvent); 
+  fParticleGun->GeneratePrimaryVertex(anEvent); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

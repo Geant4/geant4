@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -44,6 +44,9 @@
 #include <cmath>
 
 namespace G4INCL {
+  const G4double ReflectionChannel::sinMinReflectionAngleSquaredOverFour = std::pow(std::sin(2.*Math::pi/200.),2.);
+  const G4double ReflectionChannel::positionScalingFactor = 0.99;
+
   ReflectionChannel::ReflectionChannel(Nucleus *n, Particle *p)
     :theNucleus(n),theParticle(p)
   {
@@ -58,14 +61,31 @@ namespace G4INCL {
     FinalState *fs = new FinalState(); // Create final state for the output
     fs->setTotalEnergyBeforeInteraction(theParticle->getEnergy() - theParticle->getPotentialEnergy());
 
-    G4double pspr = theParticle->getPosition().dot(theParticle->getMomentum());
-    G4double x2cour = theParticle->getPosition().mag2();
-    ThreeVector newMomentum = theParticle->getMomentum() - (theParticle->getPosition() * (2.0 * pspr/x2cour));
-    //ThreeVector newMomentum = -theParticle->getMomentum(); // For debugging
-    theParticle->setMomentum(newMomentum);
-    theNucleus->updatePotentialEnergy(theParticle);
-    fs->addModifiedParticle(theParticle);
+    const ThreeVector &oldMomentum = theParticle->getMomentum();
+    G4double pspr = theParticle->getPosition().dot(oldMomentum);
+    if(pspr>=0) { // This means that the particle is trying to leave; perform a reflection
+      const G4double x2cour = theParticle->getPosition().mag2();
+      const ThreeVector newMomentum = oldMomentum - (theParticle->getPosition() * (2.0 * pspr/x2cour));
+      const G4double deltaP2 = (newMomentum-oldMomentum).mag2();
+      theParticle->setMomentum(newMomentum);
+      const G4double minDeltaP2 = sinMinReflectionAngleSquaredOverFour * newMomentum.mag2();
+      if(deltaP2 < minDeltaP2) { // Avoid extremely small reflection angles
+        theParticle->setPosition(theParticle->getPosition() * positionScalingFactor);
+        DEBUG("Reflection angle for particle " << theParticle->getID() << " was too tangential: " << std::endl
+            << "  " << deltaP2 << "=deltaP2<minDeltaP2=" << minDeltaP2 << std::endl
+            << "  Resetting the particle position to ("
+            << theParticle->getPosition().getX() << ", "
+            << theParticle->getPosition().getY() << ", "
+            << theParticle->getPosition().getZ() << ")" << std::endl);
+      }
+      theNucleus->updatePotentialEnergy(theParticle);
+    } else { // The particle momentum is already directed towards the inside of the nucleus; do nothing
+      // ...but make sure this only happened because of the frozen propagation
+// assert(theParticle->getPosition().dot(theParticle->getPropagationVelocity())>0.);
+    }
 
+    theParticle->thawPropagation();
+    fs->addModifiedParticle(theParticle);
     return fs;
   }
 }

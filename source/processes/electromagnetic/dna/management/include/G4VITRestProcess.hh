@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Identical to G4VRestProcess with dependency from G4VITProcess
+// $Id: G4VITRestProcess.hh 64057 2012-10-30 15:04:49Z gcosmo $
+//
+/// \brief Identical to G4VRestProcess with dependency from G4VITProcess
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -39,6 +41,8 @@
 
 #ifndef G4VITRestProcess_h
 #define G4VITRestProcess_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VITProcess.hh"
 
@@ -125,19 +129,19 @@ inline G4double G4VITRestProcess::AtRestGetPhysicalInteractionLength(
   *condition = NotForced;
 
   // get mean life time
-  fState->currentInteractionLength = GetMeanLifeTime(track, condition);
+  fpState->currentInteractionLength = GetMeanLifeTime(track, condition);
 
 #ifdef G4VERBOSE
- if ((fState->currentInteractionLength <0.0) || (verboseLevel>2)){
+ if ((fpState->currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4VITRestProcess::AtRestGetPhysicalInteractionLength ";
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << fState->currentInteractionLength/ns << "[ns]" <<G4endl;
+    G4cout << "MeanLifeTime = " << fpState->currentInteractionLength/CLHEP::ns << "[ns]" <<G4endl;
   }
 #endif
 
-  return (fState->theNumberOfInteractionLengthLeft) * (fState->currentInteractionLength);
+  return (fpState->theNumberOfInteractionLengthLeft) * (fpState->currentInteractionLength);
 }
 
 

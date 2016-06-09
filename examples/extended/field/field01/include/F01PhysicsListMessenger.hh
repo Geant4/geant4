@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01PhysicsListMessenger.hh
+/// \brief Definition of the F01PhysicsListMessenger class
 //
-// $Id: F01PhysicsListMessenger.hh,v 1.4 2006-06-29 17:15:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 

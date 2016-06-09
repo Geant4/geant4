@@ -55,8 +55,6 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include <string.h>	// for strcmp
 
-using namespace std;
-
 namespace CLHEP {
 
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 

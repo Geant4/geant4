@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForPositron.cc,v 1.7 2009-09-11 15:21:39 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------
@@ -40,6 +39,8 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4RToEConvForPositron::G4RToEConvForPositron() : G4VRangeToEnergyConverter()
 {    

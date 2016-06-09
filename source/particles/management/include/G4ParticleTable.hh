@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.22 2010-10-30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -222,7 +221,7 @@ class G4ParticleTable
    G4bool  readyToUse;
  
  public:
-   void SetReadiness();
+   void SetReadiness(G4bool val=true);
    G4bool GetReadiness() const;
  private:
    void CheckReadiness();

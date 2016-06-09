@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.13 2009-09-25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -50,9 +49,11 @@
 #ifndef  G4SHELLEMDATASET_HH
 #define  G4SHELLEMDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4VEMDataSet.hh"
-#include <vector>
 
 class G4VDataSetAlgorithm;
 
@@ -61,8 +62,8 @@ class G4ShellEMDataSet : public G4VEMDataSet
 public:
   G4ShellEMDataSet(G4int Z, 
 		   G4VDataSetAlgorithm* algo, 
-		   G4double eUnit=MeV, 
-		   G4double dataUnit=barn);
+		   G4double eUnit=CLHEP::MeV, 
+		   G4double dataUnit=CLHEP::barn);
 
   virtual ~G4ShellEMDataSet();
  

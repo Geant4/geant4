@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LHEPStoppingPhysics.hh,v 1.2 2010-06-03 15:03:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -33,7 +32,6 @@
 // Author: 30 April 2006 V. Ivanchenko
 //
 // Modified:
-//
 //----------------------------------------------------------------------------
 //
 

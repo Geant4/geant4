@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.hh,v 1.3 2010-07-23 00:59:33 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4SDParticleFilter_h

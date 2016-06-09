@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.4 2006-06-29 17:23:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.01.2003 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -75,19 +77,19 @@ private:
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
-  G4double radius;
+  G4double fRadius;
 
-  G4Material*  targetMaterial;
-  G4Material*  worldMaterial;
+  G4Material*  fTargetMaterial;
+  G4Material*  fWorldMaterial;
 
-  CheckVolumeSD*   checkSD;
-  TargetSD*        targetSD;
+  CheckVolumeSD*   fCheckSD;
+  TargetSD*        fTargetSD;
 
-  G4LogicalVolume* logicTarget;
-  G4LogicalVolume* logicCheck;
-  G4LogicalVolume* logicWorld;
+  G4LogicalVolume* fLogicTarget;
+  G4LogicalVolume* fLogicCheck;
+  G4LogicalVolume* fLogicWorld;
 
-  DetectorMessenger* detectorMessenger;
+  DetectorMessenger* fDetectorMessenger;
 
 };
 

@@ -28,21 +28,21 @@ static inline double safe_acos (double x) {
   return ( (x>0) ? 0 : CLHEP::pi );
 }
 
-HepRotationY::HepRotationY(double delta) : 
-		d(proper(delta)), s(std::sin(delta)), c(std::cos(delta))
+HepRotationY::HepRotationY(double ddelta) : 
+		its_d(proper(ddelta)), its_s(std::sin(ddelta)), its_c(std::cos(ddelta))
 {}
 
-HepRotationY & HepRotationY::set ( double delta ) {
-  d = proper(delta);
-  s = std::sin(d);
-  c = std::cos(d);
+HepRotationY & HepRotationY::set ( double ddelta ) {
+  its_d = proper(ddelta);
+  its_s = std::sin(its_d);
+  its_c = std::cos(its_d);
   return *this;
 }
 
 double  HepRotationY::phi() const {
-  if ( d == 0 ) {
+  if ( its_d == 0 ) {
     return 0;
-  } else if ( (d < 0) || (d == CLHEP::pi) )  {
+  } else if ( (its_d < 0) || (its_d == CLHEP::pi) )  {
     return +CLHEP::halfpi;
   } else {
     return -CLHEP::halfpi;
@@ -50,13 +50,13 @@ double  HepRotationY::phi() const {
 }  // HepRotationY::phi()
 
 double  HepRotationY::theta() const {
-  return  std::fabs( d );
+  return  std::fabs( its_d );
 }  // HepRotationY::theta()
 
 double  HepRotationY::psi() const {
-  if ( d == 0 ) {
+  if ( its_d == 0 ) {
     return 0;
-  } else if ( (d < 0) || (d == CLHEP::pi) )  {
+  } else if ( (its_d < 0) || (its_d == CLHEP::pi) )  {
     return -CLHEP::halfpi;
   } else {
     return +CLHEP::halfpi;
@@ -104,8 +104,8 @@ double HepRotationY::thetaZ() const {
 		// or ---- return d;
 }
 
-void HepRotationY::setDelta ( double delta ) {
-  set(delta);
+void HepRotationY::setDelta ( double ddelta ) {
+  set(ddelta);
 }
 
 void HepRotationY::decompose
@@ -133,7 +133,7 @@ void HepRotationY::decompose
 }
 
 double HepRotationY::distance2( const HepRotationY & r  ) const {
-  double answer = 2.0 * ( 1.0 - ( s * r.s + c * r.c ) ) ;
+  double answer = 2.0 * ( 1.0 - ( its_s * r.its_s + its_c * r.its_c ) ) ;
   return (answer >= 0) ? answer : 0;
 }
 
@@ -186,12 +186,12 @@ bool HepRotationY::isNear( const HepLorentzRotation & lt,
 }
 
 double HepRotationY::norm2() const {
-  return 2.0 - 2.0 * c;
+  return 2.0 - 2.0 * its_c;
 }
 
 std::ostream & HepRotationY::print( std::ostream & os ) const {
-  os << "\nRotation about Y (" << d <<
-                ") [cos d = " << c << " sin d = " << s << "]\n";
+  os << "\nRotation about Y (" << its_d <<
+                ") [cos d = " << its_c << " sin d = " << its_s << "]\n";
   return os;
 }
 

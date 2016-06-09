@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRFeatures.hh,v 1.6 2006-06-29 21:16:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #if !defined G4_FR_FEATURES_HH
 #define      G4_FR_FEATURES_HH

@@ -16,6 +16,74 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 November 2012 Vladimir Ivantchenko (hadr-proc-V09-05-12)
+-------------------------------------------------------
+- Fixed History
+- G4WHadronElasticProcess - marked as obsolete
+
+02 November 2012 Vladimir Ivantchenko (hadr-proc-V09-05-11)
+-------------------------------------------------------
+- G4HadronElasticProcess - added warning for obsolete method,
+    use cut for recoil as energy threshold to produce recoil ion
+
+20 September 2012 Gabriele Cosmo (hadr-proc-V09-05-10)
+-------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+17 September 2012 Michael Kelsey (hadr-proc-V09-05-09)
+-------------------------------------------------------
+- G4HadronElasticProcess.cc, G4WHadronElasticProcess.cc: Comment out "step"
+  in PostStepDoIt() signature, as no longer used (fixes compiler warning on
+  Linux).
+
+17 September 2012 Michael Kelsey (hadr-proc-V09-05-08)
+-------------------------------------------------------
+- G4HadronFissionProcess.cc, G4HadronElasticProcess.cc,
+  G4MuonNuclearProcess.cc, G4WHadronElasticProcess.cc,
+  G4HadronCaptureProcess.cc:  Follow migration of G4HadronicProcess
+  inheritance and ctor signature.
+
+- G4*HadronElasticProcess.cc: Replace use of "aParticleChange" with
+  "theTotalResult", and drop callback to G4VDiscreteProcess::PostStepDoIt().
+
+Requires co-working base tag hadr-man-V09-05-16
+
+28 July 2012 Vladimir Ivantchenko (hadr-proc-V09-05-07)
+--------------------------------------------------------
+26 July 2012 Vladimir Ivantchenko (hadr-proc-V09-05-06)
+--------------------------------------------------------
+- G4HadronElasticProcess - copy of G4WHadronElasticProcess
+
+3 July 2012  Dennis Wright  (hadr-proc-V09-05-05)
+-------------------------------------------------
+- G4AlphaInelasticProcess.cc : from Bug Report 1309, replace
+  G4Proton::Proton() with G4Alpha::Alpha() in constructor
+
+12 June 2012 Vladimir Ivantchenko (hadr-proc-V09-05-04)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed compillation problem introduced
+    in the previous tag
+
+11 June 2012 Vladimir Ivantchenko (hadr-proc-V09-05-03)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed shadowing
+
+23 April 2012 Vladimir Ivantchenko (hadr-proc-V09-05-02)
+--------------------------------------------------------
+- G4WHadronElasticProcess - time and weight for recoil are
+    copied from the primary particle directly to avoid 
+    inconsistency of parameters definition - fixed bug #1305
+
+22 February 2012 Vladimir Ivantchenko (hadr-proc-V09-05-01)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed memory growing in run time 
+
+19 February 2012 Vladimir Ivantchenko (hadr-proc-V09-05-00)
+--------------------------------------------------------
+- G4WHadronElasticProcess - removed typo - useless unnecessary call 
+    to ApplyYourself 
+
 6 November 2011 Vladimir Ivantchenko (hadr-proc-V09-04-11)
 --------------------------------------------------------
 - G4WHadronElasticProcess - more accurate handl of low-energy particles

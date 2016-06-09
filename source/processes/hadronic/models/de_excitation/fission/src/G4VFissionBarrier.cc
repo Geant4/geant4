@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFissionBarrier.cc,v 1.5 2010-11-17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.15 2009-01-19 16:53:42 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -37,6 +36,7 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4OpenGLXmViewer::drawing_style_callback (Widget w, 
 					     XtPointer clientData, 
@@ -71,7 +71,7 @@ void G4OpenGLXmViewer::drawing_style_callback (Widget w,
     style = G4ViewParameters::wireframe;
     G4Exception
       ("G4OpenGLXmViewer::drawing_style_callback",
-       "opengl0006", FatalException,
+       "opengl2006", FatalException,
        "Unrecognised case in drawing_style_callback.");
   }
 
@@ -107,7 +107,7 @@ void G4OpenGLXmViewer::rep_style_callback (Widget w,
     style = G4ViewParameters::polyhedron;
     G4Exception
       ("G4OpenGLXmViewer::rep_style_callback",
-       "opengl0007", FatalException,
+       "opengl2007", FatalException,
        "Unrecognised case in rep_style_callback.");
   }
 
@@ -149,7 +149,7 @@ void G4OpenGLXmViewer::background_color_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::background_color_callback",
-       "opengl0008", FatalException,
+       "opengl2008", FatalException,
        "Unrecognised case in background_color_callback.");
   }
 
@@ -181,7 +181,7 @@ void G4OpenGLXmViewer::transparency_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::transparency_callback",
-       "opengl0009", FatalException,
+       "opengl2009", FatalException,
        "Unrecognised case in transparency_callback.");
   }
 
@@ -220,7 +220,7 @@ void G4OpenGLXmViewer::antialias_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::antialias_callback",
-       "opengl0010", FatalException,
+       "opengl2010", FatalException,
        "Unrecognised case in antialiasing_callback.");
   }
 
@@ -252,7 +252,7 @@ void G4OpenGLXmViewer::haloing_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::haloing_callback",
-       "opengl0011", FatalException,
+       "opengl2011", FatalException,
        "Unrecognised case in haloing_callback.");
   }
 
@@ -284,7 +284,7 @@ void G4OpenGLXmViewer::aux_edge_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::aux_edge_callback",
-       "opengl0012", FatalException,
+       "opengl2012", FatalException,
        "Unrecognised case in aux_edge_callback.");
   }
 
@@ -324,7 +324,7 @@ void G4OpenGLXmViewer::projection_callback (Widget w,
     {
       G4Exception
 	("G4OpenGLXmViewer::projection_callback",
-	 "opengl0013", FatalException,
+	 "opengl2013", FatalException,
 	 "Unrecognised choice made in projection_callback");
     }
   }

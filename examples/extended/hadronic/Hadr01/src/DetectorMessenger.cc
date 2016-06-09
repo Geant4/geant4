@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.7 2007-05-16 11:43:30 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 16.11.2006 Add beamCmd (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -54,81 +56,82 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det)
 {
-  testDir = new G4UIdirectory("/testhadr/");
-  testDir->SetGuidance(" Hadronic Extended Example.");
+  fTestDir = new G4UIdirectory("/testhadr/");
+  fTestDir->SetGuidance(" Hadronic Extended Example.");
 
-  matCmd = new G4UIcmdWithAString("/testhadr/TargetMat",this);
-  matCmd->SetGuidance("Select Material for the target");
-  matCmd->SetParameterName("tMaterial",false);
-  matCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMatCmd = new G4UIcmdWithAString("/testhadr/TargetMat",this);
+  fMatCmd->SetGuidance("Select Material for the target");
+  fMatCmd->SetParameterName("tMaterial",false);
+  fMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  mat1Cmd = new G4UIcmdWithAString("/testhadr/WorldMat",this);
-  mat1Cmd->SetGuidance("Select Material for world");
-  mat1Cmd->SetParameterName("wMaterial",false);
-  mat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMat1Cmd = new G4UIcmdWithAString("/testhadr/WorldMat",this);
+  fMat1Cmd->SetGuidance("Select Material for world");
+  fMat1Cmd->SetParameterName("wMaterial",false);
+  fMat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  rCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetRadius",this);
-  rCmd->SetGuidance("Set radius of the target");
-  rCmd->SetParameterName("radius",false);
-  rCmd->SetUnitCategory("Length");
-  rCmd->SetRange("radius>0");
-  rCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fRCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetRadius",this);
+  fRCmd->SetGuidance("Set radius of the target");
+  fRCmd->SetParameterName("radius",false);
+  fRCmd->SetUnitCategory("Length");
+  fRCmd->SetRange("radius>0");
+  fRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  lCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength",this);
-  lCmd->SetGuidance("Set length of the target");
-  lCmd->SetParameterName("length",false);
-  lCmd->SetUnitCategory("Length");
-  lCmd->SetRange("length>0");
-  lCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fLCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength",this);
+  fLCmd->SetGuidance("Set length of the target");
+  fLCmd->SetParameterName("length",false);
+  fLCmd->SetUnitCategory("Length");
+  fLCmd->SetRange("length>0");
+  fLCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  binCmd = new G4UIcmdWithAnInteger("/testhadr/NumberOfBinsE",this);
-  binCmd->SetGuidance("Set number of bins for Energy");
-  binCmd->SetParameterName("NEbins",false);
-  binCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fBinCmd = new G4UIcmdWithAnInteger("/testhadr/NumberOfBinsE",this);
+  fBinCmd->SetGuidance("Set number of bins for Energy");
+  fBinCmd->SetParameterName("NEbins",false);
+  fBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  nOfAbsCmd = new G4UIcmdWithAnInteger("/testhadr/NumberDivZ",this);
-  nOfAbsCmd->SetGuidance("Set number of slices");
-  nOfAbsCmd->SetParameterName("NZ",false);
-  nOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNOfAbsCmd = new G4UIcmdWithAnInteger("/testhadr/NumberDivZ",this);
+  fNOfAbsCmd->SetGuidance("Set number of slices");
+  fNOfAbsCmd->SetParameterName("NZ",false);
+  fNOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  edepCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/MaxEdep",this);
-  edepCmd->SetGuidance("Set max energy in histogram");
-  edepCmd->SetParameterName("edep",false);
-  edepCmd->SetUnitCategory("Energy");
-  edepCmd->SetRange("edep>0");
-  edepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fEdepCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/MaxEdep",this);
+  fEdepCmd->SetGuidance("Set max energy in histogram");
+  fEdepCmd->SetParameterName("edep",false);
+  fEdepCmd->SetUnitCategory("Energy");
+  fEdepCmd->SetRange("edep>0");
+  fEdepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  updateCmd = new G4UIcmdWithoutParameter("/testhadr/Update",this);
-  updateCmd->SetGuidance("Update geometry.");
-  updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  updateCmd->SetGuidance("if you changed geometrical value(s)");
-  updateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testhadr/Update",this);
+  fUpdateCmd->SetGuidance("Update geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s)");
+  fUpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  beamCmd = new G4UIcmdWithABool("/testhadr/DefaultBeamPosition",this);
-  beamCmd->SetGuidance("show inelastic and elastic cross sections");
+  fBeamCmd = new G4UIcmdWithABool("/testhadr/DefaultBeamPosition",this);
+  fBeamCmd->SetGuidance("show inelastic and elastic cross sections");
 
-  verbCmd = new G4UIcmdWithAnInteger("/testhadr/Verbose",this);
-  verbCmd->SetGuidance("Set verbose for ");
-  verbCmd->SetParameterName("verb",false);
-  verbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fVerbCmd = new G4UIcmdWithAnInteger("/testhadr/Verbose",this);
+  fVerbCmd->SetGuidance("Set verbose for ");
+  fVerbCmd->SetParameterName("verb",false);
+  fVerbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete matCmd;
-  delete mat1Cmd;
-  delete rCmd;
-  delete lCmd;
-  delete nOfAbsCmd;
-  delete updateCmd;
-  delete testDir;
-  delete beamCmd;
-  delete verbCmd;
-  delete edepCmd;
+  delete fMatCmd;
+  delete fMat1Cmd;
+  delete fRCmd;
+  delete fLCmd;
+  delete fBinCmd;
+  delete fNOfAbsCmd;
+  delete fUpdateCmd;
+  delete fTestDir;
+  delete fBeamCmd;
+  delete fVerbCmd;
+  delete fEdepCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,26 +139,27 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   HistoManager* h = HistoManager::GetPointer();
-  if( command == matCmd )
-   Detector->SetTargetMaterial(newValue);
-  else if( command == mat1Cmd )
-   Detector->SetWorldMaterial(newValue);
-  else if( command == rCmd ) 
-    Detector->SetTargetRadius(rCmd->GetNewDoubleValue(newValue));
-  else if( command == lCmd ) 
-    h->SetTargetLength(lCmd->GetNewDoubleValue(newValue));
-  else if( command == nOfAbsCmd ) 
-    h->SetNumberOfSlices(nOfAbsCmd->GetNewIntValue(newValue));
-  else if( command == binCmd ) 
-    h->SetNumberOfBinsE(binCmd->GetNewIntValue(newValue));
-  else if( command == verbCmd )
-    h->SetVerbose(verbCmd->GetNewIntValue(newValue));
-  else if (command == beamCmd)
-    h->SetDefaultBeamPositionFlag(beamCmd->GetNewBoolValue(newValue));
-  else if (command == edepCmd)
-    h->SetMaxEnergyDeposit(edepCmd->GetNewDoubleValue(newValue));
-  else if( command == updateCmd )
-    Detector->UpdateGeometry();
+  if( command == fMatCmd ) {
+   fDetector->SetTargetMaterial(newValue);
+  } else if( command == fMat1Cmd ) {
+   fDetector->SetWorldMaterial(newValue);
+  } else if( command == fRCmd ) {
+    fDetector->SetTargetRadius(fRCmd->GetNewDoubleValue(newValue));
+  } else if( command == fLCmd ) {
+    h->SetTargetLength(fLCmd->GetNewDoubleValue(newValue));
+  } else if( command == fNOfAbsCmd ) {
+    h->SetNumberOfSlices(fNOfAbsCmd->GetNewIntValue(newValue));
+  } else if( command == fBinCmd ) {
+    h->SetNumberOfBinsE(fBinCmd->GetNewIntValue(newValue));
+  } else if( command == fVerbCmd ) {
+    h->SetVerbose(fVerbCmd->GetNewIntValue(newValue));
+  } else if (command == fBeamCmd) {
+    h->SetDefaultBeamPositionFlag(fBeamCmd->GetNewBoolValue(newValue));
+  } else if (command == fEdepCmd) {
+    h->SetMaxEnergyDeposit(fEdepCmd->GetNewDoubleValue(newValue));
+  } else if( command == fUpdateCmd ) {
+    fDetector->UpdateGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticleLargerEkin.hh,v 1.12 2010-06-25 09:43:46 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implements a *reverse* sorting: std::sort expects a less-than operator
 // which returns true if arg1<arg2.  This function returns true if arg1>=arg2.

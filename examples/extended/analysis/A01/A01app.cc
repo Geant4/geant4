@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.9 2009-11-14 14:41:13 allison Exp $
+/// \file analysis/A01/A01app.cc
+/// \brief Main program of the analysis/A01 example
+//
+// $Id$
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------

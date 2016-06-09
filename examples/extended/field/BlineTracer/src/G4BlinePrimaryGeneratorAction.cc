@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/src/G4BlinePrimaryGeneratorAction.cc
+/// \brief Implementation of the G4BlinePrimaryGeneratorAction class
 //
-// $Id: G4BlinePrimaryGeneratorAction.cc,v 1.3 2006-06-29 17:15:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -42,13 +44,14 @@
 #include "G4Types.hh"
 #include "G4Event.hh"
 #include "G4ChargedGeantino.hh"
+#include "G4SystemOfUnits.hh"
 
 ///////////////////////////////////////////////////////////////////////////
 
 G4BlinePrimaryGeneratorAction::G4BlinePrimaryGeneratorAction()
 {
   fUserPrimaryAction = 0;
-  FirstPartOfBline = true;
+  fFirstPartOfBline = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -73,20 +76,20 @@ void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // by using the USER primary action while for the second part the previous
   // values are taken.
   
-  if (FirstPartOfBline)
+  if (fFirstPartOfBline)
   {
     // set the position and time defined by using the USER primary action
  
     G4Event* tmpEvent = new G4Event();    
     fUserPrimaryAction->GeneratePrimaries(tmpEvent);
-    BlineStartPosition = tmpEvent->GetPrimaryVertex()->GetPosition();
-    T0 = tmpEvent->GetPrimaryVertex()->GetT0();
+    fBlineStartPosition = tmpEvent->GetPrimaryVertex()->GetPosition();
+    fT0 = tmpEvent->GetPrimaryVertex()->GetT0();
     delete tmpEvent;
   }
-  FirstPartOfBline = false;   
+  fFirstPartOfBline = false;   
 
   G4PrimaryVertex* primary_vertex = 
-    new G4PrimaryVertex(BlineStartPosition, T0);
+    new G4PrimaryVertex(fBlineStartPosition, fT0);
 
   // Define the particle to be tracked as Charged Geantino
     

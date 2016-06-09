@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.14 2010-04-03 00:40:45 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -152,14 +151,15 @@ public: // With description
   inline G4bool operator!=(const G4HadronicInteraction &right ) const
   { return ( this != (G4HadronicInteraction *) &right ); }
 
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
-    
+
   inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
   { epCheckLevels.first = relativeLevel;
     epCheckLevels.second = absoluteLevel; }
 
-  virtual void ModelDescription(std::ostream& outFile) const;
+  virtual void ModelDescription(std::ostream& outFile) const ; //=0;
 
 private:
     

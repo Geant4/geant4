@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/include/SteppingAction.hh
+/// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -51,8 +53,8 @@ public:
   void UserSteppingAction(const G4Step*);
     
 private:
-  DetectorConstruction* detector;
-  EventAction*          eventaction;  
+  DetectorConstruction* fDetector;
+  EventAction*          fEventaction;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

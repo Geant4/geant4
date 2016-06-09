@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc,v 1.10 2010-03-25 15:31:42 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
+// 17-Aug-2012 V.Ivanchenko added hadronic model factories
 
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
@@ -69,8 +69,8 @@ void G4HadronicInteractionRegistry::Clean()
   //G4cout << "G4HadronicInteractionRegistry::Clean() is done " << G4endl; 
 }
 
-void G4HadronicInteractionRegistry::
-RegisterMe(G4HadronicInteraction * aModel)
+void 
+G4HadronicInteractionRegistry::RegisterMe(G4HadronicInteraction * aModel)
 {
   if(!aModel) { return; }
   size_t nModels = allModels.size();
@@ -84,8 +84,8 @@ RegisterMe(G4HadronicInteraction * aModel)
   allModels.push_back(aModel);
 }
 
-void G4HadronicInteractionRegistry::
-RemoveMe(G4HadronicInteraction * aModel)
+void 
+G4HadronicInteractionRegistry::RemoveMe(G4HadronicInteraction * aModel)
 {
   if(!aModel) { return; }
   size_t nModels = allModels.size();
@@ -98,4 +98,22 @@ RemoveMe(G4HadronicInteraction * aModel)
       return;
     }
   }
+}
+
+G4HadronicInteraction* 
+G4HadronicInteractionRegistry::FindModel(const G4String& name)
+{
+  G4HadronicInteraction* model = 0; 
+
+  size_t nModels = allModels.size(); 
+  for (size_t i=0; i<nModels; ++i) {
+    G4HadronicInteraction* p = allModels[i]; 
+    if(p) {
+      if (p->GetModelName() == name) { 
+	model = p;
+	break; 
+      }
+    }
+  }
+  return model;
 }

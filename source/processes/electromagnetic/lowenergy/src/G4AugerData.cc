@@ -37,13 +37,15 @@
 //
 // -------------------------------------------------------------------
 
+#include <fstream>
+#include <sstream>
+
 #include "G4AugerData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DataVector.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-#include <fstream>
-#include <sstream>
 
 G4AugerData::G4AugerData()
 {
@@ -308,7 +310,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 
     G4double a = 0;
     G4int k = 1;
-    G4int s = 0;
+    G4int sLocal = 0;
   
     G4int vacId = 0;
     std::vector<G4int>* initIds = new std::vector<G4int>;
@@ -335,7 +337,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 
 
 
-	  if (s == 0)
+	  if (sLocal == 0)
 	    {
 	      // End of a shell data set
 	    
@@ -390,10 +392,10 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 
 
 	    }      
-	  s++;
-	  if (s == nColumns)
+	  sLocal++;
+	  if (sLocal == nColumns)
 	    {
-	      s = 0;
+	      sLocal = 0;
 	    }
 	}
       // moved to the end in order to avoid leaks
@@ -515,9 +517,9 @@ void G4AugerData::BuildAugerTransitionTable()
   G4DataVector activeZ;
   activeZ.clear();
   
-  for (G4int m=0; m<nMaterials; m++) {
+  for (G4int mLocal=0; mLocal<nMaterials; mLocal++) {
 
-    const G4Material* material= (*materialTable)[m];        
+    const G4Material* material= (*materialTable)[mLocal];        
     const G4ElementVector* elementVector = material->GetElementVector();
     const size_t nElements = material->GetNumberOfElements();
       

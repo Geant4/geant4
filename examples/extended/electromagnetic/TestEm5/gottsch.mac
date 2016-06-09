@@ -22,10 +22,9 @@
 /gun/particle proton
 /gun/energy 158.6 MeV
 #
-/testem/histo/setFileName gottsch
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 12  100  0.0  0.6 deg	#space angle  
-/testem/histo/setHisto 13  100 -0.6 +0.6 deg	#projected angle  
+/analysis/setFileName gottsch
+/analysis/h1/set 12  100  0.0  0.6 deg	#space angle  
+/analysis/h1/set 13  100 -0.6 +0.6 deg	#projected angle  
 #
 /testem/stack/killSecondaries
 #

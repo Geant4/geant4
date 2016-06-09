@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.18 2006-06-29 21:28:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  27th March 1996
@@ -83,6 +82,9 @@ public: // With description
   virtual void DrawView () = 0;
   // Draw view of the scene currently attached to the scene handler -
   // see example of a minimal function at end of this file.
+  
+  void RefreshView ();
+  // Simply invokes SetView, ClearView, DrawView.
 
   virtual void ShowView ();
   // Show view (for graphics systems which require to process

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.53 2009-05-18 14:22:43 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // 25.02.97 - John Apostolakis - Design and implementation 
@@ -34,6 +33,7 @@
 #include <iomanip>
 
 #include "G4ChordFinder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MagneticField.hh"
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4ClassicalRK4.hh"

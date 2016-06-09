@@ -23,8 +23,6 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
-
 namespace CLHEP {
 
 double transformSmall (double r);
@@ -245,14 +243,14 @@ double transformSmall (double r) {
   
   for ( int i = 1; i < 50; i++ ) {
     double vn2 = 1.0/(guess*guess);
-    double s = -13*11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2*vn2;
-    	      s +=    11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2;
-    	      s +=      -9*7*5*3 * vn2*vn2*vn2*vn2*vn2;
-	      s +=         7*5*3 * vn2*vn2*vn2*vn2;
-    	      s +=          -5*3 * vn2*vn2*vn2;
-	      s += 	       3 * vn2*vn2    - vn2  +    1.0;
-    v = sqrt ( 2.0 * log ( s / (r*guess*sqrt(CLHEP::twopi)) ) );
-    if ( abs(v-guess) < eps ) break;
+    double s1 = -13*11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2*vn2;
+            s1 +=    11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2;
+            s1 +=      -9*7*5*3 * vn2*vn2*vn2*vn2*vn2;
+            s1 +=         7*5*3 * vn2*vn2*vn2*vn2;
+            s1 +=          -5*3 * vn2*vn2*vn2;
+            s1 +=            3 * vn2*vn2    - vn2  +    1.0;
+    v = std::sqrt ( 2.0 * std::log ( s1 / (r*guess*std::sqrt(CLHEP::twopi)) ) );
+    if ( std::abs(v-guess) < eps ) break;
     guess = v;
   }
  
@@ -264,7 +262,7 @@ double HepStat::inverseErf (double t) {
 
   // This uses erf(x) = 2*gaussCDF(sqrt(2)*x) - 1
 
-  return sqrt(0.5) * flatToGaussian(.5*(t+1));
+  return std::sqrt(0.5) * flatToGaussian(.5*(t+1));
 
 }
 
@@ -293,7 +291,7 @@ double HepStat::erf (double x) {
 //
 
   double t0 = erfQ(x);
-  double deriv = exp(-x*x) * (2.0 / sqrt(CLHEP::pi));
+  double deriv = std::exp(-x*x) * (2.0 / std::sqrt(CLHEP::pi));
 
   return t0 - (inverseErf (t0) - x) * deriv;
 

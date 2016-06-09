@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +40,7 @@
 //
 
 #include "G4VCrossSectionDataSet.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
@@ -49,7 +49,7 @@
 #include "G4NistManager.hh"
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
-
+#include "Randomize.hh"
 
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
   verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(100*TeV),name(nam) 
@@ -164,6 +164,29 @@ G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* dynPart,
   throw G4HadronicException(__FILE__, __LINE__,
         "G4VCrossSectionDataSet::GetIsoCrossSection is absent");
   return 0.0;
+}
+
+G4Isotope* 
+G4VCrossSectionDataSet::SelectIsotope(const G4Element* anElement, G4double)
+{
+  G4int nIso = anElement->GetNumberOfIsotopes();
+  G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+  G4Isotope* iso = (*isoVector)[0];
+
+  // more than 1 isotope
+  if(1 < nIso) {
+    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    G4double sum = 0.0;
+    G4double q = G4UniformRand();
+    for (G4int j = 0; j<nIso; ++j) {
+      sum += abundVector[j];
+      if(q <= sum) {
+	iso = (*isoVector)[j];
+	break;
+      }
+    }
+  }
+  return iso;
 }
 
 void G4VCrossSectionDataSet::BuildPhysicsTable(const G4ParticleDefinition&)

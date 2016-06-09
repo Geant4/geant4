@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITTimeStepper.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -42,7 +43,7 @@ G4VITTimeStepper::G4VITTimeStepper()
     fVerbose = 0;
     fReactants = 0;
     fSampledMinTimeStep = 0 ;
-    fReactionTable      = 0;
+    fpReactionTable      = 0;
 }
 
 G4VITTimeStepper::~G4VITTimeStepper()
@@ -58,7 +59,7 @@ G4VITTimeStepper& G4VITTimeStepper::operator=(const G4VITTimeStepper& rhs)
 G4VITTimeStepper::G4VITTimeStepper(const G4VITTimeStepper& right)
 {
     fVerbose            = right.fVerbose ;
-    fReactionTable      = right.fReactionTable ;
+    fpReactionTable      = right.fpReactionTable ;
     fReactants          = 0;
     fSampledMinTimeStep = 0 ;
 }

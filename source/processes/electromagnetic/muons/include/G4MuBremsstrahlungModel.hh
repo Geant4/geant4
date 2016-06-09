@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.23 2010-10-26 13:52:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +59,8 @@
 
 #ifndef G4MuBremsstrahlungModel_h
 #define G4MuBremsstrahlungModel_h 1
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
@@ -149,6 +150,8 @@ private:
   G4double lowestKinEnergy;
   G4double minThreshold;
 
+  G4double fDN[93];
+
   std::vector<G4DataVector*> partialSumSigma;
 };
 
@@ -167,9 +170,9 @@ void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
   if(!particle) {
     particle = p;
     mass = particle->GetPDGMass();
-    rmass=mass/electron_mass_c2 ;
-    cc=classic_electr_radius/rmass ;
-    coeff= 16.*fine_structure_const*cc*cc/3. ;
+    rmass=mass/CLHEP::electron_mass_c2 ;
+    cc=CLHEP::classic_electr_radius/rmass ;
+    coeff= 16.*CLHEP::fine_structure_const*cc*cc/3. ;
   }
 }
 

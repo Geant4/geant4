@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4 Physics class: HadronInelasticDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
@@ -36,8 +35,8 @@
 #include <iostream>
 
 
-G4HadronInelasticDataSet::G4HadronInelasticDataSet(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4HadronInelasticDataSet::G4HadronInelasticDataSet(const G4String& nam)
+ : G4VCrossSectionDataSet(nam)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance(); 
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.9 2008-10-30 22:34:23 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //
 // File name:     G4PolarizedCompton
@@ -55,6 +54,7 @@
 
 
 #include "G4PolarizedCompton.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 
 #include "G4StokesVector.hh"
@@ -125,10 +125,10 @@ void G4PolarizedCompton::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4PolarizedCompton::SetModel(const G4String& s)
+void G4PolarizedCompton::SetModel(const G4String& ss)
 {
-  if(s == "Klein-Nishina") mType = 0;
-  if(s == "Polarized-Compton") mType = 10;
+  if(ss == "Klein-Nishina") mType = 0;
+  if(ss == "Polarized-Compton") mType = 10;
 }
 
 

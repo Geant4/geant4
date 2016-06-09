@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.24 2010-05-19 09:10:52 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/TestEm3.cc
+/// \brief Main program of the electromagnetic/TestEm3 example
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -41,7 +43,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -69,18 +70,15 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   
-  // histograms for this example
-  HistoManager* histo = new HistoManager();
-  
   // primary generator
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector,histo);
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
         
   // set user action classes
-  RunAction*      runAct = new RunAction(detector,primary,histo);
-  EventAction*    evtAct = new EventAction(detector,runAct,histo);
-  TrackingAction* trkAct = new TrackingAction(detector,runAct,evtAct,histo);
-  SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct,histo);
+  RunAction*      runAct = new RunAction(detector,primary);
+  EventAction*    evtAct = new EventAction(detector,runAct);
+  TrackingAction* trkAct = new TrackingAction(detector,runAct,evtAct);
+  SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct);
   
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(evtAct);
@@ -117,7 +115,6 @@ int main(int argc,char** argv) {
 
   // job termination
   //   
-  delete histo;
   delete runManager;
 
   return 0;

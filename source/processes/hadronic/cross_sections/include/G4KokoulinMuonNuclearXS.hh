@@ -78,6 +78,9 @@ private:
   ComputeMicroscopicCrossSection(G4double incidentKE,
                                  G4double AtomicNumber, G4double AtomicWeight);
 
+  G4KokoulinMuonNuclearXS & operator=(const G4KokoulinMuonNuclearXS &right);
+  G4KokoulinMuonNuclearXS(const G4KokoulinMuonNuclearXS&);
+
   G4PhysicsTable* theCrossSectionTable;
 
   G4double LowestKineticEnergy;

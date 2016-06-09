@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.23 2010-09-23 18:13:32 mkelsey Exp $
+// $Id$
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -50,6 +50,10 @@
 //		discard local "theFinalState" (avail in base class).
 // 20110801  M. Kelsey -- Make bullet and target buffers local objects (with
 //		hadron and nucleus versions) to reduce memory churn
+// 20120522  M. Kelsey -- Implement base class IsApplicable, and add overloaded
+//		version which takes G4ParticleDefintion, a la G4VProcess.
+// 20120822  M. Kelsey -- Add function to dump user configuration settings.
+//		Remove local verboseLevel; shadows base class data member.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -73,6 +77,7 @@ class G4DynamicParticle;
 class G4HadFinalState;
 class G4InuclCollider;
 class G4InuclParticle;
+class G4ParticleDefinition;
 class G4V3DNucleus;
 
 
@@ -89,13 +94,19 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
 				 G4Nucleus& theNucleus);
 
-  void setVerboseLevel(G4int verbose);
+  void SetVerboseLevel(G4int verbose);		// Overrides base class
+
+  G4bool IsApplicable(const G4HadProjectile& aTrack,
+		      G4Nucleus& theNucleus);
+
+  G4bool IsApplicable(const G4ParticleDefinition* aPD) const;
 
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
   void usePreCompoundDeexcitation();
 
   virtual void ModelDescription(std::ostream& outFile) const;
+  virtual void DumpConfiguration(std::ostream& outFile) const;
 
 protected:
   void clear();			// Delete previously created particles
@@ -142,10 +153,8 @@ private:
   }
 
   static const G4String randomFile;	// Filename to capture random seeds
-
   static const G4int maximumTries;	// Number of iterations for inelastic
 
-  G4int verboseLevel;
   G4int numberOfTries;
 
   G4InuclCollider* collider;

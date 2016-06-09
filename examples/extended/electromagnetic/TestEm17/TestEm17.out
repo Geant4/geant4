@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,29 +14,88 @@
 ***** Table : Nb of materials = 7 *****
 
  Material: galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
+
 
  Material:    CaCO3    density:  2.800 g/cm3   RadL:   8.581 cm   Nucl.Int.Length:  34.767 cm   Imean: 123.236 eV 
-   --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole  ElmMassFraction:  40.04 %  ElmAbundance  20.00 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  12.00 %  ElmAbundance  20.00 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  47.96 %  ElmAbundance  60.00 %
+   --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:  40.04 %  ElmAbundance  20.00 % 
+
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  12.00 %  ElmAbundance  20.00 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  47.96 %  ElmAbundance  60.00 % 
+
 
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.407 cm   Imean:  81.000 eV 
-   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:      Tin    density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.491 cm   Imean: 488.000 eV 
-   --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole
+         --->  Isotope:   112   Z = 50   N = 112   A = 111.90 g/mole   abundance:   0.97 %
+         --->  Isotope:   114   Z = 50   N = 114   A = 113.90 g/mole   abundance:   0.66 %
+         --->  Isotope:   115   Z = 50   N = 115   A = 114.90 g/mole   abundance:   0.34 %
+         --->  Isotope:   116   Z = 50   N = 116   A = 115.90 g/mole   abundance:  14.54 %
+         --->  Isotope:   117   Z = 50   N = 117   A = 116.90 g/mole   abundance:   7.68 %
+         --->  Isotope:   118   Z = 50   N = 118   A = 117.90 g/mole   abundance:  24.22 %
+         --->  Isotope:   119   Z = 50   N = 119   A = 118.90 g/mole   abundance:   8.59 %
+         --->  Isotope:   120   Z = 50   N = 120   A = 119.90 g/mole   abundance:  32.58 %
+         --->  Isotope:   122   Z = 50   N = 122   A = 121.90 g/mole   abundance:   4.63 %
+         --->  Isotope:   124   Z = 50   N = 124   A = 123.91 g/mole   abundance:   5.79 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:       HI    density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.873 cm   Imean: 462.393 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.79 %  ElmAbundance  50.00 %
-   --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction:  99.21 %  ElmAbundance  50.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   0.79 %  ElmAbundance  50.00 % 
+
+   --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole
+         --->  Isotope:  I127   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %
+          ElmMassFraction:  99.21 %  ElmAbundance  50.00 % 
+
 
 
 /run/verbose 2
@@ -226,18 +285,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.79s Real=3.04s Sys=0.21s
+  User=2.54s Real=2.54s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 461434	muPairProd : 63707	muBrems : 707
+ Number of process calls --->	muIoni : 462991	muPairProd : 63893	muBrems : 647
 
- Simulation: total CrossSection = 0.52585 /cm	 MeanFreePath = 1.9017 cm 	 massicCrossSection = 0.066817 cm2/g
+ Simulation: total CrossSection = 0.52753 /cm	 MeanFreePath = 1.8956 cm 	 massicCrossSection = 0.067031 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 806712998, 1863546607
+ Current couple of seeds = 1783091211, 617365115
 ----------------------------------------
 #
 /gun/particle pi+
@@ -271,7 +330,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 806712998, 1863546607
+ Current couple of seeds = 1783091211, 617365115
 ----------------------------------------
 Start Run processing.
 
@@ -297,17 +356,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.74s Real=3.01s Sys=0.27s
+  User=2.42s Real=2.42s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 433803	hPairProd : 59180	hBrems : 368
+ Number of process calls --->	hIoni : 433975	hPairProd : 59698	hBrems : 353
 
- Simulation: total CrossSection = 0.49335 /cm	 MeanFreePath = 2.027 cm 	 massicCrossSection = 0.062688 cm2/g
+ Simulation: total CrossSection = 0.49403 /cm	 MeanFreePath = 2.0242 cm 	 massicCrossSection = 0.062773 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1026755966, 1333996014
+ Current couple of seeds = 759122171, 619493205
 ----------------------------------------
 #
 /gun/particle proton
@@ -341,7 +400,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1026755966, 1333996014
+ Current couple of seeds = 759122171, 619493205
 ----------------------------------------
 Start Run processing.
 
@@ -367,28 +426,27 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.39s Real=2.65s Sys=0.23s
+  User=2.16s Real=2.19s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434403	hPairProd : 33880	hBrems : 3
+ Number of process calls --->	hIoni : 434995	hPairProd : 34062	hBrems : 9
 
- Simulation: total CrossSection = 0.46829 /cm	 MeanFreePath = 2.1354 cm 	 massicCrossSection = 0.059503 cm2/g
+ Simulation: total CrossSection = 0.46907 /cm	 MeanFreePath = 2.1319 cm 	 massicCrossSection = 0.059602 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1315625129, 1228206159
+ Current couple of seeds = 1671530062, 1223717994
 ----------------------------------------
 #
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
-
+RunManager is deleted.

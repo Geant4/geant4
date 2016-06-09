@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonElasticXS.hh,v 1.6 2010-10-12 06:02:09 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +57,7 @@
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
 class G4HadronNucleonXsc;
+class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -96,21 +96,22 @@ public:
   
 private:
 
-  G4double CoulombFactor(G4double kinEnergy, G4int A);
-
   G4BGGNucleonElasticXS & operator=(const G4BGGNucleonElasticXS &right);
   G4BGGNucleonElasticXS(const G4BGGNucleonElasticXS&);
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
+  G4double fSAIDHighEnergyLimit;
   G4double theGlauberFac[93];
   G4double theCoulombFac[93];
   G4int    theA[93];
 
   const G4ParticleDefinition*     particle;
+  const G4ParticleDefinition*     theProton;
   G4GlauberGribovCrossSection*    fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4HadronNucleonXsc*             fHadron;
+  G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isProton;
   G4bool                          isInitialized;
 };

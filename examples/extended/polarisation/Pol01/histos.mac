@@ -1,6 +1,6 @@
 # $Id: histos.mac,v 1.1 2006-11-17 09:49:41 vnivanch Exp $
 #
-# Macro file for "pol01.cc"
+# Macro file for "Pol01.cc"
 # (can be run in batch, without graphic)
 #
 /control/verbose 2
@@ -30,7 +30,7 @@
 ##/tracking/verbose 1
 ##/run/beamOn 1
 #
-/testem/histo/setFileName pol01.aida
+/testem/histo/setFileName Pol01.aida
 /testem/histo/setFileType xml
 /testem/histo/setHisto 1  110  0     11 MeV	#gamma energy
 /testem/histo/setHisto 2  100  -1.01   1.01 none	#gamma cos(theta)

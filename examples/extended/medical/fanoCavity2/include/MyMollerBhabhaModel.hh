@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyMollerBhabhaModel.hh,v 1.1 2007-10-15 16:20:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity2/include/MyMollerBhabhaModel.hh
+/// \brief Definition of the MyMollerBhabhaModel class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,14 +44,14 @@ class MyMollerBhabhaModel : public G4MollerBhabhaModel
 public:
 
   MyMollerBhabhaModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "myMollerBhabha");
+                      const G4String& nam = "myMollerBhabha");
 
   virtual ~MyMollerBhabhaModel();
-								 
+                                                                 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy);
+                                const G4ParticleDefinition*,
+                                G4double kineticEnergy,
+                                G4double cutEnergy);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

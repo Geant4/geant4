@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file errorpropagation/errprop.cc
+/// \brief Main program of the errorpropagation example
+//
 // ------------------------------------------------------------
 //      GEANT 4 example main
 // ------------------------------------------------------------
@@ -44,6 +47,7 @@
 #include "G4ErrorFreeTrajState.hh"
 
 #include "G4UImanager.hh"
+#include "G4SystemOfUnits.hh"
 
 void Initialize();
 G4ErrorTarget* BuildTarget( G4int iTarget );
@@ -155,7 +159,7 @@ void ProcessEvent( G4int iProp, size_t )
   G4ThreeVector xv3( 0, 0, 0 );
   G4ThreeVector pv3( 20.0*GeV, 0.0, 0.0 );
   G4ErrorTrajErr error( 5, 0 );
-  G4ErrorFreeTrajState* theG4ErrorTrajState = new G4ErrorFreeTrajState( "mu-", xv3, pv3, error );
+  G4ErrorFreeTrajState* g4ErrorTrajState = new G4ErrorFreeTrajState( "mu-", xv3, pv3, error );
 
   G4ErrorPropagatorManager* g4emgr = G4ErrorPropagatorManager::GetErrorPropagatorManager();
 
@@ -168,7 +172,7 @@ void ProcessEvent( G4int iProp, size_t )
   if( iProp == 0){
     // Propagate until G4ErrorTarget is found all in one go
      //ierr = 
-     g4emgr->Propagate( theG4ErrorTrajState, theTarget, theG4ErrorMode );
+     g4emgr->Propagate( g4ErrorTrajState, theTarget, theG4ErrorMode );
   } else if( iProp == 1){
 
     // Propagate until G4ErrorTarget is reached step by step
@@ -180,22 +184,22 @@ void ProcessEvent( G4int iProp, size_t )
     while( moreEvt ){
       
       //ierr = 
-      g4emgr->PropagateOneStep( theG4ErrorTrajState, theG4ErrorMode );
+      g4emgr->PropagateOneStep( g4ErrorTrajState, theG4ErrorMode );
       
       //---- Check if target is reached
-      if( g4emgr->GetPropagator()->CheckIfLastStep( theG4ErrorTrajState->GetG4Track() )) {
-	g4emgr->GetPropagator()->InvokePostUserTrackingAction( theG4ErrorTrajState->GetG4Track() );  
-	moreEvt = 0;
-	G4cout << "STEP_BY_STEP propagation: Last Step " << G4endl;
+      if( g4emgr->GetPropagator()->CheckIfLastStep( g4ErrorTrajState->GetG4Track() )) {
+        g4emgr->GetPropagator()->InvokePostUserTrackingAction( g4ErrorTrajState->GetG4Track() );  
+        moreEvt = 0;
+        G4cout << "STEP_BY_STEP propagation: Last Step " << G4endl;
       }
     }
   }
 
   G4cout << " $$$ PROPAGATION ENDED " << G4endl;
   // extract current state info
-  G4Point3D posEnd = theG4ErrorTrajState->GetPosition();
-  G4Normal3D momEnd = theG4ErrorTrajState->GetMomentum();
-  G4ErrorTrajErr errorEnd = theG4ErrorTrajState->GetError();
+  G4Point3D posEnd = g4ErrorTrajState->GetPosition();
+  G4Normal3D momEnd = g4ErrorTrajState->GetMomentum();
+  G4ErrorTrajErr errorEnd = g4ErrorTrajState->GetError();
 
   G4cout << " Position: " << posEnd << G4endl
          << " Momentum: " << momEnd << G4endl

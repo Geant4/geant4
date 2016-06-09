@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.cc,v 1.8 2010-03-18 00:19:12 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "ExN07PhysicsList.hh"
@@ -36,6 +35,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"              
+#include "G4SystemOfUnits.hh"
 
 ExN07PhysicsList::ExN07PhysicsList():  G4VUserPhysicsList()
 {
@@ -227,8 +227,8 @@ void ExN07PhysicsList::ConstructEM()
       pmanager->SetProcessOrdering(aPairProduction,     idxPostStep,4);
 
      } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino     
      G4hMultipleScattering* aMultipleScattering = new G4hMultipleScattering();
      aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);

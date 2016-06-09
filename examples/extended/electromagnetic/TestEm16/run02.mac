@@ -17,16 +17,16 @@
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate conv
+/process/inactivate Rayl
 #
 /gun/particle e-
 /gun/energy 10 TeV
 #
 # set up histos.  A reasonable choice for the upper limits is about 5*Ecr and 10*MeanFreePath
-/testem/histo/setHisto 1 100 0    20 MeV	#SynRad Energy
-/testem/histo/setHisto 2 100 0    20 MeV	#SynRad Power
-/testem/histo/setHisto 3 100 0    32 km		#Path Length
-/testem/histo/setFileName testem16_run02
-/testem/histo/setFileType hbook
+/analysis/setFileName run02
+/analysis/h1/set 1 100 0    20 MeV	#SynRad Energy
+/analysis/h1/set 2 100 0    20 MeV	#SynRad Power
+/analysis/h1/set 3 100 0    32 km	#Path Length
 #
 /testem/det/setSize 200 km
 /testem/det/setMat Vacuum

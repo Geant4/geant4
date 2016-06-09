@@ -25,7 +25,7 @@
 // * in compliance with any licensing, distribution and development   *
 // * policy adopted by the Geant4 Collaboration. This code has been   *
 // * written by QinetiQ Ltd for the European Space Agency, under ESA  *
-// * contract 19770/06/NL/JD (Technology Research Programme).                     *
+// * contract 19770/06/NL/JD (Technology Research Programme).         *
 // *                                                                  *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
@@ -33,16 +33,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/G4GlaubAADataSetHandler.cc
+/// \brief Implementation of the G4GlaubAADataSetHandler class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4GlaubAADataSetHandler.cc
 //
-// Version:		0.A
-// Date:		02/04/08
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		19770/06/NL/JD
+// Version:             0.A
+// Date:                02/04/08
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            19770/06/NL/JD
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////

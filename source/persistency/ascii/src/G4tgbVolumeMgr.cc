@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.10 2010-12-15 11:29:54 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbVolumeMgr
@@ -34,8 +33,10 @@
 // - Created.                                 P.Arce, CIEMAT (November 2007)
 // -------------------------------------------------------------------------
 
-#include "G4tgbVolume.hh"
 #include "G4tgbVolumeMgr.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4tgbVolume.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgbRotationMatrixMgr.hh"
 

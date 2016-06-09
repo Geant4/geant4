@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_EMV.cc,v 1.2 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -44,12 +43,31 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(G4int)
-                    :  G4VPhysicsConstructor("hInelastic LHEP_EMV") 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsLHEP_EMV);
+
+HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(G4int) 
+    :  G4VPhysicsConstructor("hInelastic LHEP_EMV")
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
 {}
 
 HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
 {}
 
 void HadronPhysicsLHEP_EMV::CreateModels()

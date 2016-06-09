@@ -49,6 +49,7 @@
 #include "globals.hh"
 #include <map>
 #include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
 
 using std::map;
 
@@ -74,21 +75,21 @@ public:
 public:
   // with description
   //
-  void AddIsotope( G4int, G4int, G4double, G4double);
+  void AddIsotope( G4int, G4int, G4double, G4double, G4double);
   // Add an isotope (Z,A,E) of rate to the table.
   //
-  G4double GetRate(G4int, G4int, G4double);
+  G4TwoVector GetRate(G4int, G4int, G4double);
   // Get the rate of isotoe (Z,A,E)
   //
   G4int Entries() const;
   // Get the total number of isotope spieces in the table
   //
-  map<G4ThreeVector,G4double>*  GetTheMap();
+  map<G4ThreeVector,G4TwoVector>*  GetTheMap();
   // Return the stl map! Mainly for printing.
   //
 private:
   
-  map<G4ThreeVector,G4double> fRadioactivity;
+  map<G4ThreeVector,G4TwoVector> fRadioactivity;
   
 };
 

@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx02/src/HepMCG4Interface.cc
+/// \brief Implementation of the HepMCG4Interface class
+//
 // ====================================================================
 //
 //   HepMCG4Interface.cc
-//   $Id: HepMCG4Interface.cc,v 1.5 2010-05-24 05:29:44 kmura Exp $
+//   $Id$
 //
 // ====================================================================
 #include "HepMCG4Interface.hh"
@@ -37,6 +40,8 @@
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4TransportationManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ////////////////////////////////////
 HepMCG4Interface::HepMCG4Interface()
@@ -70,7 +75,7 @@ G4bool HepMCG4Interface::CheckVertexInsideWorld
 
 ////////////////////////////////////////////////////////////////
 void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt, 
-				G4Event* g4event)
+                                G4Event* g4event)
 ////////////////////////////////////////////////////////////////
 {
   for(HepMC::GenEvent::vertex_const_iterator vitr= hepmcevt->vertices_begin();
@@ -79,12 +84,12 @@ void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
     // real vertex?
     G4bool qvtx=false;
     for (HepMC::GenVertex::particle_iterator 
-	   pitr= (*vitr)->particles_begin(HepMC::children);
-	 pitr != (*vitr)->particles_end(HepMC::children); ++pitr) {
+           pitr= (*vitr)->particles_begin(HepMC::children);
+         pitr != (*vitr)->particles_end(HepMC::children); ++pitr) {
 
       if (!(*pitr)->end_vertex() && (*pitr)->status()==1) {
-	qvtx=true;
-	break;
+        qvtx=true;
+        break;
       }
     }
     if (!qvtx) continue;
@@ -97,11 +102,11 @@ void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
     // create G4PrimaryVertex and associated G4PrimaryParticles
     G4PrimaryVertex* g4vtx= 
       new G4PrimaryVertex(xvtx.x()*mm, xvtx.y()*mm, xvtx.z()*mm, 
-			  xvtx.t()*mm/c_light);
+                          xvtx.t()*mm/c_light);
 
     for (HepMC::GenVertex::particle_iterator 
-	   vpitr= (*vitr)->particles_begin(HepMC::children);
-	 vpitr != (*vitr)->particles_end(HepMC::children); ++vpitr) {
+           vpitr= (*vitr)->particles_begin(HepMC::children);
+         vpitr != (*vitr)->particles_end(HepMC::children); ++vpitr) {
 
       if( (*vpitr)->status() != 1 ) continue;
 
@@ -109,7 +114,7 @@ void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
       pos= (*vpitr)-> momentum();
       G4LorentzVector p(pos.px(), pos.py(), pos.pz(), pos.e());
       G4PrimaryParticle* g4prim= 
-	new G4PrimaryParticle(pdgcode, p.x()*GeV, p.y()*GeV, p.z()*GeV);
+        new G4PrimaryParticle(pdgcode, p.x()*GeV, p.y()*GeV, p.z()*GeV);
 
       g4vtx-> SetPrimary(g4prim);
     }

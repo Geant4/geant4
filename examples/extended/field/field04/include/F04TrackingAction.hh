@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04TrackingAction.hh
+/// \brief Definition of the F04TrackingAction class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04TrackingAction_h
 #define F04TrackingAction_h 1
 
@@ -39,12 +36,12 @@ class F04TrackingAction : public G4UserTrackingAction {
 
   public:
 
-    F04TrackingAction() { };
-    ~F04TrackingAction() { };
-  
-    void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
-  
+    F04TrackingAction() {};
+    virtual ~F04TrackingAction() {};
+
+    virtual void PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
+
 };
 
 #endif

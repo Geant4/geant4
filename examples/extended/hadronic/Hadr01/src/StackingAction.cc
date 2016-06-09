@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,34 +35,34 @@
 // Created: 31.04.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
 
 #include "StackingAction.hh"
-
 #include "HistoManager.hh"
 #include "StackingMessenger.hh"
-
 #include "G4Track.hh"
-
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
 {
-  stackMessenger = new StackingMessenger(this);
-  histoManager   = HistoManager::GetPointer();
-  killSecondary  = false;
-  pname          = ""; 
+  fStackMessenger = new StackingMessenger(this);
+  fHistoManager   = HistoManager::GetPointer();
+  fKillSecondary  = false;
+  fParticle       = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::~StackingAction()
 {
-  delete stackMessenger;
+  delete fStackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,28 +72,39 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4ClassificationOfNewTrack status = fUrgent;
 
-  if (aTrack->GetTrackStatus() == fAlive) 
-    histoManager->ScoreNewTrack(aTrack);
-
-  const G4String name = aTrack->GetDefinition()->GetParticleName();
-
-  if(histoManager->GetVerbose() > 1 ) {
-    G4cout << "Track #"
-	   << aTrack->GetTrackID() << " of " << name
-	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
-	   << " produced by " 
-	   << histoManager->CurrentParticle()->GetParticleName()
-	   << " ID= " << aTrack->GetParentID()
-	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
-	   << G4endl;
+  if (aTrack->GetTrackStatus() == fAlive) {
+    fHistoManager->ScoreNewTrack(aTrack);
   }
-  if(aTrack->GetTrackID() == 1) return status;
+
+  const G4ParticleDefinition* part = aTrack->GetDefinition();
+
+  if(fHistoManager->GetVerbose() > 1 ) {
+    G4cout << "Track #"
+           << aTrack->GetTrackID() << " of " << part->GetParticleName()
+           << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
+           << " produced by Track ID= " << aTrack->GetParentID()
+           << G4endl;
+  }
 
   //stack or delete secondaries
-  if (killSecondary)      status = fKill;
-  else if(pname == name)  status = fKill; 
-
+  if(aTrack->GetTrackID() > 1) {  
+    if (fKillSecondary || fParticle == part) { status = fKill; }
+  }
   return status;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StackingAction::SetKillStatus(G4bool value)    
+{ 
+  fKillSecondary = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StackingAction::SetKill(const G4String& name)  
+{ 
+  fParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

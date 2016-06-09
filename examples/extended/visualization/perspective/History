@@ -16,6 +16,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+11th June 2012  John Allison  (exam-ext-vis-persp-V09-05-03)
+- Added .README for doxygen.
+
+9th April 2012  John Allison  (exam-ext-vis-persp-V09-05-02)
+- perspective.cc: Corrected vis user action extent.
+- vis.mac, visXm.mac: Removed arguments from /vis/scene/add/userAction.
+
+21st March 2012  John Allison  (exam-ext-vis-perps-V09-05-01)
+- Minor cosmetic improvements to comments.
+
+19th March 2012  John Allison  (exam-ext-vis-perps-V09-05-00)
+- Added README.
+- /perspectiveDemo/optionString: Improved guidance.
+
 9th November 2010  John Allison  (exam-ext-vis-perps-V09-03-00)
 - Introduced G4UIExecutive.
 - Introduced vis.mac, visXm.mac (was perspective.g4m).

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.4 2006-06-29 16:55:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm5/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,27 +40,25 @@
 class DetectorConstruction;
 class RunAction;
 class EventAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*,EventAction*,HistoManager* );
+    TrackingAction(DetectorConstruction*,RunAction*,EventAction*);
    ~TrackingAction() {};
    
-    void  PreUserTrackingAction(const G4Track*);   
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);   
+    virtual void PostUserTrackingAction(const G4Track*);
     
   private:
-    DetectorConstruction* detector;
-    RunAction*            runaction;    
-    EventAction*          eventaction;
-    HistoManager*         histoManager;
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAction;    
+    EventAction*          fEventAction;
     
-    G4double xstartAbs, xendAbs;
-    G4double primaryCharge;
+    G4double fXstartAbs, fXendAbs;
+    G4double fPrimaryCharge;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

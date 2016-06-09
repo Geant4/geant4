@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.cc,v 1.2 2010-10-21 09:21:41 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
+/// \file eventgenerator/pythia/decayer6/src/Pythia6.cc
+/// \brief Implementation of the Pythia6 class
+
+// ----------------------------------------------------------------------------
 // According to TPythia6 class from Root:
 // (The TPythia6 class is an interface class to F77 routines in Pythia6                //
 // CERNLIB event generators, written by T.Sjostrand.)                         
@@ -109,7 +112,8 @@ extern "C" {
 
 Pythia6*  Pythia6::fgInstance = 0;
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Pythia6* Pythia6::Instance() 
 {
 /// Static access method
@@ -119,14 +123,17 @@ Pythia6* Pythia6::Instance()
    return fgInstance;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//______________________________________________________________________________
 Pythia6::Pythia6()  
-  : fParticles(0)
+  : fParticles(0),
+    fPyjets(0),
+    fPydat1(0),
+    fPydat3(0)
 {
-/// Pythia6 constructor: creates a vector of Pythia6Particle in which it will store all
-/// particles. Note that there may be only one functional Pythia6 object
-/// at a time, so it's not use to create more than one instance of it.
+/// Pythia6 constructor: creates a vector of Pythia6Particle in which it will 
+/// store all particles. Note that there may be only one functional Pythia6 
+/// object at a time, so it's not use to create more than one instance of it.
   
    // Protect against multiple objects.   All access should be via the
    // Instance member function. 
@@ -143,10 +150,12 @@ Pythia6::Pythia6()
    fPydat3 = (Pydat3_t*) pythia6_common_address("PYDAT3");
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Pythia6::~Pythia6()
 {
-/// Destroy the object, delete and dispose all Pythia6Particles currently on list.
+/// Destroy the object, delete and dispose all Pythia6Particles currently on 
+/// list.
 
    if ( fParticles ) {
       ParticleVector::const_iterator it;
@@ -156,7 +165,8 @@ Pythia6::~Pythia6()
    }
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int Pythia6::Pycomp(int kf) 
 {
 /// Interface with fortran routine pycomp
@@ -164,7 +174,8 @@ int Pythia6::Pycomp(int kf)
    return pycomp(&kf);
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Pythia6::Py1ent(int ip, int kf, double pe, double theta, double phi)
 {
 /// Add one entry to the event record, i.e. either a parton or a
@@ -188,7 +199,8 @@ void Pythia6::Py1ent(int ip, int kf, double pe, double theta, double phi)
    py1ent(ip, kf, pe, theta, phi);
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int Pythia6::ImportParticles(ParticleVector* particles, const char* option)
 {
 ///  Default primary creation method. It reads the /HEPEVT/ common block which
@@ -265,3 +277,5 @@ int Pythia6::ImportParticles(ParticleVector* particles, const char* option)
 
    return nparts;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

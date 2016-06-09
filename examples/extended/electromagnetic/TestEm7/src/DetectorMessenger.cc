@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.3 2006-06-29 16:58:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,156 +45,156 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance(" detector control.");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance(" detector control.");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction commands");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction commands");
       
-  MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  MaterCmd->SetGuidance("Select material of the box.");
-  MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the box.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeXCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeX",this);
-  SizeXCmd->SetGuidance("Set sizeX of the absorber");
-  SizeXCmd->SetParameterName("SizeX",false);
-  SizeXCmd->SetRange("SizeX>0.");
-  SizeXCmd->SetUnitCategory("Length");
-  SizeXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeXCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeX",this);
+  fSizeXCmd->SetGuidance("Set sizeX of the absorber");
+  fSizeXCmd->SetParameterName("SizeX",false);
+  fSizeXCmd->SetRange("SizeX>0.");
+  fSizeXCmd->SetUnitCategory("Length");
+  fSizeXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeYZ",this);
-  SizeYZCmd->SetGuidance("Set sizeYZ of the absorber");
-  SizeYZCmd->SetParameterName("SizeYZ",false);
-  SizeYZCmd->SetRange("SizeYZ>0.");
-  SizeYZCmd->SetUnitCategory("Length");
-  SizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeYZ",this);
+  fSizeYZCmd->SetGuidance("Set sizeYZ of the absorber");
+  fSizeYZCmd->SetParameterName("SizeYZ",false);
+  fSizeYZCmd->SetRange("SizeYZ>0.");
+  fSizeYZCmd->SetUnitCategory("Length");
+  fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
         
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  TalNbCmd = new G4UIcmdWithAnInteger("/testem/det/tallyNumber",this);
-  TalNbCmd->SetGuidance("Set number of Tallies.");
-  TalNbCmd->SetParameterName("tallyNb",false);
-  TalNbCmd->SetRange("tallyNb>=0");
-  TalNbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTalNbCmd = new G4UIcmdWithAnInteger("/testem/det/tallyNumber",this);
+  fTalNbCmd->SetGuidance("Set number of fTallies.");
+  fTalNbCmd->SetParameterName("tallyNb",false);
+  fTalNbCmd->SetRange("tallyNb>=0");
+  fTalNbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TalDefCmd = new G4UIcommand("/testem/det/tallyDefinition",this);
-  TalDefCmd->SetGuidance("Set tally nb, material, box dimensions.");
-  TalDefCmd->SetGuidance("  tally number : from 1 to tallyNumber");
-  TalDefCmd->SetGuidance("  material name");
-  TalDefCmd->SetGuidance("  dimensions (3-vector with unit)");
+  fTalDefCmd = new G4UIcommand("/testem/det/tallyDefinition",this);
+  fTalDefCmd->SetGuidance("Set tally nb, material, box dimensions.");
+  fTalDefCmd->SetGuidance("  tally number : from 1 to tallyNumber");
+  fTalDefCmd->SetGuidance("  material name");
+  fTalDefCmd->SetGuidance("  dimensions (3-vector with unit)");
   //
-  G4UIparameter* TalNbPrm = new G4UIparameter("tallyNb",'i',false);
-  TalNbPrm->SetGuidance("tally number : from 1 to tallyNumber");
-  TalNbPrm->SetParameterRange("tallyNb>0");
-  TalDefCmd->SetParameter(TalNbPrm);
+  G4UIparameter* fTalNbPrm = new G4UIparameter("tallyNb",'i',false);
+  fTalNbPrm->SetGuidance("tally number : from 1 to tallyNumber");
+  fTalNbPrm->SetParameterRange("tallyNb>0");
+  fTalDefCmd->SetParameter(fTalNbPrm);
   //
   G4UIparameter* MatPrm = new G4UIparameter("material",'s',false);
   MatPrm->SetGuidance("material name");
-  TalDefCmd->SetParameter(MatPrm);
+  fTalDefCmd->SetParameter(MatPrm);
   //    
   G4UIparameter* SizeXPrm = new G4UIparameter("sizeX",'d',false);
   SizeXPrm->SetGuidance("sizeX");
   SizeXPrm->SetParameterRange("sizeX>0.");
-  TalDefCmd->SetParameter(SizeXPrm);
+  fTalDefCmd->SetParameter(SizeXPrm);
   //    
   G4UIparameter* SizeYPrm = new G4UIparameter("sizeY",'d',false);
   SizeYPrm->SetGuidance("sizeY");
   SizeYPrm->SetParameterRange("sizeY>0.");
-  TalDefCmd->SetParameter(SizeYPrm);
+  fTalDefCmd->SetParameter(SizeYPrm);
   //    
   G4UIparameter* SizeZPrm = new G4UIparameter("sizeZ",'d',false);
   SizeZPrm->SetGuidance("sizeZ");
   SizeZPrm->SetParameterRange("sizeZ>0.");
-  TalDefCmd->SetParameter(SizeZPrm);    
+  fTalDefCmd->SetParameter(SizeZPrm);    
   //
   G4UIparameter* unitPrm = new G4UIparameter("unit",'s',false);
   unitPrm->SetGuidance("unit of dimensions");
   G4String unitList = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
   unitPrm->SetParameterCandidates(unitList);
-  TalDefCmd->SetParameter(unitPrm);
+  fTalDefCmd->SetParameter(unitPrm);
   //
-  TalDefCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTalDefCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TalPosiCmd = new G4UIcommand("/testem/det/tallyPosition",this);
-  TalPosiCmd->SetGuidance("Set tally nb, position");
-  TalPosiCmd->SetGuidance("  tally number : from 1 to tallyNumber");
-  TalPosiCmd->SetGuidance("  position (3-vector with unit)");
+  fTalPosiCmd = new G4UIcommand("/testem/det/tallyPosition",this);
+  fTalPosiCmd->SetGuidance("Set tally nb, position");
+  fTalPosiCmd->SetGuidance("  tally number : from 1 to tallyNumber");
+  fTalPosiCmd->SetGuidance("  position (3-vector with unit)");
   //
-  G4UIparameter* TalNumPrm = new G4UIparameter("tallyNum",'i',false);
-  TalNumPrm->SetGuidance("tally number : from 1 to tallyNumber");
-  TalNumPrm->SetParameterRange("tallyNum>0");
-  TalPosiCmd->SetParameter(TalNumPrm);
+  G4UIparameter* fTalNumPrm = new G4UIparameter("tallyNum",'i',false);
+  fTalNumPrm->SetGuidance("tally number : from 1 to tallyNumber");
+  fTalNumPrm->SetParameterRange("tallyNum>0");
+  fTalPosiCmd->SetParameter(fTalNumPrm);
   //    
   G4UIparameter* PosiXPrm = new G4UIparameter("posiX",'d',false);
   PosiXPrm->SetGuidance("position X");
-  TalPosiCmd->SetParameter(PosiXPrm);
+  fTalPosiCmd->SetParameter(PosiXPrm);
   //    
   G4UIparameter* PosiYPrm = new G4UIparameter("posiY",'d',false);
   PosiYPrm->SetGuidance("position Y");
-  TalPosiCmd->SetParameter(PosiYPrm);
+  fTalPosiCmd->SetParameter(PosiYPrm);
   //
   G4UIparameter* PosiZPrm = new G4UIparameter("posiZ",'d',false);
   PosiZPrm->SetGuidance("position Z");
-  TalPosiCmd->SetParameter(PosiZPrm);      
+  fTalPosiCmd->SetParameter(PosiZPrm);      
   //
   G4UIparameter* unitPr = new G4UIparameter("unit",'s',false);
   unitPr->SetGuidance("unit of position");
   unitPr->SetParameterCandidates(unitList);
-  TalPosiCmd->SetParameter(unitPr);
+  fTalPosiCmd->SetParameter(unitPr);
   //
-  TalPosiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTalPosiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
         
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete SizeXCmd;
-  delete SizeYZCmd; 
-  delete MagFieldCmd;
-  delete TalNbCmd;
-  delete TalDefCmd;
-  delete TalPosiCmd;
-  delete UpdateCmd;
-  delete detDir;  
-  delete testemDir;
+  delete fMaterCmd;
+  delete fSizeXCmd;
+  delete fSizeYZCmd; 
+  delete fMagFieldCmd;
+  delete fTalNbCmd;
+  delete fTalDefCmd;
+  delete fTalPosiCmd;
+  delete fUpdateCmd;
+  delete fDetDir;  
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == MaterCmd )
-   { Detector->SetMaterial(newValue);}
+  if( command == fMaterCmd )
+   { fDetector->SetMaterial(newValue);}
    
-  if( command == SizeXCmd )
-   { Detector->SetSizeX(SizeXCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeXCmd )
+   { fDetector->SetSizeX(fSizeXCmd->GetNewDoubleValue(newValue));}
    
-  if( command == SizeYZCmd )
-   { Detector->SetSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeYZCmd )
+   { fDetector->SetSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}
       
-  if( command == MagFieldCmd )
-   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fMagFieldCmd )
+   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
       
-  if( command == TalNbCmd )
-   { Detector->SetTallyNumber(TalNbCmd->GetNewIntValue(newValue));}
+  if( command == fTalNbCmd )
+   { fDetector->SetTallyNumber(fTalNbCmd->GetNewIntValue(newValue));}
    
-  if (command == TalDefCmd)
+  if (command == fTalDefCmd)
    {
      G4int num; G4double v1, v2, v3;
      G4String unt, mat;
@@ -202,11 +204,11 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      v1 *= G4UIcommand::ValueOf(unt);
      v2 *= G4UIcommand::ValueOf(unt);
      v3 *= G4UIcommand::ValueOf(unt);          
-     Detector->SetTallyMaterial (num,material);
-     Detector->SetTallySize(num,G4ThreeVector(v1,v2,v3));
+     fDetector->SetTallyMaterial (num,material);
+     fDetector->SetTallySize(num,G4ThreeVector(v1,v2,v3));
    }
    
-  if (command == TalPosiCmd)
+  if (command == fTalPosiCmd)
    {
      G4int num; G4double v1, v2, v3;
      G4String unt;
@@ -215,11 +217,11 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      v1 *= G4UIcommand::ValueOf(unt);
      v2 *= G4UIcommand::ValueOf(unt);
      v3 *= G4UIcommand::ValueOf(unt);          
-     Detector->SetTallyPosition(num,G4ThreeVector(v1,v2,v3));
+     fDetector->SetTallyPosition(num,G4ThreeVector(v1,v2,v3));
    }      
 
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

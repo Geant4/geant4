@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AlphaGEMProbability.cc,v 1.5 2009-09-15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -33,6 +32,7 @@
 // (based on notes added on proof in Dostrovskii's paper)
 
 #include "G4AlphaGEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4AlphaGEMProbability::G4AlphaGEMProbability() :
     G4GEMProbability(4,2,0.0) // A,Z,Gamma

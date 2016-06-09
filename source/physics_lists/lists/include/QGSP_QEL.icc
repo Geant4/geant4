@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_QEL.icc,v 1.7 2011-01-05 15:40:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -39,11 +38,14 @@
 // 26.04.2007 G.Folger: Enable quasielastic for QGS string model
 // 16.05.2007 V.Ivanchenko: rename EM builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -51,14 +53,12 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -70,13 +70,13 @@
 template<class T> TQGSP_QEL<T>::TQGSP_QEL(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+  // defaultCutValue = 1.0*CLHEP::mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_QEL 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_QEL 2.0"<<G4endl;
   G4cout <<G4endl;
 
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
@@ -99,10 +99,10 @@ template<class T> TQGSP_QEL<T>::TQGSP_QEL(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP("hadron",quasiElastic=true));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4IonPhysics(ver));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));

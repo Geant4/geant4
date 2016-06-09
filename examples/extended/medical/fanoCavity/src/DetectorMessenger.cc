@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.3 2007-11-05 13:44:18 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,84 +42,84 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:fDetector(Det)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance(" detector control.");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance(" detector control.");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction commands");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction commands");
       
-  wallMater = new G4UIcmdWithAString("/testem/det/wallMater",this);
-  wallMater->SetGuidance("Set material of the wall.");
-  wallMater->SetParameterName("wallMat",false);
+  fWallMater = new G4UIcmdWithAString("/testem/det/wallMater",this);
+  fWallMater->SetGuidance("Set material of the wall.");
+  fWallMater->SetParameterName("wallMat",false);
   
-  wallThick = new G4UIcmdWithADoubleAndUnit("/testem/det/wallThickness",this);
-  wallThick->SetGuidance("Set tickness of the wall");
-  wallThick->SetParameterName("wallTick",false);
-  wallThick->SetRange("wallTick>0.");
-  wallThick->SetUnitCategory("Length");
+  fWallThick = new G4UIcmdWithADoubleAndUnit("/testem/det/wallThickness",this);
+  fWallThick->SetGuidance("Set tickness of the wall");
+  fWallThick->SetParameterName("wallTick",false);
+  fWallThick->SetRange("wallTick>0.");
+  fWallThick->SetUnitCategory("Length");
     
-  cavMater = new G4UIcmdWithAString("/testem/det/cavityMater",this);
-  cavMater->SetGuidance("Set material of the cavity.");
-  cavMater->SetParameterName("cavMat",false);
+  fCavMater = new G4UIcmdWithAString("/testem/det/cavityMater",this);
+  fCavMater->SetGuidance("Set material of the cavity.");
+  fCavMater->SetParameterName("cavMat",false);
   
-  cavThick = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityThickness",this);
-  cavThick->SetGuidance("Set tickness of the cavity");
-  cavThick->SetParameterName("cavityTick",false);
-  cavThick->SetRange("cavityTick>0.");
-  cavThick->SetUnitCategory("Length");
+  fCavThick = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityThickness",this);
+  fCavThick->SetGuidance("Set tickness of the cavity");
+  fCavThick->SetParameterName("cavityTick",false);
+  fCavThick->SetRange("cavityTick>0.");
+  fCavThick->SetUnitCategory("Length");
   
-  cavRadius = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityRadius",this);
-  cavRadius->SetGuidance("Set radius of the cavity");
-  cavRadius->SetParameterName("cavityRadius",false);
-  cavRadius->SetRange("cavityRadius>0.");
-  cavRadius->SetUnitCategory("Length");
+  fCavRadius = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityRadius",this);
+  fCavRadius->SetGuidance("Set radius of the cavity");
+  fCavRadius->SetParameterName("cavityRadius",false);
+  fCavRadius->SetRange("cavityRadius>0.");
+  fCavRadius->SetUnitCategory("Length");
         
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fUpdateCmd->SetGuidance("Update geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete wallMater;
-  delete wallThick;
+  delete fWallMater;
+  delete fWallThick;
   
-  delete cavMater;
-  delete cavThick;
-  delete cavRadius;
+  delete fCavMater;
+  delete fCavThick;
+  delete fCavRadius;
   
-  delete UpdateCmd;
-  delete detDir;  
-  delete testemDir;
+  delete fUpdateCmd;
+  delete fDetDir;  
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == wallMater )
-   { Detector->SetWallMaterial(newValue);}
+  if( command == fWallMater )
+   { fDetector->SetWallMaterial(newValue);}
    
-  if( command == wallThick )
-   { Detector->SetWallThickness(wallThick->GetNewDoubleValue(newValue));}
+  if( command == fWallThick )
+   { fDetector->SetWallThickness(fWallThick->GetNewDoubleValue(newValue));}
       
-  if( command == cavMater )
-   { Detector->SetCavityMaterial(newValue);}
+  if( command == fCavMater )
+   { fDetector->SetCavityMaterial(newValue);}
    
-  if( command == cavThick )
-   { Detector->SetCavityThickness(cavThick->GetNewDoubleValue(newValue));}
+  if( command == fCavThick )
+   { fDetector->SetCavityThickness(fCavThick->GetNewDoubleValue(newValue));}
    
-  if( command == cavRadius )
-   { Detector->SetCavityRadius(cavRadius->GetNewDoubleValue(newValue));}
+  if( command == fCavRadius )
+   { fDetector->SetCavityRadius(fCavRadius->GetNewDoubleValue(newValue));}
                 
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01EventActionMessenger.cc
+/// \brief Implementation of the F01EventActionMessenger class
 //
-// $Id: F01EventActionMessenger.cc,v 1.4 2006-06-29 17:16:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -42,50 +44,41 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-F01EventActionMessenger::F01EventActionMessenger(F01EventAction* EvAct)
-:eventAction(EvAct)
+F01EventActionMessenger::F01EventActionMessenger(F01EventAction* evAct)
+ : G4UImessenger(),
+   fEventAction(evAct),
+   fSetVerboseCmd(0),
+   fPrintCmd(0)   
 { 
-  setVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
-  setVerboseCmd->SetGuidance("Set verbose level ." );
-  setVerboseCmd->SetParameterName("level",true);
-  setVerboseCmd->SetDefaultValue(0);
+  fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
+  fSetVerboseCmd->SetGuidance("Set verbose level ." );
+  fSetVerboseCmd->SetParameterName("level",true);
+  fSetVerboseCmd->SetDefaultValue(0);
   
-  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
-  
-  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);     
+  fPrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  fPrintCmd->SetGuidance("Print events modulo n");
+  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetRange("EventNb>0");
+  fPrintCmd->AvailableForStates(G4State_Idle);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01EventActionMessenger::~F01EventActionMessenger()
 {
-  delete setVerboseCmd;
-  delete DrawCmd;
-  delete PrintCmd;    
+  delete fSetVerboseCmd;
+  delete fPrintCmd;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 { 
-  if(command == setVerboseCmd)
-    {eventAction->setEventVerbose(setVerboseCmd->GetNewIntValue(newValue));}
+  if(command == fSetVerboseCmd)
+    {fEventAction->SetEventVerbose(fSetVerboseCmd->GetNewIntValue(newValue));}
     
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-    
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}               
+  if(command == fPrintCmd)
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

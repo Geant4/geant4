@@ -63,6 +63,7 @@
 #include <G4VisManager.hh>
 #include <G4Scene.hh>
 #include <G4VModel.hh>
+#include <G4Version.hh>
 #include "CexmcRunManager.hh"
 #include "CexmcRunManagerMessenger.hh"
 #include "CexmcRunAction.hh"
@@ -857,7 +858,7 @@ void  CexmcRunManager::SaveCurrentTPTEvent(
                                 const CexmcAngularRangeList &  angularRanges,
                                 G4bool  writeToDatabase )
 {
-    CexmcRun *  run( static_cast< const CexmcRun * >( currentRun ) );
+    CexmcRun *  run( static_cast< CexmcRun * >( currentRun ) );
 
     if ( ! run )
         return;
@@ -1315,12 +1316,21 @@ void  CexmcRunManager::RegisterScenePrimitives( void )
         return;
 
     /* G4Scene declarations lack this kind of typedef */
-    typedef std::vector< G4VModel * >  MList;
+#if G4VERSION_NUMBER < 960
+    typedef std::vector< G4VModel * >      MList;
+#else
+    typedef std::vector< G4Scene::Model >  MList;
+#endif
     const MList &  mList( curScene->GetRunDurationModelList() );
 
     for ( MList::const_iterator  k( mList.begin() ); k != mList.end(); ++k )
     {
-        if ( ( *k )->GetGlobalDescription() == CexmcScenePrimitivesDescription )
+#if G4VERSION_NUMBER < 960
+        const G4String &  modelDesc( ( *k )->GetGlobalDescription() );
+#else
+        const G4String &  modelDesc( k->fpModel->GetGlobalDescription() );
+#endif
+        if ( modelDesc == CexmcScenePrimitivesDescription )
             return;
     }
 

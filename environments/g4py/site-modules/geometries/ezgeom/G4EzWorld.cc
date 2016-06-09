@@ -38,6 +38,7 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4RunManager.hh"
+#include "G4PhysicalConstants.hh"
 
 G4VPhysicalVolume* G4EzWorld::world= G4EzWorld::CreateWorld();
 

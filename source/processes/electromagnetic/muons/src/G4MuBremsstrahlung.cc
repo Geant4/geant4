@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.42 2009-02-20 14:48:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +64,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MuBremsstrahlung.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
@@ -83,6 +83,8 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
     isInitialised(false)
 {
   SetProcessSubType(fBremsstrahlung);
+  SetSecondaryParticle(G4Gamma::Gamma());
+  SetIonisation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -117,8 +119,6 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
     isInitialised = true;
 
     theParticle = part;
-    SetSecondaryParticle(G4Gamma::Gamma());
-    SetIonisation(false);
 
     if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.9 2010-08-03 07:10:09 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

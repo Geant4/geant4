@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.25 2009-02-23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -114,8 +113,8 @@ inline G4double      G4QParticle::GetWidth()         {return aQPDG.GetWidth();}
 inline G4double G4QParticle::MinMassOfFragm()
 {
   G4int nCh=aDecay.size();
-  G4double m=GetMass();
-  G4double min=m;
+  G4double mass=GetMass();
+  G4double min=mass;
   if(nCh)
   {
     min=aDecay[0]->GetMinMass();
@@ -126,7 +125,7 @@ inline G4double G4QParticle::MinMassOfFragm()
     }
   }
   G4double w=GetWidth();
-  G4double lim=m+.001;
+  G4double lim=mass+.001;
   if(w)   lim-=1.5*w;
   if(min<lim) min=lim;
   return min;

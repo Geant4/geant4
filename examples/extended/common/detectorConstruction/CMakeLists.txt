@@ -1,12 +1,58 @@
+#----------------------------------------------------------------------------
+# Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+project(detectorConstruction)
 
-set(name testDetectorConstruction)
-project(${name})
+#----------------------------------------------------------------------------
+# Find Geant4 package, no UI and Vis drivers activated
+#
 find_package(Geant4 REQUIRED)
+
+#----------------------------------------------------------------------------
+# Setup Geant4 include directories and compile definitions
+#
 include(${Geant4_USE_FILE})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
-file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
-add_executable(${name} EXCLUDE_FROM_ALL ${name}.cc ${sources})
-target_link_libraries(${name} ${Geant4_LIBRARIES})
+#----------------------------------------------------------------------------
+# Locate sources and headers for this project
+#
+include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${Geant4_INCLUDE_DIR})
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+
+#----------------------------------------------------------------------------
+# Add the executable, and link it to the Geant4 libraries
+#
+add_executable(testDetectorConstruction testDetectorConstruction.cc ${sources} ${headers})
+target_link_libraries(testDetectorConstruction ${Geant4_LIBRARIES} )
+
+#----------------------------------------------------------------------------
+# Copy all scripts to the build directory, i.e. the directory in which we
+# build detectorConstruction. This is so that we can run the executable directly because it
+# relies on these scripts being in the current working directory.
+#
+set(detectorConstruction_SCRIPTS
+   
+  )
+
+foreach(_script ${detectorConstruction_SCRIPTS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+    )
+endforeach()
+
+#----------------------------------------------------------------------------
+# Add program to the project targets
+# (this avoids the need of typing the program name after make)
+#
+add_custom_target(detectorConstruction DEPENDS testDetectorConstruction)
+
+#----------------------------------------------------------------------------
+# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
+#
+install(TARGETS testDetectorConstruction DESTINATION bin)
+

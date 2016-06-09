@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03FieldMessenger.hh
+/// \brief Definition of the F03FieldMessenger class
 //
-// $Id: F03FieldMessenger.hh,v 1.4 2006-06-29 17:18:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -35,12 +35,11 @@
 #ifndef F03FieldMessenger_h
 #define F03FieldMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class F03FieldSetup;
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
@@ -50,25 +49,18 @@ class F03FieldMessenger: public G4UImessenger
 {
   public:
     F03FieldMessenger(F03FieldSetup* );
-   ~F03FieldMessenger();
+    ~F03FieldMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
-    void SetNewValue(G4UIcommand*, G4int);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
 
     F03FieldSetup*             fEMfieldSetup;
-    
-    G4UIdirectory*             F03detDir;
-
-    G4UIcmdWithAnInteger*      StepperCmd;
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* MinStepCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
-
-    G4UIcmdWithAString*        AbsMaterCmd;
-
-
+    G4UIdirectory*             fFieldDir;
+    G4UIcmdWithAnInteger*      fStepperCmd;
+    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* fMinStepCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 #endif

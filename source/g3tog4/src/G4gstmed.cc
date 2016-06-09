@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gstmed.cc,v 1.7 2006-06-29 18:15:02 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // The last G4int argument of G4gstmed(..) is used for sending
 // info whether the Geant3 tracking medium parameters should
@@ -33,6 +32,7 @@
 //
 // by I.Hrivnacova, 27 Sep 99
 
+#include "G4SystemOfUnits.hh"
 #include "G4LogicalVolume.hh"
 #include "G3toG4.hh"
 #include "G3MatTable.hh"

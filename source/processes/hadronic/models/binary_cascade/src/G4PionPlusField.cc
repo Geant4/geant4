@@ -35,13 +35,15 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4PionPlusField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4PionPlus.hh"
 #include "G4HadTmpUtil.hh"
-
 
 G4PionPlusField::G4PionPlusField(G4V3DNucleus * nucleus, G4double coeff)
   : G4VNuclearField(nucleus)
@@ -52,28 +54,6 @@ G4PionPlusField::G4PionPlusField(G4V3DNucleus * nucleus, G4double coeff)
 
 G4PionPlusField::~G4PionPlusField()
 { }
-
-
-const G4PionPlusField & G4PionPlusField::operator=(const G4PionPlusField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionPlusField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4PionPlusField::operator==(const G4PionPlusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionPlusField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4PionPlusField::operator!=(const G4PionPlusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionPlusField::operator!= meant not to be accessible");
-  return 1;
-}
-
 
 G4double G4PionPlusField::GetField(const G4ThreeVector & aPosition)
 {

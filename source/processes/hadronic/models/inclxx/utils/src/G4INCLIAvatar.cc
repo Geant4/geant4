@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * IAvatar.cc
  *
- *  Created on: 4 juin 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 juin 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLIAvatar.hh"
@@ -50,18 +50,23 @@ namespace G4INCL {
 
   long IAvatar::nextID = 1;
 
-  IAvatar::IAvatar() {
+  IAvatar::IAvatar() :
+    type(UnknownAvatarType),
+    theTime(0.)
+  {
     ID = nextID;
     nextID++;
   }
 
-  IAvatar::IAvatar(G4double time) : theTime(time) {
+  IAvatar::IAvatar(G4double time) :
+    type(UnknownAvatarType),
+    theTime(time)
+  {
     ID = nextID;
     nextID++;
   }
 
   IAvatar::~IAvatar() {
-    // TODO Auto-generated destructor stub
   }
 
   std::string IAvatar::toString() {
@@ -85,8 +90,9 @@ namespace G4INCL {
   {
     preInteraction();
     IChannel *c = getChannel();
-    if( !c )
+    if( !c ) {
       return new FinalState;
+    }
     FinalState *fs = c->getFinalState();
     fs = postInteraction(fs);
     delete c;

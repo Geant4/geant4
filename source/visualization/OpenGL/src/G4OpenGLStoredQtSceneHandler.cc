@@ -35,9 +35,12 @@
 #include "G4OpenGLStoredQtSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
+#include "G4Text.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
 #include "G4OpenGLQtViewer.hh"
+#include <typeinfo>
+#include <sstream>
 
 G4OpenGLStoredQtSceneHandler::G4OpenGLStoredQtSceneHandler
 (G4VGraphicsSystem& system,
@@ -48,14 +51,25 @@ G4OpenGLStoredSceneHandler (system, name)
 G4OpenGLStoredQtSceneHandler::~G4OpenGLStoredQtSceneHandler ()
 {}
 
-void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
-(size_t currentPOListIndex)
+G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
+(const G4Visible& visible, size_t currentPOListIndex)
 {
+  G4bool usesGLCommands = true;
+
+  try {
+    const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+    G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
+    pG4TextPlus->fProcessing2D = fProcessing2D;
+    fPOList[currentPOListIndex].fpG4TextPlus = pG4TextPlus;
+    usesGLCommands = false;
+  }
+  catch (std::bad_cast) {}  // No special action if not text.  Just carry on.
 
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  
-  if (pPVModel) {
+  G4LogicalVolumeModel* pLVModel =
+    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+  if (pPVModel && !pLVModel) {
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of
@@ -65,7 +79,6 @@ void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // actually selected, i.e., not culled.
     typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
     typedef std::vector<PVNodeID> PVPath;
-    const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel
@@ -81,52 +94,44 @@ void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // LAST.)  SO WE MUST BE MORE SOPHISTICATED IN CONSTRUCTING A
     // TREE.
 
-    
-    // Name, currentPOindex, copyNo
-    std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect;
-    std::pair<std::string,std::pair <unsigned int, unsigned int> > treeInfos;
-
-    for (PVPath::const_iterator i = drawnPVPath.begin();
-	 i != drawnPVPath.end(); ++i) {
-      treeInfos.second.first = currentPOListIndex;
-      treeInfos.second.second = i->GetCopyNo();
-      treeInfos.first = i->GetPhysicalVolume()->GetName().data();
-      treeVect.push_back(treeInfos);
-    }
-
     // build a path for tree viewer
     G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
     if ( pGLViewer ) {
-      pGLViewer->addTreeElement(fpModel->GetCurrentDescription(),treeVect);
+      pGLViewer->addPVSceneTreeElement(fpModel->GetCurrentDescription(),pPVModel,currentPOListIndex);
     }
 
   } else {  // Not from a G4PhysicalVolumeModel.
 
     if (fpModel) {
-      // Create a place for current solid in root of scene graph tree...
-      // Name, currentPOindex, copyNo
-      std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect;
-      std::pair<std::string,std::pair <unsigned int, unsigned int> > treeInfos;
-      
-      treeInfos.second.first = currentPOListIndex;
-      treeInfos.second.second = 0;
-      treeInfos.first = fpModel->GetCurrentTag().data();
-      treeVect.push_back(treeInfos);
+
       
       // build a path for tree viewer
       G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
       if ( pGLViewer ) {
-        pGLViewer->addTreeElement(fpModel->GetCurrentDescription(),treeVect);
+        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),currentPOListIndex,fpModel->GetCurrentDescription().data(),visible);
       }
     }
   }
+
+  return usesGLCommands;
 }
 
-void G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
-(size_t)
+G4bool G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
+(const G4Visible& visible, size_t currentTOListIndex)
 {
-  //G4cout << "G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: index: "
-  //	 << currentTOListIndex << G4endl;
+
+  G4bool usesGLCommands = true;
+
+  try {
+    const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+    G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
+    pG4TextPlus->fProcessing2D = fProcessing2D;
+    fTOList[currentTOListIndex].fpG4TextPlus = pG4TextPlus;
+    usesGLCommands = false;
+  }
+  catch (std::bad_cast) {}  // Do nothing if not text.
+
+  return usesGLCommands;
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearStore () {
@@ -134,8 +139,14 @@ void G4OpenGLStoredQtSceneHandler::ClearStore () {
   //G4cout << "G4OpenGLStoredQtSceneHandler::ClearStore" << G4endl;
 
   G4OpenGLStoredSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
-  // Delete Qt Tree.
+  // Should recreate the tree
+  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+  if ( pGLQtViewer ) {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLStoredQtSceneHandler::ClearStore_________________________________\n" );
+#endif
+    pGLQtViewer->clearTreeWidget();
+  }
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
@@ -144,12 +155,32 @@ void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
 
   G4OpenGLStoredSceneHandler::ClearTransientStore ();
 
+  // Should recreate the tree
+  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+  if ( pGLQtViewer ) {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLStoredQtSceneHandler::ClearTransient_________________________________\n" );
+#endif
+    //    pGLQtViewer->clearTreeWidget();
+  }
   // Make sure screen corresponds to graphical database...
+  // FIXME : L.Garnier April 2012 : Could cause a infinite loop ?
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
+}
+
+void G4OpenGLStoredQtSceneHandler::SetScene(G4Scene* pScene){
+
+  if (pScene != fpScene) {
+    G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+    if ( pGLQtViewer ) {
+      pGLQtViewer->clearTreeWidget();
+    }
+  }
+  G4VSceneHandler::SetScene(pScene);
 }
 
 #endif

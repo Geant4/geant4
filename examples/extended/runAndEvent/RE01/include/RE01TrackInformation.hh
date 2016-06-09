@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/include/RE01TrackInformation.hh
+/// \brief Definition of the RE01TrackInformation class
 //
-// $Id: RE01TrackInformation.hh,v 1.2 2006-06-29 17:43:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef RE01TrackInformation_h
@@ -40,63 +42,51 @@
 
 class RE01TrackInformation : public G4VUserTrackInformation 
 {
-  public:
-    RE01TrackInformation();
-    RE01TrackInformation(const G4Track* aTrack);
-    RE01TrackInformation(const RE01TrackInformation* aTrackInfo);
-    virtual ~RE01TrackInformation();
+public:
+  RE01TrackInformation();
+  RE01TrackInformation(const G4Track* aTrack);
+  RE01TrackInformation(const RE01TrackInformation* aTrackInfo);
+  virtual ~RE01TrackInformation();
    
-    inline void *operator new(size_t);
-    inline void operator delete(void *aTrackInfo);
-    inline int operator ==(const RE01TrackInformation& right) const
-    {return (this==&right);}
+  inline void *operator new(size_t);
+  inline void operator delete(void *aTrackInfo);
 
-    RE01TrackInformation& operator =(const RE01TrackInformation& right);
+  RE01TrackInformation& operator =(const RE01TrackInformation& right);
+  
+  void SetSourceTrackInformation(const G4Track* aTrack);
+  virtual void Print() const;
 
-    void SetSourceTrackInformation(const G4Track* aTrack);
-    void Print() const;
+public:
+  inline G4int GetTrackingStatus() const {return fTrackingStatus;}
+  inline void  SetTrackingStatus(G4int i) {fTrackingStatus = i;}
+  inline G4int GetSourceTrackID() const {return fSourceTrackID;}
 
-  private:
-    // Information of the primary track at the primary vertex
-    G4int                 originalTrackID;  // Track ID of primary particle
-    G4ParticleDefinition* particleDefinition;
-    G4ThreeVector         originalPosition;
-    G4ThreeVector         originalMomentum;
-    G4double              originalEnergy;
-    G4double              originalTime;
+private:
+  // Information of the primary track at the primary vertex
+  G4int                 fOriginalTrackID;  // Track ID of primary particle
+  G4ParticleDefinition* fParticleDefinition;
+  G4ThreeVector         fOriginalPosition;
+  G4ThreeVector         fOriginalMomentum;
+  G4double              fOriginalEnergy;
+  G4double              fOriginalTime;
 
-    G4int                 trackingStatus;
-    // trackingStatus = 1 : primary or secondary track which has not yet reached to calorimeter
-    //                = 0 : track which or ancester of which has reached to calorimeter
+  G4int                 fTrackingStatus;
+  // trackingStatus = 1 : primary or secondary track which has not yet reached 
+  //                      to calorimeter
+  //                = 0 : track which or ancester of which has reached to 
+  //                      calorimeter
+  //                = 2 : track or its ancester had once reached to calorimeter 
+  //                      and then escaped from it
+  // Information of the track which reached to the calorimeter boundary at the 
+  // boundary surface. 
+  // This information is valid only for trackingStatus = 0 or 2
+  G4int                 fSourceTrackID;
+  G4ParticleDefinition* fSourceDefinition;
+  G4ThreeVector         fSourcePosition;
+  G4ThreeVector         fSourceMomentum;
+  G4double              fSourceEnergy;
+  G4double              fSourceTime;
 
-    //                = 2 : track or its ancester had once reached to calorimeter and
-    //                      then escaped from it
-    // Information of the track which reached to the calorimeter boundary at the boundary surface
-    // This information is valid only for trackingStatus = 0 or 2
-    G4int                 sourceTrackID;
-    G4ParticleDefinition* sourceDefinition;
-    G4ThreeVector         sourcePosition;
-    G4ThreeVector         sourceMomentum;
-    G4double              sourceEnergy;
-    G4double              sourceTime;
-
-  public:
-    inline G4int GetOriginalTrackID() const {return originalTrackID;}
-    inline G4ParticleDefinition* GetOriginalParticle() const {return particleDefinition;}
-    inline G4ThreeVector GetOriginalPosition() const {return originalPosition;}
-    inline G4ThreeVector GetOriginalMomentum() const {return originalMomentum;}
-    inline G4double GetOriginalEnergy() const {return originalEnergy;}
-    inline G4double GetOriginalTime() const {return originalTime;}
-
-    inline G4int GetTrackingStatus() const {return trackingStatus;}
-    inline void SetTrackingStatus(G4int i) {trackingStatus = i;}
-
-    inline G4int GetSourceTrackID() const {return sourceTrackID;}
-    inline G4ParticleDefinition* GetSourceParticle() const {return sourceDefinition;}
-    inline G4ThreeVector GetSourcePosition() const {return sourcePosition;}
-    inline G4ThreeVector GetSourceMomentum() const {return sourceMomentum;}
-    inline G4double GetSourceEnergy() const {return sourceEnergy;}
-    inline G4double GetSourceTime() const {return sourceTime;}
 };
 
 extern G4Allocator<RE01TrackInformation> aTrackInformationAllocator;

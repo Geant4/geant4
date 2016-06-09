@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.3 2006-06-29 16:49:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,18 +51,18 @@ class EventAction : public G4UserEventAction
     EventAction(RunAction*);
    ~EventAction();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
+    void SetDrawFlag   (G4String val)  {fDrawFlag    = val;};
+    void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
   private:
   
-    RunAction*             Run;
-    G4String               drawFlag;
-    G4int                  printModulo;          
-    EventActionMessenger*  eventMessenger;
+    RunAction*             fRun;
+    G4String               fDrawFlag;
+    G4int                  fPrintModulo;          
+    EventActionMessenger*  fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

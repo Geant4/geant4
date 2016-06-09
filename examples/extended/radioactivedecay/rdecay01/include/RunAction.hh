@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/include/RunAction.hh
+/// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -46,11 +48,11 @@ class PrimaryGeneratorAction;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(HistoManager*, PrimaryGeneratorAction*);
+    RunAction(PrimaryGeneratorAction*);
    ~RunAction();
    
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     
     void ParticleCount(G4String, G4double);
     void Balance(G4double,G4double);
@@ -58,18 +60,18 @@ class RunAction : public G4UserRunAction
     void PrimaryTiming(G4double);
     
   private:
-    HistoManager*           histoManager;
-    PrimaryGeneratorAction* primary;
+    HistoManager*           fHistoManager;
+    PrimaryGeneratorAction* fPrimary;
     
-    std::map<G4String,G4int> particleCount;
-    std::map<G4String,G4double> Emean;
-    std::map<G4String,G4double> Emin;
-    std::map<G4String,G4double> Emax;
-    G4int    decayCount, timeCount;
-    G4double EkinTot[3];
-    G4double Pbalance[3];
-    G4double EventTime[3];
-    G4double PrimaryTime;                        
+    std::map<G4String,G4int> fParticleCount;
+    std::map<G4String,G4double> fEmean;
+    std::map<G4String,G4double> fEmin;
+    std::map<G4String,G4double> fEmax;
+    G4int    fDecayCount, fTimeCount;
+    G4double fEkinTot[3];
+    G4double fPbalance[3];
+    G4double fEventTime[3];
+    G4double fPrimaryTime;                        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

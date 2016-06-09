@@ -24,9 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.13 2010-10-19 15:20:18 gcosmo Exp $
+// $Id$
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids

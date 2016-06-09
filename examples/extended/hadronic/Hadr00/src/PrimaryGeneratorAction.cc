@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr00/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -39,28 +41,32 @@
 
 #include "PrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4Proton.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  particleGun  = new G4ParticleGun(1);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  fParticleGun->SetParticleEnergy(1.*GeV);
+  fParticleGun->SetParticleDefinition(G4Proton::Proton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

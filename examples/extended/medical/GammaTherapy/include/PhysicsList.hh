@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.6 2006-11-16 14:42:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/GammaTherapy/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+// $Id$
 //
 // Modified:
 //
@@ -56,26 +58,31 @@ public:
   void SetCutForPositron(G4double);
 
   void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
+  inline void SetVerbose(G4int val);
 
 private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   helIsRegisted;
-  G4bool   bicIsRegisted;
-  G4bool   ionIsRegisted;
-  G4bool   gnucIsRegisted;
-  G4bool   stopIsRegisted;
 
-  PhysicsListMessenger* pMessenger;
-  G4String emName;
+  PhysicsList & operator=(const PhysicsList &right);
+  PhysicsList(const PhysicsList&);
 
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4int    fVerbose;
+  G4bool   fEmBuilderIsRegisted;
+  G4bool   fHelIsRegisted;
+  G4bool   fBicIsRegisted;
+  G4bool   fIonIsRegisted;
+  G4bool   fGnucIsRegisted;
+  G4bool   fStopIsRegisted;
+
+  PhysicsListMessenger* fMessenger;
 };
+
+inline void PhysicsList::SetVerbose(G4int value)
+{
+  fVerbose = value;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

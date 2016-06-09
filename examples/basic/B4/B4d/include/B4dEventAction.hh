@@ -33,10 +33,10 @@
 
 #include "G4UserEventAction.hh"
 
-#include "B4dEventActionMessenger.hh"
-
 #include "G4THitsMap.hh"
 #include "globals.hh"
+
+class G4GenericMessenger;
 
 /// Event action class
 ///
@@ -44,9 +44,10 @@
 /// deposit and track lengths of charged particles in Absober and Gap layers 
 /// stored in the hits collections.
 ///
-/// The data member fPrintModulo defines the frequency of printing.
-/// Its value can be changed via a command defined in B4dEventActionMassenger 
-/// class. 
+/// The data member fPrintModulo defines the frequency of printing
+/// the accumulated quantities. Its value can be changed via a command
+/// defined using G4GenericMessenger class:
+/// - /B4/event/setPrintModulo value
 
 class B4dEventAction : public G4UserEventAction
 {
@@ -69,7 +70,7 @@ private:
                             G4double gapEdep, G4double gapTrackLength) const;
   
   // data members                   
-  B4dEventActionMessenger  fMessenger;
+  G4GenericMessenger*  fMessenger;
   G4int  fPrintModulo;
 };
 

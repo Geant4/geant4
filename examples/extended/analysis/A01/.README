@@ -1,0 +1,160 @@
+//$Id$
+
+///\file "analysis/A01/.README"
+///\brief Example A01 README page
+
+/*! \page ExampleA01 Example A01
+
+  Example A01 implements a double-arm spectrometer with wire chambers, 
+  hodoscopes and calorimeters.  Event simulation and collection are 
+  enabled, as well as event display and analysis.
+
+
+\section A01_s1 GEOMETRY
+
+   The spectrometer consists of two detector arms.  One arm provides 
+   position and timing information of the incident particle while the 
+   other collects position, timing and energy information of the particle
+   after it has been deflected by a magnetic field centered at the 
+   spectrometer pivot point.
+ 
+     - First arm:  box filled with air, also containing:
+         - 1 hodoscope (15 vertical strips of plastic scintillator)
+         - 1 drift chamber (5 horizontal argon gas layers with a 
+                          "virtual wire" at the center of each layer)
+
+     - Magnetic field region: air-filled cylinder which contains
+                              the field
+
+     - Second arm:  box filled with air, also containing:
+         - 1 hodoscope (25 vertical strips of plastic scintillator)
+         - 1 drift chamber (5 horizontal argon gas layers with a 
+                          "virtual wire" at the center of each layer)
+         - 1 electromagnetic calorimeter: 
+               a box sub-divided along x,y and z
+               axes into cells of CsI 
+         - 1 hadronic calorimeter: 
+               a box sub-divided along x,y, and z axes
+               into cells of lead, with a layer of 
+               plastic scintillator placed at the center 
+               of each cell
+
+
+\section A01_s2 PHYSICS
+
+   This example uses the following physics processes:
+     - electromagnetic:
+         - photo-electric effect
+         - Compton scattering
+         - pair production
+         - bremsstrahlung
+         - ionization
+         - multiple scattering
+         - annihilation
+     - decay
+     - transportation in a field
+
+   and defines the following particles:
+    -  geantino, charged geantino, gamma, all leptons, 
+       pions, charged kaons
+
+   Note that even though hadrons are defined, no hadronic processes 
+   are invoked in this example.
+
+
+\section A01_s3 EVENT
+
+   An event consists of the generation of a single particle which is 
+   transported through the first spectrometer arm.  Here, a scintillator 
+   hodoscope records the reference time of the particle before it passes
+   through a drift chamber where the particle position is measured. 
+   Momentum analysis is performed as the particle passes through a magnetic
+   field at the spectrometer pivot and then into the second spectrometer 
+   arm.  In the second arm, the particle passes through another hodoscope
+   and drift chamber before interacting in the electromagnetic calorimeter.
+   Here it is likely that particles will induce electromagnetic showers.  
+   The shower energy is recorded in a three-dimensional array of CsI 
+   crystals.  Secondary particles from the shower, as well as primary 
+   particles which do not interact in the CsI crystals, pass into the 
+   hadronic calorimeter.  Here, the remaining energy is collected in a 
+   three-dimensional array of scintillator-lead sandwiches.
+
+   Several aspects of the event may be changed interactively by the user:
+     - initial particle type
+     - initial momentum and angle
+     - momentum and angle spreads
+     - type of initial particle may be randomized
+     - strength of magnetic field
+     - angle of the second spectrometer arm
+
+
+\section A01_s4 DETECTOR RESPONSE
+
+  All the information required to simulate and analyze an event is 
+  recorded in HITS.  This information is recorded in the following 
+  sensitive detectors:
+
+    - hodoscope: 
+        - particle time
+        - particle position
+        - strip ID
+
+    - drift chamber: 
+        - particle time
+        - particle position
+        - layer ID
+ 
+    - electromagnetic calorimeter: 
+        - particle position 
+        - energy deposited in cell
+        - cell ID
+  
+    - hadronic calorimeter:   
+        - particle position 
+        - energy deposited in cell
+        - cell ID
+
+
+\section A01_s5 VISUALIZATION
+  
+   Simulated events can be displayed on top of a representation of the spectrometer.
+
+   vis.mac outputs HepRep version 1 files suitable for viewing in HepRApp or WIRED4.
+   Change the /vis/open line from HepRepFile to DAWNFILE to instead
+   make .prim files suitable for viewing in DAWN.
+
+   heprep2-000-gz.mac outputs a series of gzipped HepRep version 2 files
+   each containing a single event, suitable for viewing in HepRApp or WIRED4
+
+   heprep2zip.mac outputs a single zip file that unzips to a series of
+   HepRep version 2 files, each each containing a single event (unzip
+   the single file by hand, then view the resulting individial HepRep files).
+
+   heprep2-000-zip.mac outputs a series of zipped HepRep version 2 files
+   each containing a single event (not yet viewable unless you
+   explicitly unzip them before viewing).
+
+   heprep2.mac outputs a HepRep version 2 file with multiple events
+   appended to a single file in an experimental manner
+
+   heprep2gz.mac outputs a HepRep version 2 file with multiple events
+   appended to a single file in an experimental manner
+
+   Any of the heprep mac files above with the name bheprep (for instance
+   bheprep2zip.mac) will write a Binary HepRep version 2 file, readable only
+   by WIRED4 (not by HepRApp).
+
+
+\section A01_s6 ANALYSIS
+
+   This example implements an AIDA-compliant analysis system which
+   creates histograms, ntuples and plotters.  If you have built Geant4 with
+   the option to use analysis (answering yes to the appropriate question in
+   ./Configure -build), then at the completion of a simulation run,
+   a file A01.aida is produced which contains these data structures.
+   This file can be used as an input to the Java Analysis Studio (JAS) which allows
+   the histograms and ntuples to examined, manipulated, saved and printed.
+
+   For further details, see also \link ExampleA01AIDA README.AIDA \endlink.
+*/
+

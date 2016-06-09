@@ -49,7 +49,7 @@ public:
   HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
   ~HadrontherapyPrimaryGeneratorMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  //void SetNewValue(G4UIcommand*, G4String);
 
 private:
   HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 

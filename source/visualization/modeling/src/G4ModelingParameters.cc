@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.16 2010-05-11 11:13:35 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  31st December 1997.
@@ -36,7 +35,10 @@
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
@@ -83,6 +85,26 @@ G4ModelingParameters::~G4ModelingParameters ()
 {
   delete fpSectionSolid;
   delete fpCutawaySolid;
+}
+
+G4ModelingParameters::VisAttributesModifier::VisAttributesModifier
+(const G4VisAttributes& visAtts,
+ G4ModelingParameters::VisAttributesSignifier signifier,
+ const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path):
+fVisAtts(visAtts), fSignifier(signifier)
+{
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+  typedef PVPath::const_iterator PVPathConstIterator;
+  PVPathConstIterator i;
+  for (i = path.begin();
+       i != path.end();
+       ++i) {
+    fPVNameCopyNoPath.push_back
+    (PVNameCopyNo
+     (i->GetPhysicalVolume()->GetName(),
+      i->GetCopyNo()));
+  }
 }
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
@@ -187,6 +209,15 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
 
   os << "\n  Event pointer: " << mp.fpEvent;
 
+  os << "\n  Vis attributes modifiers: ";
+  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
+    mp.fVisAttributesModifiers;
+  if (vams.empty()) {
+    os << "None";
+  } else {
+    os << vams;
+  }
+  
   return os;
 }
 
@@ -212,5 +243,194 @@ G4bool G4ModelingParameters::operator !=
   if (fDensityCulling &&
       (fVisibleDensity != mp.fVisibleDensity)) return true;
 
+  if (VAMSNotEqual(fVisAttributesModifiers, mp.fVisAttributesModifiers))
+    return true;
+
   return false;
 }
+
+G4bool G4ModelingParameters::PVNameCopyNoPathNotEqual
+(const G4ModelingParameters::PVNameCopyNoPath& path1,
+ const G4ModelingParameters::PVNameCopyNoPath& path2)
+{
+  if (path1.size() != path2.size()) return true;
+  if (path1.empty()) return false;
+  PVNameCopyNoPathConstIterator i1, i2;
+  for (i1 = path1.begin(), i2 = path2.begin();
+       i1 != path1.end();
+       ++i1, ++i2) {
+    if (i1->GetName() != i2->GetName()) return true;
+    if (i1->GetCopyNo() != i2->GetCopyNo()) return true;
+  }
+  return false;
+}
+
+G4bool G4ModelingParameters::VAMSNotEqual
+(const std::vector<G4ModelingParameters::VisAttributesModifier>& vams1,
+ const std::vector<G4ModelingParameters::VisAttributesModifier>& vams2)
+{
+  if (vams1.size() != vams2.size()) return true;
+  if (vams1.empty()) return false;
+  std::vector<VisAttributesModifier>::const_iterator i1, i2;
+  for (i1 = vams1.begin(), i2 = vams2.begin();
+       i1 != vams1.end();
+       ++i1, ++i2) {
+    const PVNameCopyNoPath& vam1Path = i1->GetPVNameCopyNoPath();
+    const PVNameCopyNoPath& vam2Path = i2->GetPVNameCopyNoPath();
+    if (PVNameCopyNoPathNotEqual(vam1Path,vam2Path)) return true;
+    if (i1->GetVisAttributesSignifier() != i2->GetVisAttributesSignifier())
+      return true;
+    const G4VisAttributes& vam1VisAtts = i1->GetVisAttributes();
+    const G4VisAttributes& vam2VisAtts = i2->GetVisAttributes();
+    const G4Colour& c1 = vam1VisAtts.GetColour();
+    const G4Colour& c2 = vam2VisAtts.GetColour();
+    switch (i1->GetVisAttributesSignifier()) {
+      case G4ModelingParameters::VASVisibility:
+        if (vam1VisAtts.IsVisible() != vam2VisAtts.IsVisible())
+          return true;
+        break;
+      case G4ModelingParameters::VASDaughtersInvisible:
+        if (vam1VisAtts.IsDaughtersInvisible() !=
+            vam2VisAtts.IsDaughtersInvisible())
+          return true;
+        break;
+      case G4ModelingParameters::VASColour:
+        if (c1 != c2)
+          return true;
+        break;
+      case G4ModelingParameters::VASLineStyle:
+        if (vam1VisAtts.GetLineStyle() != vam2VisAtts.GetLineStyle())
+          return true;
+        break;
+      case G4ModelingParameters::VASLineWidth:
+        if (vam1VisAtts.GetLineWidth() != vam2VisAtts.GetLineWidth())
+          return true;
+        break;
+      case G4ModelingParameters::VASForceWireframe:
+        if (vam1VisAtts.GetForcedDrawingStyle() !=
+            vam2VisAtts.GetForcedDrawingStyle())
+          return true;
+        break;
+      case G4ModelingParameters::VASForceSolid:
+        if (vam1VisAtts.GetForcedDrawingStyle() !=
+            vam2VisAtts.GetForcedDrawingStyle())
+          return true;
+        break;
+      case G4ModelingParameters::VASForceAuxEdgeVisible:
+        if (vam1VisAtts.IsForceAuxEdgeVisible() !=
+            vam2VisAtts.IsForceAuxEdgeVisible())
+          return true;
+        break;
+      case G4ModelingParameters::VASForceLineSegmentsPerCircle:
+        if (vam1VisAtts.GetForcedLineSegmentsPerCircle() !=
+            vam2VisAtts.GetForcedLineSegmentsPerCircle())
+          return true;
+        break;
+    }
+  }
+  return false;
+}
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
+{
+//  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
+  G4ModelingParameters::PVNameCopyNoPathConstIterator i;
+  for (i = path.begin(); i != path.end(); ++i) {
+    if (i != path.begin()) {
+      os << ", ";
+    }
+    os << i->GetName() << ':' << i->GetCopyNo();
+  }
+  return os;
+}
+
+std::ostream& operator <<
+(std::ostream& os,
+ const std::vector<G4ModelingParameters::VisAttributesModifier>& vams)
+{
+  std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
+    iModifier;
+  for (iModifier = vams.begin();
+       iModifier != vams.end();
+       ++iModifier) {
+    const G4ModelingParameters::PVNameCopyNoPath& vamPath =
+      iModifier->GetPVNameCopyNoPath();
+    os << '\n' << vamPath;
+    const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
+    const G4Colour& c = vamVisAtts.GetColour();
+    switch (iModifier->GetVisAttributesSignifier()) {
+      case G4ModelingParameters::VASVisibility:
+        os << " visibility ";
+        if (vamVisAtts.IsVisible()) {
+          os << "true";
+        } else {
+          os << "false";
+        }
+        break;
+      case G4ModelingParameters::VASDaughtersInvisible:
+        os << " daughtersInvisible ";
+        if (vamVisAtts.IsDaughtersInvisible()) {
+          os << "true";
+        } else {
+          os << "false";
+        }
+        break;
+      case G4ModelingParameters::VASColour:
+        os << " colour " << c;
+        break;
+      case G4ModelingParameters::VASLineStyle:
+        os << " lineStyle ";
+        switch (vamVisAtts.GetLineStyle()) {
+          case G4VisAttributes::unbroken:
+            os << "unbroken";
+            break;
+          case G4VisAttributes::dashed:
+            os << "dashed";
+            break;
+          case G4VisAttributes::dotted:
+            os << "dotted";
+        }
+        break;
+      case G4ModelingParameters::VASLineWidth:
+        os << " lineWidth "
+        << vamVisAtts.GetLineWidth();
+        break;
+      case G4ModelingParameters::VASForceWireframe:
+        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::wireframe) {
+          os << " forceWireframe ";
+          if (vamVisAtts.IsForceDrawingStyle()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceSolid:
+        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::solid) {
+          os << " forceSolid ";
+          if (vamVisAtts.IsForceDrawingStyle()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceAuxEdgeVisible:
+        os << " forceAuxEdgeVisible ";
+        if (vamVisAtts.IsForceAuxEdgeVisible()) {
+          os << "true";
+        } else {
+          os << "false";
+        }
+        break;
+      case G4ModelingParameters::VASForceLineSegmentsPerCircle:
+        os << " lineSegmentsPerCircle "
+        << vamVisAtts.GetForcedLineSegmentsPerCircle();
+        break;
+    }
+  }
+
+  return os;
+}
+

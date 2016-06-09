@@ -59,6 +59,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "G4Bessel.hh"
+#include "G4PhysicalConstants.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4Bessel::G4Bessel ()
@@ -235,12 +236,12 @@ G4double G4Bessel::pI0 (G4double x)
   {
     I          = 1.0;
     G4double y = x * x;
-    G4double s = 1.0;
+    G4double q = 1.0;
     for (G4int i=1; i<101; i++)
     {
-      s *= 0.25 * y / i / i;
-      I += s;
-      if (std::abs(s/I) < 1.0E-15) break;
+      q *= 0.25 * y / i / i;
+      I += q;
+      if (std::abs(q/I) < 1.0E-15) break;
     }
   }
   else
@@ -278,12 +279,12 @@ G4double G4Bessel::pI1 (G4double x)
   {
     I          = 1.0;
     G4double y = x * x;
-    G4double s = 1.0;
+    G4double q = 1.0;
     for (G4int i=1; i<101; i++)
     {
-      s *= 0.25 * y / i / (i+1.0);
-      I += s;
-      if (std::abs(s/I) < 1.0E-15) break;
+      q *= 0.25 * y / i / (i+1.0);
+      I += q;
+      if (std::abs(q/I) < 1.0E-15) break;
     }
     I *= 0.5 * x;
     
@@ -319,13 +320,13 @@ G4double G4Bessel::pK0 (G4double x)
   {
     G4double y = x * x;
     G4double C = -std::log(x/2.0) - 0.5772156649015329;
-    G4double s = 1.0;
+    G4double q = 1.0;
     G4double t = 0.0;
     for (G4int i=1; i<51; i++)
     {
-      s *= 0.25 * y / i / i;
+      q *= 0.25 * y / i / i;
       t += 1.0 / i ;
-      K += s * (t+C);
+      K += q * (t+C);
     }
     K += C;
   }

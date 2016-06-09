@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.23 2009-03-04 18:49:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,22 +49,24 @@
 
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:defaultMaterial(0),solidWorld(0),logicWorld(0),physiWorld(0),
- solidCalor(0),logicCalor(0),physiCalor(0),
- solidLayer(0),logicLayer(0),physiLayer(0),
- magField(0)
+:fDefaultMaterial(0),fSolidWorld(0),fLogicWorld(0),fPhysiWorld(0),
+ fSolidCalor(0),fLogicCalor(0),fPhysiCalor(0),
+ fSolidLayer(0),fLogicLayer(0),fPhysiLayer(0),
+ fMagField(0)
 {
   // default parameter values of the calorimeter
-  NbOfAbsor = 2;
-  AbsorThickness[1] = 2.3*mm;
-  AbsorThickness[2] = 5.7*mm;
-  NbOfLayers        = 50;
-  CalorSizeYZ       = 40.*cm;
+  fNbOfAbsor = 2;
+  fAbsorThickness[1] = 2.3*mm;
+  fAbsorThickness[2] = 5.7*mm;
+  fNbOfLayers        = 50;
+  fCalorSizeYZ       = 40.*cm;
   ComputeCalorParameters();
 
   // materials
@@ -72,14 +76,14 @@ DetectorConstruction::DetectorConstruction()
   SetAbsorMaterial(2,"liquidArgon");
 
   // create commands for interactive definition of the calorimeter
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 {
-  delete detectorMessenger;
+  delete fDetectorMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,8 +123,8 @@ void DetectorConstruction::DefineMaterials()
   //
   G4int iz, n;                       //iz=number of protons  in an isotope;
                                      // n=number of nucleons in an isotope;
-  G4int   ncomponents;				     
-  G4double abundance;				     
+  G4int   ncomponents;                                     
+  G4double abundance;                                     
 
   G4Isotope* U5 = new G4Isotope("U235", iz=92, n=235, a=235.01*g/mole);
   G4Isotope* U8 = new G4Isotope("U238", iz=92, n=238, a=238.03*g/mole);
@@ -253,7 +257,7 @@ void DetectorConstruction::DefineMaterials()
   steam->AddMaterial(H2O, fractionmass=1.);
   
   new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
-		 kStateGas, 273.15*kelvin, 1*atmosphere);
+                 kStateGas, 273.15*kelvin, 1*atmosphere);
   //
   // examples of vacuum
   //
@@ -280,13 +284,13 @@ void DetectorConstruction::DefineMaterials()
 void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
-  LayerThickness = 0.;
-  for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++) {
-    LayerThickness += AbsorThickness[iAbs];
+  fLayerThickness = 0.;
+  for (G4int iAbs=1; iAbs<=fNbOfAbsor; iAbs++) {
+    fLayerThickness += fAbsorThickness[iAbs];
   }
-  CalorThickness = NbOfLayers*LayerThickness;     
-  WorldSizeX = 1.2*CalorThickness; 
-  WorldSizeYZ = 1.2*CalorSizeYZ;
+  fCalorThickness = fNbOfLayers*fLayerThickness;     
+  fWorldSizeX = 1.2*fCalorThickness; 
+  fWorldSizeYZ = 1.2*fCalorSizeYZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -306,96 +310,96 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   // World
   //
 
-  solidWorld = new G4Box("World",				//its name
-                   WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
+  fSolidWorld = new G4Box("World",                                //its name
+                   fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);        //its size
 
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   defaultMaterial,	//its material
-                                   "World");		//its name
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,                //its solid
+                                   fDefaultMaterial,        //its material
+                                   "World");                //its name
 
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  fPhysiWorld = new G4PVPlacement(0,                        //no rotation
+                                   G4ThreeVector(),        //at (0,0,0)
+                                 fLogicWorld,                //its fLogical volume
+                                 "World",                //its name
+                                 0,                        //its mother  volume
+                                 false,                        //no boolean operation
+                                 0);                        //copy number
   //
   // Calorimeter
   //
 
-  solidCalor = new G4Box("Calorimeter",				     //its name
-    		       CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
+  fSolidCalor = new G4Box("Calorimeter",                                     //its name
+                           fCalorThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);//size
 
-  logicCalor = new G4LogicalVolume(solidCalor,		//its solid
-      				   defaultMaterial,	//its material
-      				   "Calorimeter");	//its name
+  fLogicCalor = new G4LogicalVolume(fSolidCalor,                //its solid
+                                         fDefaultMaterial,        //its material
+                                         "Calorimeter");        //its name
 
-  physiCalor = new G4PVPlacement(0,			//no rotation
-                                 G4ThreeVector(),	//at (0,0,0)
-                                 logicCalor,		//its logical volume
-                                 "Calorimeter",		//its name
-                                 logicWorld,		//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  fPhysiCalor = new G4PVPlacement(0,                        //no rotation
+                                 G4ThreeVector(),        //at (0,0,0)
+                                 fLogicCalor,                //its fLogical volume
+                                 "Calorimeter",                //its name
+                                 fLogicWorld,                //its mother  volume
+                                 false,                        //no boolean operation
+                                 0);                        //copy number
 
   //
   // Layers
   //
 
-  solidLayer = new G4Box("Layer",		                      //its name
-                       LayerThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); //size
+  fSolidLayer = new G4Box("Layer",                                      //its name
+                       fLayerThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2); //size
 
-  logicLayer = new G4LogicalVolume(solidLayer,		//its solid
-                                   defaultMaterial,	//its material
-                                   "Layer");		//its name
-  if (NbOfLayers > 1)
-    physiLayer = new G4PVReplica("Layer",		//its name
-      				 logicLayer,		//its logical volume
-      				 logicCalor,		//its mother
-                                 kXAxis,		//axis of replication
-                                 NbOfLayers,		//number of replica
-                                 LayerThickness);	//witdth of replica
+  fLogicLayer = new G4LogicalVolume(fSolidLayer,                //its solid
+                                   fDefaultMaterial,        //its material
+                                   "Layer");                //its name
+  if (fNbOfLayers > 1)
+    fPhysiLayer = new G4PVReplica("Layer",                //its name
+                                       fLogicLayer,                //its fLogical volume
+                                       fLogicCalor,                //its mother
+                                 kXAxis,                //axis of replication
+                                 fNbOfLayers,                //number of replica
+                                 fLayerThickness);        //witdth of replica
   else
-    physiLayer = new G4PVPlacement(0,			//no rotation
-                                   G4ThreeVector(),	//at (0,0,0)
-                                   logicLayer,		//its logical volume
-                                   "Layer",		//its name
-                                   logicCalor,		//its mother  volume
-                                   false,		//no boolean operation
-                                   0);			//copy number
+    fPhysiLayer = new G4PVPlacement(0,                        //no rotation
+                                   G4ThreeVector(),        //at (0,0,0)
+                                   fLogicLayer,                //its fLogical volume
+                                   "Layer",                //its name
+                                   fLogicCalor,                //its mother  volume
+                                   false,                //no boolean operation
+                                   0);                        //copy number
 
   //
   // Absorbers
   //
 
-  G4double xfront = -0.5*LayerThickness;
-  for (G4int k=1; k<=NbOfAbsor; k++) {
-    solidAbsor[k] = new G4Box("Absorber",		//its name
-			      AbsorThickness[k]/2,CalorSizeYZ/2,CalorSizeYZ/2);
+  G4double xfront = -0.5*fLayerThickness;
+  for (G4int k=1; k<=fNbOfAbsor; k++) {
+    fSolidAbsor[k] = new G4Box("Absorber",                //its name
+                              fAbsorThickness[k]/2,fCalorSizeYZ/2,fCalorSizeYZ/2);
 
-    logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
-					AbsorMaterial[k], //its material
-					AbsorMaterial[k]->GetName());
+    fLogicAbsor[k] = new G4LogicalVolume(fSolidAbsor[k],    //its solid
+                                        fAbsorMaterial[k], //its material
+                                        fAbsorMaterial[k]->GetName());
 
-    G4double xcenter = xfront+0.5*AbsorThickness[k];
-    xfront += AbsorThickness[k];
-    physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
-      		    	G4ThreeVector(xcenter,0.,0.),      //its position
-                        logicAbsor[k],     		   //its logical volume	
-                    	AbsorMaterial[k]->GetName(),	   //its name
-                        logicLayer,        		   //its mother
-                        false,             		   //no boulean operat
-                        k);               		   //copy number
+    G4double xcenter = xfront+0.5*fAbsorThickness[k];
+    xfront += fAbsorThickness[k];
+    fPhysiAbsor[k] = new G4PVPlacement(0,                   //no rotation
+                         G4ThreeVector(xcenter,0.,0.),      //its position
+                         fLogicAbsor[k],                    //its logical volume        
+                         fAbsorMaterial[k]->GetName(),      //its name
+                         fLogicLayer,                       //its mother
+                         false,                             //no boulean operat
+                         k);                                //copy number
 
   }
 
 
   PrintCalorParameters();
 
-  //always return the physical World
+  //always return the fPhysical World
   //
-  return physiWorld;
+  return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -403,17 +407,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 void DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n-------------------------------------------------------------"
-         << "\n ---> The calorimeter is " << NbOfLayers << " layers of:";
-  for (G4int i=1; i<=NbOfAbsor; i++)
+         << "\n ---> The calorimeter is " << fNbOfLayers << " layers of:";
+  for (G4int i=1; i<=fNbOfAbsor; i++)
      {
-      G4cout << "\n \t" << std::setw(12) << AbsorMaterial[i]->GetName() <<": "
-              << std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
+      G4cout << "\n \t" << std::setw(12) << fAbsorMaterial[i]->GetName() <<": "
+              << std::setw(6) << G4BestUnit(fAbsorThickness[i],"Length");
      }
   G4cout << "\n-------------------------------------------------------------\n";
   
-  G4cout << "\n" << defaultMaterial << G4endl;    
-  for (G4int j=1; j<=NbOfAbsor; j++)
-     G4cout << "\n" << AbsorMaterial[j] << G4endl;
+  G4cout << "\n" << fDefaultMaterial << G4endl;    
+  for (G4int j=1; j<=fNbOfAbsor; j++)
+     G4cout << "\n" << fAbsorMaterial[j] << G4endl;
 
   G4cout << "\n-------------------------------------------------------------\n";
 }
@@ -425,7 +429,7 @@ void DetectorConstruction::SetWorldMaterial(const G4String& material)
   // search the material by its name
   G4Material* pttoMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial(material);
-  if (pttoMaterial) defaultMaterial = pttoMaterial;
+  if (pttoMaterial) fDefaultMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -435,11 +439,11 @@ void DetectorConstruction::SetNbOfLayers(G4int ival)
   // set the number of Layers
   //
   if (ival < 1)
-    { G4cout << "\n --->warning from SetNbOfLayers: "
+    { G4cout << "\n --->warning from SetfNbOfLayers: "
              << ival << " must be at least 1. Command refused" << G4endl;
       return;
     }
-  NbOfLayers = ival;
+  fNbOfLayers = ival;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -449,12 +453,12 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
   // set the number of Absorbers
   //
   if (ival < 1 || ival > (MaxAbsor-1))
-    { G4cout << "\n ---> warning from SetNbOfAbsor: "
+    { G4cout << "\n ---> warning from SetfNbOfAbsor: "
              << ival << " must be at least 1 and and most " << MaxAbsor-1
-	     << ". Command refused" << G4endl;
+             << ". Command refused" << G4endl;
       return;
     }
-  NbOfAbsor = ival;
+  fNbOfAbsor = ival;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -463,7 +467,7 @@ void DetectorConstruction::SetAbsorMaterial(G4int ival, const G4String& material
 {
   // search the material by its name
   //
-  if (ival > NbOfAbsor || ival <= 0)
+  if (ival > fNbOfAbsor || ival <= 0)
     { G4cout << "\n --->warning from SetAbsorMaterial: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
@@ -471,7 +475,7 @@ void DetectorConstruction::SetAbsorMaterial(G4int ival, const G4String& material
 
   G4Material* pttoMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial(material);
-  if (pttoMaterial) AbsorMaterial[ival] = pttoMaterial;
+  if (pttoMaterial) fAbsorMaterial[ival] = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -480,7 +484,7 @@ void DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
 {
   // change Absorber thickness
   //
-  if (ival > NbOfAbsor || ival <= 0)
+  if (ival > fNbOfAbsor || ival <= 0)
     { G4cout << "\n --->warning from SetAbsorThickness: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
@@ -490,7 +494,7 @@ void DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
              << val  << " out of range. Command refused" << G4endl;
       return;
     }
-  AbsorThickness[ival] = val;
+  fAbsorThickness[ival] = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -500,11 +504,11 @@ void DetectorConstruction::SetCalorSizeYZ(G4double val)
   // change the transverse size
   //
   if (val <= DBL_MIN)
-    { G4cout << "\n --->warning from SetCalorSizeYZ: thickness "
+    { G4cout << "\n --->warning from SetfCalorSizeYZ: thickness "
              << val  << " out of range. Command refused" << G4endl;
       return;
     }
-  CalorSizeYZ = val;
+  fCalorSizeYZ = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -519,15 +523,15 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(magField) delete magField;		//delete the existing magn field
+  if(fMagField) delete fMagField;                //delete the existing magn field
 
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
+  if(fieldValue!=0.)                        // create a new one if non nul
+  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+    fieldMgr->SetDetectorField(fMagField);
+    fieldMgr->CreateChordFinder(fMagField);
   } else {
-    magField = 0;
-    fieldMgr->SetDetectorField(magField);
+    fMagField = 0;
+    fieldMgr->SetDetectorField(fMagField);
   }
 }
 

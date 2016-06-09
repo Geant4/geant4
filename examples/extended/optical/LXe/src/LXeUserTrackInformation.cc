@@ -23,25 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeUserTrackInformation.cc
+/// \brief Implementation of the LXeUserTrackInformation class
+//
+//
 #include "LXeUserTrackInformation.hh"
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 LXeUserTrackInformation::LXeUserTrackInformation()
-  :status(active),reflections(0),forcedraw(false)
-{
-}
+  : fStatus(active),fReflections(0),fForcedraw(false) {}
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeUserTrackInformation::~LXeUserTrackInformation()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+LXeUserTrackInformation::~LXeUserTrackInformation() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeUserTrackInformation::AddTrackStatusFlag(int s)
 {
   if(s&active) //track is now active
-    status&=~inactive; //remove any flags indicating it is inactive 
+    fStatus&=~inactive; //remove any flags indicating it is inactive
   else if(s&inactive) //track is now inactive
-    status&=~active; //remove any flags indicating it is active
-  status|=s; //add new flags
+    fStatus&=~active; //remove any flags indicating it is active
+  fStatus|=s; //add new flags
 }

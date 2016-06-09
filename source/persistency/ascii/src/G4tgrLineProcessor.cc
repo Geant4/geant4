@@ -32,6 +32,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrLineProcessor.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrParameterMgr.hh"
 #include "G4tgrFileIn.hh"
 #include "G4tgrElementSimple.hh"
@@ -317,19 +319,13 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
 //---------------------------------------------------------------
 G4tgrVolume* G4tgrLineProcessor::FindVolume( const G4String& volname )
 {
-  G4tgrVolume* vol=0;
+  G4tgrVolume* vol = volmgr->FindVolume( volname, 1);
 
-  G4tgrVolume* volt = volmgr->FindVolume( volname, 1);
-
-  if( volt->GetType() == "VOLDivision" )
+  if( vol->GetType() == "VOLDivision" )
   {
     G4Exception("G4tgrLineProcessor::FindVolume()",
                 "InvalidSetup", FatalException,
                 "Using 'PLACE' for a volume created by a division !");
-  }
-  else
-  { 
-    vol = (G4tgrVolume*)volt;
   }
 
   return vol;

@@ -5,6 +5,7 @@
 #define tools_hbook_wfile
 
 #include <sstream>
+#include <ostream>
 
 #include "CHBOOK"
 #include <tools/srep>
@@ -227,6 +228,10 @@ public:
   }
   bool mkcd(const std::string& a_name){
     if(!mkdir(a_name)) return false;
+    CHCDIR(a_name," ");
+    return true;
+  }
+  bool cd(const std::string& a_name){
     CHCDIR(a_name," ");
     return true;
   }

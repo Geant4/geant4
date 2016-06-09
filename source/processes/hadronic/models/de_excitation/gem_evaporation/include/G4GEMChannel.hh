@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.7 2010-11-18 16:21:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -58,9 +57,9 @@ public:
   // destructor
   virtual ~G4GEMChannel();
     
-  void Initialize(const G4Fragment & fragment);
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
-  G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
+  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
   {
@@ -69,9 +68,6 @@ public:
     MyOwnLevelDensity = false;
   }
 
-  inline G4double GetEmissionProbability(void) const
-  { return EmissionProbability; }
-  
   inline G4double GetMaximalKineticEnergy(void) const
   { return MaximalKineticEnergy; }
   

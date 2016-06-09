@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/include/WLSTrajectory.hh
+/// \brief Definition of the WLSTrajectory class
+//
 //
 //
 //
@@ -125,11 +128,7 @@ class WLSTrajectory : public G4VTrajectory
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
-#endif
+extern G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
 
 inline void* WLSTrajectory::operator new(size_t) {
     void* aTrajectory = (void*) WLSTrajectoryAllocator.MallocSingle();

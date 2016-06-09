@@ -23,26 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelStore.hh,v 1.4 2010-11-17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 04-10-2010  M. Kelsey -- Replace G4String keys with integers (ZZZAAA),
 //		            move string operation to GenerateFilename()
 // 17-11-2010 V. Ivanchenko - make as a classical singleton. 
 //
+// 17-10-2011 L. Desorgher -- Allow the user to replace the radioactive 
+//               decay data provided in Geant4 by its own data file for 
+//               a given isotope
+// 06-01-2012 V. Ivanchenko - added nuclear level data structure for 
+//               usage in HEP where internal conversion is neglected;
+//               cleanup the code; new method GetLevelManager  
 
-// 17-10-2011 L. Desorgher -- Allow the user to replace the radioactive decay data provided in Geant4
-// 							by its own data file for a given isotope
 #ifndef G4NuclearLevelStore_hh 
 #define G4NuclearLevelStore_hh 1
 
 #include "G4NuclearLevelManager.hh"
-#include "G4String.hh"
+#include "G4LevelManager.hh"
+#include "G4LevelReader.hh"
+#include "globals.hh"
 #include <map>
 
 class G4NuclearLevelStore
 {
 private:
+
   G4NuclearLevelStore();
 
 public:
@@ -50,24 +56,31 @@ public:
   static G4NuclearLevelStore* GetInstance();
 
   G4NuclearLevelManager* GetManager(G4int Z, G4int A);
+
+  G4LevelManager* GetLevelManager(G4int Z, G4int A);
+
   ~G4NuclearLevelStore();
 
-  void AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename);
-
+  void AddUserEvaporationDataFile(G4int Z, G4int A, 
+				  const G4String& filename);
 
 private:
+
   G4int GenerateKey(G4int Z, G4int A) const { return Z*1000+A; }
 
-  G4String GenerateFilename(G4int Z, G4int A) const;
+  G4String GenerateFileName(G4int Z, G4int A) const;
 
   typedef std::map<G4int,G4NuclearLevelManager*> ManagersMap;
+  typedef std::map<G4int,G4LevelManager*> MapForHEP;
 
-  ManagersMap theManagers;
-  G4String dirName;
+  G4LevelReader reader;
+  ManagersMap   theManagers;
+  MapForHEP     managersForHEP;
+  G4String      dirName;
 
   static G4NuclearLevelStore* theInstance;
 
-
-  std::map<G4int, G4String> theUserEvaporationDataFiles;
+  G4bool userFiles;
+  std::map<G4int, G4String> theUserDataFiles;
 };
 #endif

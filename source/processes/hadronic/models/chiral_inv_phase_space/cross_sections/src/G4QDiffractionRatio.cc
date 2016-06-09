@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QDiffractionRatio for N+A Diffraction Interactions
@@ -43,6 +42,7 @@
 //#define nandebug
 
 #include "G4QDiffractionRatio.hh"
+#include "G4SystemOfUnits.hh"
 
 // Returns Pointer to the G4VQCrossSection class
 G4QDiffractionRatio* G4QDiffractionRatio::GetPointer()
@@ -69,7 +69,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   static const G4double lsi=1.79;       // The min ln(sqs) logTabEl(sqs=5.99 < sma=6.)
   static const G4double lsa=8.;         // The max ln(sqs) logTabEl(sqs=5.99 - 2981 GeV)
   static const G4double mi=std::exp(lsi);// The min s of logTabEl(~ 5.99 GeV)
-  static const G4double ms=std::exp(lsa);// The max s of logTabEl(~ 2981 GeV)
+  static const G4double max_s=std::exp(lsa);// The max s of logTabEl(~ 2981 GeV)
   static const G4double dl=(lsa-lsi)/nls;// Step of the logarithmic Table
   static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
   static const G4double toler=.0001;    // Tolarence (GeV) defining the same sqs
@@ -105,12 +105,12 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   G4double pM=G4QPDGCode(pPDG).GetMass()/GeV; // Projectile mass in GeV
   G4double pM2=pM*pM;
   G4double mom=pIU/GeV;                 // Projectile momentum in GeV
-  G4double s=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom)); // in GeV
+  G4double s_value=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom)); // in GeV
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
-  if(s>ms)
+  if(nDB && lastA==A && std::fabs(s_value-lastS)<toler) return lastR;
+  if(s_value>max_s)
   {
-    lastR=CalcDiff2Prod_Ratio(s,A);     // @@ Probably user ought to be notified about bigS
+    lastR=CalcDiff2Prod_Ratio(s_value,A);     // @@ Probably user ought to be notified about bigS
     return lastR;
   }
   G4bool found=false;
@@ -124,7 +124,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   {
     lastA = A;
     lastT = new G4double[mps];          // Create the linear Table
-    //lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
+    //lastN = static_cast<int>(s_value/ds)+1;   // MaxBin to be initialized
     //if(lastN>nps)                     // ===> Now initialize all lin table
     //{
     //  lastN=nps;
@@ -140,7 +140,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
       lastT[j]=CalcDiff2Prod_Ratio(sv,A);
     }
     lastL = new G4double[mls];          // Create the logarithmic Table
-    //G4double ls=std::log(s);
+    //G4double ls=std::log(s_value);
     //lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
     //if(lastK>nls)                     // ===> Now initialize all lin table
     //{
@@ -175,19 +175,19 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
     lastT=vT[i];
     lastL=vL[i];
     // ==> Now all bins of the tables are initialized immediately for the A
-    //if(s>lastM)                          // At least LinTab must be updated
+    //if(s_value>lastH)                    // At least LinTab must be updated
     //{
     //  G4int nextN=lastN+1;               // The next bin to be initialized
     //  if(lastN<nps)
     //  {
-    //    lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
+    //    lastN = static_cast<int>(s_value/ds)+1;// MaxBin to be initialized
+    //    G4double sv=lastH;
     //    if(lastN>nps)
     //    {
     //      lastN=nps;
     //      lastH=sma;
     //    }
     //    else lastH = lastN*ds;           // Calculate max initialized s for LinTab
-    //    G4double sv=lastM;
     //    for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
     //    {
     //      sv+=ds;
@@ -200,10 +200,10 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
     //    vN[i]=lastN;
     //  }
     //  G4int nextK=lastK+1;
-    //  if(s>sma && lastK<nls)             // LogTab must be updated
+    //  if(s_value>sma && lastK<nls)             // LogTab must be updated
     //  {
     //    G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
-    //    G4double ls=std::log(s);
+    //    G4double ls=std::log(s_value);
     //    lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
     //    if(lastK>nls)
     //    {
@@ -225,16 +225,16 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
     //}
   }
   // Now one can use tabeles to calculate the value
-  if(s<sma)                             // Use linear table
+  if(s_value<sma)                             // Use linear table
   {
-    G4int n=static_cast<int>(s/ds);     // Low edge number of the bin
-    G4double d=s-n*ds;                  // Linear shift
-    G4double v=lastT[n];                // Base
-    lastR=v+d*(lastT[n+1]-v)/ds;        // Result
+    G4int n=static_cast<int>(s_value/ds);     // Low edge number of the bin
+    G4double d=s_value-n*ds;                  // Linear shift
+    G4double v=lastT[n];                      // Base
+    lastR=v+d*(lastT[n+1]-v)/ds;              // Result
   }
   else                                  // Use log table
   {
-    G4double ls=std::log(s)-lsi;        // ln(s)-l_min
+    G4double ls=std::log(s_value)-lsi;  // ln(s)-l_min
     G4int n=static_cast<int>(ls/dl);    // Low edge number of the bin
     G4double d=ls-n*dl;                 // Log shift
     G4double v=lastL[n];                // Base
@@ -246,7 +246,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
 } // End of GetRatio
 
 // Calculate Diffraction/Production Ratio as a function of total sq(s)(hN) (in GeV), A=Z+N
-G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
+G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s_value, G4int A)
 {
   static G4int    mA=0;
   static G4double S=.1; // s=SQRT(M_N^2+M_h^2+2*E_h*M_N)
@@ -257,10 +257,10 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   static G4double p5=0.;
   static G4double p6=0.;
   static G4double p7=0.;
-  if(s<=0. || A<=1) return 0.;
+  if(s_value<=0. || A<=1) return 0.;
   if(A!=mA && A!=1)
   {
-    S=s;
+    S=s_value;
     mA=A;
     G4double a=mA;
     G4double sa=std::sqrt(a);
@@ -283,7 +283,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   }
   else if(A==1 && mA!=1)
   {
-    S=s;
+    S=s_value;
     p1=.0315;
     p2=.73417;
     p4=.01109;
@@ -291,11 +291,11 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
     p6=.065787;
     p7=.62976;
   }
-  else if(std::fabs(s-S)/S<.0001) return R;
-  G4double s2=s*s;
+  else if(std::fabs(s_value-S)/S<.0001) return R;
+  G4double s2=s_value*s_value;
   G4double s4=s2*s2;
-  G4double dl=std::log(s)-p5;
-  R=1./(1.+1./(p1+p2/s4+p4*dl*dl/(1.+p6*std::pow(s,p7))));
+  G4double dl=std::log(s_value)-p5;
+  R=1./(1.+1./(p1+p2/s4+p4*dl*dl/(1.+p6*std::pow(s_value,p7))));
   return R;
 } // End of CalcQF2IN_Ratio
 
@@ -360,8 +360,8 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   }
   G4double mP2=pr4M.m2();                  // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                       // Can be a problem for photon (m_min = 2*m_pi0)
-  G4double s=tot4M.m2();                   // @@ Check <0 ...
-  G4double E=(s-mT2-mP2)/dmT;              // Effective interactionEnergy (virtNucl target)
+  G4double s_value=tot4M.m2();             // @@ Check <0 ...
+  G4double E=(s_value-mT2-mP2)/dmT;        // Effective interactionEnergy (virtNucl target)
   G4double E2=E*E;
   if(E<0. || E2<mP2)                       // Impossible to fragment: return projectile
   {
@@ -378,7 +378,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double sA=5./std::pow(tA,third);       // Mass-screaning
   //mMin+=mPi0+G4UniformRand()*(mP*sA+mPi0); // *Experimental*
   mMin+=G4UniformRand()*(mP*sA+mPi0);      // *Experimental*
-  G4double ss=std::sqrt(s);                // CM compound mass (sqrt(s))
+  G4double ss=std::sqrt(s_value);          // CM compound mass (sqrt(s))
   G4double mMax=ss-mP;                     // Maximum diffraction mass of the projectile
   if(mMax>maxDM) mMax=maxDM;               // Restriction to avoid too big masses
   if(mMin>=mMax)
@@ -391,7 +391,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double R = G4UniformRand();
   G4double mDif=std::exp(R*std::log(mMax)+(1.-R)*std::log(mMin)); // Low Mass Approximation
   G4double mDif2=mDif*mDif;
-  G4double ds=s-mP2-mDif2;               
+  G4double ds=s_value-mP2-mDif2;               
   //G4double e=ds/dmP;
   //G4double P=std::sqrt(e*e-mDif2);      // Momentum in pseudo laboratory system
 #ifdef debug
@@ -399,7 +399,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
 #endif
   // @@ Temporary NN t-dependence for all hadrons
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QDifR::Fragment: pPDG="<<pPDG<<G4endl;
-  G4double maxt=(ds*ds-4*mP2*mDif2)/s;  // maximum possible -t
+  G4double maxt=(ds*ds-4*mP2*mDif2)/s_value;  // maximum possible -t
   G4double tsl=140000.;                 // slope in MeV^2 
   G4double t=-std::log(G4UniformRand())*tsl;
 #ifdef pdebug
@@ -539,8 +539,8 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   }
   G4double mP2=pr4M.m2();               // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                    // A possible problem for photon (m_min = 2*m_pi0)
-  G4double s=tot4M.m2();                 // @@ Check <0 ...
-  G4double E=(s-mT2-mP2)/dmT;  // Effective interactin energy (virt. nucl. target)
+  G4double s_value=tot4M.m2();          // @@ Check <0 ...
+  G4double E=(s_value-mT2-mP2)/dmT;     // Effective interactin energy (virt. nucl. target)
   G4double E2=E*E;
   if(E<0. || E2<mP2)
   {
@@ -552,7 +552,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4double mP=std::sqrt(mP2);
   if(mP<.1)mP=mPi0;                      // For photons min diffraction is gamma+P->Pi0+Pi0
   G4double mMin=mP+mPi0;                 // Minimum diffractive mass
-  G4double ss=std::sqrt(s);              // CM compound mass (sqrt(s))
+  G4double ss=std::sqrt(s_value);        // CM compound mass (sqrt(s))
   G4double mMax=ss-mT;                   // Maximum diffraction mass
   if(mMax>maxDM) mMax=maxDM;             // Restriction to avoid too big masses
   if(mMin>=mMax)
@@ -565,7 +565,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4double R = G4UniformRand();
   G4double mDif=std::exp(R*std::log(mMax)+(1.-R)*std::log(mMin)); // LowMassApproximation
   G4double mDif2=mDif*mDif;
-  G4double ds=s-mT2-mDif2;
+  G4double ds=s_value-mT2-mDif2;
   //G4double e=ds/dmT;
   //G4double P=std::sqrt(e*e-mDif2);          // Momentum in pseudo laboratory system
 #ifdef debug
@@ -575,7 +575,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QDifR::Fragment: pPDG="<<pPDG<<G4endl;
   G4double tsl=140000.;                        // slope in MeV^2 
   G4double t=-std::log(G4UniformRand())*tsl;
-  G4double maxt=(ds*ds-4*mT2*mDif2)/s;         // maximum possible -t
+  G4double maxt=(ds*ds-4*mT2*mDif2)/s_value;   // maximum possible -t
 #ifdef pdebug
   G4cout<<"G4QDifR::PFra:ph="<<pPDG<<",P="<<P<<",t="<<mint<<"<"<<maxt<<G4endl;
 #endif
@@ -660,7 +660,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       G4int    qPN=nC-nB;                  // Number of pions in the Isonucleus         |
       G4int    fPDG = 2212;                // Prototype for nP+(Pi+) case               |
       G4int    sPDG = 211;
-      G4int    tPDG = 3122;                // @@ Sigma0 (?)                             |
+      tPDG = 3122;                         // @@ Sigma0 (?)                             |
       G4double fMass= mProt;
       G4double sMass= mPi;
       G4double tMass= mLamb;               // @@ Sigma0 (?)                             |
@@ -1068,7 +1068,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           nL=0;                            // Kill the residual strangeness             |
         }
       }
-      G4LorentzVector r4M=loh->Get4Momentum(); // Real 4-momentum of the hypernucleus   !
+      r4M=loh->Get4Momentum();                 // Real 4-momentum of the hypernucleus   !
       G4double reM=r4M.m();                    // Real mass of the hypernucleus         |
 #ifdef fdebug
       G4cout<<"G4QDiffRatio::PrFrag:oPDG=="<<oPDG<<",hPDG="<<hPDG<<",M="<<reM<<G4endl;//|

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.icc,v 1.5 2009-05-14 13:46:40 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4ErrorPropagatorData inline implementation

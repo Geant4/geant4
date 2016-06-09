@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.hh,v 1.7 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -88,18 +87,17 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
-protected:
-
-  virtual G4double ElecCosThetaDistribution(G4double ElecKineEnergy);
 
 private:
+
+  G4PEEffectModel & operator=(const G4PEEffectModel &right);
+  G4PEEffectModel(const G4PEEffectModel&);
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleChangeForGamma* fParticleChange;
 
   G4double                  fminimalEnergy;
-  G4bool                    isInitialized;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

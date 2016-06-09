@@ -25,3 +25,6 @@
 #
 # To limit the output flow in the "dump" widget :
 /event/printModulo 100
+
+#Add an icon toolbar
+/control/execute icons.mac

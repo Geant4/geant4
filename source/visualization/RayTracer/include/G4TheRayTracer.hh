@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheRayTracer.hh,v 1.3 2006-06-29 21:23:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 
@@ -150,6 +149,7 @@ class G4TheRayTracer
     G4ThreeVector targetPosition;
     G4ThreeVector eyeDirection;
     G4ThreeVector lightDirection;
+    G4ThreeVector up;
     G4double headAngle;
     G4double viewSpan; // Angle per 100 pixels
     G4double attenuationLength;
@@ -171,6 +171,8 @@ class G4TheRayTracer
     inline G4ThreeVector GetTargetPosition() const { return targetPosition; }
     inline void SetLightDirection(const G4ThreeVector& val) { lightDirection = val.unit(); }
     inline G4ThreeVector GetLightDirection() const { return lightDirection; }
+    inline void SetUpVector(const G4ThreeVector& val) { up = val; }
+    inline G4ThreeVector GetUpVector() const { return up; }
     inline void SetHeadAngle(G4double val) { headAngle = val; }
     inline G4double GetHeadAngle() const { return headAngle; }
     inline void SetViewSpan(G4double val) { viewSpan = val; }

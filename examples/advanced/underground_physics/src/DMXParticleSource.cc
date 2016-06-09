@@ -45,12 +45,15 @@
 // some minor modifications.
 //////////////////////////////////////////////////////////////////////////////
 
+#include <cmath>
+
 #include "DMXParticleSource.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
 #include "Randomize.hh"
-#include <cmath>
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"

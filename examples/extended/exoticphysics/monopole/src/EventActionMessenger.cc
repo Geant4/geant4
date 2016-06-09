@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/EventActionMessenger.cc
+/// \brief Implementation of the EventActionMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,49 +35,37 @@
 
 #include "EventAction.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::EventActionMessenger(EventAction* EvAct):eventAction(EvAct)
+EventActionMessenger::EventActionMessenger(EventAction* evAct)
+  :fEventAction(evAct)
 {
-  eventDir = new G4UIdirectory("/testex/event/");
-  eventDir->SetGuidance("event control");
+  fEventDir = new G4UIdirectory("/testex/event/");
+  fEventDir->SetGuidance("event control");
 
-  DrawCmd = new G4UIcmdWithAString("/testex/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
-
-  PrintCmd = new G4UIcmdWithAnInteger("/testex/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);
+  fPrintCmd = new G4UIcmdWithAnInteger("/testex/event/printModulo",this);
+  fPrintCmd->SetGuidance("Print events modulo n");
+  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetRange("EventNb>0");
+  fPrintCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete DrawCmd;
-  delete PrintCmd;
-  delete eventDir;
+  delete fPrintCmd;
+  delete fEventDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
+  if(command == fPrintCmd)
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,6 +45,7 @@
 #include "G4VCrossSectionDataSet.hh"
 
 class G4ParticleDefinition;
+class G4HadronNucleonXsc;
 
 class G4GGNuclNuclCrossSection : public G4VCrossSectionDataSet
 {
@@ -52,6 +53,9 @@ public:
 
   G4GGNuclNuclCrossSection ();
   virtual ~G4GGNuclNuclCrossSection ();
+    
+  static const char* Default_Name() {return "Glauber-Gribov nucleus nucleus";}
+
    
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, 
@@ -103,9 +107,10 @@ public:
 
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
 
-  G4double GetNucleusRadius(G4double At);
+  G4double GetNucleusRadius(G4double Zt, G4double At);
   G4double GetNucleusRadiusGG(G4double At);
-  G4double GetNucleusRadiusDE(G4double At);
+  G4double GetNucleusRadiusDE(G4double Z, G4double A);
+  G4double GetNucleusRadiusRMS(G4double Z, G4double A);
 
   inline void SetEnergyLowerLimit(G4double E ){fLowerLimit=E;};
 
@@ -120,7 +125,7 @@ private:
  
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;
-
+  G4HadronNucleonXsc* hnXsc;
 };
 
 ////////////////////////////////////////////////////////////////

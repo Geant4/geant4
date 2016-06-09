@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLFontBaseStore.cc,v 1.4 2009-01-19 16:53:42 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4OpenGLFontBaseStore.hh"
@@ -34,15 +33,17 @@ std::map<G4VViewer*,std::vector<G4OpenGLFontBaseStore::FontInfo> >
 G4OpenGLFontBaseStore::fFontBaseMap;
 
 void G4OpenGLFontBaseStore::AddFontBase
-(G4VViewer* viewer,G4int fontBase,
- G4double size, const G4String& fontName) {
-  fFontBaseMap[viewer].push_back(FontInfo(fontName, size, fontBase));
+(G4VViewer* viewer, G4int fontBase,
+ G4double size, const G4String& fontName,
+ G4int width) {
+  fFontBaseMap[viewer].push_back(FontInfo(fontName, size, fontBase, width));
 }
 
-G4int G4OpenGLFontBaseStore::GetFontBase(G4VViewer* viewer, G4double size) {
-  G4int fontBase = -1;
-  std::map<G4VViewer*,std::vector<FontInfo> >::const_iterator i;
-  i = fFontBaseMap.find(viewer);
+const G4OpenGLFontBaseStore::FontInfo&
+G4OpenGLFontBaseStore::GetFontInfo
+(G4VViewer* viewer, G4double size) {
+  std::map<G4VViewer*,std::vector<FontInfo> >::const_iterator i =
+    fFontBaseMap.find(viewer);
   if (i != fFontBaseMap.end()) {
     G4double sizeDiscrepancy = 9999.;
     std::vector<FontInfo>::const_iterator j, k;
@@ -53,7 +54,10 @@ G4int G4OpenGLFontBaseStore::GetFontBase(G4VViewer* viewer, G4double size) {
 	k = j;
       }
     }
-    fontBase = k->fFontBase;
+    return *k;
+  } else {
+    // No font found for requested viewer.
+    static const FontInfo nullFontInfo;  // Default struct, fontBase = -1;
+    return nullFontInfo;
   }
-  return fontBase;
 }

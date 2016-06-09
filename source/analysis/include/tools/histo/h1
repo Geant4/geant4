@@ -34,7 +34,7 @@ public:
 public:
   bool multiply(TW aFactor){
     if(!parent::base_multiply(aFactor)) return false;
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool scale(TW aFactor) {return multiply(aFactor);}
@@ -48,7 +48,7 @@ public:
 
   bool reset() {
     parent::base_reset();
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -73,24 +73,24 @@ public:
 
   bool add(const h1& a_histo){
     parent::base_add(a_histo);
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool subtract(const h1& a_histo){
     parent::base_subtract(a_histo);
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
   bool multiply(const h1& a_histo) {  
     if(!parent::base_multiply(a_histo)) return false;
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   
   bool divide(const h1& a_histo) {
     if(!parent::base_divide(a_histo)) return false;
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -99,7 +99,7 @@ public:
 
     // actual bin number must be a multiple of a_factor.
     
-    const histo::axis<TC>& _axis = this->axis();
+    const histo::axis<TC>& _axis = parent::axis();
 
     bn_t n = _axis.bins();
     if(!n) return false;
@@ -159,13 +159,11 @@ public:
   }
 
 public:
-  h1(const std::string& a_title,
-                     bn_t aXnumber,TC aXmin,TC aXmax)
-  : parent(a_title,aXnumber,aXmin,aXmax){}
+  h1(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax)
+  :parent(a_title,aXnumber,aXmin,aXmax){}
 
-  h1(const std::string& a_title,
-                     const std::vector<TC>& aEdges)
-  : parent(a_title,aEdges){}
+  h1(const std::string& a_title,const std::vector<TC>& aEdges)
+  :parent(a_title,aEdges){}
 
   virtual ~h1(){}
 public:

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -68,13 +67,11 @@ public:
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
 
   // dummy virtual methods
-  virtual void Initialize(const G4Fragment& fragment);
-
   virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
 
   virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
 
-  virtual G4double GetEmissionProbability() const;
+  virtual G4double GetEmissionProbability(G4Fragment* fragment);
 
   inline void SetVerboseLevel(G4int val);
 

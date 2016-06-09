@@ -5,6 +5,31 @@
                        Package History file
                        --------------------
 
+3 November 2012 - tag dnaphysics-V09-05-07 - S. Incerti
+- Removed shadowing in SteppingAction 
+
+26 October 2012 - tag dnaphysics-V09-05-06 - L. Pandola
+- Changed CMakeLists.txt to deal with VIS 
+
+26 October 2012 - tag dnaphysics-V09-05-05 - S. Incerti
+- Renamed executable.
+
+11 October 2012 - tag dnaphysics-V09-05-04 - G. Cosmo
+- Explicit inclusion of units and constants headers
+
+09 October 2012- tag dnaphysics-V09-05-03 - S. Incerti  
+- cleaned main
+
+09 October 2012- tag dnaphysics-V09-05-02 - S. Incerti  
+- added more histogram variables
+
+15 August 2012- tag dnaphysics-V09-05-01 - S. Incerti  
+- added messenger for material change
+- switched to new analysis interface from Guy Barrand
+
+11 August 2012- tag dnaphysics-V09-05-00 - S. Incerti  
+- updated README and SteppingAction.cc files
+
 05 November 2011- tag dnaphysics-V09-04-08 - S. Incerti  
 - removed export=root option in HistoManager.cc
 

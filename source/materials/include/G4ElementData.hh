@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementData.hh,v 1.10 2010-05-15 15:37:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
-// Description: Data structure for cross sections, shell cross sections
-//              isotope cross sections
+// Description: Data structure for cross sections, shell cross sections,
+//              isotope cross sections. Control of vector size should be
+//              performed in user code, no protection in this class
 //
 // Author:      V.Ivanchenko 10.03.2011
 //
@@ -56,25 +56,37 @@ class G4ElementData
 {
 public:
 
-  G4ElementData(const G4String& nam = "");
+  G4ElementData();
 
   ~G4ElementData();
 
   // add cross section for the element
   void InitialiseForElement(G4int Z, G4PhysicsVector* v);
 
-  // prepare vector of components
-  void InitialiseForComponent(G4int Z, G4int nComponents);
+  // reserve vector of components
+  void InitialiseForComponent(G4int Z, G4int nComponents=0);
 
   // prepare vector of components
-  void AddComponent(G4int Z, G4int id, size_t idx, G4PhysicsVector* v);
+  void AddComponent(G4int Z, G4int id, G4PhysicsVector* v);
 
-  // check if cross section for the element is available
-  inline G4bool IsInitializedForElement(G4int Z);
+  // set name of the dataset
+  void SetName(const G4String& nam);
 
-  // check if the cross section per shell or per isotope
-  // is available
-  inline G4bool IsInitializedForComponent(G4int Z, size_t idx);
+  // get vector for the element 
+  inline G4PhysicsVector* GetElementData(G4int Z);
+
+  // get number of components for the element 
+  inline size_t GetNumberOfComponents(G4int Z);
+
+  // get component ID which may be number of nucleons, 
+  // or shell number, or any other integer
+  inline G4int GetComponentID(G4int Z, size_t idx);
+
+  // get vector per shell or per isotope
+  inline G4PhysicsVector* GetComponentDataByIndex(G4int Z, size_t idx);
+
+  // get vector per shell or per isotope
+  inline G4PhysicsVector* GetComponentDataByID(G4int Z, G4int id);
 
   // return cross section per element 
   // if not available return zero
@@ -83,8 +95,6 @@ public:
   // return cross section per element 
   // if not available return zero
   inline G4double GetValueForComponent(G4int Z, size_t idx, G4double kinEnergy);
-
-  inline G4int GetComponentID(G4int Z, size_t idx);
 
 private:
 
@@ -96,20 +106,48 @@ private:
   std::vector<G4PhysicsVector*> compData[maxNumElements];
   std::vector<G4int> compID[maxNumElements];
   size_t compLength[maxNumElements];
-
   G4String name;
 };
 
-inline 
-G4bool G4ElementData::IsInitializedForElement(G4int Z)
+inline void G4ElementData::SetName(const G4String& nam)
 {
-  return G4bool(elmData[Z]);
+  name = nam;
 }
 
 inline 
-G4bool G4ElementData::IsInitializedForComponent(G4int Z, size_t idx)
+G4PhysicsVector* G4ElementData::GetElementData(G4int Z)
 {
-  return (idx < compLength[Z]);
+  return elmData[Z];
+}
+
+inline 
+size_t G4ElementData::GetNumberOfComponents(G4int Z)
+{
+  return compLength[Z];
+}
+
+inline G4int G4ElementData::GetComponentID(G4int Z, size_t idx)
+{
+  return (compID[Z])[idx];
+}
+
+inline 
+G4PhysicsVector* G4ElementData::GetComponentDataByIndex(G4int Z, size_t idx)
+{
+  return (compData[Z])[idx];
+}
+
+inline 
+G4PhysicsVector* G4ElementData::GetComponentDataByID(G4int Z, G4int id)
+{
+  G4PhysicsVector* v = 0;
+  for(size_t i=0; i<compLength[Z]; ++i) {
+    if(id == (compID[Z])[i]) {
+      v = (compData[Z])[i];
+      break;
+    }
+  }
+  return v;
 }
 
 inline 
@@ -118,17 +156,10 @@ G4double G4ElementData::GetValueForElement(G4int Z, G4double kinEnergy)
   return elmData[Z]->Value(kinEnergy);
 }
 
-inline 
-G4double G4ElementData::GetValueForComponent(G4int Z, size_t idx, G4double kinEnergy)
+inline G4double 
+G4ElementData::GetValueForComponent(G4int Z, size_t idx, G4double kinEnergy)
 {
   return ((compData[Z])[idx])->Value(kinEnergy);
-}
-
-inline G4int G4ElementData::GetComponentID(G4int Z, size_t idx)
-{
-  G4int i = -1;
-  if((compID[Z]).size() < idx) { i = (compID[Z])[idx]; }
-  return i;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

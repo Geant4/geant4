@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm18/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,50 +53,50 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void AddEnergyDeposit (G4double edep)
-                   {energyDeposit += edep;};
+                   {fEnergyDeposit += edep;};
 
     void AddTrackLength (G4double step)
-                 {trackLength += step; nbSteps++;};
-		 
+                 {fTrackLength += step; fNbSteps++;};
+                 
     void AddChargedSecondary (G4double ekin)
-                 {energyCharged += ekin; nbCharged++;
-		  if (ekin<emin[0]) emin[0] = ekin;
-		  if (ekin>emax[0]) emax[0] = ekin;
-		 };
-		 
+                 {fEnergyCharged += ekin; fNbCharged++;
+                  if (ekin<fEmin[0]) fEmin[0] = ekin;
+                  if (ekin>fEmax[0]) fEmax[0] = ekin;
+                 };
+                 
     void AddNeutralSecondary (G4double ekin)
-                 {energyNeutral += ekin; nbNeutral++;
-		  if (ekin<emin[1]) emin[1] = ekin;
-		  if (ekin>emax[1]) emax[1] = ekin;
-		 };
-		
+                 {fEnergyNeutral += ekin; fNbNeutral++;
+                  if (ekin<fEmin[1]) fEmin[1] = ekin;
+                  if (ekin>fEmax[1]) fEmax[1] = ekin;
+                 };
+                
   public:
     G4double GetEnergyFromRestrictedRange
              (G4double,G4ParticleDefinition*,G4Material*,G4double);
-	     	  
+                       
     G4double GetEnergyFromCSDARange
-             (G4double,G4ParticleDefinition*,G4Material*,G4double);		 
-		 
+             (G4double,G4ParticleDefinition*,G4Material*,G4double);                 
+                 
   private:
-    G4double energyDeposit;
-    G4double trackLength;
-    G4double energyCharged, energyNeutral;
-    G4double emin[2], emax[2];
+    G4double fEnergyDeposit;
+    G4double fTrackLength;
+    G4double fEnergyCharged, fEnergyNeutral;
+    G4double fEmin[2], fEmax[2];
     
-    G4long   nbSteps;
-    G4int    nbCharged, nbNeutral;
+    G4long   fNbSteps;
+    G4int    fNbCharged, fNbNeutral;
 
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02CellScorer.cc
+/// \brief Implementation of the B02CellScorer class
 //
-// $Id: B02CellScorer.cc,v 1.2 2006-06-29 16:34:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -48,19 +50,19 @@ B02CellScorer::~B02CellScorer()
 {}
 
 void B02CellScorer::ScoreAnExitingStep(const G4Step &aStep,
-				       const G4GeometryCell &pre_gCell){
+                                       const G4GeometryCell &pre_gCell){
   fG4CellScorer.ScoreAnExitingStep(aStep, pre_gCell);
   FillHisto(aStep);
 }
 
 void B02CellScorer::ScoreAnEnteringStep(const G4Step &aStep,
-					const G4GeometryCell &post_gCell){
+                                        const G4GeometryCell &post_gCell){
   fG4CellScorer.ScoreAnEnteringStep(aStep, post_gCell);
   return;
 }
 
 void B02CellScorer::ScoreAnInVolumeStep(const G4Step &aStep,
-					const G4GeometryCell &post_gCell){
+                                        const G4GeometryCell &post_gCell){
   fG4CellScorer.ScoreAnInVolumeStep(aStep, post_gCell);
   FillHisto(aStep);
 }

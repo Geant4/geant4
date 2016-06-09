@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.35 2010-06-03 20:35:19 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -53,6 +52,9 @@
 #include "G4Square.hh"
 #include "G4Scale.hh"
 #include "G4Polyhedron.hh"
+#include "G4AttHolder.hh"
+
+#include <typeinfo>
 
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler
 (G4VGraphicsSystem& system,const G4String& name):
@@ -64,69 +66,163 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
 
 #include <iomanip>
 
-void G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    glLoadName(++fPickName);
-    fPickMap[fPickName] = 0;
+  const G4Colour& c = GetColour (visible);
+  G4double opacity = c.GetAlpha ();
+  
+  G4bool transparency_enabled = true;
+  G4bool isMarkerNotHidden = true;
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) {
+    transparency_enabled = pViewer->transparency_enabled;
+    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
+  }
+  
+  G4bool isMarker = false;
+  try {
+    (void) dynamic_cast<const G4VMarker&>(visible);
+    isMarker = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isPolyline = false;
+  try {
+    (void) dynamic_cast<const G4Polyline&>(visible);
+    isPolyline = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isMarkerOrPolyline = isMarker || isPolyline;
+  G4bool treatAsTransparent = transparency_enabled && opacity < 1.;
+  G4bool treatAsNotHidden = isMarkerNotHidden && (isMarker || isPolyline);
+  
+  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
+  else {
+    if (isMarkerOrPolyline && isMarkerNotHidden)
+      glDisable (GL_DEPTH_TEST);
+    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
   }
 
-  const G4Colour& c = GetColour (visible);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  if (fThreePassCapable) {
+    
+    // Ensure transparent objects are drawn opaque ones and before
+    // non-hidden markers.  The problem of blending/transparency/alpha
+    // is quite a tricky one - see History of opengl-V07-01-01/2/3.
+    if (!(fSecondPassForTransparency || fThirdPassForNonHiddenMarkers)) {
+      // First pass...
+      if (treatAsTransparent) {  // Request pass for transparent objects...
+        fSecondPassForTransparencyRequested = true;
+      }
+      if (treatAsNotHidden) {    // Request pass for non-hidden markers...
+        fThirdPassForNonHiddenMarkersRequested = true;
+      }
+      // On first pass, transparent objects and non-hidden markers are not drawn...
+      if (treatAsTransparent || treatAsNotHidden) {
+        return false;
+      }
+    }
+    
+    // On second pass, only transparent objects are drawn...
+    if (fSecondPassForTransparency) {
+      if (!treatAsTransparent) {
+        return false;
+      }
+    }
+    
+    // On third pass, only non-hidden markers are drawn...
+    if (fThirdPassForNonHiddenMarkers) {
+      if (!treatAsNotHidden) {
+        return false;
+      }
+    }
+  }  // fThreePassCapable
+  
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    glLoadName(++fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(visible, holder);
+    fPickMap[fPickName] = holder;
+  }
+
+  if (transparency_enabled) {
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+  } else {
+    glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());    
+  }
+
+  return true;
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyline& polyline)
 {
-  AddPrimitivePreamble(polyline);
-  G4OpenGLSceneHandler::AddPrimitive(polyline);
+  G4bool furtherprocessing = AddPrimitivePreamble(polyline);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polyline);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
-  AddPrimitivePreamble(polymarker);
-  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+  G4bool furtherprocessing = AddPrimitivePreamble(polymarker);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polymarker);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Text& text)
 {
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Text&).
-  AddPrimitivePreamble(text);
-  G4OpenGLSceneHandler::AddPrimitive(text);
+  G4bool furtherprocessing = AddPrimitivePreamble(text);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(text);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Circle& circle)
 {
-  AddPrimitivePreamble(circle);
-  G4OpenGLSceneHandler::AddPrimitive(circle);
+  G4bool furtherprocessing = AddPrimitivePreamble(circle);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(circle);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Square& square)
 {
-  AddPrimitivePreamble(square);
-  G4OpenGLSceneHandler::AddPrimitive(square);
+  G4bool furtherprocessing = AddPrimitivePreamble(square);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(square);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Scale& scale)
 {
-  AddPrimitivePreamble(scale);
-  G4OpenGLSceneHandler::AddPrimitive(scale);
+  G4bool furtherprocessing = AddPrimitivePreamble(scale);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(scale);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 {
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&).
-  AddPrimitivePreamble(polyhedron);
-  G4OpenGLSceneHandler::AddPrimitive(polyhedron);
+  G4bool furtherprocessing = AddPrimitivePreamble(polyhedron);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polyhedron);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4NURBS& nurbs)
 {
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4NURBS&).
-  AddPrimitivePreamble(nurbs);
-  G4OpenGLSceneHandler::AddPrimitive(nurbs);
+  G4bool furtherprocessing = AddPrimitivePreamble(nurbs);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(nurbs);
+  }
 }
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
@@ -177,6 +273,8 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
   glLoadIdentity();
   G4OpenGLTransform3D oglt (objectTransformation);
   glMultMatrixd (oglt.GetGLMatrix ());
+  glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
+  glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
 }
 
 void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
@@ -201,55 +299,14 @@ void G4OpenGLImmediateSceneHandler::EndModeling () {
   G4VSceneHandler::EndModeling ();
 }
 
-void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
-
-  G4VSceneHandler::ClearTransientStore ();
-
-  // Make sure screen corresponds to graphical database...
+void G4OpenGLImmediateSceneHandler::ClearTransientStore ()
+{
+  // Nothing to do except redraw the scene ready for the next event.
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
-}
-
-void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid)
-{
-  if (fReadyForTransients) {
-    // Always draw transient solids, e.g., hits represented as solids.
-    // (As we have no control over the order of drawing of transient
-    // objects, we cannot do anything about transparent ones, as
-    // below, so always draw them.)
-    G4VSceneHandler::RequestPrimitives (solid);
-    return;
-  }
-
-  // For non-transient (run-duration) objects, ensure transparent
-  // objects are drawn last.  The problem of
-  // blending/transparency/alpha is quite a tricky one - see History
-  // of opengl-V07-01-01/2/3.
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
-  const G4Colour& c = pVA -> GetColour ();
-  G4double opacity = c.GetAlpha ();
-
-  if (!fSecondPass) {
-    G4bool transparency_enabled = true;
-    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-    if (transparency_enabled && opacity < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
-      return;
-    }
-  }
-
-  // On second pass, opaque objects are not drwan...
-  if (fSecondPass && opacity >= 1.) return;
-
-  // Else invoke base class method...
-  G4VSceneHandler::RequestPrimitives (solid);
 }
 
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;

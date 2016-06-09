@@ -58,6 +58,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -165,7 +167,7 @@ inline void G4IonCoulombCrossSection::SetupParticle(const G4ParticleDefinition* 
   	mass = particle->GetPDGMass();
   	spin = particle->GetPDGSpin();
   		if(0.0 != spin) { spin = 0.5; }
-  	G4double q = std::fabs(particle->GetPDGCharge()/eplus);
+  	G4double q = std::fabs(particle->GetPDGCharge()/CLHEP::eplus);
   	chargeSquare = q*q;
   	tkin = 0.0;
 }

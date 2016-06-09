@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.14 2010-04-06 19:06:11 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPInelasticCompFS_h
 #define G4NeutronHPInelasticCompFS_h 1

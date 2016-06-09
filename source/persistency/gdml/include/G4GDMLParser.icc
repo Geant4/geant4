@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.15 2010-11-17 10:47:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4GDMLParser inline methods
@@ -87,8 +86,8 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
                                              G4Material* medium,
                                              G4Material* solid)
 {   
-  G4STRead reader;
-  return reader.Read(filename, medium, solid);
+  G4STRead STreader;
+  return STreader.Read(filename, medium, solid);
 }
 
 //

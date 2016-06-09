@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestContinuousProcess.hh,v 1.6 2006-06-29 21:07:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -140,88 +139,6 @@ class G4VRestContinuousProcess : public G4VProcess
       G4VRestContinuousProcess & operator=(const G4VRestContinuousProcess &right);
 
 };
-
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
-inline G4double G4VRestContinuousProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4double previousStepSize,
-			     G4double currentMinimumStep,
-			     G4double& currentSafety,
-                             G4GPILSelection* selection
-			    )
-{
-  // GPILSelection is set to defaule value of CandidateForSelection
-  valueGPILSelection = CandidateForSelection;
-
-  // get Step limit proposed by the process
-  G4double steplength = GetContinuousStepLimit(track,previousStepSize,currentMinimumStep, currentSafety);
-
-  // set return value for G4GPILSelection
-  *selection = valueGPILSelection;
-#ifdef G4VERBOSE
-   if (verboseLevel>1){
-    G4cout << "G4VRestContinuousProcess::AlongStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<G4endl;
-  }
-#endif
-   return  steplength ;
-}
-
-inline G4double G4VRestContinuousProcess::AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4ForceCondition* condition
-			    )
-{
-  // beggining of tracking 
-  ResetNumberOfInteractionLengthLeft();
-
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-
-  // get mean life time
-  currentInteractionLength = GetMeanLifeTime(track, condition);
-
-#ifdef G4VERBOSE
-   if ((currentInteractionLength <0.0) || (verboseLevel>2)){
-    G4cout << "G4VRestContinuousProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
-  }
-#endif
-
-  return theNumberOfInteractionLengthLeft * currentInteractionLength;
-}
-
-
-inline G4VParticleChange* G4VRestContinuousProcess::AtRestDoIt( 
-			     const G4Track&,
-			     const G4Step& 
-			    )
-{
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
-
-    return pParticleChange;
-}
-
-inline G4VParticleChange* G4VRestContinuousProcess::AlongStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    )
-{ 
-    return pParticleChange;
-}
 
 #endif
 

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th October 2012  Laurent Garnier  (visexternal-V09-04-04 and visexternal-V09-04-05)
+- gl2ps.cc : Remove create date in eps files (very useful to be able to compare them)
+
 10th November 2011  Laurent Garnier  (visexternal-V09-04-03)
 - G4OpenGL2PSAction : Back to old buffer size (cause sometime problems
   on Qt viewer)

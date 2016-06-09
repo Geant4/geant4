@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.cc,v 1.10 2010-10-26 12:05:14 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/GammaTherapy/src/Histo.cc
+/// \brief Implementation of the Histo class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -43,12 +45,10 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4Neutron.hh"
+#include "G4RootAnalysisManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
-
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -69,88 +69,87 @@ Histo* Histo::GetPointer()
 
 Histo::Histo()
 {
-  verbose   = 1;
-  histName  = G4String("histo");
-  histType  = G4String("root");
-  nHisto    = 10;
-  nHisto1   = 10;
-  maxEnergy = 50.0*MeV;
-  nTuple = false;
-  nBinsZ = 60;
-  nBinsR = 80;
-  nBinsE = 200;
-  absorberZ = 300.*mm;
-  absorberR = 200.*mm;
-  scoreZ    = 100.*mm;
+  fVerbose   = 1;
+  fHistName  = "";
+  fNHisto    = 10;
+  fMaxEnergy = 50.0*MeV;
+  fNBinsZ    = 60;
+  fNBinsR    = 80;
+  fNBinsE    = 200;
+  fScoreBin  = 0;
 
-  gamma    = G4Gamma::Gamma();
-  electron = G4Electron::Electron();
-  positron = G4Positron::Positron();
-  neutron  = G4Neutron::Neutron();
+  fAbsorberZ = 300.*mm;
+  fAbsorberR = 200.*mm;
+  fScoreZ    = 100.*mm;
 
-#ifdef G4ANALYSIS_USE
-  af   = 0;
-  tree = 0;
-  ntup = 0;
-#endif
+  fGamma    = G4Gamma::Gamma();
+  fElectron = G4Electron::Electron();
+  fPositron = G4Positron::Positron();
+
+  fCheckVolume = fGasVolume = fPhantom = fTarget1 = fTarget2 = 0;
+
+  fAnalysisManager = 0;
+
+  fStepZ = fStepR = fStepE = fNormZ = fSumR = 0.0;
+  fNevt = fNelec = fNposit = fNgam = fNstep = fNgamPh = 
+    fNgamTar = fNeTar = fNePh = fNstepTarget = 0;
+
+  fHisto.resize(fNHisto, 0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Histo::~Histo()
-{
-#ifdef G4ANALYSIS_USE
-  delete af;
-#endif
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Histo::BeginOfHisto()
 {
-  G4cout << "### Histo start initialisation nHisto= " << nHisto << G4endl;
+  G4cout << "### Histo start initialisation nHisto= " << fNHisto << G4endl;
 
-  n_evt  = 0;
-  n_elec = 0;
-  n_posit= 0;
-  n_gam  = 0;
-  n_step = 0;
-  n_gam_ph= 0;
-  n_gam_tar= 0;
-  n_e_tar = 0;
-  n_e_ph  = 0;
-  n_step_target = 0;
-  n_neutron = 0;
-  sumR = 0.0;
-  if(nBinsR>1000) SetNumberDivR(40);
+  fNevt = fNelec = fNposit= fNgam = fNstep = fNgamPh = fNgamTar = 
+    fNeTar = fNePh = fNstepTarget = 0;
+  fSumR = 0.0;
+  if(fNBinsR>1000) { SetNumberDivR(40); }
 
-  stepZ = absorberZ/(G4double)nBinsZ;
-  stepR = absorberR/(G4double)nBinsR;
-  stepE = maxEnergy/(G4double)nBinsE;
-  nScoreBin = (G4int)(scoreZ/stepZ + 0.5);
+  fStepZ = fAbsorberZ/(G4double)fNBinsZ;
+  fStepR = fAbsorberR/(G4double)fNBinsR;
+  fStepE = fMaxEnergy/(G4double)fNBinsE;
+  fScoreBin = (G4int)(fScoreZ/fStepZ + 0.5);
 
-  G4cout << "   "<< nBinsR << " bins R   stepR= " << stepR/mm << " mm " << G4endl;
-  G4cout << "   "<< nBinsZ << " bins Z   stepZ= " << stepZ/mm << " mm " << G4endl;
-  G4cout << "   "<< nBinsE << " bins E   stepE= " << stepE/MeV << " MeV " << G4endl;
-  G4cout << "   "<< nScoreBin << "th bin in Z is used for R distribution" << G4endl;
+  G4cout << "   "<< fNBinsR << " bins R   stepR= " << fStepR/mm << " mm " 
+         << G4endl;
+  G4cout << "   "<< fNBinsZ << " bins Z   stepZ= " << fStepZ/mm << " mm " 
+         << G4endl;
+  G4cout << "   "<< fNBinsE << " bins E   stepE= " << fStepE/MeV << " MeV " 
+         << G4endl;
+  G4cout << "   "<< fScoreBin << "-th bin in Z is used for R distribution" 
+         << G4endl;
 
-  G4int i;
+  fVolumeR.resize(fNBinsR);
+  fEdep.resize(fNBinsR, 0.0);
+  fGammaE.resize(fNBinsE, 0.0);
+
   G4double r1 = 0.0;
-  G4double r2 = stepR;
-  volumeR.clear();
-  for(i=0; i<nBinsR; i++) {
-    volumeR.push_back(cm*cm/(pi*(r2*r2 - r1*r1)));
+  G4double r2 = fStepR;
+  for(G4int i=0; i<fNBinsR; ++i) {
+    fVolumeR[i] = cm*cm/(pi*(r2*r2 - r1*r1));
     r1 = r2;
-    r2 += stepR;
-  }
-  for(i=0; i<nBinsE; i++) {
-    gammaE.push_back(0.0);
+    r2 += fStepR;
   }
 
-  bookHisto();
-
-  if(verbose > 0) {
-    G4cout << "Histo: Histograms are booked and run has been started"
+  if(fHistName != "") {
+    if(!fAnalysisManager) {
+      fAnalysisManager = G4RootAnalysisManager::Instance(); 
+      BookHisto();
+    }
+    if(fVerbose > 0) {
+      G4cout << "Histo: Histograms are booked and run has been started"
+             << G4endl;
+    }
+  } else if(fVerbose > 0) {
+    G4cout << "Histo: Histograms are not booked because file name is not set"
            << G4endl;
   }
 }
@@ -165,231 +164,165 @@ void Histo::EndOfHisto()
   // average
 
   G4cout<<"========================================================"<<G4endl;
-  G4double x = (G4double)n_evt;
-  if(n_evt > 0) x = 1.0/x;
-  G4double xe = x*(G4double)n_elec;
-  G4double xg = x*(G4double)n_gam;
-  G4double xp = x*(G4double)n_posit;
-  G4double xs = x*(G4double)n_step;
-  G4double xph= x*(G4double)n_gam_ph;
-  G4double xes= x*(G4double)n_step_target;
-  G4double xgt= x*(G4double)n_gam_tar;
-  G4double xet= x*(G4double)n_e_tar;
-  G4double xphe= x*(G4double)n_e_ph;
-  G4double xne= x*(G4double)n_neutron;
-  G4cout                    << "Number of events                                  " << n_evt <<G4endl;
-  G4cout << std::setprecision(4) << "Average number of e-                         " << xe << G4endl;
-  G4cout << std::setprecision(4) << "Average number of gamma                      " << xg << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e+                         " << xp << G4endl;
-  G4cout << std::setprecision(4) << "Average number of neutrons                   " << xne << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps in absorber          " << xs << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e- steps in target         " << xes << G4endl;
-  G4cout << std::setprecision(4) << "Average number of g  produced in the target  " << xgt << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e- produced in the target  " << xet << G4endl;
-  G4cout << std::setprecision(4) << "Average number of g produced in the phantom  " << xph << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e- produced in the phantom " << xphe << G4endl;
-  G4cout << std::setprecision(4) << "Total gamma fluence in front of phantom      " << x*sumR/MeV
+  G4double x = (G4double)fNevt;
+  if(fNevt > 0) { x = 1.0/x; }
+  G4double xe = x*(G4double)fNelec;
+  G4double xg = x*(G4double)fNgam;
+  G4double xp = x*(G4double)fNposit;
+  G4double xs = x*(G4double)fNstep;
+  G4double xph= x*(G4double)fNgamPh;
+  G4double xes= x*(G4double)fNstepTarget;
+  G4double xgt= x*(G4double)fNgamTar;
+  G4double xet= x*(G4double)fNeTar;
+  G4double xphe= x*(G4double)fNePh;
+
+  G4cout                    << "Number of events                             " 
+                            << std::setprecision(8) << fNevt <<G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-                         " 
+         << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma                      " 
+         << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+                         " 
+         << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps in the phantom       " 
+         << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e- steps in the target     " 
+         << xes << G4endl;
+  G4cout << std::setprecision(4) << "Average number of g  produced in the target  " 
+         << xgt << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e- produced in the target  " 
+         << xet << G4endl;
+  G4cout << std::setprecision(4) << "Average number of g produced in the phantom  " 
+         << xph << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e- produced in the phantom " 
+         << xphe << G4endl;
+  G4cout << std::setprecision(4) << "Total fGamma fluence in front of the phantom " 
+         << x*fSumR/MeV
          << " MeV " << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
   G4cout<<G4endl;
 
-#ifdef G4ANALYSIS_USE
-  if(tree) {
+  G4double sum = 0.0;
+  for(G4int i=0; i<fNBinsR; i++) { 
+    fEdep[i] *= x; 
+    sum += fEdep[i];
+  }
+
+  if(fAnalysisManager) {
+
     // normalise histograms
-    for(G4int i=0; i<nHisto1; i++) {
-      histo[i]->scale(x);
+    for(G4int i=0; i<fNHisto; i++) {
+      fAnalysisManager->GetH1(fHisto[i])->scale(x);
     }
-    G4double nr = histo[0]->binHeight(0);
-    if(nr > 0.0) nr = 1./nr;
-    histo[0]->scale(nr);
+    G4double nr = fEdep[0];
+    if(nr > 0.0) { nr = 1./nr; }
+    fAnalysisManager->GetH1(fHisto[0])->scale(nr);
 
-    nr = (histo[1]->sumAllBinHeights())*stepR;
-    if(nr > 0.0) nr = 1./nr;
-    histo[1]->scale(nr);
+    nr = sum*fStepR;
+    if(nr > 0.0) { nr = 1./nr; }
+    fAnalysisManager->GetH1(fHisto[1])->scale(nr);
 
-    histo[3]->scale(1000.0*cm3/(pi*absorberR*absorberR*stepZ));
-    histo[4]->scale(1000.0*cm3*volumeR[0]/stepZ);
+    fAnalysisManager->GetH1(fHisto[3])
+      ->scale(1000.0*cm3/(pi*fAbsorberR*fAbsorberR*fStepZ));
+    fAnalysisManager->GetH1(fHisto[4])
+      ->scale(1000.0*cm3*fVolumeR[0]/fStepZ);
 
     // Write histogram file
-    if(0 < nHisto) {
-      tree->commit();
-      G4cout << "Histograms and Ntuples are saved" << G4endl;
+    if(!fAnalysisManager->Write()) {
+      G4cout   << "Histo::Save: FATAL ERROR writing ROOT file" << G4endl;
+      exit(1);
     }
-    tree->close();
-    delete tree;
-    tree = 0;
-    G4cout << "Tree is closed" << G4endl;
+    G4cout << "### Histo::Save: Histograms are saved" << G4endl;
+    if(fAnalysisManager->CloseFile() && fVerbose > 0) {
+      G4cout << "                 File is closed" << G4endl;
+    }
+    delete fAnalysisManager;
+    fAnalysisManager = 0;
   }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::SaveEvent()
+void Histo::BookHisto()
 {
-#ifdef G4ANALYSIS_USE
-  if(ntup) {
-    ntup->addRow();
+  G4String nam = fHistName + ".root";
+
+  if(!fAnalysisManager->OpenFile(nam)) {
+    G4cout << "Histo::bookHisto: ERROR open file <" << nam << ">" << G4endl;
+    exit(0); 
   }
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::SaveToTuple(const G4String& parname, G4double val)
-{
-  if(2 < verbose) G4cout << "Save to tuple " << parname << "   " << val << G4endl;
-#ifdef G4ANALYSIS_USE
-  if(ntup) ntup->fill( ntup->findColumn(parname), (float)val);
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::SaveToTuple(const G4String& parname,G4double val, G4double)
-{
-  if(2 < verbose) G4cout << "Save to tuple " << parname << "   " << val << G4endl;
-#ifdef G4ANALYSIS_USE
-  if(ntup) ntup->fill( ntup->findColumn(parname), (float)val);
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::bookHisto()
-{
-
-#ifdef G4ANALYSIS_USE
-  G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
-  // Creating the analysis factory
-  if(!af) af = AIDA_createAnalysisFactory();
-
-  // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
-
-  // Creating a tree mapped to a new hbook file.
-  G4String tt = histType;
-  G4String nn = histName + "." + histType;
-  if(histType == "xml" || histType == "XML" || histType == "aida" || 
-     histType == "AIDA") {
-    tt = "xml";
-    nn = histName + ".aida";
-  }
-
-  tree = tf->create(nn,tt,false,true, "");
-  if(tree) {
-    G4cout << "Tree store : " << tree->storeName() << G4endl;
-  } else {
-    G4cout << "Fail to open tree store " << nn << G4endl;
-    return;
-  }
-  delete tf;
-  histo.resize(nHisto1);
-
-  // Creating a histogram factory, whose histograms will be handled by the tree
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
+  G4cout << "### Histo::Save: Opended file <" << nam << ">  for " 
+         << fNHisto << " histograms " << G4endl;
 
   // Creating an 1-dimensional histograms in the root directory of the tree
+  fHisto[0] = fAnalysisManager->CreateH1("10",
+    "Energy deposit at radius (mm) normalised on 1st channel",fNBinsR,0.,fAbsorberR/mm);
 
-  histo[0] = hf->createHistogram1D("10",
-    "Energy deposit at radius (mm) normalised on 1st channel",nBinsR,0.,absorberR/mm);
+  fHisto[1] = fAnalysisManager->CreateH1("11",
+    "Energy deposit at radius (mm) normalised to integral",fNBinsR,0.,fAbsorberR/mm);
 
-  histo[1] = hf->createHistogram1D("11",
-    "Energy deposit at radius (mm) normalised to integral",nBinsR,0.,absorberR/mm);
+  fHisto[2] = fAnalysisManager->CreateH1("12",
+    "Energy deposit (MeV/kg/electron) at radius (mm)",fNBinsR,0.,fAbsorberR/mm);
 
-  histo[2] = hf->createHistogram1D("12",
-    "Energy deposit (MeV/kg/electron) at radius (mm)",nBinsR,0.,absorberR/mm);
+  fHisto[3] = fAnalysisManager->CreateH1("13",
+    "Energy profile (MeV/kg/electron) over Z (mm)",fNBinsZ,0.,fAbsorberZ/mm);
 
-  histo[3] = hf->createHistogram1D("13",
-    "Energy profile (MeV/kg/electron) over Z (mm)",nBinsZ,0.,absorberZ/mm);
+  fHisto[4] = fAnalysisManager->CreateH1("14",
+    "Energy profile (MeV/kg/electron) over Z (mm) at Central Voxel",fNBinsZ,0.,fAbsorberZ/mm);
 
-  histo[4] = hf->createHistogram1D("14",
-    "Energy profile (MeV/kg/electron) over Z (mm) at Central Voxel",nBinsZ,0.,absorberZ/mm);
+  fHisto[5] = fAnalysisManager->CreateH1("15",
+    "Energy (MeV) of fGamma produced in the target",fNBinsE,0.,fMaxEnergy/MeV);
 
-  histo[5] = hf->createHistogram1D("15",
-    "Energy (MeV) of gamma produced in the target",nBinsE,0.,maxEnergy/MeV);
+  fHisto[6] = fAnalysisManager->CreateH1("16",
+    "Energy (MeV) of fGamma before phantom",fNBinsE,0.,fMaxEnergy/MeV);
 
-  histo[6] = hf->createHistogram1D("16",
-    "Energy (MeV) of gamma before phantom",nBinsE,0.,maxEnergy/MeV);
+  fHisto[7] = fAnalysisManager->CreateH1("17",
+    "Energy (MeV) of electrons produced in phantom",fNBinsE,0.,fMaxEnergy/MeV);
 
-  histo[7] = hf->createHistogram1D("17",
-    "Energy (MeV) of electrons produced in phantom",nBinsE,0.,maxEnergy/MeV);
+  fHisto[8] = fAnalysisManager->CreateH1("18",
+    "Energy (MeV) of electrons produced in target",fNBinsE,0.,fMaxEnergy/MeV);
 
-  histo[8] = hf->createHistogram1D("18",
-    "Energy (MeV) of electrons produced in target",nBinsE,0.,maxEnergy/MeV);
+  fHisto[9] = fAnalysisManager->CreateH1("19",
+    "Gamma Energy Fluence (MeV/cm2) at radius(mm) in front of phantom",fNBinsR,0.,fAbsorberR/mm);
 
-  histo[9] = hf->createHistogram1D("19",
-    "Gamma Energy Fluence (MeV/cm2) at radius(mm) in front of phantom",nBinsR,0.,absorberR/mm);
+}
 
-  // Creating a tuple factory, whose tuples will be handled by the tree
-  AIDA::ITupleFactory* tpf = af->createTupleFactory( *tree );
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  // If using Anaphe HBOOK implementation, there is a limitation on the
-  // length of the variable names in a ntuple
-  if(nTuple) {
-     ntup = tpf->create( "100", "Dose deposite","float r, z, e" );
+void Histo::AddTargetPhoton(const G4DynamicParticle* p)
+{
+  ++fNgamTar; 
+  if(fAnalysisManager) { 
+    fAnalysisManager->FillH1(fHisto[5],p->GetKineticEnergy()/MeV,1.0); 
   }
-  delete hf;
-  delete tpf;
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::AddDeltaElectron(const G4DynamicParticle* elec)
+void Histo::AddPhantomPhoton(const G4DynamicParticle*)
 {
-  G4double e = elec->GetKineticEnergy()/MeV;
-  if(e > 0.0) { ++n_elec; }
+  ++fNgamPh; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::AddPhoton(const G4DynamicParticle* ph)
+void Histo::AddTargetElectron(const G4DynamicParticle* p)
 {
-  G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) { ++n_gam; }
+  ++fNeTar; 
+  if(fAnalysisManager) { 
+    fAnalysisManager->FillH1(fHisto[8],p->GetKineticEnergy()/MeV,1.0); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::AddTargetPhoton(const G4DynamicParticle* ph)
+void Histo::AddPhantomElectron(const G4DynamicParticle* p)
 {
-  G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) { ++n_gam_tar; }
-#ifdef G4ANALYSIS_USE
-  if(tree) histo[5]->fill(e,1.0);
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::AddPhantomPhoton(const G4DynamicParticle* ph)
-{
-  G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) { ++n_gam_ph; }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::AddTargetElectron(const G4DynamicParticle* ph)
-{
-  G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) { ++n_e_tar; }
-#ifdef G4ANALYSIS_USE
-  if(tree) histo[8]->fill(e,1.0);
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::AddPhantomElectron(const G4DynamicParticle* ph)
-{
-  G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) { ++n_e_ph; }
-#ifdef G4ANALYSIS_USE
-  if(tree) histo[7]->fill(e,1.0);
-#endif
+  ++fNePh;
+  if(fAnalysisManager) { 
+    fAnalysisManager->FillH1(fHisto[7],p->GetKineticEnergy()/MeV,1.0); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -397,127 +330,110 @@ void Histo::AddPhantomElectron(const G4DynamicParticle* ph)
 void Histo::ScoreNewTrack(const G4Track* aTrack)
 {
   //Save primary parameters
-
-  ResetTrackLength();
   const G4ParticleDefinition* particle = aTrack->GetParticleDefinition();
   G4int pid = aTrack->GetParentID();
-  G4double kinE = aTrack->GetKineticEnergy();
-  G4ThreeVector pos = aTrack->GetVertexPosition();
   G4VPhysicalVolume* pv = aTrack->GetVolume();
   const G4DynamicParticle* dp = aTrack->GetDynamicParticle();
 
+  //primary particle
   if(0 == pid) {
 
-    SaveToTuple("TKIN", kinE/MeV);
-
-    G4double mass = 0.0;
-    if(particle) {
-      mass = particle->GetPDGMass();
-      SaveToTuple("MASS", mass/MeV);
-      SaveToTuple("CHAR",(particle->GetPDGCharge())/eplus);
+    ++fNevt; 
+    if(1 < fVerbose) {
+      G4ThreeVector pos = aTrack->GetVertexPosition();
+      G4ThreeVector dir = aTrack->GetMomentumDirection();
+      G4cout << "TrackingAction: Primary "
+             << particle->GetParticleName()
+             << " Ekin(MeV)= " 
+             << aTrack->GetKineticEnergy()/MeV
+             << "; pos= " << pos << ";  dir= " << dir << G4endl;
     }
 
-    G4ThreeVector dir = aTrack->GetMomentumDirection();
-    if(1 < verbose) {
-      G4cout << "TrackingAction: Primary kinE(MeV)= " << kinE/MeV
-           << "; m(MeV)= " << mass/MeV
-           << "; pos= " << pos << ";  dir= " << dir << G4endl;
-    }
-
-    // delta-electron
-  } else if (0 < pid && particle == electron) {
-    if(1 < verbose) {
+    // secondary electron
+  } else if (0 < pid && particle == fElectron) {
+    if(1 < fVerbose) {
       G4cout << "TrackingAction: Secondary electron " << G4endl;
     }
-    AddDeltaElectron(dp);
-    if(pv == phantom)                       { AddPhantomElectron(dp); }
-    else if(pv == target1 || pv == target2) { AddTargetElectron(dp); }
+    AddElectron(dp);
+    if(pv == fPhantom)                        { AddPhantomElectron(dp); }
+    else if(pv == fTarget1 || pv == fTarget2) { AddTargetElectron(dp); }
 
-  } else if (0 < pid && particle == positron) {
-    if(1 < verbose) {
+    // secondary positron
+  } else if (0 < pid && particle == fPositron) {
+    if(1 < fVerbose) {
       G4cout << "TrackingAction: Secondary positron " << G4endl;
     }
     AddPositron(dp);
 
-  } else if (0 < pid && particle == gamma) {
-    if(1 < verbose) {
+    // secondary gamma
+  } else if (0 < pid && particle == fGamma) {
+    if(1 < fVerbose) {
       G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
              << " E= " << aTrack->GetKineticEnergy() << G4endl;
     }
     AddPhoton(dp);
-    if(pv == phantom)                       { AddPhantomPhoton(dp); }
-    else if(pv == target1 || pv == target2) { AddTargetPhoton(dp); }
+    if(pv == fPhantom)                        { AddPhantomPhoton(dp); }
+    else if(pv == fTarget1 || pv == fTarget2) { AddTargetPhoton(dp); }
 
-  } else if (0 < pid && particle == neutron) {
-    n_neutron++;
-    if(1 < verbose) {
-      G4cout << "TrackingAction: Secondary neutron; parentID= " << pid
-             << " E= " << aTrack->GetKineticEnergy() << G4endl;
-    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::AddGamma(G4double e, G4double r)
+void Histo::AddPhantomGamma(G4double e, G4double r)
 {
   e /= MeV;
-  sumR += e;
-  G4int bin = (G4int)(e/stepE);
-  if(bin >= nBinsE) { bin = nBinsE-1; }
-  gammaE[bin] += e;
-  G4int bin1 = (G4int)(r/stepR);
-  if(bin1 >= nBinsR) { bin1 = nBinsR-1; }
-#ifdef G4ANALYSIS_USE
-  if(tree) {
-    histo[6]->fill(e,1.0);
-    histo[9]->fill(r,e*volumeR[bin1]);
+  fSumR += e;
+  G4int bin = (G4int)(e/fStepE);
+  if(bin >= fNBinsE) { bin = fNBinsE-1; }
+  fGammaE[bin] += e;
+  G4int bin1 = (G4int)(r/fStepR);
+  if(bin1 >= fNBinsR) { bin1 = fNBinsR-1; }
+  if(fAnalysisManager) {
+    fAnalysisManager->FillH1(fHisto[6],e,1.0);
+    fAnalysisManager->FillH1(fHisto[9],r,e*fVolumeR[bin1]);
   }
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::AddStep(G4double edep, G4double r1, G4double z1, G4double r2, G4double z2,
-                                   G4double r0, G4double z0)
+void Histo::AddPhantomStep(G4double edep, G4double r1, G4double z1, 
+                           G4double r2, G4double z2,
+                           G4double r0, G4double z0)
 {
-  n_step++;
-  G4int nzbin = (G4int)(z0/stepZ);
-  if(verbose > 1) {
+  ++fNstep;
+  G4int nzbin = (G4int)(z0/fStepZ);
+  if(fVerbose > 1) {
     G4cout << "Histo: edep(MeV)= " << edep/MeV << " at binz= " << nzbin
            << " r1= " << r1 << " z1= " << z1
            << " r2= " << r2 << " z2= " << z2
            << " r0= " << r0 << " z0= " << z0
-	   << G4endl;
+           << G4endl;
   }
-  if(nzbin == nScoreBin) {
-#ifdef G4ANALYSIS_USE
-    if(tree) {
-      G4int bin  = (G4int)(r0/stepR);
-      if(bin >= nBinsR) bin = nBinsR-1;
-      double w    = edep*volumeR[bin];
-      histo[0]->fill(r0,w);
-      histo[1]->fill(r0,w);
-      histo[2]->fill(r0,w);
+  if(nzbin == fScoreBin) {
+    G4int bin  = (G4int)(r0/fStepR);
+    if(bin >= fNBinsR) { bin = fNBinsR-1; }
+    double w = edep*fVolumeR[bin];
+    fEdep[bin] += w;
+    if(fAnalysisManager) {
+      fAnalysisManager->FillH1(fHisto[0],r0,w); 
+      fAnalysisManager->FillH1(fHisto[1],r0,w); 
+      fAnalysisManager->FillH1(fHisto[2],r0,w); 
     }
-#endif
   }
-  G4int bin1 = (G4int)(z1/stepZ);
-  if(bin1 >= nBinsZ) bin1 = nBinsZ-1;
-  G4int bin2 = (G4int)(z2/stepZ);
-  if(bin2 >= nBinsZ) bin2 = nBinsZ-1;
+  G4int bin1 = (G4int)(z1/fStepZ);
+  if(bin1 >= fNBinsZ) { bin1 = fNBinsZ-1; }
+  G4int bin2 = (G4int)(z2/fStepZ);
+  if(bin2 >= fNBinsZ) { bin2 = fNBinsZ-1; }
   if(bin1 == bin2) {
-#ifdef G4ANALYSIS_USE
-    if(tree) {
-      histo[3]->fill(z0,edep);
-      if(r1 < stepR) {
+    if(fAnalysisManager) {
+      fAnalysisManager->FillH1(fHisto[3],z0,edep); 
+      if(r1 < fStepR) {
         G4double w = edep;
-        if(r2 > stepR) w *= (stepR - r1)/(r2 - r1);
-        histo[4]->fill(z0,w);
+        if(r2 > fStepR) { w *= (fStepR - r1)/(r2 - r1); }
+        fAnalysisManager->FillH1(fHisto[4],z0,w);
       }
     }
-#endif
   } else {
     G4int bin;
 
@@ -530,26 +446,24 @@ void Histo::AddStep(G4double edep, G4double r1, G4double z1, G4double r2, G4doub
       z1 = z;
     }
     G4double zz1 = z1;
-    G4double zz2 = (bin1+1)*stepZ;
+    G4double zz2 = (bin1+1)*fStepZ;
     G4double rr1 = r1;
     G4double dz  = z2 - z1;
     G4double dr  = r2 - r1;
     G4double rr2 = r1 + dr*(zz2-zz1)/dz;
     for(bin=bin1; bin<=bin2; bin++) {
-#ifdef G4ANALYSIS_USE
-      if(tree) {
-	G4double de = edep*(zz2 - zz1)/dz;
-	G4double zf = (zz1+zz2)*0.5;
-	histo[3]->fill(zf,de);
-	if(rr1 < stepR) {
-	  G4double w = de;
-	  if(rr2 > stepR) w *= (stepR - rr1)/(rr2 - rr1);
-	  histo[4]->fill(zf,w);
-	}
+      if(fAnalysisManager) {
+        G4double de = edep*(zz2 - zz1)/dz;
+        G4double zf = (zz1+zz2)*0.5;
+        { fAnalysisManager->FillH1(fHisto[3],zf,de); }
+        if(rr1 < fStepR) {
+          G4double w = de;
+          if(rr2 > fStepR) w *= (fStepR - rr1)/(rr2 - rr1);
+          { fAnalysisManager->FillH1(fHisto[4],zf,w); }
+        }
       }
-#endif
       zz1 = zz2;
-      zz2 = std::min(z2, zz1+stepZ);
+      zz2 = std::min(z2, zz1+fStepZ);
       rr1 = rr2;
       rr2 = rr1 + dr*(zz2 - zz1)/dz;
     }

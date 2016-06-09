@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.10 2010-11-15 16:09:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -33,6 +32,7 @@
 
 
 #include "G4EvaporationLevelDensityParameter.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
 // Those values are from table 3 in 

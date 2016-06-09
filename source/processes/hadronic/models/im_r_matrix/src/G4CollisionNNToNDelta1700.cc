@@ -33,5 +33,12 @@
 
 G4CollisionNNToNDelta1700::G4CollisionNNToNDelta1700()
 { 
-  MakeNNToNDelta<Dm_1700PC, D0_1700PC, Dp_1700PC, Dpp_1700PC, G4ConcreteNNToNDeltaStar>::Make(this);
+	components=0;
+	MakeNNToNDelta<Dm_1700PC, D0_1700PC, Dp_1700PC, Dpp_1700PC, G4ConcreteNNToNDeltaStar>::Make(this);
+}
+
+G4CollisionNNToNDelta1700::~G4CollisionNNToNDelta1700()
+{
+	if (components) delete components;
+	components=0;
 }

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.4 2009-09-23 14:37:44 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Geant4 Header : G4HadronElastic
 //
@@ -101,8 +100,8 @@ G4HadronElastic::ComputeMomentumCMS(const G4ParticleDefinition* p,
 {
   G4double m1 = p->GetPDGMass();
   G4double m12= m1*m1;
-  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
-  return plab*m2/std::sqrt(m12 + m2*m2 + 2.*m2*std::sqrt(m12 + plab*plab));
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  return plab*mass2/std::sqrt(m12 + mass2*mass2 + 2.*mass2*std::sqrt(m12 + plab*plab));
 }
 
 #endif

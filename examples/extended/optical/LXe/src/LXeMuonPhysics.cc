@@ -23,21 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/src/LXeMuonPhysics.cc
+/// \brief Implementation of the LXeMuonPhysics class
+//
+//
 #include "LXeMuonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4PhysicalConstants.hh"
+#include <iomanip>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeMuonPhysics::LXeMuonPhysics(const G4String& name)
-                   :  G4VPhysicsConstructor(name)
-{
+                   :  G4VPhysicsConstructor(name) {
+  fMuPlusIonisation = NULL;
+  fMuPlusMultipleScattering = NULL;
+  fMuPlusBremsstrahlung = NULL;
+  fMuPlusPairProduction = NULL;
+
+  fMuMinusIonisation = NULL;
+  fMuMinusMultipleScattering = NULL;
+  fMuMinusBremsstrahlung = NULL;
+  fMuMinusPairProduction = NULL;
+
+  fMuMinusCaptureAtRest = NULL;
 }
 
-LXeMuonPhysics::~LXeMuonPhysics()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+LXeMuonPhysics::~LXeMuonPhysics() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -56,6 +74,7 @@ void LXeMuonPhysics::ConstructParticle()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
 
@@ -77,7 +96,7 @@ void LXeMuonPhysics::ConstructProcess()
 
   // Muon Plus Physics
   pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
-   
+
   pManager->AddProcess(fMuPlusMultipleScattering,-1,  1, 1);
   pManager->AddProcess(fMuPlusIonisation,        -1,  2, 2);
   pManager->AddProcess(fMuPlusBremsstrahlung,    -1,  3, 3);
@@ -85,7 +104,7 @@ void LXeMuonPhysics::ConstructProcess()
 
   // Muon Minus Physics
   pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
-   
+
   pManager->AddProcess(fMuMinusMultipleScattering,-1,  1, 1);
   pManager->AddProcess(fMuMinusIonisation,        -1,  2, 2);
   pManager->AddProcess(fMuMinusBremsstrahlung,    -1,  3, 3);
@@ -94,6 +113,3 @@ void LXeMuonPhysics::ConstructProcess()
   pManager->AddRestProcess(fMuMinusCaptureAtRest);
 
 }
-
-
-

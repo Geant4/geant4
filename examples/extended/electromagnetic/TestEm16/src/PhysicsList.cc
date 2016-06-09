@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.5 2009-11-19 18:12:32 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm16/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +42,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
@@ -56,6 +59,8 @@
 
 #include "G4StepLimiter.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
@@ -63,15 +68,15 @@ PhysicsList::PhysicsList()
 {
   defaultCutValue = 1.*km;
   
-  SRType = true; 
-  pMes = new PhysicsListMessenger(this);
+  fSRType = true; 
+  fMess = new PhysicsListMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 { 
-  delete pMes;
+  delete fMess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -139,16 +144,18 @@ void PhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
+      pmanager->AddDiscreteProcess(new G4RayleighScattering);
             
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4eMultipleScattering,       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,               -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3, 3);
-      if (SRType)
-      pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
-      else
-      pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
+      if (fSRType) {
+	pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
+      } else {
+	pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
+      }
       pmanager->AddProcess(new G4StepLimiter,               -1,-1, 5);
      
     } else if (particleName == "e+") {
@@ -157,10 +164,11 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,               -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,          0,-1, 4);
-      if (SRType)
-      pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 5);
-      else
-      pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 5);       
+      if (fSRType) {
+	pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 5);
+      } else {
+	pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 5);
+      }
       pmanager->AddProcess(new G4StepLimiter,               -1,-1, 6);
       
     } else if( particleName == "mu+" ||

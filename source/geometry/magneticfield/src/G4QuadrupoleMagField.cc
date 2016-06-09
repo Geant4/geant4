@@ -24,16 +24,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrupoleMagField.cc,v 1.4 2006-06-29 18:24:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 
 #include "G4QuadrupoleMagField.hh"
+#include "G4RotationMatrix.hh"
+
+static G4RotationMatrix IdentityMatrix; 
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient)
 {
+
    fGradient = pGradient ;
+   fOrigin      = G4ThreeVector( 0.0, 0.0, 0.0) ;
+   fpMatrix      = &IdentityMatrix;
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient, G4ThreeVector
+pOrigin, G4RotationMatrix* pMatrix)
+{
+   fGradient    = pGradient ;
+   fOrigin      = pOrigin ;
+   fpMatrix      = pMatrix ;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -43,12 +58,34 @@ G4QuadrupoleMagField::~G4QuadrupoleMagField()
 }
 
 ////////////////////////////////////////////////////////////////////////
+//  Allow displaced origin and rotation 
+//  Extensions by Björn Riese (GSI)
 
 void G4QuadrupoleMagField::GetFieldValue( const G4double y[7],
                                                 G4double B[3]  ) const  
 {
-   //   G4double fGradient = 0.001 ;   // Tesla/mm
-   B[0] = fGradient*y[1] ;
-   B[1] = fGradient*y[0] ;
-   B[2] = 0 ;
+
+   G4ThreeVector r_global = G4ThreeVector(
+        y[0] - fOrigin.x(), 
+        y[1] - fOrigin.y(), 
+        y[2] - fOrigin.z());
+
+   G4ThreeVector r_local = G4ThreeVector(
+           fpMatrix->colX() * r_global,
+           fpMatrix->colY() * r_global,
+           fpMatrix->colZ() * r_global);
+
+   G4ThreeVector B_local = G4ThreeVector(
+           fGradient * r_local.y(),
+        fGradient * r_local.x(),
+        0);
+
+   G4ThreeVector B_global = G4ThreeVector(
+           fpMatrix->inverse().rowX() * B_local,
+           fpMatrix->inverse().rowY() * B_local,
+           fpMatrix->inverse().rowZ() * B_local);
+
+   B[0] = B_global.x() ;
+   B[1] = B_global.y() ;
+   B[2] = B_global.z() ;
 }

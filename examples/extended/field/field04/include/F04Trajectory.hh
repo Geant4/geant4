@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04Trajectory.hh
+/// \brief Definition of the F04Trajectory class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04Trajectory_h
 #define F04Trajectory_h 1
 
@@ -43,7 +40,7 @@
 #include "G4Track.hh"
 #include "G4Allocator.hh"
 #include "G4VTrajectory.hh"
-#include "G4ParticleDefinition.hh" 
+#include "G4ParticleDefinition.hh"
 #include "G4TrajectoryPoint.hh"
 
 typedef std::vector<G4VTrajectoryPoint*> TrajectoryPointContainer;
@@ -59,7 +56,7 @@ class F04Trajectory : public G4VTrajectory
 
      F04Trajectory();
      F04Trajectory(const G4Track* aTrack);
-     F04Trajectory(F04Trajectory &);
+     F04Trajectory(F04Trajectory&);
      virtual ~F04Trajectory();
 
 // Operators
@@ -69,14 +66,14 @@ class F04Trajectory : public G4VTrajectory
      inline int operator == (const F04Trajectory& right) const
      { return (this==&right); }
 
-// Get/Set functions 
+// Get/Set functions
 
      inline G4int GetTrackID() const { return fTrackID; }
      inline G4int GetParentID() const { return fParentID; }
-     inline G4String GetParticleName() const { return ParticleName; }
-     inline G4double GetCharge() const { return PDGCharge; }
-     inline G4int GetPDGEncoding() const { return PDGEncoding; }
-     inline G4ThreeVector GetInitialMomentum() const { return initialMomentum; }
+     inline G4String GetParticleName() const { return fParticleName; }
+     inline G4double GetCharge() const { return fPDGCharge; }
+     inline G4int GetPDGEncoding() const { return fPDGEncoding; }
+     inline G4ThreeVector GetInitialMomentum() const { return fInitialMomentum; }
 
 // Other member functions
 
@@ -88,7 +85,7 @@ class F04Trajectory : public G4VTrajectory
 
      G4ParticleDefinition* GetParticleDefinition();
 
-     virtual int GetPointEntries() const 
+     virtual int GetPointEntries() const
      { return fpPointsContainer->size(); }
      virtual G4VTrajectoryPoint* GetPoint(G4int i) const
      { return (*fpPointsContainer)[i]; }
@@ -104,28 +101,24 @@ class F04Trajectory : public G4VTrajectory
 
      TrajectoryPointContainer* fpPointsContainer;
 
-     G4int fTrackID;
-     G4int fParentID;
-     G4double PDGCharge;
-     G4int    PDGEncoding;
-     G4String ParticleName;
-     G4ThreeVector initialMomentum;
+     G4int         fTrackID;
+     G4int         fParentID;
+     G4double      fPDGCharge;
+     G4int         fPDGEncoding;
+     G4String      fParticleName;
+     G4ThreeVector fInitialMomentum;
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<F04Trajectory> aTrajectoryAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<F04Trajectory> aTrajectoryAllocator;
-#endif
+extern G4Allocator<F04Trajectory> myTrajectoryAllocator;
 
 inline void* F04Trajectory::operator new(size_t) {
-    void* aTrajectory = (void*) aTrajectoryAllocator.MallocSingle();
+    void* aTrajectory = (void*) myTrajectoryAllocator.MallocSingle();
     return aTrajectory;
 }
 
 inline void F04Trajectory::operator delete(void* aTrajectory) {
-    aTrajectoryAllocator.FreeSingle((F04Trajectory*)aTrajectory);
+    myTrajectoryAllocator.FreeSingle((F04Trajectory*)aTrajectory);
 }
 
 #endif

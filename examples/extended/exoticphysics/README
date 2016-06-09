@@ -1,0 +1,18 @@
+
+        Geant4 extended examples - exotic physics
+        ----------------------------------------------
+
+ Examples in this directory demonstrate exotic physics applications. 
+ Currently, only two examples are provided:
+
+monopole
+---------
+
+This example is devoted to the energy deposited by classical magnetic
+monopole.
+
+phonon
+------
+
+This example simulates phonons in sub-Kelvin temperature Germanium crystal.
+

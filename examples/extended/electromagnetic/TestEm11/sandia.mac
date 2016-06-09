@@ -25,10 +25,9 @@
 /gun/particle e-
 /gun/energy 1000 keV
 #
-/testem/histo/setFileType root
-/testem/histo/setFileName sandia/Ta.1000keV.opt3
-###/testem/histo/setHisto 8 100 0.  1.0 none	#normalized Edep profile
-/testem/histo/setHisto 8 100 0.  0.5 none	#for Ta
+/analysis/setFileName sandia/Ta.1000keV.opt3
+###/analysis/h1/set 8 100 0.  1.0 none	#normalized Edep profile
+/analysis/h1/set 8 100 0.  0.5 none	#for Ta
 #
 /testem/event/printModulo 10000
 #

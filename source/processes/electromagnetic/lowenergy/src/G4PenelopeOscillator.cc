@@ -31,6 +31,7 @@
 // 18 Dec 2008   L Pandola    First implementation 
 
 #include "G4PenelopeOscillator.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -56,8 +57,11 @@ G4PenelopeOscillator::G4PenelopeOscillator(const G4PenelopeOscillator& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4PenelopeOscillator& G4PenelopeOscillator::operator=(const G4PenelopeOscillator& right)
+G4PenelopeOscillator& G4PenelopeOscillator::operator=(const G4PenelopeOscillator& right)
 {
+  if (this == &right)  
+    return *this; 
+
   hartreeFactor = right.hartreeFactor;
   ionisationEnergy = right.ionisationEnergy;
   resonanceEnergy = right.resonanceEnergy;

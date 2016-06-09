@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.6 2010-06-07 05:40:46 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm9/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
+// $Id$
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -40,12 +42,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction():
-  nEvt(0),
-  printModulo(100),
-  verbose(0),
-  drawFlag("all")
+  fPrintModulo(100),
+  fVerbose(0)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,46 +55,44 @@ EventAction::~EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::BeginOfEventAction(const G4Event*)
+void EventAction::BeginOfEventAction(const G4Event* event)
 {
   // New event
-  nEvt++;
+  G4int n = event->GetEventID();
   HistoManager* hi = HistoManager::GetPointer();
   hi->BeginOfEvent();
 
   // Switch on verbose mode
 
-  if(hi->FirstEventToDebug() == nEvt) {
-    verbose = 2;
+  if(hi->FirstEventToDebug() == n) {
+    fVerbose = 2;
     hi->SetVerbose(2);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
   }
 
   // Switch off verbose mode
-  if(hi->LastEventToDebug() == nEvt-1) {
-    verbose = 0;
+  if(hi->LastEventToDebug() == n+1) {
+    fVerbose = 0;
     hi->SetVerbose(0);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
   }
 
-
   // Initialize user actions
-  if(verbose > 0) {
-    G4cout << "EventAction: Event # "
-           << nEvt << " started" << G4endl;
+  if(fVerbose > 0 || (n/fPrintModulo)*fPrintModulo == n) {
+    G4cout << "EventAction: Event # " << n << " started" << G4endl;
   }
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::EndOfEventAction(const G4Event*)
+void EventAction::EndOfEventAction(const G4Event* event)
 {
   (HistoManager::GetPointer())->EndOfEvent();
 
-  if(verbose > 0) {
-    G4cout << "EventAction: Event # "
-           << nEvt << " ended" << G4endl;
+  if(fVerbose > 0) {
+    G4cout << "EventAction: Event # " << event->GetEventID() 
+           << " ended" << G4endl;
   }
 }
 

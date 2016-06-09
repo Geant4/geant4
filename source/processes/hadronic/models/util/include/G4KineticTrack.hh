@@ -35,6 +35,8 @@
 #ifndef G4KineticTrack_h
 #define G4KineticTrack_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
 
@@ -73,7 +75,7 @@ class G4KineticTrack : public G4VKineticNucleon
 
       ~G4KineticTrack();
 
-      const G4KineticTrack& operator=(const G4KineticTrack& right);
+      G4KineticTrack& operator=(const G4KineticTrack& right);
 
       G4int operator==(const G4KineticTrack& right) const;
 
@@ -160,10 +162,6 @@ public:
 
   //   friend G4double IntegrandFunction4 (G4double xmass);
       
-  // LB new variable created LB
-      G4int chosench;
-
-
   private:
  
       G4ParticleDefinition* theDefinition;
@@ -297,9 +295,9 @@ inline void G4KineticTrack::SetTrackingMomentum(const G4LorentzVector& aMomentum
   the4Momentum = aMomentum;
   theTotal4Momentum=the4Momentum+theFermi3Momentum;
 //     keep mass of aMomentum for the total momentum
-  G4double m2 = aMomentum.mag2();
+  G4double mass2 = aMomentum.mag2();
   G4double p2=theTotal4Momentum.vect().mag2();
-  theTotal4Momentum.setE(std::sqrt(m2+p2));
+  theTotal4Momentum.setE(std::sqrt(mass2+p2));
 }
 
 inline void G4KineticTrack::UpdateTrackingMomentum(G4double aEnergy)
@@ -376,21 +374,21 @@ inline G4double G4KineticTrack::EvaluateTotalActualWidth()
 inline G4double G4KineticTrack::SampleResidualLifetime()
 {
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
- G4double tau = hbar_Planck * (-1.0 / theTotalActualWidth);
+ G4double tau = CLHEP::hbar_Planck * (-1.0 / theTotalActualWidth);
  G4double theResidualLifetime = tau * std::log(G4UniformRand());
  return theResidualLifetime*the4Momentum.gamma();
 }
 
 
 
-inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double m, 
+inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double mass, 
                                                  const G4double* m_ij) const
 {
   G4double theCMMomentum;
-  if((m_ij[0]+m_ij[1])<m)
-   theCMMomentum = 1 / (2 * m) * 
-          std::sqrt (((m * m) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
-                ((m * m) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));
+  if((m_ij[0]+m_ij[1])<mass)
+   theCMMomentum = 1 / (2 * mass) * 
+          std::sqrt (((mass * mass) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
+                ((mass * mass) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));
   else
    theCMMomentum=0.;
 
@@ -399,7 +397,7 @@ inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double m,
 
 inline G4double G4KineticTrack::BrWig(const G4double Gamma, const G4double rmass, const G4double mass) const 
 {                
-  G4double Norm = twopi;
+  G4double Norm = CLHEP::twopi;
   return (Gamma/((mass-rmass)*(mass-rmass)+Gamma*Gamma/4.))/Norm;
 }
       

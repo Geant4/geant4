@@ -4,7 +4,7 @@
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
 
-name := hadr01
+name := Hadr01
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -18,9 +18,6 @@ all: lib bin
 include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
-
-histclean:
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl

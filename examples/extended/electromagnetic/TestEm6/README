@@ -94,10 +94,6 @@ $Id: README,v 1.17 2008-09-18 16:42:07 maire Exp $
 		  	
  6- HOW TO START ?
  
-     - compile and link to generate an executable
-	% cd geant4/examples/extended/electromagnetic/TestEm6 
- 	% gmake
- 		
      - execute Test  in 'batch' mode from macro files
  	% TestEm6    run01.mac
  		
@@ -126,18 +122,8 @@ $Id: README,v 1.17 2008-09-18 16:42:07 maire Exp $
  
   Testem6 produces 6 histograms which illustrate the final state of 
   the GammaConversionToMuons process. See their definitions in RunAction.cc   
-
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-  Before compilation of the example it is optimal to clean up old files:
-	gmake histclean
-	gmake
 	
   By default the histograms are saved as testem6.root
-  It is possible to choose the format of the histogram file (hbook, root, XML):
-  comment/uncomment 1 line in the constructor of RunAction. 
 
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
+  The format of the histogram file can be : root (default), xml, csv,
+  by selecting g4nnn.hh in RunAction.hh   

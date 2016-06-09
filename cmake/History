@@ -29,6 +29,440 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27th November 2012 -  Ben Morgan       (cmake-V09-05-79)
+- Templates/geant4-config.in : Correct listing of G3toG4 library,
+  replacing "-lG3ToG4" with "-lG3toG4"
+
+
+27th November 2012 -  Gabriele Cosmo   (cmake-V09-05-78)
+- Added "-Wno-variadic-macros -Wshadow" compilation options g++ and clang.
+- Extended description in Geant4CPackBase.cmake script.
+
+26th November 2012 -  Gunter Folger    (cmake-V09-05-77)
+- Switch to PhotonEvaporation 2.3
+
+23rd November 2012 -  Gunter Folger    (cmake-V09-05-76)
+- Switch to G4RadioactiveDecay 3.6
+
+21st November 2012 - Ben Morgan        (cmake-V09-05-75)
+- Templates/geant4_validate_sources.cmake.in : Add "T1xxChannel.cc"
+  and "XXChannel.cc" names to false positives. These names appear
+  in processes/hadronic/models/cascade/cascade/sources.cmake as
+  comments, but the current regex picks them up. This is a temporary
+  fix as longer term solution is to update regex to not match
+  comments!
+
+21st November 2012 - Ben Morgan        (cmake-V09-05-74)
+- Templates/Geant4Config.cmake.in : Fix setting of Geant4 DEFINITIONS
+  INCLUDE_DIRS and LIBRARIES so that multiple calls to find_package
+  do not overwrite previosu settings. Multiple calls now copy,
+  insert or append to these variables as needed. Duplicates
+  are removed from the final list.
+- Templates/UseGeant4.cmake : Tidy up documentation and mark
+  macros as deprecated.
+
+20th November 2012 - Ivana Hrivnacova  (cmake-V09-05-73)
+- Fixed FindHepMC.cmake (GenEvent.h file extension was missing)
+ 
+16th November 2012 - Ben Morgan        (cmake-V09-05-72)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Improve
+  description of workaround for sourcing Cshell scripts
+  non-interactively, as reported in HyperNews:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/installconfig/1513/1.html
+
+15th November 2012 - Ben Morgan        (cmake-V09-05-71)
+[BUGFIX #1387]
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Correct shell
+  variable name in export of commands to scripts.
+
+14th November 2012 - Ben Morgan        (cmake-V09-05-70)
+- Modules/Geant4BuildProjectConfig.cmake : Add CMakeMacroParseArguments
+  to list of modules installed as it is needed to support FindROOT
+  on CMake < 2.8.
+
+
+14th November 2012 -  Gunter Folger    (cmake-V09-05-69)
+-  switch to G4NDL 4.2 
+   (excluding changes made past tag cmake-V09-05-68)
+
+13th November 2012 - Ben Morgan
+[BUGFIX #1290, #1328]
+- Templates/geant4-config.in : Add support for G3ToG4 library. Add
+  CLHEP library to link line using output from clhep-config.
+  Replace explicit -I@VAR@ flags with pure @VAR@ variables for
+  each include path that may be filtered out if it is in the 
+  compiler's default search path.
+- Modules/Geant4ConfigureConfigScript.cmake : Set export variable
+  for existence of G3ToG4. Implement function to return list of
+  default search paths for GNU, Clang and Intel compilers.
+  Create list before configuring geant4-config, and filter out
+  any header paths that we need to export but that appear in this list 
+  before creating export variables.
+
+13th November 2012 - Ben Morgan       (cmake-V09-05-68)
+- Modules/Geant4BuildProjectConfig.cmake : Copy FindXXX modules required
+  by examples from source to build tree, and install them into a
+  Modules subdirectory of GEANT4_CMAKE_DIR.
+- Templates/UseGeant4.cmake : Append path for FindXXX modules required
+  by examples to CMAKE_MODULE_PATH. This is transparent across both
+  the build and install trees.
+
+
+12th November 2012 - Ben Morgan       (cmake-V09-05-67)
+- Modules/Geant4MakeRules_cxx.cmake : Add -Qunused-arguments flag
+  to compiler flags when running Clang. This is to finally suppress
+  warnings when building tests, which CTest cannot filter out.
+
+
+9th November 2012 - Ben Morgan        (cmake-V09-05-66)
+- Resubmission of cmake-V09-05-64+cmake-V09-05-65. Former was
+  rejected after clang warnings, which are now ignored by the
+  CTest system. Latter passed Continuous builds without issue and
+  only affects Windows systems.
+
+
+8th November 2012 - Ben Morgan        (cmake-V09-05-65)
+- Modules/Geant4MakeRules_cxx.cmake : Remove MD flags from core flags.
+  Add MD flag to Release style build modes (RELEASE, MINSIZEREL and
+  RELWITHDEBINFO). Add MDd flag to Debug style build modes (DEBUG,
+  TESTRELEASE, MAINTAINER).
+  This follows discussions originated from HyperNews:
+  http://hypernews.slac.stanford.edu:5090/HyperNews/geant4/get/installconfig/1436/1.html
+
+
+7th November 2012 - Ben Morgan        (cmake-V09-05-64)
+- [BUGFIX #1351]
+- Geant4MacroUtilities.cmake : Implement new functions set_ifnot
+  and enum_option
+- Geant4MakeRules_cxx.cmake : Implement C++ Standard detection and
+  flag configuration for GNU, Clang and Intel compilers.
+- Geant4LibraryBuildOptions.cmake : Add user option to select C++
+  Standard to build against, it the compiler supports this. The
+  default is always c++98/'ansi' (C++98 plus the '03 addenda).
+
+
+5th November 2012 - Ben Morgan        (cmake-V09-05-63)
+- Modules/Geant4InterfaceOptions.cmake: Remove requirement to co-work
+  with internal tag openinventor-V09-05-16.
+
+
+5th November 2012 - Ben Morgan        (cmake-V09-05-62)
+- Modules/Geant4InterfaceOptions.cmake: Check that X11 Xpm library
+  has been found when Inventor driver is activated, and FATAL_ERROR
+  is it is not located.
+
+
+2nd November 2012 - Ben Morgan        (cmake-V09-05-61)
+- [BUGFIX #1285]
+- Modules/Geant4InstallData.cmake: Implement new
+  API for managing data to allow reuse of existing datasets and
+  not install data at build time if required.
+- Modules/Geant4DatasetDefinitions.cmake: Migrate dataset definitions
+  to separate file to ease update and patch cycle.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Migrate export
+  of dataset environment variables/paths to use new dataset API. Avoids
+  hardcoding of dataset names, allowing for easy expansion/contraction
+  in the future.
+- Modules/Geant4CTest.cmake: Migrate setting of GEANT4_TEST_ENVIRONMENT
+  to use new dataset API for export of environment variable names and
+  values.
+- Templates/geant4make-skeleton.in: Migrate expansion variables for
+  datasets to single 'code block' variable.
+- Templates/geant4-env-skeleton.in: Migrate expansion variables for
+  datasets to single 'code block' variable.
+- [PERFORMANCE]: Tidy up module inclusions to provide minor, but
+  noticeable, speed up in CMake configuration time.
+- Modules/Geant4MacroDefineModule.cmake: Use 'header guard' variable to
+  prevent module being loaded multiple times.
+- Modules/Geant4MacroLibraryTargets.cmake: Use 'header guard' variable to
+  prevent module being loaded multiple times.
+- Modules/Geant4MacroUtilities.cmake: Include Geant4MacroDefineModule
+  and Geant4MacroLibraryTargets so these are included at top level and
+  hence are not re-parsed by CMake if they are included in lower scopes.
+- [CLEANUP]
+- Templates/geant4-env.csh.in: Remove obsolete file.
+- Templates/geant4-env.sh.in: Remove obsolete file.
+
+
+31st October 2012 - Ben Morgan        (cmake-V09-05-60)
+- Modules/Geant4InstallData.cmake: Remove obsolete ABLA dataset.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Remove
+  setting of ABLA environment export variables to overcome error
+  reported by Gunter Folger and Hisaya Kurashige.
+- Modules/Geant4CTest.cmake: Remove obsolete ABLA dataset.
+- Template/geant4-env-skeleton.in: Remove ABLA export variables
+- Template/geant4make-skeleton.in: Remove ABLA export variables
+
+
+31th October 2012 -  Gunter Folger    (cmake-V09-05-59)
+-  bring settings for ABLA back in , used elsewhere, and caused 
+    configure to badly fail.
+    
+30th October 2012 -  Gunter Folger    (cmake-V09-05-58)
+- Modules/Geant4InstallData.cmake: Revert to use G4EMLOW.6.32
+    and delete settings for ABLA, not needed per Davide M.
+
+30th October 2012 - John Apostolakis  (cmake-V09-05-57)
+- Modules/Geant4InstallData.cmake: Revert to use G4EMLOW.6.31
+    to overcome problems in Continuous build of G4 in Cdash
+
+30th October 2012 - Gunter Folger     (cmake-V09-05-56)
+- Modules/Geant4InstallData.cmake: Use G4EMLOW.6.32
+
+25th October 2012 - Pere Mato (cmake-V09-05-55)
+- Templates/Geant4CTest.cmake: corrected mistake with GEANT4_DATA_DIR
+
+19th October 2012 - Ben Morgan (cmake-V09-05-54)
+- Templates/Geant4Config.cmake.in : Add g3tog4 component to detect
+  and configure G3toG4 library if required.
+- Modules/Geant4OptionalComponents.cmake : Improve documentation of
+  GEANT4_USE_G3TOG4 option.
+- Modules/Geant4CTest.cmake : Remove un-needed message() of dataset
+  configuration.
+
+18th October 2012 - Gunter Folger     (cmake-V09-05-53)
+- Modules/Geant4InstallData.cmake: Use G4EMLOW.6.31
+
+16th October 2012 Ben Morgan (cmake-V09-05-52)
+- Modules/Geant4InstallData.cmake : Update version and MD5 of
+  G4NEUTRONXS for 1.2 release, add new G4SAIDDATA dataset,
+  version 1.1
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Export
+  new G4SAIDDATA dataset to scripts.
+- Modules/Geant4CTest.cmake : Add new G4SAIDDATA dataset to
+  CTest environment, and remove obsolete G4ELASTICDATA and 
+  NeutronHPCrossSections environment variables.
+- Templates/geant4-env-skeleton.in : Add expansion variable for
+  export of new G4SAIDDATA dataset.
+- Templates/geant4make-skeleton.in : Add expansion variable for
+  export of new G4SAIDDATA dataset.
+
+
+12th October 2012 Ben Morgan (cmake-V09-05-51)
+- Modules/FindInventor.cmake: BUGFIX #1320: Remove find of Inventor
+  debug libraries and do not use the "optimized;debug" technique.
+  Add find for of SoXt headers.
+- Modules/Geant4InterfaceOptions.cmake: BUGFIX #1320: Add SoXt headers
+  to INVENTOR_INCLUDE_DIR when on UNIX, and FATAL_ERROR if SoXt not
+  located. Add X11 Xt library when SoXt is used on Mac OS X
+ 
+9th October 2012 Pere Mato (cmake-V09-05-50)
+- Modules/Geant4CTest.cmake: minor changes to avoid user traps
+
+4th October 2012 - Gunter Folger     (cmake-V09-05-49)
+- Modules/Geant4InstallData.cmake: Use G4EMLOW.6.30
+
+26th September 2012 Ivana Hrivnacova (cmake-V09-05-48)
+- Adding FindPythia6 module.
+- Modules/FindHepMC.cmake: support also HEPMC_DIR environment variable (which
+  is used in GNUmake build); added HEPMC_FIO_LIBRARIES
+
+25th September 2012 Ivana Hrivnacova (cmake-V09-05-47)
+- Adding FindAIDA module.
+
+24th September - Pere Mato (cmake-V09-05-46)
+- Modules/Geant4TestDriver.cmake : Use the argument TIM=<timeout> to set a shorter timeout than CTest
+- Templates/UseGeant4_internal.cmake : Generate TIM argument from test TIMEOUT property
+
+24th September - Ben Morgan (cmake-V09-05-45)
+- Modules/ResolveCompilerPaths.cmake : Remove extraneous quotes around
+  resolved include paths (patch from Fabian Kislat, BUGFIX #1357)
+
+19th September - Ben Morgan (cmake-V09-05-44)
+- Modules/Geant4MakeRules_cxx.cmake : Remove optimization flags from
+  TestRelease build mode flags on all platforms (BUGFIX #1263).
+- Modules/Geant4BuildModes.cmake : Remove obsolete "TestReleaseDebug" build
+  mode (BUGFIX #1263)
+
+17th September - Ben Morgan (cmake-V09-05-43)
+- Modules/Geant4InstallData.cmake : Update G4EMLOW dataset to version 6.29
+  and update MD5 sum.
+
+30th August 2012 Pere Mato (cmake-V09-05-42)
+- Modules/Geant4CTest.cmake : Added Unit Tests and some re-organization of the module
+- Modules/Geant4MacroUtilities.cmake : Moved macro GEANT4_LATEST_VERSION to this module
+
+29th August 2012 Witek Pokorski (cmake-V09-05-41)
+- Adding FindHepMC module.
+
+28th August 2012 - Pere Mato 
+- Modules/Geant4MacroUtilities.cmake: Defined new macro GEANT4_ADD_UNIT_TESTS
+- Modules/Geant4LibraryBuildOptions.cmake: Added new option GEANT4_BUILD_TESTS
+
+28th August 2012 - Gunter Folger (cmake-V09-05-39)
+- Modules/Geant4InstallData.cmake: Use RadioactiveDecay3.5
+
+16th July 2012 - Ben Morgan (cmake-V09-05-38)
+- Use correct tag name. Update tag number to ensure numerical sequence.
+
+16th July 2012 - Ben Morgan (cmake-V09-05-37)
+- Templates/geant4_validate_sources.cmake.in : Remove use of STATUS in
+  error messages so all errors go to stderr.
+
+10th July 2012 - Ben Morgan (cmake-V09-05-36)
+- Modules/Geant4MakeRules_cxx.cmake : Add preliminary support for Clang 
+  detection (CMake > 2.8.1)
+- Modules/Geant4/LibraryBuildOptions.cmake : Add preliminary support for
+  Clang detection (CMake > 2.8.1)
+
+10th July 2012 - Ben Morgan
+- Modules/FindStatTest.cmake : Minor formatting/layout updates.
+
+10th July 2012 - Andrea Dotti (cmake-V09-05-35)
+- Modules/FindStatTest.cmake : First commit of module to find and setup
+  utility program StatTest for automatic regression testing of Geant4 
+  ctest outputs
+
+27th June 2012 - Pere Mato  (cmake-V09-05-34)
+- Modules/Geant4TestDriver.cmake : Added TST paramenter to obtain the test name to produce
+                                   <test>.out and <test>.err
+- Templates/UseGeant4_internal.cmake: mofdified to pass the test name
+
+22nd June 2012 - Pere Mato  (cmake-V09-05-33)
+- Modules/Geant4TestDriver.cmake : Fixed the problem that <test> should be only the
+  file name and not the full path of the executable.
+
+22nd June 2012 - Pere Mato  (cmake-V09-05-32)
+- Modules/Geant4TestDriver.cmake : adapted to create <test>.out and <test>.err files 
+  with stdout and stderr each time a test is run in the current directory.
+
+21th June 2012 - Gunter Folger  (cmake-V09-05-31)
+- After update of G4EMLOW6.27, new tar needs updated md5sum.
+
+21th June 2012 - Gunter Folger  (cmake-V09-05-30)
+- After recreating G4NDL4.1, update md5sum.
+
+20th June 2012 - Gunter Folger  (cmake-V09-05-29) 
+- Modules/Geant4InstallData.cmake: Use G4NDL 4.1
+
+15th June 2012 - Gabriele Cosmo (cmake-V09-05-28)
+- Updated tags to 9.6.0 for 9.6-beta.
+
+14th June 2012 - Ben Morgan (cmake-V09-05-27)
+- Modules/Geant4OptionalComponents.cmake : Search for system expat by
+  default on non-Win32. We prefer the system library on these platforms
+  due to compilation warnings in the current internal version of expat.
+
+13th June 2012 - Ben Morgan (cmake-V09-05-26)
+- Modules/Geant4OptionalComponents.cmake : Allow choice between internal
+  and system expat library on non-Win32 platforms, default to use
+  internal. Choosing system expat requires it to be found.
+
+12th June 2012 - Ben Morgan (cmake-V09-05-25)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Quote paths used
+  in execute_process calls run at install time. This fixes a problem
+  reported by Joseph Perl on Windows, when a space appears in the install
+  prefix.
+
+8th June, 2012 - Gunter Folger (cmake-V09-05-24)
+- Modules/Geant4OptionalComponents.cmake: require CLHEP 2.1.2.3
+
+4th June, 2012 - Gunter Folger (cmake-V09-05-23)
+- Modules/Geant4InstallData.cmake: use G4EMLOW.6.27
+
+1st June, 2012 - Ben Morgan (cmake-V09-05-22)
+- Modules/Geant4InstallData.cmake : Complete rewrite of data installation 
+  with support for CMake >= 2.6.4 and custom physics data install location.
+  Downloaded data bundles are also verified using MD5 hashes.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Location of data
+  updated to use new paths from Geant4InstallData.cmake.
+
+May 31st, 2012 - Pere Mato (cmake-V09-05-21)
+- Modules/Geant4BuildProjectConfig.cmake : Transmit CMAKE_EXE_LINKER_FLAGS as Geant4_EXE_LINKER_FLAGS
+- Templates/UseGeant4.cmake : Set CMAKE_EXE_LINKER_FLAGS as Geant4_EXE_LINKER_FLAGS
+  This is to ensure that the definition is of CMAKE_EXE_LINKER_FLAGS is used by projects using Geant4
+
+May 30th, 2012 - Pere Mato (cmake-V09-05-20)
+- Modules/Geant4MakeRules_cxx.cmake : Added -limf library in CMAKE_EXE_LINKER_FLAGS for icc compiler.
+  This is to avoid warnings of the type "warning: feupdateenv is not implemented and will always fail"
+
+May 30th, 2012 - Pere Mato (cmake-V09-05-19)
+- Templates/UseGeant4_internal.cmake : Added new arguments WORKING_DIRECTORY and LABELS to GEANT4_ADD_TEST() 
+  This allows to assign tests to specific test slots (Nightly, Continuous, PhyscisChecks). If no label is specified it is
+  given the Nightly label.
+
+May 29th, 2012 - Ben Morgan (cmake-V09-05-18)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : [BUGFIX #1268] Enable use of C-shell scripts inside other scripts. 
+ This follows the pattern used in ROOT's cshell scripts, which works at 
+ the cost of the user having to supply extra information to the source
+ command/script.
+- Templates/geant4-env-skeleton.in : [BUGFIX #1268] Protect changes to the environment if self location fails.
+- Templates/geant4make-skeleton.in : [BUGFIX #1268] Protect changes to the environment if self location fails.
+
+
+May 9th, 2012 - Pere Mato (cmake-V09-05-17)
+- Templates/UseGeant4_internal.cmake : By default tests building anything will fail in case of warnings. 
+  This is wanted by G. Folger.
+
+May 8th, 2012 - Pere Mato (cmake-V09-05-16)
+- Templates/UseGeant4_internal.cmake : Added PASSREGEX and FAILREGEX arguments to GEANT4_ADD_TEST()
+
+April 30th, 2012 - Ben Morgan (cmake-V09-05-15)
+- Modules/Geant4InstallData.cmake : GEANT4_INSTALL_DATA set as an INTERNAL
+  variable when deactivated on CMake < 2.8. Ensures it doesn't show in GUI.
+- Modules/Geant4LibraryBuildOptions.cmake : Force deactivation of
+  GEANT4_ENABLE_TESTING on CMake < 2.8 due to compatibility issues.
+
+April 24th, 2012 - Ben Morgan (cmake-V09-05-14)
+- Modules/Geant4InstallData.cmake : Force GEANT4_INSTALL_DATA to OFF if
+  CMake < 2.8.0 is used, and warn user if it has been set. This prevents the
+  problem reported on HyperNews:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/visualization/612/3/1/1/1.html
+
+April 20th, 2012 - Ben Morgan (cmake-V09-05-13)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Fixed Bug #1306, using
+  BASH_VERSION instead of non-POSIX compliant check.
+
+April 12th, 2012 - Pere Mato (cmake-V09-05-12)
+- Fixed bug in Modules/Geant4CTest.cmake to locate newest data library version
+
+April 12th, 2012 - Gunter Folger (cmake-V09-05-11)
+- Switch to G4EMLOW6.26
+
+April 5th, 2012 - Gunter Folger  (cmake-V09-05-10)
+- Switch to G4EMLOW6.25
+
+April 3rd, 2012 - Ben Morgan (cmake-V09-05-09)
+- Modules/Geant4InstallData.cmake : Increased default timeout to 1500s.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Redirect all cd commands
+  to /dev/null as some cd implementations report change to stdout.
+
+March 30th, 2012 - Ben Morgan (cmake-V09-05-08)
+- Modules/Geant4InstallData.cmake : Add GEANT4_INSTALL_DATA_TIMEOUT cache
+  variable to allow users to increase the download timeout on slow connections.
+  Only available on CMake 2.8.1 and above.
+
+March 22nd, 2012 - Pere Mato (cmake-V09-05-07)
+- genwindef/LibSymbolInfo.cpp : filter the symbols giving problems when building G4clhep for Win64 (second attempt)
+
+March 22nd, 2012 - Pere Mato (cmake-V09-05-06)
+- genwindef/LibSymbolInfo.cpp : filter the symbols giving problems when building G4clhep for Win64
+
+March 7th, 2012 - Pere Mato (cmake-V09-05-05)
+- Modules/Geant4MakeRules_cxx.cmake : added link flag "-i-dynamic" to avoid link ICC warnings of the sort
+                                      "warning: feupdateenv is not implemented and will always fail"
+
+March 6th, 2012 - Pere Mato (cmake-V09-05-04)
+- Modules/Geant4LibraryBuildOptions.cmake : matching "icc" in addition to "icpc" to detect Intel compiler
+- Modules/Geant4MakeRules_cxx.cmake : change ICC option from -Wnon-virtual-dtor to -Wno-non-virtual-dtor 
+
+February 10th, 2012 - Pere Mato (cmake-V09-05-03)
+- Added function REFLEX_GENERATE_DICTIONARY() in FindROOT.cmake
+
+January 25th, 2012 - Gunter Folger (cmake-V09-05-02)
+- Switch to G4EMLOW6.24
+
+December 13th 2011 - P. mato (cmake-V09-05-01)
+- Templates/UseGeant4_internal.cmake: Avoid prepending configuration tag for existing commands
+
+December 6th 2011 - B.Morgan (cmake-V09-05-00)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake [BUGFIX #1265]: Added
+  setting of expansion variable needed to prepend path with G4WORKDIR path.
+- Templates/geant4make-skeleton.in [BUGFIX #1265] : Added expansion variable for
+  path setup to G4WORKDIR directory for executables.
+- Templates/geant4-env-skeleton.in [BUGFIX #1265] : Added needed '@' symbol 
+  to end of GEANT4_TC_SHELL_PROGRAM used as shbang.
+
 
 November 30th 2011 - B.Morgan (cmake-V09-04-41)
 - Modules/Geant4LibraryBuildOptions.cmake : Commented out

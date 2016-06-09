@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.17 2008-07-18 06:37:06 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef WIN32
@@ -75,7 +74,10 @@ G4UItcsh::G4UItcsh(const G4String& prompt, G4int maxhist)
   tcgetattr(0, &tios);
 
   // read a shell history file
-  G4String homedir= getenv("HOME");
+  const char* path = getenv("HOME");
+  if( path == NULL ) return;
+
+  G4String homedir= path;
   G4String fname= homedir + historyFileName;
 
   std::ifstream histfile;
@@ -98,7 +100,10 @@ G4UItcsh::~G4UItcsh()
 /////////////////////
 {
   // store a shell history
-  G4String homedir= getenv("HOME");
+  const char* path = getenv("HOME");
+  if( path == NULL ) return;
+
+  G4String homedir= path;
   G4String fname= homedir + historyFileName;
 
   std::ofstream histfile;
@@ -403,10 +408,11 @@ void G4UItcsh::ListMatchedCommand()
     input.remove(0, jhead);
     input= input.strip(G4String::leading);
   }
+  //G4cout << "@@@@ input=" << input << G4endl;
 
   // command tree of "user specified directory"
-  G4String vpath= currentCommandDir;
-  G4String vcmd;
+  G4String vpath = currentCommandDir;
+  G4String vcmd = "";
 
   if( !input.empty() ) {
     G4int len= input.length();
@@ -415,7 +421,7 @@ void G4UItcsh::ListMatchedCommand()
       if(input[(size_t)i]=='/') {
         indx= i;
         break;
-      }   
+      }
     }
     // get abs. path
     if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));  
@@ -423,6 +429,7 @@ void G4UItcsh::ListMatchedCommand()
   }
 
   // list matched dirs/commands
+  //G4cout << "@@@ vpath=" << vpath <<":vcmd=" << vcmd << G4endl;
   ListCommand(vpath, vpath+vcmd);
 
   G4cout << promptString << commandLine << std::flush;
@@ -441,6 +448,11 @@ void G4UItcsh::CompleteCommand()
     input= input.strip(G4String::leading);
   }
 
+  // tail string
+  size_t thead = input.find_last_of('/');
+  G4String strtail = input;
+  if (thead != G4String::npos) strtail = input(thead+1, input.size()-thead-1);
+
   // command tree of "user specified directory"  
   G4String vpath= currentCommandDir;
   G4String vcmd;
@@ -455,7 +467,7 @@ void G4UItcsh::CompleteCommand()
       }   
     }
     // get abs. path
-    if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));  
+    if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));
     if(!(indx==0  && len==1)) vcmd= input(indx+1,len-indx-1);  // care for "/"
   }
 
@@ -501,8 +513,6 @@ void G4UItcsh::CompleteCommand()
     }
   }
 
-  if(nMatch==0) return;  // no matched
-
   // display...
   input= commandLine;
   // target token is last token
@@ -510,11 +520,7 @@ void G4UItcsh::CompleteCommand()
   if(jhead == G4int(G4String::npos)) jhead=0;
   else jhead++;
 
-  G4int jt= input.find_last_of('/');
-  if(jt<jhead) jt=G4int(G4String::npos);
-
-  if(jt==G4int(G4String::npos)) jt= jhead;
-  else jt++;
+  G4int jt = jhead;
 
   G4String dspstr; 
   G4int i;
@@ -522,17 +528,18 @@ void G4UItcsh::CompleteCommand()
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(' '); 
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
 
-  dspstr+= stream;
-  G4cout << dspstr << std::flush; 
+  dspstr+= (vpath + stream);
+  if (nMatch == 0) dspstr+= strtail;
+  G4cout << dspstr << std::flush;
 
   // command line string
   input.remove(jt);
-  input+= stream;
+  input+= (vpath + stream);
+  if (nMatch==0) input+= strtail;
 
   commandLine= input;
   cursorPosition= commandLine.length()+1;
 }
-
 
 // --------------------------------------------------------------------
 //      commad line
@@ -637,9 +644,9 @@ G4String G4UItcsh::ReadLine()
   return commandLine;
 }
 
-//////////////////////////////////////////////////
-G4String G4UItcsh::GetCommandLine(const char* msg)
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+G4String G4UItcsh::GetCommandLineString(const char* msg)
+////////////////////////////////////////////////////////
 {
   SetTermToInputMode();
 

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * StandardPropagationModel.hh
  *
- *  Created on: 4 June 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 June 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef G4INCLStandardPropagationModel_hh
@@ -83,8 +83,9 @@ namespace G4INCL {
        */
       G4INCL::Nucleus* getNucleus();
 
-      G4bool shootProjectile(G4INCL::Particle *p, G4double impactParameter);
-      G4bool shootProjectile(G4INCL::Nucleus *n, G4double impactParameter);
+      G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
+      G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
+      G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
 
       /**
        * Set the stopping time of the simulation.
@@ -112,7 +113,7 @@ namespace G4INCL {
        *
        * Returns the reflection time of a particle on the potential wall.
        *
-       * \param aParticle poG4inter to the particle
+       * \param aParticle pointer to the particle
        */
       G4double getReflectionTime(G4INCL::Particle const * const aParticle);
 
@@ -122,12 +123,6 @@ namespace G4INCL {
       G4double getTime(G4INCL::Particle const * const particleA,
 		     G4INCL::Particle const * const particleB, G4double *minDistOfApproach) const;
 
-      /**
-       * Create avatars between participants and all other particles.
-       */
-      void checkCollisions(const ParticleList &participants,
-					       const ParticleList &particles);
-
       /** \brief Generate and register collisions between a list of updated particles and all the other particles.
        *
        * This method does not generate collisions among the particles in
@@ -135,7 +130,7 @@ namespace G4INCL {
        * of the updatedParticles and one of the particles ONLY IF the latter
        * does not belong to updatedParticles.
        *
-       * If you G4intend to generate all possible collisions among particles in a
+       * If you intend to generate all possible collisions among particles in a
        * list, use generateCollisions().
        *
        * \param updatedParticles list of updated particles
@@ -182,14 +177,15 @@ namespace G4INCL {
        */
       G4INCL::IAvatar* propagate();
 
-      G4double calculateParticlePositionAtSurface(ThreeVector pos, Particle *p);
-
     private:
       G4INCL::Nucleus *theNucleus;
       G4double maximumTime;
       G4double currentTime;
       G4bool firstAvatar;
       LocalEnergyType theLocalEnergyType, theLocalEnergyDeltaType;
+
+      /// \brief Put spectators on shell by extracting energy from the participants.
+      void putSpectatorsOnShell(IAvatarList const &entryAvatars, ParticleList const &spectators);
     };
 
 }

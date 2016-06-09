@@ -24,111 +24,82 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.hh,v 1.8 2010-09-23 10:27:25 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:              G4VFacet.hh
-//
-// Date:                15/06/2005
-// Author:              P R Truscott
-// Organisation:        QinetiQ Ltd, UK
-// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:            C/MAT/N03517
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
-//
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// Class G4VFacet
 //
 // Class description:
 //
 //   Base class defining the facets which are components of a
 //   G4TessellatedSolid shape.
+
+// CHANGE HISTORY
+// --------------
 //
-
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
+// 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
+//
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef G4VFacet_hh
-#define G4VFacet_hh 1
 
-#include "G4VSolid.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
+#ifndef G4VFacet_hh
+#define G4VFacet_hh
 
 #include <iostream>
 #include <vector>
 
+#include "globals.hh"
+#include "G4ThreeVector.hh"
+#include "G4VSolid.hh"
+
 enum G4FacetVertexType {ABSOLUTE, RELATIVE};
+
+class G4TessellatedSolid;
 
 class G4VFacet
 {
-  public:  // with description
+  public:
 
-    G4VFacet ();
     virtual ~G4VFacet ();
 
     G4bool operator== (const G4VFacet &right) const;
 
-    inline size_t GetNumberOfVertices () const;
-    inline G4ThreeVector GetVertex (size_t i) const;
-    
-    inline G4GeometryType GetEntityType () const;
-    inline G4ThreeVector GetSurfaceNormal () const;
-    inline G4bool IsInside(const G4ThreeVector &p) const;
-    inline G4bool IsDefined () const;
-    inline void SetVertexIndex (const size_t i, const size_t j);
-    inline size_t GetVertexIndex (const size_t i) const;
-    inline G4ThreeVector GetCircumcentre () const;
-    inline G4double GetRadius () const;
-    inline G4double GetRadiusSquared() const;
-    
-    void ApplyTranslation (const G4ThreeVector v);
-    
-    std::ostream &StreamInfo(std::ostream &os) const;
-
-    virtual G4VFacet *GetClone ();
-    virtual G4double Distance (const G4ThreeVector&, const G4double);
-    virtual G4double Distance (const G4ThreeVector&, const G4double,
-                               const G4bool);
-    virtual G4double Extent   (const G4ThreeVector);
-    virtual G4bool Intersect  (const G4ThreeVector&, const G4ThreeVector &,
-                               const G4bool , G4double &, G4double &,
-                                     G4ThreeVector &);
+    virtual G4int GetNumberOfVertices () const = 0;
+    virtual G4ThreeVector GetVertex (G4int i) const = 0;
+    virtual void SetVertex (G4int i, const G4ThreeVector &val) = 0;
+    virtual G4GeometryType GetEntityType () const = 0;
+    virtual G4ThreeVector GetSurfaceNormal () const = 0;
+    virtual G4bool IsDefined () const = 0;
+    virtual G4ThreeVector GetCircumcentre () const = 0;
+    virtual G4double GetRadius () const = 0;
+    virtual G4VFacet *GetClone () = 0;
+    virtual G4double Distance (const G4ThreeVector&, G4double) = 0;
+    virtual G4double Distance (const G4ThreeVector&, G4double,
+                               const G4bool) = 0;
+    virtual G4double Extent (const G4ThreeVector) = 0;
+    virtual G4bool Intersect (const G4ThreeVector&, const G4ThreeVector &,
+                              const G4bool , G4double &, G4double &,
+                                    G4ThreeVector &) = 0;
     virtual G4double GetArea() = 0;
     virtual G4ThreeVector GetPointOnFace() const = 0;
 
-  public:  // without description
+    void ApplyTranslation (const G4ThreeVector v);
 
-    G4VFacet (const G4VFacet &right);
-    const G4VFacet &operator=(G4VFacet &right);
+    std::ostream &StreamInfo(std::ostream &os) const;
+
+    G4bool IsInside(const G4ThreeVector &p) const;
+
+    virtual G4int AllocatedMemory() = 0;
+    virtual void SetVertexIndex (G4int i, G4int j) = 0;
+    virtual G4int GetVertexIndex (G4int i) const = 0;
+
+    virtual void SetVertices(std::vector<G4ThreeVector> *vertices) = 0;
 
   protected:
 
-    G4GeometryType       geometryType;
-    G4bool               isDefined;
-    size_t               nVertices;
-    G4ThreeVector        P0;
-    G4ThreeVectorList    P;
-    G4ThreeVectorList    E;
-    std::vector<size_t>  I;
-    G4ThreeVector        surfaceNormal;
-    G4ThreeVector        circumcentre;
-    G4double             radius;
-    G4double             radiusSqr;
-
-    G4double             dirTolerance;
-    G4double             kCarTolerance;
-    G4double             area;
+    static const G4double dirTolerance;
+    static const G4double kCarTolerance;
 };
-
-typedef std::vector<G4VFacet*>::iterator       FacetI;
-typedef std::vector<G4VFacet*>::const_iterator FacetCI;
-
-#include "G4VFacet.icc"
 
 #endif

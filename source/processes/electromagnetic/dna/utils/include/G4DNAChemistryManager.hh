@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAChemistryManager.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -44,13 +45,15 @@
 #include <memory>
 
 class G4Track;
-class G4WaterExcitationStructure;
-class G4WaterIonisationStructure;
+class G4DNAWaterExcitationStructure;
+class G4DNAWaterIonisationStructure;
+class G4Molecule;
 
 enum ElectronicModification
 {
-    fIonizedMolecule,
-    fExcitedMolecule
+    eIonizedMolecule,
+    eExcitedMolecule,
+    eDissociativeAttachment
 };
 
 /**
@@ -58,12 +61,18 @@ enum ElectronicModification
   * It creates the water molecules and the solvated electrons and
   * and send them to G4ITStepManager to be treated in the chemistry stage.
   * For this, the fActiveChemistry flag needs to be on.
+  * It is also possible to give already molecule's pointers already built.
+  * G4DNAChemistryManager will then be in charge of creating the track and loading
+  * it to the IT system.
   * The user can also ask to create a file containing a information about the
   * creation of water molecules and solvated electrons.
   */
 
 class G4DNAChemistryManager
 {
+    friend class std::auto_ptr<G4DNAChemistryManager>;
+    ~G4DNAChemistryManager();
+
 public:
     static G4DNAChemistryManager* Instance();
 
@@ -71,8 +80,6 @@ public:
       * You should rather use DeleteInstance than the destructor of this class
       */
     static void DeleteInstance();
-
-    ~G4DNAChemistryManager();
 
     /**
       * Tells the chemMan to write into a file
@@ -106,9 +113,31 @@ public:
     void CreateSolvatedElectron(const G4Track* /*theIncomingTrack*/,
                                 G4ThreeVector* finalPosition = 0);
 
+    /**
+      * WARNING : In case chemistry is not activated, PushMolecule will take care
+      * of deleting the transfered molecule.
+      * Before calling this method, it is also possible to check if the chemistry is activated
+      * through IsChemistryActived().
+      * This method will create the track corresponding to the transfered molecule and will be in charge
+      * of loading the new track to the system.
+      */
+
+    void PushMolecule(G4Molecule*& molecule,
+                      double time, const G4ThreeVector& position, int parentID);
+
+    /**
+      * WARNING : In case chemistry is not activated, PushMoleculeAtParentTimeAndPlace
+      * will take care of deleting the transfered molecule.
+      * Before calling this method, it is also possible to check if the chemistry is activated
+      * through IsChemistryActived().
+      * This method will create the track corresponding to the transfered molecule and will be in charge
+      * of loading the new track to the system.
+      */
+    void PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
+                                          const G4Track* /*theIncomingTrack*/);
 protected :
-    G4WaterExcitationStructure* GetExcitationLevel();
-    G4WaterIonisationStructure* GetIonisationLevel();
+    G4DNAWaterExcitationStructure* GetExcitationLevel();
+    G4DNAWaterIonisationStructure* GetIonisationLevel();
 
 private:
     G4DNAChemistryManager();
@@ -118,8 +147,8 @@ private:
     std::ofstream  fOutput;
     G4bool fWriteFile;
 
-    G4WaterExcitationStructure* fExcitationLevel;
-    G4WaterIonisationStructure* fIonisationLevel;
+    G4DNAWaterExcitationStructure* fExcitationLevel;
+    G4DNAWaterIonisationStructure* fIonisationLevel;
 };
 
 inline G4bool G4DNAChemistryManager::IsChemistryActived()

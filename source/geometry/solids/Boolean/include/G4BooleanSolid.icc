@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.icc,v 1.4 2006-10-20 14:20:54 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -101,4 +100,15 @@ G4double G4BooleanSolid::GetSurfaceArea()
   if(fSurfaceArea != 0.) {;}
   else   { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
   return fSurfaceArea;
+}
+
+inline 
+G4double G4BooleanSolid::GetAreaRatio() const
+{
+  if (fAreaRatio <= 0.)
+  {
+    fAreaRatio = fPtrSolidA->GetSurfaceArea() /
+      (fPtrSolidA->GetSurfaceArea()+fPtrSolidB->GetSurfaceArea());
+  }
+  return fAreaRatio;
 }

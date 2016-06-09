@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.4 2007-10-06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4PrimaryVertex.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 

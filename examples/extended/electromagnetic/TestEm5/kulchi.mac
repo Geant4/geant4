@@ -16,6 +16,7 @@
 /testem/det/setAbsYZ     1 cm
 #
 /testem/phys/setCuts 1 mm
+###/run/setCut 1 mm
 #
 /run/initialize
 #
@@ -23,9 +24,8 @@
 /gun/particle e-
 /gun/energy 2.25 MeV
 #
-/testem/histo/setFileName kulchi
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 12  100   0.  25. deg	#space angle  
-/testem/histo/setHisto 13  100 -25. +25. deg	#projected angle  
+/analysis/setFileName kulchi
+/analysis/h1/set 12  100   0.  25. deg #space angle  
+/analysis/h1/set 13  100 -25. +25. deg #projected angle  
 #
 /run/beamOn 100000

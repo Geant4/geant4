@@ -28,6 +28,8 @@
 
 #include "G4HadronNucleonXsc.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -361,26 +363,28 @@ G4double
 G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
 {
-  G4double xsection(0);
-  // G4double Delta;  DHW 19 May 2011: variable set but not used
+  G4double xsection(0); 
+  
   G4double A0, B0;
-  G4int Zt=1, Nt=1, At=1;
   G4double hpXsc(0);
   G4double hnXsc(0);
 
 
-  G4double targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
+  G4double tM = 0.939*GeV;  // ~mean neutron and proton ???
 
-  G4double proj_mass     = aParticle->GetMass();
-  G4double proj_energy   = aParticle->GetTotalEnergy(); 
-  G4double proj_momentum = aParticle->GetMomentum().mag();
+  G4double pM   = aParticle->GetMass();
+  G4double pE   = aParticle->GetTotalEnergy(); 
+  G4double pLab = aParticle->GetMomentum().mag();
 
-  G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
+  G4double sMand = CalcMandelstamS ( pM , tM , pLab );
 
   sMand         /= GeV*GeV;  // in GeV for parametrisation
-  proj_momentum /= GeV;
-  proj_energy   /= GeV;
-  proj_mass     /= GeV;
+  pLab /= GeV;
+  pE   /= GeV;
+  pM     /= GeV;
+
+  G4double logP = std::log(pLab);
+
 
   // General PDG fit constants
 
@@ -396,337 +400,554 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
   G4bool proton = (nucleon == theProton);
   G4bool neutron = (nucleon == theNeutron);
 
-  if( theParticle == theNeutron && pORn) 
+  if( theParticle == theNeutron && pORn ) 
   {
-    if( proj_momentum >= 373.)
+    if( pLab >= 373.)
     {
-      return GetHadronNucleonXscPDG(aParticle,nucleon);
-    }
-    else if( proj_momentum >= 10.)
-    // if( proj_momentum >= 2.)
-    {
-      // Delta = 1.;   DHW 19 May 2011: variable set but not used
-      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      xsection =  GetHadronNucleonXscPDG(aParticle, nucleon)/millibarn;
 
-      if(proj_momentum >= 10.)
-      {
+      fElasticXsc = 6.5 + 0.308*std::pow(std::log(sMand/400.),1.65) + 9.19*std::pow(sMand,-0.458);
+    
+      fTotalXsc = xsection;
+    
+    }
+    else if( pLab >= 100.)
+    {
+      B0 = 7.5;
+      A0 = 100. - B0*std::log(3.0e7);
+
+      xsection = A0 + B0*std::log(pE) - 11
+	  // + 103*std::pow(2*0.93827*pE + pM*pM+0.93827*0.93827,-0.165);        //  mb
+                  + 103*std::pow(sMand,-0.165);        //  mb
+
+      fElasticXsc = 5.53 + 0.308*std::pow(std::log(sMand/28.9),1.1) + 9.19*std::pow(sMand,-0.458);
+      
+      fTotalXsc = xsection;
+    }
+    else if( pLab >= 10.)
+    {
         B0 = 7.5;
         A0 = 100. - B0*std::log(3.0e7);
 
-        xsection = A0 + B0*std::log(proj_energy) - 11
-                  + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
-                     0.93827*0.93827,-0.165);        //  mb
-      }
+        xsection = A0 + B0*std::log(pE) - 11
+                  + 103*std::pow(2*0.93827*pE + pM*pM+
+                     0.93827*0.93827,-0.165);        //  mb      
       fTotalXsc = xsection;
+      fElasticXsc =  6 + 20/( (logP-0.182)*(logP-0.182) + 1.0 );
     }
-    else
+    else  // pLab < 10 GeV/c
     {
-      // nn to be pp
-
-      if(neutron)
+      if( neutron )      // nn to be pp
       {
-        if( proj_momentum < 0.73 )
+        if( pLab < 0.4 )
         {
-          hnXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+          hnXsc = 23 + 50*( std::pow( std::log(0.73/pLab), 3.5 ) );
+          fElasticXsc = hnXsc;
         }
-        else if( proj_momentum < 1.05  )
+        else if( pLab < 0.73 )
         {
-          hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
-                         (std::log(proj_momentum/0.73));
+          hnXsc = 23 + 50*( std::pow( std::log(0.73/pLab), 3.5 ) );
+          fElasticXsc = hnXsc; 
         }
-        else  // if( proj_momentum < 10.  )
+        else if( pLab < 1.05  )
         {
-          hnXsc = 39.0+
-              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+          hnXsc = 23 + 40*(std::log(pLab/0.73))*
+                         (std::log(pLab/0.73));
+          fElasticXsc = 23 + 20*(std::log(pLab/0.73))*
+                         (std::log(pLab/0.73));
+        }
+        else    // 1.05 - 10 GeV/c
+        {
+          hnXsc = 39.0+75*(pLab - 1.2)/(std::pow(pLab,3.0) + 0.15);
+
+          fElasticXsc =  6 + 20/( (logP-0.182)*(logP-0.182) + 1.0 );
         }
         fTotalXsc = hnXsc;
       }
-      // pn to be np
-
-      if(proton)
+      if( proton )   // pn to be np
       {
-        if( proj_momentum < 0.8 )
+        if( pLab < 0.02 )
         {
-          hpXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+          hpXsc = 4100+30*std::pow(std::log(1.3/pLab),3.6); // was as pLab < 0.8
+	  fElasticXsc = hpXsc;
         }      
-        else if( proj_momentum < 1.4 )
+        else if( pLab < 0.8 )
         {
-          hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+          hpXsc = 33+30*std::pow(std::log(pLab/1.3),4.0);
+	  fElasticXsc = hpXsc;
+        }      
+        else if( pLab < 1.05 )
+        {
+          hpXsc = 33+30*std::pow(std::log(pLab/0.95),2.0);
+          fElasticXsc =  6 + 52/( std::log(0.511/pLab)*std::log(0.511/pLab) + 1.6 );
         }
-        else    // if( proj_momentum < 10.  )
+        else if( pLab < 1.4 )
         {
-          hpXsc = 33.3+
-              20.8*(std::pow(proj_momentum,2.0)-1.35)/
-                 (std::pow(proj_momentum,2.50)+0.95);
+          hpXsc = 33+30*std::pow(std::log(pLab/0.95),2.0);
+          fElasticXsc =  6 + 52/( std::log(0.511/pLab)*std::log(0.511/pLab) + 1.6 );
+        }
+        else    // 1.4 < pLab < 10.  )
+        {
+          hpXsc = 33.3 + 20.8*(std::pow(pLab,2.0) - 1.35)/(std::pow(pLab,2.50) + 0.95);
+          
+          fElasticXsc =  6 + 20/( (logP-0.182)*(logP-0.182) + 1.0 );
         }
         fTotalXsc = hpXsc;
       }
-      // xsection = hpXsc*Zt + hnXsc*Nt;
     }
   } 
-  else if(theParticle == theProton && pORn) 
+  else if( theParticle == theProton && pORn ) ////// proton //////////////////////////////////////////////
   {
-    if( proj_momentum >= 373.)
+    if( pLab >= 373.) // pdg due to TOTEM data
     {
-      return GetHadronNucleonXscPDG(aParticle,nucleon);
+      xsection =  GetHadronNucleonXscPDG(aParticle, nucleon)/millibarn;
+
+      fElasticXsc = 6.5 + 0.308*std::pow(std::log(sMand/400.),1.65) + 9.19*std::pow(sMand,-0.458);
+     
+      fTotalXsc = xsection;
     }
-    else if( proj_momentum >= 10.)
-    // if( proj_momentum >= 2.)
+    else if( pLab >= 100.)
     {
-      // Delta = 1.;  DHW 19 May 2011: variable set but not used
-      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      B0 = 7.5;
+      A0 = 100. - B0*std::log(3.0e7);
 
-      if(proj_momentum >= 10.)
-      {
-        B0 = 7.5;
-        A0 = 100. - B0*std::log(3.0e7);
+      xsection = A0 + B0*std::log(pE) - 11 + 103*std::pow(sMand,-0.165);        //  mb
 
-        xsection = A0 + B0*std::log(proj_energy) - 11
-                  + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
-                     0.93827*0.93827,-0.165);        //  mb
-      }
+      fElasticXsc = 5.53 + 0.308*std::pow(std::log(sMand/28.9),1.1) + 9.19*std::pow(sMand,-0.458);
+      
+      fTotalXsc = xsection;
+    }
+    else if( pLab >= 10.)
+    {
+      B0 = 7.5;
+      A0 = 100. - B0*std::log(3.0e7);
+
+      xsection = A0 + B0*std::log(pE) - 11 + 103*std::pow(sMand,-0.165);        //  mb
+
+      fElasticXsc =  6 + 20/( (logP-0.182)*(logP-0.182) + 1.0 );
+      
       fTotalXsc = xsection;
     }
     else
     {
       // pp
 
-      if(proton)
+      if( proton )
       {
-        if( proj_momentum < 0.73 )
+        if( pLab < 0.4 )
         {
-          hpXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+          hpXsc = 23 + 50*( std::pow( std::log(0.73/pLab), 3.5 ) );
+          fElasticXsc = hpXsc;
         }
-        else if( proj_momentum < 1.05  )
+        else if( pLab < 0.73 )
         {
-          hpXsc = 23 + 40*(std::log(proj_momentum/0.73))*
-                         (std::log(proj_momentum/0.73));
+          hpXsc = 23 + 50*( std::pow( std::log(0.73/pLab), 3.5 ) );
+          fElasticXsc = hpXsc; 
         }
-        else    // if( proj_momentum < 10.  )
+        else if( pLab < 1.05  )
         {
-           hpXsc = 39.0+
-              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+          hpXsc = 23 + 40*(std::log(pLab/0.73))*
+                         (std::log(pLab/0.73));
+          fElasticXsc = 23 + 20*(std::log(pLab/0.73))*
+                         (std::log(pLab/0.73));
+        }
+        else    // 1.05 - 10 GeV/c
+        {
+          hpXsc = 39.0+75*(pLab - 1.2)/(std::pow(pLab,3.0) + 0.15);
+
+          fElasticXsc =  6 + 20/( (logP-0.182)*(logP-0.182) + 1.0 );
         }
         fTotalXsc = hpXsc;
       }
-      // pn to be np
-
-      if(neutron)
+      if( neutron )     // pn to be np
       {
-        if( proj_momentum < 0.8 )
+        if( pLab < 0.02 )
         {
-          hnXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+          hnXsc = 4100+30*std::pow(std::log(1.3/pLab),3.6); // was as pLab < 0.8
+	  fElasticXsc = hnXsc;
         }      
-        else if( proj_momentum < 1.4 )
+        else if( pLab < 0.8 )
         {
-          hnXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+          hnXsc = 33+30*std::pow(std::log(pLab/1.3),4.0);
+	  fElasticXsc = hnXsc;
+        }      
+        else if( pLab < 1.05 )
+        {
+          hnXsc = 33+30*std::pow(std::log(pLab/0.95),2.0);
+          fElasticXsc =  6 + 52/( std::log(0.511/pLab)*std::log(0.511/pLab) + 1.6 );
         }
-        else   // if( proj_momentum < 10.  )
+        else if( pLab < 1.4 )
         {
-          hnXsc = 33.3+
-              20.8*(std::pow(proj_momentum,2.0)-1.35)/
-                 (std::pow(proj_momentum,2.50)+0.95);
+          hnXsc = 33+30*std::pow(std::log(pLab/0.95),2.0);
+          fElasticXsc =  6 + 52/( std::log(0.511/pLab)*std::log(0.511/pLab) + 1.6 );
+        }
+        else    // 1.4 < pLab < 10.  )
+        {
+          hnXsc = 33.3 + 20.8*(std::pow(pLab,2.0) - 1.35)/(std::pow(pLab,2.50) + 0.95);
+          
+          fElasticXsc =  6 + 20/( (logP-0.182)*(logP-0.182) + 1.0 );
         }
         fTotalXsc = hnXsc;
       }
-      // xsection = hpXsc*Zt + hnXsc*Nt;
-      // xsection = hpXsc*(Zt + Nt);
-      // xsection = hnXsc*(Zt + Nt);
     }    
-    // xsection *= 0.95;
   } 
-  else if(theParticle == theAProton && pORn) 
+  else if( theParticle == theAProton && pORn ) /////////////////// p_bar ///////////////////////////
   {
-    if(proton)
+    if( proton )
     {
-      xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 42.53*std::pow(sMand,-eta1) + 33.34*std::pow(sMand,-eta2));
+      xsection  = 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 42.53*std::pow(sMand,-eta1) + 33.34*std::pow(sMand,-eta2);
     }
-    if(proton)
+    if( neutron ) // ???
     {
-      xsection = Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 40.15*std::pow(sMand,-eta1) + 30.*std::pow(sMand,-eta2));
+      xsection = 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 40.15*std::pow(sMand,-eta1) + 30.*std::pow(sMand,-eta2);
     }
     fTotalXsc = xsection;
   } 
-  else if(theParticle == thePiPlus && pORn) 
+  else if( theParticle == thePiPlus && pORn ) // pi+ /////////////////////////////////////////////
   {
-    if(proton)
+    if( proton ) // pi+ p
     {
-      if(proj_momentum < 0.4)
+      if( pLab < 0.28 )
       {
-        G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
-        hpXsc      = Ex3+20.0;
+        hpXsc       = 10./((logP + 1.273)*(logP + 1.273) + 0.05);
+        fElasticXsc = hpXsc;
       }
-      else if(proj_momentum < 1.15)
+      else if( pLab < 0.4 )
       {
-        G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
-        hpXsc = Ex4+14.0;
+        hpXsc       = 14./( (logP + 1.273)*(logP + 1.273) + 0.07);
+        fElasticXsc = hpXsc;
       }
-      else if(proj_momentum < 3.5)
+      else if( pLab < 0.68 )
       {
-        G4double Ex1 = 3.2*std::exp(-(proj_momentum-2.55)*(proj_momentum-2.55)/0.55/0.55);
-        G4double Ex2 = 12*std::exp(-(proj_momentum-1.47)*(proj_momentum-1.47)/0.225/0.225);
-        hpXsc = Ex1+Ex2+27.5;
+        hpXsc       = 14./( (logP + 1.273)*(logP + 1.273) + 0.07);
+        fElasticXsc = hpXsc;
       }
-      else //  if(proj_momentum > 3.5) // mb
+      else if( pLab < 0.85 )
       {
-        hpXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
+        G4double Ex4 = 88*(std::log(pLab/0.77))*(std::log(pLab/0.77));
+        hpXsc        = Ex4 + 14.9;
+        fElasticXsc = hpXsc*std::exp(-3.*(pLab - 0.68));  
+      }
+      else if( pLab < 1.15 )
+      {
+        G4double Ex4 = 88*(std::log(pLab/0.77))*(std::log(pLab/0.77));
+        hpXsc        = Ex4 + 14.9;
+
+        fElasticXsc = 6.0 + 1.4/(( pLab - 1.4)*( pLab - 1.4) + 0.1);
+      }
+      else if( pLab < 1.4) // ns original
+      {
+        G4double Ex1 = 3.2*std::exp(-(pLab-2.55)*(pLab-2.55)/0.55/0.55);
+        G4double Ex2 = 12*std::exp(-(pLab-1.47)*(pLab-1.47)/0.225/0.225);
+        hpXsc        = Ex1 + Ex2 + 27.5;
+        fElasticXsc = 6.0 + 1.4/(( pLab - 1.4)*( pLab - 1.4) + 0.1);
+      }
+      else if( pLab < 2.0 ) // ns original
+      {
+        G4double Ex1 = 3.2*std::exp(-(pLab-2.55)*(pLab-2.55)/0.55/0.55);
+        G4double Ex2 = 12*std::exp(-(pLab-1.47)*(pLab-1.47)/0.225/0.225);
+        hpXsc        = Ex1 + Ex2 + 27.5;
+        fElasticXsc = 3.0 + 1.36/( (logP - 0.336)*(logP - 0.336) + 0.08);    
+      }
+      else if( pLab < 3.5 ) // ns original
+      {
+        G4double Ex1 = 3.2*std::exp(-(pLab-2.55)*(pLab-2.55)/0.55/0.55);
+        G4double Ex2 = 12*std::exp(-(pLab-1.47)*(pLab-1.47)/0.225/0.225);
+        hpXsc        = Ex1 + Ex2 + 27.5;
+        fElasticXsc = 3.0 + 6.20/( (logP - 0.336)*(logP - 0.336) + 0.8);    
+      }
+      else if( pLab < 200. ) // my
+      {
+        hpXsc = 10.6 + 2.*std::log(pE) + 25*std::pow(pE, -0.43 ); // ns original
+        // hpXsc = GetHadronNucleonXscPDG(aParticle, nucleon )/millibarn;
+        fElasticXsc = 3.0 + 6.20/( (logP - 0.336)*(logP - 0.336) + 0.8);    
+      }
+      else //  pLab > 100 // my
+      {
+        hpXsc = GetHadronNucleonXscPDG(aParticle, nucleon )/millibarn;
+        fElasticXsc = 3.0 + 6.20/( (logP - 0.336)*(logP - 0.336) + 0.8);    
       }
       fTotalXsc = hpXsc;
     }    
-
-// pi+n = pi-p??
-
-    if(neutron)
+    if( neutron )  // pi+ n = pi- p??
     {
-      if(proj_momentum < 0.37)
+      if( pLab < 0.28 ) 
       {
-        hnXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+        hnXsc       = 0.288/((pLab - 0.28)*(pLab - 0.28) + 0.004);
+        fElasticXsc = 1.8/((logP + 1.273)*(logP + 1.273) + 0.07);
       }
-      else if(proj_momentum<0.65)
+      else if( pLab < 0.395676 ) // first peak
       {
-        hnXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
+        hnXsc       = 0.648/((pLab - 0.28)*(pLab - 0.28) + 0.009);
+        fElasticXsc = 0.257/((pLab - 0.28)*(pLab - 0.28) + 0.01);
+       }
+      else if( pLab < 0.5 )
+      {
+        hnXsc       = 26 + 110*(std::log(pLab/0.48))*(std::log(pLab/0.48));
+        fElasticXsc = 0.37*hnXsc;
       }
-      else if(proj_momentum<1.3)
+      else if( pLab < 0.65 )
       {
-        hnXsc = 36.1+
-                10*std::exp(-(proj_momentum-0.72)*(proj_momentum-0.72)/0.06/0.06)+
-                24*std::exp(-(proj_momentum-1.015)*(proj_momentum-1.015)/0.075/0.075);
+        hnXsc       = 26 + 110*(std::log(pLab/0.48))*(std::log(pLab/0.48));
+        fElasticXsc = 0.95/((pLab - 0.72)*(pLab - 0.72) + 0.049);
       }
-      else if(proj_momentum<3.0)
+      else if( pLab < 0.72 )
       {
-        hnXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
-                3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
-                1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
+        hnXsc = 36.1 + 10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 0.95/((pLab - 0.72)*(pLab - 0.72) + 0.049);
       }
-      else   // mb
+      else if( pLab < 0.88 )
       {
-        hnXsc = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
+        hnXsc = 36.1 + 10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 0.95/((pLab - 0.72)*(pLab - 0.72) + 0.049);
+      }
+      else if( pLab < 1.03 )
+      {
+        hnXsc = 36.1 + 10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 2.0 + 0.4/((pLab - 1.03)*(pLab - 1.03) + 0.016);
+      }
+      else if( pLab < 1.15 )
+      {
+        hnXsc = 36.1 + 10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 2.0 + 0.4/((pLab - 1.03)*(pLab - 1.03) + 0.016);
+      }
+      else if( pLab < 1.3 )
+      {
+        hnXsc = 36.1 + 10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 3. + 13./pLab;
+      }
+      else if( pLab < 2.6 ) // < 3.0) // ns original
+      {
+        hnXsc = 36.1 + 0.079-4.313*std::log(pLab)+
+                3*std::exp(-(pLab-2.1)*(pLab-2.1)/0.4/0.4)+
+                1.5*std::exp(-(pLab-1.4)*(pLab-1.4)/0.12/0.12);
+        fElasticXsc = 3. + 13./pLab; 
+      }
+      else if( pLab < 20. ) // < 3.0) // ns original
+      {
+        hnXsc = 36.1 + 0.079 - 4.313*std::log(pLab)+
+                3*std::exp(-(pLab-2.1)*(pLab-2.1)/0.4/0.4)+
+                1.5*std::exp(-(pLab-1.4)*(pLab-1.4)/0.12/0.12);
+        fElasticXsc = 3. + 13./pLab; 
+      }
+      else   // mb 
+      {
+        hnXsc = GetHadronNucleonXscPDG(aParticle, nucleon )/millibarn;
+        fElasticXsc = 3. + 13./pLab;
       }
       fTotalXsc = hnXsc;
     }
-    // xsection = hpXsc*Zt + hnXsc*Nt;
   } 
-  else if(theParticle == thePiMinus && pORn) 
+  else if( theParticle == thePiMinus && pORn ) /// pi- ////////////////////////////////////////////
   {
-    // pi-n = pi+p??
-
-    if(neutron)
+    if( neutron )     // pi- n = pi+ p??
     {
-      if(proj_momentum < 0.4)
+      if( pLab < 0.28 )
       {
-        G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
-        hnXsc      = Ex3+20.0;
+        hnXsc       = 10./((logP + 1.273)*(logP + 1.273) + 0.05);
+        fElasticXsc = hnXsc;
       }
-      else if(proj_momentum < 1.15)
+      else if( pLab < 0.4 )
       {
-        G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
-        hnXsc = Ex4+14.0;
+        hnXsc       = 14./( (logP + 1.273)*(logP + 1.273) + 0.07);
+        fElasticXsc = hnXsc;
       }
-      else if(proj_momentum < 3.5)
+      else if( pLab < 0.68 )
       {
-        G4double Ex1 = 3.2*std::exp(-(proj_momentum-2.55)*(proj_momentum-2.55)/0.55/0.55);
-        G4double Ex2 = 12*std::exp(-(proj_momentum-1.47)*(proj_momentum-1.47)/0.225/0.225);
-        hnXsc = Ex1+Ex2+27.5;
+        hnXsc       = 14./( (logP + 1.273)*(logP + 1.273) + 0.07);
+        fElasticXsc = hnXsc;
       }
-      else //  if(proj_momentum > 3.5) // mb
+      else if( pLab < 0.85 )
       {
-      hnXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
+        G4double Ex4 = 88*(std::log(pLab/0.77))*(std::log(pLab/0.77));
+        hnXsc        = Ex4 + 14.9;
+        fElasticXsc = hnXsc*std::exp(-3.*(pLab - 0.68));  
+      }
+      else if( pLab < 1.15 )
+      {
+        G4double Ex4 = 88*(std::log(pLab/0.77))*(std::log(pLab/0.77));
+        hnXsc        = Ex4 + 14.9;
+
+        fElasticXsc = 6.0 + 1.4/(( pLab - 1.4)*( pLab - 1.4) + 0.1);
+      }
+      else if( pLab < 1.4) // ns original
+      {
+        G4double Ex1 = 3.2*std::exp(-(pLab-2.55)*(pLab-2.55)/0.55/0.55);
+        G4double Ex2 = 12*std::exp(-(pLab-1.47)*(pLab-1.47)/0.225/0.225);
+        hnXsc        = Ex1 + Ex2 + 27.5;
+        fElasticXsc = 6.0 + 1.4/(( pLab - 1.4)*( pLab - 1.4) + 0.1);
+      }
+      else if( pLab < 2.0 ) // ns original
+      {
+        G4double Ex1 = 3.2*std::exp(-(pLab-2.55)*(pLab-2.55)/0.55/0.55);
+        G4double Ex2 = 12*std::exp(-(pLab-1.47)*(pLab-1.47)/0.225/0.225);
+        hnXsc        = Ex1 + Ex2 + 27.5;
+        fElasticXsc = 3.0 + 1.36/( (logP - 0.336)*(logP - 0.336) + 0.08);    
+      }
+      else if( pLab < 3.5 ) // ns original
+      {
+        G4double Ex1 = 3.2*std::exp(-(pLab-2.55)*(pLab-2.55)/0.55/0.55);
+        G4double Ex2 = 12*std::exp(-(pLab-1.47)*(pLab-1.47)/0.225/0.225);
+        hnXsc        = Ex1 + Ex2 + 27.5;
+        fElasticXsc = 3.0 + 6.20/( (logP - 0.336)*(logP - 0.336) + 0.8);    
+      }
+      else if( pLab < 200. ) // my
+      {
+        hnXsc = 10.6 + 2.*std::log(pE) + 25*std::pow(pE, -0.43 ); // ns original
+        fElasticXsc = 3.0 + 6.20/( (logP - 0.336)*(logP - 0.336) + 0.8);    
+      }
+      else //  pLab > 100 // my
+      {
+        hnXsc = GetHadronNucleonXscPDG(aParticle, nucleon )/millibarn;
+        fElasticXsc = 3.0 + 6.20/( (logP - 0.336)*(logP - 0.336) + 0.8);    
       }
       fTotalXsc = hnXsc;
     }
-    // pi-p
-
-    if(proton)
+    if( proton )    // pi- p
     {
-      if(proj_momentum < 0.37)
+      if( pLab < 0.28 ) 
       {
-        hpXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+        hpXsc       = 0.288/((pLab - 0.28)*(pLab - 0.28) + 0.004);
+        fElasticXsc = 1.8/((logP + 1.273)*(logP + 1.273) + 0.07);
       }
-      else if(proj_momentum<0.65)
+      else if( pLab < 0.395676 ) // first peak
       {
-        hpXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
+        hpXsc       = 0.648/((pLab - 0.28)*(pLab - 0.28) + 0.009);
+        fElasticXsc = 0.257/((pLab - 0.28)*(pLab - 0.28) + 0.01);
+       }
+      else if( pLab < 0.5 )
+      {
+        hpXsc       = 26 + 110*(std::log(pLab/0.48))*(std::log(pLab/0.48));
+        fElasticXsc = 0.37*hpXsc;
       }
-      else if(proj_momentum<1.3)
+      else if( pLab < 0.65 )
+      {
+        hpXsc       = 26 + 110*(std::log(pLab/0.48))*(std::log(pLab/0.48));
+        fElasticXsc = 0.95/((pLab - 0.72)*(pLab - 0.72) + 0.049);
+      }
+      else if( pLab < 0.72 )
       {
         hpXsc = 36.1+
-                10*std::exp(-(proj_momentum-0.72)*(proj_momentum-0.72)/0.06/0.06)+
-                24*std::exp(-(proj_momentum-1.015)*(proj_momentum-1.015)/0.075/0.075);
+                10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 0.95/((pLab - 0.72)*(pLab - 0.72) + 0.049);
       }
-      else if(proj_momentum<3.0)
+      else if( pLab < 0.88 )
       {
-        hpXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
-                3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
-                1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
+        hpXsc = 36.1+
+                10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 0.95/((pLab - 0.72)*(pLab - 0.72) + 0.049);
+      }
+      else if( pLab < 1.03 )
+      {
+        hpXsc = 36.1+
+                10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 2.0 + 0.4/((pLab - 1.03)*(pLab - 1.03) + 0.016);
+      }
+      else if( pLab < 1.15 )
+      {
+        hpXsc = 36.1+
+                10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 2.0 + 0.4/((pLab - 1.03)*(pLab - 1.03) + 0.016);
+      }
+      else if( pLab < 1.3 )
+      {
+        hpXsc = 36.1+
+                10*std::exp(-(pLab-0.72)*(pLab-0.72)/0.06/0.06)+
+                24*std::exp(-(pLab-1.015)*(pLab-1.015)/0.075/0.075);
+        fElasticXsc = 3. + 13./pLab;
+      }
+      else if( pLab < 2.6 ) // < 3.0) // ns original
+      {
+        hpXsc = 36.1+0.079-4.313*std::log(pLab)+
+                3*std::exp(-(pLab-2.1)*(pLab-2.1)/0.4/0.4)+
+                1.5*std::exp(-(pLab-1.4)*(pLab-1.4)/0.12/0.12);
+        fElasticXsc = 3. +13./pLab; // *std::log(pLab*6.79);
       }
       else   // mb
       {
-        hpXsc = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
+        hpXsc = GetHadronNucleonXscPDG(aParticle, nucleon )/millibarn;
+        fElasticXsc = 3. + 13./pLab;
       }
       fTotalXsc = hpXsc;
     }
-    // xsection = hpXsc*Zt + hnXsc*Nt;
   } 
-  else if(theParticle == theKPlus && pORn) 
+  else if( theParticle == theKPlus && pORn ) 
   {
-    if(proton)
+    if( proton )
     {
-      xsection  = Zt*( 17.91 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 7.14*std::pow(sMand,-eta1) - 13.45*std::pow(sMand,-eta2));
+      xsection  = 17.91 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 7.14*std::pow(sMand,-eta1) - 13.45*std::pow(sMand,-eta2);
     }
-    if(neutron)
+    if( neutron )
     {
-      xsection = Nt*( 17.87 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 5.17*std::pow(sMand,-eta1) - 7.23*std::pow(sMand,-eta2));
+      xsection = 17.87 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 5.17*std::pow(sMand,-eta1) - 7.23*std::pow(sMand,-eta2);
     }
     fTotalXsc = xsection;
   } 
-  else if(theParticle == theKMinus && pORn) 
+  else if( theParticle == theKMinus && pORn ) 
   {
-    if(proton)
+    if( proton )
     {
-      xsection  = Zt*( 17.91 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 7.14*std::pow(sMand,-eta1) + 13.45*std::pow(sMand,-eta2));
+      xsection  = 17.91 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 7.14*std::pow(sMand,-eta1) + 13.45*std::pow(sMand,-eta2);
     }
-    if(neutron)
+    if( neutron )
     {
-      xsection = Nt*( 17.87 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 5.17*std::pow(sMand,-eta1) + 7.23*std::pow(sMand,-eta2));
+      xsection = 17.87 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 5.17*std::pow(sMand,-eta1) + 7.23*std::pow(sMand,-eta2);
     }
     fTotalXsc = xsection;
   }
-  else if(theParticle == theSMinus && pORn) 
+  else if( theParticle == theSMinus && pORn ) 
   {
-    xsection  = At*( 35.20 + B*std::pow(std::log(sMand/s0),2.) 
-                          - 199.*std::pow(sMand,-eta1) + 264.*std::pow(sMand,-eta2));
+    xsection  = 35.20 + B*std::pow(std::log(sMand/s0),2.) 
+                          - 199.*std::pow(sMand,-eta1) + 264.*std::pow(sMand,-eta2);
   } 
-  else if(theParticle == theGamma && pORn) // modify later on
+  else if( theParticle == theGamma && pORn ) // modify later on
   {
-    xsection  = At*( 0.0 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 0.032*std::pow(sMand,-eta1) - 0.0*std::pow(sMand,-eta2));
+    xsection  = 0.0 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 0.032*std::pow(sMand,-eta1) - 0.0*std::pow(sMand,-eta2);
     fTotalXsc = xsection;   
   } 
-  else  // as proton ??? 
+  else  // other then p,n,pi+,pi-,K+,K- as proton ??? 
   {
-    if(proton)
+    if( proton )
     {
-      xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
+      xsection  = 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2);
     }
-    if(neutron)
+    if( neutron )
     {
-      xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+      xsection += 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2);
     }
     fTotalXsc = xsection;
   } 
-  fTotalXsc *= millibarn; // parametrised in mb
-  // xsection  *= millibarn; // parametrised in mb
+  fTotalXsc   *= millibarn; // parametrised in mb
+  fElasticXsc *= millibarn; // parametrised in mb
 
-  fInelasticXsc = 0.83*fTotalXsc;
-  fElasticXsc   = fTotalXsc - fInelasticXsc;
-  if (fElasticXsc < 0.)fElasticXsc = 0.;
+  if( proton && aParticle->GetDefinition()->GetPDGCharge() > 0. )
+  {
+    G4double cB = GetCoulombBarrier(aParticle, nucleon);
+    fTotalXsc   *= cB;
+    fElasticXsc *= cB; 
+  }
+  fInelasticXsc = fTotalXsc - fElasticXsc;
+  if( fInelasticXsc < 0. ) fInelasticXsc = 0.;
+
+  // G4cout<<fTotalXsc/millibarn<<"; "<<fElasticXsc/millibarn<<"; "<<fInelasticXsc/millibarn<<G4endl;
 
   return fTotalXsc;
 }
@@ -910,6 +1131,58 @@ G4double G4HadronNucleonXsc::CalcMandelstamS( const G4double mp ,
 
   return sMand;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4HadronNucleonXsc::GetCoulombBarrier(const G4DynamicParticle* aParticle, 
+                                               const G4ParticleDefinition* nucleon )
+{
+  G4double ratio;
+
+  G4double tR = 0.895*fermi, pR;
+
+  if     ( aParticle->GetDefinition() == theProton ) pR = 0.895*fermi;
+  else if( aParticle->GetDefinition() == thePiPlus ) pR = 0.663*fermi;
+  else if( aParticle->GetDefinition() == theKPlus )  pR = 0.340*fermi;
+  else                                               pR = 0.500*fermi;
+
+  G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
+  G4double tZ = nucleon->GetPDGCharge();
+
+  G4double pTkin = aParticle->GetKineticEnergy();
+  
+  G4double pM    = aParticle->GetDefinition()->GetPDGMass(); 
+  G4double tM    = nucleon->GetPDGMass();
+
+  G4double pElab = pTkin + pM;
+
+  G4double totEcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM);
+
+  G4double totTcm  = totEcm - pM -tM;
+
+  G4double bC    = fine_structure_const*hbarc*pZ*tZ;
+           bC   /= pR + tR;
+           bC   /= 2.;  // 4., 2. parametrisation cof ??? vmg
+
+	   // G4cout<<"pTkin = "<<pTkin/GeV<<"; pPlab = "
+	   // <<pPlab/GeV<<"; bC = "<<bC/GeV<<"; pTcm = "<<pTcm/GeV<<G4endl;
+
+  if( totTcm <= bC ) ratio = 0.;
+  else               ratio = 1. - bC/totTcm;
+
+  // if(ratio < DBL_MIN) ratio = DBL_MIN;
+  if( ratio < 0.) ratio = 0.;
+
+  // G4cout <<"ratio = "<<ratio<<G4endl;
+  return ratio;
+}
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 //

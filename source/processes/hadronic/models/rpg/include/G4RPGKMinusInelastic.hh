@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGKMinusInelastic.hh,v 1.1 2007-07-18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
  
@@ -35,8 +34,8 @@
 // Final state production model for K- inelastic scattering
 // using the re-parameterized Gheisha model.
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
-
 
  class G4RPGKMinusInelastic : public G4RPGInelastic
  {
@@ -45,7 +44,7 @@
     G4RPGKMinusInelastic() : G4RPGInelastic("G4RPGKMinusInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGKMinusInelastic()

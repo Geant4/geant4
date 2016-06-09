@@ -17,5 +17,5 @@
 /analysis/maxpos 5 cm 
 /analysis/minpos -5 cm
 /event/printModulo 1000
-#/control/execute display.mac
+/control/execute display.mac
 /run/beamOn 10000

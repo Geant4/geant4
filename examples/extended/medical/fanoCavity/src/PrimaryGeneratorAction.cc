@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,32 +40,34 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:detector(det)					       
+:fDetector(det)                                               
 {
-  particleGun  = new G4ParticleGun(1);
+  fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
            = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(1.25*MeV);  
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleEnergy(1.25*MeV);  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
     
-  rBeam   = 1.;
+  fRBeam   = 1.;
     
   //create a messenger for this class
-  gunMessenger = new PrimaryGeneratorMessenger(this);  
+  fGunMessenger = new PrimaryGeneratorMessenger(this);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;  
+  delete fParticleGun;
+  delete fGunMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,21 +76,21 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   //
-  G4double z0 = -0.5*(detector->GetTotalThickness());
+  G4double z0 = -0.5*(fDetector->GetTotalThickness());
   G4double x0 = 0.*cm, y0 = 0.*cm;
     
   //beam width
   //
-  if (rBeam > 0.) 
+  if (fRBeam > 0.) 
     {
-      G4double beam  = rBeam*(detector->GetWallRadius());
+      G4double beam  = fRBeam*(fDetector->GetWallRadius());
       G4double r     = beam*std::sqrt(G4UniformRand());
       G4double theta = twopi*G4UniformRand();
         x0 = r*std::cos(theta);
         y0 = r*std::sin(theta);
     }
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

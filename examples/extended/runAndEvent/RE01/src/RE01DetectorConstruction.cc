@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01DetectorConstruction.cc,v 1.3 2006-06-29 17:43:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
+/// \brief Implementation of the RE01DetectorConstruction class
 //
-
+// $Id$
+//
 
 #include "RE01DetectorConstruction.hh"
 #include "RE01TrackerSD.hh"
@@ -37,6 +38,7 @@
 #include "RE01Field.hh"
 #include "RE01RegionInformation.hh"
 
+#include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -56,23 +58,26 @@
 #include "G4Colour.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4SystemOfUnits.hh"    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01DetectorConstruction::RE01DetectorConstruction()
+  : G4VUserDetectorConstruction()
 {
-
 #include "RE01DetectorParameterDef.icc"
-
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01DetectorConstruction::~RE01DetectorConstruction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 G4VPhysicalVolume* RE01DetectorConstruction::Construct()
 {
   //-------------------------------------------------------------------------
   // Magnetic field
   //-------------------------------------------------------------------------
-/******************************************************************
+  /******************************************************************
   static G4bool fieldIsInitialized = false;
   if(!fieldIsInitialized)
   {
@@ -84,12 +89,12 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
     fieldMgr->CreateChordFinder(myField);
     fieldIsInitialized = true;
   }
-*******************************************************************/
+  *******************************************************************/
   //-------------------------------------------------------------------------
   // Materials
   //-------------------------------------------------------------------------
 
-  G4double a, iz, z, density;
+  G4double a, iz, density;
   G4String name, symbol;
   G4int nel;
 
@@ -99,43 +104,26 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", iz=6., a);
 
-  a = 14.01*g/mole;
-  G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
-
-  a = 16.00*g/mole;
-  G4Element* elO = new G4Element(name="Oxygen", symbol="O", iz=8., a);
-
-  density = 1.29e-03*g/cm3;
-  G4Material* Air = new G4Material(name="Air", density, nel=2);
-  Air->AddElement(elN, .7);
-  Air->AddElement(elO, .3);
-
-  a = 207.19*g/mole;
-  density = 11.35*g/cm3;
-  G4Material* Lead = new G4Material(name="Lead", z=82., a, density);
-
-  a = 39.95*g/mole;
-  density = 1.782e-03*g/cm3;
-  G4Material* Ar = new G4Material(name="ArgonGas", z=18., a, density);
-
-  a = 28.09*g/mole;
-  density = 2.33*g/cm3;
-  G4Material * Silicon = new G4Material(name="Silicon", z=14., a, density);
+  //  Material Information imported from NIST database.
+  G4NistManager* NISTman = G4NistManager::Instance();
+  G4Material* air     = NISTman->FindOrBuildMaterial("G4_AIR");
+  G4Material* lead    = NISTman->FindOrBuildMaterial("G4_Pb");
+  G4Material* arGas   = NISTman->FindOrBuildMaterial("G4_Ar");
+  G4Material* silicon = NISTman->FindOrBuildMaterial("G4_Si");
 
   density = 1.032*g/cm3;
-  G4Material* Scinti = new G4Material(name="Scintillator", density, nel=2);
-  Scinti->AddElement(elC, 9);
-  Scinti->AddElement(elH, 10);
+  G4Material* scinti = new G4Material(name="Scintillator", density, nel=2);
+  scinti->AddElement(elC, 9);
+  scinti->AddElement(elH, 10);
 
   //-------------------------------------------------------------------------
   // Detector geometry
   //-------------------------------------------------------------------------
-
   //------------------------------ experimental hall
   G4Box * experimentalHall_box
-    = new G4Box("expHall_b",expHall_x,expHall_y,expHall_z);
+    = new G4Box("expHall_b",fExpHall_x,fExpHall_y,fExpHall_z);
   G4LogicalVolume * experimentalHall_log
-    = new G4LogicalVolume(experimentalHall_box,Air,"expHall_L",0,0,0);
+    = new G4LogicalVolume(experimentalHall_box,air,"expHall_L",0,0,0);
   G4VPhysicalVolume * experimentalHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),experimentalHall_log,"expHall_P",
                         0,false,0);
@@ -146,17 +134,18 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   G4Region* defaultRegion = (*(G4RegionStore::GetInstance()))[0];
   RE01RegionInformation* defaultRInfo = new RE01RegionInformation();
   defaultRInfo->SetWorld();
+  defaultRInfo->Print();
   defaultRegion->SetUserInformation(defaultRInfo);
 
   //------------------------------ tracker
   G4VSolid * tracker_tubs
-    = new G4Tubs("trkTubs_tubs",trkTubs_rmin,trkTubs_rmax,trkTubs_dz,
-                 trkTubs_sphi,trkTubs_dphi);
+    = new G4Tubs("trkTubs_tubs",fTrkTubs_rmin,fTrkTubs_rmax,fTrkTubs_dz,
+                 fTrkTubs_sphi,fTrkTubs_dphi);
   G4LogicalVolume * tracker_log
-    = new G4LogicalVolume(tracker_tubs,Ar,"trackerT_L",0,0,0);
+    = new G4LogicalVolume(tracker_tubs,arGas,"trackerT_L",0,0,0);
   // G4VPhysicalVolume * tracker_phys =
       new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
-			experimentalHall_log,false,0);
+                        experimentalHall_log,false,0);
   G4VisAttributes* tracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
   tracker_logVisAtt->SetForceWireframe(true);
@@ -168,21 +157,20 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   tracker_log->SetRegion(trackerRegion);
   trackerRegion->AddRootLogicalVolume(tracker_log);
 
-
   //------------------------------ tracker layers
   // As an example for Parameterised volume 
   // dummy values for G4Tubs -- modified by parameterised volume
   G4VSolid * trackerLayer_tubs
-    = new G4Tubs("trackerLayer_tubs",trkTubs_rmin,trkTubs_rmax,trkTubs_dz,
-                 trkTubs_sphi,trkTubs_dphi);
+    = new G4Tubs("trackerLayer_tubs",fTrkTubs_rmin,fTrkTubs_rmax,fTrkTubs_dz,
+                 fTrkTubs_sphi,fTrkTubs_dphi);
   G4LogicalVolume * trackerLayer_log
-    = new G4LogicalVolume(trackerLayer_tubs,Silicon,"trackerB_L",0,0,0);
+    = new G4LogicalVolume(trackerLayer_tubs,silicon,"trackerB_L",0,0,0);
   G4VPVParameterisation * trackerParam
     = new RE01TrackerParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume *trackerLayer_phys =
       new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_log,
-			   kXAxis, notrkLayers, trackerParam);
+                           kXAxis, fNotrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
   trackerLayer_logVisAtt->SetForceWireframe(true);
@@ -190,13 +178,13 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
 
   //------------------------------ calorimeter
   G4VSolid * calorimeter_tubs
-    = new G4Tubs("calorimeter_tubs",caloTubs_rmin,caloTubs_rmax,
-		  caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
+    = new G4Tubs("calorimeter_tubs",fCaloTubs_rmin,fCaloTubs_rmax,
+                  fCaloTubs_dz,fCaloTubs_sphi,fCaloTubs_dphi);
   G4LogicalVolume * calorimeter_log
-    = new G4LogicalVolume(calorimeter_tubs,Scinti,"caloT_L",0,0,0);
+    = new G4LogicalVolume(calorimeter_tubs,scinti,"caloT_L",0,0,0);
   // G4VPhysicalVolume * calorimeter_phys =
       new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
-			experimentalHall_log,false,0);
+                        experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calorimeter_logVisATT->SetForceWireframe(true);
@@ -212,16 +200,16 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   // As an example for Parameterised volume 
   // dummy values for G4Tubs -- modified by parameterised volume
   G4VSolid * caloLayer_tubs
-    = new G4Tubs("caloLayer_tubs",caloRing_rmin,caloRing_rmax,
-		  caloRing_dz,caloRing_sphi,caloRing_dphi);
+    = new G4Tubs("caloLayer_tubs",fCaloRing_rmin,fCaloRing_rmax,
+                  fCaloRing_dz,fCaloRing_sphi,fCaloRing_dphi);
   G4LogicalVolume * caloLayer_log
-    = new G4LogicalVolume(caloLayer_tubs,Lead,"caloR_L",0,0,0);
+    = new G4LogicalVolume(caloLayer_tubs,lead,"caloR_L",0,0,0);
   G4VPVParameterisation * calorimeterParam
     = new RE01CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
       new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_log,
-			   kXAxis, nocaloLayers, calorimeterParam);
+                           kXAxis, fNocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
   caloLayer_logVisAtt->SetForceWireframe(true);
@@ -230,7 +218,6 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   //------------------------------------------------------------------
   // Sensitive Detector
   //------------------------------------------------------------------
-
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   G4String trackerSDname = "/mydet/tracker";

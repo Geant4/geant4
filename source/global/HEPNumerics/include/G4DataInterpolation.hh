@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.hh,v 1.5 2006-06-29 18:59:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class description:
 //

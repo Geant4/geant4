@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
 //
-// $Id: TrackingAction.hh,v 1.3 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -52,16 +54,16 @@ class TrackingAction : public G4UserTrackingAction {
     void PostUserTrackingAction(const G4Track*);
     
   private:
-    PrimaryGeneratorAction* primary;
-    HistoManager*  histoManager;
+    PrimaryGeneratorAction* fPrimary;
+    HistoManager*  fHistoManager;
 
    // parameters for generator action #3
-    G4ThreeVector newUz;
+    G4ThreeVector fNewUz;
 
    // parameters for generator action #4
-    G4double deltaR3;
-    G4double cosAlphaMin; 
-    G4double cosAlphaMax;  //opening angle
+    G4double fDeltaR3;
+    G4double fCosAlphaMin; 
+    G4double fCosAlphaMax;  //opening angle
 
 };
 

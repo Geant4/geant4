@@ -23,20 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This class is a slightly modified version of G4Transportation
-// But it should use the exact same algorithm
+// $Id: G4ITTransportation.hh 64374 2012-10-31 16:37:23Z gcosmo $
+//
+/// \brief This class is a slightly modified version of G4Transportation
+///        initially written by John Apostolakis and colleagues (1997)
+///        But it should use the exact same algorithm
+//
+// Original Author : John Apostolakis
+//
+// Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
-//
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
 //
 // -------------------------------------------------------------------
 
 #ifndef G4ITTransportation_H
 #define G4ITTransportation_H
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4IT.hh"
 #include "G4VITProcess.hh"
@@ -44,7 +49,8 @@
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
 
-class G4Navigator;
+class G4ITNavigator;
+//class G4Navigator;
 class G4SafetyHelper;
 class G4PropagatorInField;
 
@@ -192,11 +198,11 @@ protected :
     //________________________________________________________________
     // Informations relative to the process only (meaning no information
     // relative to the treated particle)
-    G4Navigator*         fLinearNavigator;
+    G4ITNavigator*         fLinearNavigator;
     G4PropagatorInField* fFieldPropagator;
     // The Propagators used to transport the particle
 
-    static const G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
+//    static const G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
 
     G4ParticleChangeForTransport fParticleChange;
     // New ParticleChange

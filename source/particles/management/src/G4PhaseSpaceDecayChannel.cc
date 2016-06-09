@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.14 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------
@@ -38,6 +37,8 @@
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
@@ -66,7 +67,8 @@ G4PhaseSpaceDecayChannel::G4PhaseSpaceDecayChannel(
 					  theDaughterName1,
 					  theDaughterName2,
 					  theDaughterName3,
-					  theDaughterName4)
+					  theDaughterName4),
+			  current_parent_mass(0.0)
 {
 
 }
@@ -86,7 +88,9 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
   if (parent == 0) FillParent();  
   if (daughters == 0) FillDaughters();
 
-  if (parentMass >0.0) parent_mass = parentMass;  
+  if (parentMass >0.0) current_parent_mass = parentMass;
+  else                 current_parent_mass = parent_mass;
+
   switch (numberOfDaughters){
   case 0:
 #ifdef G4VERBOSE
@@ -152,7 +156,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
-  G4double parentmass = parent_mass;
+  G4double parentmass = current_parent_mass;
   
   //daughters'mass
   G4double daughtermass[2]; 
@@ -174,7 +178,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
     if (GetVerboseLevel()>0) {
       G4cerr << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
              << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cerr << "parent :" << parent->GetParticleName() << "  " << parent_mass/GeV << G4endl;
+      G4cerr << "parent :" << parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
       G4cerr << "daughter 1 :" << daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
       G4cerr << "daughter 2:" << daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
     }
@@ -213,7 +217,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
-  G4double parentmass = parent_mass;
+  G4double parentmass = current_parent_mass;
   //daughters'mass
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
@@ -236,7 +240,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
     if (GetVerboseLevel()>0) {
       G4cerr << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
              << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cerr << "parent :" << parent->GetParticleName() << "  " << parent_mass/GeV << G4endl;
+      G4cerr << "parent :" << parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
       G4cerr << "daughter 1 :" << daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
       G4cerr << "daughter 2:" << daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
       G4cerr << "daughter 3:" << daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
@@ -355,7 +359,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
-  G4double parentmass = parent_mass;
+  G4double parentmass = current_parent_mass;
   //daughters'mass
   G4double *daughtermass = new G4double[numberOfDaughters]; 
   G4double sumofdaughtermass = 0.0;
@@ -514,7 +518,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     // boost already created particles 
     beta = daughtermomentum[index];
     beta /= std::sqrt( daughtermomentum[index]*daughtermomentum[index] + sm[index+1]*sm[index+1] );
-    for (G4int index2 = index+1; index2<numberOfDaughters; index2++) {
+    for (index2 = index+1; index2<numberOfDaughters; index2++) {
       G4LorentzVector p4;
       // make G4LorentzVector for secondaries
       p4 = daughterparticle[index2]->Get4Momentum();

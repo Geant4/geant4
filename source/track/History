@@ -17,6 +17,85 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- November 8, 2012 I.Hrivnacova (track-V09-05-20)
+- Fixed G4Track: added initialisation of useGivenVelocity where missing
+
+- Sep. 23, 2012 H.Kurashige (track-V09-05-19)
+- Add UseGivenVelocity methods to skip CalculateVelocity
+
+- August 27, 2012 H.Kurashige (track-V09-05-18)
+- Fix a bug in copy constructor of G4VUUserTrackInformation (Problem #1346)
+
+- August 11, 2012 H.Kurashige (track-V09-05-17)
+- Fix a bug in G4VParticleChange::CheckSecondary
+  theParentGlobalTime is set to time at the pre-step point
+
+- August 9, 2012 V.Ivanchenko (track-V09-05-16)
+  (should be accompned by a new EM tag of emutils-V09-05-31)
+- G4ParticleChangeForMSC - allowed modification of position and
+    direction AlongStep 
+
+- June 26, 2012 G.Cosmo (track-V09-05-13)
+- Additional protection for parameter not used in G4VParticleChange when
+  G4_NO_VERBOSE is set.
+
+- June 20, 2012 G.Cosmo (track-V09-05-12)
+- Protect variable used for verbosity within G4VERBOSE in G4ParticleChange
+  and G4VParticleChange. Fixes compilation warnings when G4_NO_VERBOSE is
+  set.
+
+- June 13, 2012 G.Cosmo (track-V09-05-11)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+- June 09, 2012 H.Kurashige (track-V09-05-10)
+- Fixed G4VelocityTable::Interpolation()
+
+- May 23, 2012 G.Cosmo (track-V09-05-09)
+- Fixed trivial cases of variable shadowing.
+
+- May 15, 2012 H.Kurashige (track-V09-05-08)
+- Modify way of handling parent weight in AlongStep 
+  in accumulated way (same manner for other prperties) 
+
+- May 1st, 2012 H.Kurashige (track-V09-05-07)
+- Add global time check for secondaries in G4VParticleChange
+- Modify output messages for CheckIt and CheckSecondary
+- Add G4Exception in G4ParticleChangeForRadDecay:: AddSecondary 
+
+- April 30, 2012 H.Kurashige (track-V09-05-06)
+- Fixed the bug in G4ParticleChange::AddSecondary. 
+  (Problem#1305 The local time of the parent was set before)
+
+- April 29, 2012 H.Kurashige (track-V09-05-05)
+- Fix treatment of weights in ParticleChange
+  (Problem#1283)
+ 
+- February 3rd, 2012 J.Apostolakis  (track-V09-05-04)
+- G4FieldTrackUpdator::Update method must reset the RestMass, 
+   because it is used to Initialise each track by ParallelWorldScoringProcess,
+   (as well as update during stepping a track.)
+    Requires tag  'field-V09-05-03' of geometry/magneticfield
+
+- January 21st, 2012 H.Kurashige    (track-V09-05-03)
+- G4Track::CalculateVelocityForOpticalPhoton() has been reverted
+  Modification of Optical process solves Problem #1275
+
+- January 9th, 2012 H.Kurashige  (track-V09-05-02)
+- Use GetNextMaterial instead of GetMaterial 
+  in G4Track::CalculateVelocityForOpticalPhoton()
+   (Problem #1275)
+
+- December 22nd, 2011 H.Kurashige  (track-V09-05-01)
+- Set 'false' to SecondaryWeightByProcess in default 
+  (Problem #1273)
+
+- December 9th, 2011 H.Kurashige  (track-V09-05-00)
+- Fix Coverity defects
+  (Modify copy constructor/assignment operator for G4VParticleChange and derived classes)
+  (Add copy constructor/assignment operator for G4VUserTrackInformation)
+
 - November 9th, 2011 H.Kurashige  (track-V09-04-13)
 - Fix Coverity defects
   (copy constructor/assignment operator for G4Step/G4StepPoint)

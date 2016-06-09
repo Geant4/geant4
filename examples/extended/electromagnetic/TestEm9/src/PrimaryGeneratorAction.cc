@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.3 2006-06-29 17:03:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -48,40 +50,43 @@
 
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4Electron.hh"
 #include "HistoManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:detector(det)
+  :fDetector(det)
 {
-  G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
-
-  G4ParticleDefinition* particle
-                 = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(1.*GeV);
+  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun->SetParticleDefinition(G4Electron::Electron());
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(1.*GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4double zVertex = - (detector->GetWorldSizeZ());
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
-  if(anEvent->GetEventID() == 1)
-    (HistoManager::GetPointer())->SetBeamEnergy(particleGun->GetParticleEnergy());
-  particleGun->GeneratePrimaryVertex(anEvent);
+  if(anEvent->GetEventID() == 0) {
+    G4double zVertex = - (fDetector->GetWorldSizeZ());
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+    (HistoManager::GetPointer())->SetBeamEnergy(fParticleGun->GetParticleEnergy());
+    G4cout << "### PrimaryGeneratorAction::GeneratePrimaries ##########" << G4endl;
+    G4cout << "### " << fParticleGun->GetParticleDefinition()->GetParticleName()
+           << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV << G4endl;
+    G4cout << "########################################################"
+           << G4endl;
+  }
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

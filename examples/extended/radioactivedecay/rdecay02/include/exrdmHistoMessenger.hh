@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmHistoMessenger.hh
+/// \brief Definition of the exrdmHistoMessenger class
+//
 
 #ifndef exrdmHistoMessenger_h
 #define exrdmHistoMessenger_h 1
@@ -44,18 +47,18 @@ class exrdmHistoMessenger: public G4UImessenger
   public:
 
    exrdmHistoMessenger(exrdmHisto* );
-  ~exrdmHistoMessenger();
+   virtual ~exrdmHistoMessenger();
 
-   void SetNewValue(G4UIcommand* ,G4String );
+   virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-   exrdmHisto*                  histo;
+   exrdmHisto*                  fHisto;
    
-   G4UIdirectory*          histoDir;   
-   G4UIcmdWithAString*     factoryCmd;
-   G4UIcmdWithAString*     fileCmd;
-   G4UIcommand*            histoCmd;
+   G4UIdirectory*          fHistoDir;   
+   G4UIcmdWithAString*     fActoryCmd;
+   G4UIcmdWithAString*     fIleCmd;
+   G4UIcommand*            fHistoCmd;
 
 };
 

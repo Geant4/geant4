@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LineCurrentMagField.cc,v 1.6 2006-06-29 18:24:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "G4LineCurrentMagField.hh"
@@ -47,7 +46,7 @@ void G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
                                                  G4double B[3]      ) const  
 {
    //   G4double fFieldConstant = 100 ;
-   G4double a = 1.00*mm ;   // mm -> m 
+   G4double a = 1.00 ;   // mm
    G4double x = a*yTrack[0], y = a*yTrack[1] ;
    G4double x2 = x*x, y2 = y*y, r2 = x2 + y2 ;
    G4double r = std::sqrt(r2+a*a) ;

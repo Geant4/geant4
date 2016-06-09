@@ -26,6 +26,7 @@
 // hpw: done, but low quality at present.
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AngularDistribution.hh"
 #include "Randomize.hh"
 
@@ -165,7 +166,7 @@ G4AngularDistribution()
 { }
 
 
-G4double G4AngularDistribution::CosTheta(G4double s, G4double m1, G4double m2) const
+G4double G4AngularDistribution::CosTheta(G4double S, G4double m_1, G4double m_2) const
 {
    G4double random = G4UniformRand();
    G4double dCosTheta = 2.;
@@ -179,7 +180,7 @@ G4double G4AngularDistribution::CosTheta(G4double s, G4double m1, G4double m2) c
       // Accuracy is 2^-jmax 
       dCosTheta *= 0.5;
       G4double cosTh = cosTheta + dCosTheta;
-      if(DifferentialCrossSection(s, m1, m2, cosTh) <= random) cosTheta = cosTh;
+      if(DifferentialCrossSection(S, m_1, m_2, cosTh) <= random) cosTheta = cosTh;
     }
 
    // Randomize in final interval in order to avoid discrete angles 
@@ -193,19 +194,19 @@ G4double G4AngularDistribution::CosTheta(G4double s, G4double m1, G4double m2) c
 }
 
 
-G4double G4AngularDistribution::DifferentialCrossSection(G4double sIn, G4double m1, G4double m2, 
+G4double G4AngularDistribution::DifferentialCrossSection(G4double sIn, G4double m_1, G4double m_2, 
 							 G4double cosTheta) const
 {
 // local calculus is in GeV, ie. normalize input
   sIn = sIn/sqr(GeV)+m42/2.;
-  m1  = m1/GeV;
-  m2  = m2/GeV;
+  m_1  = m_1/GeV;
+  m_2  = m_2/GeV;
 //  G4cout << "Here we go"<<sIn << " "<<m1 << " " << m2 <<" " m42<< G4endl;
 // scaling from masses other than p,p.
-  G4double s = sIn - (m1+m2) * (m1+m2) + m42;
-  G4double tMax = s - m42;
+  G4double S = sIn - (m_1+m_2) * (m_1+m_2) + m42;
+  G4double tMax = S - m42;
   G4double tp = 0.5 * (cosTheta + 1.) * tMax; 
-  G4double twoS = 2. * s;
+  G4double twoS = 2. * S;
   
   // Define s-dependent stuff for omega-Term
   G4double brak1 = (twoS-m42) * (twoS-m42);
@@ -216,7 +217,7 @@ G4double G4AngularDistribution::DifferentialCrossSection(G4double sIn, G4double 
 			 - 2. * (cmOmega2 + 2 * mOmega2) * twoS 
 			 - 3. * brak1);
   G4double bOmega_m = cOmega_m * (-2. * mOmega2*mOmega2 - 2. * mOmega2 * twoS - brak1);
-  G4double bOmega_L = cOmega_L * (sOmega1 * mOmega2 + (cmOmega2 + 3. * mOmega2) * s + brak1);
+  G4double bOmega_L = cOmega_L * (sOmega1 * mOmega2 + (cmOmega2 + 3. * mOmega2) * S + brak1);
   G4double bOmega_0 = -(bOmega_3 + bOmega_2 + bOmega_1 + bOmega_m);
   
   // Define s-dependent stuff for mix-Term            
@@ -224,8 +225,8 @@ G4double G4AngularDistribution::DifferentialCrossSection(G4double sIn, G4double 
   G4double bMix_s1 = cMix_s1 * (dSigma1 - twoS);
   G4double bMix_Omega = cMix_Omega * (dOmega2 - twoS);
   G4double bMix_sm = cMix_sm * (dSigma2 - twoS);
-  G4double bMix_oL = cMix_oLc + cMix_oLs * s;
-  G4double bMix_sL = cMix_sLc + cMix_sLs * s;
+  G4double bMix_oL = cMix_oLc + cMix_oLs * S;
+  G4double bMix_sL = cMix_sLc + cMix_sLs * S;
   
   G4double t1_Pion = 1. / (1. + tMax / cmPion2);
   G4double t2_Pion = 1. + tMax / mPion2;

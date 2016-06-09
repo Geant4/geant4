@@ -37,10 +37,10 @@
 // -------------------------------------------------------------------
 
 #include "G4KM_OpticalEqRhs.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4HadTmpUtil.hh"
-
 
 G4KM_OpticalEqRhs::G4KM_OpticalEqRhs(G4KM_DummyField *field,
 				     G4V3DNucleus * nucleus) :

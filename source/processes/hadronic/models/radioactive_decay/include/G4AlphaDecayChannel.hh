@@ -47,6 +47,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
@@ -69,7 +71,7 @@ class G4AlphaDecayChannel : public G4NuclearDecayChannel
       G4NuclearDecayChannel (Alpha, Verbose, theParentNucleus, theBR,
                              theEndPointEnergy,
                              (theParentNucleus->GetBaryonNumber())-4,
-                             int(theParentNucleus->GetPDGCharge()/eplus)-2,
+                             int(theParentNucleus->GetPDGCharge()/CLHEP::eplus)-2,
                              theDaughterExcitation, "alpha")
     {
 #ifdef G4VERBOSE

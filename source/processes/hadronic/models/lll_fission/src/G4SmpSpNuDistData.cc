@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpSpNuDistData.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
+// $Id$
 //
 
 #include "G4fissionEvent.hh"
@@ -139,10 +139,10 @@ G4int G4fissionEvent::G4SmpSpNuDistData(G4int isotope, G4int Cf252option) {
   if (index != -1) { 
     r=fisslibrng();
 
-    sum=0.;
-    for(i=0; i<nSPfissn; i++) {
-       sum=sum+sfnu[index][i];
-       if (r <= sum || sfnu[index][i+1] == 0.) return i;
+    sum = 0.;
+    for (i = 0; i < nSPfissn-1; i++) {
+      sum = sum + sfnu[index][i];
+      if (r <= sum || sfnu[index][i+1] == 0.) return i;
     }
     //
     // Fall through

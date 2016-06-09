@@ -37,8 +37,13 @@ the beam can be defined via standard UI commands
 
                            PHYSICS
 
-Physics List is defined by the PHYSLIST environment variable. By default 
-QGSP_BERT Physics List will be instantiated.
+Physics List is defined by its name given in the 3d argument of the of the 
+run command. 
+
+Hadr00 my.macro QGSP_BERT   
+
+If 3d argument is not set then by the PHYSLIST environment variable. 
+By default FTFP_BERT Physics List will be instantiated.
 
  
                         CROSS SECTION
@@ -83,39 +88,9 @@ and log10(p/GeV)) for one projectile particle and one target element.
 The element is taken from the Geant4 NIST database, natural isotope 
 composition is assumed. 
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
+It is possible to change scale and output file name using UI commands:
 
-For example, if iAIDA is installed and compiled at SLC4 Linux 
+/testhadr/histo/fileName name
+/testhadr/histo/setHisto idx nbins vmin vmax unit
 
-setenv AIDA_DIR  $MYPACKAGES/analysis/iAIDA/install/slc4_amd64_gcc34_root 
-setenv PATH ${PATH}:${AIDA_DIR}/bin
-
-Before compilation of the example it is optimal to clean up old 
-object files:
-
-gmake histclean
-setenv G4ANALYSIS_USE 1
-gmake
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-/testhadr/HistoName   name
-/testhadr/HistoType   type
-/testhadr/HistoOption "uncompress"
-
-The following types are available: hbook, root, aida. They will be 
-stored in the file "name.hbook", "name.root", or "name.aida". 
-
-To show the content of a histogram ID=i the commands may be applied:
-
-/testhadr/HistoPrint  i
-
-!!! 
-Please put '/run/initialize'  after '/testhadr/' commands and before 
-'/run/beamOn ' command:
-
-/testhadr/..
-/run/initialize
-/run/beamOn  0
+Only ROOT histograms are available.

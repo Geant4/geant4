@@ -15,6 +15,93 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 September 2012, G.Cosmo
+=  Explicitly use inclusion of headers for system of units and physical
+   constants, in plan to remove implicit inclusion from globals.hh.
+
+15 August 2012, A.Ribon  (hadr-string-diff-V09-05-17)
+-  Coverity fixes in G4FTFParticipants.cc.
+
+14 August 2012, A.Ribon  (hadr-string-diff-V09-05-16)
+-  Coverity fixes in G4FTFParticipants.cc and G4FTFParameters.cc.
+
+25 July 2012, A.Ribon   (hadr-string-diff-V09-05-15)
+-  Coverity fixes in: G4FTFModel, G4FTFAnnihilation,
+   G4ElasticHNScattering, G4FTFParameters, G4FTFParticipants.
+
+17 July 2012, G.Folger   (hadr-string-diff-V09-05-14)
+-  fixes for coverity in G4DiffractiveSplitableHadron
+
+6 July 2012, V. Uzhinsky (hadr-string-diff-V09-05-13)
+- FTF parameters tunned: Wdelta 0.25 -> 0.05, Dcor 0.4 -> 0.3
+                         E* 75 -> 100 MeV
+-------------------------------------------------------
+21 June 2012, W.Pokorski  (hadr-string-diff-V09-05-12)
+- removed dependency on CHIPS in sources.cmake file
+-------------------------------------------------------
+
+20 June 2012, V. Uzhinsky (hadr-string-diff-V09-05-11)
+- Bug is fixed for K-minus interactions in FTFModel
+-------------------------------------------------------
+
+13 June 2012, V. Uzhinsky (hadr-string-diff-V09-05-10)
+- Bug is fixed for high energy anti-baryons in FTFModel
+-------------------------------------------------------
+
+12 June 2012, V. Uzhinsky (hadr-string-diff-V09-05-09)
+- Bug is fixed in PutOnMassShell in FTFModel
+- FTFModel operation is improved.
+-------------------------------------------------------------
+
+12 June 2012, G.Folger   (hadr-string-diff-V09-05-08)
+-  Fix sahdowing of variables, 
+    affected files:G4FTFParameters.{hh,cc},G4FTFModel.cc,G4DiffractiveExcitation.cc
+--------------------------------------------------------------------
+
+6 June 2012, V. Uzhinsky (hadr-string-diff-V09-05-07)
+- Diffraction dissociation of p/pi/k-mesons are improved.
+- Fit of exp. data on p/pi/k + H has been done.
+- Good results are obtained for h+A interactions.
+- New energy dependences are introduced for the diffraction
+  cross sections.
+- Quark exchange algorithm is improved. Strings with large masses
+  are now allowed to save thier masses.
+- Pt transfered in the excitation is increased up to 0.3 GeV/c.
+- String mass sampling for baryon like strings is changed.
+--------------------------------------------------------------------
+31 May 2012, W.Pokorski (hadr-string-diff-V09-05-06)
+---------------------------------------------------------------------
+ - slight change in the implementation of the static pointer for the 
+ cross sections (to make it safer)
+
+30 May 2012, W.Pokorski (hadr-string-diff-V09-05-05)
+---------------------------------------------------------------------
+ - making G4ChipsComponentXS static to avoid multiple instanciations
+
+25-May-2012, Gunter Folger   (hadr-string-diff-V09-05-04)
+-  Add ModelDescription in FTF
+-  Make copy ctor, =, ==, and != operators private without implementation
+-  add Modelname in Ctor
+
+21 May 2012, V.Uzhinsky (hadr-string-diff-V09-05-03)
+-  Improved diffraction dissociation is implemented
+
+--------------------------------------------------------
+21 May 2012, W.Pokorski (hadr-string-diff-V09-05-02)
+---------------------------------------------------------------------
+ - definitely removing G4ComponentCHIPShadronNuclearXS
+
+11 May 2012, W.Pokorski (hadr-string-diff-V09-05-01)
+---------------------------------------------------------------------
+ - G4FTFParameters uses the new G4ChipsComponentXS from 
+ hadronic/cross_sections
+
+May 5, 2012, Gunter Folger  ( ..trunk.. )
+- revert changes by Mikhail ( rev. r58261 )
+
+28 April 2012, M.Kosov                 (hadr-string-diff-V09-05-00)
+- hadronic/models/chiral_inv_phase_space moved to hadronic/chips
+
 22-November 2011, V. Uzhinsky& G.Folger (hadr-string-diff-V09-04-10)
    Fix memory leak in G4FTFParticipants.cc
 

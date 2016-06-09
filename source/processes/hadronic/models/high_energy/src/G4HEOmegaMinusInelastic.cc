@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEOmegaMinusInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
-
-#include "globals.hh"
-#include "G4ios.hh"
 
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
@@ -39,7 +35,9 @@
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
  
 #include "G4HEOmegaMinusInelastic.hh"
-
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 
 void G4HEOmegaMinusInelastic::ModelDescription(std::ostream& outFile) const
 {
@@ -205,12 +203,12 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;              
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
   static const G4int numMul = 1200;
   static const G4int numSec = 60;
@@ -225,28 +223,28 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
   static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
   //  misc. local variables
-  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  npos = number of pi+,  nneg = number of pi-,  nzero = number of pi0
 
-  G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, npos, nneg, nzero;
 
-   if( first ) 
-     {    // compute normalization constants, this will only be done once
-       first = false;
-       for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
-       counter = -1;
-       for( np=0; np<(numSec/3); np++ ) 
+  if (first) {
+    // compute normalization constants, this will only be done once
+    first = false;
+    for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
+    for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
+    counter = -1;
+       for( npos=0; npos<(numSec/3); npos++ ) 
           {
-            for( nm=std::max(0,np-1); nm<=np; nm++ ) 
+            for( nneg=std::max(0,npos-1); nneg<=npos; nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
-                              protmul[counter] = pmltpc(np,nm,nz,nt,protb,c);
+                              protmul[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
                               protnorm[nt-1] += protmul[counter];
                             }
                         }
@@ -256,18 +254,18 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
        for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
        for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
        counter = -1;
-       for( np=0; np<numSec/3; np++ ) 
+       for( npos=0; npos<numSec/3; npos++ ) 
           {
-            for( nm=np; nm<=(np+1); nm++ ) 
+            for( nneg=npos; nneg<=(npos+1); nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
-                               neutmul[counter] = pmltpc(np,nm,nz,nt,neutb,c);
+                               neutmul[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
                                neutnorm[nt-1] += neutmul[counter];
                             }
                         }
@@ -357,21 +355,19 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
    else if (availableEnergy <= PionPlus.getMass())
        return;
 
-                                                  //   inelastic scattering
+  // inelastic scattering
+  npos = 0; nneg = 0; nzero = 0;
 
-   np = 0; nm = 0; nz = 0;
-
-//                    number of total particles vs. centre of mass Energy - 2*proton mass
+  // number of total particles vs. centre of mass Energy - 2*proton mass
+  G4double aleab = std::log(availableEnergy);
+  G4double n = 3.62567+aleab*(0.665843+aleab*(0.336514
+                + aleab*(0.117712+0.0136912*aleab))) - 2.0;
    
-   G4double aleab = std::log(availableEnergy);
-   G4double n     = 3.62567+aleab*(0.665843+aleab*(0.336514
-                    + aleab*(0.117712+0.0136912*aleab))) - 2.0;
-   
-//                    normalization constant for kno-distribution.
-//                    calculate first the sum of all constants, check for numerical problems.             
-   G4double test, dum, anpn = 0.0;
+  // normalization constant for kno-distribution.
+  // calculate first the sum of all constants, check for numerical problems.             
+  G4double test, dum, anpn = 0.0;
 
-   for (nt=1; nt<=numSec; nt++) {
+  for (nt=1; nt<=numSec; nt++) {
      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
      dum = pi*nt/(2.0*n*n);
      if (std::fabs(dum) < 1.0) {
@@ -379,22 +375,20 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
      } else { 
        anpn += dum*test;
      }
-   }
+  }
    
-   G4double ran = G4UniformRand();
-   G4double excs = 0.0;
-   if( targetCode == protonCode ) 
-     {
-       counter = -1;
-       for( np=0; np<numSec/3; np++ ) 
-          {
-            for( nm=std::max(0,np-1); nm<=np; nm++ ) 
+  G4double ran = G4UniformRand();
+  G4double excs = 0.0;
+  if (targetCode == protonCode) {
+    counter = -1;
+    for (npos = 0; npos < numSec/3; npos++) {
+            for( nneg=std::max(0,npos-1); nneg<=npos; nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if ( (nt>0) && (nt<=numSec) ) {
                             test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                             dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
@@ -417,15 +411,15 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
    else   
      {                                         // target must be a neutron
        counter = -1;
-       for( np=0; np<numSec/3; np++ ) 
+       for( npos=0; npos<numSec/3; npos++ ) 
           {
-            for( nm=np; nm<=(np+1); nm++ ) 
+            for( nneg=npos; nneg<=(npos+1); nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if ( (nt>=1) && (nt<=numSec) ) {
                             test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                             dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
@@ -445,81 +439,59 @@ G4HEOmegaMinusInelastic::FirstIntInCasOmegaMinus(G4bool& inElastic,
        return;
      }
  
-   outOfLoop:           //  <------------------------------------------------------------------------   
+  outOfLoop:           //  <------------------------------------------------------------------------   
     
-                                                   // in the following we do not consider
-   ran = G4UniformRand();                          // strangeness transfer in high multiplicity 
-   if( targetCode == protonCode)                   // events. YK combinations are added in 
-     {                                             // StrangeParticlePairProduction
-       if( np == nm)
+  // in the following we do not consider strangeness transfer at high
+  // multiplicity events. YK combinations are added in
+  // StrangeParticlePairProduction
+  ran = G4UniformRand(); 
+  if (targetCode == protonCode) {
+       if( npos == nneg)
          { 
          }
        else
          {
            pv[1] = Neutron;
          }   
-     }  
-   else
-     {
-       if (np == nm)
+  } else {
+       if (npos == nneg)
          {
          }  
        else 
          {
            pv[1] = Proton;
          }
-     }      
+  }      
 
-
-   nt = np + nm + nz;
-   while ( nt > 0)
-       {
-         G4double ran = G4UniformRand();
-         if ( ran < (G4double)np/nt)
-            { 
-              if( np > 0 ) 
-                { pv[vecLen++] = PionPlus;
-                  np--;
-                }
-            }
-         else if ( ran < (G4double)(np+nm)/nt)
-            {   
-              if( nm > 0 )
-                { 
-                  pv[vecLen++] = PionMinus;
-                  nm--;
-                }
-            }
-         else
-            {
-              if( nz > 0 )
-                { 
-                  pv[vecLen++] = PionZero;
-                  nz--;
-                }
-            }
-         nt = np + nm + nz;
-       } 
-   if (verboseLevel > 1)
-      {
-        G4cout << "Particles produced: " ;
-        G4cout << pv[0].getName() << " " ;
-        G4cout << pv[1].getName() << " " ;
-        for (i=2; i < vecLen; i++)   
-            { 
-              G4cout << pv[i].getName() << " " ;
-            }
-         G4cout << G4endl;
+  nt = npos + nneg + nzero;
+  while (nt > 0) {
+    G4double rnd = G4UniformRand();
+    if (rnd < (G4double)npos/nt) { 
+      if (npos > 0) {
+        pv[vecLen++] = PionPlus;
+        npos--;
       }
-   return;
- }
-
-
-
-
-
-
-
-
-
+    } else if (rnd < (G4double)(npos+nneg)/nt) {   
+      if (nneg > 0) { 
+        pv[vecLen++] = PionMinus;
+        nneg--;
+      }
+    } else {
+      if (nzero > 0) { 
+        pv[vecLen++] = PionZero;
+        nzero--;
+      }
+    }
+    nt = npos + nneg + nzero;
+  }
+ 
+  if (verboseLevel > 1) {
+    G4cout << "Particles produced: " ;
+    G4cout << pv[0].getName() << " " ;
+    G4cout << pv[1].getName() << " " ;
+    for (i=2; i < vecLen; i++) G4cout << pv[i].getName() << " " ;
+    G4cout << G4endl;
+  }
+  return;
+}
 

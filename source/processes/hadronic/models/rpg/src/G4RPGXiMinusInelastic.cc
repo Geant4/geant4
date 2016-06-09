@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGXiMinusInelastic.cc,v 1.1 2007-07-18 21:04:21 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGXiMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
  
 G4HadFinalState*
@@ -122,15 +123,15 @@ G4RPGXiMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
 }
 
 
-void G4RPGXiMinusInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-   G4int& vecLen,
-   const G4HadProjectile *originalIncident,
-   G4ReactionProduct &currentParticle,
-   G4ReactionProduct &targetParticle,
-   G4bool &incidentHasChanged,
-   G4bool &targetHasChanged,
-   G4bool &quasiElastic )
+void 
+G4RPGXiMinusInelastic::Cascade(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
+                               G4int& vecLen,
+                               const G4HadProjectile* originalIncident,
+                               G4ReactionProduct& currentParticle,
+                               G4ReactionProduct& targetParticle,
+                               G4bool& incidentHasChanged,
+                               G4bool& targetHasChanged,
+                               G4bool& quasiElastic)
 {
   // Derived from H. Fesefeldt's original FORTRAN code CASXM
   //
@@ -149,61 +150,56 @@ void G4RPGXiMinusInelastic::Cascade(
                                       targetMass*targetMass +
                                       2.0*targetMass*etOriginal );
   G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-  if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV )
-  {
+  if (availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV) {
     quasiElastic = true;
     return;
   }
-    static G4bool first = true;
-    const G4int numMul = 1200;
-    const G4int numSec = 60;
-    static G4double protmul[numMul], protnorm[numSec]; // proton constants
-    static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
-    G4double test;
-    const G4double c = 1.25;    
-    const G4double b[] = { 0.7, 0.7 };
-    if( first )       // compute normalization constants, this will only be Done once
-    {
-      first = false;
-      G4int i;
-      for( i=0; i<numMul; ++i )protmul[i] = 0.0;
-      for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
-      counter = -1;
-      for( np=0; np<(numSec/3); ++np )
-      {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
-        {
-          for( nz=0; nz<numSec/3; ++nz )
-          {
-            if( ++counter < numMul )
-            {
-              nt = np+nm+nz;
-              if( nt>0 && nt<=numSec )
-              {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
-                protnorm[nt-1] += protmul[counter];
-              }
+  static G4bool first = true;
+  const G4int numMul = 1200;
+  const G4int numSec = 60;
+  static G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+
+  // np = number of pi+, nneg = number of pi-, nz = number of pi0
+  G4int counter, nt = 0, np = 0, nneg = 0, nz = 0;
+  G4double test;
+  const G4double c = 1.25;    
+  const G4double b[] = { 0.7, 0.7 };
+  if (first) {  // Computation of normalization constants will only be done once
+    first = false;
+    G4int i;
+    for (i = 0; i < numMul; ++i) protmul[i] = 0.0;
+    for (i = 0; i < numSec; ++i) protnorm[i] = 0.0;
+    counter = -1;
+    for (np = 0; np < (numSec/3); ++np) {
+      for (nneg = std::max(0,np-1); nneg <= (np+1); ++nneg) {
+        for (nz = 0; nz < numSec/3; ++nz) {
+          if (++counter < numMul) {
+            nt = np + nneg + nz;
+            if (nt > 0 && nt <= numSec) {
+              protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
+              protnorm[nt-1] += protmul[counter];
             }
           }
         }
       }
-      for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
-      for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
-      counter = -1;
-      for( np=0; np<numSec/3; ++np )
+    }
+
+    for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
+    for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
+    counter = -1;
+    for( np=0; np<numSec/3; ++np )
       {
-        for( nm=np; nm<=(np+2); ++nm )
+        for( nneg=np; nneg<=(np+2); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -236,13 +232,13 @@ void G4RPGXiMinusInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+1) && ran>=excs; ++nneg )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -263,16 +259,16 @@ void G4RPGXiMinusInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
+      np--; nneg--; nz--;
       //
       // number of secondary mesons determined by kno distribution
       // check for total charge of final state mesons to determine
       // the kind of baryons to be produced, taking into account
       // charge and strangeness conservation
       //
-      if( np < nm )
+      if( np < nneg )
       {
-        if( np+1 == nm )
+        if( np+1 == nneg )
         {
           currentParticle.SetDefinitionAndUpdateE( aXiZero );
           incidentHasChanged = true;
@@ -289,10 +285,10 @@ void G4RPGXiMinusInelastic::Cascade(
           p->SetDefinition( aKaonMinus );
           (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
           vec.SetElement( vecLen++, p );
-          --nm;
+          --nneg;
         }
       }
-      else if( np == nm )
+      else if( np == nneg )
       {
         if( G4UniformRand() >= 0.5 )
         {
@@ -313,13 +309,13 @@ void G4RPGXiMinusInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=np; nm<=(np+2) && ran>=excs; ++nm )
+        for( nneg=np; nneg<=(np+2) && ran>=excs; ++nneg )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -340,10 +336,10 @@ void G4RPGXiMinusInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
-      if( np+1 < nm )
+      np--; nneg--; nz--;
+      if( np+1 < nneg )
       {
-        if( np+2 == nm )
+        if( np+2 == nneg )
         {
           currentParticle.SetDefinitionAndUpdateE( aXiZero );
           incidentHasChanged = true;
@@ -364,10 +360,10 @@ void G4RPGXiMinusInelastic::Cascade(
           p->SetDefinition( aKaonMinus );
           (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
           vec.SetElement( vecLen++, p );
-          --nm;
+          --nneg;
         }
       }
-      else if( np+1 == nm )
+      else if( np+1 == nneg )
       {
         if( G4UniformRand() < 0.5 )
         {
@@ -380,8 +376,8 @@ void G4RPGXiMinusInelastic::Cascade(
           targetHasChanged = true;
         }
       }
-    }
-  SetUpPions( np, nm, nz, vec, vecLen );
+  }
+  SetUpPions(np, nneg, nz, vec, vecLen);
   return;
 }
 

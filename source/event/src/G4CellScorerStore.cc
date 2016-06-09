@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScorerStore.cc,v 1.4 2006-06-29 18:09:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -40,7 +39,15 @@
 
 G4CellScorerStore::G4CellScorerStore() :
   fAutoCreate(false)
-{}
+{
+  G4cout << "--------------------------------------------------------" << G4endl
+         << "WARNING: Class  <G4CellScorerStore>  is  now obsolete |" << G4endl
+         << "         and will be removed starting from next Geant4 |" << G4endl
+         << "         major release.  Please, consider switching to |" << G4endl
+         << "         general purpose scoring functionality.        |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+}
 
 G4CellScorerStore::~G4CellScorerStore()
 {}
@@ -51,26 +58,26 @@ void G4CellScorerStore::SetAutoScorerCreate(){
 
 G4CellScorer *G4CellScorerStore::
 AddCellScorer(G4VPhysicalVolume &vol, G4int repnum) {
-  G4CellScorer *s = 0;
-  s = new G4CellScorer;
-  if (!s) {
+  G4CellScorer *cs = 0;
+  cs = new G4CellScorer;
+  if (!cs) {
     G4Exception("G4CellScorerStore::AddCellScorer","Event0801",FatalException,
     "failed to create G4CellScorer!");
   }  
-  fMapGeometryCellCellScorer[G4GeometryCell(vol, repnum)] = s;
-  return s;
+  fMapGeometryCellCellScorer[G4GeometryCell(vol, repnum)] = cs;
+  return cs;
 }
 
 G4CellScorer *G4CellScorerStore::
 AddCellScorer(const G4GeometryCell &gCell) {
-  G4CellScorer *s = 0;
-  s = new G4CellScorer;
-  if (!s) {
+  G4CellScorer *cs = 0;
+  cs = new G4CellScorer;
+  if (!cs) {
     G4Exception("G4CellScorerStore::AddCellScorer","Event0801",FatalException,
     "failed to create G4CellScorer!");
   }  
-  fMapGeometryCellCellScorer[gCell] = s;
-  return s;
+  fMapGeometryCellCellScorer[gCell] = cs;
+  return cs;
 }
 
 const G4MapGeometryCellCellScorer &G4CellScorerStore::GetMapGeometryCellCellScorer() const {
@@ -79,17 +86,17 @@ const G4MapGeometryCellCellScorer &G4CellScorerStore::GetMapGeometryCellCellScor
 
 G4VCellScorer *G4CellScorerStore::
 GetCellScore(const G4GeometryCell &gCell){
-  G4VCellScorer *s=0;
+  G4VCellScorer *cs=0;
   G4MapGeometryCellCellScorer::iterator it = fMapGeometryCellCellScorer.find(gCell);
   if (it != fMapGeometryCellCellScorer.end()) {
-    s = (*it).second;
+    cs = (*it).second;
   }
   else {
     if (fAutoCreate) {
-      s =  AddCellScorer(gCell);
+      cs =  AddCellScorer(gCell);
     }
   }
-  return s;
+  return cs;
 }
 
 void G4CellScorerStore::DeleteAllScorers(){

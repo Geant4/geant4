@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.14 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------------
@@ -52,6 +51,8 @@
 // --------------------------------------------------------------------
 #ifndef G4Ellipsoid_HH
 #define G4Ellipsoid_HH
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc,v 1.6 2010-06-16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -48,6 +47,8 @@
 G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
                                                       G4ProcessType type )
   : G4VDiscreteProcess(processName, type),
+    region(0),
+    model(0),
   nSteps(0),
   gammaMin(100),
   cosDThetaMax(std::cos(0.1))
@@ -151,9 +152,9 @@ void G4VTransitionRadiation::SetRegion(const G4Region* reg)
 
 ///////////////////////////////////////////////////////////////////////
 
-void G4VTransitionRadiation::SetModel(G4VTRModel* m)
+void G4VTransitionRadiation::SetModel(G4VTRModel* mod)
 {
-  model = m;
+  model = mod;
 }
 
 ///////////////////////////////////////////////////////////////////////

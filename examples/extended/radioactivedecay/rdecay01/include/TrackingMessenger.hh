@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file radioactivedecay/rdecay01/include/TrackingMessenger.hh
+/// \brief Definition of the TrackingMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,12 +48,11 @@ class TrackingMessenger: public G4UImessenger
     TrackingMessenger(TrackingAction*);
    ~TrackingMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    TrackingAction* trackingAction;
-    
-    G4UIcmdWithABool* TrackingCmd;
+    TrackingAction*   fTrackingAction;    
+    G4UIcmdWithABool* fTrackingCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCrossSection.cc,v 1.2 2010-12-15 07:39:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
 // 18 Mar 2010   L Pandola    First implementation
+// 09 Mar 2012   L. Pandola   Add public method (and machinery) to return 
+//                            the absolute and the normalized shell cross 
+//                            sections independently.
 //
 #include "G4PenelopeCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4DataVector.hh"
@@ -40,7 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 G4PenelopeCrossSection::G4PenelopeCrossSection(size_t nPointsE,size_t nShells) : 
   numberOfEnergyPoints(nPointsE),numberOfShells(nShells),softCrossSections(0),
-  hardCrossSections(0),shellCrossSections(0)
+  hardCrossSections(0),shellCrossSections(0),shellNormalizedCrossSections(0)
 {
   //check the number of points is not zero
   if (!numberOfEnergyPoints)
@@ -79,10 +82,14 @@ G4PenelopeCrossSection::G4PenelopeCrossSection(size_t nPointsE,size_t nShells) :
   if (numberOfShells)
     {
       shellCrossSections = new G4PhysicsTable();
+      shellNormalizedCrossSections = new G4PhysicsTable();
       //the table has to contain numberofShells G4PhysicsFreeVectors, 
       //(theTable)[ishell] --> cross section for shell #ishell
       for (size_t i=0;i<numberOfShells;i++)	
-	shellCrossSections->push_back(new G4PhysicsFreeVector(numberOfEnergyPoints));       
+	{
+	  shellCrossSections->push_back(new G4PhysicsFreeVector(numberOfEnergyPoints));       
+	  shellNormalizedCrossSections->push_back(new G4PhysicsFreeVector(numberOfEnergyPoints));  
+	}
     }
 }
 
@@ -94,6 +101,11 @@ G4PenelopeCrossSection::~G4PenelopeCrossSection()
     {
       shellCrossSections->clearAndDestroy();
       delete shellCrossSections;	  
+    }
+  if (shellNormalizedCrossSections)
+    {
+      shellNormalizedCrossSections->clearAndDestroy();
+      delete shellNormalizedCrossSections;
     }
   if (softCrossSections)
     {
@@ -337,7 +349,47 @@ G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double en
     {
       G4cout << "Something wrong in G4PenelopeCrossSection::GetShellCrossSection" <<
 	G4endl;
-      G4cout << "Soft cross section table looks not filled" << G4endl;
+      G4cout << "Shell cross section table looks not filled" << G4endl;
+      return result;
+    }
+  G4double logene = std::log(energy);
+  G4double logXS = theVector->Value(logene);
+  result = std::exp(logXS);
+
+  return result;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
+
+G4double G4PenelopeCrossSection::GetNormalizedShellCrossSection(size_t shellID,G4double energy)
+{
+  G4double result = 0;
+  if (!shellNormalizedCrossSections)
+    {
+      G4cout << "Something wrong in G4PenelopeCrossSection::GetShellCrossSection" <<
+	G4endl;
+      G4cout << "Trying to retrieve from un-initialized tables" << G4endl;
+      return result;
+    }
+
+  if (!isNormalized)
+    NormalizeShellCrossSections();
+
+  if (shellID >= numberOfShells)
+    {
+      G4cout << "Something wrong in G4PenelopeCrossSection::GetShellCrossSection" <<
+	G4endl;
+      G4cout << "Trying to retrieve shell #" << shellID << " while the maximum is " 
+	     <<  numberOfShells-1 << G4endl;  
+      return result;
+    }
+ 
+  G4PhysicsFreeVector* theVector = (G4PhysicsFreeVector*) (*shellNormalizedCrossSections)[shellID];
+
+  if (theVector->GetVectorLength() < numberOfEnergyPoints)
+    {
+      G4cout << "Something wrong in G4PenelopeCrossSection::GetShellCrossSection" <<
+	G4endl;
+      G4cout << "Shell cross section table looks not filled" << G4endl;
       return result;
     }
   G4double logene = std::log(energy);
@@ -347,6 +399,8 @@ G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double en
   return result;
 }
 
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 
 void G4PenelopeCrossSection::NormalizeShellCrossSections()
@@ -355,6 +409,14 @@ void G4PenelopeCrossSection::NormalizeShellCrossSections()
     {
       G4cout << "G4PenelopeCrossSection::NormalizeShellCrossSections()" << G4endl;
       G4cout << "already invoked. Ignore it" << G4endl;
+      return;
+    }
+
+  if (!shellNormalizedCrossSections)
+    {
+      G4cout << "Something wrong in G4PenelopeCrossSection::GetShellCrossSection" <<
+	G4endl;
+      G4cout << "Trying to retrieve from un-initialized tables" << G4endl;
       return;
     }
 
@@ -377,9 +439,11 @@ void G4PenelopeCrossSection::NormalizeShellCrossSections()
       for (size_t shellID=0;shellID<numberOfShells;shellID++)
 	{
 	 G4PhysicsFreeVector* theVec = 
-	    (G4PhysicsFreeVector*) (*shellCrossSections)[shellID]; 
-	 G4double previousValue = (*theVec)[i]; //log(XS)
-	 G4double logEnergy = theVec->GetLowEdgeEnergy(i);
+	    (G4PhysicsFreeVector*) (*shellNormalizedCrossSections)[shellID]; 
+	 G4PhysicsFreeVector* theFullVec = 
+	   (G4PhysicsFreeVector*) (*shellCrossSections)[shellID]; 
+	 G4double previousValue = (*theFullVec)[i]; //log(XS)
+	 G4double logEnergy = theFullVec->GetLowEdgeEnergy(i);
 	 //log(XS/normFactor) = log(XS) - log(normFactor)
 	 theVec->PutValue(i,logEnergy,previousValue-logNormFactor);	
 	}

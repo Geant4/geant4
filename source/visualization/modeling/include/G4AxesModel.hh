@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.hh,v 1.6 2006-11-01 10:28:42 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  3rd April 2001
@@ -47,7 +46,13 @@ class G4AxesModel: public G4VModel {
 
 public: // With description
 
-  G4AxesModel (G4double, G4double, G4double, G4double);
+  G4AxesModel
+  (G4double x0, G4double y0, G4double z0, G4double length,
+   G4double arrowWidth = 1.,
+   const G4String& colourString = "auto",
+   const G4String& description = "",
+   G4bool withAnnotation = true
+   );
    
   virtual ~G4AxesModel ();
 
@@ -60,8 +65,10 @@ private:
   G4AxesModel (const G4AxesModel&);
   G4AxesModel& operator = (const G4AxesModel&);
 
-  G4double fX0, fY0, fZ0, fLength;
-
+  G4VModel
+    *fXAxisModel, *fXLabelModel, *fXAnnotationModel,
+    *fYAxisModel, *fYLabelModel, *fYAnnotationModel,
+    *fZAxisModel, *fZLabelModel, *fZAnnotationModel;
 };
 
 #endif

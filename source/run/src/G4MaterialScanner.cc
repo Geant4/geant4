@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialScanner.cc,v 1.3 2006-06-29 21:13:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //
-
 
 #include "G4MaterialScanner.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4EventManager.hh"
 #include "G4MatScanMessenger.hh"
 #include "G4RayShooter.hh"
@@ -45,7 +45,6 @@
 #include "G4RegionStore.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
-/////#include "G4Geantino.hh"
 #include "G4SDManager.hh"
 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CookShellCorrections.hh,v 1.6 2010-11-15 16:09:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,6 +32,8 @@
 
 #ifndef G4CookShellCorrections_h
 #define G4CookShellCorrections_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh" 
 
@@ -60,7 +61,7 @@ public:
 
   G4double GetShellZ(const G4int Z) const 
   {
-    if ( this->IsInTableThisZ(Z) ) return ShellZTable[Z-ZTableMin]*MeV;
+    if ( this->IsInTableThisZ(Z) ) return ShellZTable[Z-ZTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CookShellCorrections: out of table for Z = " << Z << G4endl;
@@ -77,7 +78,7 @@ public:
   
   G4double GetShellN(const G4int N) const 
   {
-    if ( this->IsInTableThisN(N) ) return ShellNTable[N-NTableMin]*MeV;
+    if ( this->IsInTableThisN(N) ) return ShellNTable[N-NTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CookShellCorrections: out of table for N = " << N << G4endl;

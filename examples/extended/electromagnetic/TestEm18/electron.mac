@@ -17,15 +17,14 @@
 /gun/particle e- 
 /gun/energy 10 MeV
 #
-/testem/histo/setFileName electron
-/testem/histo/setFileType root
+/analysis/setFileName electron
 # 
-/testem/histo/setHisto 1 100 0 10 MeV	#continuous eLoss 
-/testem/histo/setHisto 2 100 0 10 MeV	#secondary  eLoss
-/testem/histo/setHisto 3 100 0 10 MeV	#total eLoss
-/testem/histo/setHisto 4 100 0 10 MeV	#e- energy spectrum
-/testem/histo/setHisto 5 100 0 10 MeV	#gamma energy spectrum
-/testem/histo/setHisto 6 100 0 10 mm	#step size
+/analysis/h1/set 1 100 0 10 MeV	  #continuous eLoss 
+/analysis/h1/set 2 100 0 10 MeV	  #secondary  eLoss
+/analysis/h1/set 3 100 0 10 MeV	  #total eLoss
+/analysis/h1/set 4 100 0 10 MeV	  #e- energy spectrum
+/analysis/h1/set 5 100 0 10 MeV	  #gamma energy spectrum
+/analysis/h1/set 6 100 0 10 mm	  #step size
 #
 /testem/event/printModulo 100000
 #

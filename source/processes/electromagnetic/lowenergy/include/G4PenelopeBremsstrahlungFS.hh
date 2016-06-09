@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungFS.hh,v 1.1 2010-12-20 14:11:13 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -73,9 +72,11 @@ public:
   G4double SampleGammaEnergy(G4double energy,const G4Material*, G4double cut);
 
 private:
- 
-
-
+  //assignment operator
+  G4PenelopeBremsstrahlungFS & operator=(const G4PenelopeBremsstrahlungFS &right);
+  //copy constructor
+  G4PenelopeBremsstrahlungFS(const G4PenelopeBremsstrahlungFS&);
+  
   //Differential cross section tables
   //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) for a grid of 32 values in 
   //x (= reduced photon energy)
@@ -99,7 +100,7 @@ private:
   //points and 32 points in x. The 33-th column gives the total XS vs. E.
   //It is implemented as a one-dimensional array of dimension
   //57*33=1881 elements. data[e][x] --> theElementData[e*(nBinsX+1)+x]
-  std::map<const G4int,G4DataVector*> *theElementData;
+  std::map<G4int,G4DataVector*> *theElementData;
 
   //Tables for energy sampling
   void InitializeEnergySampling(const G4Material*,G4double cut);
@@ -111,6 +112,10 @@ private:
   std::map< std::pair<const G4Material*,G4double> , 
 	    G4PhysicsFreeVector* > *thePBcut;
  
+  //temporary vector. Used as member variable to avoid to book/release the 
+  //memory on the fly. This vector is over-written at every call of 
+  //SampleGammaEnergy()
+  G4PhysicsFreeVector* theTempVec; 
 
 };
 

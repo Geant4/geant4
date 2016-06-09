@@ -53,8 +53,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hZiegler1985p.hh"
-#include "G4UnitsTable.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Material.hh"
 
 G4double G4hZiegler1985p::a[92][8] = {
@@ -226,13 +228,13 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
   // low energy region
   if ( T < 25.0 ) {
     
-    G4double  s = 0.45 ;
+    G4double  sLocal = 0.45 ;
     // light elements
-    if(6.5 > z) s = 0.25 ;
+    if(6.5 > z) sLocal = 0.25 ;
     // semiconductors
-    if(5 == i || 13 == i || 31 == i) s = 0.375 ;
+    if(5 == i || 13 == i || 31 == i) sLocal = 0.375 ;
     
-    ionloss *= std::pow(T/25.0, s) ;
+    ionloss *= std::pow(T/25.0, sLocal) ;
   }
   
   if ( ionloss < 0.0) ionloss = 0.0 ;

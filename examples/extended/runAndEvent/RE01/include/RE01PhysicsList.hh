@@ -23,17 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/include/RE01PhysicsList.hh
+/// \brief Definition of the RE01PhysicsList class
 //
-// $Id: RE01PhysicsList.hh,v 1.2 2006-06-29 17:43:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
-
 #ifndef RE01PhysicsList_h
 #define RE01PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
-
 
 class RE01PhysicsList: public G4VModularPhysicsList
 {
@@ -43,8 +42,4 @@ public:
   
   virtual void SetCuts();
 };
-
 #endif
-
-
-

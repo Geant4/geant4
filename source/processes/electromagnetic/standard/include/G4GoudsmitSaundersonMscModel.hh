@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.6 2010-12-29 18:56:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +59,8 @@
 #ifndef G4GoudsmitSaundersonMscModel_h
 #define G4GoudsmitSaundersonMscModel_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VMscModel.hh"
 #include "G4PhysicsTable.hh"
 #include "globals.hh"
@@ -68,7 +69,6 @@ class G4DataVector;
 class G4ParticleChangeForMSC;
 class G4LossTableManager;
 class G4GoudsmitSaundersonTable;
-class G4PhysicsTable;
 
 class G4GoudsmitSaundersonMscModel : public G4VMscModel
 {
@@ -80,18 +80,18 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  void StartTracking(G4Track*);
+
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 					      G4double KineticEnergy,
 					      G4double AtomicNumber, G4double, 
 					      G4double, G4double);
 
-  virtual void SampleScattering(const G4DynamicParticle* ,
-				G4double );
+  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+					  G4double safety);
 
-  virtual G4double ComputeTruePathLengthLimit(
-                             const G4Track& track,
-			           G4PhysicsTable* theLambdaTable,
-			           G4double currentMinimalStep);
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
+					      G4double& currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -128,11 +128,10 @@ private:
   G4double mass;
   G4int    currentMaterialIndex;
 
+  G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
-  G4bool   isInitialized;
 
-  G4PhysicsTable*            theLambdaTable;
   G4GoudsmitSaundersonTable* GSTable;
   G4LossTableManager*        theManager;
   const G4ParticleDefinition* particle;
@@ -154,24 +153,8 @@ void G4GoudsmitSaundersonMscModel::SetParticle(const G4ParticleDefinition* p)
   if (p != particle) {
     particle = p;
     mass = p->GetPDGMass();
-    charge = p->GetPDGCharge()/eplus;
+    charge = p->GetPDGCharge()/CLHEP::eplus;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4GoudsmitSaundersonMscModel::GetLambda(G4double e)
-{
-  G4double x;  
-  if(theLambdaTable) {
-    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
-  } else {
-    x = CrossSection(currentCouple,particle,e);
-  }
-
-  if(x > DBL_MIN) { x = 1./x; }
-  else            { x = DBL_MAX; }
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

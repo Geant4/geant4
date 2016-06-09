@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01PhysicsList.cc
+/// \brief Implementation of the F01PhysicsList class
 //
-// $Id: F01PhysicsList.cc,v 1.16 2010-08-16 08:24:39 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 
 #include "G4Timer.hh"
@@ -41,6 +43,7 @@
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <iomanip>
 

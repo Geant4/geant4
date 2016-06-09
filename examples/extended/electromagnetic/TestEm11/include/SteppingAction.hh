@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.2 2006-06-29 16:40:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm11/include/SteppingAction.hh
+/// \brief Definition of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,23 +39,21 @@
 class DetectorConstruction;
 class RunAction;
 class EventAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*,EventAction*, HistoManager*);
+    SteppingAction(DetectorConstruction*,RunAction*,EventAction*);
    ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
   private:
-    DetectorConstruction* detector;
-    RunAction*            runAction;
-    EventAction*          eventAction;
-    HistoManager*         histoManager;        
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAction;
+    EventAction*          fEventAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

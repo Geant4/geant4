@@ -89,19 +89,22 @@ class G4GHEKinematicsVector
   inline
    G4GHEKinematicsVector & operator = ( const G4GHEKinematicsVector & p )
    {
-     momentum.setX( p.momentum.x() );
-     momentum.setY( p.momentum.y() );
-     momentum.setZ( p.momentum.z() );
-     energy        = p.energy;
-     kineticEnergy = p.kineticEnergy;
-     mass          = p.mass;
-     charge        = p.charge;
-     timeOfFlight  = p.timeOfFlight;
-     side          = p.side;
-     flag          = p.flag;
-     code          = p.code;
-     particleDef   = p.particleDef;
-     return *this;
+     if (this != &p)
+     {
+        momentum.setX( p.momentum.x() );
+        momentum.setY( p.momentum.y() );
+        momentum.setZ( p.momentum.z() );
+        energy        = p.energy;
+        kineticEnergy = p.kineticEnergy;
+        mass          = p.mass;
+        charge        = p.charge;
+        timeOfFlight  = p.timeOfFlight;
+        side          = p.side;
+        flag          = p.flag;
+        code          = p.code;
+        particleDef   = p.particleDef;
+     }
+    return *this;
    }
 
   inline
@@ -197,7 +200,7 @@ class G4GHEKinematicsVector
            {
              G4double cost = 1.0- 2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = twopi* G4UniformRand();
+             G4double phi  = CLHEP::twopi* G4UniformRand();
              momentum.setX( momnew * sint * std::cos(phi));
              momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
@@ -237,7 +240,7 @@ class G4GHEKinematicsVector
            {
              G4double cost = 1.0-2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = twopi* G4UniformRand();
+             G4double phi  = CLHEP::twopi* G4UniformRand();
              momentum.setX( momnew * sint * std::cos(phi));
              momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
@@ -260,13 +263,13 @@ class G4GHEKinematicsVector
   G4double GetKineticEnergy() {return kineticEnergy;}
 
   inline
-  void SetMass( G4double m ) { mass = m; return; }
+  void SetMass( G4double mas ) { mass = mas; return; }
 
   inline
-  void SetMassAndUpdate( G4double m )
+  void SetMassAndUpdate( G4double mas )
   {
-    kineticEnergy = std::max(0., energy - m);
-    mass = m;
+    kineticEnergy = std::max(0., energy - mas);
+    mass = mas;
     energy = kineticEnergy + mass;
     G4double momnew = std::sqrt(std::max(0., energy*energy - mass*mass));
     if ( momnew == 0.0) 
@@ -282,7 +285,7 @@ class G4GHEKinematicsVector
             { 
               G4double cost = 1.-2.*G4UniformRand();
               G4double sint = std::sqrt(1.-cost*cost);
-              G4double phi  = twopi*G4UniformRand();
+              G4double phi  = CLHEP::twopi*G4UniformRand();
               momentum.setX( momnew*sint*std::cos(phi));
               momentum.setY( momnew*sint*std::sin(phi));
               momentum.setZ( momnew*cost);
@@ -314,7 +317,7 @@ class G4GHEKinematicsVector
   G4double GetTOF() { return timeOfFlight; }
 
   inline
-  void SetSide( G4int s ) { side = s; return; }
+  void SetSide( G4int sid ) { side = sid; return; }
 
   inline
   G4int GetSide() { return side; }
@@ -582,7 +585,7 @@ class G4GHEKinematicsVector
           G4double cost  = p2.momentum.z()/p2.momentum.mag(); 
           G4double sint  = 0.5 * (  std::sqrt(std::fabs((1.-cost)*(1.+cost))) 
                                   + std::sqrt(pt2)/p2.momentum.mag());
-          (p2.momentum.y() < 0.) ? ph = 1.5*pi : ph = halfpi;
+          (p2.momentum.y() < 0.) ? ph = 1.5*CLHEP::pi : ph = CLHEP::halfpi;
           if( p2.momentum.x() != 0.0) 
              ph = std::atan2(p2.momentum.y(),p2.momentum.x());             
           px =   cost*std::cos(ph)*p1.momentum.x() - std::sin(ph)*p1.momentum.y()

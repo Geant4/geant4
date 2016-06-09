@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMoleculeEncounterStepper.cc 64374 2012-10-31 16:37:23Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -45,16 +46,20 @@ using namespace std;
 
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper() :
     G4VITTimeStepper(),
-    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable)),
-    fReactionModel(0),fVerbose(0)
-{}
+    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable)),
+    fReactionModel(0)
+{
+    fVerbose = 0;
+    fHasAlreadyReachedNullTime = false;
+}
 
 G4DNAMoleculeEncounterStepper& G4DNAMoleculeEncounterStepper::operator=(const G4DNAMoleculeEncounterStepper& rhs)
 {
     if(this == &rhs) return *this;
-    fReactionModel = 0;
-    fVerbose = rhs.fVerbose;
-    fMolecularReactionTable = rhs.fMolecularReactionTable;
+    fReactionModel              = 0;
+    fVerbose                    = rhs.fVerbose;
+    fMolecularReactionTable     = rhs.fMolecularReactionTable;
+    fHasAlreadyReachedNullTime  = false;
     return *this;
 }
 
@@ -63,24 +68,26 @@ G4DNAMoleculeEncounterStepper::~G4DNAMoleculeEncounterStepper()
 
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper& right) :
     G4VITTimeStepper(right),
-    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable))
+    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
-    fVerbose                 = right.fVerbose ;
-    fMolecularReactionTable  = right.fMolecularReactionTable;
-    fReactionModel           = 0;
+    fVerbose                    = right.fVerbose ;
+    fMolecularReactionTable     = right.fMolecularReactionTable;
+    fReactionModel              = 0;
+    fHasAlreadyReachedNullTime  = false;
 }
 
-void G4DNAMoleculeEncounterStepper::PrepareForAllProcessors()
+void G4DNAMoleculeEncounterStepper::Prepare()
 {
     // DEBUG
     //    G4cout << "G4DNAMoleculeEncounterStepper::PrepareForAllProcessors" << G4endl;
+    G4VITTimeStepper::Prepare();
     G4ITManager<G4Molecule>::Instance()->UpdatePositionMap();
 }
 
 G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, const G4double& userMinTimeStep)
 {
     // DEBUG
-    //    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITStepManager::Instance()->GetGlobalTime()  << G4endl;
+    //    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITTrackHolder::Instance()->GetGlobalTime()  << G4endl;
 
     G4Molecule* moleculeA = GetMolecule(trackA);
 
@@ -260,9 +267,9 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
             exceptionDescription << "The incomming trackID "
                                  << "(trackA entering in G4DNAMoleculeEncounterStepper and "
                                  << "for which you are looking reactant for) is : "
-                                 << trackA.GetTrackID() << G4endl;
+                                 << trackA.GetTrackID()  <<"("<< GetMolecule(trackA)->GetName()<<")" << G4endl;
             exceptionDescription << "And the trackID of the reactant (trackB) is: "
-                                 << trackB->GetTrackID() << G4endl;
+                                 << trackB->GetTrackID()  <<"("<< GetMolecule(trackB)->GetName()<<")" << G4endl;
             G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults","MoleculeEncounterStepper002",
                         FatalErrorInArgument,exceptionDescription);
             continue ;

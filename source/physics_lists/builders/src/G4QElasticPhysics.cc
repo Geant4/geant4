@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElasticPhysics.cc,v 1.2 2010-06-04 10:44:07 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -53,7 +52,7 @@
 #include "G4IonConstructor.hh"
 
 G4QElasticPhysics::G4QElasticPhysics(const G4String& name,  G4int ver)
-  : G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  : G4VPhysicsConstructor(name), process(0), verbose(ver), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### QElasticPhysics is initialized" << G4endl;
   model = 0;

@@ -32,8 +32,7 @@
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //
-// $Id: RemSimRoofDecorator.hh,v 1.6 2006-06-29 16:23:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RemSimRoofDecorator_h

@@ -16,7 +16,7 @@
 # (Edit the next line(s) to choose another graphic system)
 #
 # Use this open statement instead for OpenGL in immediate mode.
-/vis/open OGLIX
+/vis/open OGL 600x600-0+0
 #
 # Output an empty detector
 #/vis/viewer/flush

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomHit.cc,v 1.11 2007-05-15 14:45:35 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4HumanPhantomHit.hh"

@@ -17,6 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-November, 2012 G.Cosmo (ReverseMC01-V09-05-06)
+- Fixed cases of variable shadowing.
+
+16-November, 2012 I.Hrivnacova  (ReverseMC01-V09-05-05)
+- Fixed .README file for artefacts from Markdown support
+
+04-September, 2012 I.Hrivnacova  (ReverseMC01-V09-05-04)
+- Renamed macros to have an extension .mac (was .g4mac)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+
+14-June, 2012  L.Desorgher     (ReverseMC01-V09-05-03)
+- Add .README for doxygen documentation
+
+13-June, 2012  L.Desorgher     (ReverseMC01-V09-05-02)
+- Update/Review of the code according to coding guide lines 2.2-3.3
+
+05-April, 2012  L.Desorgher     (ReverseMC01-V09-05-01)
+- Update/Review of the code according to coding guide line 2.1
+
+04-April, 2012  L.Desorgher     (ReverseMC01-V09-05-00)
+- Update/Review of the code according to coding guide line 1.3,1.4, and 1.5
+
+
 03-October, 2011  G.Folger     (ReverseMC01-V09-04-01)
 - Fix gcc46 compilation warning in  RMC01AnalysisManager.cc
 

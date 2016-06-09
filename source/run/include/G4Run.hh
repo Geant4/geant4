@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.16 2007-03-07 03:00:14 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4Run_h
@@ -49,6 +48,11 @@ class G4Run
   public:
     G4Run();
     virtual ~G4Run();
+
+  private:
+    // These copy constructor and = operator must not be used.
+    G4Run(const G4Run &) {;}
+    G4Run& operator=(const G4Run &) { return *this; }
 
   protected:
     G4int runID;

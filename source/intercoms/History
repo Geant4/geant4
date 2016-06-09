@@ -16,8 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26 October, 2012 P. Mato (intercoms-V09-05-07)
+ - G4AnyMethod.hh avoided compilation warning.
+
+22 October, 2012 K. Murakami (intercoms-V09-05-06)
+ - GenericMessenger, add settting range and available states.
+
+19 October, 2012 K. Murakami (intercoms-V09-05-05)
+ - ReceiveG4cout/cerr() argument, change G4String to const G4String&
+   (G4UIsesson, G4UIbatch)
+ - Code reviewed in terms of "function const" and G4String argument.
+   (G4UImanager, G4UIcommandTree)
+
+17 October, 2012 K. Murakami (intercoms-V09-05-04)
+ - Added macro path feature with /control/macroPath command (G4UImanager)
+ - Added a shortcut way for defining UImacro commands (G4UImessenger)
+ - Fixed on executing a macro file containing Windows return codes.
+
+2 October, 2012 P. Mato (intercoms-V09-05-03)
+ - Added some protection when getting the value of a command which is a method 
+
+1 October, 2012 P. Mato (intercoms-V09-05-02)
+ - Fixed windows warning
+
+27 September, 2012 P. Mato (intercoms-V09-05-01)
+ - Added initial version of the G4GenericMessenger class. The use can be seen in the testGenericMessenger.cc unit test.
+ - Added G4AnyType and G4AnyMethod class to support G4Generic Messenger.
+
+23 May, 2012 G.Cosmo (intercoms-V09-05-00)
+ - Fixed trivial cases of variable shadowing.
 
 07 November, 2011 K. Murakami (intercoms-V09-04-01)
+ - Code quality improvements by Coverity.
  - G4Exception ID is modified. (set sequential ID in UI)
 
 20 October, 2011 M. Asai (intercoms-V09-04-00)

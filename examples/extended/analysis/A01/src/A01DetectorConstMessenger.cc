@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstMessenger.cc,v 1.4 2006-06-29 16:32:01 gunter Exp $
+/// \file analysis/A01/src/A01DetectorConstMessenger.cc
+/// \brief Implementation of the A01DetectorConstMessenger class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01DetectorConstMessenger.hh"
@@ -33,36 +36,36 @@
 #include "G4ios.hh"
 
 A01DetectorConstMessenger::A01DetectorConstMessenger(A01DetectorConstruction* mpga)
-:target(mpga)
+:fTarget(mpga)
 {
-  mydetDirectory = new G4UIdirectory("/mydet/");
-  mydetDirectory->SetGuidance("A01 detector setup control commands.");
+  fMydetDirectory = new G4UIdirectory("/mydet/");
+  fMydetDirectory->SetGuidance("A01 detector setup control commands.");
 
-  armCmd = new G4UIcmdWithADoubleAndUnit("/mydet/armAngle",this);
-  armCmd->SetGuidance("Rotation angle of the second arm.");
-  armCmd->SetParameterName("angle",true);
-  armCmd->SetRange("angle>=0. && angle<180.");
-  armCmd->SetDefaultValue(30.);
-  armCmd->SetDefaultUnit("deg");
+  fArmCmd = new G4UIcmdWithADoubleAndUnit("/mydet/armAngle",this);
+  fArmCmd->SetGuidance("Rotation angle of the second arm.");
+  fArmCmd->SetParameterName("angle",true);
+  fArmCmd->SetRange("angle>=0. && angle<180.");
+  fArmCmd->SetDefaultValue(30.);
+  fArmCmd->SetDefaultUnit("deg");
 }
 
 A01DetectorConstMessenger::~A01DetectorConstMessenger()
 {
-  delete armCmd;
-  delete mydetDirectory;
+  delete fArmCmd;
+  delete fMydetDirectory;
 }
 
 void A01DetectorConstMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==armCmd )
-  { target->SetArmAngle(armCmd->GetNewDoubleValue(newValue)); }
+  if( command==fArmCmd )
+  { fTarget->SetArmAngle(fArmCmd->GetNewDoubleValue(newValue)); }
 }
 
 G4String A01DetectorConstMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String cv;
-  if( command==armCmd )
-  { cv = armCmd->ConvertToString(target->GetArmAngle(),"deg"); }
+  if( command==fArmCmd )
+  { cv = fArmCmd->ConvertToString(fTarget->GetArmAngle(),"deg"); }
 
   return cv;
 }

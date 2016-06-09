@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.32 2010-10-30 06:51:05 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------
@@ -49,6 +48,9 @@
 //
 
 #include "G4Decay.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"

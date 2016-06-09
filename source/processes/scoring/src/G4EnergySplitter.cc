@@ -59,13 +59,13 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #ifdef VERBOSE_ENERSPLIT
   G4bool verbose = 1;
   if( verbose ) G4cout << "G4EnergySplitter::SplitEnergyInVolumes totalEdepo " << aStep->GetTotalEnergyDeposit() 
-		       << " Nsteps " << G4RegularNavigationHelper::theStepLengths.size() << G4endl;
+		       << " Nsteps " << G4RegularNavigationHelper::Instance()->GetStepLengths().size() << G4endl;
 #endif    
-  if( G4RegularNavigationHelper::theStepLengths.size() == 0 ||
+  if( G4RegularNavigationHelper::Instance()->GetStepLengths().size() == 0 ||
       aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0)  { // we are only counting dose deposit
     return theEnergies.size();
   }
-  if( G4RegularNavigationHelper::theStepLengths.size() == 1 ) {
+  if( G4RegularNavigationHelper::Instance()->GetStepLengths().size() == 1 ) {
     theEnergies.push_back(edep);
     return theEnergies.size();
   }
@@ -75,7 +75,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
   if( aStep == 0 ) return FALSE; // it is 0 when called by GmScoringMgr after last event
   
   //----- Distribute energy deposited in voxels 
-  std::vector< std::pair<G4int,G4double> > rnsl = G4RegularNavigationHelper::theStepLengths; 
+  std::vector< std::pair<G4int,G4double> > rnsl = G4RegularNavigationHelper::Instance()->GetStepLengths(); 
 
   const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
   G4double kinEnergyPreOrig = aStep->GetPreStepPoint()->GetKineticEnergy();
@@ -103,8 +103,8 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #endif
   //----- No iterations to correct elost and msc => distribute energy deposited according to geometrical step length in each voxel
   if( theNIterations == 0 ) { 
-    for( unsigned int ii = 0; ii < rnsl.size(); ii++ ){
-      G4double sl = G4RegularNavigationHelper::theStepLengths[ii].second;
+    for( ii = 0; ii < rnsl.size(); ii++ ){
+      G4double sl = rnsl[ii].second;
       G4double edepStep = edep * sl/slSum; //divide edep along steps, proportional to step length
 #ifdef VERBOSE_ENERSPLIT
       if(verbose) G4cout  << "G4EnergySplitter::SplitEnergyInVolumes"<< ii 
@@ -204,7 +204,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 	}
 	
 	//---- Recalculate energy lost with this new step lengths
-	G4double kinEnergyPre = aStep->GetPreStepPoint()->GetKineticEnergy();
+        kinEnergyPre = aStep->GetPreStepPoint()->GetKineticEnergy();
 	totalELost = 0.;
 	for( ii = 0; ii < rnsl.size(); ii++ ){
 	  const G4Material* mate = thePhantomParam->GetMaterial( rnsl[ii].first );
@@ -296,3 +296,38 @@ G4bool G4EnergySplitter::IsPhantomVolume( G4VPhysicalVolume* pv )
 
 } 
 
+//-----------------------------------------------------------------------
+void G4EnergySplitter::GetLastVoxelID( G4int& voxelID)
+{	
+  voxelID = (*(G4RegularNavigationHelper::Instance()->GetStepLengths().begin())).first;
+}
+
+//-----------------------------------------------------------------------
+void G4EnergySplitter::GetFirstVoxelID( G4int& voxelID)
+{
+  voxelID =  (*(G4RegularNavigationHelper::Instance()->GetStepLengths().rbegin())).first;
+}
+
+//-----------------------------------------------------------------------
+void G4EnergySplitter::GetVoxelID( G4int stepNo, G4int& voxelID )
+{
+  if( stepNo < 0 || stepNo >= G4int(G4RegularNavigationHelper::Instance()->GetStepLengths().size()) ) {
+  G4Exception("G4EnergySplitter::GetVoxelID",
+	      "Invalid stepNo, smaller than 0 or bigger or equal to number of voxels traversed",
+	      FatalErrorInArgument,
+	      G4String("stepNo = " + G4UIcommand::ConvertToString(stepNo) + ", number of voxels = " + G4UIcommand::ConvertToString(G4int(G4RegularNavigationHelper::Instance()->GetStepLengths().size())) ).c_str());
+  }
+  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::Instance()->GetStepLengths().begin();
+  advance( ite, stepNo );
+  voxelID = (*ite).first;
+
+}
+
+
+//-----------------------------------------------------------------------
+void G4EnergySplitter::GetStepLength( G4int stepNo, G4double& stepLength )
+{
+  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::Instance()->GetStepLengths().begin();
+  advance( ite, stepNo );
+  stepLength = (*ite).second;
+}

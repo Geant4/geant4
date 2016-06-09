@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P02/src/ExP02PhysicsList.cc
+/// \brief Implementation of the ExP02PhysicsList class
 //
-// $Id: ExP02PhysicsList.cc,v 1.3 2010-11-30 11:39:49 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +37,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -195,8 +198,8 @@ void ExP02PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);

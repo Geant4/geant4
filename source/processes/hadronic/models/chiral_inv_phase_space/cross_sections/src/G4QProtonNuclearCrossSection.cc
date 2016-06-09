@@ -45,6 +45,7 @@
 //#define debugs
 
 #include "G4QProtonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QProtonNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
@@ -80,7 +81,7 @@ G4QProtonNuclearCrossSection::~G4QProtonNuclearCrossSection()
 G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                        G4int tgZ, G4int tgN, G4int PDG)
 {
-  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
+  //A.R.23-Oct-2012 Shadowed variable  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
@@ -266,9 +267,9 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int n=0; n<nL; n++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[n] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -485,14 +486,14 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double dl=al-3.;
     G4double dl2=dl*dl;
     G4double r=.21+.62*dl2/(1.+.5*dl2);
-    G4double g=40.*std::exp(al*0.712)/(1.+12.2/a)/(1.+34./a2);
+    G4double g_value=40.*std::exp(al*0.712)/(1.+12.2/a)/(1.+34./a2);
     G4double e=318.+a4/(1.+.0015*a4/std::exp(al*0.09))/(1.+4.e-28*a12)+
                8.e-18/(1./a16+1.3e-20)/(1.+1.e-21*a12);
-    G4double s=3.57+.009*a2/(1.+.0001*a2*a);
+    G4double s_value=3.57+.009*a2/(1.+.0001*a2*a);
     G4double h=(.01/a4+2.5e-6/a)*(1.+6.e-6*a2*a)/(1.+6.e7/a12/a2);
-    sigma=(c+d*d)/(1.+r/p4)+(g+e*std::exp(-s*P))/(1.+h/p4/p4);
+    sigma=(c+d*d)/(1.+r/p4)+(g_value+e*std::exp(-s_value*P))/(1.+h/p4/p4);
 #ifdef pdebug
-    G4cout<<"G4QProtNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g
+    G4cout<<"G4QProtNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g_value
           <<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }

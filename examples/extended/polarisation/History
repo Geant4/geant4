@@ -1,0 +1,35 @@
+$Id$
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                Polarisation Examples History file
+               -----------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 23rd, 2012 Ivana Hrivnacova (exPolarisation-V09-05-02)
+- Updated documentation:
+  - Added README files for the category
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+Sep 29th, 2012 Ivana Hrivnacova (exPolarisation-V09-05-01)
+- Renamed pol01.cc to Pol01.cc to match exactly with the example directory name
+  (this allows to configure CMake build in the same way on both case sensitive
+  and case insensitive platforms).
+
+Sep 24th, 2012  Ivana Hrivnacova (exPolarisation-V09-05-00)
+- Updated CMakeLists.txt files:
+  adding visualization, optional external package (AIDA), copying macros, 
+  install target and comment lines 
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters  

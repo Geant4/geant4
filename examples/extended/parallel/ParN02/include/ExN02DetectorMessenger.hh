@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN02/include/ExN02DetectorMessenger.hh
+/// \brief Definition of the ExN02DetectorMessenger class
 //
-// $Id: ExN02DetectorMessenger.hh,v 1.9 2008-09-22 16:41:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

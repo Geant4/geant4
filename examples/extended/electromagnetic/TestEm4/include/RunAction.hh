@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.7 2006-06-29 16:53:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm4/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,15 +37,13 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
+#include "g4root.hh"
+////#include "g4xml.hh"
+////#include "g4hbook.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-
-namespace AIDA {
-  class IAnalysisFactory;
-  class ITree;
-  class IHistogram1D;
-}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,15 +54,8 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
-  
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-    
-  private:
-    AIDA::IAnalysisFactory* af;         
-    AIDA::ITree*            tree;             
-    AIDA::IHistogram1D*     histo[1];        
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

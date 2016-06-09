@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/AnnotatedFiles/G4String.hh
+/// \brief Definition of the place-holder for the G4String class
+//
 /*
   This file only serves as a place-holder for the annotations of G4String class,
   which is a type alias in Geant4. 

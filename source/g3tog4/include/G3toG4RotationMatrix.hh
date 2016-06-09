@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4RotationMatrix.hh,v 1.6 2006-06-29 18:12:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // ----------------------
 // Class description:
 //

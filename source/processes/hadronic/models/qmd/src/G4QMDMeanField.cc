@@ -25,16 +25,18 @@
 //
 // 081120 Add Update by T. Koi
 //
-#include "G4QMDMeanField.hh"
-#include "G4QMDParameters.hh"
-
-#include "Randomize.hh"
-
-#include <CLHEP/Random/Stat.h>
 
 #include <map>
 #include <algorithm>
 #include <numeric>
+
+#include <CLHEP/Random/Stat.h>
+
+#include "G4QMDMeanField.hh"
+#include "G4QMDParameters.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
 
 G4QMDMeanField::G4QMDMeanField()
 : rclds ( 4.0 )    // distance for cluster judgement        
@@ -616,13 +618,13 @@ G4bool G4QMDMeanField::IsPauliBlocked( G4int i )
 void G4QMDMeanField::DoPropagation( G4double dt )
 {
  
-   G4double c2 = 1.0; 
-   G4double c1 = 1.0 - c2; 
-   G4double c3 = 1.0 / 2.0 / c2; 
+   G4double cc2 = 1.0; 
+   G4double cc1 = 1.0 - cc2; 
+   G4double cc3 = 1.0 / 2.0 / cc2; 
 
-   G4double dt3 = dt * c3;
-   G4double dt1 = dt * ( c1 - c3 );
-   G4double dt2 = dt * c2;
+   G4double dt3 = dt * cc3;
+   G4double dt1 = dt * ( cc1 - cc3 );
+   G4double dt2 = dt * cc2;
 
    CalGraduate(); 
 
@@ -670,7 +672,6 @@ void G4QMDMeanField::DoPropagation( G4double dt )
    }
 
    Cal2BodyQuantities(); 
-
 
 }
 
@@ -900,7 +901,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
    {
  
       //std::cout << i << " cluster has " << clusters.count( i )  << " nucleons." << std::endl;
-      sorted_cluster_map.insert ( std::multimap<G4int,G4int>::value_type ( clusters.count( i ) , i ) );
+      sorted_cluster_map.insert ( std::multimap<G4int,G4int>::value_type ( (G4int) clusters.count( i ) , i ) );
 
    }
 

@@ -26,6 +26,8 @@
 #ifndef G4LshellECDecayChannel_h
 #define G4LshellECDecayChannel_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
@@ -47,7 +49,7 @@ public:
 			    G4double theDaughterExcitation=0.0) :
       G4NuclearDecayChannel (LshellEC, Verbose, theParentNucleus, theBR,
 			     theQtransit, theParentNucleus->GetBaryonNumber(),
-			     int(theParentNucleus->GetPDGCharge()/eplus)-1, 
+			     int(theParentNucleus->GetPDGCharge()/CLHEP::eplus)-1, 
 			     theDaughterExcitation,
 			     "nu_e")
   {  

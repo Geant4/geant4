@@ -1,0 +1,116 @@
+$Id: README,v 1.16 2010-11-29 10:34:36 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                 How to build and run an example
+                 -------------------------------
+
+ All novice, basic and most of extended examples have a similar structure.
+ The main () function is included in exampleXYZ.cc in the example top directory
+ and the example source code is structered in include and src subdirectories.
+ When the example is built, the executable takes the same name as the file with
+ main() function without .cc extension, exampleXYZ.
+
+ Then several macros are provided to run the example with various start-up
+ conditions. These macros have usually .mac extension. Besides these macros,
+ there is often a macro exampleXYZ.in (note its different extension)
+ which is used in Geant4 testing and which output, exampleXYZ.out, can also included
+ in the distribution.
+
+ You can find all details about building the examples in the Geant4 Installation Guide:
+ "http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/index.html"
+ in the section 3.2. Building Applications with Geant4:
+ http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s02.html"
+ Here we recall only the basics. 
+
+ 1) COMPILE AND LINK TO GENERATE AN EXECUTABLE
+
+    1a) With CMake
+
+        % cd path_to_exampleXYZ     # go to directory which contains your example
+        % mkdir exampleXYZ_build
+        % cd exampleXYZ_build
+        % cmake -DGeant4_DIR=path_to_Geant4_installation/lib[64]/Geant4-9.6.0/ ../exampleXYZ
+        % make -j N exampleXYZ      # "N" is the number of processes 
+        % make install              # this step is optional              
+
+    1b) With GNUmake 
+
+    To use GNUmake build system when Geant4 was installed with CMake, you have to source first
+    the setup script in order to define needed environment variables:
+
+        % source path_to_Geant4_installation/share/Geant4-9.6.0/geant4make/geant4make.[c]sh 
+
+    Then to build example
+
+        % cd path_to_exampleXYZ/exampleXYZ
+        % gmake
+
+    An additional step is needed when building an example using shared classes
+    (usually from ../shared directory) or classes from common:
+
+        % cd path_to_exampleXYZ/exampleXYZ
+        % gmake setup
+        % gmake
+
+    When building the example in this way make sure that the path to the example executable 
+    and its shared library is added in the paths defined on your system 
+    (eg. PATH and LD_LIBRARY_PATH on Linux). 
+
+ 2) EXECUTE EXAMPLEXYZ IN 'BATCH' MODE FROM MACRO FILES
+ 		
+       ... go to the directory where examples was built/installed
+       % exampleXYZ  xyz.mac
+ 		
+ 3) EXECUTE EXAMPLEXYZ IN 'INTERACTIVE MODE' WITH VISUALIZATION
+
+       ... go to the directory where examples was built/installed
+       % exampleXYZ
+       ....
+       Idle> type your commands
+       ....
+       Idle> exit
+
+
+ Below we give the explicit instructions for the example 
+ extended/electromagnetic/TestEm1. 
+
+ Let's suppose that the TestEm1 directory is available in $HOME and Geant4 
+ installation in /usr/local and we work within bash shell on a 64-bit machine.
+
+ 1) COMPILE AND LINK TESTEM1 TO GENERATE AN EXECUTABLE
+
+    1a) With CMake
+
+        % cd $HOME
+        % mkdir TestEm1_build
+        % cd TestEm1_build
+        % cmake -DGeant4_DIR=/usr/local/lib64/Geant4-9.6.0/ ../TestEm1
+        % make -j 2 TestEm1
+
+   1b) With GNUmake
+
+       % cd $HOME/TestEm1
+       % source /usr/local/share/Geant4-9.6.0/geant4make/geant4make.sh
+       % make 
+
+ 2) EXECUTE TESTEM1 IN 'BATCH' MODE FROM MACRO FILES
+
+    % cd $HOME/TestEm1_build    # or cd $HOME/TestEm1 if example was built with GNUmake
+    % TestEm1 annihil.mac
+    % TestEm1 brem.mac
+    % TestEm1 TestEm1.in >& myTestEm1.out   # redirecting output in a file
+ 	 	
+ 3) EXECUTE TESTEM1 IN 'INTERACTIVE MODE' WITH VISUALIZATION
+
+    % cd $HOME/TestEm1_build    # or cd $HOME/TestEm1 if example was built with GNUmake
+    % TestEm1
+    PreInit> /run/initialize 
+    Idle>    /run/beamOn 1
+    ...
+    Idle>    exit
+
+*/

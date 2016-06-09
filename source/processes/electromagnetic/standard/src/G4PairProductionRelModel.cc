@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc,v 1.4 2010-10-26 09:06:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +53,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4PairProductionRelModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -217,11 +218,12 @@ G4PairProductionRelModel::ComputeRelDXSectionPerAtom(G4double eplusEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void  G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplus)
+void  
+G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplusEnergy)
 {
   // *** calculate lpm variable s & sprime ***
   // Klein eqs. (78) & (79)
-  G4double sprime = sqrt(0.125*k*lpmEnergy/(eplus*(k-eplus)));
+  G4double sprime = sqrt(0.125*k*lpmEnergy/(eplusEnergy*(k-eplusEnergy)));
 
   G4double s1 = preS1*z23;
   G4double logS1 = 2./3.*lnZ-2.*facFel;
@@ -236,35 +238,35 @@ void  G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplus)
     xiLPM = 1+h-0.08*(1-h)*(1-sqr(1-h))/logTS1;
   }
 
-  G4double s = sprime/sqrt(xiLPM); 
-//   G4cout<<"k="<<k<<" y="<<eplus/k<<G4endl;
-//   G4cout<<"s="<<s<<G4endl;
+  G4double s0 = sprime/sqrt(xiLPM); 
+  //   G4cout<<"k="<<k<<" y="<<eplusEnergy/k<<G4endl;
+  //   G4cout<<"s0="<<s0<<G4endl;
   
   // *** calculate supression functions phi and G ***
   // Klein eqs. (77)
-  G4double s2=s*s;
-  G4double s3=s*s2;
+  G4double s2=s0*s0;
+  G4double s3=s0*s2;
   G4double s4=s2*s2;
 
-  if (s<0.1) {
+  if (s0<0.1) {
     // high suppression limit
-    phiLPM = 6.*s - 18.84955592153876*s2 + 39.47841760435743*s3 
+    phiLPM = 6.*s0 - 18.84955592153876*s2 + 39.47841760435743*s3 
       - 57.69873135166053*s4;
     gLPM = 37.69911184307752*s2 - 236.8705056261446*s3 + 807.7822389*s4;
   }
-  else if (s<1.9516) {
+  else if (s0<1.9516) {
     // intermediate suppression
-    // using eq.77 approxim. valid s<2.      
-    phiLPM = 1.-exp(-6.*s*(1.+(3.-pi)*s)
-		+s3/(0.623+0.795*s+0.658*s2));
-    if (s<0.415827397755) {
+    // using eq.77 approxim. valid s0<2.      
+    phiLPM = 1.-exp(-6.*s0*(1.+(3.-pi)*s0)
+		+s3/(0.623+0.795*s0+0.658*s2));
+    if (s0<0.415827397755) {
       // using eq.77 approxim. valid 0.07<s<2
-      G4double psiLPM = 1-exp(-4*s-8*s2/(1+3.936*s+4.97*s2-0.05*s3+7.50*s4));
+      G4double psiLPM = 1-exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
       gLPM = 3*psiLPM-2*phiLPM;
     }
     else {
       // using alternative parametrisiation
-      G4double pre = -0.16072300849123999 + s*3.7550300067531581 + s2*-1.7981383069010097 
+      G4double pre = -0.16072300849123999 + s0*3.7550300067531581 + s2*-1.7981383069010097 
 	+ s3*0.67282686077812381 + s4*-0.1207722909879257;
       gLPM = tanh(pre);
     }
@@ -277,7 +279,7 @@ void  G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplus)
 
   // *** make sure suppression is smaller than 1 ***
   // *** caused by Migdal approximation in xi    ***
-  if (xiLPM*phiLPM>1. || s>0.57)  xiLPM=1./phiLPM;
+  if (xiLPM*phiLPM>1. || s0>0.57)  xiLPM=1./phiLPM;
 }
 
 

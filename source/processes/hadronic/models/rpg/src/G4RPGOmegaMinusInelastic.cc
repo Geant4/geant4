@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGOmegaMinusInelastic.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "G4RPGOmegaMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4HadFinalState*
@@ -162,8 +163,8 @@ void G4RPGOmegaMinusInelastic::Cascade(
     const G4int numSec = 60;
     static G4double protmul[numMul], protnorm[numSec]; // proton constants
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
+    // np = number of pi+, nneg = number of pi-, nz = number of pi0
+    G4int counter, nt=0, np=0, nneg=0, nz=0;
     G4double test;
     const G4double c = 1.25;    
     const G4double b[] = { 0.70, 0.70 };
@@ -176,16 +177,16 @@ void G4RPGOmegaMinusInelastic::Cascade(
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+1); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt > 0 )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -197,16 +198,16 @@ void G4RPGOmegaMinusInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=np; nm<=(np+2); ++nm )
+        for( nneg=np; nneg<=(np+2); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>0) && (nt<=numSec) )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -240,13 +241,13 @@ void G4RPGOmegaMinusInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+1) && ran>=excs; ++nneg )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt > 0 )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -267,20 +268,20 @@ void G4RPGOmegaMinusInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
+      np--; nneg--; nz--;
     }
     else  // target must be a neutron
     {
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=np; nm<=(np+2) && ran>=excs; ++nm )
+        for( nneg=np; nneg<=(np+2) && ran>=excs; ++nneg )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>=1) && (nt<=numSec) )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -301,7 +302,7 @@ void G4RPGOmegaMinusInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
+      np--; nneg--; nz--;
     }
     // number of secondary mesons determined by kno distribution
     // check for total charge of final state mesons to determine
@@ -311,9 +312,9 @@ void G4RPGOmegaMinusInelastic::Cascade(
     G4int nvefix = 0;
     if( targetParticle.GetDefinition() == aProton )
     {
-      if( nm > np )
+      if( nneg > np )
       {
-        if( nm == np+1 )
+        if( nneg == np+1 )
         {
           currentParticle.SetDefinitionAndUpdateE( aXiZero );
           nvefix = 1;
@@ -325,7 +326,7 @@ void G4RPGOmegaMinusInelastic::Cascade(
         }
         incidentHasChanged = true;
       }
-      else if( nm < np )
+      else if( nneg < np )
       {
         targetParticle.SetDefinitionAndUpdateE( aNeutron );
         targetHasChanged = true;
@@ -333,9 +334,9 @@ void G4RPGOmegaMinusInelastic::Cascade(
     }
     else // target is a neutron
     {
-      if( np+1 < nm )
+      if( np+1 < nneg )
       {
-        if( nm == np+2 )
+        if( nneg == np+2 )
         {
           currentParticle.SetDefinitionAndUpdateE( aXiZero );
           incidentHasChanged = true;
@@ -350,22 +351,22 @@ void G4RPGOmegaMinusInelastic::Cascade(
         targetParticle.SetDefinitionAndUpdateE( aProton );
         targetHasChanged = true;
       }
-      else if( nm == np+1 )
+      else if( nneg == np+1 )
       {
         targetParticle.SetDefinitionAndUpdateE( aProton );
         targetHasChanged = true;
       }
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
-    for( G4int i=0; i<vecLen && nvefix>0; ++i )
-    {
-      if( vec[i]->GetDefinition() == aPiMinus )
-      {
-        if( nvefix >= 1 )vec[i]->SetDefinitionAndUpdateE( aKaonMinus );
-        --nvefix;
-      }
+
+  SetUpPions(np, nneg, nz, vec, vecLen);
+  for (G4int i = 0; i < vecLen && nvefix > 0; ++i) {
+    if (vec[i]->GetDefinition() == aPiMinus) {
+      if( nvefix >= 1 )vec[i]->SetDefinitionAndUpdateE(aKaonMinus);
+      --nvefix;
     }
-    return;
+  }
+
+  return;
 }
 
  /* end of file */

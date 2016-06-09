@@ -38,6 +38,8 @@
 
 #include "G4KokoulinMuonNuclearXS.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 

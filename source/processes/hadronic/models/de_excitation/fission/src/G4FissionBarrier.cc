@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionBarrier.cc,v 1.8 2010-11-17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -33,6 +32,7 @@
 // 17.11.2010 V.Ivanchenko cleanup and add usage of G4Pow
 
 #include "G4FissionBarrier.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4FissionBarrier::G4FissionBarrier()

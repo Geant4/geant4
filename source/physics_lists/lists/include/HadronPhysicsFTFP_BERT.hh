@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT.hh,v 1.5 2010-06-03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -78,7 +77,6 @@ class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
-    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
     
     G4NeutronBuilder * theNeutrons;
     G4BertiniNeutronBuilder * theBertiniNeutron;
@@ -99,7 +97,12 @@ class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
     G4bool QuasiElastic;
-    G4VCrossSectionDataSet * theCHIPSInelastic;
+    G4VCrossSectionDataSet * ChipsKaonMinus;
+    G4VCrossSectionDataSet * ChipsKaonPlus;
+    G4VCrossSectionDataSet * ChipsKaonZero;
+    G4VCrossSectionDataSet * BGGProton;
+    G4VCrossSectionDataSet * BGGNeutron;
+    
 };
 
 #endif

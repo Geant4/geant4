@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ThreeMat.cc,v 1.8 2006-06-29 18:42:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -69,16 +68,16 @@ G4ThreeMat::~G4ThreeMat()
 }
 
 
-G4ThreeMat::G4ThreeMat( const G4ThreeMat& m )
+G4ThreeMat::G4ThreeMat( const G4ThreeMat& mat )
 { 
   //  copy constructor
   for ( G4int i = 0; i < 3 ; i++ )
   {
-    row[i]    = m.row[i];
-    column[i] = m.column[i];
+    row[i]    = mat.row[i];
+    column[i] = mat.column[i];
     
     for ( G4int j = 0; j < 3 ; j++ ) 
-      element[i][j] = m.element[i][j];
+      element[i][j] = mat.element[i][j];
   }
 }
 
@@ -89,11 +88,11 @@ const char* G4ThreeMat::NameOf() const
 }
 
 
-std::ostream& operator<<( std::ostream& os, const G4ThreeMat& m )
+std::ostream& operator<<( std::ostream& os, const G4ThreeMat& mat )
 {
   // overwrite output operator << to Print out G4ThreeMat objects
   // using the PrintOn function defined below
-  m.PrintOn( os );
+  mat.PrintOn( os );
   return os;
 }
 
@@ -119,13 +118,13 @@ void G4ThreeMat::PrintOn( std::ostream& os ) const
 }
 
 
-G4int G4ThreeMat::operator==( const G4ThreeMat& m ) const
+G4int G4ThreeMat::operator==( const G4ThreeMat& mat ) const
 {
   for ( G4int i = 0; i < 3 ; i++ ) 
   {
     for ( G4int j = 0; j < 3 ; j++ ) 
     {
-      if ( element[i][j] != m.element[i][j] )
+      if ( element[i][j] != mat.element[i][j] )
 	return 0;
     }
   }
@@ -134,16 +133,16 @@ G4int G4ThreeMat::operator==( const G4ThreeMat& m ) const
 }
 
 
-G4ThreeMat& G4ThreeMat::operator=( const G4ThreeMat& m )
+G4ThreeMat& G4ThreeMat::operator=( const G4ThreeMat& mat )
 { 
-  if (&m == this) return *this;
+  if (&mat == this) return *this;
   for ( G4int i = 0; i < 3 ; i++ )
   {
-    row[i]    = m.row[i];
-    column[i] = m.column[i];
+    row[i]    = mat.row[i];
+    column[i] = mat.column[i];
 
     for ( G4int j = 0; j < 3 ; j++ ) 
-      element[i][j] = m.element[i][j];
+      element[i][j] = mat.element[i][j];
   }
   return *this;
 }

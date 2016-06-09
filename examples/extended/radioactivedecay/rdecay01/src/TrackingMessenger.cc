@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.cc,v 1.2 2010-09-17 11:21:46 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file radioactivedecay/rdecay01/src/TrackingMessenger.cc
+/// \brief Implementation of the TrackingMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,27 +39,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
-:trackingAction(trackA)
+:fTrackingAction(trackA)
 {
-  TrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
-  TrackingCmd->SetGuidance("allow full decay chain");
-  TrackingCmd->SetParameterName("flag",true);
-  TrackingCmd->SetDefaultValue(true);
+  fTrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
+  fTrackingCmd->SetGuidance("allow full decay chain");
+  fTrackingCmd->SetParameterName("flag",true);
+  fTrackingCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::~TrackingMessenger()
 {
-  delete TrackingCmd;
+  delete fTrackingCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == TrackingCmd)
-    { trackingAction->SetFullChain(TrackingCmd->GetNewBoolValue(newValue));}
+  if (command == fTrackingCmd)
+    { fTrackingAction->SetFullChain(fTrackingCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

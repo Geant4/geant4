@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02HadronPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
+/// \file runAndEvent/RE02/include/RE02HadronPhysics.hh
+/// \brief Definition of the RE02HadronPhysics class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 //  10-Oct-2003 Full Hadron Processes with Parameterization Model  T. Koi
@@ -133,6 +136,122 @@
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 
+//
+/// User hadron  physics constructor
+///
+///  applys related processes to hadrons
+///
+/// - void ConstructParticle()
+///     does nothing
+///
+/// - void ConstructProcess()
+///     adds processes to each particle
+///     pi+ :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4PionPlusInelasticProcess with G4LEPionPlusInelastic and
+///       G4HEPionPlusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     pi- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4PionMinusInelasticProcess with G4LEPionMinusInelastic and
+///       G4HEPionMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     K+ :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4KaonPlusInelasticProcess with G4LEKaonPlusInelastic and
+///       G4HEKaonPlusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     K- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4KaonMinusInelasticProcess with G4LEKaonMinusInelastic and
+///       G4HEKaonMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     K0L :
+///       G4HadronElasticProcess with G4LEastic and 
+///       G4KaonZeoLInelasticProcess with G4LEKaonZeroLInelastic and
+///       G4HEKaonZeroInelastic
+///     K0S :
+///       G4HadronElasticProcess with G4LEastic and
+///       G4KaonZeroSInelasticProcess with G4LEKaonZeroSInelastic and
+///       G4HEKaonZeroInelastic.
+///     proton :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4ProtonInelasticProcess with G4BinaryCascade, G4LEProtonInelastic and 
+///       G4HEProtonInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     anti proton :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiProtonInelasticProcess with G4LEAntiProtonInelastic and 
+///       G4HEAntiProtonInelastic,
+///       G4AntiProtonAnnihilationAtRest, G4hMultipleScattering and G4hIonisation
+///     neutron :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4NeutronInelasticProcess with G4BinaryCascade, G4LENeutronInelastic
+///       and G4HENeutronInelastic,
+///       G4HadronFissionProcess with G4LFission and
+///       G4HadronCaptureProcess with G4LCapture
+///     anti neutron :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiNeutronInelasticProcess with G4LEAntiNeutronInelastic and 
+///       G4HEAntiNeutronInelastic and
+///       G4AntiNeutronAnnihilationAtRest
+///     lambda :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4LambdaInelasticProcess with G4LELambdaInelastic and 
+///       G4HELambdaInelastic
+///     anti lambda :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiLambdaInelasticProcess with G4LEAntiLambdaInelastic and 
+///       G4HEAntiLambdaInelastic
+///     sigma+ :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4SigmaPlusInelasticProcess with G4LESigmaPlusInelastic and 
+///       G4HESigmaPlusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     anti sigma+ :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiSigmaPlusInelasticProcess with G4LEAntiSigmaPlusInelastic and 
+///       G4HEAntiSigmaPlusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     sigma- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4SigmaMinusInelasticProcess with G4LESigmaMinusInelastic and 
+///       G4HESigmaMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     anti sigma- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiSigmaMinusInelasticProcess with G4LEAntiSigmaMinusInelastic and 
+///       G4HEAntiSigmaMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     Xi0 :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4XiZeroInelasticProcess with G4LEXiZeroInelastic and 
+///       G4HEXiZeroInelastic
+///     anti Xi0 :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiXiZeroInelasticProcess with G4LEAntiXiZeroInelastic and 
+///       G4HEAntiXiZeroInelastic
+///     Xi- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4XiMinusInelasticProcess with G4LEXiMinusInelastic and 
+///       G4HEXiMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     anti Xi- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiXiMinusInelasticProcess with G4LEAntiXiMinusInelastic and 
+///       G4HEAntiXiMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     omega- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4OmegaMinusInelasticProcess with G4LEOmegaMinusInelastic and 
+///       G4HEOmegaMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     anti omega- :
+///       G4HadronElasticProcess with G4LElastic,
+///       G4AntiOmegaMinusInelasticProcess with G4LEAntiOmegaMinusInelastic and 
+///       G4HEAntiOmegaMinusInelastic,
+///       G4hMultipleScattering and G4hIonisation
+//
 class RE02HadronPhysics : public G4VPhysicsConstructor
 {
   public: 
@@ -152,7 +271,6 @@ class RE02HadronPhysics : public G4VPhysicsConstructor
   protected:
 
 };
-
 
 #endif
 

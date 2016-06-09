@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopoleEq.cc,v 1.2 2010-03-18 10:23:29 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  This is the right-hand side for equation of motion for a 
@@ -39,6 +38,8 @@
 
 #include "G4MonopoleEq.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void  
 G4MonopoleEq::SetChargeMomentumMass(G4double particleCharge, // e+ units

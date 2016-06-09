@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/src/RE03UserScoreWriter.cc
+/// \brief Implementation of the RE03UserScoreWriter class
+//
 //
 
 #include "RE03UserScoreWriter.hh"
@@ -35,16 +38,19 @@
 #include <map>
 #include <fstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03UserScoreWriter::RE03UserScoreWriter()
-  : G4VScoreWriter() {
-  ;
-}
+  : G4VScoreWriter() 
+{;}
 
-RE03UserScoreWriter::~RE03UserScoreWriter() {
-  ;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE03UserScoreWriter::~RE03UserScoreWriter() 
+{;}
 
-void RE03UserScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, 
+                                             const G4String & fileName, 
+                                             const G4String & option) {
 
   //
   if(verboseLevel > 0) {
@@ -66,20 +72,19 @@ void RE03UserScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileN
   std::ofstream ofile(fileName);
   if(!ofile) {
     G4cerr << "ERROR : DumpToFile : File open error -> "
-	   << fileName << G4endl;
+           << fileName << G4endl;
     return;
   }
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
 
   
   // retrieve the map
-  MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
-  
+  MeshScoreMap scMap = fScoringMesh->GetScoreMap();
 
-  MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
-  if(msMapItr == fSMap.end()) {
+  MeshScoreMap::const_iterator msMapItr = scMap.find(psName);
+  if(msMapItr == scMap.end()) {
     G4cerr << "ERROR : DumpToFile : Unknown quantity, \""
-	   << psName << "\"." << G4endl;
+           << psName << "\"." << G4endl;
     return;
   }
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
@@ -100,10 +105,10 @@ void RE03UserScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileN
     for(int y = 0; y < fNMeshSegments[1]; y++) {
       for(int z = 0; z < fNMeshSegments[2]; z++) {
 
-	G4int idx = GetIndex(x, y, z);
-	
-	std::map<G4int, G4double*>::iterator value = score->find(idx);
-	if(value != score->end()) projxy[x][y] += *(value->second);
+        G4int idx = GetIndex(x, y, z);
+        
+        std::map<G4int, G4double*>::iterator value = score->find(idx);
+        if(value != score->end()) projxy[x][y] += *(value->second);
 
       } // z
     } // y

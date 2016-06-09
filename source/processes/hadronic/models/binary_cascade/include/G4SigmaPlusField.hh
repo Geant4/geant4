@@ -28,12 +28,14 @@
 #ifndef G4SigmaPlusField_h
 #define  G4SigmaPlusField_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VNuclearField.hh"
 
 class G4SigmaPlusField: public G4VNuclearField
 {
 public:
-  G4SigmaPlusField(G4V3DNucleus * nucleus, G4double coeff = 0.36*fermi);
+  G4SigmaPlusField(G4V3DNucleus * nucleus, G4double coeff = 0.36*CLHEP::fermi);
   virtual ~G4SigmaPlusField();
 
 private:

@@ -1,0 +1,26 @@
+$Id: History,v 1.12 2006-06-16 10:24:40 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Novice Examples History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08 October 2012 Ivana Hrivnacova (exNovice-V09-05-01)
+- Adding back copying pythia_event.data in N04/CMakeLists.txt;
+  removed -lXt from N01/CMakeLists.txt
+
+04 October 2012 Ivana Hrivnacova (exNovice-V09-05-00)
+- Minor changes in CMake build (mostly comment lines);
+  adding examples subdirectories explicitly in novice/CMakeList.txt
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters  

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.30 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -95,6 +94,8 @@
 
 #ifndef G4Torus_HH
 #define G4Torus_HH
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
 

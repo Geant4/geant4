@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.16 2006-06-29 18:22:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  
 // class G4FieldManager

@@ -47,6 +47,7 @@
 //#define debugs
 
 #include "G4QPhotonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static variables
 G4bool    G4QPhotonNuclearCrossSection::onlyCS=true;// Flag to calculate only CS
@@ -1716,18 +1717,18 @@ G4int G4QPhotonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
     G4int     k1=k-1;
     G4double  xi=LA[k1];
     G4double   b=(a-xi)/(LA[k]-xi);
-    for(G4int m=0; m<nL; m++)
+    for(G4int j=0; j<nL; j++)
     {
       if(a>1.5)
       {
-        G4double yi=SL[k1][m];
-        y[m]=yi+(SL[k][m]-yi)*b;
+        G4double yi=SL[k1][j];
+        y[j]=yi+(SL[k][j]-yi)*b;
 #ifdef debugs
-        if(y[m]<0.)G4cout<<"G4QPhotNucCS::GetF:y="<<y[m]<<",k="<<k<<",yi="<<yi<<",ya="
-                         <<SL[k][m]<<",b="<<b<<",xi="<<xi<<",xa="<<LA[k]<<",a="<<a<<G4endl;
+        if(y[j]<0.)G4cout<<"G4QPhotNucCS::GetF:y="<<y[j]<<",k="<<k<<",yi="<<yi<<",ya="
+                         <<SL[k][j]<<",b="<<b<<",xi="<<xi<<",xa="<<LA[k]<<",a="<<a<<G4endl;
 #endif
       }
-      else y[m]=0.;
+      else y[j]=0.;
     }
     r=1;
   }
@@ -1740,10 +1741,10 @@ G4int G4QPhotonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
     G4int     k1=k-1;
     G4double  xi=HA[k1];
     G4double   b=(a-xi)/(HA[k]-xi);
-    for(G4int m=0; m<nH; m++)
+    for(G4int j=0; j<nH; j++)
     {
-      G4double zi=SH[k1][m];
-      z[m]=zi+(SH[k][m]-zi)*b;
+      G4double zi=SH[k1][j];
+      z[j]=zi+(SH[k][j]-zi)*b;
     }
     h=1;
   }

@@ -25,8 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.11 2009-08-24 14:41:49 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4QString_h
 #define G4QString_h 1
@@ -100,8 +99,8 @@ class G4QString
   G4double Mass2() const { return Pplus*Pminus-(Ptleft+Ptright).mag2();}
   G4double Mass() const  // @@ Very dangerous! USE ONLY FORE THE LIGHT CONE ALGORITHM !!
   {
-    G4double  m2=Mass2();
-    if(m2>0) return std::sqrt(Mass2());
+    G4double  mass2=Mass2();
+    if(mass2>0) return std::sqrt(Mass2());
     else     return 0.; // @@ Make Warning
   }
   G4bool StopFragmentation()

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonParametrisedLossModel.icc,v 1.7 2010-11-04 12:21:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ===========================================================================
 // GEANT4 class
@@ -107,7 +106,7 @@ inline G4double G4IonParametrisedLossModel::DeltaRayMeanEnergyTransferRate(
 
     meanRate = 
         (- std::log(cutMaxEnergyRatio) - (1.0 - cutMaxEnergyRatio) * betaSquared) * 
-        twopi_mc2_rcl2 * 
+        CLHEP::twopi_mc2_rcl2 * 
         (material->GetTotNbOfElectPerVolume()) / betaSquared;
 
     meanRate *= GetChargeSquareRatio(particle, material, kineticEnergy);
@@ -122,8 +121,8 @@ void G4IonParametrisedLossModel::UpdateCache(
 
   cacheParticle = particle;
   cacheMass = particle -> GetPDGMass();
-  cacheElecMassRatio = electron_mass_c2 / cacheMass;
-  G4double q = particle -> GetPDGCharge() / eplus;
+  cacheElecMassRatio = CLHEP::electron_mass_c2 / cacheMass;
+  G4double q = particle -> GetPDGCharge() / CLHEP::eplus;
   cacheChargeSquare = q * q;
 }
 

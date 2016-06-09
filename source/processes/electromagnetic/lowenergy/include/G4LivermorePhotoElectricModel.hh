@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.hh,v 1.4 2010-03-15 09:02:29 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -33,6 +32,7 @@
 // 15 Mar 2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
 //               Main cuts from G4ProductionCutsTable are always used
 // 30 May 2011   A Mantero & V Ivanchenko Migration to model design for deexcitation
+// 22 Oct 2012   A & V Ivanchenko Migration data structure to G4PhysicsVector
 //
 
 
@@ -40,20 +40,19 @@
 #define G4LivermorePhotoElectricModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4ElementData.hh"
+#include <vector>
 
 class G4ParticleChangeForGamma;
-class G4VCrossSectionHandler;
 class G4VAtomDeexcitation;
-class G4VPhotoElectricAngularDistribution;
-class G4AtomicTransitionManager;
+class G4LPhysicsFreeVector;
 
 class G4LivermorePhotoElectricModel : public G4VEmModel
 {
 
 public:
 
-  G4LivermorePhotoElectricModel(const G4ParticleDefinition* p = 0, 
-				const G4String& nam = "LivermorePhElectric");
+  G4LivermorePhotoElectricModel(const G4String& nam = "LivermorePhElectric");
 
   virtual ~G4LivermorePhotoElectricModel();
 
@@ -73,11 +72,8 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  //  void ActivateAuger(G4bool);
+  inline void SetLimitNumberOfShells(G4int);
 
-  void SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution);
-
-  void SetAngularGenerator(const G4String& name);
 
 protected:
 
@@ -85,28 +81,36 @@ protected:
 
 private:
 
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-
-  G4int verboseLevel;
-  G4bool isInitialised;
-
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VCrossSectionHandler* shellCrossSectionHandler;
-
-  G4VAtomDeexcitation*             fAtomDeexcitation;
-  const G4AtomicTransitionManager* fTransitionManager;
-
-  G4VPhotoElectricAngularDistribution* fElectronAngularGenerator;
-  G4String generatorName;
+  void ReadData(G4int Z, const char* path = 0);
 
   G4LivermorePhotoElectricModel & operator=(const  G4LivermorePhotoElectricModel &right);
   G4LivermorePhotoElectricModel(const  G4LivermorePhotoElectricModel&);
 
+  G4ParticleDefinition*   theGamma;
+  G4ParticleDefinition*   theElectron;
+
+  G4int                   verboseLevel;
+  G4int                   maxZ;
+  G4int                   nShellLimit;
+  G4bool                  fDeexcitationActive;
+  G4bool                  isInitialised;
+
+  G4LPhysicsFreeVector*   fCrossSection[99];
+  G4LPhysicsFreeVector*   fCrossSectionLE[99];
+  std::vector<G4double>   fParam[99];
+  G4int                   fNShells[99];
+  G4int                   fNShellsUsed[99];
+  G4ElementData           fShellCrossSection;
+
+  G4VAtomDeexcitation*    fAtomDeexcitation;
+
 };
+
+inline 
+void G4LivermorePhotoElectricModel::SetLimitNumberOfShells(G4int n)
+{
+  nShellLimit = n;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

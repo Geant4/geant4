@@ -1,0 +1,34 @@
+-------------------------------------------------------------------------------
+History File, 2012/10/24 F.Romano, Created
+francesco.romano@lns.infn.it
+-------------------------------------------------------------------------------
+
+         ====================================================
+             History file of the GammaKnife application
+         ====================================================
+
+16.11.2012 J.Allison;      Tag: gammaknife-V09-05-06
+           - gammaknife.cc: Removed unnecessary #include "G4UIXm.hh".
+
+07.11.2012 F.Romano;       Tag: gammaknife-V09-05-05
+           - gammaknife.cc: fixed problem for referencePhysList if condition
+
+07.11.2012 F.Romano;       Tag: gammaknife-V09-05-04
+           - MachineAngle.in: modified angles for final configuration
+	   - README file updated 
+
+31.10.2012 G.Folger;       Tag: gammaknife-V09-05-03
+           - gammaknife.cc: add include for <ctime>, needed for Windows 
+
+31.10.2012 F.Romano;       Tag: gammaknife-V09-05-02
+           - added batch.mac without VIS
+	   - fixed warnings 
+	   - optimized macro options in main
+
+29.10.2012 F.Romano;       Tag: gammaknife-V09-05-01
+           - Executable renamed to the same name of the directory
+             to avoid possible problems with Mac/WIN
+
+24.10.2012 F.Romano;       Tag: gammaknife-V09-05-00
+           - Created, first version
+

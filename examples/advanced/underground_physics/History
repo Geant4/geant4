@@ -9,6 +9,21 @@ $Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
                       Category History file
                       ---------------------
 
+31.10.2012 - L.Pandola (DMX-V09-05-03)
+	   - Fix the CMakeLists.txt file (AIDA optional dependency)
+
+16.10.2012 - L.Pandola (DMX-V09-05-02)
+	   - Change the logic of the CMakeLists.txt file. The env variable 
+             and the cmake line command can be used (the cmake commands gets 
+             the priority)
+
+12.10.2012 - L.Pandola (DMX-V09-05-01)
+           - Removed obsolete call to G4OpBoundaryProcess::SetModel()
+           - Add a CMakeLists.txt file
+
+12.10.2012 - G.Cosmo (DMX-V09-05-00)
+           - Explicit inclusion of units and constants headers.
+
 19.01.2011 - L.Pandola (DMX-V09-04-00)
 	   - Removed #includes of G4hLowEnergyIonisation (though commented)
 

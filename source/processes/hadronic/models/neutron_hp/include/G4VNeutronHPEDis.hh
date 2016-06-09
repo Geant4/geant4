@@ -24,17 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEDis.hh,v 1.10 2006-06-29 20:50:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 
 class G4VNeutronHPEDis
 {

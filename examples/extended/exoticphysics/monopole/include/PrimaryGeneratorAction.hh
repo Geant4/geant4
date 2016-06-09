@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2009-07-15 10:19:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,9 +38,7 @@
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 
-class G4Event;
 class DetectorConstruction;
-class PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,21 +49,15 @@ public:
   PrimaryGeneratorAction(DetectorConstruction*);    
   ~PrimaryGeneratorAction();
 
-  void SetRndmBeam(G4double val)  {rndmBeam = val;}   
   void GeneratePrimaries(G4Event*);
     
-  void   ResetEbeamCumul() {EbeamCumul = 0.;}
-  G4double GetEbeamCumul() {return EbeamCumul;}
-     
-  G4ParticleGun* GetParticleGun() {return particleGun;}
+  inline G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
 private:
 
-  G4ParticleGun*             particleGun;
-  DetectorConstruction*      detector;
-  G4double                   rndmBeam;
-  G4double                   EbeamCumul;       
-  PrimaryGeneratorMessenger* gunMessenger;     
+  G4ParticleGun*         fParticleGun;
+  DetectorConstruction*  fDetector;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

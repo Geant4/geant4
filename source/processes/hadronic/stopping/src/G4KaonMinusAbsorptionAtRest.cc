@@ -43,11 +43,13 @@
 #include "G4StopDeexcitationAlgorithm.hh"
 #include "G4ReactionKinematics.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4HadronicDeprecate.hh"
 
 G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& processName,
                                       G4ProcessType   aType ) :
   G4VRestProcess (processName, aType)
 {
+  G4HadronicDeprecate("G4KaonMinusAbsorptionAtRest");
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
@@ -132,6 +134,13 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 
   // Do the interaction with the nucleon
   G4DynamicParticleVector* absorptionProducts = KaonNucleonReaction();
+
+  //A.R. 26-Jul-2012 Coverity fix
+  if ( ! absorptionProducts ) {
+    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0001",
+                FatalException, "NULL absorptionProducts");
+    return 0;
+  }
   
   // Secondary interactions
   
@@ -224,7 +233,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
     }
 
   if (energyDeposit < 0.)
-    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0001",
+    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0002",
                 FatalException, "Excitation energy < 0");
   delete nucleus;    
 
@@ -396,6 +405,10 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
 	    << " is not a good nucleon - check G4Nucleus::ReturnTargetParticle()!"
 	    << G4endl;
 	}
+
+      //A.R. 26-Jul-2012 Coverity fix
+      if ( products ) delete products;
+
       return 0;
     }  
 

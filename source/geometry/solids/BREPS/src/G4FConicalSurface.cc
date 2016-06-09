@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FConicalSurface.cc,v 1.19 2006-06-29 18:42:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +34,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4FConicalSurface.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Sort.hh"
 #include "G4CircularCurve.hh"
 
@@ -54,12 +54,12 @@ G4FConicalSurface::~G4FConicalSurface()
 G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o, 
 				     const G4Vector3D& a,
 				     G4double          l, 
-				     G4double          sr, 
+				     G4double          srad, 
 				     G4double          lr 
 				    ) 
 {
   // Make a G4FConicalSurface with origin o, axis a, length l, small radius 
-  // sr, and large radius lr. The angle is calculated below and the SetAngle
+  // srad, and large radius lr. The angle is calculated below and the SetAngle
   // function of G4ConicalSurface is used to set it properly from the default
   // value used above in the initialization.
  
@@ -84,8 +84,8 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
   }
   
   //  Require small radius to be non-negative (i.e., allow zero)
-  if ( sr >= 0.0 )
-    small_radius = sr;
+  if ( srad >= 0.0 )
+    small_radius = srad;
   else 
   {
     std::ostringstream message;
@@ -185,9 +185,9 @@ G4int G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
   G4Vector3D q = G4Vector3D( x - origin );
   
   G4double qmag = q.mag();
-  G4double s    = std::sin( std::atan2(large_radius-small_radius, length) );
-  G4double ls   = small_radius / s;
-  G4double ll   = large_radius / s;
+  G4double ss   = std::sin( std::atan2(large_radius-small_radius, length) );
+  G4double ls   = small_radius / ss;
+  G4double ll   = large_radius / ss;
   
   if ( ( qmag >= ls )  &&  ( qmag <= ll ) )
     return 1;
@@ -218,9 +218,9 @@ G4double G4FConicalSurface::Area() const
 }
 
 
-void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
+void G4FConicalSurface::resize( G4double l, G4double srad, G4double lr )
 {
-  //  Resize a G4FConicalSurface to a new length l, and new radii sr and lr.
+  //  Resize a G4FConicalSurface to a new length l, and new radii srad and lr.
   //  Must Reset angle of the G4ConicalSurface as well based on these new 
   //  values.
   //  Require length to be non-negative
@@ -238,8 +238,8 @@ void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
   }
 
   //  Require small radius to be non-negative (i.e., allow zero)
-  if ( sr >= 0.0 )
-    small_radius = sr;
+  if ( srad >= 0.0 )
+    small_radius = srad;
   else 
   {
     std::ostringstream message;
@@ -296,9 +296,9 @@ G4int G4FConicalSurface::Intersect(const G4Ray& ry )
   G4Vector3D ahat = Position.GetAxis();
  
   //  array of solutions in distance along the ray
-  G4double s[2];
-  s[0]=-1.0;
-  s[1]=-1.0;
+  G4double sol[2];
+  sol[0]=-1.0;
+  sol[1]=-1.0;
 
   // calculate the two intersections (quadratic equation)   
   G4Vector3D gamma =  G4Vector3D( x - Position.GetLocation() );
@@ -321,20 +321,20 @@ G4int G4FConicalSurface::Intersect(const G4Ray& ry )
   else 
   {
     G4double root = std::sqrt( radical );
-    s[0] = ( - B + root ) / ( 2. * A );
-    s[1] = ( - B - root ) / ( 2. * A );
+    sol[0] = ( - B + root ) / ( 2. * A );
+    sol[1] = ( - B - root ) / ( 2. * A );
   }
   
   // validity of the solutions
   // the hit point must be into the bounding box of the conical surface
-  G4Point3D p0 = G4Point3D( x + s[0]*dhat );
-  G4Point3D p1 = G4Point3D( x + s[1]*dhat );
+  G4Point3D p0 = G4Point3D( x + sol[0]*dhat );
+  G4Point3D p1 = G4Point3D( x + sol[1]*dhat );
   
   if( !GetBBox()->Inside(p0) )
-    s[0] = kInfinity;
+    sol[0] = kInfinity;
 
   if( !GetBBox()->Inside(p1) )
-    s[1] = kInfinity;
+    sol[1] = kInfinity;
  
   // now loop over each positive solution, keeping the first one (smallest
   // distance along the ray) which is within the boundary of the sub-shape
@@ -343,11 +343,11 @@ G4int G4FConicalSurface::Intersect(const G4Ray& ry )
 
   for ( G4int i = 0; i < 2; i++ ) 
   {  
-    if(s[i] < kInfinity) {
-      if ( (s[i] > kCarTolerance*0.5)  ) {
+    if(sol[i] < kInfinity) {
+      if ( (sol[i] > kCarTolerance*0.5)  ) {
 	nbinter++;
-  	if ( distance > (s[i]*s[i]) ) {
-	  distance = s[i]*s[i];
+  	if ( distance > (sol[i]*sol[i]) ) {
+	  distance = sol[i]*sol[i];
 	}
       }
     }
@@ -373,22 +373,20 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
   
   xd = G4Vector3D ( std::sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
     
-  G4double m = (upcorner.z() - downcorner.z()) / (upcorner.x() - downcorner.x());
+  G4double r = (upcorner.z() - downcorner.z()) / (upcorner.x() - downcorner.x());
   G4double q = (downcorner.z()*upcorner.x() - upcorner.z()*downcorner.x()) /
                (upcorner.x() - downcorner.x());
   
-  G4double Zinter = (xd.z()*m*m + xd.x()*m +q)/(1+m*m) ;
+  G4double Zinter = (xd.z()*r*r + xd.x()*r +q)/(1+r*r) ;
   
   if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ||
        ((Zinter >= upcorner.z()) && (Zinter <=downcorner.z())) ) {
-    hownear = std::fabs(m*xd.x()-xd.z()+q)/std::sqrt(1+m*m);
+    hownear = std::fabs(r*xd.x()-xd.z()+q)/std::sqrt(1+r*r);
     return hownear;
   } else {
     hownear = std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
     return hownear;
   }
-
-
 }
 
 
@@ -396,9 +394,9 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
-  G4Vector3D s  = G4Vector3D( p - origin );
-  G4double   da = s * Position.GetAxis();
-  G4double   r  = std::sqrt( s*s - da*da);
+  G4Vector3D ss = G4Vector3D( p - origin );
+  G4double   da = ss * Position.GetAxis();
+  G4double   r  = std::sqrt( ss*ss - da*da);
   G4double   z  = tan_angle * r; 
   
   if (Position.GetAxis().z() < 0)

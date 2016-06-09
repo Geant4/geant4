@@ -29,6 +29,7 @@
 // by J.P Wellisch, Sun Sep 15 2002.
 
 #include "G4PiData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
 ///////////////////////////////////////////////////////////////////////

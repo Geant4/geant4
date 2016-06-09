@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.24 2010/10/01 02:41:43 kurasige Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -39,6 +39,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiNeutron.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4NeutronBetaDecayChannel.hh"

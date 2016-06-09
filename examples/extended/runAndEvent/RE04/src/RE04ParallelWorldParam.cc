@@ -23,22 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+/// \file runAndEvent/RE04/src/RE04ParallelWorldParam.cc
+/// \brief Implementation of the RE04ParallelWorldParam class
+//
+// $Id: $
+//
 #include "RE04ParallelWorldParam.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04ParallelWorldParam::RE04ParallelWorldParam()
 {
-  water = G4Material::GetMaterial("Water");
-  Pb = G4Material::GetMaterial("Lead");
+  fWater = G4Material::GetMaterial("Water");
+  fPb = G4Material::GetMaterial("Lead");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04ParallelWorldParam::~RE04ParallelWorldParam()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04ParallelWorldParam::ComputeTransformation(const G4int copyNo,
                                      G4VPhysicalVolume* physVol) const
 {
@@ -46,7 +54,8 @@ void RE04ParallelWorldParam::ComputeTransformation(const G4int copyNo,
   physVol->SetTranslation(G4ThreeVector(x,x,0.));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* RE04ParallelWorldParam::ComputeMaterial(const G4int copyNo,
       G4VPhysicalVolume* /*currentVol*/,const G4VTouchable* /*parentTouch*/)
-{ return copyNo ? water: Pb; }
+{ return copyNo ? fWater: fPb; }
 

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITStepProcessor2.cc 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -39,7 +40,12 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4VITProcess.hh"
 #include "G4TrackingInformation.hh"
+#include "G4IT.hh"
+#include "G4ITTrackingManager.hh"
+#include "G4ITTransportation.hh"
 
+#include "G4ITNavigator.hh"             // Include from 'geometry'
+//#include "G4Navigator.hh"             // Include from 'geometry'
 
 void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
 {
@@ -69,11 +75,11 @@ void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
         {
             G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
             if (pm->GetAtRestProcessVector()->entries()>0){
-              tempSecondaryTrack->SetTrackStatus( fStopButAlive );
-              fpSecondary->push_back( tempSecondaryTrack );
-              fN2ndariesAtRestDoIt++;
+                tempSecondaryTrack->SetTrackStatus( fStopButAlive );
+                fpSecondary->push_back( tempSecondaryTrack );
+                fN2ndariesAtRestDoIt++;
             } else {
-              delete tempSecondaryTrack;
+                delete tempSecondaryTrack;
             }
         }
         else
@@ -84,33 +90,215 @@ void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
     } //end of loop on secondary
 }
 
-//////////////////////////////////////////////////////
+//______________________________________________________________________________
+
+void G4ITStepProcessor::Stepping(G4Track* track, const double & timeStep)
+{
+    CleanProcessor();
+    if(track == 0) return ; // maybe put an exception here
+    fTimeStep = timeStep ;
+    SetTrack(track);
+    DoStepping();
+}
+//______________________________________________________________________________
+
+// ************************************************************************
+//	Stepping
+// ************************************************************************
+void G4ITStepProcessor::DoStepping()
+{
+    SetupMembers() ;
+
+    if(!fpProcessInfo)
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "No process info found for particle :"
+                             << fpTrack->GetDefinition()->GetParticleName();
+        G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor0012",
+                    FatalErrorInArgument,exceptionDescription);
+        return ;
+    }
+    else if(fpTrack->GetTrackStatus() == fStopAndKill )
+    {
+        fpState->fStepStatus = fUndefined;
+        return ;
+    }
+
+    if(fpProcessInfo->MAXofPostStepLoops == 0
+            && fpProcessInfo->MAXofAlongStepLoops == 0
+            && fpProcessInfo->MAXofAtRestLoops == 0)
+    {
+        fpTrack -> SetTrackStatus(fStopAndKill) ;
+        fpState->fStepStatus = fUndefined;
+        return ;
+    }
+    //---------------------------------
+    // AtRestStep, AlongStep and PostStep Processes
+    //---------------------------------
+    else
+    {
+        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+        fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+                                              fpTrack->GetMomentumDirection(),
+                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+        // We reset the navigator state before checking for AtRest
+        // in case a AtRest processe would use a navigator info
+
+        if( fpTrack->GetTrackStatus() == fStopButAlive )
+        {
+            if( fpProcessInfo->MAXofAtRestLoops>0 &&
+                    fpProcessInfo->fpAtRestDoItVector != 0) // second condition to make coverity happy
+            {
+                //-----------------
+                // AtRestStepDoIt
+                //-----------------
+                InvokeAtRestDoItProcs();
+                fpState->fStepStatus = fAtRestDoItProc;
+                fpStep->GetPostStepPoint()->SetStepStatus( fpState->fStepStatus );
+
+            }
+            // Make sure the track is killed
+            fpTrack->SetTrackStatus( fStopAndKill );
+        }
+        else // if(fTimeStep > 0.) // Bye, because PostStepIL can return 0 => time =0
+        {
+            if(fpITrack == 0)
+            {
+                G4ExceptionDescription exceptionDescription ;
+                exceptionDescription
+                        << " !!! TrackID : "<<  fpTrack->GetTrackID() << G4endl
+                        << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl
+                        << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl
+                        << "No G4ITStepProcessor::fpITrack found" << G4endl;
+
+                G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor0013",
+                            FatalErrorInArgument,exceptionDescription);
+                return ; // to make coverity happy
+            }
+
+            if(fpITrack->GetTrackingInfo()->IsLeadingStep() == false)
+            {
+                // In case the track has NOT the minimum step length
+                // Given the final step time, the transportation
+                // will compute the final position of the particle
+
+                fpState->fStepStatus = fPostStepDoItProc;
+                fpStep->GetPostStepPoint()
+                        ->SetProcessDefinedStep(fpTransportation);
+                FindTransportationStep();
+            }
+
+
+            // Store the Step length (geometrical length) to G4Step and G4Track
+            fpTrack->SetStepLength( fpState->fPhysicalStep );
+            fpStep->SetStepLength( fpState->fPhysicalStep );
+
+            G4double GeomStepLength = fpState->fPhysicalStep;
+
+            // Store StepStatus to PostStepPoint
+            fpStep->GetPostStepPoint()->SetStepStatus( fpState->fStepStatus );
+
+            // Invoke AlongStepDoIt
+            InvokeAlongStepDoItProcs();
+
+            // Update track by taking into account all changes by AlongStepDoIt
+            // fpStep->UpdateTrack(); // done in InvokeAlongStepDoItProcs
+
+            // Update safety after invocation of all AlongStepDoIts
+            fpState->endpointSafOrigin= fpPostStepPoint->GetPosition();
+
+            fpState->endpointSafety=  std::max( fpState->proposedSafety - GeomStepLength, kCarTolerance);
+
+            fpStep->GetPostStepPoint()->SetSafety( fpState->endpointSafety );
+
+            if(GetIT(fpTrack)->GetTrackingInfo()->IsLeadingStep())
+            {
+                // Invoke PostStepDoIt including G4ITTransportation::PSDI
+                InvokePostStepDoItProcs();
+            }
+            else
+            {
+                // Only invoke transportation
+                InvokeTransportationProc();
+            }
+        }
+
+        fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
+        fpNavigator->SetNavigatorState(0);
+    }
+    //-------
+    // Finale
+    //-------
+
+    // Update 'TrackLength' and remeber the Step length of the current Step
+    fpTrack->AddTrackLength(fpStep->GetStepLength());
+    fpTrack->IncrementCurrentStepNumber();
+
+    // Send G4Step information to Hit/Dig if the volume is sensitive
+/***
+    fpCurrentVolume = fpStep->GetPreStepPoint()->GetPhysicalVolume();
+    StepControlFlag =  fpStep->GetControlFlag();
+
+    if( fpCurrentVolume != 0 && StepControlFlag != AvoidHitInvocation)
+    {
+        fpSensitive = fpStep->GetPreStepPoint()->
+                GetSensitiveDetector();
+        if( fpSensitive != 0 )
+        {
+            fpSensitive->Hit(fpStep);
+        }
+    }
+
+     User intervention process.
+    if( fpUserSteppingAction != 0 )
+    {
+        fpUserSteppingAction->UserSteppingAction(fpStep);
+    }
+    G4UserSteppingAction* regionalAction
+            = fpStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()
+            ->GetRegionalSteppingAction();
+    if( regionalAction ) regionalAction->UserSteppingAction(fpStep);
+***/
+    fpTrackingManager->AppendStep(fpTrack,fpStep);
+    // Stepping process finish. Return the value of the StepStatus.
+
+    //    return fpState->fStepStatus;
+}
+
+//______________________________________________________________________________
+
+// ************************************************************************
+//	AtRestDoIt
+// ************************************************************************
+
 void G4ITStepProcessor::InvokeAtRestDoItProcs()
-//////////////////////////////////////////////////////
 {
     fpStep->SetStepLength( 0. );  //the particle has stopped
     fpTrack->SetStepLength( 0. );
 
-// invoke selected process
-    for(size_t np=0; np < MAXofAtRestLoops; np++)
+    G4SelectedAtRestDoItVector& selectedAtRestDoItVector = fpState->fSelectedAtRestDoItVector;
+
+    // invoke selected process
+    for(size_t np=0; np < fpProcessInfo->MAXofAtRestLoops; np++)
     {
         //
         // Note: DoItVector has inverse order against GetPhysIntVector
         //       and SelectedAtRestDoItVector.
         //
-        if( (*fpSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated)
+        if( selectedAtRestDoItVector[fpProcessInfo->MAXofAtRestLoops-np-1] != InActivated)
         {
-            fpCurrentProcess = (G4VITProcess*) (*fpAtRestDoItVector)[np];
+            fpCurrentProcess = (G4VITProcess*) (*fpProcessInfo->fpAtRestDoItVector)[np];
 
             fpCurrentProcess->SetProcessState(
                         fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
             fpParticleChange
-            = fpCurrentProcess->AtRestDoIt( *fpTrack, *fpStep);
+                    = fpCurrentProcess->AtRestDoIt( *fpTrack, *fpStep);
             fpCurrentProcess->SetProcessState(0);
 
             // Set the current process as a process which defined this Step length
             fpStep->GetPostStepPoint()
-            ->SetProcessDefinedStep(fpCurrentProcess);
+                    ->SetProcessDefinedStep(fpCurrentProcess);
 
             // Update Step
             fpParticleChange->UpdateStepForAtRest(fpStep);
@@ -127,30 +315,36 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
 
     fpTrack->SetTrackStatus( fStopAndKill );
 }
+
 //______________________________________________________________________________
+
+// ************************************************************************
+//	AlongStepDoIt
+// ************************************************************************
 
 void G4ITStepProcessor::InvokeAlongStepDoItProcs()
 {
 
-// If the current Step is defined by a 'ExclusivelyForced'
-// PostStepDoIt, then don't invoke any AlongStepDoIt
-    if(*fpStepStatus == fExclusivelyForcedProc)
+    // If the current Step is defined by a 'ExclusivelyForced'
+    // PostStepDoIt, then don't invoke any AlongStepDoIt
+    if(fpState->fStepStatus == fExclusivelyForcedProc)
     {
         return;               // Take note 'return' at here !!!
     }
 
-// Invoke the all active continuous processes
-    for( size_t ci=0 ; ci<MAXofAlongStepLoops ; ci++ )
+    // Invoke the all active continuous processes
+    for( size_t ci=0 ; ci<fpProcessInfo->MAXofAlongStepLoops ; ci++ )
     {
-        fpCurrentProcess = (G4VITProcess*) (*fpAlongStepDoItVector)[ci];
+        fpCurrentProcess = (G4VITProcess*) (*fpProcessInfo->fpAlongStepDoItVector)[ci];
         if (fpCurrentProcess== 0) continue;
         // NULL means the process is inactivated by a user on fly.
 
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
         fpParticleChange
-        = fpCurrentProcess->AlongStepDoIt( *fpTrack, *fpStep );
+                = fpCurrentProcess->AlongStepDoIt( *fpTrack, *fpStep );
         fpCurrentProcess->SetProcessState(0);
         // Update the PostStepPoint of Step according to ParticleChange
+
         fpParticleChange->UpdateStepForAlongStep(fpStep);
 
         // Now Store the secondaries from ParticleChange to SecondaryList
@@ -165,39 +359,49 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
     }
 
     fpStep->UpdateTrack();
+
     G4TrackStatus fNewStatus = fpTrack->GetTrackStatus();
 
     if ( fNewStatus == fAlive && fpTrack->GetKineticEnergy() <= DBL_MIN )
     {
-        G4cout << "G4ITStepProcessor::InvokeAlongStepDoItProcs : Track will be killed" << G4endl;
-        if(MAXofAtRestLoops>0) fNewStatus = fStopButAlive;
+        //        G4cout << "G4ITStepProcessor::InvokeAlongStepDoItProcs : Track will be killed" << G4endl;
+        if(fpProcessInfo->MAXofAtRestLoops>0) fNewStatus = fStopButAlive;
         else                   fNewStatus = fStopAndKill;
         fpTrack->SetTrackStatus( fNewStatus );
     }
 
 }
 
-////////////////////////////////////////////////////////
+//______________________________________________________________________________
+
+
+// ************************************************************************
+//	PostStepDoIt
+// ************************************************************************
+
+
 void G4ITStepProcessor::InvokePostStepDoItProcs()
-////////////////////////////////////////////////////////
 {
 
-// Invoke the specified discrete processes
-    for(size_t np=0; np < MAXofPostStepLoops; np++)
+    G4SelectedPostStepDoItVector& selectedPostStepDoItVector = fpState->fSelectedPostStepDoItVector;
+    G4StepStatus& stepStatus = fpState->fStepStatus;
+
+    // Invoke the specified discrete processes
+    for(size_t np=0; np < fpProcessInfo->MAXofPostStepLoops; np++)
     {
         //
         // Note: DoItVector has inverse order against GetPhysIntVector
         //       and SelectedPostStepDoItVector.
         //
-        G4int Cond = (*fpSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
+        G4int Cond = selectedPostStepDoItVector[fpProcessInfo->MAXofPostStepLoops-np-1];
         if(Cond != InActivated)
         {
-            if( ((Cond == NotForced) && (*fpStepStatus == fPostStepDoItProc)) ||
-                    ((Cond == Forced) && (*fpStepStatus != fExclusivelyForcedProc)) ||
-                    ((Cond == Conditionally) && (*fpStepStatus == fAlongStepDoItProc)) ||
-                    ((Cond == ExclusivelyForced) && (*fpStepStatus == fExclusivelyForcedProc)) ||
+            if( ((Cond == NotForced) && (stepStatus == fPostStepDoItProc)) ||
+                    ((Cond == Forced) && (stepStatus != fExclusivelyForcedProc)) ||
+                    //                    ((Cond == Conditionally) && (stepStatus == fAlongStepDoItProc)) ||
+                    ((Cond == ExclusivelyForced) && (stepStatus == fExclusivelyForcedProc)) ||
                     ((Cond == StronglyForced) )
-              )
+                    )
             {
 
                 InvokePSDIP(np);
@@ -208,9 +412,9 @@ void G4ITStepProcessor::InvokePostStepDoItProcs()
         // but extra treatment for processes with Strongly Forced flag
         if(fpTrack->GetTrackStatus() == fStopAndKill)
         {
-            for(size_t np1=np+1; np1 < MAXofPostStepLoops; np1++)
+            for(size_t np1=np+1; np1 < fpProcessInfo->MAXofPostStepLoops; np1++)
             {
-                G4int Cond2 = (*fpSelectedPostStepDoItVector)[MAXofPostStepLoops-np1-1];
+                G4int Cond2 = selectedPostStepDoItVector[fpProcessInfo->MAXofPostStepLoops-np1-1];
                 if (Cond2 == StronglyForced)
                 {
                     InvokePSDIP(np1);
@@ -221,15 +425,15 @@ void G4ITStepProcessor::InvokePostStepDoItProcs()
     } //for(size_t np=0; np < MAXofPostStepLoops; np++){
 }
 
-////////////////////////////////////////////////////////
+//______________________________________________________________________________
+
 void G4ITStepProcessor::InvokePSDIP(size_t np)
-////////////////////////////////////////////////////////
 {
-    fpCurrentProcess = (G4VITProcess*) (*fpPostStepDoItVector)[np];
+    fpCurrentProcess = (G4VITProcess*) (*fpProcessInfo->fpPostStepDoItVector)[np];
 
     fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
     fpParticleChange
-    = fpCurrentProcess->PostStepDoIt( *fpTrack, *fpStep);
+            = fpCurrentProcess->PostStepDoIt( *fpTrack, *fpStep);
     fpCurrentProcess->SetProcessState(0);
 
     // Update PostStepPoint of Step according to ParticleChange
@@ -251,26 +455,88 @@ void G4ITStepProcessor::InvokePSDIP(size_t np)
     fpParticleChange->Clear();
 }
 
-////////////////////////////////////////////////////////
-void G4ITStepProcessor::InvokeTransportationProc()
-////////////////////////////////////////////////////////
+//______________________________________________________________________________
+
+// ************************************************************************
+//	Transport on a given time
+// ************************************************************************
+
+void G4ITStepProcessor::FindTransportationStep()
 {
+    double physicalStep(0.) ;
+
+    fpTransportation =  fpProcessInfo->fpTransportation;
+    //            dynamic_cast<G4ITTransportation*>((fpProcessInfo->fpAlongStepGetPhysIntVector)[MAXofAlongStepLoops-1]);
+
+    if(!fpTrack)
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription
+                << "No G4ITStepProcessor::fpTrack found";
+        G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor0013",
+                    FatalErrorInArgument,exceptionDescription);
+        return;
+
+    }
+    if(!fpITrack)
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription
+                << "No G4ITStepProcessor::fITrack" ;
+        G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor0014",
+                    FatalErrorInArgument,exceptionDescription);
+        return;
+    }
+    if(!(fpITrack->GetTrack()))
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription
+                << "No G4ITStepProcessor::fITrack->GetTrack()" ;
+        G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor0015",
+                    FatalErrorInArgument,exceptionDescription);
+        return;
+    }
+
+    if(fpTransportation)
+    {
+        fpTransportation->SetProcessState(fpTrackingInfo->GetProcessState(fpTransportation->GetProcessID()));
+        fpTransportation->ComputeStep(*fpTrack, *fpStep, fTimeStep, physicalStep) ;
+        fpTransportation->SetProcessState(0);
+    }
+
+    if(physicalStep >= DBL_MAX)
+    {
+        fpTrack -> SetTrackStatus(fStopAndKill) ;
+        return ;
+    }
+
+    fpState->fPhysicalStep = physicalStep ;
+}
+
+//______________________________________________________________________________
+
+void G4ITStepProcessor::InvokeTransportationProc()
+{
+    size_t _MAXofPostStepLoops = fpProcessInfo->MAXofPostStepLoops;
+    G4SelectedPostStepDoItVector& selectedPostStepDoItVector = fpState->fSelectedPostStepDoItVector;
+    G4StepStatus& stepStatus = fpState->fStepStatus;
+
     // Invoke the specified discrete processes
-    for(size_t np=0; np < MAXofPostStepLoops; np++)
+    for(size_t np=0; np < _MAXofPostStepLoops; np++)
     {
         //
         // Note: DoItVector has inverse order against GetPhysIntVector
         //       and SelectedPostStepDoItVector.
         //
-        G4int Cond = (*fpSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
+        G4int Cond = selectedPostStepDoItVector[_MAXofPostStepLoops-np-1];
         if(Cond != InActivated)
         {
             if(
-                ((Cond == Forced) && (*fpStepStatus != fExclusivelyForcedProc)) ||
-                ((Cond == Conditionally) && (*fpStepStatus == fAlongStepDoItProc)) ||
-                ((Cond == ExclusivelyForced) && (*fpStepStatus == fExclusivelyForcedProc)) ||
-                ((Cond == StronglyForced) )
-              )
+                    ((Cond == Forced) && (stepStatus != fExclusivelyForcedProc)) ||
+                    //                ((Cond == Conditionally) && (stepStatus == fAlongStepDoItProc)) ||
+                    ((Cond == ExclusivelyForced) && (stepStatus == fExclusivelyForcedProc)) ||
+                    ((Cond == StronglyForced) )
+                    )
             {
 
                 InvokePSDIP(np);
@@ -281,9 +547,9 @@ void G4ITStepProcessor::InvokeTransportationProc()
         // but extra treatment for processes with Strongly Forced flag
         if(fpTrack->GetTrackStatus() == fStopAndKill)
         {
-            for(size_t np1=np+1; np1 < MAXofPostStepLoops; np1++)
+            for(size_t np1=np+1; np1 < _MAXofPostStepLoops; np1++)
             {
-                G4int Cond2 = (*fpSelectedPostStepDoItVector)[MAXofPostStepLoops-np1-1];
+                G4int Cond2 = selectedPostStepDoItVector[_MAXofPostStepLoops-np1-1];
                 if (Cond2 == StronglyForced)
                 {
                     InvokePSDIP(np1);
@@ -294,32 +560,37 @@ void G4ITStepProcessor::InvokeTransportationProc()
     }
 }
 
-///////////////////////////////////////////////////////////////
+//______________________________________________________________________________
+
+// ************************************************************************
+//	Apply cuts
+// ************************************************************************
+
+
 void G4ITStepProcessor::ApplyProductionCut(G4Track* aSecondary)
-///////////////////////////////////////////////////////////////
 {
     G4bool tBelowCutEnergyAndSafety = false;
     G4int tPtclIdx
-    = G4ProductionCuts::GetIndex(aSecondary->GetDefinition());
+            = G4ProductionCuts::GetIndex(aSecondary->GetDefinition());
     if (tPtclIdx<0)
     {
         return;
     }
     G4ProductionCutsTable* tCutsTbl
-    = G4ProductionCutsTable::GetProductionCutsTable();
+            = G4ProductionCutsTable::GetProductionCutsTable();
     G4int tCoupleIdx
-    = tCutsTbl->GetCoupleIndex(fpPreStepPoint->GetMaterialCutsCouple());
+            = tCutsTbl->GetCoupleIndex(fpPreStepPoint->GetMaterialCutsCouple());
     G4double tProdThreshold
-    = (*(tCutsTbl->GetEnergyCutsVector(tPtclIdx)))[tCoupleIdx];
+            = (*(tCutsTbl->GetEnergyCutsVector(tPtclIdx)))[tCoupleIdx];
     if( aSecondary->GetKineticEnergy()<tProdThreshold )
     {
         tBelowCutEnergyAndSafety = true;
         if(std::abs(aSecondary->GetDynamicParticle()->GetCharge()) > DBL_MIN)
         {
             G4double currentRange
-            = G4LossTableManager::Instance()->GetRange(aSecondary->GetDefinition(),
-                    aSecondary->GetKineticEnergy(),
-                    fpPreStepPoint->GetMaterialCutsCouple());
+                    = G4LossTableManager::Instance()->GetRange(aSecondary->GetDefinition(),
+                                                               aSecondary->GetKineticEnergy(),
+                                                               fpPreStepPoint->GetMaterialCutsCouple());
             tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
         }
     }
@@ -330,7 +601,7 @@ void G4ITStepProcessor::ApplyProductionCut(G4Track* aSecondary)
         {
             // Add kinetic energy to the total energy deposit
             fpStep->AddTotalEnergyDeposit(
-                aSecondary->GetKineticEnergy() );
+                        aSecondary->GetKineticEnergy() );
             aSecondary->SetKineticEnergy(0.0);
         }
     }

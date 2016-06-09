@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eInverseBremsstrahlung.hh,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4eInverseBremstrahlung.hh
@@ -51,13 +50,14 @@
 #include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
 #include "G4eIonisation.hh"
-class G4AdjointBremsstrahlungModel;
+class G4VEmAdjointModel;
 class G4eInverseBremsstrahlung: public G4VAdjointReverseReaction
 
 {
 public:
 
-  G4eInverseBremsstrahlung(G4bool whichScatCase, G4String process_name, G4AdjointBremsstrahlungModel* aEmAdjointModel);
+  G4eInverseBremsstrahlung(G4bool whichScatCase, G4String process_name,
+		                   G4VEmAdjointModel* aEmAdjointModel);
   ~G4eInverseBremsstrahlung();
   
 private:

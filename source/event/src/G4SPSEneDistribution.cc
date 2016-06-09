@@ -44,10 +44,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-#include "Randomize.hh"
-//#include <cmath>
 
 #include "G4SPSEneDistribution.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4SPSEneDistribution::G4SPSEneDistribution()
   : particle_definition(0), eneRndm(0), Splinetemp(0)
@@ -915,15 +916,15 @@ void G4SPSEneDistribution::GenerateBbodyEnergies() {
 	}
 
 	// Now interpolate in that bin to find the correct output value.
-	G4double x1, x2, y1, y2, m, q;
+	G4double x1, x2, y1, y2, t, q;
 	x1 = Bbody_x[nbelow];
 	x2 = Bbody_x[nbelow + 1];
 	y1 = BBHist[nbelow];
 	y2 = BBHist[nbelow + 1];
-	m = (y2 - y1) / (x2 - x1);
-	q = y1 - m * x1;
+	t = (y2 - y1) / (x2 - x1);
+	q = y1 - t * x1;
 
-	particle_energy = (rndm - q) / m;
+	particle_energy = (rndm - q) / t;
 
 	if (verbosityLevel >= 1) {
 		G4cout << "Energy is " << particle_energy << G4endl;

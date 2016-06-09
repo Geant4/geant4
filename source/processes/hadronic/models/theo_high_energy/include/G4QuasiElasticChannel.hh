@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.hh,v 1.2 2008-04-08 15:41:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Author : Gunter Folger March 2007

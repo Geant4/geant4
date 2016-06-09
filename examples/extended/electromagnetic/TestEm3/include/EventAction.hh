@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.10 2006-06-29 16:51:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,36 +40,34 @@
 
 class RunAction;
 class EventActionMessenger;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*, HistoManager*);
+    EventAction(DetectorConstruction*, RunAction*);
    ~EventAction();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
+    void SetDrawFlag   (G4String val)  {fDrawFlag    = val;};
+    void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
     void SumEnergy(G4int k, G4double de, G4double dl)
-        {energyDeposit[k] += de; trackLengthCh[k] += dl;};  	
+        {fEnergyDeposit[k] += de; fTrackLengthCh[k] += dl;};          
         
   private:  
-    DetectorConstruction* detector;
-    RunAction*            runAct;
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAct;
     
-    G4double              energyDeposit[MaxAbsor];
-    G4double              trackLengthCh[MaxAbsor];
+    G4double              fEnergyDeposit[MaxAbsor];
+    G4double              fTrackLengthCh[MaxAbsor];
         
-    G4String              drawFlag; 
-    G4int                 printModulo;         
-    EventActionMessenger* eventMessenger;
-    HistoManager*         histoManager;
+    G4String              fDrawFlag; 
+    G4int                 fPrintModulo;         
+    EventActionMessenger* fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

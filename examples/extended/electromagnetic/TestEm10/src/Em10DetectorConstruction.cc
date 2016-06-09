@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10DetectorConstruction.cc
+/// \brief Implementation of the Em10DetectorConstruction class
 //
-// $Id: Em10DetectorConstruction.cc,v 1.32 2007-07-27 17:52:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -56,6 +58,7 @@
 #include "G4Colour.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -217,10 +220,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");        
                                    
-  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 fLogicWorld, 0,  false, 0);			
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",                
+                                 fLogicWorld, 0,  false, 0);                        
 
   // TR radiator envelope
 
@@ -232,23 +235,23 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
                               1.1*fAbsorberRadius,  0.5*fRadThick ); 
                          
   fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
-                                       "Radiator");	       
+                                       "Radiator");               
                                    
   fPhysicsRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,fRadZ),	        
-                                     "Radiator", fLogicRadiator,		
-                                     fPhysicsWorld, false,	0 ); 
+                                     G4ThreeVector(0,0,fRadZ),                
+                                     "Radiator", fLogicRadiator,                
+                                     fPhysicsWorld, false,        0 ); 
 
   // create region for window inside windowR for
 
   if( fRadRegion != 0 ) delete fRadRegion; 
   if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
                                fRadRegion->AddRootLogicalVolume(fLogicRadiator);                
- 	
+         
 
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
-      			                  
+                                                
   //  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
   //                                        fAbsorberRadius+0.001,
   //                                        fWindowThick/2.+0.001  ); 
@@ -256,11 +259,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
   //  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
   //                                   fWorldMaterial, "WindowR");
  
-  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,                   
   //                      G4ThreeVector(0.,0.,fWindowZ),        
   //                            "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
-      			                  
+                                                
   //  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
   //                                 fAbsorberRadius, fWindowThick/2.); 
                           
@@ -279,12 +282,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 
   fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
 
-  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
+  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,                
                                  fAbsorberRadius, fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
+                                                "Absorber");     
+                                                
   fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
                                         fPhysicsWorld,  false,  0);                
@@ -419,10 +422,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 
   fSolidWorld = new G4Box("World", fWorldSizeR, fWorldSizeR, fWorldSizeZ/2.);
                          
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");        
                                    
-  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 fLogicWorld, 0,  false, 0);			
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",                
+                                 fLogicWorld, 0,  false, 0);                        
 
   // TR radiator envelope
 
@@ -438,19 +441,19 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
                               1.1*fAbsorberRadius,  0.5*fRadThick ); 
                          
   fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
-                                       "Radiator");	       
+                                       "Radiator");               
                                    
   fPhysicsRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,fRadZ),	        
-                                     "Radiator", fLogicRadiator,		
-                                     fPhysicsWorld, false,	0 ); 
+                                     G4ThreeVector(0,0,fRadZ),                
+                                     "Radiator", fLogicRadiator,                
+                                     fPhysicsWorld, false,        0 ); 
 
   // create region for radiator
 
   if( fRadRegion != 0 ) delete fRadRegion; 
   if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
                                fRadRegion->AddRootLogicalVolume(fLogicRadiator);                 
- 	
+         
   // Drift Electrode on both sides of Radiator:
 
   G4double zElectrode1 = fRadZ - fRadThick/2. - fElectrodeThick/2.; 
@@ -582,15 +585,15 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 
 
   fSolidAbsorber = new G4Box("Absorber", 
-			     fAbsorberRadius, 
+                             fAbsorberRadius, 
                              // fAbsorberRadius, 
-			     // 10.*mm,
+                             // 10.*mm,
                              10.*mm,
                              fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
+                                                "Absorber");     
+                                                
   fPhysicsAbsorber = new G4PVPlacement(0, 
                          G4ThreeVector(0., 0., fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
@@ -727,10 +730,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");        
                                    
-  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 fLogicWorld, 0,  false, 0);			
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",                
+                                 fLogicWorld, 0,  false, 0);                        
 
   // TR radiator envelope
 
@@ -745,19 +748,19 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
                               1.1*fAbsorberRadius,  0.5*fRadThick ); 
                          
   fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
-                                       "Radiator");	       
+                                       "Radiator");               
                                    
   fPhysicsRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,fRadZ),	        
-                                     "Radiator", fLogicRadiator,		
-                                     fPhysicsWorld, false,	0 ); 
+                                     G4ThreeVector(0,0,fRadZ),                
+                                     "Radiator", fLogicRadiator,                
+                                     fPhysicsWorld, false,        0 ); 
 
   // create region for radiator
 
   if( fRadRegion != 0 ) delete fRadRegion; 
   if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
                                fRadRegion->AddRootLogicalVolume(fLogicRadiator);                   
- 	
+         
   // Drift Electrode on both sides of Radiator:
 
   //  G4Box* solidElectrode = new G4Box("Electrode",fAbsorberRadius*1.1,
@@ -883,13 +886,13 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 
 
   fSolidAbsorber = new G4Box("Absorber", 
-			     // fAbsorberRadius, fAbsorberRadius, 
-			     10.*mm,10.*mm,
+                             // fAbsorberRadius, fAbsorberRadius, 
+                             10.*mm,10.*mm,
                               fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
+                                                "Absorber");     
+                                                
   fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
                                         fPhysicsWorld,  false,  0);                
@@ -989,10 +992,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpHarris73()
 
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");        
                                    
-  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 fLogicWorld, 0,  false, 0);			
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",                
+                                 fLogicWorld, 0,  false, 0);                        
 
   // TR radiator envelope
 
@@ -1004,23 +1007,23 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpHarris73()
                               1.1*fAbsorberRadius,  0.5*fRadThick ); 
                          
   fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
-                                       "Radiator");	       
+                                       "Radiator");               
                                    
   fPhysicsRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,fRadZ),	        
-                                     "Radiator", fLogicRadiator,		
-                                     fPhysicsWorld, false,	0 ); 
+                                     G4ThreeVector(0,0,fRadZ),                
+                                     "Radiator", fLogicRadiator,                
+                                     fPhysicsWorld, false,        0 ); 
 
   // create region for window inside windowR for
 
   if( fRadRegion != 0 ) delete fRadRegion; 
   if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
                                fRadRegion->AddRootLogicalVolume(fLogicRadiator);                   
- 	
+         
 
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
-      			                  
+                                                
   // G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
   //                                        fAbsorberRadius+0.001,
   //                                        fWindowThick/2.+0.001  ); 
@@ -1028,11 +1031,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpHarris73()
   //  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
   //                                    fWorldMaterial, "WindowR");
  
-  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,                   
   //                       G4ThreeVector(0.,0.,fWindowZ),        
   //                             "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
-      			                  
+                                                
   // G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
   //                                  fAbsorberRadius, fWindowThick/2.); 
                           
@@ -1051,12 +1054,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpHarris73()
 
   fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
 
-  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
+  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,                
                                  fAbsorberRadius, fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
+                                                "Absorber");     
+                                                
   fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
                                         fPhysicsWorld,  false,  0);                
@@ -1158,10 +1161,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpWatase86()
 
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");        
                                    
-  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 fLogicWorld, 0,  false, 0);			
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",                
+                                 fLogicWorld, 0,  false, 0);                        
 
   // TR radiator envelope
 
@@ -1173,23 +1176,23 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpWatase86()
                               1.1*fAbsorberRadius,  0.5*fRadThick ); 
                          
   fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
-                                       "Radiator");	       
+                                       "Radiator");               
                                    
   fPhysicsRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,fRadZ),	        
-                                     "Radiator", fLogicRadiator,		
-                                     fPhysicsWorld, false,	0 ); 
+                                     G4ThreeVector(0,0,fRadZ),                
+                                     "Radiator", fLogicRadiator,                
+                                     fPhysicsWorld, false,        0 ); 
 
   // create region for window inside windowR for
 
   if( fRadRegion != 0 ) delete fRadRegion; 
   if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
                                fRadRegion->AddRootLogicalVolume(fLogicRadiator);                   
- 	
+         
 
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
-      			                  
+                                                
   // G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
   //                                         fAbsorberRadius+0.001,
   //                                         fWindowThick/2.+0.001  ); 
@@ -1197,11 +1200,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpWatase86()
   // G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
   //                                    fWorldMaterial, "WindowR");
  
-  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,                   
   //                    G4ThreeVector(0.,0.,fWindowZ),        
   //                          "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
-      			                  
+                                                
   // G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
   //                                 fAbsorberRadius, fWindowThick/2.); 
                           
@@ -1220,12 +1223,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpWatase86()
 
   fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
 
-  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
+  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,                
                                  fAbsorberRadius, fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
+                                                "Absorber");     
+                                                
   fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
                                         fPhysicsWorld,  false,  0);                
@@ -1327,10 +1330,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBarr90()
 
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");        
                                    
-  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 fLogicWorld, 0,  false, 0);			
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",                
+                                 fLogicWorld, 0,  false, 0);                        
 
   // TR radiator envelope
 
@@ -1342,23 +1345,23 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBarr90()
                               1.1*fAbsorberRadius,  0.5*fRadThick ); 
                          
   fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
-                                       "Radiator");	       
+                                       "Radiator");               
                                    
   fPhysicsRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,fRadZ),	        
-                                     "Radiator", fLogicRadiator,		
-                                     fPhysicsWorld, false,	0 ); 
+                                     G4ThreeVector(0,0,fRadZ),                
+                                     "Radiator", fLogicRadiator,                
+                                     fPhysicsWorld, false,        0 ); 
 
   // create region for window inside windowR for
 
   if( fRadRegion != 0 ) delete fRadRegion; 
   if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
                                fRadRegion->AddRootLogicalVolume(fLogicRadiator);                   
- 	
+         
 
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
-      			                  
+                                                
   // G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
   //                                         fAbsorberRadius+0.001,
   //                                         fWindowThick/2.+0.001  ); 
@@ -1366,11 +1369,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBarr90()
   // G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
   //                                    fWorldMaterial, "WindowR");
   //
-  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,                   
   //                       G4ThreeVector(0.,0.,fWindowZ),        
   //                             "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
-      			                  
+                                                
   // G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
   //                                 fAbsorberRadius, fWindowThick/2.); 
                           
@@ -1389,12 +1392,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBarr90()
 
   fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
 
-  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
+  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,                
                                  fAbsorberRadius, fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
+                                                "Absorber");     
+                                                
   fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
                                         fPhysicsWorld,  false,  0);                
@@ -1517,9 +1520,9 @@ void Em10DetectorConstruction::TestOld()
   //                                fGapThick/2.     ) ; 
                           
   // G4LogicalVolume* logicGap = new G4LogicalVolume(solidGap,fGapMat, "Gap"); 
-      			                  
-  // G4VPhysicalVolume*    physiGap = new G4PVPlacement(0,		   
-  // 		                       G4ThreeVector(0.,0.,zGap),        
+                                                
+  // G4VPhysicalVolume*    physiGap = new G4PVPlacement(0,                   
+  //                                        G4ThreeVector(0.,0.,zGap),        
   //                                    "Gap",logicGap,physiWorld,false,0); 
 
 
@@ -1528,9 +1531,9 @@ void Em10DetectorConstruction::TestOld()
                           
   // G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
   //                                     fElectrodeMat, "Electrode"); 
-      			                  
-  //  G4VPhysicalVolume*    physiElectrode = new G4PVPlacement(0,		   
-  //  		                       G4ThreeVector(0.,0.,zElectrode),        
+                                                
+  //  G4VPhysicalVolume*    physiElectrode = new G4PVPlacement(0,                   
+  //                                         G4ThreeVector(0.,0.,zElectrode),        
   //                                    "Electrode",logicElectrode,
   //                                     physiWorld,false,0);    
     //  if(solidAbsorber) delete solidAbsorber ;
@@ -1749,9 +1752,9 @@ void Em10DetectorConstruction::SetMagField(G4double)
   G4FieldManager* fieldMgr 
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if(magField) delete magField;		//delete the existing magn field
+  if(magField) delete magField;                //delete the existing magn field
   
-  if(fieldValue!=0.)			// create a new one if non nul
+  if(fieldValue!=0.)                        // create a new one if non nul
   { 
     magField = new G4UniformMagField(G4ThreeVector(fieldValue,0.,0.));        
     fieldMgr->SetDetectorField(magField);

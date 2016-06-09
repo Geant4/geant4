@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/Hadr02.cc
+/// \brief Main program of the hadronic/Hadr02 example
 //
-// $Id: hadr00.cc,v 1.4 2010-05-27 18:09:56 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------
-//      GEANT4 hadr00
+//      GEANT4 Hadr02
 //
 //  Application demonstrating Geant4 hadronic cross sections
 //
@@ -64,6 +65,7 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "UrQMD.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
@@ -89,17 +91,17 @@ int main(int argc,char** argv) {
     char* path = getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
-  phys = factory.GetReferencePhysList(physName); 
+  if ( physName == "UrQMD" ) { phys = new UrQMD; }
+  else { phys = factory.GetReferencePhysList(physName); }
 
   // Physics List is defined via environment variable PHYSLIST
   if(!phys) {
     G4cout << "Hadr02 FATAL ERROR: Physics List is not defined"
-	   << G4endl;
+           << G4endl;
     return 1;
   }
   runManager->SetUserInitialization(phys);
   HistoManager::GetPointer()->SetPhysicsList(phys);
-  HistoManager::GetPointer()->SetPhysicsListName(physName);
 
   runManager->SetUserAction(new PrimaryGeneratorAction());
 

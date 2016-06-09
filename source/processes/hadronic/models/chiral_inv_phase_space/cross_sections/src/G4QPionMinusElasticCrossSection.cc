@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPionMinusElasticCrossSection.cc,v 1.3 2010-02-16 07:53:05 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QPionMinusElasticCrossSection for pA elastic cross sections
@@ -44,6 +43,7 @@
 //#define sdebug
 
 #include "G4QPionMinusElasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static parameters
 const G4int G4QPionMinusElasticCrossSection::nPoints=128;//#ofPt in AMDB table(>anyPar)(D)
@@ -1098,8 +1098,8 @@ G4double G4QPionMinusElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int t
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mPi2)+mPi2+mt*mt;    // Mondelstam s
-    return dmt*dmt*pP2/s;
+    G4double s_value=dmt*std::sqrt(pP2+mPi2)+mPi2+mt*mt;    // Mondelstam s
+    return dmt*dmt*pP2/s_value;
   }
   else
   {

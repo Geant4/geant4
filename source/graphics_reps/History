@@ -17,6 +17,84 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st October 2012  John Allison (greps-V09-05-14)
+- G4DimensionedType: Another attempt to keep compilers happy:
+  o Created G4DimensionedType.cc.
+  o Moved "Helper class" HasName and utility function GetUnitValue from
+    G4DimensionedType.hh to G4DimensionedTypeUtils.cc inside a new
+    namespace, G4DimensionedTypeUtils.
+
+27th September 2012  John Allison (greps-V09-05-13)
+- G4DimensionedType.hh:
+  o Reverted to r53697.
+  o The last 3 tags cure the clang warning but cause run-time problems with
+    x86_64-slc5-gcc43-staticlibs
+
+25th September 2012  John Allison (greps-V09-05-12)
+- G4DimensionedType.hh: using namespace G4DimensionedTypeNameSpace, but changed
+  the name of the function to GetTheUnitValue (there is another GetUnitValue elsewhere).
+
+19th September 2012  John Allison (greps-V09-05-11)
+- G4DimensionedType.hh: Specifically defined G4DimensionedTypeNameSpace::GetUnitValue,
+  which keeps clang happy.  Hopefully other compilers too.
+
+15th August 2012  John Allison (greps-V09-05-10)
+- G4DimensionedType.hh: Introduced G4DimensionedTypeNameSpace to replace an
+  un-name namespace to keep the clang compiler happy and improve the lives
+  of system testers.
+
+June 11, 2012 G.Cosmo (greps-V09-05-09)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+29th May 2012  John Allison  (greps-V09-05-08)
+- G4VisExtent: Cached radius and centre for improved efficiency.
+
+24th May 2012  Gabriele Cosmo  (greps-V09-05-07)
+- Fixed trivial cases of variable shadowing.
+
+23rd March 2012  John Allison  (greps-V09-05-06)
+- G4Colour: Added brown (colour of G4 logo).
+- G4Text: Added operator<<(...,G4Text::Layout).  This produces meaningful
+  word instead of the integer value of the enumerator.
+
+7th February 2012  John Allison  (greps-V09-05-05)
+- G4VisAttributes:
+  o Added copy constructor and assignment operator.
+- G4Visible.cc:
+  o Fixed bug in copy constructor and assignment operator.
+
+4th February 2012  John Allison  (greps-V09-05-04)
+- Added G4Text::G4Text(const G4Text& text) (copy contructor).
+- Added G4Text& operator=(const G4Text& text) (assignment operator).
+
+1st February 2012  John Allison  (greps-V09-05-03)
+- BooleanProcessor.src:
+  o Explicit conversion from size_t to int when using ExtEdge constructor.
+
+30th December 2011  John Allison  (greps-V09-05-02)
+- G4VVisManager.hh: Improved comments for Added Begin/EndDraw(2D).
+
+28th December 2011  John Allison  (greps-V09-05-01)
+- G4VVisManager.hh: Added Begin/EndDraw(2D), optional methods for
+  bracketing Draw methods to improve drawing speed.
+
+15th December 2011  John Allison  (greps-V09-05-00)
+- G4Colour.hh: Cosmetics.
+- Tagged.
+
+8th December 2011  John Allison
+- G4Visible.hh: Cosmetic improvement to comments.
+- G4NURBS.cc: G4Exception id's changed to 900x.
+- HepPolyhedron.cc: G4Exception id's changed to 100x.
+
+17th November 2011  John Allison
+- G4Colour: operator<<:
+  o Added colour name if in colour map, e.g., (1,0,0,1) (red).
+- BooleanProcessor.src: Saved one instruction.
+  o No need to evaluate "point *= (1./nnode)" unless nnode > 1.
+  o (Also suppresses Coverity warning about division by zero.)
+
 11th November 2011  John Allison  (greps-V09-04-10)
 - Fixed most Coverity warnings.
 

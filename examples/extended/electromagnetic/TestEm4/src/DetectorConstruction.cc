@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm4/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc,v 1.3 2006-06-29 16:53:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +39,7 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,21 +78,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double Rmin=0., Rmax=5*cm, deltaZ= 5*cm, Phimin=0., deltaPhi=360*degree;
 
   G4Tubs*  
-  solidWorld = new G4Tubs("C6F6",			//its name
-                   Rmin,Rmax,deltaZ,Phimin,deltaPhi);	//its size
+  solidWorld = new G4Tubs("C6F6",                        //its name
+                   Rmin,Rmax,deltaZ,Phimin,deltaPhi);        //its size
 
   G4LogicalVolume*                         
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   C6F6,		//its material
-                                   "C6F6");		//its name
+  logicWorld = new G4LogicalVolume(solidWorld,                //its solid
+                                   C6F6,                //its material
+                                   "C6F6");                //its name
   G4VPhysicalVolume*                                   
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume
-                                 "C6F6",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  physiWorld = new G4PVPlacement(0,                        //no rotation
+                                   G4ThreeVector(),        //at (0,0,0)
+                                 logicWorld,                //its logical volume
+                                 "C6F6",                //its name
+                                 0,                        //its mother  volume
+                                 false,                        //no boolean operation
+                                 0);                        //copy number
 
   //
   //always return the physical World

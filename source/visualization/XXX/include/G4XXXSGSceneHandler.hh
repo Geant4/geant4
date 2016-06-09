@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.hh,v 1.4 2009-10-21 15:28:53 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  10th March 2006
@@ -48,10 +47,10 @@ namespace JA {
 
   struct Node {
     Node(PVNodeID pvNodeID = PVNodeID(), G4int index = -1):
-      pvNodeID(pvNodeID), index(index) {}
-    PVNodeID pvNodeID;
-    G4int index;
-    std::vector<Node*> daughters;
+      fPVNodeID(pvNodeID), fIndex(index) {}
+    PVNodeID fPVNodeID;
+    G4int fIndex;
+    std::vector<Node*> fDaughters;
   };
 
   void Insert(const PVNodeID* pvPath, size_t pathLength,

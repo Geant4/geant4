@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/include/OlapManagerMessenger.hh
+/// \brief Definition of the OlapManagerMessenger class
 //
-// $Id: OlapManagerMessenger.hh,v 1.2 2006-06-29 17:22:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

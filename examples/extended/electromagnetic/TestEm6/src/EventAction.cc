@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.8 2010-06-07 05:40:46 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm6/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,16 +43,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:drawFlag("none"),printModulo(10000),eventMessenger(0)
+:fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +62,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
  
  //printing survey
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 }
 

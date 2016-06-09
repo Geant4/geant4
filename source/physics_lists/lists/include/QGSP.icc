@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.13 2010-11-18 14:57:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -43,11 +42,14 @@
 // 27.11.2009 G.Folger: Mark as obsolete
 // 04.06.2010 G.Folger: Mark as replaced, use new ctor for Builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -55,14 +57,12 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -74,13 +74,13 @@
 template<class T> TQGSP<T>::TQGSP(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+  // defaultCutValue = 1.0*CLHEP::mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP 3.4"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP 4.0"<<G4endl;
   G4cout <<G4endl;
 
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
@@ -102,7 +102,7 @@ template<class T> TQGSP<T>::TQGSP(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

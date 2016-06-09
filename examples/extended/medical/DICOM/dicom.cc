@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/DICOM.cc
+/// \brief Main program of the medical/DICOM example
+//
 // The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//        *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca
 //      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
@@ -45,8 +48,8 @@
 
 #include "DicomPhysicsList.hh"
 
-#include "RegularDicomDetectorConstruction.hh"
-#include "NestedParamDicomDetectorConstruction.hh"
+#include "DicomRegularDetectorConstruction.hh"
+#include "DicomNestedParamDetectorConstruction.hh"
 #include "DicomPartialDetectorConstruction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
@@ -67,7 +70,7 @@
 int main(int argc,char** argv)
 {
 
-  new G4tgrMessenger;				
+  new G4tgrMessenger;                                
   char* part = getenv( "DICOM_PARTIAL_PARAM" );
   G4bool bPartial = FALSE;
   if( part && G4String(part) == "1" ) {
@@ -86,9 +89,9 @@ int main(int argc,char** argv)
     // Initialisation of physics, geometry, primary particles ... 
     char* nest = getenv( "DICOM_NESTED_PARAM" );
     if( nest && G4String(nest) == "1" ) {
-      theGeometry = new NestedParamDicomDetectorConstruction();
+      theGeometry = new DicomNestedParamDetectorConstruction();
     } else {
-      theGeometry = new RegularDicomDetectorConstruction();
+      theGeometry = new DicomRegularDetectorConstruction();
     }
   } else {
     theGeometry = new DicomPartialDetectorConstruction();

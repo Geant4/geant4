@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4TrackList.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -55,10 +56,10 @@ struct _ListRef
 {
     friend class G4TrackList ;
 protected :
-    inline _ListRef(G4TrackList* __list) :fTrackList(__list)
+    inline _ListRef(G4TrackList* __list) :fpTrackList(__list)
     {;}
 
-    G4TrackList* fTrackList;
+    G4TrackList* fpTrackList;
 };
 
 /**
@@ -73,9 +74,9 @@ class G4TrackListNode
     friend class G4TrackList;
 
 public :
-    G4Track* GetTrack() { return fTrack; }
-    G4TrackListNode* GetNext() { return fNext;}
-    G4TrackListNode* GetPrevious() { return fPrevious;}
+    G4Track* GetTrack() { return fpTrack; }
+    G4TrackListNode* GetNext() { return fpNext;}
+    G4TrackListNode* GetPrevious() { return fpPrevious;}
     bool IsAttached() { return fAttachedToList;}
 
 protected:
@@ -83,15 +84,15 @@ protected:
     G4TrackListNode(G4Track* track= 0);
     /** Default destructor */
     ~G4TrackListNode();
-    void SetNext(G4TrackListNode* node) { fNext = node;}
-    void SetPrevious(G4TrackListNode* node) { fPrevious = node;}
+    void SetNext(G4TrackListNode* node) { fpNext = node;}
+    void SetPrevious(G4TrackListNode* node) { fpPrevious = node;}
     void SetAttachedToList(bool flag) { fAttachedToList = flag;}
 
     bool fAttachedToList;
     G4ReferenceCountedHandle<_ListRef> fListRef;
-    G4Track*         fTrack;
-    G4TrackListNode* fPrevious;
-    G4TrackListNode* fNext;
+    G4Track*         fpTrack;
+    G4TrackListNode* fpPrevious;
+    G4TrackListNode* fpNext;
 };
 
 struct G4TrackList_iterator ;
@@ -106,8 +107,8 @@ class G4TrackList
 {
 private :
     G4int                               fNbTracks;
-    G4TrackListNode *                   fStart;
-    G4TrackListNode *                   fFinish;
+    G4TrackListNode *                   fpStart;
+    G4TrackListNode *                   fpFinish;
     G4ReferenceCountedHandle<_ListRef>  fListRef;
 
     G4TrackListNode fBoundary;
@@ -124,7 +125,7 @@ public:
     inline G4Track* back()
     {
         if(fNbTracks != 0)
-            return fFinish->GetTrack();
+            return fpFinish->GetTrack();
         else return 0 ;
     }
     inline G4int size() const
@@ -197,14 +198,14 @@ struct G4TrackList_iterator
     typedef G4TrackListNode                          _Node;
 
     G4TrackList_iterator()
-        : fNode() { }
+        : fpNode() { }
 
     explicit
     G4TrackList_iterator(_Node* __x)
-        : fNode(__x) { }
+        : fpNode(__x) { }
 
     _Node* GetNode()
-    { return fNode; }
+    { return fpNode; }
 
     G4Track*
     operator*();
@@ -221,7 +222,7 @@ struct G4TrackList_iterator
     _Self&
     operator++()
     {
-        fNode = fNode->GetNext();
+        fpNode = fpNode->GetNext();
         return *this;
     }
 
@@ -229,14 +230,14 @@ struct G4TrackList_iterator
     operator++(int)
     {
         _Self __tmp = *this;
-        fNode = fNode->GetNext();
+        fpNode = fpNode->GetNext();
         return __tmp;
     }
 
     _Self&
     operator--()
     {
-        fNode = fNode->GetPrevious();
+        fpNode = fpNode->GetPrevious();
         return *this;
     }
 
@@ -244,23 +245,23 @@ struct G4TrackList_iterator
     operator--(int)
     {
         _Self __tmp = *this;
-        fNode = fNode->GetPrevious();
+        fpNode = fpNode->GetPrevious();
         return __tmp;
     }
 
     bool
     operator==(const _Self& __x) const
-    { return (fNode == __x.fNode); }
+    { return (fpNode == __x.fpNode); }
 
     bool
     operator!=(const _Self& __x) const
     {
-        return (fNode != __x.fNode);
+        return (fpNode != __x.fpNode);
     }
 
 private:
     // The only member points to the G4TrackList_iterator element.
-    _Node* fNode;
+    _Node* fpNode;
 };
 
 inline bool G4TrackList::empty() const
@@ -268,7 +269,7 @@ inline bool G4TrackList::empty() const
 
 
 inline G4TrackList::iterator G4TrackList::begin()
-{ return iterator(fStart); }
+{ return iterator(fpStart); }
 
 inline G4TrackList::iterator G4TrackList::end()
 { return iterator( &(fBoundary) ); }

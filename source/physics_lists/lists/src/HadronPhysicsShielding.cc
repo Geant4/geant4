@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsShielding.cc,v 1.1 2010-06-08 16:06:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -37,11 +36,13 @@
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "HadronPhysicsShielding.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
@@ -49,18 +50,66 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4NeutronHPBGGNucleonInelasticXS.hh"
 #include "G4NeutronHPJENDLHEInelasticData.hh"
+#include "G4NeutronHPInelasticData.hh"
+
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4PhysListUtil.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsShielding);
+
 HadronPhysicsShielding::HadronPhysicsShielding( G4int )
-                    :  G4VPhysicsConstructor("hInelastic Shielding")
-		     , QuasiElastic(false)
-                    , useLEND(false)
+    :  G4VPhysicsConstructor("hInelastic Shielding")
+    , theNeutrons(0)
+    , theLENeutron(0)
+    , theBertiniNeutron(0)
+    , theFTFPNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theBertiniPiK(0)
+    , theFTFPPiK(0)
+    , thePro(0)
+    , theBertiniPro(0)
+    , theFTFPPro(0)
+    , theMiscCHIPS(0)
+    , QuasiElastic(false)
+    , theCHIPSInelastic(0)
+    , BGGxsNeutron(0)
+    , NeutronHPJENDLHEInelastic(0)
+    , BGGxsProton(0)
+    , useLEND(false)
+    , evaluation()
 {}
 
 HadronPhysicsShielding::HadronPhysicsShielding(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
-                    , useLEND(false)
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLENeutron(0)
+    , theBertiniNeutron(0)
+    , theFTFPNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theBertiniPiK(0)
+    , theFTFPPiK(0)
+    , thePro(0)
+    , theBertiniPro(0)
+    , theFTFPPro(0)
+    , theMiscCHIPS(0)
+    , QuasiElastic(quasiElastic)
+    , theCHIPSInelastic(0)
+    , BGGxsNeutron(0)
+    , NeutronHPJENDLHEInelastic(0)
+    , BGGxsProton(0)
+    , useLEND(false)
+    , evaluation()
 {}
 
 #include "G4NeutronLENDBuilder.hh"
@@ -79,7 +128,7 @@ void HadronPhysicsShielding::CreateModels()
   theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
   //theNeutrons->RegisterMe(theHPNeutron=new G4NeutronHPBuilder);
 
-  if ( useLEND != true )
+    if ( useLEND != true )
      theNeutrons->RegisterMe(theLENeutron=new G4NeutronHPBuilder);
   else
   {
@@ -140,45 +189,32 @@ void HadronPhysicsShielding::ConstructParticle()
 void HadronPhysicsShielding::ConstructProcess()
 {
   CreateModels();
-  theNeutrons->Build();
-  BGGxsNeutron=new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()); 
-  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(BGGxsNeutron);
 
-  NeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
-  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(NeutronHPJENDLHEInelastic);
-
+  //BGGxsNeutron=new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()); 
   thePro->Build();
-  BGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
-  FindInelasticProcess(G4Proton::Proton())->AddDataSet(BGGxsProton);
+  theNeutrons->Build();
+    
+//  BGGxsNeutron=new  G4NeutronHPBGGNucleonInelasticXS(G4Neutron::Neutron());
+//  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(BGGxsNeutron);
+//
+
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
+  NeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(NeutronHPJENDLHEInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4NeutronHPInelasticData);
+    
+//  BGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
+//  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(BGGxsProton);
 
   thePiK->Build();
   // use CHIPS cross sections also for Kaons
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
   
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+  G4CrossSectionDataSetRegistry* registry = G4CrossSectionDataSetRegistry::Instance();
+    
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 
   theMiscCHIPS->Build();
 }
-
-G4HadronicProcess* 
-HadronPhysicsShielding::FindInelasticProcess(const G4ParticleDefinition* p)
-{
-  G4HadronicProcess* had = 0;
-  if(p) {
-     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
-     size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
-       }
-     }
-  }
-  return had;
-}
-

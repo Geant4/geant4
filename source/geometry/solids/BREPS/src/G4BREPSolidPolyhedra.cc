@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.40 2010-11-01 16:43:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -62,10 +61,12 @@
 //   constructor of the input arguments (i.e. circumscribed radius).
 // ----------------------------------------------------------------------
 
-#include "G4BREPSolidPolyhedra.hh"
-#include "G4FPlane.hh"
-
 #include <sstream>
+
+#include "G4BREPSolidPolyhedra.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4FPlane.hh"
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                                                  G4double  start_angle,

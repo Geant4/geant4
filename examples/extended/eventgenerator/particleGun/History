@@ -12,7 +12,37 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+17-11-12 I. Hrivnacova (particleGunExample-V09-05-05)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+13-11-12 I. Hrivnacova (particleGunExample-V09-05-04)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
      
+26-03-12 mma (particleGunExample-V09-05-03)
+- all classes : apply G4 coding conventions
+     
+14-02-12 mma (particleGunExample-V09-05-02)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+      
+16-01-12 mma (particleGunExample-V09-05-01) 
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)
+- HistoManager and HistoMessenger : coding conventions
+- Functions Normalize() and saveAscii() re-activated
+       
+11-01-12 mma (particleGunExample-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- Functions Normalize() and saveAscii() temporarily empty  
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+      
 08-11-11 mma (particleGunExample-V09-04-01)
 - modify SteppingVerbose for OutOfWorld
           

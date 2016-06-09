@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.20 2010-01-24 17:25:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,18 +56,21 @@ class RunAction : public G4UserRunAction
 {
 public:
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-  ~RunAction();
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+ ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
 
-  void fillPerEvent(G4int,G4double,G4double);
+  void FillPerEvent(G4int,G4double,G4double);
     
-  void sumEnergyFlow(G4int plane, G4double Eflow)
-                                            {EnergyFlow[plane]  += Eflow;};
-  void sumLateralEleak(G4int cell, G4double Eflow)
-                                            {lateralEleak[cell] += Eflow;};
+  void SumEnergyFlow(G4int plane, G4double Eflow)
+                                            {fEnergyFlow[plane]  += Eflow;};
+  void SumLateralEleak(G4int cell, G4double Eflow)
+                                            {fLateralEleak[cell] += Eflow;};
+
+  void AddChargedStep() { fChargedStep += 1.0; }
+  void AddNeutralStep() { fNeutralStep += 1.0; }
     
   void PrintDedxTables();
 
@@ -73,34 +78,37 @@ public:
     
   // Acceptance parameters
   void     SetEdepAndRMS(G4int, G4double, G4double, G4double);
-  G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
-  G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
-  G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
-  void     SetApplyLimit(G4bool val)        {applyLimit = val;};
+  G4double GetAverageEdep(G4int i) const    {return fEdeptrue[i];};
+  G4double GetRMSEdep(G4int i) const        {return fRmstrue[i];};
+  G4double GetLimitEdep(G4int i) const      {return fLimittrue[i];};
+  void     SetApplyLimit(G4bool val)        {fApplyLimit = val;};
 
 private:
   
-  DetectorConstruction*   Detector;
-  PrimaryGeneratorAction* Primary;    
-  RunActionMessenger*     runMessenger;
-  HistoManager*           histoManager;
+  DetectorConstruction*   fDetector;
+  PrimaryGeneratorAction* fPrimary;    
+  RunActionMessenger*     fRunMessenger;
+  HistoManager*           fHistoManager;
 
-  G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
-  G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
+  G4double fSumEAbs [MaxAbsor], fSum2EAbs [MaxAbsor]; 
+  G4double fSumLAbs [MaxAbsor], fSum2LAbs [MaxAbsor];
     
-  std::vector<G4double> EnergyFlow;
-  std::vector<G4double> lateralEleak;
-  std::vector<G4double> energyDeposit[MaxAbsor];
+  std::vector<G4double> fEnergyFlow;
+  std::vector<G4double> fLateralEleak;
+  std::vector<G4double> fEnergyDeposit[MaxAbsor];
     
-  G4double edeptrue [MaxAbsor];
-  G4double rmstrue  [MaxAbsor];
-  G4double limittrue[MaxAbsor];
+  G4double fEdeptrue [MaxAbsor];
+  G4double fRmstrue  [MaxAbsor];
+  G4double fLimittrue[MaxAbsor];
 
-  G4int  n_gamma;
-  G4int  n_elec;
-  G4int  n_pos;
+  G4double fChargedStep;
+  G4double fNeutralStep;
 
-  G4bool applyLimit;
+  G4int  fN_gamma;
+  G4int  fN_elec;
+  G4int  fN_pos;
+
+  G4bool fApplyLimit;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

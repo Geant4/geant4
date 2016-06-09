@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.cc,v 1.11 2006-11-14 07:11:19 perl Exp $
+/// \file analysis/A01/src/A01HodoscopeHit.cc
+/// \brief Implementation of the A01HodoscopeHit class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01HodoscopeHit.hh"
@@ -36,15 +39,16 @@
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 G4Allocator<A01HodoscopeHit> A01HodoscopeHitAllocator;
 
 A01HodoscopeHit::A01HodoscopeHit(G4int i,G4double t)
 {
-  id = i;
-  time = t;
-  pLogV = 0;
+  fId = i;
+  fTime = t;
+  fPLogV = 0;
 }
 
 A01HodoscopeHit::~A01HodoscopeHit()
@@ -52,20 +56,20 @@ A01HodoscopeHit::~A01HodoscopeHit()
 
 A01HodoscopeHit::A01HodoscopeHit(const A01HodoscopeHit &right)
     : G4VHit() {
-  id = right.id;
-  time = right.time;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
+  fId = right.fId;
+  fTime = right.fTime;
+  fPos = right.fPos;
+  fRot = right.fRot;
+  fPLogV = right.fPLogV;
 }
 
 const A01HodoscopeHit& A01HodoscopeHit::operator=(const A01HodoscopeHit &right)
 {
-  id = right.id;
-  time = right.time;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
+  fId = right.fId;
+  fTime = right.fTime;
+  fPos = right.fPos;
+  fRot = right.fRot;
+  fPLogV = right.fPLogV;
   return *this;
 }
 
@@ -79,14 +83,14 @@ void A01HodoscopeHit::Draw()
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Transform3D trans(rot.inverse(),pos);
+    G4Transform3D trans(fRot.inverse(),fPos);
     G4VisAttributes attribs;
-    const G4VisAttributes* pVA = pLogV->GetVisAttributes();
+    const G4VisAttributes* pVA = fPLogV->GetVisAttributes();
     if(pVA) attribs = *pVA;
     G4Colour colour(0.,1.,1.);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*pLogV,attribs,trans);
+    pVVisManager->Draw(*fPLogV,attribs,trans);
   }
 }
 
@@ -107,7 +111,7 @@ const std::map<G4String,G4AttDef>* A01HodoscopeHit::GetAttDefs() const
 
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+                      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String LVol("LVol");
     (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Physics","","G4String");
@@ -122,17 +126,17 @@ std::vector<G4AttValue>* A01HodoscopeHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","HodoscopeHit",""));
 
   values->push_back
-    (G4AttValue("ID",G4UIcommand::ConvertToString(id),""));
+    (G4AttValue("ID",G4UIcommand::ConvertToString(fId),""));
 
   values->push_back
-    (G4AttValue("Time",G4BestUnit(time,"Time"),""));
+    (G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
 
   values->push_back
-    (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
+    (G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
 
-  if (pLogV)
+  if (fPLogV)
     values->push_back
-      (G4AttValue("LVol",pLogV->GetName(),""));
+      (G4AttValue("LVol",fPLogV->GetName(),""));
   else
     values->push_back
       (G4AttValue("LVol"," ",""));
@@ -142,7 +146,7 @@ std::vector<G4AttValue>* A01HodoscopeHit::CreateAttValues() const
 
 void A01HodoscopeHit::Print()
 {
-    G4cout << "  Hodoscope[" << id << "] " << time/ns << " (nsec)" << G4endl;
+    G4cout << "  Hodoscope[" << fId << "] " << fTime/ns << " (nsec)" << G4endl;
 }
 
 

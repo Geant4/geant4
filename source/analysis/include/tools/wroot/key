@@ -146,8 +146,8 @@ public:
     short version = m_version;
     if(!a_wb.write(version)) return false;
     if(!a_wb.write(m_object_size)) return false;
-    unsigned int date = 0; //FIXME
-    if(!a_wb.write(date)) return false;
+    unsigned int _date = 0; //FIXME
+    if(!a_wb.write(_date)) return false;
     if(!a_wb.write(m_key_length)) return false;
     if(!a_wb.write(m_cycle)) return false;
     if(version>1000) {

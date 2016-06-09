@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmEnergyDeposition.hh
+/// \brief Definition of the exrdmEnergyDeposition class
+//
 #ifndef exrdmEnergyDeposition_h
 #define exrdmEnergyDeposition_h 1
 
@@ -43,16 +46,16 @@ class exrdmEnergyDeposition
     G4bool operator<=(const exrdmEnergyDeposition &right) const ;
   // Operators  
 
-  G4double GetEnergy() {return Energy;};
-  G4double GetTime() {return Time;};
-  G4double GetWeight() {return Weight;};
+  G4double GetEnergy() {return fEnergy;};
+  G4double GetTime() {return fTime;};
+  G4double GetWeight() {return fWeight;};
   // Accessors
 
   private:
 
-    G4double Energy;  
-    G4double Time;    
-    G4double Weight;
+    G4double fEnergy;  
+    G4double fTime;    
+    G4double fWeight;
 };
 #endif
 

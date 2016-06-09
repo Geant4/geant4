@@ -25,8 +25,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.12 2008-07-18 06:39:43 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef WIN32
 
@@ -111,7 +110,7 @@ G4UIsession* G4UIGainServer::SessionStart()
 }
 
 //////////////////////////////////////////////////
-void G4UIGainServer::PauseSessionStart(G4String msg)
+void G4UIGainServer::PauseSessionStart(const G4String& msg)
 //////////////////////////////////////////////////
 {
     promptCharacter = msg;
@@ -129,7 +128,7 @@ void G4UIGainServer::PauseSessionStart(G4String msg)
 }
 
 ////////////////////////////////////////////////////
-void G4UIGainServer::ExecuteCommand(G4String aCommand)
+void G4UIGainServer::ExecuteCommand(const G4String& aCommand)
 ////////////////////////////////////////////////////
 {
     if(aCommand.length()<2) return;
@@ -312,7 +311,7 @@ G4String G4UIGainServer::GetCommand()
 }
 
 //////////////////////////////////////////////////////
-G4int G4UIGainServer::ReceiveG4cout(G4String coutString)
+G4int G4UIGainServer::ReceiveG4cout(const G4String& coutString)
 //////////////////////////////////////////////////////
 {
     if(socketD[1]>0){
@@ -320,18 +319,12 @@ G4int G4UIGainServer::ReceiveG4cout(G4String coutString)
     }
     return 0;
 
-
-
-
-
-
-
   //std::cout << coutString << std::flush;
   //return 0;
 }
 
 //////////////////////////////////////////////////////
-G4int G4UIGainServer::ReceiveG4cerr(G4String cerrString)
+G4int G4UIGainServer::ReceiveG4cerr(const G4String& cerrString)
 //////////////////////////////////////////////////////
 {
     if(socketD[2]>0){
@@ -339,15 +332,13 @@ G4int G4UIGainServer::ReceiveG4cerr(G4String cerrString)
     }
     return 0;
 
-
-
   //std::cerr << cerrString << std::flush;
   //return 0;
 }
 
-///////////////////////////////////////////////
+/////////////////////////////////////////////////
 G4bool G4UIGainServer::GetHelpChoice(G4int& aInt)
-///////////////////////////////////////////////
+/////////////////////////////////////////////////
 {
     G4cin >> aInt;
     if(!G4cin.good()){
@@ -359,7 +350,7 @@ G4bool G4UIGainServer::GetHelpChoice(G4int& aInt)
 }
 
 /////////////////////////////
-void G4UIGainServer::ExitHelp()
+void G4UIGainServer::ExitHelp() const
 /////////////////////////////
 {
     char temp[100];
@@ -573,29 +564,29 @@ void G4UIGainServer::TerminalHelp(G4String newCommand){
     }
     floor[iFloor]->ListCurrentWithNum();
     while(1){
-        int i;
+        int j;
         G4cout<<G4endl <<"Type the number (0:end, -n:n level back) :"<<std::flush;
-        G4cin >> i;
+        G4cin >> j;
         if(!G4cin.good()){
             G4cin.clear();
             G4cin.ignore(30,'\n');
             G4cout<<G4endl <<"Not a number,once more"<<G4endl; continue;
         }
-        else if(i<0){
-            iFloor += i;
+        else if(j<0){
+            iFloor += j;
             if(iFloor <0) iFloor =0;
             floor[iFloor]->ListCurrentWithNum(); continue;
         }
-        else if(i==0){break;}
-        else if(i>0){
+        else if(j==0){break;}
+        else if(j>0){
             int n_tree = floor[iFloor]->GetTreeEntry();
-            if(i>n_tree){
-                if(i<=n_tree+floor[iFloor]->GetCommandEntry()){
-                    floor[iFloor]->GetCommand(i-n_tree)->List();
+            if(j>n_tree){
+                if(j<=n_tree+floor[iFloor]->GetCommandEntry()){
+                    floor[iFloor]->GetCommand(j-n_tree)->List();
                 }
             }
             else{
-                floor[iFloor+1] = floor[iFloor]->GetTree(i);
+                floor[iFloor+1] = floor[iFloor]->GetTree(j);
                 iFloor++;
                 floor[iFloor]->ListCurrentWithNum();
             }
@@ -787,8 +778,9 @@ void G4UIGainServer::SendDisableList(G4UIcommandTree* tree,int level){
 //####### update check routines ####################################
 
 ///////////////////////////////
-void G4UIGainServer::UpdateState(void){
+void G4UIGainServer::UpdateState(void)
 ///////////////////////////////
+{
    static G4ApplicationState previousState= G4State_PreInit;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();

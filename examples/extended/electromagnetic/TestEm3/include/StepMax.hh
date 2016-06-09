@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.7 2006-06-29 16:52:11 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm3/include/StepMax.hh
+/// \brief Definition of the StepMax class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,11 +56,11 @@ public:
 
   void     SetStepMax(G4int, G4double);
 
-  G4double GetStepMax(G4int k) {return stepMax[k];};
+  G4double GetStepMax(G4int k) { return fStepMax[k];};
 
   G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                       G4double previousStepSize,
-			                       G4ForceCondition* condition);
+                                               G4double previousStepSize,
+                                               G4ForceCondition* condition);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
@@ -67,9 +69,9 @@ public:
 
 private:
 
-  G4double stepMax[MaxAbsor];
+  G4double fStepMax[MaxAbsor];
      
-  StepMaxMessenger* pMess;
+  StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +85,7 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
   
   G4double limit = DBL_MAX; 
   G4int n = aTrack.GetVolume()->GetCopyNo();
-  if (n < MaxAbsor) limit = stepMax[n];
+  if (n < MaxAbsor) limit = fStepMax[n];
   return limit;
 }
 

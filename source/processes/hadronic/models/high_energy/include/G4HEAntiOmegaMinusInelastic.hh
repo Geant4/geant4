@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEAntiOmegaMinusInelastic.hh,v 1.16 2010-11-29 05:45:06 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -47,6 +46,8 @@
 
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4HEInelastic.hh"
 
 class G4HEAntiOmegaMinusInelastic : public G4HEInelastic  
@@ -55,10 +56,12 @@ class G4HEAntiOmegaMinusInelastic : public G4HEInelastic
     G4HEAntiOmegaMinusInelastic() : G4HEInelastic("G4HEAntiOmegaMinusInelastic")
     {
       vecLength = 0;
-      theMinEnergy =  20*GeV;
-      theMaxEnergy = 10*TeV;
+      theMinEnergy = 20*CLHEP::GeV;
+      theMaxEnergy = 10*CLHEP::TeV;
       MAXPART      = 2048;
       verboseLevel = 0; 
+      G4cout << "WARNING: model G4HEAntiOmegaMinusInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;  
     }
 
     ~G4HEAntiOmegaMinusInelastic() {};

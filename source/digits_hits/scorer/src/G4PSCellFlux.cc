@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.cc,v 1.4 2010/07/22 23:42:01 taso Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSCellFlux
 #include "G4PSCellFlux.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"

@@ -97,12 +97,15 @@ endfunction()
 # function GEANT4_ADD_TEST( <name> COMMAND cmd [arg1... ] 
 #                           [PRECMD cmd [arg1...]] [POSTCMD cmd [arg1...]]
 #                           [OUTPUT outfile] [ERROR errfile]
+#                           [WORKING_DIRECTORY directory]
 #                           [ENVIRONMENT var1=val1 var2=val2 ...
 #                           [DEPENDS test1 ...]
 #                           [TIMEOUT seconds] 
 #                           [DEBUG]
 #                           [SOURCE_DIR dir] [BINARY_DIR dir]
-#                           [BUILD target] [PROJECT project])
+#                           [BUILD target] [PROJECT project]
+#                           [PASSREGEX exp] [FAILREGEX epx]
+#                           [LABELS label1 label2 ...])
 #
 function(GEANT4_ADD_TEST test)
   if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
@@ -110,12 +113,13 @@ function(GEANT4_ADD_TEST test)
     return()
   endif()
 
-  CMAKE_PARSE_ARGUMENTS(ARG "DEBUG" "TIMEOUT;BUILD;OUTPUT;ERROR;SOURCE_DIR;BINARY_DIR;PROJECT" 
-    "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "DEBUG" "TIMEOUT;BUILD;OUTPUT;ERROR;SOURCE_DIR;BINARY_DIR;PROJECT;PASSREGEX;FAILREGEX;WORKING_DIRECTORY" 
+    "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS;LABELS" ${ARGN})
 
   if(NOT CMAKE_GENERATOR MATCHES Makefiles)
     set(_cfg $<CONFIGURATION>/)
   endif()
+  
   #- Handle COMMAND argument
   list(LENGTH ARG_COMMAND _len)
   if(_len LESS 1)
@@ -127,16 +131,17 @@ function(GEANT4_ADD_TEST test)
     list(REMOVE_AT ARG_COMMAND 0)
     if(NOT IS_ABSOLUTE ${_prg})
       set(_prg ${CMAKE_CURRENT_BINARY_DIR}/${_cfg}${_prg})
+    elseif(EXISTS ${_prg})
     else()
-	  get_filename_component(_path ${_prg} PATH)
-	  get_filename_component(_file ${_prg} NAME)
+      get_filename_component(_path ${_prg} PATH)
+      get_filename_component(_file ${_prg} NAME)
       set(_prg ${_path}/${_cfg}${_file})
     endif()
     set(_cmd ${_prg} ${ARG_COMMAND})
     string(REPLACE ";" "#" _cmd "${_cmd}")
   endif()
 
-  set(_command ${CMAKE_COMMAND} -DCMD=${_cmd})
+  set(_command ${CMAKE_COMMAND} -DTST=${test} -DCMD=${_cmd})
 
   #- Handle PRE and POST commands
   if(ARG_PRECMD)
@@ -161,6 +166,14 @@ function(GEANT4_ADD_TEST test)
 
   if(ARG_DEBUG)
     set(_command ${_command} -DDBG=ON)
+  endif()
+  
+  if(ARG_WORKING_DIRECTORY)
+    set(_command ${_command} -DCWD=${ARG_WORKING_DIRECTORY})
+  endif()
+  
+  if(ARG_TIMEOUT)
+    set(_command ${_command} -DTIM=${ARG_TIMEOUT})
   endif()
 
   #- Handle ENVIRONMENT argument
@@ -203,8 +216,16 @@ function(GEANT4_ADD_TEST test)
       --build-noclean
       --test-command ${_command} )
     set_property(TEST ${test} PROPERTY ENVIRONMENT Geant4_DIR=${CMAKE_BINARY_DIR})
+    if(ARG_FAILREGEX)
+      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:|(${ARG_FAILREGEX})")
+    else()
+      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:")      
+    endif()
   else()
     add_test(NAME ${test} COMMAND ${_command})
+    if(ARG_FAILREGEX)
+      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION ${ARG_FAILREGEX})
+    endif()
   endif()
 
   #- Handle TIMOUT and DEPENDS arguments
@@ -214,6 +235,16 @@ function(GEANT4_ADD_TEST test)
 
   if(ARG_DEPENDS)
     set_property(TEST ${test} PROPERTY DEPENDS ${ARG_DEPENDS})
+  endif()
+
+  if(ARG_PASSREGEX)
+    set_property(TEST ${test} PROPERTY PASS_REGULAR_EXPRESSION ${ARG_PASSREGEX})
+  endif()
+  
+  if(ARG_LABELS)
+    set_property(TEST ${test} PROPERTY LABELS ${ARG_LABELS})
+  else()
+    set_property(TEST ${test} PROPERTY LABELS Nightly)  
   endif()
 
 endfunction()

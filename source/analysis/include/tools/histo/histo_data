@@ -5,7 +5,7 @@
 #define tools_histo_histo_data
 
 #include <vector>
-//#include <map> //for annotations
+#include <map> //for annotations
 
 #include "axis"
 
@@ -40,7 +40,7 @@ public:
   ,m_bin_Sxw(a_from.m_bin_Sxw)
   ,m_bin_Sx2w(a_from.m_bin_Sx2w)
   ,m_axes(a_from.m_axes)
-  //,m_annotations(a_from.m_annotations)
+  ,m_annotations(a_from.m_annotations)
   {}
 
   histo_data& operator=(const histo_data& a_from) {
@@ -56,7 +56,7 @@ public:
     m_bin_Sx2w = a_from.m_bin_Sx2w;
     m_axes = a_from.m_axes;
     //
-    //m_annotations = a_from.m_annotations;
+    m_annotations = a_from.m_annotations;
     return *this;
   }
 
@@ -198,7 +198,7 @@ public:
   // Axes :
   std::vector< axis<TC> > m_axes;
   // etc :
-  //std::map<std::string,std::string> m_annotations;
+  std::map<std::string,std::string> m_annotations;
 };
 
 }}

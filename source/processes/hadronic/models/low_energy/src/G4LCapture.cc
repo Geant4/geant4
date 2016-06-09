@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.14 2007-02-24 05:17:29 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -41,11 +40,13 @@
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 //
 
-#include "globals.hh"
-#include "G4LCapture.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "globals.hh"
+#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4LCapture.hh"
 
 G4LCapture::G4LCapture(const G4String& name)
  : G4HadronicInteraction(name)
@@ -189,4 +190,10 @@ G4LCapture::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
     }
   }
   return &theParticleChange;
+}
+
+const std::pair<G4double, G4double> G4LCapture::GetFatalEnergyCheckLevels() const
+{
+	// max energy non-conservation is mass of heavy nucleus
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);
 }

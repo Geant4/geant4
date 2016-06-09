@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/N03Con/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
 //
-// $Id: EventActionMessenger.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -53,9 +55,9 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  EventAction*          eventAction;
-  G4UIdirectory*        eventDir;   
-  G4UIcmdWithAnInteger* PrintCmd;    
+  EventAction*          fEventAction;
+  G4UIdirectory*        fEventDir;   
+  G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

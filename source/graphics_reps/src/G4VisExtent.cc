@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc,v 1.10 2006-06-29 19:07:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // A.Walkden 28/11/95
@@ -40,11 +39,15 @@ const G4VisExtent G4VisExtent::NullExtent;  // Default extent is null.
 
 G4VisExtent::G4VisExtent (G4double xmin, G4double xmax, 
 			  G4double ymin, G4double ymax, 
-			  G4double zmin, G4double zmax) 
-:fXmin(xmin), fXmax(xmax), fYmin(ymin), fYmax(ymax), fZmin(zmin), fZmax(zmax)
+			  G4double zmin, G4double zmax):
+  fXmin(xmin), fXmax(xmax), fYmin(ymin), fYmax(ymax), fZmin(zmin), fZmax(zmax),
+  fRadiusCached(false), fCentreCached(false), fRadius(0.)
 {}
 
-G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius) {
+G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius):
+  fRadiusCached(true), fCentreCached(true),
+  fRadius(radius), fCentre(centre)
+{
   // Use exscribed radius ... see comments in header file.
   G4double halfSide (radius / std::sqrt (3.));
   fXmin = centre.x () - halfSide;
@@ -57,18 +60,26 @@ G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius) {
 
 G4VisExtent::~G4VisExtent () {}
 
-G4Point3D G4VisExtent::GetExtentCentre () const {
-  return G4Point3D (((fXmin + fXmax) / 2.),
-		    ((fYmin + fYmax) / 2.),
-		    ((fZmin + fZmax) / 2.));
+const G4Point3D& G4VisExtent::GetExtentCentre () const {
+  if (!fCentreCached) {
+    fCentre = G4Point3D (((fXmin + fXmax) / 2.),
+			 ((fYmin + fYmax) / 2.),
+			 ((fZmin + fZmax) / 2.));
+    fCentreCached = true;
+  }
+  return fCentre;
 }
 
 G4double G4VisExtent::GetExtentRadius () const {
-  return std::sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
-	       ((fYmax - fYmin) * (fYmax - fYmin)) +
-	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
+  if (!fRadiusCached) {
+    fRadius = std::sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
+			 ((fYmax - fYmin) * (fYmax - fYmin)) +
+			 ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
+    fRadiusCached = true;
+  }
+  return fRadius;
 }
- 
+
 std::ostream& operator << (std::ostream& os, const G4VisExtent& e) {
   os << "G4VisExtent (bounding box):";
   os << "\n  X limits: " << e.fXmin << ' ' << e.fXmax;

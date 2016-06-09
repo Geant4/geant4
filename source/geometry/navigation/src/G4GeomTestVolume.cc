@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc,v 1.6 2007-11-16 09:39:14 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,8 +34,14 @@
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <iomanip>
+
 #include "G4GeomTestVolume.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4GeomTestLogger.hh"
 #include "G4GeomTestVolPoint.hh"
 #include "G4GeomTestSegment.hh"
@@ -44,11 +49,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
-
-#include <vector>
-#include <set>
-#include <algorithm>
-#include <iomanip>
 
 //
 // Constructor
@@ -597,7 +597,6 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
             result =
               overshoots.insert( std::pair<const G4long,G4GeomTestOvershootList>
                                (iDaug,G4GeomTestOvershootList(target,iDaug)) );
-          assert(result.second);
           overshoot = result.first;
         }
 
@@ -630,7 +629,6 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
             result =
             overlaps.insert( std::pair<const G4long,G4GeomTestOverlapList>
                            (key,G4GeomTestOverlapList(target,iDaug,kDaug)) );
-          assert(result.second);
           overlap = result.first;
         }
 

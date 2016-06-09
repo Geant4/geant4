@@ -19,6 +19,7 @@
 /LXe/detector/ny 20
 /LXe/detector/nz 0
 /LXe/detector/dimensions 60 60 25 cm
+/LXe/detector/housingThickness 0.0635 cm
 /LXe/detector/pmtRadius 1.5 cm
 /LXe/detector/volumes/sphere 0
 /LXe/detector/reflectivity 0.0

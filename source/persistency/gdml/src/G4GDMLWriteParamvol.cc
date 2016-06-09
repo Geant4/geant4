@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.25 2009-04-24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4GDMLParamVol Implementation
 //
@@ -35,6 +34,7 @@
 
 #include "G4GDMLWriteParamvol.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"
 #include "G4Trap.hh"

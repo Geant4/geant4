@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_option0.cc,v 1.1 2009-10-25 19:06:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/PhysListEmStandard_option0.cc
+/// \brief Implementation of the PhysListEmStandard_option0 class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -53,11 +55,13 @@
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard_option0::PhysListEmStandard_option0(const G4String& name,
                                DetectorConstruction* det)
-: G4VPhysicsConstructor(name), detector(det)
+: G4VPhysicsConstructor(name), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +86,7 @@ void PhysListEmStandard_option0::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(detector);
+      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
       compton->SetModel(comptonModel );
             
@@ -99,7 +103,7 @@ void PhysListEmStandard_option0::ConstructProcess()
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-	    
+            
     } else if (particleName == "e+") {
       //positron
       
@@ -127,9 +131,9 @@ void PhysListEmStandard_option0::ConstructProcess()
            
   //build CSDA range
   //
-  emOptions.SetBuildCSDARange(true);		//default=false
+  emOptions.SetBuildCSDARange(true);                //default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(8*7);	//default=8*7
+  emOptions.SetDEDXBinningForCSDARange(8*7);        //default=8*7
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.16 2006-06-29 21:09:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------
 //
@@ -44,6 +43,8 @@
 //---------------------------------------------------------------
 
 #include "G4FastStep.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"

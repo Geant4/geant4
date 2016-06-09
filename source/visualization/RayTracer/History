@@ -24,6 +24,42 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+5th July 2012  Gabriele Cosmo  (raytracer-V09-05-05)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+3rd July 2012  John Allison  (raytracer-V09-05-04)
+- Fixed some Coverity warnings.
+
+3rd July 2012  John Allison  (raytracer-V09-05-03)
+- Tagged a fix: uses std::sqrt.
+
+8th June 2012  John Allison  (raytracer-V09-05-02)
+- Shadow clean.
+
+8th February 2012  John Allison  (raytracer-V09-05-01)
+- G4RayTracerViewer.cc, G4TheRayTracer.hh/cc:
+  Adopt fix proposed by jasondet@gmail.com to fix Bug #1274.
+- G4RayTracerViewer.cc:
+  o Move window size hints to constructor from SetView, so that
+    NColumn/Row are never changed, even if window size hints change
+    (e.g., as a result of /vis/viewer/set/all).  It is not possible to
+    change NColumn/Row after instantiation.
+- G4TheRayTracer.cc:
+  o Ensure unit vector for the ray shooter.  (Otherwise it can cause a
+    G4Exception in G4ParticleChange::CheckIt.)
+
+7th February 2012  John Allison  (raytracer-V09-05-00)
+- G4RayTracerViewer.cc:
+  o G4RayTracerViewer::SetView: Fix up-vector bug #1274.
+  o Move window size hints to constructor from SetView, so that
+    NColumn/Row are never changed, even if window size hints change
+    (e.g., as a result of /vis/viewer/set/all).  It is not possible to
+    change NColumn/Row after instantiation.
+- G4TheRayTracer.cc:
+  o Ensure unit vector for the ray shooter.  (Otherwise it can cause a
+    G4Exception in G4ParticleChange::CheckIt.)
+
 17th June 2011 Ben Morgan (raytracer-V09-04-04)
 - sources.cmake : Changed to use GEANT4_USE_RAYTRACER_X11 variable.
 

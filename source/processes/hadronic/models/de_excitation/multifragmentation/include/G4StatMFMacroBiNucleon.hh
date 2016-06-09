@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroBiNucleon.hh,v 1.4 2008-10-24 23:03:33 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

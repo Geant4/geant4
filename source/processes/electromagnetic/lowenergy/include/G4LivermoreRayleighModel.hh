@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // Author: Sebastien Incerti
-//         30 October 2008
-//         on base of G4LowEnergyRayleigh developed by A.Forti and M.G.Pia
+//         31 March 2012
+//         on base of G4LivermoreRayleighModel
 //
 
 #ifndef G4LivermoreRayleighModel_h
@@ -36,19 +33,15 @@
 
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4ForceCondition.hh"
-#include "G4Gamma.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4ProductionCutsTable.hh"
 
 class G4LivermoreRayleighModel : public G4VEmModel
 {
 
 public:
 
-  G4LivermoreRayleighModel(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "LivermoreRayleigh");
+  G4LivermoreRayleighModel();
 
   virtual ~G4LivermoreRayleighModel();
 
@@ -68,26 +61,31 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
+  inline void SetLowEnergyThreshold(G4double);
 
 private:
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
+  void ReadData(size_t Z, const char* path = 0);
 
-  G4int verboseLevel;
+  G4LivermoreRayleighModel & operator=(const G4LivermoreRayleighModel &right);
+  G4LivermoreRayleighModel(const G4LivermoreRayleighModel&);
+
   G4bool isInitialised;
+  G4int maxZ;
+  G4int verboseLevel;
 
-  G4VEMDataSet* meanFreePathTable;
-  G4VEMDataSet* formFactorData;
-  G4VCrossSectionHandler* crossSectionHandler;
+  G4double lowEnergyLimit;  
 
-  G4LivermoreRayleighModel & operator=(const  G4LivermoreRayleighModel &right);
-  G4LivermoreRayleighModel(const  G4LivermoreRayleighModel&);
+  std::vector<G4LPhysicsFreeVector*> dataCS;
+
+  G4ParticleChangeForGamma* fParticleChange;
 
 };
+
+inline void G4LivermoreRayleighModel::SetLowEnergyThreshold(G4double val)
+{
+  lowEnergyLimit = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

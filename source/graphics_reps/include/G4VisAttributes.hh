@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.19 2007-01-05 14:12:13 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  23rd October 1996
@@ -73,11 +72,12 @@ public: // With description
   enum ForcedDrawingStyle {wireframe, solid};
 
   G4VisAttributes ();
+  G4VisAttributes (const G4VisAttributes&);
   G4VisAttributes (G4bool visibility);
   G4VisAttributes (const G4Colour& colour);
   G4VisAttributes (G4bool visibility, const G4Colour& colour);
-
-  // Compiler defaults for copy constructor and assigment operator are OK.
+  ~G4VisAttributes ();
+  G4VisAttributes& operator= (const G4VisAttributes&);
 
   static const G4VisAttributes Invisible;
 

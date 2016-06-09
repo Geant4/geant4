@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.hh,v 1.7 2006-06-29 18:59:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class description:
 //
@@ -44,6 +43,7 @@
 
 #include "G4Types.hh"
 #include <cmath>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 template <class T, class F>
 class G4Integrator

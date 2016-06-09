@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeUserTrackInformation.hh
+/// \brief Definition of the LXeUserTrackInformation class
+//
 #include "G4VUserTrackInformation.hh"
 #include "globals.hh"
 
@@ -40,34 +43,37 @@ enum LXeTrackStatus { active=1, hitPMT=2, absorbed=4, boundaryAbsorbed=8,
   hitSphere: track hit the sphere at some point
   inactive: track is stopped for some reason
    -This is the sum of all stopped flags so can be used to remove stopped flags
-  
- */
+ 
+*/
 
 class LXeUserTrackInformation : public G4VUserTrackInformation
 {
-public:
-  LXeUserTrackInformation();
-  ~LXeUserTrackInformation();
-  
-  //Sets the track status to s (does not check validity of flags)
-  void SetTrackStatusFlags(int s){status=s;}
-  //Does a smart add of track status flags (disabling old flags that conflict)
-  //If s conflicts with itself it will not be detected
-  void AddTrackStatusFlag(int s);
-  
-  int GetTrackStatus()const {return status;}
-  
-  void IncReflections(){reflections++;}
-  G4int GetReflectionCount()const {return reflections;}
+  public:
 
-  void SetForceDrawTrajectory(G4bool b){forcedraw=b;}
-  G4bool GetForceDrawTrajectory(){return forcedraw;}
+    LXeUserTrackInformation();
+    virtual ~LXeUserTrackInformation();
 
-  inline void Print()const{};
-private:
-  int status;
-  G4int reflections;
-  G4bool forcedraw;
+    //Sets the track status to s (does not check validity of flags)
+    void SetTrackStatusFlags(int s){fStatus=s;}
+    //Does a smart add of track status flags (disabling old flags that conflict)
+    //If s conflicts with itself it will not be detected
+    void AddTrackStatusFlag(int s);
+ 
+    int GetTrackStatus()const {return fStatus;}
+ 
+    void IncReflections(){fReflections++;}
+    G4int GetReflectionCount()const {return fReflections;}
+
+    void SetForceDrawTrajectory(G4bool b){fForcedraw=b;}
+    G4bool GetForceDrawTrajectory(){return fForcedraw;}
+
+    inline virtual void Print() const{};
+
+  private:
+
+    int fStatus;
+    G4int fReflections;
+    G4bool fForcedraw;
 };
 
 #endif

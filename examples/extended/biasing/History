@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 15, 2012 I.Hrivnacova - exbiasing-V09-05-04
+- Minor fixes in .README
+
+Oct 13, 2012 A. Dotti - exbiasing-V09-05-03
+- Adding explicit use of system of units
+
+Sep 24, 2012 I.Hrivnacova - exbiasing-V09-05-02
+- New tag for synchronizing with ctest
+
+Sep 19, 2012 I.Hrivnacova - exbiasing-V09-05-01
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Fixed compiler warnings in B02PSScoringDetectorConstruction.cc  
+- Replaced tabulators with space characters  
+
+Sep 4, 2012 I.Hrivnacova - exbiasing-V09-05-00
+- Updated CMakeLists.txt:
+  adding visualization (if used), copying macros, install target 
+  and comment lines 
+
 Nov 14th, 2011 G.Cosmo - exbiasing-V09-04-01
 - Archived obsolete example B03 laying on the trunk.
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILE.cc,v 1.11 2006-06-29 21:16:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Satoshi TANAKA
 // DAWNFILE factory.

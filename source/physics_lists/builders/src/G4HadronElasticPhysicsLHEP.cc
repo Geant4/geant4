@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsLHEP.cc,v 1.2 2010-06-03 14:28:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -41,7 +40,7 @@
 #include "G4HadronElasticPhysicsLHEP.hh"
 
 #include "G4HadronicProcess.hh"
-#include "G4WHadronElasticProcess.hh"
+#include "G4HadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4LElastic.hh"
 
@@ -52,6 +51,12 @@
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4Neutron.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLHEP);
+
 
 G4HadronElasticPhysicsLHEP::G4HadronElasticPhysicsLHEP(G4int ver)
   : G4VPhysicsConstructor("hElasticLHEP"), verbose(ver), 
@@ -123,7 +128,7 @@ void G4HadronElasticPhysicsLHEP::ConstructProcess()
        pname == "deuteron"  ||
        pname == "triton") {
       
-      hel = new G4WHadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {

@@ -101,10 +101,6 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  5- How to start ?
     --------------
  
-  - compile and link to generate an executable
- 	% cd gun
- 	% gmake
- 		
   - execute particleGun in 'batch' mode from macro files
  	% ParticleGun   run1.mac
  		
@@ -144,23 +140,9 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
   One can control the name of the histograms file with the command:
   /gunExample/histo/setFileName  name  (default particleGun)
    
-  It is possible to choose the format of the histogram file (hbook, root, XML)
-  with the command /gunExample/histo/setFileType (root by default)
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh
    
-  It is also possible to print selected histograms on an ascii file:
-  /gunExample/histo/printHisto id
-  All selected histos will be written on a file name.ascii (default particleGun)
-
-  Note that, by default, histograms are disabled. To activate them, uncomment
-  the flag G4ANALYSIS_USE in GNUmakefile.
- 
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake 
-
- 7- Using histograms
-    ---------------- 
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See the file InstallAida.txt
-  
+   It is also possible to print selected histograms on an ascii file:
+   /gunExample/histo/printHisto id
+   All selected histos will be written on a file name.ascii (default gunExample)

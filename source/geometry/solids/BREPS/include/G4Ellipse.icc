@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.icc,v 1.8 2006-06-29 18:39:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -71,7 +70,7 @@ G4double G4Ellipse::GetSemiAxis2() const
 inline
 G4double G4Ellipse::GetPMax() const
 {
-  return twopi;
+  return CLHEP::twopi;
 }
 
 inline
@@ -88,7 +87,7 @@ G4double G4Ellipse::GetPPoint(const G4Point3D& pt) const
 {
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
   G4double angle= std::atan2(ptLocal.y(), ptLocal.x()*ratioAxis2Axis1);
-  G4double r= (angle<0)? angle+twopi: angle;
+  G4double r= (angle<0)? angle+CLHEP::twopi: angle;
   return r+GetPShift();
 }
 
@@ -145,13 +144,13 @@ G4int G4Ellipse::IntersectRay2D(const G4Ray& ray)
   // with the center at the origin
 
   // 2D operations would be faster
-  G4Point3D  s= toUnitCircle*ray.GetStart();
+  G4Point3D  st= toUnitCircle*ray.GetStart();
   G4Vector3D d= toUnitCircle*ray.GetDir();
   
-  // solve (s+i*t)^2 = 1 for i (the distance)
-  G4double sd= s*d;
+  // solve (st+i*t)^2 = 1 for i (the distance)
+  G4double sd= st*d;
   G4double dd= d.mag2(); // never 0
-  G4double ss= s.mag2();
+  G4double ss= st.mag2();
 
   G4double discr= sd*sd-dd*(ss-1);
   G4int nbinter = 0;

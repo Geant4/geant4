@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2007-10-08 12:05:02 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
+// $Id$
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,30 +47,32 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pWall(0), pCavity(0)
+:fWall(0), fCavity(0)
 {
   // default parameter values
-  cavityThickness = 2*mm;
-  cavityRadius    = 1*cm;      
+  fCavityThickness = 2*mm;
+  fCavityRadius    = 1*cm;      
   
-  wallThickness = 5*mm;
+  fWallThickness = 5*mm;
   
   DefineMaterials();
   SetWallMaterial("Water");
   SetCavityMaterial("Water_vapor");
   
   // create commands for interactive definition of the detector  
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -127,54 +131,54 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-		   
+                   
   // Chamber
   //
-  totalThickness = cavityThickness + 2*wallThickness;
-  wallRadius     = cavityRadius + wallThickness;
+  fTotalThickness = fCavityThickness + 2*fWallThickness;
+  fWallRadius     = fCavityRadius + fWallThickness;
   
   G4Tubs* 
-  sChamber = new G4Tubs("Chamber",					//name
-    		        0.,wallRadius,0.5*totalThickness,0.,twopi);	//size
+  sChamber = new G4Tubs("Chamber",                                     //name
+                         0.,fWallRadius,0.5*fTotalThickness,0.,twopi); //size
 
   G4LogicalVolume*
-  lChamber = new G4LogicalVolume(sChamber,		//solid
-      			       wallMaterial,		//material
-      			      "Chamber");		//name
-				   
-  pWall = new G4PVPlacement(0,				//no rotation
-                             G4ThreeVector(),		//at (0,0,0)
-                             lChamber,			//logical volume
-                            "Wall",			//name
-                             0,				//mother  volume
-                             false,			//no boolean operation
-                             0);			//copy number
+  lChamber = new G4LogicalVolume(sChamber,              //solid
+                                     fWallMaterial,     //material
+                                    "Chamber");         //name
+                                   
+  fWall = new G4PVPlacement(0,                          //no rotation
+                            G4ThreeVector(),            //at (0,0,0)
+                            lChamber,                   //logical volume
+                            "Wall",                     //name
+                            0,                          //mother  volume
+                            false,                      //no boolean operation
+                            0);                         //copy number
 
   // Cavity
-  //  			   
+  //                             
   G4Tubs*
-  sCavity = new G4Tubs("Cavity",	
-                       0.,cavityRadius,0.5*cavityThickness,0.,twopi);
-		 
-  G4LogicalVolume*		   			                      
-  lCavity = new G4LogicalVolume(sCavity,		//shape
-                                cavityMaterial,		//material
-                                "Cavity");		//name
-				
-  pCavity = new G4PVPlacement(0,			//no rotation
-                             G4ThreeVector(),		//at (0,0,0)
-                             lCavity,			//logical volume
-                            "Cavity",			//name
-                             lChamber,			//mother  volume
-                             false,			//no boolean operation
-                             1);			//copy number
-				
+  sCavity = new G4Tubs("Cavity",        
+                       0.,fCavityRadius,0.5*fCavityThickness,0.,twopi);
+                 
+  G4LogicalVolume*                                                                 
+  lCavity = new G4LogicalVolume(sCavity,                //shape
+                                fCavityMaterial,        //material
+                                "Cavity");              //name
+                                
+  fCavity = new G4PVPlacement(0,                        //no rotation
+                             G4ThreeVector(),           //at (0,0,0)
+                             lCavity,                   //logical volume
+                            "Cavity",                   //name
+                             lChamber,                  //mother  volume
+                             false,                     //no boolean operation
+                             1);                        //copy number
+                                
   PrintParameters();
     
   //
   //always return the root volume
   //  
-  return pWall;
+  return fWall;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,12 +186,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n---------------------------------------------------------\n";
-  G4cout << "---> The Wall is " << G4BestUnit(wallThickness,"Length")
-         << " of " << wallMaterial->GetName() << " ( " 
-	 << G4BestUnit(wallMaterial->GetDensity(),"Volumic Mass") << " )\n";
-  G4cout << "     The Cavity is " << G4BestUnit(cavityThickness,"Length")
-         << " of " << cavityMaterial->GetName() << " ( " 
-	 << G4BestUnit(cavityMaterial->GetDensity(),"Volumic Mass") << " )";	 	 
+  G4cout << "---> The Wall is " << G4BestUnit(fWallThickness,"Length")
+         << " of " << fWallMaterial->GetName() << " ( " 
+         << G4BestUnit(fWallMaterial->GetDensity(),"Volumic Mass") << " )\n";
+  G4cout << "     The Cavity is " << G4BestUnit(fCavityThickness,"Length")
+         << " of " << fCavityMaterial->GetName() << " ( " 
+         << G4BestUnit(fCavityMaterial->GetDensity(),"Volumic Mass") << " )";                  
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << G4endl;
 }
@@ -196,7 +200,7 @@ void DetectorConstruction::PrintParameters()
 
 void DetectorConstruction::SetWallThickness(G4double value)
 {
-  wallThickness = value;
+  fWallThickness = value;
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,21 +209,21 @@ void DetectorConstruction::SetWallMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) wallMaterial = pttoMaterial;
+  if (pttoMaterial) fWallMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetCavityThickness(G4double value)
 {
-  cavityThickness = value;
+  fCavityThickness = value;
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetCavityRadius(G4double value)
 {
-  cavityRadius  = value;
+  fCavityRadius  = value;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,7 +232,7 @@ void DetectorConstruction::SetCavityMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) cavityMaterial = pttoMaterial;
+  if (pttoMaterial) fCavityMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VITTimeStepper.hh 64057 2012-10-30 15:04:49Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -69,7 +70,7 @@ public:
 
     // Preparation part
     static void SetTimes(const G4double&, const G4double&);
-    inline virtual void PrepareForAllProcessors(){;}
+//    inline virtual void PrepareForAllProcessors(){;}
     inline virtual void Prepare() ;
 
     virtual G4double CalculateStep(const G4Track&, const G4double&) = 0;
@@ -90,7 +91,7 @@ protected :
     G4double fSampledMinTimeStep ;
     G4TrackVectorHandle fReactants;
 
-    const G4ITReactionTable* fReactionTable;
+    const G4ITReactionTable* fpReactionTable;
 
 private:
     G4int fVerbose ;
@@ -98,12 +99,12 @@ private:
 
 inline void G4VITTimeStepper::SetReactionTable(const G4ITReactionTable* table)
 {
-    fReactionTable = table;
+    fpReactionTable = table;
 }
 
 inline const G4ITReactionTable* G4VITTimeStepper::GetReactionTable()
 {
-    return fReactionTable ;
+    return fpReactionTable ;
 }
 
 inline void G4VITTimeStepper::Prepare()

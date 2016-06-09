@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.6 2010-06-04 09:59:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -33,7 +32,7 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-//
+// 20120921  M. Kelsey -- Make forward declarations.
 //----------------------------------------------------------------------------
 //
 
@@ -42,9 +41,10 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
 
 class G4QCaptureAtRest;
+class G4MuonMinusCaptureAtRest;
+
 
 class G4QStoppingPhysics : public G4VPhysicsConstructor
 {
@@ -72,7 +72,7 @@ private:
 
   G4int    verbose;
   G4bool   wasActivated;
-  G4bool   useMuonMinusCaptureAtRest;
+  G4bool   useMuonMinusCapture;
 };
 
 #endif

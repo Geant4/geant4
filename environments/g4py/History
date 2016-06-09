@@ -1,6 +1,3 @@
-$Id: History,v 1.53 2010-12-02 08:34:26 kmura Exp $
--------------------------------------------------------------------
-
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
@@ -13,6 +10,24 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8 November 2012 K.Murakami
+ - configure script is updated for CMake build
+ - updated Geant4 interface for the latest
+ - G4SystemOfUnits.hh and G4PhysicalConstants.hh are explictly added.
+ - Documentations are updated in Markdown format.
+ - some minor updated for examples
+
+23 July 2012 K.Murakami
+ - configure script: fixed logics for specifying python include path (bug.1316)
+ - pyG4VisManager: (bug.1318))
+   added static statement for GetVerbosity.
+   fixed GetConcreteInstance returns an insufficient class pointer.
+
+21 July 2012 K.Murakami
+ - configure script is updated for internal G4clhep
+ - pyG4Run.cc, pyG4Event.cc are updated as non-copyable (9.5.p01) (bug.1317)
+ - g4autobuild, g4package scripts are apdated for internal clhep use.
 
 10 Nomvembter 2011 K.Murakami
  - fixes on OSX Lion matters

@@ -20,15 +20,18 @@
 
  1 - main()
 
+    See field06.cc.
+
+
  2- GEOMETRY DEFINITION
 
-    as simple world G4Box with a G4UniformGravityField propagating momentum
+    As simple world G4Box with a G4UniformGravityField propagating momentum
     (G4EqGravityField) with G4ClassicalRK4(fEquation,8). The example uses the
     default gravity field on the earth's surface: gy = -9.81*m/s/s/c_light.
 
  3- AN EVENT: THE PRIMARY GENERATOR
 
-    uses an Ultra Cold Neutron (UCN) and G4ParticleGun with:
+    Uses an Ultra Cold Neutron (UCN) and G4ParticleGun with:
     particleEnergy = G4UniformRand()*1e-7*eV
 
     UCN are launched from (0,0,0) uniform into 4pi
@@ -43,27 +46,23 @@
 
     G4VModularPhysicsList::ConstructProcess();
 
-    AddBetaDecay to "neutron" as an example of how to set a decay-table with
-    decay-channel(s) to a G4ParticleDefinition.
-
     F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+
+    F06ExtraPhysics::AddBetaDecay() to "neutron" as an example of how to set a decay-table with
+    decay-channel(s) to a G4ParticleDefinition.
 
  5- User Action Classes
 
-        EventAction:
+        F06EventAction:
             EndOfEventAction - draws trajectories in G4TrajectoryContainer
 
  6- HOW TO START ?
 
-        - compile and link to generate an executable
-                % cd $G4INSTALL/example/extended/field/field06
-                % gmake
-
         - execute field06 in 'batch' mode from macro files e.g.
-                % $(G4INSTALL)/bin/$(G4SYSTEM)/field06 field06.in > field06.out &
+                % field06 field06.in > field06.out &
 
         - execute field06 in 'interactive' mode with visualization e.g.
-                % $(G4INSTALL)/bin/$(G4SYSTEM)/field60
+                % field60
                 ....
                 Idle> type your commands, for example:
                 Idle> run/beamOn 1

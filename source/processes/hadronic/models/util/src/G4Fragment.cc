@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.22 2010-11-02 17:55:43 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------
 //
@@ -62,7 +61,8 @@ G4Fragment::G4Fragment() :
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
   theParticleDefinition(0),
-  theCreationTime(0.0)
+  theCreationTime(0.0),
+  isStable(true)
 {}
 
 // Copy Constructor
@@ -81,6 +81,7 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    numberOfShellElectrons = right.numberOfShellElectrons;
    theParticleDefinition = right.theParticleDefinition;
    theCreationTime = right.theCreationTime;
+   isStable = right.isStable;
 }
 
 G4Fragment::~G4Fragment()
@@ -97,13 +98,18 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
   theParticleDefinition(0),
-  theCreationTime(0.0)
+  theCreationTime(0.0),
+  isStable(true)
 {
   theExcitationEnergy = 0.0;
   theGroundStateMass = 0.0;
   if(theA > 0) { 
     CalculateGroundStateMass();
     CalculateExcitationEnergy(); 
+
+    // default flag of stability for excited fragments is false
+    // it may be overwritten by SetStable(G4bool val) method
+    if(theExcitationEnergy > 0.0) { isStable = false; }
   }
 }
 
@@ -120,7 +126,8 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
   theParticleDefinition(aParticleDefinition),
-  theCreationTime(0.0)
+  theCreationTime(0.0),
+  isStable(true)
 {
   theExcitationEnergy = 0.0;
   if(aParticleDefinition != G4Gamma::Gamma() && 
@@ -132,7 +139,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   theGroundStateMass = aParticleDefinition->GetPDGMass();
 }
 
-const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
+G4Fragment & G4Fragment::operator=(const G4Fragment &right)
 {
   if (this != &right) {
     theA = right.theA;
@@ -148,6 +155,7 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     numberOfShellElectrons = right.numberOfShellElectrons;
     theParticleDefinition = right.theParticleDefinition;
     theCreationTime = right.theCreationTime;
+    isStable = right.isStable;
   }
   return *this;
 }
@@ -181,7 +189,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 
   out << std::setprecision(3)
       << ", U = " << theFragment->GetExcitationEnergy()/CLHEP::MeV 
-      << " MeV" << G4endl
+      << " MeV  IsStable= " << theFragment->IsStable() << G4endl
       << "          P = (" 
       << theFragment->theMomentum.x()/CLHEP::MeV << ","
       << theFragment->theMomentum.y()/CLHEP::MeV << ","

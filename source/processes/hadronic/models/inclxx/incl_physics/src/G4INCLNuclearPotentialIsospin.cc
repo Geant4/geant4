@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Provides an isospin-dependent nuclear potential.
  *
- * Created on: 28 February 2011
- *     Author: Davide Mancusi
+ * \date 28 February 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLNuclearPotentialIsospin.hh"
@@ -55,8 +55,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     // Constructors
-    NuclearPotentialIsospin::NuclearPotentialIsospin(NuclearDensity *density, G4bool pionPotential)
-      : INuclearPotential(density, pionPotential)
+    NuclearPotentialIsospin::NuclearPotentialIsospin(const G4int A, const G4int Z, const G4bool aPionPotential)
+      : INuclearPotential(A, Z, aPionPotential)
     {
       initialize();
     }
@@ -65,31 +65,49 @@ namespace G4INCL {
     NuclearPotentialIsospin::~NuclearPotentialIsospin() {}
 
     void NuclearPotentialIsospin::initialize() {
-      const G4double ZOverA = ((G4double) theDensity->getZ()) / ((G4double) theDensity->getA());
+      const G4double ZOverA = ((G4double) theZ) / ((G4double) theA);
 
-      const G4double mp = ParticleTable::getMass(Proton);
-      fermiMomentum[Proton] = Pf * Math::pow13(2.*ZOverA);
-      fermiEnergy[Proton] = std::sqrt(fermiMomentum[Proton]*fermiMomentum[Proton] + mp*mp) - mp;
-      vProton = fermiEnergy[Proton] + ParticleTable::getSeparationEnergy(Proton);
+      const G4double mp = ParticleTable::getINCLMass(Proton);
+      const G4double mn = ParticleTable::getINCLMass(Neutron);
 
-      const G4double mn = ParticleTable::getMass(Neutron);
-      fermiMomentum[Neutron] = Pf * Math::pow13(2.*(1.-ZOverA));
-      fermiEnergy[Neutron] = std::sqrt(fermiMomentum[Neutron]*fermiMomentum[Neutron] + mn*mn) - mn;
-      vNeutron = fermiEnergy[Neutron] + ParticleTable::getSeparationEnergy(Neutron);
+      G4double theFermiMomentum;
+      if(theA<ParticleTable::clusterTableASize && theZ<ParticleTable::clusterTableZSize)
+        // Use momentum RMS from tables to define the Fermi momentum for light
+        // nuclei
+        theFermiMomentum = Math::sqrtFiveThirds * ParticleTable::getMomentumRMS(theA,theZ);
+      else
+        theFermiMomentum = PhysicalConstants::Pf;
+
+      fermiMomentum[Proton] = theFermiMomentum * Math::pow13(2.*ZOverA);
+      const G4double theProtonFermiEnergy = std::sqrt(fermiMomentum[Proton]*fermiMomentum[Proton] + mp*mp) - mp;
+      fermiEnergy[Proton] = theProtonFermiEnergy;
+      // Use separation energies from the ParticleTable
+      const G4double theProtonSeparationEnergy = ParticleTable::getSeparationEnergy(Proton,theA,theZ);
+      separationEnergy[Proton] = theProtonSeparationEnergy;
+      vProton = theProtonFermiEnergy + theProtonSeparationEnergy;
+
+      fermiMomentum[Neutron] = theFermiMomentum * Math::pow13(2.*(1.-ZOverA));
+      const G4double theNeutronFermiEnergy = std::sqrt(fermiMomentum[Neutron]*fermiMomentum[Neutron] + mn*mn) - mn;
+      fermiEnergy[Neutron] = theNeutronFermiEnergy;
+      // Use separation energies from the ParticleTable
+      const G4double theNeutronSeparationEnergy = ParticleTable::getSeparationEnergy(Neutron,theA,theZ);
+      separationEnergy[Neutron] = theNeutronSeparationEnergy;
+      vNeutron = theNeutronFermiEnergy + theNeutronSeparationEnergy;
 
       vDeltaPlus = vProton;
       vDeltaZero = vNeutron;
-      vDeltaPlusPlus = 2*vDeltaPlus - vDeltaZero;
-      vDeltaMinus = 2*vDeltaZero - vDeltaPlus;
+      vDeltaPlusPlus = 2.*vDeltaPlus - vDeltaZero;
+      vDeltaMinus = 2.*vDeltaZero - vDeltaPlus;
 
-      const G4double Tfpp = vDeltaPlusPlus - vProton + fermiEnergy.find(Proton)->second;
-      const G4double Tfp = fermiEnergy.find(Proton)->second;
-      const G4double Tf0 = fermiEnergy.find(Neutron)->second;
-      const G4double Tfm = vDeltaMinus - vNeutron + fermiEnergy.find(Neutron)->second;
-      fermiEnergy[DeltaPlusPlus] = Tfpp;
-      fermiEnergy[DeltaPlus] = Tfp;
-      fermiEnergy[DeltaZero] = Tf0;
-      fermiEnergy[DeltaMinus] = Tfm;
+      separationEnergy[DeltaPlusPlus] = 2.*theProtonSeparationEnergy - theNeutronSeparationEnergy;
+      separationEnergy[DeltaPlus] = theProtonSeparationEnergy;
+      separationEnergy[DeltaZero] = theNeutronSeparationEnergy;
+      separationEnergy[DeltaMinus] = 2.*theNeutronSeparationEnergy - theProtonSeparationEnergy;
+
+      fermiEnergy[DeltaPlusPlus] = vDeltaPlusPlus - separationEnergy[DeltaPlusPlus];
+      fermiEnergy[DeltaPlus] = vDeltaPlus - separationEnergy[DeltaPlus];
+      fermiEnergy[DeltaZero] = vDeltaZero - separationEnergy[DeltaZero];
+      fermiEnergy[DeltaMinus] = vDeltaMinus - separationEnergy[DeltaMinus];
     }
 
     G4double NuclearPotentialIsospin::computePotentialEnergy(const Particle *particle) const {

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopolePhysics.cc,v 1.6 2010-11-29 15:14:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
+/// \brief Implementation of the G4MonopolePhysics class
+//
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -57,28 +59,40 @@
 #include "G4hhIonisation.hh"
 #include "G4hIonisation.hh"
 
+#include "G4PhysicsListHelper.hh"
+#include "G4BuilderType.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysics::G4MonopolePhysics(const G4String& nam)
   : G4VPhysicsConstructor(nam)
 {
-  magCharge = 1.0;
-  //  magCharge = -1.0;
-  //  elCharge  = -50.0;
-  elCharge  = 0.0;
-  monopoleMass = 100.*GeV;
-  theMessenger = new G4MonopolePhysicsMessenger(this);
+  fMagCharge = 1.0;
+  //  fMagCharge = -1.0;
+  //  fElCharge  = -50.0;
+  fElCharge  = 0.0;
+  fMonopoleMass = 100.*GeV;
+  fMessenger = new G4MonopolePhysicsMessenger(this);
+  fMpl = 0;
+  SetPhysicsType(bUnknown);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysics::~G4MonopolePhysics()
 {
-  delete theMessenger;
+  delete fMessenger;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::ConstructParticle()
 {
-  mpl = G4Monopole::MonopoleDefinition(monopoleMass, magCharge, elCharge);
+  fMpl = G4Monopole::MonopoleDefinition(fMonopoleMass, fMagCharge, fElCharge);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::ConstructProcess()
 {
@@ -86,71 +100,61 @@ void G4MonopolePhysics::ConstructProcess()
     G4cout << "G4MonopolePhysics::ConstructProcess" << G4endl;
   }
   
-  G4ProcessManager* pmanager = new G4ProcessManager(mpl);
-  mpl->SetProcessManager(pmanager);
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4ProcessManager* pmanager = new G4ProcessManager(fMpl);
+  fMpl->SetProcessManager(pmanager);
   
   // defined monopole parameters and binning
 
-  G4double emax = 10.*TeV;
-  G4double magn = mpl->MagneticCharge();
-  G4double emin = mpl->GetPDGMass()/20000.;
-  if(emin < keV) emin = keV;
+  G4double magn = fMpl->MagneticCharge();
+  G4double emin = fMonopoleMass/20000.;
+  if(emin < keV) { emin = keV; }
+  G4double emax = std::max(10.*TeV, fMonopoleMass*100);
+  G4int nbin = G4lrint(10*std::log10(emax/emin));
 
-  G4int nbin = G4int(std::log10(emin/eV));
-  emin       = std::pow(10.,G4double(nbin))*eV;
-
-  nbin = G4int(std::log10(emax/emin));
-  if(nbin < 1) nbin = 1;
-  nbin *= 10;
-  
   if(magn == 0.0) {
-    pmanager->AddProcess( new G4Transportation(), -1, 0, 0);
+    ph->RegisterProcess(new G4Transportation(), fMpl);
   } else {
-    pmanager->AddProcess( new G4MonopoleTransportation(mpl), -1, 0, 0);
+    ph->RegisterProcess(new G4MonopoleTransportation(fMpl), fMpl);
   }
 
-  G4int idx = 1;
-  if(mpl->GetPDGCharge() != 0.0) {
-    //G4hMultipleScattering* hmsc = new G4hMultipleScattering();
-    //pmanager->AddProcess(hmsc,  -1, idx, idx);
-    //++idx;
+  if(fMpl->GetPDGCharge() != 0.0) {
     G4hIonisation* hhioni = new G4hIonisation();
     hhioni->SetDEDXBinning(nbin);
     hhioni->SetMinKinEnergy(emin);
     hhioni->SetMaxKinEnergy(emax);
-    pmanager->AddProcess(hhioni,  -1, idx, idx);
-    ++idx;
+    ph->RegisterProcess(hhioni, fMpl);
   }
   if(magn != 0.0) {
     G4mplIonisation* mplioni = new G4mplIonisation(magn);
     mplioni->SetDEDXBinning(nbin);
     mplioni->SetMinKinEnergy(emin);
     mplioni->SetMaxKinEnergy(emax);
-    G4mplIonisationWithDeltaModel* mod = 
-      new G4mplIonisationWithDeltaModel(magn,"PAI");
-    mplioni->AddEmModel(0,mod,mod);
-    pmanager->AddProcess(mplioni, -1, idx, idx);
-    ++idx;
+    ph->RegisterProcess(mplioni, fMpl);
   }
-  pmanager->AddProcess( new G4StepLimiter(),  -1, -1, idx);
-
+  ph->RegisterProcess(new G4StepLimiter(), fMpl);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::SetMagneticCharge(G4double val)
 {
-  magCharge = val;
+  fMagCharge = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::SetElectricCharge(G4double val)
 {
-  elCharge = val;
+  fElCharge = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::SetMonopoleMass(G4double mass)
 {
-  monopoleMass = mass;
+  fMonopoleMass = mass;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

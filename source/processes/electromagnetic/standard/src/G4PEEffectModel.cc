@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.8 2009-04-09 18:41:18 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -51,24 +50,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4PEEffectModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4SauterGavrilaAngularDistribution.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
-G4PEEffectModel::G4PEEffectModel(const G4ParticleDefinition*,
-					 const G4String& nam)
-  : G4VEmModel(nam),isInitialized(false)
+G4PEEffectModel::G4PEEffectModel(const G4ParticleDefinition*, 
+				 const G4String& nam)
+  : G4VEmModel(nam)
 {
+  G4cout << "### G4PEEffectModel is obsolete "
+	 << "and will be removed for the next release." << G4endl;
+
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*eV;
   fParticleChange = 0;
+
+  // default generator
+  SetAngularDistribution(new G4SauterGavrilaAngularDistribution());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,10 +91,7 @@ void G4PEEffectModel::Initialise(const G4ParticleDefinition*,
 {
   // always false before the run
   SetDeexcitationFlag(false);
-
-  if (isInitialized) { return; }
-  fParticleChange = GetParticleChangeForGamma();
-  isInitialized = true;
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -147,60 +152,37 @@ void G4PEEffectModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   // Select atomic shell
   G4int nShells = anElement->GetNbOfAtomicShells();
   G4int i  = 0;  
-  while ((i<nShells) && (energy<anElement->GetAtomicShell(i))) i++;
+  while ((i<nShells) && (energy<anElement->GetAtomicShell(i))) { ++i; }
+
+  G4double edep = energy;
 
   // no shell available
-  if (i == nShells) return;
+  if (i < nShells) {
   
-  G4double bindingEnergy  = anElement->GetAtomicShell(i);
-  G4double ElecKineEnergy = energy - bindingEnergy;
+    G4double bindingEnergy = anElement->GetAtomicShell(i);
+    G4double elecKineEnergy = energy - bindingEnergy;
 
-  if (ElecKineEnergy > fminimalEnergy)
-    {
-     // direction of the photo electron
-     //
-     G4double cosTeta = ElecCosThetaDistribution(ElecKineEnergy);
-     G4double sinTeta = sqrt(1.-cosTeta*cosTeta);
-     G4double Phi     = twopi * G4UniformRand();
-     G4double dirx = sinTeta*cos(Phi),diry = sinTeta*sin(Phi),dirz = cosTeta;
-     G4ThreeVector ElecDirection(dirx,diry,dirz);
-     ElecDirection.rotateUz(PhotonDirection);
-     //
-     G4DynamicParticle* aParticle = new G4DynamicParticle (
-                       theElectron,ElecDirection, ElecKineEnergy);
-     fvect->push_back(aParticle);
-    }
+    if (elecKineEnergy > fminimalEnergy) {
+
+      edep = bindingEnergy;
+      G4ThreeVector elecDirection =
+	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
+						  elecKineEnergy,
+						  i, 
+						  couple->GetMaterial());
+
+      G4DynamicParticle* aParticle = 
+	new G4DynamicParticle(theElectron, elecDirection, elecKineEnergy);
+      fvect->push_back(aParticle);
+
+    } 
+  }
     
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
-  fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4PEEffectModel::ElecCosThetaDistribution(G4double kineEnergy)
-{
-  // Compute Theta distribution of the emitted electron, with respect to the
-  // incident Gamma.
-  // The Sauter-Gavrila distribution for the K-shell is used.
-  //
-  G4double costeta = 1.;
-  G4double gamma   = 1. + kineEnergy/electron_mass_c2;
-  if (gamma > 5.) { return costeta; }
-  G4double beta  = sqrt(gamma*gamma-1.)/gamma;
-  G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
-
-  G4double rndm,term,greject,grejsup;
-  if (gamma < 2.) { grejsup = gamma*gamma*(1.+b-beta*b); }
-  else            { grejsup = gamma*gamma*(1.+b+beta*b); }
-
-  do { rndm = 1.-2*G4UniformRand();
-       costeta = (rndm+beta)/(rndm*beta+1.);
-       term = 1.-beta*costeta;
-       greject = (1.-costeta*costeta)*(1.+b*term)/(term*term);
-  } while(greject < G4UniformRand()*grejsup);
-
-  return costeta;
+  if(edep > 0.0) {
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

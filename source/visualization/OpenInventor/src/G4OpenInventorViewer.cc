@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc,v 1.61 2010-10-06 10:09:57 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -185,7 +184,9 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // Scaling for Open Inventor is done by the scene handler so it
       // needs a kernel visit.  (In this respect, it differs from the
       // OpenGL drivers, where it's done in SetView.)
-      (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())
+      (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
+      (vp.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       )
     return true;
 

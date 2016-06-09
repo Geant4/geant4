@@ -15,7 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15/11/2011 I. Hrivnacova (exTransforms-V09-04-00)
+06/09/2012 I. Hrivnacova (exTransforms-V09-05-03)
+- Fixed warning on windows from DetectorConstruction
 
-First version of Transforms examples implemented by M.Maire;
-the reflection option added by I. Hrivnacova. 
+04/09/2012 I. Hrivnacova (exTransforms-V09-05-02)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Minor fixes in .README  
+     
+25/06/2012 mma (exTransforms-V09-05-01)
+ - update readme and .readme
+      
+12/03/2012 mma (exTransforms-V09-05-00)
+ - simplified version, limited to geometry functionalities
+ 
+15/11/2011 I. Hrivnacova (exTransforms-V09-04-00)
+ First version of Transforms examples implemented by M.Maire;
+ the reflection option added by I. Hrivnacova. 

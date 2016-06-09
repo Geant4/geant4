@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.8 2010-06-16 11:20:54 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -138,11 +137,11 @@ void G4ePolarizedIonisation::PrintInfo()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4ePolarizedIonisation::GetMeanFreePath(const G4Track& track,
-                                              G4double s,
-                                              G4ForceCondition* cond)
+						 G4double step,
+						 G4ForceCondition* cond)
 {
   // *** get unploarised mean free path from lambda table ***
-  G4double mfp = G4VEnergyLossProcess::GetMeanFreePath(track, s, cond);
+  G4double mfp = G4VEnergyLossProcess::GetMeanFreePath(track, step, cond);
 
 
   // *** get asymmetry, if target is polarized ***
@@ -150,12 +149,12 @@ G4double G4ePolarizedIonisation::GetMeanFreePath(const G4Track& track,
   G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
 
   G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
-  const G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
+  G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
   const G4StokesVector ePolarization = track.GetPolarization();
 
   if (mfp != DBL_MAX &&  volumeIsPolarized && !ePolarization.IsZero()) {
     const G4DynamicParticle* aDynamicElectron = track.GetDynamicParticle();
-    const G4double eEnergy = aDynamicElectron->GetKineticEnergy();
+    G4double eEnergy = aDynamicElectron->GetKineticEnergy();
     const G4ParticleMomentum eDirection0 = aDynamicElectron->GetMomentumDirection();
 
     G4StokesVector volumePolarization = polarizationManger->GetVolumePolarization(aLVolume);
@@ -192,11 +191,11 @@ G4double G4ePolarizedIonisation::GetMeanFreePath(const G4Track& track,
 }
 
 G4double G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                              G4double s,
+                                              G4double step,
                                               G4ForceCondition* cond)
 {
   // *** get unploarised mean free path from lambda table ***
-  G4double mfp = G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(track, s, cond);
+  G4double mfp = G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(track, step, cond);
 
 
   // *** get asymmetry, if target is polarized ***
@@ -204,22 +203,19 @@ G4double G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength(const G4Tr
   G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
 
   G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
-  const G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
+  G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
   const G4StokesVector ePolarization = track.GetPolarization();
 
   if (mfp != DBL_MAX &&  volumeIsPolarized && !ePolarization.IsZero()) {
     const G4DynamicParticle* aDynamicElectron = track.GetDynamicParticle();
-    const G4double eEnergy = aDynamicElectron->GetKineticEnergy();
+    G4double eEnergy = aDynamicElectron->GetKineticEnergy();
     const G4ParticleMomentum eDirection0 = aDynamicElectron->GetMomentumDirection();
 
     G4StokesVector volumePolarization = polarizationManger->GetVolumePolarization(aLVolume);
 
-    G4bool isOutRange;
     size_t idx = CurrentMaterialCutsCoupleIndex();
-    G4double lAsymmetry = (*theAsymmetryTable)(idx)->
-                                  GetValue(eEnergy, isOutRange);
-    G4double tAsymmetry = (*theTransverseAsymmetryTable)(idx)->
-                                  GetValue(eEnergy, isOutRange);
+    G4double lAsymmetry = (*theAsymmetryTable)(idx)->Value(eEnergy);
+    G4double tAsymmetry = (*theTransverseAsymmetryTable)(idx)->Value(eEnergy);
 
     // calculate longitudinal spin component
     G4double polZZ = ePolarization.z()*
@@ -276,10 +272,10 @@ void G4ePolarizedIonisation::BuildPhysicsTable(const G4ParticleDefinition& part)
     //create physics vectors then fill it (same parameters as lambda vector)
     G4PhysicsVector * ptrVectorA = LambdaPhysicsVector(couple,cut);
     G4PhysicsVector * ptrVectorB = LambdaPhysicsVector(couple,cut);
-    size_t nBins = ptrVectorA->GetVectorLength();
+    size_t bins = ptrVectorA->GetVectorLength();
 
-    for (size_t i = 0 ; i < nBins ; i++ ) {
-      G4double lowEdgeEnergy = ptrVectorA->GetLowEdgeEnergy(i);
+    for (size_t i = 0 ; i < bins ; i++ ) {
+      G4double lowEdgeEnergy = ptrVectorA->Energy(i);
       G4double tasm=0.;
       G4double asym = ComputeAsymmetry(lowEdgeEnergy, couple, part, cut, tasm);
       ptrVectorA->PutValue(i,asym);

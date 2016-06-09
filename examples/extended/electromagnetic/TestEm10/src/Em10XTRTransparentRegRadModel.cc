@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10XTRTransparentRegRadModel.cc
+/// \brief Implementation of the Em10XTRTransparentRegRadModel class
+//
 //
 
 #include <complex>
@@ -31,6 +34,7 @@
 #include "Randomize.hh"
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"
+#include "G4PhysicalConstants.hh"
 
 using namespace std;
 
@@ -39,7 +43,7 @@ using namespace std;
 // Constructor, destructor
 
 Em10XTRTransparentRegRadModel::Em10XTRTransparentRegRadModel(G4LogicalVolume *anEnvelope,
-					 G4Material* foilMat,G4Material* gasMat, 
+                                         G4Material* foilMat,G4Material* gasMat, 
                                          G4double a, G4double b, G4int n,
                                          const G4String& processName) :
   G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,n,processName)

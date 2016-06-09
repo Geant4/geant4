@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeKzeroBarNChannel.cc,v 1.7 2010-08-04 05:28:24 mkelsey Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor

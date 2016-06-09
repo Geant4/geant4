@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungFS.cc,v 1.1 2010-12-20 14:11:37 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -37,6 +36,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PenelopeBremsstrahlungFS.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLogVector.hh" 
@@ -62,7 +63,8 @@ G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS() :
   for (size_t i=0;i<nBinsE;i++)
     theEGrid[i] = 0.;
 
-  theElementData = new std::map<const G4int,G4DataVector*>;
+  theElementData = new std::map<G4int,G4DataVector*>;
+  theTempVec = new G4PhysicsFreeVector(nBinsX);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -71,8 +73,11 @@ G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
 {
   ClearTables();
 
+  if (theTempVec)
+    delete theTempVec;
+
   //Clear manually theElementData
-  std::map<const G4int,G4DataVector*>::iterator i;
+  std::map<G4int,G4DataVector*>::iterator i;
   if (theElementData)
     {
       for (i=theElementData->begin(); i != theElementData->end(); i++)        
@@ -594,10 +599,18 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 
   //Find the energy bin using bi-partition
   size_t eBin = 0;
-  if (energy < theEGrid[0])
-    eBin = 0;
-  else if (energy > theEGrid[nBinsE-1])
-    eBin = nBinsE-1;
+  G4bool firstOrLastBin = false;
+
+  if (energy < theEGrid[0]) //below first bin
+    {
+      eBin = 0;
+      firstOrLastBin = true;
+    }
+  else if (energy > theEGrid[nBinsE-1]) //after last bin
+    {
+      eBin = nBinsE-1;
+      firstOrLastBin = true;
+    }
   else
     {
       size_t i=0;
@@ -614,12 +627,41 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
     }
 
   //Get the appropriate physics vector
-  G4PhysicsFreeVector* theVec = (G4PhysicsFreeVector*) (*theTableInte)[eBin];
+  G4PhysicsFreeVector* theVec1 = (G4PhysicsFreeVector*) (*theTableInte)[eBin];
+
+  //use a "temporary" vector which contains the linear interpolation of the x spectra 
+  //in energy
+
+  //theTempVect is allocated only once (member variable), but it is overwritten at 
+  //every call of this method (because the interpolation factors change!)
+  if (!firstOrLastBin)
+    {  
+      G4PhysicsFreeVector* theVec2 = (G4PhysicsFreeVector*) (*theTableInte)[eBin+1];
+      for (size_t iloop=0;iloop<nBinsX;iloop++)
+	{
+	  G4double val = (*theVec1)[iloop]+(((*theVec2)[iloop]-(*theVec1)[iloop]))*
+	    (energy-theEGrid[eBin])/(theEGrid[eBin+1]-theEGrid[eBin]);
+	  theTempVec->PutValue(iloop,theXGrid[iloop],val);
+	}      
+    }
+  else //first or last bin, no interpolation
+    {
+      for (size_t iloop=0;iloop<nBinsX;iloop++)	
+	theTempVec->PutValue(iloop,theXGrid[iloop],(*theVec1)[iloop]);	
+    }
 
   //Start the game
   G4double pbcut = (*(thePBcut->find(theKey)->second))[eBin];
-  G4double pCumulative = (*theVec)[nBinsX-1]; //last value  
+ 
+  if (!firstOrLastBin) //linear interpolation on pbcut as well
+    {
+      pbcut = (*(thePBcut->find(theKey)->second))[eBin] + 
+	((*(thePBcut->find(theKey)->second))[eBin+1]-(*(thePBcut->find(theKey)->second))[eBin])*
+	(energy-theEGrid[eBin])/(theEGrid[eBin+1]-theEGrid[eBin]);
+    }
 
+  G4double pCumulative = (*theTempVec)[nBinsX-1]; //last value  
+ 
   G4double eGamma = 0;
   do
     {    
@@ -627,20 +669,20 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 
       //find where it is
       size_t ibin = 0;
-      if (pt < (*theVec)[0])
+      if (pt < (*theTempVec)[0])
 	ibin = 0;
-      else if (pt > (*theVec)[nBinsX-1])
+      else if (pt > (*theTempVec)[nBinsX-1])
 	{
 	  //We observed problems due to numerical rounding here (STT). 
 	  //delta here is a tiny positive number
-	  G4double delta = pt-(*theVec)[nBinsX-1];
+	  G4double delta = pt-(*theTempVec)[nBinsX-1];
 	  if (delta < pt*1e-10) // very small! Numerical rounding only
 	    {
-	      ibin = nBinsX-1;
+	      ibin = nBinsX-2;
 	      G4ExceptionDescription ed;
-	      ed << "Found that (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
-		" , (*theVec)[nBinsX-1] = " << (*theVec)[nBinsX-1] << " and delta = " << 
-		(pt-(*theVec)[nBinsX-1]) << G4endl;
+	      ed << "Found that (pt > (*theTempVec)[nBinsX-1]) with pt = " << pt << 
+		" , (*theTempVec)[nBinsX-1] = " << (*theTempVec)[nBinsX-1] << " and delta = " << 
+		(pt-(*theTempVec)[nBinsX-1]) << G4endl;
 	      ed << "Possible symptom of problem with numerical precision" << G4endl;
 	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
 			  "em2015",JustWarning,ed);
@@ -648,8 +690,8 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	  else //real problem
 	    {
 	      G4ExceptionDescription ed;
-	      ed << "Crash at (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
-		" , (*theVec)[nBinsX-1]=" << (*theVec)[nBinsX-1] << " and nBinsX = " << 
+	      ed << "Crash at (pt > (*theTempVec)[nBinsX-1]) with pt = " << pt << 
+		" , (*theTempVec)[nBinsX-1]=" << (*theTempVec)[nBinsX-1] << " and nBinsX = " << 
 		nBinsX << G4endl;
 	      ed << "Material: " << mat->GetName() << ", energy = " << energy/keV << " keV" << 
 		G4endl;
@@ -664,7 +706,7 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	  while ((j-i)>1)
 	    {
 	      size_t k = (i+j)/2;
-	      if (pt > (*theVec)[k])
+	      if (pt > (*theTempVec)[k])
 		i = k;
 	      else
 		j = k;
@@ -673,7 +715,7 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	}
     
       G4double w1 = theXGrid[ibin];
-      G4double w2 = theXGrid[ibin+1];    
+      G4double w2 = theXGrid[ibin+1];            
 
       G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTableRed)[ibin];
       G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTableRed)[ibin+1];     
@@ -685,13 +727,20 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
       G4double dpdfb = pdf2-pdf1;
       G4double B = dpdfb/deltaW;
       G4double A = pdf1-B*w1;
-      G4double wbcut  = (cut < theEGrid[eBin]) ? cut/theEGrid[eBin] : 1.0;
+      //I already made an interpolation in energy, so I can use the actual value for the 
+      //calculation of the wbcut, instead of the grid values (except for the last bin)
+      G4double wbcut  = (cut < energy) ? cut/energy : 1.0;
+      if (firstOrLastBin) //this is an particular case: no interpolation available
+	wbcut  = (cut < theEGrid[eBin]) ? cut/theEGrid[eBin] : 1.0;
+     
       if (w1 < wbcut)
 	w1 = wbcut;
       if (w2 < w1)
 	{
 	  G4cout << "Warning in G4PenelopeBremsstrahlungFS::SampleX()" << G4endl;
-	  G4cout << "Conflicting end-point values" << G4endl;
+	  G4cout << "Conflicting end-point values: w1=" << w1 << "; w2 = " << w2 << G4endl;
+	  G4cout << "wbcut = " << wbcut << " energy= " << energy/keV << " keV" << G4endl;
+	  G4cout << "cut = " << cut/keV << " keV" << G4endl;
 	  return w1*energy;
 	}
   
@@ -706,6 +755,7 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	}while(loopAgain);     
       eGamma *= energy;
     }while(eGamma < cut); //repeat if sampled sub-cut!  
+
   return eGamma;
 }
 

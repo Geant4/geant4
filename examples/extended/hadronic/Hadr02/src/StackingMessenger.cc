@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.cc,v 1.3 2006-06-29 17:24:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr02/src/StackingMessenger.cc
+/// \brief Implementation of the StackingMessenger class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -47,37 +49,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:stackAction(stack)
+:fStackAction(stack)
 {
-  killCmd = new G4UIcmdWithABool("/testhadr/killAll",this);
-  killCmd->SetGuidance("  Choice : true false");
-  killCmd->SetGuidance("Kill all secondaries");
-  killCmd->SetParameterName("choice",true);
-  killCmd->SetDefaultValue(false);
+  fKillCmd = new G4UIcmdWithABool("/testhadr/killAll",this);
+  fKillCmd->SetGuidance("  Choice : true false");
+  fKillCmd->SetGuidance("Kill all secondaries");
+  fKillCmd->SetParameterName("choice",true);
+  fKillCmd->SetDefaultValue(false);
 
-  kCmd = new G4UIcmdWithABool("/testhadr/killEM", this);
-  kCmd->SetGuidance("  Choice : true false");
-  kCmd->SetGuidance("Kill secondary e+, e-, gamma");
-  kCmd->SetParameterName("ch", true);
-  kCmd->SetDefaultValue(true);
+  fKCmd = new G4UIcmdWithABool("/testhadr/killEM", this);
+  fKCmd->SetGuidance("  Choice : true false");
+  fKCmd->SetGuidance("Kill secondary e+, e-, gamma");
+  fKCmd->SetParameterName("ch", true);
+  fKCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::~StackingMessenger()
 {
-  delete killCmd;
-  delete kCmd;
+  delete fKillCmd;
+  delete fKCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
-  if(command == killCmd) {
-    stackAction->SetKillAll(killCmd->GetNewBoolValue(newValue));               
-  } else if(command == kCmd) {
-    stackAction->SetKillEM(kCmd->GetNewBoolValue(newValue));               
+  if(command == fKillCmd) {
+    fStackAction->SetKillAll(fKillCmd->GetNewBoolValue(newValue));
+  } else if(command == fKCmd) {
+    fStackAction->SetKillEM(fKCmd->GetNewBoolValue(newValue));               
   }
 }
 

@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.8 2009-11-20 16:39:38 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4RPGInelastic.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadReentrentException.hh"
 #include "G4RPGStrangeProduction.hh"
 #include "G4RPGTwoBody.hh"
@@ -64,7 +65,7 @@ G4RPGInelastic::G4RPGInelastic(const G4String& modelName)
 }
 
 
-G4double G4RPGInelastic::Pmltpc(G4int np, G4int nm, G4int nz, 
+G4double G4RPGInelastic::Pmltpc(G4int np, G4int nneg, G4int nz, 
                                 G4int n, G4double b, G4double c)
 {
   const G4double expxu =  82.;           // upper bound for arg. of exp
@@ -74,20 +75,20 @@ G4double G4RPGInelastic::Pmltpc(G4int np, G4int nm, G4int nz,
   G4double nzf = 0.0;
   G4int i;
   for( i=2; i<=np; i++ )npf += std::log((double)i);
-  for( i=2; i<=nm; i++ )nmf += std::log((double)i);
+  for( i=2; i<=nneg; i++ )nmf += std::log((double)i);
   for( i=2; i<=nz; i++ )nzf += std::log((double)i);
   G4double r;
-  r = std::min( expxu, std::max( expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
+  r = std::min( expxu, std::max( expxl, -(np-nneg+nz+b)*(np-nneg+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
   return std::exp(r);
 }
 
 
 G4int G4RPGInelastic::Factorial( G4int n )
 {
-  G4int m = std::min(n,10);
+  G4int j = std::min(n,10);
   G4int result = 1;
-  if( m <= 1 )return result;
-  for( G4int i=2; i<=m; ++i )result *= i;
+  if (j <= 1) return result;
+  for (G4int i = 2; i <= j; ++i) result *= i;
   return result;
 }
 
@@ -122,12 +123,12 @@ G4bool G4RPGInelastic::MarkLeadingStrangeParticle(
 }
 
  
- void G4RPGInelastic::SetUpPions(const G4int np, const G4int nm, 
+ void G4RPGInelastic::SetUpPions(const G4int np, const G4int nneg, 
                                  const G4int nz,
                              G4FastVector<G4ReactionProduct,256> &vec,
                                  G4int &vecLen)
  {
-   if( np+nm+nz == 0 )return;
+   if( np+nneg+nz == 0 )return;
    G4int i;
    G4ReactionProduct *p;
    for( i=0; i<np; ++i )
@@ -137,14 +138,14 @@ G4bool G4RPGInelastic::MarkLeadingStrangeParticle(
      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
      vec.SetElement( vecLen++, p );
    }
-   for( i=np; i<np+nm; ++i )
+   for( i=np; i<np+nneg; ++i )
    {
      p = new G4ReactionProduct;
      p->SetDefinition( G4PionMinus::PionMinus() );
      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
      vec.SetElement( vecLen++, p );
    }
-   for( i=np+nm; i<np+nm+nz; ++i )
+   for( i=np+nneg; i<np+nneg+nz; ++i )
    {
      p = new G4ReactionProduct;
      p->SetDefinition( G4PionZero::PionZero() );
@@ -456,11 +457,11 @@ G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256>& vec,
 
   } else {
     G4double p = currentParticle.GetMomentum().mag()/MeV;
-    G4ThreeVector m = currentParticle.GetMomentum();
+    G4ThreeVector mom = currentParticle.GetMomentum();
     if (p > DBL_MIN)
-      theParticleChange.SetMomentumChange( m.x()/p, m.y()/p, m.z()/p );
+      theParticleChange.SetMomentumChange(mom.x()/p, mom.y()/p, mom.z()/p );
     else
-      theParticleChange.SetMomentumChange( 0.0, 0.0, 1.0 );
+      theParticleChange.SetMomentumChange(0.0, 0.0, 1.0);
 
     G4double aE = currentParticle.GetKineticEnergy();
     if (std::fabs(aE)<.1*eV) aE=.1*eV;

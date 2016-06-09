@@ -39,6 +39,7 @@
 #include "G4KM_NucleonEqRhs.hh"
 #include "G4VNuclearDensity.hh"
 
+#include "G4PhysicalConstants.hh"
 
 G4KM_NucleonEqRhs::G4KM_NucleonEqRhs(G4KM_DummyField *field,
 				     G4V3DNucleus * nucleus) :

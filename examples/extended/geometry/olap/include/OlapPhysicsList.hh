@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file geometry/olap/include/OlapPhysicsList.hh
+/// \brief Definition of the OlapPhysicsList class
 //
-// $Id: OlapPhysicsList.hh,v 1.2 2006-06-29 17:22:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------

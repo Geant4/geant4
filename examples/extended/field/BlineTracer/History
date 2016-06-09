@@ -15,6 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th Nnvember 2012  Ivana Hrivnacova (BlineTracer-V09-05-03)
+- Fixed testBlineTracer: 
+  now a physics list has to be instatiated first. 
+
+21st September 2012  Ivana Hrivnacova (BlineTracer-V09-05-02)
+- Fixed compiler warning (unused variable in G4BlineEventAction.cc)
+
+5th April 2012  Laurent Desorgher  (BlineTracer-V09-05-01)
+- Update/Review of the code according to coding guide line 2.1
+
+4th April 2012  Laurent Desorgher  (BlineTracer-V09-05-00)
+- Update/Review of the code according to coding guide line 1.3,1.4, and 1.5
+
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 

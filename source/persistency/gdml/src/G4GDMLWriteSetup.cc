@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.cc,v 1.13 2009-04-24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4GDMLWriteSetup Implementation
 //

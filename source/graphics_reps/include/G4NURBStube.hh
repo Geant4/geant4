@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStube.hh,v 1.9 2006-06-29 19:05:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

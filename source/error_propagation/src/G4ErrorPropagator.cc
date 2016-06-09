@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc,v 1.7 2007-11-14 17:01:14 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -38,6 +37,7 @@
 #include "G4ErrorGeomVolumeTarget.hh"
 #include "G4ErrorSurfaceTarget.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Track.hh"
 #include "G4SteppingManager.hh"
@@ -55,14 +55,14 @@
 
 //---------------------------------------------------------------------------
 G4ErrorPropagator::G4ErrorPropagator()
-  : theInitialTrajState(0), theFinalTrajState(0)
+  : theStepLength(0.), theInitialTrajState(0),
+    theFinalTrajState(0), theStepN(0), theG4Track(0)
 {
   verbose =  G4ErrorPropagatorData::verbose();
 #ifdef G4EVERBOSE
    if(verbose >= 5) { G4cout << "G4ErrorPropagator " << this << G4endl; }
 #endif
 
-  theG4Track = 0;
   fpSteppingManager = G4EventManager::GetEventManager()
                     ->GetTrackingManager()->GetSteppingManager();
   thePropIsInitialized = false;
@@ -169,6 +169,8 @@ G4int G4ErrorPropagator::Propagate( G4ErrorTrajState* currentTS,
   theG4Track->GetDefinition()->GetProcessManager()->EndTracking();
 
   InvokePostUserTrackingAction( theG4Track );
+
+  // delete currentTS_FREE;
 
   return ierr;
 }

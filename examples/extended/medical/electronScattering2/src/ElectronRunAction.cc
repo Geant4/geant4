@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/ElectronRunAction.cc
+/// \brief Implementation of the ElectronRunAction class
+//
 
 #include "ElectronRunAction.hh"
 #include "ElectronRun.hh"
@@ -30,7 +33,7 @@
 #include <assert.h>
 
 ElectronRunAction::ElectronRunAction(G4String &outputFile) {
-  outputFileSpec = outputFile;
+  fOutputFileSpec = outputFile;
 }
 
 ElectronRunAction::~ElectronRunAction() {}
@@ -49,5 +52,5 @@ void ElectronRunAction::EndOfRunAction(const G4Run* aRun)
   const ElectronRun* theRun = dynamic_cast<const ElectronRun*>(aRun);
   assert (0 != theRun);
 
-  theRun->DumpData(outputFileSpec);
+  theRun->DumpData(fOutputFileSpec);
 }

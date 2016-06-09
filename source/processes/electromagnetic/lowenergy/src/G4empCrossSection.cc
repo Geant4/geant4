@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.cc,v 1.4 2011-01-03 19:35:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //         
 //
@@ -32,6 +31,7 @@
 // -----------
 //  29 Apr 2009   ALF   1st implementation
 //  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
+//  09 Mar 2012   LP  updated methods
 //
 
 
@@ -60,7 +60,8 @@ G4empCrossSection::~G4empCrossSection()
 std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
 							 G4double incidentEnergy,
 							 G4double mass,
-							 G4double,G4bool) const
+							 G4double,
+							 const G4Material*) 
 {
   std::vector<G4double> crossSections;
   G4ParticleDefinition* aProton = G4Proton::Proton();
@@ -89,7 +90,8 @@ std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
 
 G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double incidentEnergy,
-					 G4double mass) const
+					 G4double mass,
+					 const G4Material*)
 {
 
   //let's reproduce  
@@ -121,12 +123,13 @@ G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 }
 
 std::vector<G4double> G4empCrossSection::Probabilities(G4int Z,
-							   G4double incidentEnergy,
-							   G4double mass,
-							   G4double deltaEnergy) const
+						       G4double incidentEnergy,
+						       G4double mass,
+						       G4double deltaEnergy,
+						       const G4Material* mat)
 {
   
-std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);
+  std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, deltaEnergy,mat);
 
   for (size_t i=0; i<crossSections.size(); i++ ) {
     

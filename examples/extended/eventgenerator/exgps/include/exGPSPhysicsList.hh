@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSPhysicsList.hh
+/// \brief Definition of the exGPSPhysicsList class
+//
 
 #ifndef exGPSPhysicsList_h
 #define exGPSPhysicsList_h 1
@@ -36,12 +39,12 @@ class exGPSPhysicsList: public G4VUserPhysicsList
 {
   public:
     exGPSPhysicsList();
-   ~exGPSPhysicsList();
+    virtual ~exGPSPhysicsList();
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
     void SetCuts();
 
   public:

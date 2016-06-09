@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.10 2007-02-24 06:45:04 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy Deuteron Inelastic Process
 // J.L. Chuma, TRIUMF, 25-Feb-1997
@@ -39,6 +38,8 @@
 // the corresponding process.
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InelasticInteraction.hh"
  
 class G4LEDeuteronInelastic : public G4InelasticInteraction
@@ -48,9 +49,11 @@ class G4LEDeuteronInelastic : public G4InelasticInteraction
     G4LEDeuteronInelastic() : G4InelasticInteraction("G4LEDeuteronInelastic")
     {
       SetMinEnergy( 0.0 );
-      // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV
+      // SetMaxEnergy( 100.*CLHEP::MeV );  // NUCREC only worked for energies < 100MeV
       // Work around to avoid exception in G4EnergyRangeManager
-      SetMaxEnergy( 10.*TeV );  // NUCREC only worked for energies < 100MeV
+      SetMaxEnergy( 10.*CLHEP::TeV );  // NUCREC only worked for energies < 100MeV
+      G4cout << "WARNING: model G4LEDeuteronInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
     
     ~G4LEDeuteronInelastic() {}

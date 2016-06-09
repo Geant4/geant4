@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.hh,v 1.2 2011-01-03 19:35:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //         
 //
@@ -32,6 +31,7 @@
 // -----------
 //  21 Apr 2009   ALF  1st implementation
 //  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
+//  09 Mar 2012   LP   changed signature of methods
 //
 // -------------------------------------------------------------------
 
@@ -60,16 +60,18 @@ public:
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy,
-					G4bool testFlag = false) const;
+					const G4Material* mat);
 
   G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
-			G4double mass) const;
+			G4double mass,
+			const G4Material* mat);
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
 				      G4double mass,
-				      G4double deltaEnergy) const;
+				      G4double deltaEnergy,
+				      const G4Material* mat);
   
   
   void SetTotalCS(G4double);

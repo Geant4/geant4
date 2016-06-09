@@ -29,14 +29,14 @@ inline double Hep3Vector::getX() const { return dx; }
 inline double Hep3Vector::getY() const { return dy; }
 inline double Hep3Vector::getZ() const { return dz; }
 
-inline void Hep3Vector::setX(double x) { dx = x; }
-inline void Hep3Vector::setY(double y) { dy = y; }
-inline void Hep3Vector::setZ(double z) { dz = z; }
+inline void Hep3Vector::setX(double x1) { dx = x1; }
+inline void Hep3Vector::setY(double y1) { dy = y1; }
+inline void Hep3Vector::setZ(double z1) { dz = z1; }
 
-inline void Hep3Vector::set(double x, double y, double z) { 
-  dx = x; 
-  dy = y; 
-  dz = z; 
+inline void Hep3Vector::set(double x1, double y1, double z1) { 
+  dx = x1; 
+  dy = y1; 
+  dz = z1; 
 }
 
 // --------------
@@ -68,18 +68,18 @@ inline double operator * (const Hep3Vector & a, const Hep3Vector & b) {
 // --------------------------
 
 inline void Hep3Vector::setRThetaPhi
-		  ( double r, double theta, double phi ) {
-  setSpherical (r, theta, phi); 
+		  ( double r1, double theta1, double phi1 ) {
+  setSpherical (r1, theta1, phi1); 
 }
 
 inline void Hep3Vector::setREtaPhi
-		  ( double r, double eta,  double phi ) {
-  setSpherical (r, 2*std::atan(std::exp(-eta)), phi); 
+		  ( double r1, double eta1,  double phi1 ) {
+  setSpherical (r1, 2*std::atan(std::exp(-eta1)), phi1); 
 }
 
 inline void Hep3Vector::setRhoPhiZ
-		  ( double rho, double phi, double z) {
-  setCylindrical (rho, phi, z); 
+		  ( double rho1, double phi1, double z1) {
+  setCylindrical (rho1, phi1, z1); 
 }
 
 // ------------
@@ -88,12 +88,12 @@ inline void Hep3Vector::setRhoPhiZ
 
 inline Hep3Vector::Hep3Vector()
   : dx(0.), dy(0.), dz(0.) {}
-inline Hep3Vector::Hep3Vector(double x)
-  : dx(x), dy(0.), dz(0.) {}
-inline Hep3Vector::Hep3Vector(double x, double y)
-  : dx(x), dy(y), dz(0.) {}
-inline Hep3Vector::Hep3Vector(double x, double y, double z)
-  : dx(x), dy(y), dz(z) {}
+inline Hep3Vector::Hep3Vector(double x1)
+  : dx(x1), dy(0.), dz(0.) {}
+inline Hep3Vector::Hep3Vector(double x1, double y1)
+  : dx(x1), dy(y1), dz(0.) {}
+inline Hep3Vector::Hep3Vector(double x1, double y1, double z1)
+  : dx(x1), dy(y1), dz(z1) {}
 
 inline Hep3Vector::Hep3Vector(const Hep3Vector & p)
 : dx(p.dx), dy(p.dy), dz(p.dz) {}
@@ -139,7 +139,7 @@ inline double Hep3Vector::cos2Theta() const {
   return ptot2 == 0.0 ? 1.0 : dz*dz/ptot2;
 }
 
-inline void Hep3Vector::setR(double r) { setMag(r); }
+inline void Hep3Vector::setR(double r1) { setMag(r1); }
 
 inline void Hep3Vector::setTheta(double th) {
   double ma   = mag();
@@ -165,14 +165,14 @@ inline double Hep3Vector::eta()    const { return pseudoRapidity();}
 inline double Hep3Vector::getRho() const { return perp();  }
 inline double Hep3Vector::getEta() const { return pseudoRapidity();}
 
-inline void Hep3Vector::setPerp(double r) {
+inline void Hep3Vector::setPerp(double r1) {
   double p = perp();
   if (p != 0.0) {
-    dx *= r/p;
-    dy *= r/p;
+    dx *= r1/p;
+    dy *= r1/p;
   }
 }
-inline void Hep3Vector::setRho(double rho) { setPerp (rho); }
+inline void Hep3Vector::setRho(double rho1) { setPerp (rho1); }
 
 // ----------
 // Comparison
@@ -279,13 +279,13 @@ inline Hep3Vector Hep3Vector::unit() const {
 }
 
 inline Hep3Vector Hep3Vector::orthogonal() const {
-  double x = dx < 0.0 ? -dx : dx;
-  double y = dy < 0.0 ? -dy : dy;
-  double z = dz < 0.0 ? -dz : dz;
-  if (x < y) {
-    return x < z ? Hep3Vector(0,dz,-dy) : Hep3Vector(dy,-dx,0);
+  double xx = dx < 0.0 ? -dx : dx;
+  double yy = dy < 0.0 ? -dy : dy;
+  double zz = dz < 0.0 ? -dz : dz;
+  if (xx < yy) {
+    return xx < zz ? Hep3Vector(0,dz,-dy) : Hep3Vector(dy,-dx,0);
   }else{
-    return y < z ? Hep3Vector(-dz,0,dx) : Hep3Vector(dy,-dx,0);
+    return yy < zz ? Hep3Vector(-dz,0,dx) : Hep3Vector(dy,-dx,0);
   }
 }
 

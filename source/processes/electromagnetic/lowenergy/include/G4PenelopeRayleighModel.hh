@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola
 //
@@ -101,8 +100,8 @@ private:
   G4bool isInitialised;
 
   //Internal tables and manager methods
-  std::map<const G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
-  std::map<const G4int,G4PhysicsFreeVector*> *atomicFormFactor;
+  std::map<G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
+  std::map<G4int,G4PhysicsFreeVector*> *atomicFormFactor;
 
 
   G4DataVector logQSquareGrid; //log(Q^2) grid for interpolation

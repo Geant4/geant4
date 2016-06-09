@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.11 2010-10-25 17:23:01 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +44,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmSaturation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
@@ -119,8 +120,8 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       if(nloss > 0.0) {
         if(!proton) { proton = G4Proton::Proton(); }
         G4double escaled = nloss*curRatio;
-        G4double s = manager->GetRange(proton,escaled,couple)/curChargeSq; 
-	nloss /= (1.0 + bfactor*nloss/s);
+        G4double range = manager->GetRange(proton,escaled,couple)/curChargeSq; 
+	nloss /= (1.0 + bfactor*nloss/range);
       }
 
       evis = eloss + nloss;

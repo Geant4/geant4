@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/include/G4BlineTracerMessenger.hh
+/// \brief Definition of the G4BlineTracerMessenger class
 //
-// $Id: G4BlineTracerMessenger.hh,v 1.2 2006-06-29 17:15:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -62,25 +64,25 @@ class G4BlineTracerMessenger : public G4UImessenger
   public:  // with description
 
     G4BlineTracerMessenger(G4BlineTracer* aBlineTool);
-    ~G4BlineTracerMessenger();
+    virtual  ~G4BlineTracerMessenger();
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
 
   private:
 
-    G4BlineTracer* theBlineTool;
-    G4UIdirectory* BlineToolDir;
+    G4BlineTracer* fTheBlineTool;
+    G4UIdirectory* fBlineToolDir;
 
     //  commands
 
-    G4UIcmdWithAnInteger* BlineCmd;
-    G4UIcmdWithADoubleAndUnit* SetMaxTrackingStepCmd;
-    G4UIcmdWith3Vector* SetDrawColourCmd;
-    G4UIcmdWithABool*   SetDrawBlineCmd;    
-    G4UIcmdWithABool*  SetDrawPointsCmd;
-    G4UIcmdWithADouble* SetPointSizeCmd;
-    G4UIcmdWithoutParameter* DrawCmd;
-    G4UIcmdWithoutParameter* ResetCmd;
+    G4UIcmdWithAnInteger* fBlineCmd;
+    G4UIcmdWithADoubleAndUnit* fSetMaxTrackingStepCmd;
+    G4UIcmdWith3Vector* fSetDrawColourCmd;
+    G4UIcmdWithABool*   fSetDrawBlineCmd;    
+    G4UIcmdWithABool*  fSetDrawPointsCmd;
+    G4UIcmdWithADouble* fSetPointSizeCmd;
+    G4UIcmdWithoutParameter* fDrawCmd;
+    G4UIcmdWithoutParameter* fResetCmd;
 };
 
 #endif

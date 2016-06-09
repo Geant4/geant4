@@ -20,7 +20,7 @@
 
 #include "CLHEP/Random/RandLandau.h"
 #include <iostream>
-#include <cmath>	// for log()
+#include <cmath>	// for std::log()
 
 namespace CLHEP {
 

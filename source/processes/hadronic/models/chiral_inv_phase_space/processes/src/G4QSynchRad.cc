@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSynchRad.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Created by Mikhail Kosov 6-Nov-2009
 //
@@ -43,10 +42,16 @@
 //#define pdebug
 
 #include "G4QSynchRad.hh"
- 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
+
 // Constructor
 G4QSynchRad::G4QSynchRad(const G4String& Name, G4ProcessType Type):
-  G4VDiscreteProcess (Name, Type), minGamma(227.), Polarization(0.,0.,1.) {}
+  G4VDiscreteProcess (Name, Type), minGamma(227.), Polarization(0.,0.,1.) {
+  G4HadronicDeprecate("G4QSynchRad");
+}
 
 // Calculates MeanFreePath in GEANT4 internal units
 G4double G4QSynchRad::GetMeanFreePath(const G4Track& track,G4double,G4ForceCondition* cond)

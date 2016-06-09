@@ -88,7 +88,6 @@ G4double G4PiMinusStopTa::angle[8] = { 1.308997, 1.570796, 1.832596, 2.094395,
 // Constructor
 
 G4PiMinusStopTa::G4PiMinusStopTa()
-  
 {
   // Cluster size: nucleon pair, alpha, triton etc.
   // First implementation: interaction with nucleon pair only

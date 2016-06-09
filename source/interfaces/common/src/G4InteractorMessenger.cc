@@ -73,6 +73,47 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter->SetDefaultValue("");
   addButton->SetParameter (parameter);
 
+  // /gui/addIcon :
+  addIcon = new G4UIcommand("/gui/addIcon",this);
+  addIcon->SetGuidance
+  ("Add a non-checkable icon to the Icon toolbar.");
+  addIcon->SetGuidance
+  ("If the Icon parameter is set to \"user_icon\", you should provide the icon file in xpm format, otherwise you have to choose one of the candidate icons");
+  addIcon->SetGuidance
+  ("A command given without parameters will display a window that will allow one to choose the parameters (if needed) for this command.");
+  addIcon->SetGuidance
+  ("E.g: /gui/addIcon \"Change background color\" user_icon /vis/viewer/set/background ../Images/background.xpm");
+  addIcon->SetGuidance
+  ("Special cases for the Icon parameter:");
+  addIcon->SetGuidance
+  (" - open: Open an open-file-selector that can run the Command with File as argument.");
+  addIcon->SetGuidance
+  (" - save: Open a save-file-selector that can run the Command with File as argument.");
+  addIcon->SetGuidance
+  (" - move/rotate/pick/zoom_in/zoom_out: Theses icons are radio-button icons that can change cursor action.");
+  addIcon->SetGuidance
+  (" - wireframe/solid/hidden_line_removal/hidden_line_and_surface_removal: These icons are radio-button icons that can change drawing style.");
+  addIcon->SetGuidance
+  (" - perspective/ortho: These icons are radio-button icons that can change projection style.");
+
+  parameter = new G4UIparameter("Label",'s',false);
+  parameter->SetDefaultValue("");
+  addIcon->SetParameter (parameter);
+
+  parameter = new G4UIparameter("Icon",'s',false);
+  parameter->SetDefaultValue("");
+  parameter->SetParameterCandidates
+  ("open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho user_icon");
+  addIcon->SetParameter (parameter);
+
+  parameter = new G4UIparameter("Command",'s',true);
+  parameter->SetDefaultValue("no_command");
+  addIcon->SetParameter (parameter);
+
+  parameter = new G4UIparameter("File",'s',true);
+  parameter->SetDefaultValue("no_file");
+  addIcon->SetParameter (parameter);
+
   // /gui/system :
   sys = new G4UIcommand("/gui/system",this);
   sys->SetGuidance("Send a command to the system.");
@@ -85,6 +126,7 @@ G4InteractorMessenger::G4InteractorMessenger (
 G4InteractorMessenger::~G4InteractorMessenger()
 {
   delete addButton;
+  delete addIcon;
   delete addMenu;
   delete interactorDirectory;
 }
@@ -101,6 +143,8 @@ void G4InteractorMessenger::SetNewValue (
       session->AddMenu((const char*)params[0],(const char*)params[1]);
     } else if(command==addButton) {
       session->AddButton((const char*)params[0],(const char*)params[1],(const char*)params[2]);
+    } else if(command==addIcon) {
+      session->AddIcon((const char*)params[0],(const char*)params[1],(const char*)params[2],(const char*)params[3]);
     } else if(command==sys) {
       system((const char*)params[0]);
     }

@@ -23,24 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.15 2010-09-17 18:45:43 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm7/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 #include "DetectorConstruction.hh"
-#include "HistoManager.hh"
 #include "RunAction.hh"
-#include "G4SteppingManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, HistoManager* histo,
-                                RunAction* RuAct)
-:detector(det), histoManager(histo), runAction(RuAct)
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct)
+:fDetector(det), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,34 +57,34 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   if (edep <= 0.) return;
   
   G4double niel = step->GetNonIonizingEnergyDeposit();
-
-  runAction->FillEdep(edep, niel);
-
+  fRunAction->FillEdep(edep, niel);
+  
   if (step->GetTrack()->GetTrackID() == 1) {
-    runAction->AddPrimaryStep();
+    fRunAction->AddPrimaryStep();
     /*
     G4cout << step->GetTrack()->GetMaterial()->GetName()
-	   << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
-	   << "  E2= " << step->GetPostStepPoint()->GetKineticEnergy()
-	   << " Edep= " << edep << G4endl;
+           << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
+           << "  E2= " << step->GetPostStepPoint()->GetKineticEnergy()
+           << " Edep= " << edep << G4endl;
     */
   } 
 
   //Bragg curve
-  //	
+  //        
   G4StepPoint* prePoint  = step->GetPreStepPoint();
   G4StepPoint* postPoint = step->GetPostStepPoint();
    
   G4double x1 = prePoint->GetPosition().x();
   G4double x2 = postPoint->GetPosition().x();  
-  G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(detector->GetAbsorSizeX());
-  histoManager->FillHisto(1, x, edep);
-  histoManager->FillHisto(2, x, edep);
+  G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(fDetector->GetAbsorSizeX());
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, x, edep);
+  analysisManager->FillH1(2, x, edep);    
 
   //fill tallies
   //
   G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
-  if (copyNb > 0) runAction->FillTallyEdep(copyNb, edep);
+  if (copyNb > 0) fRunAction->FillTallyEdep(copyNb, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

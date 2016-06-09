@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DetectorConstruction.hh
+/// \brief Definition of the ExN04DetectorConstruction class
+//
 
 #ifndef ExN04DetectorConstruction_h
 #define ExN04DetectorConstruction_h 1

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointPositron.cc,v 1.3 2008-11-13 08:23:12 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // ------------------------------------------------------------
@@ -40,6 +39,8 @@
 
 #include "G4AdjointPositron.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // ######################################################################
 // ###                         ADJOINT ELECTRON                       ###

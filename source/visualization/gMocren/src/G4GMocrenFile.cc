@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFile.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // GMocrenFile factory.

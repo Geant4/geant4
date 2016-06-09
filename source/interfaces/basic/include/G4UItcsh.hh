@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.8 2007-06-14 05:44:58 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UItcsh_h
@@ -97,7 +96,7 @@ protected:
   void PreviousCommand();        // previous command
 
   void ListMatchedCommand();     // list matched commands
-  void CompleteCommand();        // complete command
+  void CompleteCommand();        // complete command  
   
   // utilities...
   G4String GetFirstMatchedString(const G4String& str1, 
@@ -124,7 +123,7 @@ public:
   ~G4UItcsh();
   
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);
-  virtual G4String GetCommandLine(const char* msg=0);
+  virtual G4String GetCommandLineString(const char* msg=0);
 
   virtual void ResetTerminal();
 };

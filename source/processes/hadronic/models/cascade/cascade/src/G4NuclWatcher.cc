@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclWatcher.cc,v 1.5 2010-10-19 19:48:57 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100202  M. Kelsey -- Move most code here from .hh file, clean up
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>

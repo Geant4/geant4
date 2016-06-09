@@ -1,5 +1,5 @@
 /control/verbose 2
-/tracking/verbose 1
+/tracking/verbose 3
 #
 /gun/particle e+
 /gun/energy 500 keV

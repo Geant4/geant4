@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01SteppingAction.hh,v 1.2 2006-06-29 17:43:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file runAndEvent/RE01/include/RE01SteppingAction.hh
+/// \brief Definition of the RE01SteppingAction class
 //
-
+// $Id$
+//
 
 #ifndef RE01SteppingAction_H
 #define RE01SteppingAction_H 1
@@ -36,11 +37,11 @@
 
 class RE01SteppingAction : public G4UserSteppingAction
 {
-  public:
-    RE01SteppingAction();
-    virtual ~RE01SteppingAction();
-
-    virtual void UserSteppingAction(const G4Step*);
+public:
+  RE01SteppingAction();
+  virtual ~RE01SteppingAction();
+  
+  virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif

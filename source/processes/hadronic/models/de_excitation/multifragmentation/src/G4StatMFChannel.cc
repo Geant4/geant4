@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.10 2008-11-19 14:33:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,11 +34,12 @@
 //          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
 //          Moscow, pshenich@fias.uni-frankfurt.de) fixed semi-infinite loop 
 
+#include <numeric>
 
 #include "G4StatMFChannel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
-#include <numeric>
 
 class SumCoulombEnergy : public std::binary_function<G4double,G4double,G4double>
 {

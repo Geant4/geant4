@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNotifier.hh,v 1.2 2006-06-29 19:03:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4VNotifier
 //

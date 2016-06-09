@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DriftChamber.hh,v 1.4 2006-06-29 16:30:53 gunter Exp $
+/// \file analysis/A01/include/A01DriftChamber.hh
+/// \brief Definition of the A01DriftChamber class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01DriftChamber_h
@@ -37,7 +40,6 @@ class G4TouchableHistory;
 
 class A01DriftChamber : public G4VSensitiveDetector
 {
-
   public:
       A01DriftChamber(G4String name);
       virtual ~A01DriftChamber();
@@ -47,12 +49,9 @@ class A01DriftChamber : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      A01DriftChamberHitsCollection * hitsCollection;
-      G4int HCID;
+      A01DriftChamberHitsCollection * fHitsCollection;
+      G4int fHCID;
 };
-
-
-
 
 #endif
 

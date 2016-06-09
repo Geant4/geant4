@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.10 2010-02-22 15:41:29 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file electromagnetic/TestEm2/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,8 +40,11 @@
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 
-#include <vector>
+#include "g4root.hh"
+////#include "g4xml.hh"
+////#include "g4hbook.hh"
 
+#include <vector>
 typedef  std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,12 +55,6 @@ class RunActionMessenger;
 
 class G4Run;
 
-namespace AIDA {
-  class IAnalysisFactory;
-  class ITree;
-  class IHistogram1D;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
@@ -65,110 +64,97 @@ class RunAction : public G4UserRunAction
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
-    inline void initializePerEvent();
-           void fillPerEvent();
-    inline void fillPerTrack(G4double,G4double);
-    inline void fillPerStep (G4double,G4int,G4int);
+           void InitializePerEvent();
+           void FillPerEvent();
+    inline void FillPerTrack(G4double,G4double);
+    inline void FillPerStep (G4double,G4int,G4int);
+    inline void AddStep (G4double q);
     
-    void SetVerbose(G4int val)  {verbose = val;};
+    void SetVerbose(G4int val)  {fVerbose = val;};
     
      // Acceptance parameters
      void     SetEdepAndRMS(G4ThreeVector);
      
-     G4double GetAverageEdep() const    {return edeptrue;};
-     G4double GetRMSEdep() const        {return rmstrue;};
-     G4double GetLimitEdep() const      {return limittrue;};
+     G4double GetAverageEdep() const    {return fEdeptrue;};
+     G4double GetRMSEdep() const        {return fRmstrue;};
+     G4double GetLimitEdep() const      {return fLimittrue;};
 
      // Histogram name and type
-     void SetHistoName(G4String& val)   {histoName[0] = val;};
-     void SetHistoType(G4String& val)   {histoType    = val;};
+     void SetHistoName(G4String& val)   {fHistoName[0] = val;};
      
-     const G4String& GetHistoName() const  {return histoName[1];};
-     const G4String& GetHistoType() const  {return histoType;};
+     const G4String& GetHistoName() const  {return fHistoName[1];};
      
   private:
 
-    void bookHisto();
-    void cleanHisto();
+    void BookHisto();
+    void CleanHisto();
 
   private:
 
-    DetectorConstruction*   Det;
-    PrimaryGeneratorAction* Kin;
-    RunActionMessenger*     runMessenger;
+    DetectorConstruction*   fDet;
+    PrimaryGeneratorAction* fKin;
+    RunActionMessenger*     fRunMessenger;
     
-    G4int nLbin;
-    MyVector dEdL;
-    MyVector sumELongit;
-    MyVector sumE2Longit;
-    MyVector sumELongitCumul;
-    MyVector sumE2LongitCumul;
+    G4int f_nLbin;
+    MyVector f_dEdL;
+    MyVector fSumELongit;
+    MyVector fSumE2Longit;
+    MyVector fSumELongitCumul;
+    MyVector fSumE2LongitCumul;
 
-    G4int nRbin;
-    MyVector dEdR;
-    MyVector sumERadial;
-    MyVector sumE2Radial;
-    MyVector sumERadialCumul;
-    MyVector sumE2RadialCumul;
+    G4int f_nRbin;
+    MyVector f_dEdR;
+    MyVector fSumERadial;
+    MyVector fSumE2Radial;
+    MyVector fSumERadialCumul;
+    MyVector fSumE2RadialCumul;
 
-    G4double ChargTrLength;
-    G4double sumChargTrLength;
-    G4double sum2ChargTrLength;
+    G4double fChargTrLength;
+    G4double fSumChargTrLength;
+    G4double fSum2ChargTrLength;
 
-    G4double NeutrTrLength;
-    G4double sumNeutrTrLength;
-    G4double sum2NeutrTrLength;
+    G4double fNeutrTrLength;
+    G4double fSumNeutrTrLength;
+    G4double fSum2NeutrTrLength;
 
-    G4double edeptrue;
-    G4double rmstrue;
-    G4double limittrue;
+    G4double fEdeptrue;
+    G4double fRmstrue;
+    G4double fLimittrue;
+
+    G4double fChargedStep;
+    G4double fNeutralStep;    
     
-    G4int    verbose;
+    G4int    fVerbose;
     
-    G4String histoName[2];
-    G4String histoType;
-    
-    AIDA::IAnalysisFactory* af;
-    AIDA::ITree*            tree;
-    AIDA::IHistogram1D*     histo[11];
+    G4String fHistoName[2];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void RunAction::initializePerEvent()
+void RunAction::FillPerTrack(G4double charge, G4double trkLength)
 {
-  //initialize arrays of energy deposit per bin
-  for (G4int i=0; i<nLbin; i++)
-     { dEdL[i] = 0.; }
-     
-  for (G4int j=0; j<nRbin; j++)
-     { dEdR[j] = 0.; }     
-  
-  //initialize tracklength 
-    ChargTrLength = NeutrTrLength = 0.;
+  if (charge != 0.) fChargTrLength += trkLength;
+  else              fNeutrTrLength += trkLength;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void RunAction::fillPerTrack(G4double charge, G4double trkLength)
+void RunAction::FillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
-  if (charge != 0.) ChargTrLength += trkLength;
-  else              NeutrTrLength += trkLength;   
+  f_dEdL[Lbin] += dEstep; f_dEdR[Rbin] += dEstep;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
+inline void RunAction::AddStep(G4double q)
 {
-  dEdL[Lbin] += dEstep; dEdR[Rbin] += dEstep;
+  if (q == 0.0) { fNeutralStep += 1.0; }
+  else          { fChargedStep += 1.0; }  
 }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

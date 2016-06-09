@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.cc,v 1.1 2007-01-23 13:34:19 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/src/StackingMessenger.cc
+/// \brief Implementation of the StackingMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,27 +39,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:stacking(stack)
+:fStacking(stack)
 {   
-  killCmd = new G4UIcmdWithABool("/testem/killTracks",this);
-  killCmd->SetGuidance("kill selected secondaries");  
-  killCmd->SetParameterName("kill",true);
-  killCmd->SetDefaultValue(true);
+  fKillCmd = new G4UIcmdWithABool("/testem/killTracks",this);
+  fKillCmd->SetGuidance("kill selected secondaries");  
+  fKillCmd->SetParameterName("kill",true);
+  fKillCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::~StackingMessenger()
 {
-  delete killCmd;
+  delete fKillCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
-  if (command == killCmd)
-    { stacking->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
+  if (command == fKillCmd)
+    { fStacking->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));}               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

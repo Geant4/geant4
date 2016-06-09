@@ -29,6 +29,8 @@
 //              electromagnetic calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cmath>
+
 #include "CCalG4Ecal.hh"
 
 #include "CCalMaterialFactory.hh"
@@ -36,8 +38,8 @@
 #include "CCalSensitiveDetectors.hh"
 
 #include "CCalutils.hh"
-#include <cmath>
 
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"

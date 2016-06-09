@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.46 2009-11-16 18:15:01 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.

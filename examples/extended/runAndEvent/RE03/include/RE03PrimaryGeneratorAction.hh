@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/include/RE03PrimaryGeneratorAction.hh
+/// \brief Definition of the RE03PrimaryGeneratorAction class
 //
-// $Id: RE03PrimaryGeneratorAction.hh,v 1.1 2007-11-13 19:55:43 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef RE03PrimaryGeneratorAction_h
@@ -47,10 +49,9 @@ class RE03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*                particleGun;
+    G4ParticleGun*                fParticleGun;
 
 };
-
 
 #endif
 

@@ -25,8 +25,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlungAngular.hh,v 1.1 2010-12-20 14:11:13 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: L.Pandola
 //
@@ -34,6 +33,9 @@
 // -----------
 // 23 Nov 2010  L. Pandola       1st implementation
 // 24 May 2011  L. Pandola       Renamed (make default Penelope)
+// 13 Mar 2012  L. Pandola       Made a derived class of G4VEmAngularDistribution
+//                               and update the interface accordingly
+// 18 Jul 2012  L. Pandola       Migrate to the new interface of G4VEmAngularDistribution
 //
 // Class description:
 // Calculation of angular distribution for Penelope Bremsstrahlung
@@ -45,22 +47,45 @@
 #define G4PENELOPEBREMSSTRAHLUNGANGULAR_HH 1
 #include "globals.hh"
 #include <map>
+#include "G4VEmAngularDistribution.hh"
 
 class G4PhysicsTable;
+class G4Material;
 
-class G4PenelopeBremsstrahlungAngular
+class G4PenelopeBremsstrahlungAngular : public G4VEmAngularDistribution
 { 
 
 public:
   G4PenelopeBremsstrahlungAngular(); 
   ~G4PenelopeBremsstrahlungAngular();
-  G4double SampleCosTheta(G4double Zeq,
-			  G4double primaryEnergy,G4double gammaEnergy);
-  void ClearTables();
+
+  //! The Initialize() method forces the cleaning of tables
+  void Initialize();
   
+  //! Old interface, backwards compatibility. Will not work in this case
+  //! it will produce a G4Exception().
+  G4double PolarAngle(const G4double initial_energy,
+		      const G4double final_energy,
+		      const G4int Z);
+
+  //! Samples the direction of the outgoing photon (in global coordinates). 
+  //! Forces the calculation of tables, if they are not available
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy,
+				 G4int Z,
+				 const G4Material* mat = 0);
+  
+  //! Set/Get Verbosity level
+  void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};
+  G4int GetVerbosityLevel(){return verbosityLevel;};
+
 private:
   void PrepareInterpolationTables(G4double Zeq);
-  
+  void ClearTables();
+
+  G4double GetEffectiveZ(const G4Material* material);
+  std::map<const G4Material*,G4double> *theEffectiveZSq;
+
   //Tables containing the Lorentz sampling coefficients 
   //The key is the effective Z of the material
   std::map<G4double,G4PhysicsTable*> *theLorentzTables1;
@@ -75,6 +100,8 @@ private:
 
   G4double QQ1[NumberofZPoints][NumberofEPoints][NumberofKPoints];
   G4double QQ2[NumberofZPoints][NumberofEPoints][NumberofKPoints];
+
+  G4int verbosityLevel;
 
 };
 

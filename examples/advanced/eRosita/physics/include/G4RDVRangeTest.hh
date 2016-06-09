@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDVRangeTest.hh,v 1.3 2006/06/29 19:37:21 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

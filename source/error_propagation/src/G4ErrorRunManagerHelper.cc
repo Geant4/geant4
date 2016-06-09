@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorRunManagerHelper.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -143,7 +142,7 @@ void G4ErrorRunManagerHelper::InitializePhysics()
   //----- Second option: physics list has been defined to GEANT4, do nothing GEANT4 should take care 
     if( G4RunManager::GetRunManager() != 0 && G4RunManager::GetRunManager()->GetUserPhysicsList() != 0 ){ 
       //--- Physics should be G4ErrorPhysicsList, else send a warning
-      if( static_cast<const G4ErrorPhysicsList*>(G4RunManager::GetRunManager()->GetUserPhysicsList()) != 0 ) {
+      if( static_cast<const G4ErrorPhysicsList*>(G4RunManager::GetRunManager()->GetUserPhysicsList()) == 0 ) {
         G4cerr << " WARNING G4ErrorRunManagerHelper::InitializePhysics() physics list is not G4ErrorPhysicsList. Are you sure? " << G4endl;
       }
     } else {

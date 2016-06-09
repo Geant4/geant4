@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02PSEnergyDeposit.hh
+/// \brief Definition of the RE02PSEnergyDeposit class
 //
-// $Id: RE02PSEnergyDeposit.hh,v 1.2 2006-12-13 15:42:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 
 #ifndef RE02PSEnergyDeposit_h
@@ -33,12 +35,11 @@
 
 #include "G4PSEnergyDeposit.hh"
 ///////////////////////////////////////////////////////////////////////////////
-// Description:
+// (Description)
 //   This is a primitive scorer class for scoring energy deposit.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class RE02PSEnergyDeposit : public G4PSEnergyDeposit
 {

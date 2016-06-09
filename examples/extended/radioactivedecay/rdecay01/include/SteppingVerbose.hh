@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/include/SteppingVerbose.hh
+/// \brief Definition of the SteppingVerbose class
 //
-// $Id: SteppingVerbose.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -44,8 +46,8 @@ public:
   SteppingVerbose();
  ~SteppingVerbose();
 
-  void StepInfo();
-  void TrackingStarted();
+  virtual void StepInfo();
+  virtual void TrackingStarted();
 
 };
 

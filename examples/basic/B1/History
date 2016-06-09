@@ -15,22 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29/11/11 B.Morgan (exbasic-V09-04-05)
-- Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
-  to build directory so executable is runnable directly.
+13/11/12 I. Hrivnacova  (exampleB1-V09-05-03)
+- Use QBBC physics list instead of QGSP_BIC_EMY, which becomes
+  obsolete
 
-23/11/11 I. Hrivnacova (exbasic-V09-04-04)     
-- Fixed the example name in the top comment line in init.mac and
-  init_vis.mac  
+02/11/12 J. Allison  (exampleB1-V09-05-01 and 02)
+- README: Improved.
 
-21/11/11 I. Hrivnacova (exbasic-V09-04-03)     
-- Improved vis.mac 
+02/11/12 J. Allison  (exampleB1-V09-05-00)
+- vis.mac: Improved view and added text, scale, logo etc. to scene.
 
-18/11/11 I. Hrivnacova (exbasic-V09-04-02)
-- Fixes in macros and README files
-     
-14/11/11 I. Hrivnacova (exbasic-V09-04-00)
-- The first tagged version of the new B1 example.
+14/11/11 I. Hrivnacova
+- The first tagged version of the new B1 example
+  (tagged in basic) 
 
 31/10/11 I. Hrivnacova
 - change volume names

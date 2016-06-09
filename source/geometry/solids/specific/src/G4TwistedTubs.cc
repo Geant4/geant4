@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.30 2010-11-10 10:00:16 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------
@@ -44,6 +43,8 @@
 
 #include "G4TwistedTubs.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1096,25 +1097,25 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
   // number of meshes
   //
   G4double dA = std::max(fDPhi,fPhiTwist);
-  const G4int m =
+  const G4int k =
     G4int(G4Polyhedron::GetNumberOfRotationSteps() * dA / twopi) + 2;
   const G4int n =
     G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
 
-  const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
-  const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
+  const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
+  const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;
 
   G4Polyhedron *ph=new G4Polyhedron;
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
   G4double3* xyz = new G4double3[nnodes];  // number of nodes 
   G4int4*  faces = new G4int4[nfaces] ;    // number of faces
-  fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
-  fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
-  fInnerHype->GetFacets(m,n,xyz,faces,2) ;
-  fFormerTwisted->GetFacets(m,n,xyz,faces,3) ;
-  fOuterHype->GetFacets(m,n,xyz,faces,4) ;
-  fLatterTwisted->GetFacets(m,n,xyz,faces,5) ;
+  fLowerEndcap->GetFacets(k,k,xyz,faces,0) ;
+  fUpperEndcap->GetFacets(k,k,xyz,faces,1) ;
+  fInnerHype->GetFacets(k,n,xyz,faces,2) ;
+  fFormerTwisted->GetFacets(k,n,xyz,faces,3) ;
+  fOuterHype->GetFacets(k,n,xyz,faces,4) ;
+  fLatterTwisted->GetFacets(k,n,xyz,faces,5) ;
 
   ph->createPolyhedron(nnodes,nfaces,xyz,faces);
 
@@ -1306,27 +1307,24 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     x = G4RandFlat::shoot(xmin,xmax) ;
 
     return fFormerTwisted->SurfacePoint(x,z,true) ;
-  
-  }
+   }
   else if( (chose >= a1 + a2 + a3 + a4  )&&(chose < a1 + a2 + a3 + a4 + a5 ) )
   {
-
     rmin = GetEndInnerRadius(0) ;
     rmax = GetEndOuterRadius(0) ;
-    r = G4RandFlat::shoot(rmin,rmax) ;
+    r = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
 
     phimin = fLowerEndcap->GetBoundaryMin(r) ; 
     phimax = fLowerEndcap->GetBoundaryMax(r) ;
     phi    = G4RandFlat::shoot(phimin,phimax) ;
 
     return fLowerEndcap->SurfacePoint(phi,r,true) ;
-
   }
   else
   {
     rmin = GetEndInnerRadius(1) ;
     rmax = GetEndOuterRadius(1) ;
-    r = G4RandFlat::shoot(rmin,rmax) ;
+    r = rmin + (rmax-rmin)*std::sqrt(G4RandFlat::shoot());
 
     phimin = fUpperEndcap->GetBoundaryMin(r) ; 
     phimax = fUpperEndcap->GetBoundaryMax(r) ;

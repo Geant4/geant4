@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadSecondary.hh
         G4HadSignalHandler.hh
         G4HadTmpUtil.hh
+	G4HadronicDeprecate.hh
         G4HadronicException.hh
         G4HadronicWhiteBoard.hh
         G4IsoResult.hh

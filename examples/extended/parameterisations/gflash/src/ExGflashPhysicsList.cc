@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashPhysicsList.cc
+/// \brief Implementation of the ExGflashPhysicsList class
+//
 #include "ExGflashPhysicsList.hh"
 
 #include "globals.hh"
@@ -59,13 +62,13 @@ void ExGflashPhysicsList::ConstructParticle()
   // This ensures that objects of these particle types will be
   // created in the program. 
 
-	std::cout<<"start construct particle"<<std::endl;
+  std::cout<<"start construct particle"<<std::endl;
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
   ConstructIons();
-	std::cout<<"end construct particle"<<std::endl;
+  std::cout<<"end construct particle"<<std::endl;
 }
 
 void ExGflashPhysicsList::ConstructBosons()
@@ -115,16 +118,16 @@ void ExGflashPhysicsList::ConstructIons()
 
 void ExGflashPhysicsList::ConstructProcess()
 {
-  //	std::cout<<"1111"<<std::endl;
+  //  std::cout<<"1111"<<std::endl;
   AddTransportation();
-  // 	std::cout<<"2222"<<std::endl;
+  //   std::cout<<"2222"<<std::endl;
   AddParameterisation();
   std::cout<<"AddParameterisation"<<std::endl;
  
   ConstructEM();
   std::cout<<"ConstructEM"<<std::endl;
   ConstructGeneral();
-  //	std::cout<<"5555"<<std::endl;
+  //  std::cout<<"5555"<<std::endl;
 }
 
 
@@ -259,8 +262,8 @@ void ExGflashPhysicsList::ConstructEM()
      pmanager->SetProcessOrdering(aPairProduction, idxPostStep, 4);
      
    } else if ((!particle->IsShortLived()) &&
-	      (particle->GetPDGCharge() != 0.0) && 
-	      (particle->GetParticleName() != "chargedgeantino")) {
+        (particle->GetPDGCharge() != 0.0) && 
+        (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
      G4VProcess* aMultipleScattering = new G4hMultipleScattering();
      G4VProcess* anIonisation = new G4hIonisation();

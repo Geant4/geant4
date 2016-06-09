@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/LXe/include/LXeWLSSlab.hh
+/// \brief Definition of the LXeWLSSlab class
+//
+//
 #ifndef LXeWLSSlab_H
 #define LXeWLSSlab_H 1
 
@@ -37,27 +41,30 @@
 
 class LXeWLSSlab : public G4PVPlacement
 {
-public:
-  LXeWLSSlab(G4RotationMatrix *pRot,
-		const G4ThreeVector &tlate,
-		G4LogicalVolume *pMotherLogical,
-		G4bool pMany,
-		G4int pCopyNo,
-		LXeDetectorConstruction* c);
-private:
-  void CopyValues();
-  
-  LXeDetectorConstruction* constructor;
+  public:
 
-  G4bool updated;
+    LXeWLSSlab(G4RotationMatrix *pRot,
+               const G4ThreeVector &tlate,
+               G4LogicalVolume *pMotherLogical,
+               G4bool pMany,
+               G4int pCopyNo,
+               LXeDetectorConstruction* c);
 
-  static G4LogicalVolume* ScintSlab_log;
+  private:
 
-  G4int nfibers;
-  G4double scint_x;
-  G4double scint_y;
-  G4double scint_z;
-  G4double slab_z;
+    void CopyValues();
+
+    LXeDetectorConstruction* fConstructor;
+
+    G4bool fUpdated;
+
+    static G4LogicalVolume* fScintSlab_log;
+
+    G4int fNfibers;
+    G4double fScint_x;
+    G4double fScint_y;
+    G4double fScint_z;
+    G4double fSlab_z;
 };
 
 #endif

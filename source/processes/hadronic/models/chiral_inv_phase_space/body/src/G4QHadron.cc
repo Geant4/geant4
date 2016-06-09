@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.64 2009-09-02 15:45:19 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -43,8 +42,12 @@
 //#define sdebug
 //#define ppdebug
 
-#include "G4QHadron.hh"
 #include <cmath>
+
+#include "G4QHadron.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 G4double G4QHadron::StrangeSuppress = 0.48;         // ? M.K.
@@ -225,9 +228,9 @@ void G4QHadron::DefineQC(G4int PDGCode)
   G4int dn=0;
   if(szn<-100000)
   {
-    G4int ns=(-szn)/1000000+1;
-    szn+=ns*1000000;
-    ds+=ns;
+    G4int ns_value=(-szn)/1000000+1;
+    szn+=ns_value*1000000;
+    ds+=ns_value;
   }
   else if(szn<-100)
   {
@@ -598,7 +601,8 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
     G4cerr<<"*G4QH::DecIn2:*Boost* 4M="<<theMomentum<<",e-p="
           <<theMomentum.e()-theMomentum.rho()<<G4endl;
     //throw G4QException("G4QHadron::DecayIn2: Decay of particle with zero mass")
-    theMomentum.setE(1.0000001*theMomentum.rho());
+    //theMomentum.setE(1.0000001*theMomentum.rho()); // Lead to TeV error !
+    return false;
   }
   G4double vP  = theMomentum.rho();      // Momentum of the decaying hadron
   G4double dE  = theMomentum.e();        // Energy of the decaying hadron
@@ -672,7 +676,8 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   if(cm4Mom.e()<cm4Mom.rho())
   {
     G4cerr<<"*G4QH::CorMDecIn2:*Boost* c4M="<<cm4Mom<<G4endl;
-    cm4Mom.setE(1.0000001*cm4Mom.rho());
+    //cm4Mom.setE(1.0000001*cm4Mom.rho());
+    return false;
   }
   cm4Mom.boost(ltf);                           // Now it is in CMS (Forward Lor.Trans.)
   G4double pfx= cm4Mom.px();
@@ -702,8 +707,8 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   }
   else
   {
-    G4double pc=sqrt(pc2);
-    ct=pfz/pc;
+    G4double pc_value=sqrt(pc2);
+    ct=pfz/pc_value;
   }
 #ifdef debug
   G4cout<<"G4QHadron::CorMDecayIn2: ct="<<ct<<", p="<<p<<G4endl;
@@ -1338,10 +1343,10 @@ G4double* G4QHadron::RandomX(G4int nPart)
 // Non-iterative recursive phase-space CHIPS algorthm
 G4double G4QHadron::SampleCHIPSX(G4double anXtot, G4int nSea)
 {
-  G4double ns=nSea;
+  G4double ns_value=nSea;
   if(nSea<1 || anXtot<=0.) G4cout<<"-Warning-G4QHad::SCX:N="<<nSea<<",tX="<<anXtot<<G4endl;
   if(nSea<2) return anXtot;
-  return anXtot*(1.-std::pow(G4UniformRand(),1./ns));
+  return anXtot*(1.-std::pow(G4UniformRand(),1./ns_value));
 }
 
 // Get flavors for the valence quarks of this hadron

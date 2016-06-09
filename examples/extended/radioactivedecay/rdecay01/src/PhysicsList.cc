@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -34,8 +36,11 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleTypes.hh"
 #include "G4IonConstructor.hh"
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4RadioactiveDecay.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,11 +98,19 @@ void PhysicsList::ConstructProcess()
   
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
   radioactiveDecay->SetHLThreshold(-1.*s);
-  radioactiveDecay->SetICM(true);		//Internal Conversion
-  radioactiveDecay->SetARM(false);		//Atomic Rearangement
+  radioactiveDecay->SetICM(true);                //Internal Conversion
+  radioactiveDecay->SetARM(false);               //Atomic Rearangement
+  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
       
-  G4ProcessManager* pmanager = G4GenericIon::GenericIon()->GetProcessManager();  
-  pmanager->AddProcess(radioactiveDecay, 0, -1, 1);    
+  // Deexcitation (in case of Atomic Rearangement)
+  //
+  G4UAtomicDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(true);   
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

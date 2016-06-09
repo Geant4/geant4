@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHyperonElasticCrossSection.cc,v 1.1 2010-02-16 07:53:05 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QHyperonElasticCrossSection for pA elastic cross sections
@@ -44,6 +43,7 @@
 //#define sdebug
 
 #include "G4QHyperonElasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static parameters
 const G4int G4QHyperonElasticCrossSection::nPoints=128;//#ofPt in AMDB table(>anyPar)(D)
@@ -1091,8 +1091,8 @@ G4double G4QHyperonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mLa2)+mLa2+mt*mt;    // Mondelstam s (@@ other hyperons?)
-    return dmt*dmt*pP2/s;
+    G4double s_value=dmt*std::sqrt(pP2+mLa2)+mLa2+mt*mt;    // Mondelstam s (@@ other hyperons?)
+    return dmt*dmt*pP2/s_value;
   }
   else
   {

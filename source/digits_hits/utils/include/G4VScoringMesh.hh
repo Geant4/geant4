@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.41 2010-11-09 00:29:55 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VScoringMesh_h
@@ -53,7 +52,7 @@ typedef std::map<G4String,G4THitsMap<G4double>* > MeshScoreMap;
 class G4VScoringMesh
 {
   public:
-  G4VScoringMesh(G4String wName);
+  G4VScoringMesh(const G4String& wName);
   virtual ~G4VScoringMesh();
 
   public: // with description
@@ -80,9 +79,9 @@ class G4VScoringMesh
   // dump information of primitive socrers registered in this mesh
   void Dump();
   // draw a projected quantity on a current viewer
-  void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
+  void DrawMesh(const G4String& psName,G4VScoreColorMap* colorMap,G4int axflg=111);
   // draw a column of a quantity on a current viewer
-  void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
+  void DrawMesh(const G4String& psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
   // draw a projected quantity on a current viewer
   virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
   // draw a column of a quantity on a current viewer
@@ -120,24 +119,24 @@ class G4VScoringMesh
   // register a filter to a current primtive scorer
   void SetFilter(G4VSDFilter * filter);
   // set a primitive scorer to the current one by the name
-  void SetCurrentPrimitiveScorer(G4String & name);
+  void SetCurrentPrimitiveScorer(const G4String & name);
   // find registered primitive scorer by the name
-  G4bool FindPrimitiveScorer(G4String & psname);
+  G4bool FindPrimitiveScorer(const G4String & psname);
   // get whether current primitive scorer is set or not
   G4bool IsCurrentPrimitiveScorerNull() {
     if(fCurrentPS == NULL) return true;
     else return false;
   }
   // get unit of primitive scorer by the name
-  G4String GetPSUnit(G4String & psname);
+  G4String GetPSUnit(const G4String & psname);
   // get unit of current primitive scorer
   G4String GetCurrentPSUnit();
   // set unit of current primitive scorer
   void SetCurrentPSUnit(const G4String& unit);
   // get unit value of primitive scorer by the name
-  G4double GetPSUnitValue(G4String & psname);
+  G4double GetPSUnitValue(const G4String & psname);
   // set PS name to be drawn
-  void SetDrawPSName(G4String & psname) {fDrawPSName = psname;}
+  void SetDrawPSName(const G4String & psname) {fDrawPSName = psname;}
 
   // get axis names of the hierarchical division in the divided order
   void GetDivisionAxisNames(G4String divisionAxisNames[3]);
@@ -155,7 +154,7 @@ class G4VScoringMesh
 
 protected:
   // get registered primitive socrer by the name
-  G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
+  G4VPrimitiveScorer * GetPrimitiveScorer(const G4String & name);
 
 protected:
   G4String  fWorldName;

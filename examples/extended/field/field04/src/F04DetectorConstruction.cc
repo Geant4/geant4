@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04DetectorConstruction.cc
+/// \brief Implementation of the F04DetectorConstruction class
 //
 //
-
 #include "G4ios.hh"
 #include "globals.hh"
 
@@ -54,6 +55,9 @@
 
 #include "G4RunManager.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "F04DetectorConstruction.hh"
 #include "F04DetectorMessenger.hh"
 #include "F04Materials.hh"
@@ -63,133 +67,143 @@
 #include "F04SimpleSolenoid.hh"
 #include "F04FocusSolenoid.hh"
 
-F04DetectorConstruction::F04DetectorConstruction()
- : solidWorld(0), logicWorld(0), physiWorld(0),
-   solidTarget(0), logicTarget(0), physiTarget(0),
-   solidDegrader(0),logicDegrader(0), physiDegrader(0),
-   solidCaptureMgnt(0), logicCaptureMgnt(0), physiCaptureMgnt(0),
-   solidTransferMgnt(0), logicTransferMgnt(0), physiTransferMgnt(0),
-   WorldMaterial(0), TargetMaterial(0), DegraderMaterial(0),
-   focusSolenoid(0), simpleSolenoid(0)
-{
-  WorldSizeZ = 50.*m;
-  WorldSizeR =  5.*m;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  TargetRadius       =   0.4*cm;
-  TargetThickness    =  16.0*cm;
+F04DetectorConstruction::F04DetectorConstruction()
+ : fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
+   fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0),
+   fSolidDegrader(0), fLogicDegrader(0), fPhysiDegrader(0),
+   fSolidCaptureMgnt(0), fLogicCaptureMgnt(0), fPhysiCaptureMgnt(0),
+   fSolidTransferMgnt(0), fLogicTransferMgnt(0), fPhysiTransferMgnt(0),
+   fWorldMaterial(0), fTargetMaterial(0), fDegraderMaterial(0),
+   fFocusSolenoid(0), fSimpleSolenoid(0)
+{
+  fWorldSizeZ = 50.*m;
+  fWorldSizeR =  5.*m;
+
+  fTargetRadius       =   0.4*cm;
+  fTargetThickness    =  16.0*cm;
 
   SetTargetAngle(170);
 
-  DegraderRadius     =  30.0*cm;
-  DegraderThickness  =   0.1*cm;
+  fDegraderRadius     =  30.0*cm;
+  fDegraderThickness  =   0.1*cm;
 
-  CaptureMgntRadius  =  0.6*m;
-  CaptureMgntLength  =  4.0*m;
+  fCaptureMgntRadius  =  0.6*m;
+  fCaptureMgntLength  =  4.0*m;
 
   SetCaptureMgntB1(2.5*tesla);
   SetCaptureMgntB2(5.0*tesla);
 
-  TransferMgntRadius =  0.3*m;
-  TransferMgntLength = 15.0*m;
+  fTransferMgntRadius =  0.3*m;
+  fTransferMgntLength = 15.0*m;
 
   SetTransferMgntB(5.0*tesla);
 
-  DegraderPos = -TransferMgntLength/2. + DegraderThickness/2.;
+  fDegraderPos = -fTransferMgntLength/2. + fDegraderThickness/2.;
 
   // ensure the global field is initialized
-  (void)F04GlobalField::getObject();
+  (void)F04GlobalField::GetObject();
 
-  detectorMessenger = new F04DetectorMessenger(this);
+  fDetectorMessenger = new F04DetectorMessenger(this);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04DetectorConstruction::~F04DetectorConstruction()
-{ 
-  delete detectorMessenger;
+{
+  delete fDetectorMessenger;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* F04DetectorConstruction::Construct()
 {
-  materials = F04Materials::GetInstance();
+  fMaterials = F04Materials::GetInstance();
 
   DefineMaterials();
 
   return ConstructDetector();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04DetectorConstruction::DefineMaterials()
 {
   //define materials for the experiment
 
-  Vacuum = materials->GetMaterial("G4_Galactic");
+  fVacuum = fMaterials->GetMaterial("G4_Galactic");
 
-  WorldMaterial    = materials->GetMaterial("G4_AIR");
-  DegraderMaterial = materials->GetMaterial("G4_Pb");
-  TargetMaterial   = materials->GetMaterial("G4_W");
+  fWorldMaterial    = fMaterials->GetMaterial("G4_AIR");
+  fDegraderMaterial = fMaterials->GetMaterial("G4_Pb");
+  fTargetMaterial   = fMaterials->GetMaterial("G4_W");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 {
-  solidWorld = new G4Tubs("World",
+  fSolidWorld = new G4Tubs("World",
                0.,GetWorldSizeR(),GetWorldSizeZ()/2.,0.,twopi);
-                         
-  logicWorld = new G4LogicalVolume(solidWorld,
+ 
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,
                                    GetWorldMaterial(),
                                    "World");
-                                   
-  physiWorld = new G4PVPlacement(0,
-  				 G4ThreeVector(),
+
+  fPhysiWorld = new G4PVPlacement(0,
+                                 G4ThreeVector(),
                                  "World",
-                                 logicWorld,
+                                 fLogicWorld,
                                  0,
                                  false,
                                  0);
 
   // Capture Magnet
 
-  solidCaptureMgnt = new G4Tubs("CaptureMgnt",
+  fSolidCaptureMgnt = new G4Tubs("CaptureMgnt",
                      0.,GetCaptureMgntRadius(),
                      GetCaptureMgntLength()/2.,0.,twopi);
 
-  logicCaptureMgnt = new G4LogicalVolume(solidCaptureMgnt,
-                                         Vacuum,
+  fLogicCaptureMgnt = new G4LogicalVolume(fSolidCaptureMgnt,
+                                         fVacuum,
                                          "CaptureMgnt");
 
-  G4ThreeVector CaptureMgntCenter = G4ThreeVector();
+  G4ThreeVector captureMgntCenter = G4ThreeVector();
 
-  physiCaptureMgnt = new G4PVPlacement(0,
-                                       CaptureMgntCenter,
+  fPhysiCaptureMgnt = new G4PVPlacement(0,
+                                       captureMgntCenter,
                                        "CaptureMgnt",
-                                       logicCaptureMgnt,
-                                       physiWorld,
+                                       fLogicCaptureMgnt,
+                                       fPhysiWorld,
                                        false,
                                        0);
 
   // Transfer Magnet
 
-  solidTransferMgnt = new G4Tubs("TransferMgnt",
+  fSolidTransferMgnt = new G4Tubs("TransferMgnt",
                       0.,GetTransferMgntRadius(),
                       GetTransferMgntLength()/2.,0.,twopi);
 
-  logicTransferMgnt = new G4LogicalVolume(solidTransferMgnt,
-                                          Vacuum,
+  fLogicTransferMgnt = new G4LogicalVolume(fSolidTransferMgnt,
+                                          fVacuum,
                                           "TransferMgnt");
 
   G4double z  = GetCaptureMgntLength()/2. + GetTransferMgntLength()/2.
                               + GetTransferMgntPos();
   G4double x =  GetTransferMgntPos()/2.;
 
-  G4ThreeVector TransferMgntCenter = G4ThreeVector(x,0.,z);
+  G4ThreeVector transferMgntCenter = G4ThreeVector(x,0.,z);
 
   G4RotationMatrix* g4rot = new G4RotationMatrix();
-  *g4rot = stringToRotationMatrix("Y30,X10");
+  *g4rot = StringToRotationMatrix("Y30,X10");
   *g4rot = g4rot->inverse();
   if (*g4rot == G4RotationMatrix()) g4rot = NULL;
 
-  physiTransferMgnt = new G4PVPlacement(g4rot,
-                                        TransferMgntCenter,
+  fPhysiTransferMgnt = new G4PVPlacement(g4rot,
+                                        transferMgntCenter,
                                         "TransferMgnt",
-                                        logicTransferMgnt,
-                                        physiWorld,
+                                        fLogicTransferMgnt,
+                                        fPhysiWorld,
                                         false,
                                         0);
 
@@ -200,19 +214,18 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
                                       1.*mm,0.,twopi);
 
   G4LogicalVolume* logicTestPlane = new G4LogicalVolume(solidTestPlane,
-                                                        Vacuum,
+                                                        fVacuum,
                                                         "TestPlane");
-
 
   z = GetTransferMgntLength()/2. - 1.*mm;
 
-  G4ThreeVector TestPlaneCenter = G4ThreeVector(0.,0.,z);
+  G4ThreeVector testPlaneCenter = G4ThreeVector(0.,0.,z);
 
   new G4PVPlacement(0,
-                    TestPlaneCenter,
+                    testPlaneCenter,
                     "TestPlane",
                     logicTestPlane,
-                    physiTransferMgnt,
+                    fPhysiTransferMgnt,
                     false,
                     0);
 
@@ -220,11 +233,11 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
   if (GetTargetThickness() > 0.)
   {
-      solidTarget = new G4Tubs("Target", 
+      fSolidTarget = new G4Tubs("Target",
                     0.,GetTargetRadius(),
                     GetTargetThickness()/2.,0.,twopi);
 
-      logicTarget = new G4LogicalVolume(solidTarget,
+      fLogicTarget = new G4LogicalVolume(fSolidTarget,
                                         GetTargetMaterial(),
                                         "Target");
 
@@ -232,46 +245,46 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
       char c[4];
       sprintf(c,"%d",i);
-      G4String Angle = c;
-      Angle = Angle.strip(G4String::both,' ');
-      Angle = "Y" + Angle;
+      G4String angle = c;
+      angle = angle.strip(G4String::both,' ');
+      angle = "Y" + angle;
 
       g4rot = new G4RotationMatrix();
-      *g4rot = stringToRotationMatrix(Angle);
+      *g4rot = StringToRotationMatrix(angle);
       *g4rot = g4rot->inverse();
       if (*g4rot == G4RotationMatrix()) g4rot = NULL;
 
-      G4ThreeVector TargetCenter(0.,0.,GetTargetPos());
+      G4ThreeVector targetCenter(0.,0.,GetTargetPos());
 
-      physiTarget = new G4PVPlacement(g4rot,
-                                      TargetCenter,
+      fPhysiTarget = new G4PVPlacement(g4rot,
+                                      targetCenter,
                                       "Target",
-                                      logicTarget,
-                                      physiCaptureMgnt,
+                                      fLogicTarget,
+                                      fPhysiCaptureMgnt,
                                       false,
                                       0);
   }
 
   // Degrader
 
-  if (GetDegraderThickness() > 0.) 
-  { 
-      solidDegrader = new G4Tubs("Degrader",
+  if (GetDegraderThickness() > 0.)
+  {
+      fSolidDegrader = new G4Tubs("Degrader",
                       0., GetDegraderRadius(),
-                      GetDegraderThickness()/2., 0.,twopi); 
-                          
-      logicDegrader = new G4LogicalVolume(solidDegrader,    
-      			                  GetDegraderMaterial(), 
-      			                  "Degrader");     
+                      GetDegraderThickness()/2., 0.,twopi);
+ 
+      fLogicDegrader = new G4LogicalVolume(fSolidDegrader,
+                                                GetDegraderMaterial(),
+                                                "Degrader");
 
-      G4ThreeVector DegraderCenter = G4ThreeVector(0.,0.,GetDegraderPos());
+      G4ThreeVector degraderCenter = G4ThreeVector(0.,0.,GetDegraderPos());
 
-      physiDegrader = new G4PVPlacement(0,		   
-      		                        DegraderCenter,
-                                        "Degrader",        
-                                        logicDegrader,     
-                                        physiTransferMgnt,       
-                                        false,             
+      fPhysiDegrader = new G4PVPlacement(0,
+                                        degraderCenter,
+                                        "Degrader",
+                                        fLogicDegrader,
+                                        fPhysiTransferMgnt,
+                                        false,
                                         0);
   }
 
@@ -279,34 +292,36 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
   G4double B1 = GetCaptureMgntB1();
   G4double B2 = GetCaptureMgntB2();
 
-  if (focusSolenoid) delete focusSolenoid;
-  focusSolenoid = new F04FocusSolenoid(B1, B2, l,
-                                    logicCaptureMgnt,CaptureMgntCenter);
-  focusSolenoid -> SetHalf(true);
+  if (fFocusSolenoid) delete fFocusSolenoid;
+  fFocusSolenoid = new F04FocusSolenoid(B1, B2, l,
+                                    fLogicCaptureMgnt,captureMgntCenter);
+  fFocusSolenoid -> SetHalf(true);
 
            l = 0.0;
   G4double B = GetTransferMgntB();
 
-  if (simpleSolenoid) delete simpleSolenoid;
-  simpleSolenoid = new F04SimpleSolenoid(B, l,
-                                      logicTransferMgnt,TransferMgntCenter);
+  if (fSimpleSolenoid) delete fSimpleSolenoid;
+  fSimpleSolenoid = new F04SimpleSolenoid(B, l,
+                                      fLogicTransferMgnt,transferMgntCenter);
 
-  simpleSolenoid->setColor("1,0,1");
-  simpleSolenoid->setColor("0,1,1");
-  simpleSolenoid->setMaxStep(1.5*mm);
-  simpleSolenoid->setMaxStep(2.5*mm);
+  fSimpleSolenoid->SetColor("1,0,1");
+  fSimpleSolenoid->SetColor("0,1,1");
+  fSimpleSolenoid->SetMaxStep(1.5*mm);
+  fSimpleSolenoid->SetMaxStep(2.5*mm);
 
-  return physiWorld;
+  return fPhysiWorld;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetWorldMaterial(const G4String materialChoice)
 {
   G4Material* pttoMaterial =
       G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial != WorldMaterial) {
+  if (pttoMaterial != fWorldMaterial) {
      if ( pttoMaterial ) {
-        WorldMaterial = pttoMaterial;
+        fWorldMaterial = pttoMaterial;
      } else {
         G4cout << "\n--> WARNING from SetWorldMaterial : "
                << materialChoice << " not found" << G4endl;
@@ -314,14 +329,16 @@ void F04DetectorConstruction::SetWorldMaterial(const G4String materialChoice)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04DetectorConstruction::SetTargetMaterial(const G4String materialChoice)
 {
   G4Material* pttoMaterial =
       G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial != TargetMaterial) {
+  if (pttoMaterial != fTargetMaterial) {
      if ( pttoMaterial ) {
-        TargetMaterial = pttoMaterial;
+        fTargetMaterial = pttoMaterial;
      } else {
         G4cout << "\n-->  WARNING from SetTargetMaterial : "
                << materialChoice << " not found" << G4endl;
@@ -329,15 +346,17 @@ void F04DetectorConstruction::SetTargetMaterial(const G4String materialChoice)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04DetectorConstruction::SetDegraderMaterial(const G4String materialChoice)
 
 {
   G4Material* pttoMaterial =
       G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial != DegraderMaterial) {
+  if (pttoMaterial != fDegraderMaterial) {
      if ( pttoMaterial ) {
-        DegraderMaterial = pttoMaterial;
+        fDegraderMaterial = pttoMaterial;
      } else {
         G4cout << "\n--> WARNING from SetDegraderMaterial : "
                << materialChoice << " not found" << G4endl;
@@ -345,94 +364,130 @@ void F04DetectorConstruction::SetDegraderMaterial(const G4String materialChoice)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04DetectorConstruction::SetWorldSizeZ(G4double val)
 {
-  WorldSizeZ = val;
+  fWorldSizeZ = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetWorldSizeR(G4double val)
 {
-  WorldSizeR = val;
+  fWorldSizeR = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetCaptureMgntRadius(G4double val)
 {
-  CaptureMgntRadius = val;
+  fCaptureMgntRadius = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetCaptureMgntLength(G4double val)
 {
-  CaptureMgntLength = val;
+  fCaptureMgntLength = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetCaptureMgntB1(G4double val)
 {
-  CaptureMgntB1 = val;
+  fCaptureMgntB1 = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetCaptureMgntB2(G4double val)
 {
-  CaptureMgntB2 = val;
+  fCaptureMgntB2 = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTransferMgntRadius(G4double val)
 {
-  TransferMgntRadius = val;
+  fTransferMgntRadius = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTransferMgntLength(G4double val)
 {
-  TransferMgntLength = val;
+  fTransferMgntLength = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTransferMgntB(G4double val)
 {
-  TransferMgntB = val;
+  fTransferMgntB = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTransferMgntPos(G4double val)
 {
-  TransferMgntPos = val;
+  fTransferMgntPos = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTargetRadius(G4double val)
 {
-  TargetRadius = val;
+  fTargetRadius = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTargetThickness(G4double val)
 {
-  TargetThickness = val;
+  fTargetThickness = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTargetPos(G4double val)
 {
-  TargetPos = val;
+  fTargetPos = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetTargetAngle(G4int val)
 {
-  TargetAngle = val;
+  fTargetAngle = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetDegraderRadius(G4double val)
 {
-  DegraderRadius = val;
+  fDegraderRadius = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetDegraderThickness(G4double val)
 {
-  DegraderThickness = val;
-}  
+  fDegraderThickness = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::SetDegraderPos(G4double val)
 {
-  DegraderPos = val;
-}  
+  fDegraderPos = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::UpdateGeometry()
 {
-  if (!physiWorld) return;
+  if (!fPhysiWorld) return;
 
   // clean-up previous geometry
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -447,12 +502,14 @@ void F04DetectorConstruction::UpdateGeometry()
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 
-  G4RegionStore::GetInstance()->UpdateMaterialList(physiWorld);
+  G4RegionStore::GetInstance()->UpdateMaterialList(fPhysiWorld);
 
 }
 
-G4RotationMatrix 
-            F04DetectorConstruction::stringToRotationMatrix(G4String rotation)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4RotationMatrix
+            F04DetectorConstruction::StringToRotationMatrix(G4String rotation)
 {
   // We apply successive rotations OF THE OBJECT around the FIXED
   // axes of the parent's local coordinates; rotations are applied
@@ -466,11 +523,11 @@ G4RotationMatrix
 
         G4double angle;
         char* p(0);
-	G4String current=rotation.substr(place+1);
+        G4String current=rotation.substr(place+1);
         angle = strtod(current.c_str(),&p) * deg;
-             
+
         if (!p || (*p != ',' && *p != '\0')) {
-          G4cerr << "Invalid rotation specification: " << 
+          G4cerr << "Invalid rotation specification: " <<
                                                   rotation.c_str() << G4endl;
 
            return rot;

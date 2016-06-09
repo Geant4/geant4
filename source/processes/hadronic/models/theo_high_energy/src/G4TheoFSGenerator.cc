@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TheoFSGenerator.cc,v 1.11 2009-04-09 08:28:42 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4TheoFSGenerator
 //
@@ -40,40 +39,29 @@
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
+    , theTransport(0), theHighEnergyGenerator(0)
     , theQuasielastic(0), theProjectileDiffraction(0)
  {
  theParticleChange = new G4HadFinalState;
 }
-
-G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) 
-    : G4HadronicInteraction("TheoFSGenerator")
-    , theQuasielastic(0), theProjectileDiffraction(0)
-{
-}
-
 
 G4TheoFSGenerator::~G4TheoFSGenerator()
 {
   delete theParticleChange;
 }
 
-
-const G4TheoFSGenerator & G4TheoFSGenerator::operator=(const G4TheoFSGenerator &)
+void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
 {
-  G4String text = "G4CrossSectionBase::operator= meant to not be accessable";
-  throw G4HadronicException(__FILE__, __LINE__, text);
-  return *this;
-}
-
-
-int G4TheoFSGenerator::operator==(const G4TheoFSGenerator &) const
-{
-  return 0;
-}
-
-int G4TheoFSGenerator::operator!=(const G4TheoFSGenerator &) const
-{
-  return 1;
+  outFile << GetModelName() <<" consists of a " << theHighEnergyGenerator->GetModelName()
+		  << " string model and of "
+		  << ".\n"
+		  << "The string model simulates the interaction of\n"
+          << "an incident hadron with a nucleus, forming \n"
+          << "excited strings, decays these strings into hadrons,\n"
+          << "and leaves an excited nucleus.\n"
+          << "The string model:\n";
+  theHighEnergyGenerator->ModelDescription(outFile);
+//theTransport->IntraNuclearTransportDescription(outFile)
 }
 
 
@@ -163,6 +151,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   	  std::vector<G4KineticTrack *>::iterator ir_iter;
   	  for(ir_iter=theInitialResult->begin(); ir_iter!=theInitialResult->end(); ir_iter++)
   	  {
+  		  //G4cout << "TheoFS secondary, mom " << (*ir_iter)->GetDefinition()->GetParticleName() << " " << (*ir_iter)->Get4Momentum() << G4endl;
   		  E_out += (*ir_iter)->Get4Momentum().e();
   	  }
   	  G4double init_mass= ionTable->GetIonMass(theNucleus.GetZ_asInt(),theNucleus.GetA_asInt());
@@ -191,7 +180,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	  G4cout << " Corrected delta mass " << init_mass - final_mass - delta_m << G4endl;
   	  G4cout << "initial E, mass = " << init_E << ", " << init_mass << G4endl;
   	  G4cout << "  final E, mass = " << E_out <<", " << final_mass << "  excitation_E " << E_excit << G4endl;
-    #endif
+  #endif
 
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;

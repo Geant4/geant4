@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.33 2010-11-07 22:29:30 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Joseph Perl  27th January 2002

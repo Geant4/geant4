@@ -36,6 +36,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPorLElastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPElasticFS.hh"
 
 G4NeutronHPorLElastic::G4NeutronHPorLElastic()
@@ -143,4 +144,10 @@ G4bool G4NeutronHPorLElastic::IsThisElementOK( G4String name )
 void G4NeutronHPorLElastic::createXSectionDataSet()
 {
    theDataSet = new G4NeutronHPorLElasticData ( theElastic , &unavailable_elements );
+}
+
+const std::pair<G4double, G4double> G4NeutronHPorLElastic::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }

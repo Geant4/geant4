@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-
+/// \file runAndEvent/RE04/include/RE04TrajectoryPoint.hh
+/// \brief Definition of the RE04TrajectoryPoint class
+//
+// $Id: $
+//
 #ifndef RE04TrajectoryPoint_h
 #define RE04TrajectoryPoint_h 1
 
@@ -34,6 +37,23 @@
 #include "G4Allocator.hh"
 class G4Material;
 
+//
+/// Trajectory point class
+///
+/// - new, delete and "==" operators are overwritten
+///
+/// - const G4ThreeVector GetPosition() const
+///    gets the position of this trajectory
+///
+/// - const G4Material* GetMaterial() const
+///    gets material that this trajectory has.
+///
+/// - const std::map<G4String,G4AttDef>* GetAttDefs() const
+///    defines the position and the material as attiributes 
+///
+/// - std::vector<G4AttValue>* CreateAttValues() const
+///    sets and returns the attributes
+//
 ////////////////////////
 class RE04TrajectoryPoint : public G4VTrajectoryPoint
 //////////////////////// 
@@ -56,7 +76,7 @@ public:
    { return (this==&right); };
 
 // Get/Set functions
-   inline const G4ThreeVector GetPosition() const
+   inline virtual const G4ThreeVector GetPosition() const
    { return fPosition; };
    inline const G4Material* GetMaterial() const
    { return fpMaterial; };
@@ -75,18 +95,18 @@ public:
 
 };
 
-extern G4Allocator<RE04TrajectoryPoint> aTrajPointAllocator;
+extern G4Allocator<RE04TrajectoryPoint> faTrajPointAllocator;
 
 inline void* RE04TrajectoryPoint::operator new(size_t)
 {
    void *aTrajectoryPoint;
-   aTrajectoryPoint = (void *) aTrajPointAllocator.MallocSingle();
+   aTrajectoryPoint = (void *) faTrajPointAllocator.MallocSingle();
    return aTrajectoryPoint;
 }
 
 inline void RE04TrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-   aTrajPointAllocator.FreeSingle((RE04TrajectoryPoint *) aTrajectoryPoint);
+   faTrajPointAllocator.FreeSingle((RE04TrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif

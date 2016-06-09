@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.hh,v 1.2 2010-11-04 12:55:09 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +51,11 @@
 #define G4VEmAngularDistribution_h 1
 
 #include "globals.hh"
+#include "Randomize.hh"
+#include "G4ThreeVector.hh"
+#include "G4DynamicParticle.hh"
+
+class G4Material;
 
 class G4VEmAngularDistribution
 {
@@ -61,12 +65,19 @@ public:
 
   virtual ~G4VEmAngularDistribution();
 
-  // method for bremsstrahlung
-  virtual G4double PolarAngle(const G4double initial_energy,
-			      const G4double final_energy,
-                              const G4int Z) = 0;
+  // Sample direction in global coordinate system,
+  // this means for zero scattering angle this direction is the same
+  // as the direction of primary 
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+					 G4double finalTotalEnergy,
+					 G4int Z,
+					 const G4Material*) = 0;
 
   inline const G4String& GetName() const;
+
+protected:
+
+  G4ThreeVector fLocalDirection;
 
 private:
 

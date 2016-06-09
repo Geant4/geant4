@@ -28,6 +28,8 @@
 #ifndef G4ProtonAntiProtonAtRestChips_h
 #define G4ProtonAntiProtonAtRestChips_h
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4VRestProcess.hh"
 #include "G4ParticleTable.hh"
@@ -41,6 +43,8 @@
 #include "G4StopElementSelector.hh"
 #include "G4ChiralInvariantPhaseSpace.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
 {
@@ -55,6 +59,7 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
                                                             "AntiProtonAnnihilationAtRest")
       : G4VRestProcess (processName, fHadronic) 
      {
+       G4HadronicDeprecate("G4ProtonAntiProtonAtRestChips");
        SetProcessSubType(fHadronAtRest);
      }
  
@@ -121,7 +126,7 @@ AtRestGetPhysicalInteractionLength(const G4Track&track,
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/CLHEP::ns << "[ns]" <<G4endl;
   }
 #endif
   return theNumberOfInteractionLengthLeft * currentInteractionLength;

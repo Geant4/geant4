@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DNAMolecularStepByStepModel.hh 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -64,15 +65,6 @@ public:
 
     G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel&);
 
-    /** Assignment operator
-         *  \param other Object to assign from
-         *  \return A reference to this
-         */
-    G4DNAMolecularStepByStepModel& operator=(const G4DNAMolecularStepByStepModel& /*other*/)
-    {
-        return *this;
-    }
-
     G4IT_ADD_CLONE(G4VITModel, G4DNAMolecularStepByStepModel)
 
     virtual void PrintInfo();
@@ -84,13 +76,20 @@ public:
 protected:
     const G4DNAMolecularReactionTable*& fMolecularReactionTable;
     G4VDNAReactionModel* fReactionModel;
+
+private :
+    /** Assignment operator
+         *  \param other Object to assign from
+         *  \return A reference to this
+         */
+    G4DNAMolecularStepByStepModel& operator=(const G4DNAMolecularStepByStepModel& /*other*/);
 };
 
 inline void G4DNAMolecularStepByStepModel::SetReactionModel(G4VDNAReactionModel* reactionModel)
 {
     fReactionModel = reactionModel;
-    ((G4DNAMolecularReaction*)      fReactionProcess)-> SetReactionModel(reactionModel);
-    ((G4DNAMoleculeEncounterStepper*) 	fTimeStepper)	 -> SetReactionModel(reactionModel);
+    ((G4DNAMolecularReaction*)      fpReactionProcess)-> SetReactionModel(reactionModel);
+    ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)	 -> SetReactionModel(reactionModel);
 }
 
 inline G4VDNAReactionModel* G4DNAMolecularStepByStepModel::GetReactionModel()

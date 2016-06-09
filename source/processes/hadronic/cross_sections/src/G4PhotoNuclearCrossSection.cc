@@ -36,10 +36,12 @@
 //#define debugn
 //#define debugs
 
-#include "G4PhotoNuclearCrossSection.hh"
-#include "G4HadTmpUtil.hh"
 #include <iostream>
 #include <fstream>
+
+#include "G4PhotoNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadTmpUtil.hh"
 
 // Initialization of the statics
 G4int G4PhotoNuclearCrossSection::lastN=0;  
@@ -67,8 +69,8 @@ std::vector<G4double*> G4PhotoNuclearCrossSection::GDR;
 std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;
 
 
-G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection(const G4String& nam)
+ : G4VCrossSectionDataSet(nam)
 {}
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
@@ -1824,20 +1826,20 @@ G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
     G4int     k1=k-1;
     G4double  xi=LA[k1];
     G4double   b=(a-xi)/(LA[k]-xi);
-    for(G4int m=0; m<nL; m++)
+    for(G4int q=0; q<nL; q++)
     {
       if(a>1.5)
       {
-        G4double yi=SL[k1][m];
-        y[m]=yi+(SL[k][m]-yi)*b;
+        G4double yi=SL[k1][q];
+        y[q]=yi+(SL[k][q]-yi)*b;
 #ifdef debugs
-        if(y[m]<0.) G4cout << "G4PhotNucCS::GetF:y=" << y[m] << ",k="
-                           << k << ",yi=" << yi << ",ya=" << SL[k][m] 
+        if(y[q]<0.) G4cout << "G4PhotNucCS::GetF:y=" << y[q] << ",k="
+                           << k << ",yi=" << yi << ",ya=" << SL[k][q] 
                            << ",b=" << b << ",xi=" << xi << ",xa=" 
                            << LA[k] << ",a=" << a << G4endl;
 #endif
 	  }
-      else y[m]=0.;
+      else y[q]=0.;
     }
     r=1;
   }
@@ -1850,10 +1852,10 @@ G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
     G4int     k1=k-1;
     G4double  xi=HA[k1];
     G4double   b=(a-xi)/(HA[k]-xi);
-    for(G4int m=0; m<nH; m++)
+    for(G4int q=0; q<nH; q++)
     {
-      G4double zi=SH[k1][m];
-      z[m]=zi+(SH[k][m]-zi)*b;
+      G4double zi=SH[k1][q];
+      z[q]=zi+(SH[k][q]-zi)*b;
     }
     h=1;
   }

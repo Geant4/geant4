@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.icc,v 1.6 2006-10-19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -69,7 +68,7 @@ inline
 G4double G4Torus::GetCubicVolume()
 {
   if(fCubicVolume != 0.) {;}
-  else  { fCubicVolume = fDPhi*pi*fRtor*(fRmax*fRmax-fRmin*fRmin); }
+  else  { fCubicVolume = fDPhi*CLHEP::pi*fRtor*(fRmax*fRmax-fRmin*fRmin); }
   return fCubicVolume;
 }
 
@@ -79,10 +78,10 @@ G4double G4Torus::GetSurfaceArea()
   if(fSurfaceArea != 0.) {;}
   else
   { 
-    fSurfaceArea = fDPhi*2*pi*fRtor*(fRmax+fRmin);
-    if(fDPhi < twopi)
+    fSurfaceArea = fDPhi*CLHEP::twopi*fRtor*(fRmax+fRmin);
+    if(fDPhi < CLHEP::twopi)
     {
-      fSurfaceArea = fSurfaceArea + twopi*(fRmax*fRmax-fRmin*fRmin);
+      fSurfaceArea = fSurfaceArea + CLHEP::twopi*(fRmax*fRmax-fRmin*fRmin);
     } 
   }
   return fSurfaceArea;

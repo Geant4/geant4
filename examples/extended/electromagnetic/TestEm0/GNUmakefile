@@ -3,7 +3,7 @@
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-### name := DirectAccess
+#### name := DirectAccess
 name := TestEm0
 G4TARGET := $(name)
 

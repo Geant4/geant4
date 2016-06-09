@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01PrimaryGeneratorAction.hh
+/// \brief Definition of the F01PrimaryGeneratorAction class
 //
-// $Id: F01PrimaryGeneratorAction.hh,v 1.3 2006-06-29 17:15:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id$
 //
 // 
 
@@ -49,27 +51,27 @@ class F01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     F01PrimaryGeneratorAction(F01DetectorConstruction*);    
-   ~F01PrimaryGeneratorAction();
+    ~F01PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
-    void Setxvertex(G4double x) ;
-    void Setyvertex(G4double y) ;
-    void Setzvertex(G4double z) ;
+    virtual void GeneratePrimaries(G4Event*);
+    void SetRndmFlag(G4String val) { fRndmFlag = val;}
+    void SetXVertex(G4double x) ;
+    void SetYVertex(G4double y) ;
+    void SetZVertex(G4double z) ;
 
     static G4String GetPrimaryName() ;                
 
   private:
-    G4ParticleGun*                particleGun;	//pointer a to G4 service class
-    F01DetectorConstruction*      F01Detector; //pointer to the geometry
+    G4ParticleGun*                fParticleGun; //pointer a to G4 service class
+    F01DetectorConstruction*      fDetector;    //pointer to the geometry
     
-    F01PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	//flag for a random impact point       
+    F01PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
+    G4String                      fRndmFlag;     //flag for a random impact point       
 
-    static G4String thePrimaryParticleName ;
-    G4double xvertex,yvertex,zvertex;
-    G4bool vertexdefined ;
+    static G4String fgPrimaryParticleName ;
+    G4double fXVertex, fYVertex, fZVertex;
+    G4bool fVertexDefined ;
 
 };
 

@@ -20,6 +20,7 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
@@ -34,6 +35,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4specsolids
     HEADERS
+        G4SurfBits.hh
         G4ClippablePolygon.hh
         G4ClippablePolygon.icc
         G4Ellipsoid.hh
@@ -63,8 +65,9 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4QuadrangularFacet.hh
         G4ReduciblePolygon.hh
         G4SolidExtentList.hh
+        G4SurfaceVoxelizer.hh
+        G4SurfaceVoxelizer.icc
         G4TessellatedGeometryAlgorithms.hh
-        G4TessellatedGeometryAlgorithms.icc
         G4TessellatedSolid.hh
         G4Tet.hh
         G4TriangularFacet.hh
@@ -82,11 +85,11 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4VCSGface.hh
         G4VCSGfaceted.hh
         G4VFacet.hh
-        G4VFacet.icc
         G4VTwistSurface.hh
         G4VTwistSurface.icc
         G4VTwistedFaceted.hh
     SOURCES
+        G4SurfBits.cc
         G4ClippablePolygon.cc
         G4Ellipsoid.cc
         G4EllipticalCone.cc
@@ -105,6 +108,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4QuadrangularFacet.cc
         G4ReduciblePolygon.cc
         G4SolidExtentList.cc
+        G4SurfaceVoxelizer.cc
         G4TessellatedGeometryAlgorithms.cc
         G4TessellatedSolid.cc
         G4Tet.cc
@@ -125,6 +129,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4VTwistSurface.cc
         G4VTwistedFaceted.cc
     GRANULAR_DEPENDENCIES
+        G4csg
         G4geometrymng
         G4globman
         G4graphics_reps

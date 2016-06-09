@@ -42,8 +42,8 @@
 #ifndef G4RESONANCEPARTIALWIDTH_HH
 #define G4RESONANCEPARTIALWIDTH_HH
 
-#include "globals.hh"
 #include <map>
+#include "globals.hh"
 
 class G4PhysicsVector;
 

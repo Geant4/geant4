@@ -15,14 +15,13 @@
 /gun/particle proton
 /gun/energy 100 MeV
 #
-/testem/histo/setFileName proton
-/testem/histo/setFileType root
-/testem/histo/setHisto 1  100 99   100 MeV	#energy  of primary  
-/testem/histo/setHisto 2  100 0.99 +1. none	#costeta of primary
-/testem/histo/setHisto 3  100 0.   500 keV	#energy  of ch. secondary  
-/testem/histo/setHisto 4  100 0.   +1. none	#costeta of ch. secondary
-/testem/histo/setHisto 5  100 0.   50 keV	#energy  of gamma  
-/testem/histo/setHisto 6  100 -1.  +1. none	#costeta of gamma
+/analysis/setFileName proton
+/analysis/h1/set 1  100 99   100 MeV	#energy  of primary  
+/analysis/h1/set 2  100 0.99 +1. none	#costeta of primary
+/analysis/h1/set 3  100 0.   500 keV	#energy  of ch. secondary  
+/analysis/h1/set 4  100 0.   +1. none	#costeta of ch. secondary
+/analysis/h1/set 5  100 0.   50 keV	#energy  of gamma  
+/analysis/h1/set 6  100 -1.  +1. none	#costeta of gamma
 #
 ##/tracking/verbose 2
 ##/run/beamOn 1

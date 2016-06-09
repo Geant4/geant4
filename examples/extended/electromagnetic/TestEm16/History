@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-10-12 mma (testem16-V09-05-03)
+-use G4AnalysisManager
+- coding convention: virtual
+ 
+12-10-12 V.Ivant (testem16-V09-05-02)
+- Migration to explicit units
+- Added Rayleigh scattering in the PhysicsList
+     
+15-04-12 mma (testem16-V09-05-01)
+- all classes : apply G4 coding conventions 
+      
+12-03-12 mma (testem16-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
 
 09-11-10 M.Asai (testem16-V09-03-04)
 - Fix AIDA file option.

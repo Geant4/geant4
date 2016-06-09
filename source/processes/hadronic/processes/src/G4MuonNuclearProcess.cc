@@ -32,6 +32,8 @@
 //              boson, which then interacts hadronically.  Either 
 //              electromagnetic or weak interaction models can be
 //              assigned to this process.
+//
+// 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 
 
 #include "G4MuonNuclearProcess.hh"
@@ -41,10 +43,8 @@
 #include <iostream>
 
 
-G4MuonNuclearProcess::G4MuonNuclearProcess(const G4String& processName) : 
-   G4HadronicProcess(processName)
-{
-  SetProcessSubType(fHadronInelastic);
+G4MuonNuclearProcess::G4MuonNuclearProcess(const G4String& processName)
+  : G4HadronicProcess(processName, fHadronInelastic) {
   G4HadronicProcess::AddDataSet(new G4KokoulinMuonNuclearXS());
 }
 

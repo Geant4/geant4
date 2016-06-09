@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCrossSectionXS.cc,v 1.4 2010-07-29 10:52:14 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -52,6 +51,12 @@
 #include "G4HadronicProcessType.hh"
 
 #include "G4Neutron.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronCrossSectionXS);
+
 
 G4NeutronCrossSectionXS::G4NeutronCrossSectionXS(G4int ver) :
   G4VPhysicsConstructor("NeutronXS"), verbose(ver) 

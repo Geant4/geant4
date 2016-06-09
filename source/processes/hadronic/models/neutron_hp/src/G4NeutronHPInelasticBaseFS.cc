@@ -33,6 +33,7 @@
 // 101111 Add Special treatment for Be9(n,2n)Be8(2a) case by T. Koi
 //
 #include "G4NeutronHPInelasticBaseFS.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
 #include "G4He3.hh"
@@ -78,11 +79,13 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4int M, G4String
   G4bool dbool;
   G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M,tString, bit, dbool);
   G4String filename = aFile.GetName();
-  theBaseA = aFile.GetA();
-  theBaseZ = aFile.GetZ();
-   theNDLDataA = (int)aFile.GetA();
-   theNDLDataZ = aFile.GetZ();
-  if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
+  SetAZMs( A, Z, M, aFile); 
+  //theBaseA = aFile.GetA();
+  //theBaseZ = aFile.GetZ();
+  // theNDLDataA = (int)aFile.GetA();
+  // theNDLDataZ = aFile.GetZ();
+  //if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
+  if ( !dbool || ( Z<2.5 && ( std::abs(theNDLDataZ - Z)>0.0001 || std::abs(theNDLDataA - A)>0.0001)) )
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
     hasAnyData = false;
@@ -90,8 +93,8 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4int M, G4String
     hasXsec = false;
     return;
   }
-  theBaseA = A;
-  theBaseZ = G4int(Z+.5);
+  //theBaseA = A;
+  //theBaseZ = G4int(Z+.5);
   std::ifstream theData(filename, std::ios::in);
   if(!(theData))
   {
@@ -233,6 +236,15 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       theResult.AddSecondary(aPart);     
     }   
     theResult.SetStatusChange(stopAndKill);
+
+    //TK120607
+    //Final momentum check should be done before return
+    G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+    G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
+    G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
+    G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;
+    adjust_final_state ( init_4p_lab );
+
     return;
   }
 
@@ -305,16 +317,16 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	{
 	  if(i0==0)
 	  {
-	    G4double m1 = theDefs[0]->GetPDGMass();
-	    G4double m2 = theDefs[1]->GetPDGMass();
-	    G4double mn = G4Neutron::Neutron()->GetPDGMass();
+	    G4double mass1 = theDefs[0]->GetPDGMass();
+	    G4double mass2 = theDefs[1]->GetPDGMass();
+	    G4double massn = G4Neutron::Neutron()->GetPDGMass();
 	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
 	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
 	    G4double concreteMass = G4NucleiProperties::GetNuclearMass(a1, z1);
-	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
+	    G4double availableEnergy = eKinetic+massn+localMass-mass1-mass2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
-	    G4double emin = availableEnergy+m1+m2 - std::sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
-	    G4double p1=std::sqrt(2.*m2*emin);
+	    G4double emin = availableEnergy+mass1+mass2 - std::sqrt((mass1+mass2)*(mass1+mass2)+orgMomentum*orgMomentum);
+	    G4double p1=std::sqrt(2.*mass2*emin);
 	    bufferedDirection = p1*aHadron->GetMomentum().unit();
 	    if(getenv("HTOKEN")) // @@@@@ verify the nucleon counting...
 	    { 
@@ -354,9 +366,9 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   if(theFinalStatePhotons!=0) 
   {
     // the photon distributions are in the Nucleus rest frame.
-    G4ReactionProduct boosted;
-    boosted.Lorentz(theNeutron, theTarget);
-    G4double anEnergy = boosted.GetKineticEnergy();
+    G4ReactionProduct boosted_tmp;
+    boosted_tmp.Lorentz(theNeutron, theTarget);
+    G4double anEnergy = boosted_tmp.GetKineticEnergy();
     thePhotons = theFinalStatePhotons->GetPhotons(anEnergy);
     if(thePhotons!=0)
     {
@@ -450,9 +462,9 @@ if ( (G4int)(theBaseZ+eps) == 4 && (G4int)(theBaseA+eps) == 9 )
       if(thePhotons==0) thePhotons = new G4ReactionProductVector;
       if(theOtherPhotons != 0)
       {
-        for(unsigned int ii=0; ii<theOtherPhotons->size(); ii++)
+        for(unsigned int iii=0; iii<theOtherPhotons->size(); iii++)
         {
-          thePhotons->push_back(theOtherPhotons->operator[](ii));
+          thePhotons->push_back(theOtherPhotons->operator[](iii));
         }
         delete theOtherPhotons; 
       }

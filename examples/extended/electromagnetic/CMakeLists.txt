@@ -1,0 +1,23 @@
+#---Adding all electromagnetic examples subdirectories explicitly 
+
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+
+add_subdirectory(TestEm0)
+add_subdirectory(TestEm1)
+add_subdirectory(TestEm2)
+add_subdirectory(TestEm3)
+add_subdirectory(TestEm4)
+add_subdirectory(TestEm5)
+add_subdirectory(TestEm6)
+add_subdirectory(TestEm7)
+add_subdirectory(TestEm8)
+add_subdirectory(TestEm9)
+add_subdirectory(TestEm10)
+add_subdirectory(TestEm11)
+add_subdirectory(TestEm12)
+add_subdirectory(TestEm13)
+add_subdirectory(TestEm14)
+add_subdirectory(TestEm15)
+add_subdirectory(TestEm16)
+add_subdirectory(TestEm17)
+add_subdirectory(TestEm18)

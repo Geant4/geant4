@@ -65,7 +65,7 @@ public:
 	CML2AcceleratorConstructionMessenger(CML2AcceleratorConstruction *acceleratorConstructor);
 	~CML2AcceleratorConstructionMessenger(void);
 	void SetNewValue(G4UIcommand* cmd, G4String newValue);
-	inline void SetReferenceWorld(G4bool bOnlyVisio) {this->bOnlyVisio=bOnlyVisio;};
+	inline void SetReferenceWorld(G4bool bOV) {bOnlyVisio=bOV;}
 private:
 	CML2AcceleratorConstruction *pAcceleratorConstructor;
 

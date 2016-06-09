@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.15 2006-11-14 09:21:44 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "ExN05EMShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -38,6 +37,8 @@
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHandle.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
@@ -82,7 +83,7 @@ G4bool ExN05EMShowerModel::ModelTrigger(const G4FastTrack& fastTrack)
 }
 
 void ExN05EMShowerModel::DoIt(const G4FastTrack& fastTrack, 
-		     G4FastStep& fastStep)
+                     G4FastStep& fastStep)
 {
   // Kill the parameterised particle:
   fastStep.KillPrimaryTrack();
@@ -159,8 +160,8 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
 
       // build the position:
       ePoint = sShower +
-	z*zShower +
-	r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;
+        z*zShower +
+        r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;
       
       // and the energy spot:
       eSpot.SetPosition(ePoint);
@@ -206,11 +207,11 @@ void ExN05EMShowerModel::AssignSpotAndCallHit(const ExN05EnergySpot &eSpot)
   if( pCurrentVolume != 0 )
     {
       pSensitive = pCurrentVolume->GetLogicalVolume()->
-	GetSensitiveDetector();
+        GetSensitiveDetector();
       if( pSensitive != 0 )
-	{
-	  pSensitive->Hit(fFakeStep);
-	}
+        {
+          pSensitive->Hit(fFakeStep);
+        }
     }
 }
 
@@ -223,21 +224,21 @@ void ExN05EMShowerModel::FillFakeStep(const ExN05EnergySpot &eSpot)
   if (!fNaviSetup)
     {
       fpNavigator->
-	SetWorldVolume(G4TransportationManager::GetTransportationManager()->
-		       GetNavigatorForTracking()->GetWorldVolume());
+        SetWorldVolume(G4TransportationManager::GetTransportationManager()->
+                       GetNavigatorForTracking()->GetWorldVolume());
       fpNavigator->
-	LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
+        LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
                                             G4ThreeVector(0.,0.,0.),
-					    fTouchableHandle,
-					    false);
+                                            fTouchableHandle,
+                                            false);
       fNaviSetup = true;
     }
   else
     {
       fpNavigator->
-	LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
+        LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
                                             G4ThreeVector(0.,0.,0.),
-					    fTouchableHandle);
+                                            fTouchableHandle);
      }
   //--------------------------------------
   // Fills attribute of the G4Step needed

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.64 2010-12-02 12:19:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -46,6 +45,7 @@
 // 29.02.2008 V.Ivanchenko use expantions for log and power function
 // 21.04.2008 Updated computations for ions (V.Ivanchenko)
 // 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
+// 19.04.2012 Fix reproducibility problem (A.Ribon)
 //
 //
 // Class Description:
@@ -58,6 +58,8 @@
 
 #include "G4EmCorrections.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4VEmModel.hh"
@@ -213,18 +215,27 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     if(Z >= 100)   Z = 99;
     else if(Z < 1) Z = 1;
 
-    // fill vector
-    if(thcorr[Z].size() == 0) {
-      thcorr[Z].resize(ncouples);
-      G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+    G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+    G4int ionPDG = p->GetPDGEncoding();
+    if(thcorr.find(ionPDG)==thcorr.end()) {  // Not found: fill the map
+      std::vector<G4double> v;
+      for(size_t i=0; i<ncouples; ++i){
+	v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
+      }
+      thcorr.insert(std::pair< G4int, std::vector<G4double> >(ionPDG,v)); 
+    }
 
-      for(size_t i=0; i<ncouples; ++i) {
-	(thcorr[Z])[i] = ethscaled*ComputeIonCorrections(p, currmat[i], ethscaled);
-	//G4cout << i << ". ethscaled= " << ethscaled 
-	//<< " corr= " << (thcorr[Z])[i]/ethscaled << G4endl;
-      } 
-    } 
-    G4double rest = (thcorr[Z])[couple->GetIndex()];
+    //G4cout << " map size=" << thcorr.size() << G4endl;
+    //for(std::map< G4int, std::vector<G4double> >::iterator 
+    //    it = thcorr.begin(); it != thcorr.end(); ++it){
+    //  G4cout << "\t map element: first (key)=" << it->first  
+    //         << "\t second (vector): vec size=" << (it->second).size() << G4endl;
+    //  for(size_t i=0; i<(it->second).size(); ++i){
+    //    G4cout << "\t \t vec element: [" << i << "]=" << (it->second)[i] << G4endl; 
+    //  } 
+    //}
+
+    G4double rest = (thcorr.find(ionPDG)->second)[couple->GetIndex()];
 
     sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
@@ -668,14 +679,14 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
 
   // Projectile nucleus
   G4double z1 = std::fabs(particle->GetPDGCharge()/eplus);
-  G4double m1 = mass/amu_c2;
+  G4double mass1 = mass/amu_c2;
 
   //  loop for the elements in the material
   for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double m2 = element->GetA()*mole/g ;
-    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, m1, m2))
+    G4double mass2 = element->GetA()*mole/g ;
+    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, mass1, mass2))
            * atomDensity[iel] ;
   }
   nloss *= theZieglerFactor;
@@ -686,18 +697,18 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
 
 G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
                                                G4double z1, G4double z2,
-                                               G4double m1, G4double m2)
+                                               G4double mass1, G4double mass2)
 {
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double nloss = 0.0;
   
   G4double rm;
-  if(z1 > 1.5) rm = (m1 + m2) * ( Z23[G4int(z1)] + Z23[G4int(z2)] ) ;
-  else         rm = (m1 + m2) * nist->GetZ13(G4int(z2));
+  if(z1 > 1.5) rm = (mass1 + mass2) * ( Z23[G4int(z1)] + Z23[G4int(z2)] ) ;
+  else         rm = (mass1 + mass2) * nist->GetZ13(G4int(z2));
 
-  G4double er = 32.536 * m2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
+  G4double er = 32.536 * mass2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
 
-  if (er >= ed[0])       nloss = a[0];
+  if (er >= ed[0]) { nloss = a[0]; }
   else {
     // the table is inverse in energy
     for (G4int i=102; i>=0; i--)
@@ -712,14 +723,14 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   // Stragling
   if(lossFlucFlag) {
     //    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
-    //              (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
-    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+    //   (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
+    G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
 				    (4.0 + 0.197/(er*er) + 6.584/er));
 
     nloss *= G4RandGauss::shoot(1.0,sig) ;
   }
    
-  nloss *= 8.462 * z1 * z2 * m1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
+  nloss *= 8.462 * z1 * z2 * mass1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
 
   if ( nloss < 0.0) nloss = 0.0 ;
 
@@ -884,9 +895,12 @@ void G4EmCorrections::InitialiseForNewRun()
   ncouples = tb->GetTableSize();
   if(currmat.size() != ncouples) {
     currmat.resize(ncouples);
-    size_t i;
-    for(i=0; i<100; ++i) {thcorr[i].clear();}
-    for(i=0; i<ncouples; ++i) {
+    for(std::map< G4int, std::vector<G4double> >::iterator it = 
+        thcorr.begin(); it != thcorr.end(); ++it){
+      (it->second).clear();
+    }
+    thcorr.clear();
+    for(size_t i=0; i<ncouples; ++i) {
       currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
       G4String nam = currmat[i]->GetName();
       for(G4int j=0; j<nIons; ++j) {

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.102 2009-11-23 05:42:28 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 /**
@@ -47,6 +46,7 @@
 #include "G4HepRepMessenger.hh"
 
 //G4
+#include "G4PhysicalConstants.hh"
 #include "G4Vector3D.hh"
 #include "G4Version.hh"
 #include "G4Types.hh"
@@ -772,6 +772,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 #endif
     if (dontWrite()) return;
 
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4Polyline&)",
+	   "vis-HepRep1001", JustWarning,
+	   "2D polylines not implemented.  Ignored.");
+      }
+      return;
+    }
+
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getTrajectoryType());
 
     addAttributes(instance, getTrajectoryType());
@@ -795,6 +807,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polymarker&) " << line.size() << endl;
 #endif
     if (dontWrite()) return;
+
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4Polymarker&)",
+	   "vis-HepRep1002", JustWarning,
+	   "2D polymarkers not implemented.  Ignored.");
+      }
+      return;
+    }
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
@@ -834,6 +858,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 #endif
     if (dontWrite()) return;
 
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4Circle&)",
+	   "vis-HepRep1003", JustWarning,
+	   "2D circles not implemented.  Ignored.");
+      }
+      return;
+    }
+
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
     addAttributes(instance, getHitType());
@@ -856,6 +892,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyhedron&) " << endl;
 #endif
     if (dontWrite()) return;
+
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron&)",
+	   "vis-HepRep1004", JustWarning,
+	   "2D polyhedra not implemented.  Ignored.");
+      }
+      return;
+    }
 
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
@@ -907,6 +955,20 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Text&) {
 #endif
     if (dontWrite()) return;
 
+    /*** You may need this
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4Text&)",
+	   "vis-HepRep1005", JustWarning,
+	   "2D text not implemented.  Ignored.");
+      }
+      return;
+    }
+    ***/
+
     cout << "G4HepRepSceneHandler::AddPrimitive G4Text : not yet implemented. " << endl;
 }
 
@@ -916,6 +978,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << endl;
 #endif
     if (dontWrite()) return;
+
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4Square&)",
+	   "vis-HepRep1006", JustWarning,
+	   "2D squares not implemented.  Ignored.");
+      }
+      return;
+    }
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
@@ -937,6 +1011,20 @@ void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
 #endif
     if (dontWrite()) return;
+
+    /*** You may need this
+    if (fProcessing2D) {
+      static G4bool warned = false;
+      if (!warned) {
+	warned = true;
+	G4Exception
+	  ("G4HepRepSceneHandler::AddPrimitive (const G4NURBS&)",
+	   "vis-HepRep1007", JustWarning,
+	   "2D NURBS not implemented.  Ignored.");
+      }
+      return;
+    }
+    ***/
 
     cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << endl;
 }
@@ -1263,39 +1351,39 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
         if ((name == "Pos") && (point != NULL)) {
             G4String pos = attValIterator->GetValue();
 //            cout << "Pos* " << pos << endl;
-            int s = 0;
-            int n = 0;
-            int m = 0;
+            int is = 0;
+            int in = 0;
+            int im = 0;
             G4String unit;
             for (unsigned int i=0; i<pos.length(); i++) {
                 if (pos[i] == ' ') {
-                    if (n == 0) {
+                    if (in == 0) {
                         // first coordinate
-                        double factor = atof(pos.substr(s, i-s).c_str())/point->getX();
-                        m = (int)(std::log10(factor)+((factor < 1) ? -0.5 : 0.5));
-//                        cout << factor << ", " << m << endl;
-                    } else if (n == 3) {
+                        double factor = atof(pos.substr(is, i-is).c_str())/point->getX();
+                        im = (int)(std::log10(factor)+((factor < 1) ? -0.5 : 0.5));
+//                        cout << factor << ", " << im << endl;
+                    } else if (in == 3) {
                         // unit
-                        unit = pos.substr(s, i-s);
+                        unit = pos.substr(is, i-is);
                         if (unit == G4String("mum")) {
-                            m += -6;
+                            im += -6;
                         } else if (unit == G4String("mm")) {
-                            m += -3;
+                            im += -3;
                         } else if (unit == G4String("cm")) {
-                            m += -2;
+                            im += -2;
                         } else if (unit == G4String("m")) {
-                            m += 0;
+                            im += 0;
                         } else if (unit == G4String("km")) {
-                            m += 3;
+                            im += 3;
                         } else {
                             cerr << "HepRepSceneHandler: Unrecognized Unit: '" << unit << "'" << endl;
                         }
                     }
-                    s = i+1;
-                    n++;
+                    is = i+1;
+                    in++;
                 }
             }
-            switch(m) {
+            switch(im) {
                 case -6:
                     unit = G4String("mum");
                     break;
@@ -1312,8 +1400,8 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
                     unit = G4String("km");
                     break;
                 default:
-                    cerr << "HepRepSceneHandler: No valid unit found for m: " << m << endl;
-                    unit = G4String("*m");                        
+                    cerr << "HepRepSceneHandler: No valid unit found for im: " << im << endl;
+                    unit = G4String("*im");                        
                     break;
             }
 //            cout << "U: " << unit << endl;

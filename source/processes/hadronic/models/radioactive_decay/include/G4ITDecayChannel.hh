@@ -26,6 +26,8 @@
 #ifndef G4ITDecayChannel_h
 #define G4ITDecayChannel_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4NuclearDecayChannel.hh"
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +47,7 @@ class G4ITDecayChannel : public G4NuclearDecayChannel
                       G4double theBR) :
       G4NuclearDecayChannel (IT, Verbose, theParentNucleus, theBR, 0.0,
 			     theParentNucleus->GetBaryonNumber(),
-			     int(theParentNucleus->GetPDGCharge()/eplus),
+			     int(theParentNucleus->GetPDGCharge()/CLHEP::eplus),
 			     theParentNucleus->GetExcitationEnergy())
     {
 #ifdef G4VERBOSE

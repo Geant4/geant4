@@ -42,6 +42,7 @@
  */
 
 #include <cmath>
+#include <G4SystemOfUnits.hh>
 #include <G4Polyline.hh>
 #include <G4Circle.hh>
 #include <G4Polyhedron.hh>

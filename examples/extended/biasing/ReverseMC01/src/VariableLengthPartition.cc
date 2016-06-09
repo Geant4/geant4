@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/src/VariableLengthPartition.cc
+/// \brief Implementation of the VariableLengthPartition class
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              VariableLengthParition.cc
 //
-// Version:		1.0
-// Date:		09/03/00
-// Author:		P R Truscott
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/96/NL/JG Work Order No. 3
+// Version:                1.0
+// Date:                09/03/00
+// Author:                P R Truscott
+// Organisation:        DERA UK
+// Customer:                ESA/ESTEC, NOORDWIJK
+// Contract:                12115/96/NL/JG Work Order No. 3
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -89,13 +92,13 @@ long VariableLengthPartition::get_elem_bin (double *data_point)
   // Find out whether *data_point falls below of exceeds the range of the
   // binning scheme.
   //
-  int location (0);
+  int loc (0);
   if ((conv == LEFT && *data_point > bin[nbin]) ||
       (conv == RIGHT && *data_point >= bin[nbin])) {
-    location = BIN_OVERFLOW;}
+    loc = BIN_OVERFLOW;}
   else if ((conv == LEFT && *data_point <= *bin.begin()) ||
       (conv == RIGHT && *data_point < *bin.begin())) {
-    location = BIN_UNDERFLOW;}
+    loc = BIN_UNDERFLOW;}
   else {
   //
   //
@@ -103,16 +106,16 @@ long VariableLengthPartition::get_elem_bin (double *data_point)
   //
     int upperLimit = bin.size()-1;
     int lowerLimit = 0;
-    location = (upperLimit-1)/2;
-    while (*data_point < bin[location] || *data_point > bin[location+1]) {
-      if (*data_point < bin[location]) {upperLimit = location;}
-      else {lowerLimit = location;}
-      location = (upperLimit+lowerLimit)/2;
+    loc = (upperLimit-1)/2;
+    while (*data_point < bin[loc] || *data_point > bin[loc+1]) {
+      if (*data_point < bin[loc]) {upperLimit = loc;}
+      else {lowerLimit = loc;}
+      loc = (upperLimit+lowerLimit)/2;
     }
-    if (bin[location] == *data_point && conv == RIGHT) {
-      location++;}
+    if (bin[loc] == *data_point && conv == RIGHT) {
+      loc++;}
   }
-  return location;
+  return loc;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

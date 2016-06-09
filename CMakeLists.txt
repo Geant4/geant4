@@ -23,7 +23,7 @@ endif()
 #------------------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
 
@@ -52,9 +52,9 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "9.5.0")
+set(${PROJECT_NAME}_VERSION "9.6.0")
 set(${PROJECT_NAME}_VERSION_MAJOR "9")
-set(${PROJECT_NAME}_VERSION_MINOR "5")
+set(${PROJECT_NAME}_VERSION_MINOR "6")
 set(${PROJECT_NAME}_VERSION_PATCH "0")
 
 # - Provide dependent options as these are needed for some Geant4 features

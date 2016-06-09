@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04FocusSolenoid.hh
+/// \brief Definition of the F04FocusSolenoid class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04FocusSolenoid_h
 #define F04FocusSolenoid_h 1
 
@@ -52,18 +49,18 @@ class F04FocusSolenoid : public F04SimpleSolenoid
     virtual ~F04FocusSolenoid() {}
 
     ///  Set F04FocusSolenoid to only half-focusing (default negative z)
-    void SetHalf(G4bool h) { Half = h; }
+    void SetHalf(G4bool h) { fHalf = h; }
 
-    ///  addFieldValue() adds the field for this solenoid into field[].
+    ///  AddFieldValue() adds the field for this solenoid into field[].
     ///  point[] is in global coordinates.
-    void addFieldValue(const G4double point[4], G4double field[6]) const;
+    virtual void AddFieldValue(const G4double point[4], G4double field[6]) const;
 
   private:
 
-  G4bool Half;
+  G4bool fHalf;
 
-  G4double B1;
-  G4double B2;
+  G4double fB1;
+  G4double fB2;
 
 };
 

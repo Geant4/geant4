@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITManager.hh 65022 2012-11-12 16:43:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -152,11 +153,10 @@ class G4ITManager : public G4VITManager
     static G4ITManager<T> *      fInstance;
     G4ITManager<T>();
 
-    typedef std::map<const T,G4ITBox* > BoxMap;
+    typedef std::map<T,G4ITBox* > BoxMap;
     BoxMap fBox;
 
-    typedef std::map<const T, G4KDTree* > TreeMap ;
-
+    typedef std::map<T, G4KDTree* > TreeMap;
     TreeMap fTree;
     TreeMap fPrevious_tree;
 
@@ -204,6 +204,7 @@ public :
             G4ExceptionDescription exceptionDescription ("You are requested a bad IT");
             G4Exception("G4ITManager::GetBox","ITManager001",
                         FatalErrorInArgument,exceptionDescription);
+            return 0; // coverity
         }
 
         return GetBox(myIT);

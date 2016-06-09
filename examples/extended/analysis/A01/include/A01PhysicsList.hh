@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PhysicsList.hh,v 1.4 2006-06-29 16:31:33 gunter Exp $
+/// \file analysis/A01/include/A01PhysicsList.hh
+/// \brief Definition of the A01PhysicsList class
+//
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01PhysicsList_h
@@ -38,13 +41,8 @@ public:
   A01PhysicsList();
   virtual ~A01PhysicsList();
 
-public:
-  // SetCuts()
   virtual void SetCuts();
-
-
 };
-
 
 #endif
 

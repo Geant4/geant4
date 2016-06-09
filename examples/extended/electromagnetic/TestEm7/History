@@ -15,6 +15,56 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-11-12 I.Hrivnacova (testem7-V09-05-11)
+- Fixed typo in .README
+
+02-11-12 V.Ivant (testem7-V09-05-10)
+- c2_functions - fixed variable shadowing
+     
+19-10-12 mma (testem7-V09-05-09)
+- PhysListEmStandard: use G4UrbanMsc96
+      
+18-10-12 mma (testem7-V09-05-08)
+- coding conventions: virtual and initialisation lists
+- back: fill histo in SteppingAction and TrackingAction
+
+12-10-12 V.Ivant (testem7-V09-05-07)
+- Migration to the updated analysis tool and implicit units
+- RunAction - added functionality from HistoManager, which not
+    needed anymore and deleted, added protection against division
+    by zero
+- SteppinAction and RunAction - moved histogram filling into
+    RunAction
+- PhysicsList - added Opt4 builder
+    
+07-10-12 mma (testem7-V09-05-06)
+- HistoManager : use G4AnalysisManager
+
+11-07-12 V.Ivant (testem7-V09-05-05)
+- c2_functions - removed not used arguments
+
+12-04-12 V.Ivant (testem7-V09-05-04)
+- c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7
+- G4ScreenedNuclearRecoil (M.Mendenhall) fixed division by zero at 
+    initialisation (no effect at run time)
+
+05-04-12 V.Ivant (testem7-V09-05-03)
+- c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7
+- TestEm7 - added extra test case for low-energy ions
+     
+03-04-12 mma (testem7-V09-05-02)
+- all classes : apply G4 coding conventions
+       
+05-03-12 mma (testem7-V09-05-01)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+
+09-02-12 V.Ivant (testem7-V09-05-00)
+- PhysListEmStandard,PhysListEmStandardSS - more correct process 
+    order  
+
 11-11-11 V.Ivant (testem7-V09-04-14)
 - G4ScreenedNuclearRecoil - commented out G4Exceptions
      

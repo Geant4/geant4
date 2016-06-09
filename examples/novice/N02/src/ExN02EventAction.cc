@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02EventAction.cc,v 1.11 2006-06-29 17:48:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +69,7 @@ void ExN02EventAction::EndOfEventAction(const G4Event* evt)
   if (event_id < 100 || event_id%100 == 0) {
     G4cout << ">>> Event " << evt->GetEventID() << G4endl;
     G4cout << "    " << n_trajectories 
-	   << " trajectories stored in this event." << G4endl;
+           << " trajectories stored in this event." << G4endl;
   }
 }
 

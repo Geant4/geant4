@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.2 2007-10-08 12:05:02 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file medical/fanoCavity/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,17 +56,17 @@ class DetectorMessenger: public G4UImessenger
     
   private:
   
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;    
-    G4UIcmdWithAString*        wallMater;
-    G4UIcmdWithADoubleAndUnit* wallThick;
-    G4UIcmdWithAString*        cavMater;
-    G4UIcmdWithADoubleAndUnit* cavThick;
-    G4UIcmdWithADoubleAndUnit* cavRadius;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;    
+    G4UIcmdWithAString*        fWallMater;
+    G4UIcmdWithADoubleAndUnit* fWallThick;
+    G4UIcmdWithAString*        fCavMater;
+    G4UIcmdWithADoubleAndUnit* fCavThick;
+    G4UIcmdWithADoubleAndUnit* fCavRadius;
             
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

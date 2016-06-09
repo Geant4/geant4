@@ -38,10 +38,13 @@
 #include "G4QMDNucleus.hh"
 #include "G4QMDGroundStateNucleus.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
 G4QMDReaction::G4QMDReaction()
-: system ( NULL )
+: G4HadronicInteraction("QMDModel")
+, system ( NULL )
 , deltaT ( 1 ) // in fsec (c=1)
 , maxTime ( 100 ) // will have maxTime-th time step
 , envelopF ( 1.05 ) // 10% for Peripheral reactions

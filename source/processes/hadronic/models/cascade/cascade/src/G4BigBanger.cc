@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.40 2010-09-28 20:15:00 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100301  M. Kelsey -- In generateBangInSCM(), restore old G4CascMom calcs.
@@ -44,14 +43,17 @@
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110806  M. Kelsey -- Pre-allocate buffers to reduce memory churn
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+
+#include <algorithm>
 
 #include "G4BigBanger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
-#include <algorithm>
 
 using namespace G4InuclSpecialFunctions;
 
@@ -277,10 +279,10 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
   }
 
   for(G4int i = 0; i < a; i++) {
-    G4double m = i < z ? mp : mn;
+    G4double mass = i < z ? mp : mn;
 
     momModules[i] *= etot/xtot;
-    momModules[i] = std::sqrt(momModules[i] * (momModules[i] + 2.0 * m));
+    momModules[i] = std::sqrt(momModules[i] * (momModules[i] + 2.0 * mass));
 
     if (verboseLevel > 2) {
       G4cout << " i " << i << " pmod " << momModules[i] << G4endl;

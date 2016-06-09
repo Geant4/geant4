@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
 #include "G4MesonAbsorption.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
 #include "Randomize.hh"
@@ -182,20 +185,20 @@ GetFinalState(G4KineticTrack * projectile,
   }
   
   // calculate the momenta.
-  G4double M = (thePro+theT1+theT2).mag();
-  G4double m1 = d1->GetPDGMass();
-  G4double m2 = d2->GetPDGMass();
-  G4double m = std::sqrt(M*M-m1*m1-m2*m2);
-  G4double p = std::sqrt((m*m*m*m - 4.*m1*m1 * m2*m2)/(4.*(M*M)));
+  G4double M_sq  = (thePro+theT1+theT2).mag2();
+  G4double m1_sq = sqr(d1->GetPDGMass());
+  G4double m2_sq = sqr(d2->GetPDGMass());
+  G4double m_sq  = M_sq-m1_sq-m2_sq;
+  G4double p = std::sqrt((m_sq*m_sq - 4.*m1_sq * m2_sq)/(4.*M_sq));
   G4double costh = 2.*G4UniformRand()-1.;
   G4double phi = 2.*pi*G4UniformRand();
   G4ThreeVector pFinal(p*std::sin(std::acos(costh))*std::cos(phi), p*std::sin(std::acos(costh))*std::sin(phi), p*costh);
   
   // G4cout << "testing p "<<p-pFinal.mag()<<G4endl;
   // construct the final state particles lorentz momentum.
-  G4double eFinal1 = std::sqrt(m1*m1+pFinal.mag2());
+  G4double eFinal1 = std::sqrt(m1_sq+pFinal.mag2());
   G4LorentzVector final1(pFinal, eFinal1);
-  G4double eFinal2 = std::sqrt(m2*m2+pFinal.mag2());
+  G4double eFinal2 = std::sqrt(m2_sq+pFinal.mag2());
   G4LorentzVector final2(-1.*pFinal, eFinal2);
   
   // rotate back.
@@ -317,11 +320,8 @@ AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
   static G4double it [26] =
         {0,4,50,5.5,75,8,95,10,120,11.5,140,12,160,11.5,180,10,190,8,210,6,235,4,260,3,300,2};
 
-  if(t>it[24]) 
-  {
-    theCross = 0;
-  }
-  else 
+  G4double aCross(0);
+  if(t<=it[24])
   {
     G4int count = 0;
     while(t>it[count])count+=2;
@@ -329,9 +329,9 @@ AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
     G4double x2 = it[count];
     G4double y1 = it[count-1];
     G4double y2 = it[count+1];
-    theCross = y1+(y2-y1)/(x2-x1)*(t-x1);
+    aCross = y1+(y2-y1)/(x2-x1)*(t-x1);
     // G4cout << "Printing the absorption crosssection "
-    //        <<x1<< " "<<x2<<" "<<t<<" "<<y1<<" "<<y2<<" "<<0.5*theCross<<G4endl;
+    //        <<x1<< " "<<x2<<" "<<t<<" "<<y1<<" "<<y2<<" "<<0.5*aCross<<G4endl;
   }
-  return .5*theCross*millibarn;
+  return .5*aCross*millibarn;
 }

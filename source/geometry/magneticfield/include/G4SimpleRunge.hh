@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4SimpleRunge
@@ -72,7 +71,6 @@ class G4SimpleRunge : public G4MagErrorStepper
     G4int fNumberOfVariables ;
 
     G4double* dydxTemp;
-    G4double* dydxTemp2;
     G4double* yTemp;
       // scratch space    
 };

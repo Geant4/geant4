@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryProtonBuilder.cc,v 1.4 2010-11-18 14:52:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -40,11 +39,12 @@
 //----------------------------------------------------------------------------
 //
 #include "G4FTFBinaryProtonBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProtonInelasticCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
+#include "G4BGGNucleonInelasticXS.hh"
 
 G4FTFBinaryProtonBuilder::
 G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
@@ -79,8 +79,7 @@ Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4CrossSectionPairGG(
-   		new G4ProtonInelasticCrossSection(), 91*GeV));  
+  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
 }
 
 G4FTFBinaryProtonBuilder::

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/src/ExN04MuonSD.cc
+/// \brief Implementation of the ExN04MuonSD class
+//
 
 #include "ExN04MuonSD.hh"
 #include "ExN04MuonHit.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.cc,v 1.1 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -45,6 +45,8 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DiffractiveSplitableHadron.hh"
 #include "G4DiffractiveExcitation.hh"
@@ -189,43 +191,43 @@ G4bool G4FTFAnnihilation::
 
 //G4cout<<"Annih X a b c d "<<X_a<<" "<<X_b<<" "<<X_c<<" "<<X_d<<G4endl;
 
-     if((ProjectilePDGcode == -2212)&&(TargetPDGcode == 2212)) 
+     if((ProjectilePDGcode == -2212)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214))) 
      {X_b*=5.; X_c*=5.; X_d*=6.;} // Pbar P
-     else if((ProjectilePDGcode == -2212)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -2212)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=4.; X_c*=4.;  X_d*=4.;} // Pbar N
-     else if((ProjectilePDGcode == -2112)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -2112)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=4.; X_c*=4.;  X_d*=4.;} // NeutrBar P
-     else if((ProjectilePDGcode == -2112)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -2112)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=5.; X_c*=5.;  X_d*=6.;} // NeutrBar N
-     else if((ProjectilePDGcode == -3122)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3122)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=3.; X_c*=3.;  X_d*=2.;} // LambdaBar P
-     else if((ProjectilePDGcode == -3122)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -3122)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=3.; X_c*=3.;  X_d*=2.;} // LambdaBar N
-     else if((ProjectilePDGcode == -3112)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3112)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=2.; X_c*=2.;  X_d*=0.;} // Sigma-Bar P
-     else if((ProjectilePDGcode == -3112)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -3112)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=4.; X_c*=4.;  X_d*=2.;} // Sigma-Bar N
-     else if((ProjectilePDGcode == -3212)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3212)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=3.; X_c*=3.;  X_d*=2.;} // Sigma0Bar P
-     else if((ProjectilePDGcode == -3212)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -3212)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=3.; X_c*=3.;  X_d*=2.;} // Sigma0Bar N
-     else if((ProjectilePDGcode == -3222)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3222)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=4.; X_c*=4.;  X_d*=2.;} // Sigma+Bar P
-     else if((ProjectilePDGcode == -3222)&&(TargetPDGcode == 2112))
-     {X_b*=2.; X_c*=2.;  X_d*=0.;} // Sigma+Bar P
-     else if((ProjectilePDGcode == -3312)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3222)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
+     {X_b*=2.; X_c*=2.;  X_d*=0.;} // Sigma+Bar N
+     else if((ProjectilePDGcode == -3312)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=1.; X_c*=1.;  X_d*=0.;} // Xi-Bar P
-     else if((ProjectilePDGcode == -3312)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -3312)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=2.; X_c*=2.;  X_d*=0.;} // Xi-Bar N
-     else if((ProjectilePDGcode == -3322)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3322)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=2.; X_c*=2.;  X_d*=0.;} // Xi0Bar P
-     else if((ProjectilePDGcode == -3322)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -3322)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=1.; X_c*=1.;  X_d*=0.;} // Xi0Bar N
-     else if((ProjectilePDGcode == -3334)&&(TargetPDGcode == 2212))
+     else if((ProjectilePDGcode == -3334)&&((TargetPDGcode == 2212)||(TargetPDGcode == 2214)))
      {X_b*=0.; X_c*=0.;  X_d*=0.;} // Omega-Bar P
-     else if((ProjectilePDGcode == -3334)&&(TargetPDGcode == 2112))
+     else if((ProjectilePDGcode == -3334)&&((TargetPDGcode == 2112)||(TargetPDGcode == 2114)))
      {X_b*=0.; X_c*=0.;  X_d*=0.;} // Omega-Bar N
-     else {G4cout<<"Unknown anti-baryon for FTF annihilation"<<G4endl;}
+     else {G4cout<<"Unknown anti-baryon for FTF annihilation: PDGcodes - "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;}
 
 //G4cout<<"Annih X a b c d "<<X_a<<" "<<X_b<<" "<<X_c<<" "<<X_d<<G4endl;
 //=========================================
@@ -1111,19 +1113,19 @@ G4FTFAnnihilation::~G4FTFAnnihilation()
 
 const G4FTFAnnihilation & G4FTFAnnihilation::operator=(const G4FTFAnnihilation &)
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation = operator meant to be called");
-	return *this;
+	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation = operator not meant to be called"); 
+        //return *this;  //A.R. 25-Jul-2012 : fix Coverity
 }
 
 
 int G4FTFAnnihilation::operator==(const G4FTFAnnihilation &) const
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation == operator meant to be called");
-	return false;
+	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation == operator not meant to be called");
+	//return false;  //A.R. 25-Jul-2012 : fix Coverity
 }
 
 int G4FTFAnnihilation::operator!=(const G4FTFAnnihilation &) const
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation != operator meant to be called");
-	return true;
+	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation != operator not meant to be called");
+	//return true;  //A.R. 25-Jul-2012 : fix Coverity
 }

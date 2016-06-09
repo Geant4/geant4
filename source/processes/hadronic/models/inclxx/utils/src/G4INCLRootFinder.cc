@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Provides a stateless root-finder algorithm.
  *
- * Created on: 2nd March 2011
- *     Author: Davide Mancusi
+ * \date 2nd March 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLRootFinder.hh"
@@ -71,9 +71,17 @@ namespace G4INCL {
     G4double x2 = bracket.second;
     // If x1>x2, it means that we could not bracket the root. Return false.
     if(x1>x2) {
-      WARN("Root-finding algorithm could not bracket the root." << std::endl);
-      f->cleanUp(false);
-      return false;
+      // Maybe zero is a good solution?
+      G4double y_at_zero = (*f)(0.);
+      if(std::abs(y_at_zero)<=toleranceY) {
+        f->cleanUp(true);
+        solution = std::make_pair(0.,y_at_zero);
+        return true;
+      } else {
+        WARN("Root-finding algorithm could not bracket the root." << std::endl);
+        f->cleanUp(false);
+        return false;
+      }
     }
 
     G4double y1 = (*f)(x1);
@@ -85,7 +93,7 @@ namespace G4INCL {
      * Start of the false-position loop
      * ********************************/
 
-    // Keep track of the last updated G4interval end (-1=left, 1=right)
+    // Keep track of the last updated interval end (-1=left, 1=right)
     G4int lastUpdated = 0;
 
     for(G4int iterations=0; std::abs(y) > toleranceY; iterations++) {
@@ -96,13 +104,13 @@ namespace G4INCL {
         return false;
       }
 
-      // Estimate the root position by linear G4interpolation
+      // Estimate the root position by linear interpolation
       x = (y1*x2-y2*x1)/(y1-y2);
 
       // Update the value of the function
       y = (*f)(x);
 
-      // Update the bracketing G4interval
+      // Update the bracketing interval
       if(Math::sign(y) == Math::sign(y1)) {
         x1=x;
         y1=y;
@@ -127,12 +135,20 @@ namespace G4INCL {
 
   std::pair<G4double,G4double> RootFinder::bracketRoot(RootFunctor const * const f, G4double x0) {
     G4double y0 = (*f)(x0);
-    G4double x1 = x0;
-    G4double y1 = (*f)(x1);
 
     const G4double scaleFactor = 1.5;
-    const G4double scaleFactorMinus1 = 1./scaleFactor;
 
+    G4double x1;
+    if(x0!=0.)
+      x1=scaleFactor*x0;
+    else
+      x1=1.;
+    G4double y1 = (*f)(x1);
+
+    if(Math::sign(y0)!=Math::sign(y1))
+      return std::make_pair(x0,x1);
+
+    const G4double scaleFactorMinus1 = 1./scaleFactor;
     G4double oldx0, oldx1, oldy1;
     G4int iterations=0;
     do {

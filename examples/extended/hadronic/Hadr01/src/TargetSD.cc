@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TargetSD.cc,v 1.4 2006-06-29 17:24:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// \file hadronic/Hadr01/src/TargetSD.cc
+/// \brief Implementation of the TargetSD class
+//
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +35,7 @@
 // Created: 31.01.2003 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -49,7 +51,7 @@
 TargetSD::TargetSD(const G4String& name)
  :G4VSensitiveDetector(name)
 {
-  theHisto = HistoManager::GetPointer();
+  fHisto = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,7 +68,7 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  theHisto->AddTargetStep(aStep);
+  fHisto->AddTargetStep(aStep);
   return true;
 }
 

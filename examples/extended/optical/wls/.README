@@ -1,0 +1,96 @@
+$Id$
+
+///\file "optical/wls/.README"
+///\brief Example wls README page
+
+/*! \page Examplewls Example wls
+
+This application simulates the propagation of photons inside a Wave Length
+Shifting (WLS) fiber.
+
+
+\section Examplewls_s1 Geometry Definition
+
+  The default geometry is as follow:
+
+- A perfect, bare, PMMA fiber: 0.5mm radius, 2m length at center(0,0,0)
+  of the World.
+- A circular MPPC with 0.5mm radius at the +z end of the fiber
+- World and coupling materials are G4_AIR
+- Photons will always refracted out to coupling material before
+  reaching MPPC
+- There are many flexible parameters that the user could specify.
+  They are under the /WLS directory of help.
+
+
+\section Examplewls_s2 Material Choices
+
+  There are several materials that the user can use for the fiber core,
+  world and coupling.
+  
+They are:
+
+- Vacuum (G4_Galactic)
+- Air (G4_AIR)
+- PMMA, n = 1.60
+- Pethylene, n = 1.49
+- FPethylene, n = 1.42
+- Polystyrene, n = 1.60
+- Silicone, n = 1.46
+
+
+\section Examplewls_s3 Photon Source
+
+  This program uses the General Particle Source (G4GeneralParticleSource) 
+  provided by GEANT4 for
+  generating photons. The energy of the photon must be within 2.00 eV
+  to 3.47 eV.  For detail instruction on how to use the General Particle
+  Source, please visit their home page at:
+  http://reat.space.qinetiq.com/gps/
+
+
+\section Examplewls_s4 Hit
+
+  A hit is registered when the photon is absorbed on the MPPC surface.
+  Information stored in hit includes the local coordinate of the location
+  the photon is absorbed on the MPPC, the global coordinate where the
+  photon left the fiber and the transit time of the photon.
+
+
+\section Examplewls_s5 Stepping Action
+
+  The stepping action keeps track of the number of bounces a photon has
+  gone through.  In order to prevent infinite loop and extremely skewed
+  rays taking up computing time, there is a limit of the number of
+  bounces that a photon can go through before it is artificially killed.
+  The default limit is 100,000.  The user can set his/her own limit using
+  the /stepping/setBounceLimit command.  A value of 0 will turn off the
+  limit.  All photons artificially killed will have murderee flag turned
+  on in their UserTrackInformation.
+
+
+\section Examplewls_s6 Visualization
+
+  To visualize a photon's trajectory, simply use vis.mac macro in
+  interactive mode or in your own macro.
+
+
+\section Examplewls_s7 main ()
+
+ - Execute wls in 'batch' mode from macro files; \n
+   you can enter an optional integer seed for batch mode 
+\verbatim
+% wls wls.in (optional: enter an integer seed here)
+\endverbatim
+                 
+ - wls in 'interactive mode' with visualization
+\verbatim
+% wls
+....
+Idle> /control/execute vis.mac
+Idle> /run/beamOn 1
+....
+Idle> exit
+\endverbatim
+         
+*/         

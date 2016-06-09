@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissLib.hh,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ********************************************************************
 // !                A neutron-induced fission package                 !
@@ -129,29 +128,25 @@
 #include "G4HadronicInteraction.hh"
 #include "G4NeutronHPThermalBoost.hh"
 #include "G4FissionLibrary.hh"
-#include "G4FissLib.hh"
+// #include "G4FissLib.hh"
 
 class G4FissLib : public G4HadronicInteraction
 {
   public: 
+    G4FissLib();
+    ~G4FissLib();
   
-  G4FissLib();
-
-  ~G4FissLib();
-  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& aTargetNucleus);
 
   private:
-  
-  G4FissionLibrary theLibrary;
+    G4FissionLibrary theLibrary;
   
   private:
-  
-  G4double * xSec;
-  G4NeutronHPChannel * theFission;
-  G4String dirName;
-  G4int numEle;
-  // static G4String theNames[3];
+    G4double* xSec;
+    G4NeutronHPChannel* theFission;
+    G4String dirName;
+    G4int numEle;
 };
 
 #endif

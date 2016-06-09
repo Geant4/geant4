@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.30 2009-01-21 16:59:22 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  19th July 1996
@@ -75,12 +74,16 @@
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
 
-#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
+#include "G4ModelingParameters.hh"
+
+#include <vector>
+#include <utility>
 
 typedef std::vector<G4Plane3D> G4Planes;
 
@@ -172,16 +175,18 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
-  bool IsWindowSizeHintX () const;
-  bool IsWindowSizeHintY () const;
-  bool IsWindowLocationHintX () const;
-  bool IsWindowLocationHintY () const;
-
+        bool             IsWindowSizeHintX       () const;
+        bool             IsWindowSizeHintY       () const;
+        bool             IsWindowLocationHintX   () const;
+        bool             IsWindowLocationHintY   () const;
         G4bool           IsAutoRefresh           () const;
-  const G4Colour&        GetBackgroundColour     () const;
+  const G4Colour&  GetBackgroundColour           () const;
         G4bool           IsPicking               () const;
-
-  // Here Follow functions to evaluate the above algorithms as a
+        RotationStyle    GetRotationStyle        () const;
+  const std::vector<G4ModelingParameters::VisAttributesModifier>&
+                         GetVisAttributesModifiers () const;
+  
+  // Here Follow functions to evaluate useful quantities as a
   // function of the radius of the Bounding Sphere of the object being
   // viewed.  Call them in the order given - for efficiency, later
   // functions depend on the results of earlier ones (Store the
@@ -192,7 +197,6 @@ public: // With description
   G4double GetFarDistance     (G4double cameraDistance,
 			       G4double nearDistance, G4double radius) const;
   G4double GetFrontHalfHeight (G4double nearDistance, G4double radius) const;
-  RotationStyle GetRotationStyle() const;
 
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
@@ -219,6 +223,8 @@ public: // With description
   // Also sets lightpoint direction according to G4bool fLightsMoveWithCamera.
   void SetUpVector             (const G4Vector3D& upVector);
   void SetFieldHalfAngle       (G4double fieldHalfAngle);
+  void SetOrthogonalProjection ();  // This and next use SetFieldHalfAngle.
+  void SetPerspectiveProjection(G4double fieldHalfAngle = 30. * CLHEP::deg);
   void SetZoomFactor           (G4double zoomFactor);
   void MultiplyZoomFactor      (G4double zoomFactorMultiplier);
   void SetScaleFactor          (const G4Vector3D& scaleFactor);
@@ -234,7 +240,9 @@ public: // With description
   void IncrementPan            (G4double right, G4double up, G4double forward);
   // Increment currentTarget point also along viewpoint direction.
   void SetDefaultVisAttributes (const G4VisAttributes&);
+  void SetDefaultColour        (const G4Colour&);  // Uses SetDefaultVisAttributes.
   void SetDefaultTextVisAttributes (const G4VisAttributes&);
+  void SetDefaultTextColour    (const G4Colour&);  // SetDefaultTextVisAttributes.
   void SetDefaultMarker        (const G4VMarker& defaultMarker);
   void SetGlobalMarkerScale    (G4double globalMarkerScale);
   void SetGlobalLineWidthScale (G4double globalLineWidthScale);
@@ -247,22 +255,24 @@ public: // With description
   void SetBackgroundColour     (const G4Colour&);
   void SetPicking              (G4bool);
   void SetRotationStyle        (RotationStyle);
+  void AddVisAttributesModifier
+  (const G4ModelingParameters::VisAttributesModifier&);
 
+  // Command dumping functions.
+  // For camera commands we need to provide the standard target point from
+  // the current scene.
+  G4String CameraAndLightingCommands(const G4Point3D standardTargetPoint) const;
+  G4String DrawingStyleCommands  () const;
+  G4String SceneModifyingCommands() const;
+  G4String TouchableCommands     () const;
+  
+  // Other functions.
   void PrintDifferences (const G4ViewParameters& v) const;
 
 private:
+  
   G4int ParseGeometry ( const char *string, G4int *x, G4int *y, unsigned int *width, unsigned int *height);
   G4int ReadInteger(char *string, char **NextString);
-
-  G4int fNoValue;
-  G4int fXValue; // XValue set for XGeometry
-  G4int fYValue; // YValue set for XGeometry
-  G4int fWidthValue; // WidthValue set for XGeometry
-  G4int fHeightValue; // HeightValue set for XGeometry
-  G4int fAllValues; // AllValues are set for XGeometry
-  G4int fXNegative; // XValue is from left for XGeometry
-  G4int fYNegative; // YValue is from top for XGeometry
-  G4int fGeometryMask; // Mask for ParseGeometry
 
   DrawingStyle fDrawingStyle;    // Drawing style.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
@@ -308,10 +318,24 @@ private:
   G4bool       fWindowLocationHintXNegative; //  Reference of location hints for pixel-based window systems.
   G4bool       fWindowLocationHintYNegative;
   G4String     fXGeometryString; // If non-null, geometry string for X Windows.
+  G4int        fGeometryMask;    // Corresponding mask.
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
   RotationStyle fRotationStyle;  // Rotation style.
+  std::vector<G4ModelingParameters::VisAttributesModifier>
+  fVisAttributesModifiers;
+
+  enum { // Constants for geometry mask in ParseGeometry and related functions.
+    fNoValue     = 0,
+    fXValue      = 0x0001,
+    fYValue      = 0x0002,
+    fWidthValue  = 0x0004,
+    fHeightValue = 0x0008,
+    fAllValues   = 0x000F,
+    fXNegative   = 0x0010,
+    fYNegative   = 0x0020
+  };
 };
 
 #include "G4ViewParameters.icc"

@@ -54,6 +54,9 @@ public:
     return "ConcreteNNToDeltaDelta";
   }
 
+private:
+  G4ConcreteNNToDeltaDelta(const G4ConcreteNNToDeltaDelta &);
+  G4ConcreteNNToDeltaDelta & operator= (const G4ConcreteNNToDeltaDelta &);
   G4bool operator==(const G4ConcreteNNToDeltaDelta &right) const;
   G4bool operator!=(const G4ConcreteNNToDeltaDelta &right) const;
 

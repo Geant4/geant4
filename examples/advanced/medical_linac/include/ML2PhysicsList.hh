@@ -69,7 +69,7 @@ public:
   void ConstructProcess();
 
   void AddStepMax();
-  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;}
   void AddPackage(const G4String& name);
 
 private:
@@ -96,4 +96,3 @@ private:
 };
 
 #endif
-

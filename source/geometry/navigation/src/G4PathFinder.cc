@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.64 2010-07-13 15:59:42 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -33,10 +33,11 @@
 // 
 // --------------------------------------------------------------------
 
-#include "G4PathFinder.hh"
-
 #include <iomanip>
 
+#include "G4PathFinder.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4Navigator.hh"
 #include "G4PropagatorInField.hh"
@@ -246,6 +247,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     }
     fLastStepNo= stepNo; 
 
+#ifdef  G4DEBUG_PATHFINDER
     if ( (fNoGeometriesLimiting < 0)
       || (fNoGeometriesLimiting > fNoActiveNavigators) )
     {
@@ -256,6 +258,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
       G4Exception("G4PathFinder::ComputeStep()", 
                   "GeomNav0002", FatalException, message); 
     }
+#endif
   }
 #ifdef G4DEBUG_PATHFINDER      
   else

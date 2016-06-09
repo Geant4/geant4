@@ -39,11 +39,11 @@
 
 #include "FCALMaterialConsultant.hh"
 #include "FCALCryostatVolumes.hh"
-//#include "FCALEMModule.hh"
-//#include "FCALHadModule.hh"
 
 #include "FCALTestbeamSetupSD.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4SubtractionSolid.hh"
@@ -61,7 +61,6 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
-
 
 FCALTestbeamSetup::FCALTestbeamSetup() : FCALTBSetupSD(0) {
 #include "FCALTestbeamSetupParameters.input"

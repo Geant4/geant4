@@ -17,6 +17,231 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12.11.2012  V.Ivanchenko, tag emlowen-V09-05-48
+- G4MuElecInelasticModel Gunter Folger fixed usage of iterators at 
+    boundary of vectors
+
+06.11.2012  G.Cosmo, tag emlowen-V09-05-47
+- Minor fixes for porting on AIX; mainly on use of const signature for
+  objects in maps...
+
+02.11.2012  V.Ivanchenko, tag emlowen-V09-05-46
+- G4LivermorePhotoElectricModel - fixed non-initialised variable in prvious tag
+
+02.11.2012  V.Ivanchenko, tag emlowen-V09-05-45
+- G4LivermorePhotoElectricModel - migration to G4PhysicsVector data structure
+
+20.10.2012  V.Ivanchenko, tag emlowen-V09-05-44
+- G4RayleighScattering - substitute methods Model(), SetModel()
+    by EmModel(), SetEmModel()
+- G4LivermoreGammaConversionModel - removed variable shadowing
+
+17.10.2012  M. Raine, tag emlowen-V09-05-43
+	    Update of MuElec classes to widen the energy range of application.
+
+28.09.2012  G.Cosmo, tag emlowen-V09-05-42
+            Explicitly use inclusion of headers for system of units and
+            physical constants, in plan to remove implicit inclusion from
+            globals.hh.
+
+26.09.2012  S.Incerti, tag emlowen-V09-05-41
+            Added renamed Compton low energy model by JB et al.
+
+21.09.2012  V.Ivanchenko, tag emlowen-V09-05-40
+            G4PhotoElectricAngularGeneratorPolarized, G4Generator2BN,
+            G4Generator2BS, G4RayleighAngularGenerator - added 
+              protection against cos(theta) < -1 to avoid numerical
+              problems
+            G4LivermoreRayleighModel - fix exception printout
+            G4Livermore2012GammaConversionModel - temporary class removed
+
+17.09.2012  S. Incerti, tag emlowen-V09-05-39 to 37
+            Updated sources.cmake       
+
+17.09.2012  S. Incerti, tag emlowen-V09-05-36
+            Renamed Monash U. Compton model       
+
+01.08.2012  V.Ivanchenko, tag emlowen-V09-05-35
+            G4LivermorePolarizedPhotoElectricModel - removed debug cout 
+
+31.07.2012  V.Ivanchenko, tag emlowen-V09-05-34
+            G4LivermorePolarizedPhotoElectricModel - fixed initialisation 
+
+28.07.2012  V.Ivanchenko, tag emlowen-V09-05-33
+            G4LivermorePolarizedPhotoElectricModel - use 
+              G4SauterGavrilaAngularDistribution as it was in 9.5 
+              instead of G4PhotoElectricAngularGeneratorPolarized
+              to avoid infinite loop in angular sampling
+
+26.07.2012  V.Ivanchenko, tag emlowen-V09-05-32
+            G4PhotoElectricAngularGeneratorPolarized - added protection 
+              against infinite loop
+
+26.07.2012  V.Ivanchenko, tag emlowen-V09-05-31
+            G4Generator2BN - use G4Generator2BS for Ekin > 1.5 MeV
+            G4LivermorePhotoElectricModel, 
+            G4LivermorePolarizedPhotoElectricModel - use angular
+              generator via G4VAngularDistribution interface
+              removed headers and initialisation of old 
+              deexcitation
+            G4PhotoElectricAngularGeneratorSimple,
+            G4PhotoElectricAngularGeneratorSauterGavrila,
+            G4PhotoElectricAngularGeneratorPolarized - migrated
+              to G4VAngularDistribution interface
+
+20.07.2012  V.Ivanchenko, tag emlowen-V09-05-30
+            G4Generator2BS - fixed sampling according to original paper
+            G4Generator2BN - cleanup
+
+20.07.2012  V.Ivanchenko, L.Pandola tag emlowen-V09-05-29
+            G4LivermoreBremsstrahlungModel, G4LivermoreRayleighModel,
+            G4RayleighAngularGenerator, G4Generator2BN, G4Generator2BS,
+            G4PenelopeBremsstrahlungAngular, G4PenelopeBremsstrahlungModel
+            migrated to the common SampleDirection interface of the pure
+            virtual G4VEmAngularDistribution interface 
+
+17.07.2012  V.Ivanchenko, tag emlowen-V09-05-28
+            G4RayleighScattering - use high energy table above 100 keV
+            G4LivermoreRayleighModel - updated by S.Incerti
+            G4RayleighAngularGenerator - new class (A.Ivantchenko)
+            G4LivermoreGammaConversionModel - is a new version (S.Incerti)
+            G4Livermore2012GammaConversionModel - temporary keep old version
+
+11.07.2012  G.Cosmo, tag emlowen-V09-05-27
+            Explicitly use inclusion of headers for system of units and
+            physical constants, in plan to remove implicit inclusion from
+            globals.hh.
+
+29.06.2012  L.Pandola, tag emlowen-V09-05-26
+	    Corrected G4PenelopeBremsstrahlungFS to avoid the anomaly 
+	    in the gamma-ray spectrum close to the cut which was 
+	    reported by Vladimir
+
+21.06.2012  JB, tag emlowen-V09-05-25 (committed by SI)
+            Fix in G4MUComptonModel 
+
+20.06.2012  JB, tag emlowen-V09-05-24 (committed by SI)
+            Update of G4MUComptonModel & G4LivermoreComptonModel classes
+
+13.06.2012  S. Incerti, tag emlowen-V09-05-23
+            Shadowing issues fixes
+
+01.06.2012  S. Incerti, tag emlowen-V09-05-22
+            Coverity fix of G4MUComptonModel.cc
+
+21.05.2012  S. Incerti, J. Brown, tag emlowen-V09-05-21
+            Update of G4MUComptonModel.cc
+
+03.05.2012  S. Incerti, J. Brown, tag emlowen-V09-05-20
+            Corrected compil. warning in G4MUComptonModel.cc
+
+29.04.2012  S. Incerti tag emlowen-V09-05-19
+            Coverity fixes
+
+19.04.2012  S. Incerti tag emlowen-V09-05-18
+            New draft class G4Livermore2012GammaConversionModel
+
+16.04.2012  L. Pandola tag emlowen-V09-05-17
+            Copy of the previous tag (rejected for other reasons)
+	    Database G4LEDATA updated to G4EMLOW6.26 in the meanwhile 
+            (no real effect, removed unused files only).
+
+10.04.2012  L. Pandola tag emlowen-V09-05-16
+	    Removed obsolete Penelope v2001 models and releted 
+	    helper classes. A clean-up of G4LEDATA will follow 
+	    (there are unused files now) 
+
+04.04.2012  M. Raine, S. Incerti tag emlowen-V09-05-15
+            - Delivered processes and models for microdosimetry in Si
+	    for electrons, protons and ions. These processes and models
+	    are described in the following publications:
+	    - Inelastic cross-sections of low energy electrons in silicon
+	    for the simulation of heavy ion tracks with theGeant4-DNA toolkit,
+	    NSS Conf. Record 2010, p80-85
+	    - Geant4 physics processes for microdosimetry simulation:
+	    very low energy electromagnetic models for electrons in Si,
+	    to be published in TNS
+	    - Geant4 physics processes for microdosimetry simulation:
+	    very low energy electromagnetic models for protons and
+	    heavy ions in Si, to be published in NIMB	
+	    by A. Valentin, M. Raine, J.E. Sauvestre, 
+	    M. Gaillardin, P. Paillet
+	    - to be used with G4LEDATA version 6.25    
+
+03.04.2012  S. Incerti, L. Pandola tag emlowen-V09-05-14
+	    - Updated GNUMakefile for usage of G4lrint 
+	    - Fixes of coverity defects in Penelope classes (bug fixes)
+
+02.04.2012  S. Incerti tag emlowen-V09-05-13
+	    Update to G4lrint by J. Brown (G4MUComptonModel)
+
+30.03.2012  S. Incerti tag emlowen-V09-05-12
+	    Added new rounding method developped by J. Brown for Windows 
+	    compilation of new Compton model (G4MUComptonModel)
+
+26.03.2012  S. Incerti tag emlowen-V09-05-11
+	    Added new Compton model (G4MUComptonModel) developped by
+	    J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin,
+	    Monash University, Australia
+	    
+22.03.2012  L. Pandola tag emlowen-V09-05-10
+	    Penelope-based XS model for electron PIXE 
+	    registered in G4UAtomicDeexcitation.
+	    Added warning messages to Penelope models to 
+	    verify the proper activation of fluorescence.
+
+20.03.2012  L. Pandola tag emlowen-V09-05-09
+	    Updated G4PenelopeOscillatorManager to accomodate the 
+	    calculation of PIXE cross sections. First implementation 
+	    of Penelope-specific PIXE cross sections: 
+	    G4PenelopeIonisationCrossSection (derived from 
+	    G4VhShellCrossSection). **Preliminary**
+
+14.03.2012  L. Pandola tag emlowen-V09-05-08
+	    1) Make G4PenelopeBremsstrahlungAngular derived by the basic 
+	    interface G4VEmAngularDistribution. Makes angular generator 
+	    usable by any other model via the interface.
+	    2) Rename G4PenelopeIonisationCrossSection to
+	    G4PenelopeIonisationXSHandler (the name will be reserved for 
+	    a different class in a while)
+	    3) Make G4PenelopeCrossSection able to return both absolute 
+	    and normalized values of the shell cross sections. It will be 
+	    used for Penelope-PIXE.
+
+09.03.2012  L. Pandola tag emlowen-V09-05-07
+	    Minor design iteration for G4VhShellCrossSection base class, 
+            in order to carry also the information about G4Material. Also 
+            preliminar step for a future Penelope-specific fluorescence 
+            model.
+
+09.03.2012  L. Pandola tag emlowen-V09-05-06
+	    Decouple calculation of Penelope ionisation cross sections
+	    from the Ionisation model. Preliminary step for a future 
+            Penelope-specific AtomicDeexcitation model.
+
+06.03.2012  V.Ivanchenko tag emlowen-V09-05-05
+            G4IonParametrisedLossModel - fixed minor memory leak
+
+20.02.2012  L. Pandola tag emlowen-V09-05-04
+	    Make a consistent use of G4Element::GetA() and 
+            G4Element::GetAtomicMassAmu() in the Penelope models
+
+09.02.2012  L. Pandola  tag emlowen-V09-05-03
+	    Get rid of the compiler warning (gcc-4.6) which caused 
+            the rejection of tag emlowen-V09-05-02
+
+27.01.2012  L. Pandola  tag emlowen-V09-05-02
+	    Remove in G4PenelopeIonisationModel the dependency on the 
+	    obsolete G4AtomicDeexcitation (gets rid of warning on screen)
+
+24.01.2012  L. Pandola  tag emlowen-V09-05-01
+	    Fix all remaining defects reported by the Coverity 
+	    analysis
+
+11.01.2012  L. Pandola, tag emlowen-V09-05-00
+	    Fix defects reported by the Coverity analysis for all 
+	    Penelope-related classes
+
 25.11.2011  V.Ivanchenko tag emlowen-V09-04-81
             Minor cleanup of comments
 

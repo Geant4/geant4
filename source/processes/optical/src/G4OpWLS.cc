@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.13 2008-10-24 19:50:50 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -44,10 +43,13 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+#include "G4OpWLS.hh"
+
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4OpProcessSubType.hh"
 
-#include "G4OpWLS.hh"
 #include "G4WLSTimeGeneratorProfileDelta.hh"
 #include "G4WLSTimeGeneratorProfileExponential.hh"
 
@@ -313,12 +315,12 @@ void G4OpWLS::BuildThePhysicsTable()
 	    // loop over all (photon energy, intensity)
 	    // pairs stored for this material
 
-            for (size_t i = 1;
-                 i < theWLSVector->GetVectorLength();
-                 i++)	    
+            for (size_t j = 1;
+                 j < theWLSVector->GetVectorLength();
+                 j++)	    
 	      {
-		currentPM = theWLSVector->Energy(i);
-		currentIN = (*theWLSVector)[i];
+		currentPM = theWLSVector->Energy(j);
+		currentIN = (*theWLSVector)[j];
 		
 		currentCII = 0.5 * (prevIN + currentIN);
 		

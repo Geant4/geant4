@@ -5,7 +5,6 @@
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
 #/testhadr/NumberDivZ       100
-/testhadr/DrawTracks       all
 #/testhadr/CutsAll          1 mm
 #/testhadr/Physics          QBBC
 #
@@ -50,8 +49,8 @@
 # as markers 2 pixels wide:
 /vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:

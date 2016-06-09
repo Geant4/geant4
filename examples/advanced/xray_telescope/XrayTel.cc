@@ -79,8 +79,15 @@
 #include "G4UImanager.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
+
+#ifdef G4VIS_USE
+  #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+  #include "G4UIExecutive.hh"
+#endif
+
 #include "XrayTelRunAction.hh"
 #include "XrayTelSteppingAction.hh"
 #include "XrayTelPrimaryGeneratorAction.hh"
@@ -101,9 +108,11 @@ int main( int argc, char** argv )
   runManager->SetUserAction(new XrayTelRunAction);
   runManager->SetUserAction(new XrayTelSteppingAction);
 
+#ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();    
+#endif
 
   //Initialize G4 kernel
   runManager->Initialize();
@@ -111,9 +120,11 @@ int main( int argc, char** argv )
   // get the pointer to the User Interface manager 
   G4UImanager *UImanager = G4UImanager::GetUIpointer();  
   if ( argc==1 ){
+#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       ui->SessionStart();
       delete ui;
+#endif
   }
   else {
     // Create a pointer to the User Interface manager 
@@ -125,7 +136,9 @@ int main( int argc, char** argv )
   }                                  
 
   // job termination
+#ifdef G4VIS_USE
   delete visManager;
+#endif
   delete runManager;
   return 0;
 }
